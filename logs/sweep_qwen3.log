@@ -1,0 +1,19 @@
+02:45:20 qwen3: sets=['paper', 'strict', 'relaxed'] union=528 cases
+02:45:27 running pass: 1056 prefill rows, 25344 spawn rows
+02:45:30   layer   0: load-wait 3.01s compute 0.52s  wf_rows=528
+02:45:40   layer   8: load-wait 1.12s compute 0.13s  wf_rows=4752
+02:45:49   layer  16: load-wait 1.10s compute 0.15s  wf_rows=8976
+02:45:59   layer  24: load-wait 1.07s compute 0.17s  wf_rows=13200
+02:46:11   layer  32: load-wait 0.97s compute 0.20s  wf_rows=17424
+02:46:20   layer  40: load-wait 0.77s compute 0.23s  wf_rows=21648
+02:46:29   layer  47: load-wait 1.00s compute 0.25s  wf_rows=25344
+02:46:29   pass done: 1056 prefill rows (T=18), 25344 spawn rows, 62.0s
+02:46:29 pass time 62.2s
+/home/ubuntu/MOE/scripts/run_sweep.py:105: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:106: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+02:46:30 set paper: L*=44 disc=+0.973 val@L*=+0.941 val argmax L44 +0.941 funnel strict 234/256
+02:46:30 set strict: L*=44 disc=+0.932 val@L*=+0.921 val argmax L44 +0.921 funnel strict 253/256
+02:46:30 set relaxed: L*=44 disc=+0.861 val@L*=+0.791 val argmax L44 +0.791 funnel strict 486/512
+02:46:30 done

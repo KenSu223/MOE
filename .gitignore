@@ -1,0 +1,22 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# paper copies (copyright of the authors; see README for the arXiv link)
+2606.03780.pdf
+paper.txt
+paper_src/
+
+# agent transcripts and machine-local files
+logs/agent_*.jsonl
+logs/agent_*.err
+logs/agent_session_id.txt
+scripts/claude_bin.txt
+.ddtest
+*.incomplete
+
+# model weights are never stored here (HF_HOME=/opt/dlami/nvme/hf)
+hf/
+offload/

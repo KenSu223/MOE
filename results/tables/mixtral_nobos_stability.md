@@ -1,0 +1,8 @@
+**Mixtral without BOS (add_special_tokens=False), paper case IDs: selection stability (Appendix D analogue)**
+
+| Check | Ours | Paper |
+|---|---|---|
+| Stability grid: E006 selected | 8/25 (selected counts {2.0: 12, 6.0: 8}) | (Qwen3 only in the paper) |
+| Stability grid: mean val rescue / spec | +0.171 / -0.055 |  |
+| Relation-held-out: E006 selected | 2/5 folds; active 131/256 |  |
+| Relation-held-out: rescue / spec | +0.123 [+0.081, +0.168] / -0.117 [-0.188, -0.047] |  |

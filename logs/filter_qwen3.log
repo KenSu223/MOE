@@ -1,0 +1,13 @@
+02:42:34 qwen3: embed_std=0.020654 sigma=0.061961 hidden=2048 layers=48
+02:42:38   layer   0: load-wait 2.89s compute 0.58s  wf_rows=0
+02:42:47   layer   8: load-wait 1.08s compute 0.17s  wf_rows=0
+02:42:57   layer  16: load-wait 1.08s compute 0.17s  wf_rows=0
+02:43:07   layer  24: load-wait 1.08s compute 0.16s  wf_rows=0
+02:43:17   layer  32: load-wait 1.08s compute 0.17s  wf_rows=0
+02:43:28   layer  40: load-wait 1.30s compute 0.17s  wf_rows=0
+02:43:40   layer  47: load-wait 0.97s compute 0.17s  wf_rows=0
+02:43:40   pass done: 2048 prefill rows (T=18), 0 spawn rows, 65.1s
+02:43:40 chunk done (1024 records, 65.3s): scanned=1048 tokenizable=1024 strict=816 relaxed=855
+02:43:40 scan summary: {"records_scanned": 1048, "tokenizable": 1024, "rejected": 24, "n_strict_total": 816, "n_relaxed_total": 855, "strict_pass_rate_tokenizable": 0.796875, "relaxed_pass_rate_tokenizable": 0.8349609375, "reject_reasons": {"multi_token": 24}, "embed_std": 0.020653514191508293, "sigma": 0.06196054257452488, "pass_times_s": [65.32161855697632]}
+02:43:40 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 389, "paper_ids_scan_rank_median": 196, "our_scan_last_rank": 1048, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 235, "paper_ids_relaxed_in_scan": 240, "overlap_paper_vs_our_strict256": 195, "overlap_paper_vs_our_relaxed512": 240, "paper_ids_rejected_by_tokenizer": []}
+02:43:40 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/qwen3

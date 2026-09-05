@@ -1,0 +1,12 @@
+16:13:20 mixtral: 256 cases, layers [19], 512 prefill rows, 1954 spawn rows
+16:13:27   layer   0: load-wait 6.43s compute 0.64s  wf_rows=0
+16:13:50   layer   8: load-wait 2.69s compute 0.13s  wf_rows=0
+16:14:09   layer  16: load-wait 2.44s compute 0.14s  wf_rows=0
+16:14:31   layer  24: load-wait 2.76s compute 0.17s  wf_rows=1954
+16:14:51   layer  31: load-wait 2.72s compute 0.17s  wf_rows=1954
+16:14:51   pass done: 512 prefill rows (T=18), 1954 spawn rows, 90.9s
+16:14:51 pass time 91.1s
+16:14:51 L19 set paper: 1 candidates (>= 64 active); best E006 all-case mean +0.071 active 91/128; top5: {6: 0.071}
+16:14:51 L19 set strict: 1 candidates (>= 64 active); best E006 all-case mean +0.086 active 82/128; top5: {6: 0.086}
+16:14:51 L19 set relaxed: no candidate meets the recurrence threshold; max activity 85
+16:14:51 wrote 1954 rows to /home/ubuntu/MOE/results/mixtral_nobos/expert_rows.parquet

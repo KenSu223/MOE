@@ -1,0 +1,7 @@
+**Mixtral without BOS (add_special_tokens=False), paper case IDs: coalition patching (Table 16 analogue)**
+
+| Patch | Rescue (ours) | Paper |
+|---|---|---|
+| Clean top-2 coalition | +0.431 [+0.315, +0.547] | +0.461 [+0.343, +0.572] |
+| Routing-union coalition | +0.454 [+0.335, +0.570] | +0.490 [+0.367, +0.613] |
+| L19 MoE-block patch (same pass) | +0.454 [+0.335, +0.570] | +0.457 [+0.331, +0.579] |

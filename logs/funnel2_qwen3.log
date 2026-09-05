@@ -1,0 +1,14 @@
+02:52:04 390 records, 3292 rows
+02:52:08   layer   0: load-wait 2.88s compute 0.61s  wf_rows=0
+02:52:15   layer   8: load-wait 0.76s compute 0.26s  wf_rows=0
+02:52:22   layer  16: load-wait 0.51s compute 0.26s  wf_rows=0
+02:52:30   layer  24: load-wait 0.97s compute 0.26s  wf_rows=0
+02:52:40   layer  32: load-wait 0.97s compute 0.26s  wf_rows=0
+02:52:50   layer  40: load-wait 0.72s compute 0.26s  wf_rows=0
+02:52:58   layer  47: load-wait 0.98s compute 0.26s  wf_rows=0
+02:52:59   pass done: 3292 prefill rows (T=18), 0 spawn rows, 53.9s
+02:52:59 space_single {"defined": 380, "paper_pass": 236, "paper_defined": 256, "nonpaper_pass": 66, "nonpaper_defined": 124, "agreement": 0.774, "overlap_first256": 195}
+02:52:59 space_first {"defined": 390, "paper_pass": 236, "paper_defined": 256, "nonpaper_pass": 76, "nonpaper_defined": 134, "agreement": 0.754, "overlap_first256": 187}
+02:52:59 nospace_first {"defined": 390, "paper_pass": 205, "paper_defined": 256, "nonpaper_pass": 56, "nonpaper_defined": 134, "agreement": 0.726, "overlap_first256": 200}
+02:52:59 nospace_single_else_space {"defined": 390, "paper_pass": 252, "paper_defined": 256, "nonpaper_pass": 16, "nonpaper_defined": 134, "agreement": 0.949, "overlap_first256": 241}
+02:52:59 nospace_single_only {"defined": 96, "paper_pass": 74, "paper_defined": 75, "nonpaper_pass": 2, "nonpaper_defined": 21, "agreement": 0.969, "overlap_first256": 74}

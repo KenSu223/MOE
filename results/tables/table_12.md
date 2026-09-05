@@ -1,0 +1,18 @@
+**Table 12: relation-held-out expert-selection check (5 relation folds)**
+
+| Model | Metric | Ours | Paper |
+|---|---|---|---|
+| Qwen3-30B-A3B-Base | Folds | 5 | 5 |
+| Qwen3-30B-A3B-Base | Selected L44E069 | 5 / 5 | 5 / 5 |
+| Qwen3-30B-A3B-Base | Held-out cases | 256 | 256 |
+| Qwen3-30B-A3B-Base | Active cases | 230 / 256 | 229 / 256 |
+| Qwen3-30B-A3B-Base | Rescue | +0.485 [+0.389, +0.593] | +0.443 [+0.343, +0.545] |
+| Qwen3-30B-A3B-Base | Specificity | +0.434 [+0.335, +0.541] | +0.388 [+0.297, +0.484] |
+| Qwen3-30B-A3B-Base | Per-fold selections | E069, E069, E069, E069, E069 |  |
+| Mixtral-8x7B-v0.1 | Folds | 5 |  |
+| Mixtral-8x7B-v0.1 | Selected L19E002 | 5 / 5 |  |
+| Mixtral-8x7B-v0.1 | Held-out cases | 256 |  |
+| Mixtral-8x7B-v0.1 | Active cases | 160 / 256 |  |
+| Mixtral-8x7B-v0.1 | Rescue | +0.361 [+0.286, +0.442] |  |
+| Mixtral-8x7B-v0.1 | Specificity | +0.191 [+0.114, +0.273] |  |
+| Mixtral-8x7B-v0.1 | Per-fold selections | E002, E002, E002, E002, E002 |  |

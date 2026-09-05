@@ -1,0 +1,13 @@
+expert pass layers for mixtral (mixtral, rule=space): 19
+02:58:31 mixtral: 527 cases, layers [19], 1054 prefill rows, 3939 spawn rows
+02:58:38   layer   0: load-wait 6.05s compute 0.71s  wf_rows=0
+02:58:59   layer   8: load-wait 2.54s compute 0.29s  wf_rows=0
+02:59:22   layer  16: load-wait 2.56s compute 0.29s  wf_rows=0
+02:59:41   layer  24: load-wait 1.79s compute 0.35s  wf_rows=3939
+02:59:59   layer  31: load-wait 1.98s compute 0.35s  wf_rows=3939
+03:00:00   pass done: 1054 prefill rows (T=19), 3939 spawn rows, 88.6s
+03:00:00 pass time 88.8s
+03:00:00 L19 set paper: 2 candidates (>= 64 active); best E002 all-case mean +0.371 active 76/128; top5: {2: 0.371, 6: 0.105}
+03:00:00 L19 set strict: 2 candidates (>= 64 active); best E002 all-case mean +0.358 active 79/128; top5: {2: 0.358, 6: 0.096}
+03:00:00 L19 set relaxed: 2 candidates (>= 128 active); best E002 all-case mean +0.353 active 166/256; top5: {2: 0.353, 6: 0.094}
+03:00:00 wrote 3939 rows to /home/ubuntu/MOE/results/mixtral/expert_rows.parquet

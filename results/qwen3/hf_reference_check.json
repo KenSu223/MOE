@@ -1,0 +1,78 @@
+{
+ "n": 5,
+ "max_abs_delta_diff": 0.25,
+ "mean_abs_delta_diff": 0.1375,
+ "top1_agree": 5,
+ "rows": [
+  {
+   "case_id": 11072,
+   "prompt": "Dominique Joseph Garat, a native",
+   "delta_engine": 11.5625,
+   "delta_hf": 11.4375,
+   "diff": 0.125,
+   "logit_true_engine": 26.125,
+   "logit_true_hf": 26.125,
+   "logit_foil_engine": 14.5625,
+   "logit_foil_hf": 14.6875,
+   "top1_engine": 315,
+   "top1_hf": 315,
+   "forward_s": 22.126755952835083
+  },
+  {
+   "case_id": 636,
+   "prompt": "Old Trinity Church can be found in",
+   "delta_engine": 1.25,
+   "delta_hf": 1.375,
+   "diff": -0.125,
+   "logit_true_engine": 18.625,
+   "logit_true_hf": 18.625,
+   "logit_foil_engine": 17.375,
+   "logit_foil_hf": 17.25,
+   "top1_engine": 279,
+   "top1_hf": 279,
+   "forward_s": 19.035757303237915
+  },
+  {
+   "case_id": 3463,
+   "prompt": "Gray Television, whose headquarters are in",
+   "delta_engine": 11.25,
+   "delta_hf": 11.3125,
+   "diff": -0.0625,
+   "logit_true_engine": 25.0,
+   "logit_true_hf": 25.125,
+   "logit_foil_engine": 13.75,
+   "logit_foil_hf": 13.8125,
+   "top1_engine": 19440,
+   "top1_hf": 19440,
+   "forward_s": 18.986419200897217
+  },
+  {
+   "case_id": 19770,
+   "prompt": "The language of The White Guard is",
+   "delta_engine": 3.0,
+   "delta_hf": 2.875,
+   "diff": 0.125,
+   "logit_true_engine": 22.125,
+   "logit_true_hf": 22.125,
+   "logit_foil_engine": 19.125,
+   "logit_foil_hf": 19.25,
+   "top1_engine": 264,
+   "top1_hf": 264,
+   "forward_s": 18.272457599639893
+  },
+  {
+   "case_id": 16489,
+   "prompt": "The original language of Mouna Ragam was",
+   "delta_engine": 8.125,
+   "delta_hf": 8.375,
+   "diff": -0.25,
+   "logit_true_engine": 26.875,
+   "logit_true_hf": 27.0,
+   "logit_foil_engine": 18.75,
+   "logit_foil_hf": 18.625,
+   "top1_engine": 43783,
+   "top1_hf": 43783,
+   "forward_s": 18.891874074935913
+  }
+ ]
+}

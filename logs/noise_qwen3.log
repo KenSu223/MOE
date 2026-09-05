@@ -1,0 +1,14 @@
+02:53:17 qwen3: 256 cases x sigmas [1.0, 2.0, 4.0]: 1024 prefill rows, 3072 spawn rows
+02:53:21   layer   0: load-wait 2.75s compute 0.60s  wf_rows=0
+02:53:27   layer   8: load-wait 0.82s compute 0.09s  wf_rows=0
+02:53:36   layer  16: load-wait 0.97s compute 0.09s  wf_rows=0
+02:53:45   layer  24: load-wait 1.09s compute 0.08s  wf_rows=0
+02:53:54   layer  32: load-wait 1.13s compute 0.09s  wf_rows=0
+02:54:06   layer  40: load-wait 1.97s compute 0.10s  wf_rows=0
+02:54:14   layer  47: load-wait 1.21s compute 0.11s  wf_rows=3072
+02:54:14   pass done: 1024 prefill rows (T=16), 3072 spawn rows, 56.4s
+02:54:14 pass time 56.6s
+02:54:14 sigma 1.0: drop +1.364  expert rescue +0.091 pos 0.42 active 117/128  layer rescue +0.218
+02:54:14 sigma 2.0: drop +4.809  expert rescue +0.437 pos 0.63 active 117/128  layer rescue +0.780
+02:54:14 sigma 4.0: drop +5.955  expert rescue +0.505 pos 0.66 active 117/128  layer rescue +1.003
+02:54:14 done

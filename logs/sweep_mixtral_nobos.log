@@ -1,0 +1,15 @@
+16:11:16 mixtral: sets=['paper'] union=256 cases
+16:11:19 running pass: 512 prefill rows, 8192 spawn rows
+16:11:27   layer   0: load-wait 7.12s compute 0.71s  wf_rows=256
+16:11:51   layer   8: load-wait 3.43s compute 0.57s  wf_rows=2304
+16:12:14   layer  16: load-wait 2.69s compute 0.21s  wf_rows=4352
+16:12:37   layer  24: load-wait 2.66s compute 0.24s  wf_rows=6400
+16:12:57   layer  31: load-wait 2.61s compute 0.27s  wf_rows=8192
+16:12:57   pass done: 512 prefill rows (T=18), 8192 spawn rows, 97.5s
+16:12:57 pass time 97.7s
+/home/ubuntu/MOE/scripts/run_sweep.py:108: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:109: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+16:12:58 set paper: L*=19 disc=+0.436 val@L*=+0.446 val argmax L21 +0.531 funnel strict 249/256
+16:12:58 done

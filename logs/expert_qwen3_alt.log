@@ -1,0 +1,15 @@
+expert pass layers for qwen3 (qwen3_alt, rule=paper_like): 44
+03:01:48 qwen3: 256 cases, layers [44], 512 prefill rows, 17869 spawn rows
+03:01:52   layer   0: load-wait 2.94s compute 0.59s  wf_rows=0
+03:01:59   layer   8: load-wait 0.68s compute 0.06s  wf_rows=0
+03:02:05   layer  16: load-wait 0.61s compute 0.06s  wf_rows=0
+03:02:12   layer  24: load-wait 1.18s compute 0.05s  wf_rows=0
+03:02:22   layer  32: load-wait 0.75s compute 0.07s  wf_rows=0
+03:02:32   layer  40: load-wait 1.50s compute 0.06s  wf_rows=0
+03:02:40   layer  47: load-wait 1.08s compute 0.15s  wf_rows=17869
+03:02:41   pass done: 512 prefill rows (T=16), 17869 spawn rows, 52.0s
+03:02:41 pass time 52.2s
+03:02:41 L44 set paper: 5 candidates (>= 64 active); best E069 all-case mean +0.470 active 114/128; top5: {69: 0.47, 27: 0.037, 54: 0.008, 71: 0.001, 56: -0.015}
+03:02:41 L44 set strict: 3 candidates (>= 64 active); best E069 all-case mean +0.311 active 82/128; top5: {69: 0.311, 54: 0.003, 71: -0.002}
+03:02:41 L44 set relaxed: no candidate meets the recurrence threshold; max activity 112
+03:02:41 wrote 17869 rows to /home/ubuntu/MOE/results/qwen3_alt/expert_rows.parquet

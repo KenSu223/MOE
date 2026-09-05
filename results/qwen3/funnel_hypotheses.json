@@ -1,0 +1,38 @@
+{
+ "bos=False,nospace": {
+  "n_paper": 75,
+  "paper_strict_pass": 74,
+  "n_nonpaper": 21,
+  "nonpaper_strict_pass": 2,
+  "paper_pass_rate": 0.987,
+  "nonpaper_pass_rate": 0.095,
+  "overlap_first256_with_paper": 74
+ },
+ "bos=False,space": {
+  "n_paper": 256,
+  "paper_strict_pass": 234,
+  "n_nonpaper": 124,
+  "nonpaper_strict_pass": 69,
+  "paper_pass_rate": 0.914,
+  "nonpaper_pass_rate": 0.556,
+  "overlap_first256_with_paper": 193
+ },
+ "bos=True,nospace": {
+  "n_paper": 75,
+  "paper_strict_pass": 71,
+  "n_nonpaper": 21,
+  "nonpaper_strict_pass": 3,
+  "paper_pass_rate": 0.947,
+  "nonpaper_pass_rate": 0.143,
+  "overlap_first256_with_paper": 71
+ },
+ "bos=True,space": {
+  "n_paper": 256,
+  "paper_strict_pass": 230,
+  "n_nonpaper": 124,
+  "nonpaper_strict_pass": 70,
+  "paper_pass_rate": 0.898,
+  "nonpaper_pass_rate": 0.565,
+  "overlap_first256_with_paper": 191
+ }
+}

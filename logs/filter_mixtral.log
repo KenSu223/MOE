@@ -1,0 +1,11 @@
+02:54:31 mixtral: embed_std=0.011152 sigma=0.033455 hidden=4096 layers=32
+02:54:40   layer   0: load-wait 7.58s compute 1.22s  wf_rows=0
+02:55:03   layer   8: load-wait 2.23s compute 0.66s  wf_rows=0
+02:55:26   layer  16: load-wait 2.20s compute 0.67s  wf_rows=0
+02:55:49   layer  24: load-wait 2.27s compute 0.66s  wf_rows=0
+02:56:09   layer  31: load-wait 2.23s compute 0.66s  wf_rows=0
+02:56:09   pass done: 2048 prefill rows (T=23), 0 spawn rows, 97.9s
+02:56:09 chunk done (1024 records, 98.1s): scanned=2034 tokenizable=1024 strict=879 relaxed=905
+02:56:09 scan summary: {"records_scanned": 2034, "tokenizable": 1024, "rejected": 1010, "n_strict_total": 879, "n_relaxed_total": 905, "strict_pass_rate_tokenizable": 0.8583984375, "relaxed_pass_rate_tokenizable": 0.8837890625, "reject_reasons": {"multi_token": 1010}, "embed_std": 0.01115164440125227, "sigma": 0.03345493320375681, "pass_times_s": [98.13172245025635]}
+02:56:09 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 580, "paper_ids_scan_rank_median": 300, "our_scan_last_rank": 2034, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 233, "paper_ids_relaxed_in_scan": 241, "overlap_paper_vs_our_strict256": 230, "overlap_paper_vs_our_relaxed512": 241, "paper_ids_rejected_by_tokenizer": []}
+02:56:09 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/mixtral

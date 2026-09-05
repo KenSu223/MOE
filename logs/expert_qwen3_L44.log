@@ -1,0 +1,14 @@
+02:49:08 qwen3: 528 cases, layers [44], 1056 prefill rows, 36847 spawn rows
+02:49:12   layer   0: load-wait 2.73s compute 0.91s  wf_rows=0
+02:49:17   layer   8: load-wait 0.79s compute 0.09s  wf_rows=0
+02:49:26   layer  16: load-wait 1.11s compute 0.09s  wf_rows=0
+02:49:34   layer  24: load-wait 1.06s compute 0.09s  wf_rows=0
+02:49:44   layer  32: load-wait 1.15s compute 0.09s  wf_rows=0
+02:49:54   layer  40: load-wait 1.10s compute 0.09s  wf_rows=0
+02:50:04   layer  47: load-wait 0.99s compute 0.31s  wf_rows=36847
+02:50:04   pass done: 1056 prefill rows (T=18), 36847 spawn rows, 55.5s
+02:50:04 pass time 55.6s
+02:50:07 L44 set paper: 5 candidates (>= 64 active); best E069 all-case mean +0.468 active 114/128; top5: {69: 0.468, 27: 0.029, 54: 0.01, 71: -0.001, 56: -0.029}
+02:50:07 L44 set strict: 5 candidates (>= 64 active); best E069 all-case mean +0.434 active 117/128; top5: {69: 0.434, 27: 0.03, 71: 0.001, 54: -0.0, 56: -0.007}
+02:50:07 L44 set relaxed: 5 candidates (>= 128 active); best E069 all-case mean +0.392 active 228/256; top5: {69: 0.392, 27: 0.038, 54: 0.013, 71: 0.002, 56: -0.01}
+02:50:07 wrote 36847 rows to /home/ubuntu/MOE/results/qwen3/expert_rows.parquet

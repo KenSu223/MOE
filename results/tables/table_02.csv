@@ -1,0 +1,10 @@
+Item,Setting (ours)
+Record order,"random.Random(0).shuffle over the 21,919 CounterFact records (verified: all paper IDs lie in the first 390/580 records)"
+Cases,Paper's Table 8 IDs (primary); our own strict 256 and relaxed 512 as secondary sets
+Filtering,single-token true/foil (continuation tokenisation with leading space); clean margin >= 1.0; drop >= 0.5 (relaxed 0.5 / 0.25)
+Subject noise,"one Gaussian draw per case, torch.Generator seed 0 + case_id, scale 3.0 x embedding-matrix std (fp32), added to subject-token embeddings"
+Layer selection,argmax mean rescue over discovery cases; fixed on validation
+Expert selection,clean-active in >= 64 of 128 discovery cases (half the split); highest all-case mean rescue
+Active-random,Qwen3: 3 other clean-active experts sampled with random.Random(1000 + case_id); Mixtral: the unique other expert
+Statistics,"5,000 percentile-bootstrap resamples (seed 0); 10,000 two-sided sign-flip samples (seed 0)"
+Precision,"bf16 weights and activations (as HF), fp32 accumulation; Delta from bf16 logits"

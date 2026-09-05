@@ -1,0 +1,17 @@
+02:47:48 380 cases, 1904 rows
+02:47:51   layer   0: load-wait 3.01s compute 0.51s  wf_rows=0
+02:47:59   layer   8: load-wait 0.98s compute 0.17s  wf_rows=0
+02:48:07   layer  16: load-wait 0.80s compute 0.16s  wf_rows=0
+02:48:13   layer  24: load-wait 0.73s compute 0.16s  wf_rows=0
+02:48:21   layer  32: load-wait 1.07s compute 0.16s  wf_rows=0
+02:48:32   layer  40: load-wait 0.66s compute 0.17s  wf_rows=0
+02:48:40   layer  47: load-wait 1.09s compute 0.16s  wf_rows=0
+02:48:41   pass done: 1904 prefill rows (T=19), 0 spawn rows, 52.8s
+02:48:41 bos=False nospace: paper 74/75 pass strict; non-paper 2/21 pass
+02:48:41 bos=False space: paper 234/256 pass strict; non-paper 69/124 pass
+02:48:41 bos=True nospace: paper 71/75 pass strict; non-paper 3/21 pass
+02:48:41 bos=True space: paper 230/256 pass strict; non-paper 70/124 pass
+02:48:41 bos=False nospace: overlap of first-256 strict with paper set: 74
+02:48:41 bos=False space: overlap of first-256 strict with paper set: 193
+02:48:41 bos=True nospace: overlap of first-256 strict with paper set: 71
+02:48:41 bos=True space: overlap of first-256 strict with paper set: 191

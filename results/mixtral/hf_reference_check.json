@@ -1,0 +1,78 @@
+{
+ "n": 5,
+ "max_abs_delta_diff": 0.0625,
+ "mean_abs_delta_diff": 0.0125,
+ "top1_agree": 5,
+ "rows": [
+  {
+   "case_id": 6515,
+   "prompt": "Guillaumes, which is located in",
+   "delta_engine": 9.3125,
+   "delta_hf": 9.375,
+   "diff": -0.0625,
+   "logit_true_engine": 24.375,
+   "logit_true_hf": 24.375,
+   "logit_foil_engine": 15.0,
+   "logit_foil_hf": 15.0,
+   "top1_engine": 272,
+   "top1_hf": 272,
+   "forward_s": 60.53087568283081
+  },
+  {
+   "case_id": 15598,
+   "prompt": "Clifford Brown, who plays",
+   "delta_engine": 7.25,
+   "delta_hf": 7.25,
+   "diff": 0.0,
+   "logit_true_engine": 22.75,
+   "logit_true_hf": 22.75,
+   "logit_foil_engine": 15.5,
+   "logit_foil_hf": 15.5,
+   "top1_engine": 22945,
+   "top1_hf": 22945,
+   "forward_s": 56.524853467941284
+  },
+  {
+   "case_id": 8024,
+   "prompt": "Google Patents, a product developed by",
+   "delta_engine": 6.25,
+   "delta_hf": 6.25,
+   "diff": 0.0,
+   "logit_true_engine": 27.5,
+   "logit_true_hf": 27.5,
+   "logit_foil_engine": 21.25,
+   "logit_foil_hf": 21.25,
+   "top1_engine": 6182,
+   "top1_hf": 6182,
+   "forward_s": 56.25890040397644
+  },
+  {
+   "case_id": 18874,
+   "prompt": "LBi, that was created in",
+   "delta_engine": 2.875,
+   "delta_hf": 2.875,
+   "diff": 0.0,
+   "logit_true_engine": 24.0,
+   "logit_true_hf": 24.125,
+   "logit_foil_engine": 21.25,
+   "logit_foil_hf": 21.25,
+   "top1_engine": 28705,
+   "top1_hf": 28705,
+   "forward_s": 56.26820492744446
+  },
+  {
+   "case_id": 3167,
+   "prompt": "Brian May, the",
+   "delta_engine": 9.75,
+   "delta_hf": 9.75,
+   "diff": 0.0,
+   "logit_true_engine": 27.375,
+   "logit_true_hf": 27.375,
+   "logit_foil_engine": 17.625,
+   "logit_foil_hf": 17.625,
+   "top1_engine": 10686,
+   "top1_hf": 10686,
+   "forward_s": 56.51467800140381
+  }
+ ]
+}

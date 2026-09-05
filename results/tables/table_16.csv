@@ -1,0 +1,7 @@
+Model,Patch,Rescue (ours),Pos. frac. (ours),Rescue (paper),Pos. frac. (paper)
+Qwen3-30B-A3B-Base,Clean top-8 coalition,"+0.916 [+0.756, +1.096]",0.85,,
+Qwen3-30B-A3B-Base,Routing-union coalition,"+0.932 [+0.771, +1.116]",0.86,,
+Qwen3-30B-A3B-Base,L44 MoE-block patch (same pass),"+0.932 [+0.771, +1.116]",0.86,,
+Mixtral-8x7B-v0.1,Clean top-2 coalition,"+0.542 [+0.435, +0.658]",0.79,"+0.461 [+0.343, +0.572]",0.75
+Mixtral-8x7B-v0.1,Routing-union coalition,"+0.560 [+0.449, +0.680]",0.77,"+0.490 [+0.367, +0.613]",0.75
+Mixtral-8x7B-v0.1,L19 MoE-block patch (same pass),"+0.560 [+0.449, +0.680]",0.77,,

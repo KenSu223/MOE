@@ -1,0 +1,17 @@
+03:00:15 qwen3: sets=['paper'] union=256 cases
+03:00:24 running pass: 512 prefill rows, 12288 spawn rows
+03:00:27   layer   0: load-wait 2.88s compute 0.66s  wf_rows=256
+03:00:36   layer   8: load-wait 1.16s compute 0.08s  wf_rows=2304
+03:00:46   layer  16: load-wait 1.14s compute 0.09s  wf_rows=4352
+03:00:56   layer  24: load-wait 1.15s compute 0.09s  wf_rows=6400
+03:01:06   layer  32: load-wait 1.14s compute 0.10s  wf_rows=8448
+03:01:16   layer  40: load-wait 1.13s compute 0.12s  wf_rows=10496
+03:01:26   layer  47: load-wait 1.78s compute 0.12s  wf_rows=12288
+03:01:26   pass done: 512 prefill rows (T=16), 12288 spawn rows, 62.4s
+03:01:26 pass time 62.6s
+/home/ubuntu/MOE/scripts/run_sweep.py:107: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:108: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+03:01:27 set paper: L*=44 disc=+0.957 val@L*=+0.924 val argmax L44 +0.924 funnel strict 251/256
+03:01:27 done

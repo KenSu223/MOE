@@ -1,0 +1,8 @@
+scripts/download_models.sh: line 15: 2729379 Killed                     hf download "$repo" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+02:07:15 DONE Qwen/Qwen3-30B-A3B-Base rc=0 elapsed=51s
+02:09:10 DONE allenai/OLMoE-1B-7B-0125 rc=0 elapsed=166s
+02:14:24 DONE mistralai/Mixtral-8x7B-v0.1 rc=0 elapsed=480s
+ALL_DOWNLOADS_DONE
+61G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base
+39G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125
+93G	/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1
