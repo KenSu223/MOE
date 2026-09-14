@@ -1,0 +1,5 @@
+|  | delimiter before final | no delimiter | All |
+|---|---|---|---|
+| final position is the sink | 5 | 58 | 63 |
+| sink elsewhere | 95 | 98 | 193 |
+| All | 100 | 156 | 256 |

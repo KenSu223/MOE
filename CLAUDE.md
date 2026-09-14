@@ -38,6 +38,26 @@ paper-vs-ours, both Figure 1 variants, verification, deviations). Repository: gi
 - Numerics: our engine's deviation from transformers equals transformers' own bf16 noise (fp32 CPU reference on
   OLMoE); big-model checks vs transformers-with-offload on 5 prompts each: max |ΔΔ| 0.25 (Qwen3), 0.06 (Mixtral).
 
+## 2b. Extensions (RESEARCH_PLAN.md; results in results/EXTENSIONS_REPORT.md, sections in results/sections/)
+
+Wave 1 done 2026-09-14 (Directions 1 and 3); wave 2 (Directions 2 and 4) follows.
+- **Direction 1 (joint layer×expert search, all-layer expert passes in `results/*_alllayers`)**: the two-stage
+  procedure does not miss a *better* expert in Qwen3 (L44E069 is the joint argmax) but misses a *second locus*:
+  L42E115 (126/128 recurrent, val +0.447 [0.363, 0.537], Spec +0.423) wins the discovery argmax on the strict and
+  relaxed sets and in 30/75 grid cells. Mixtral under the paper protocol (no BOS): the joint winner is **L18E001**
+  (Spec +0.098 [0.040, 0.162]) while the paper's L19E006 has Spec −0.159; E001 is the strongest expert of L17/18/21/22
+  under both protocols; L19E002 is the strongest L19 expert without BOS too but fails the 64/128 recurrence gate.
+- **Direction 3 (BOS mechanism)**: `<s>` is a prompt-independent attention sink whose per-layer K/V alone reproduce
+  the BOS run when transplanted into no-BOS prompts (routing agreement 0.99); a key-only sink breaks the model.
+  Without BOS, Mixtral forms no position-0 sink; in 63/256 prompts the final token itself becomes the sink state and
+  is routed to E006 (63/63), which is the L19 "sink expert" (P(E006|`<s>`)=1.00) but an ordinary content expert on
+  corpus text. Any position-0 token that forms a sink (`\n`, `,`, `:`, attached `.`, `▁`) restores the BOS-run routing;
+  `the`, `▁.`, rare words do not. RoPE shift is a no-op (relative positions). Qwen3's L44E069 survives a prepended
+  `<|endoftext|>`. Consequence: the paper's negative Mixtral specificity is expected once a quarter of its prompts
+  route the final token like a sink. Engine gained optional diagnostics (`DiagSpec`), `PrefillSpec.pos_offset`,
+  sink transplant (`sink_donor`), `prefix_ids` in `prepare_case`; verify_olmoe unchanged.
+- Literature: docs/ext3_literature_review.md (Mistral is the documented exception: BOS is its sole sink driver).
+
 ## 3. What is NOT done / known gaps
 
 - Mixtral **relaxed-filter set (Tables 14, 15)** was run only under the BOS default. A no-BOS filter scan → sweep →

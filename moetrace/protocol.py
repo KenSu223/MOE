@@ -28,8 +28,10 @@ def set_names(sets: dict) -> list[str]:
     return [k for k in ("paper", "strict", "relaxed") if k in sets]
 
 
-def cases_by_id(model: str, case_ids: list[int], tok=None, token_rule: str = "space", special_tokens: bool = True) -> tuple[dict[int, Case], list[dict]]:
-    """Tokenise the given case ids with the model tokenizer. Returns (id -> Case, list of rejects)."""
+def cases_by_id(model: str, case_ids: list[int], tok=None, token_rule: str = "space", special_tokens: bool = True,
+                prefix_ids: Optional[list[int]] = None) -> tuple[dict[int, Case], list[dict]]:
+    """Tokenise the given case ids with the model tokenizer. Returns (id -> Case, list of rejects).
+    prefix_ids (ext3): tokens prepended to every prompt (see data.prepare_case)."""
     if tok is None:
         from transformers import AutoTokenizer
         from .arch import snapshot_dir
@@ -37,7 +39,7 @@ def cases_by_id(model: str, case_ids: list[int], tok=None, token_rule: str = "sp
     recs = load_records()
     out, rej = {}, []
     for cid in case_ids:
-        c, why = prepare_case(recs[cid], tok, token_rule, special_tokens)
+        c, why = prepare_case(recs[cid], tok, token_rule, special_tokens, prefix_ids=prefix_ids)
         if c is None:
             rej.append({"case_id": cid, "reason": why})
         else:

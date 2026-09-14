@@ -229,3 +229,34 @@
 - Outputs: results/sections/ext1_joint_search.md, results/ext1_summary.json, results/figures/ext1_curves_{qwen3_bos,mixtral_bos,mixtral_nobos}.{png,pdf},
   results/tables/ext1_{top10,stability,neighbours,concentration,best_expert_by_layer}_<run>.{md,csv}, ext1_layer_curve_*.csv,
   ext1_all_candidates_*.csv, ext1_neighbours_all_*.csv, ext1_mixtral_E001_by_layer.{md,csv}, ext1_summary.{md,csv}.
+
+## 2026-09-14 05:15 UTC — ext3-bos-mechanism: all passes done, section written (agent resumed after the usage-limit reset)
+- Passes D (dot2, colon, of, space, unk), Qwen3 (default, eot) and the two corpus passes (wiki, code; 400 x 127 tokens
+  x 2 protocols each) finished 01:15-01:22 UTC (10 ext3 GPU jobs in total, ~16 GPU minutes). scripts/ext3_analyze.py
+  rebuilt every table/figure (results/tables/ext3_*, results/figures/ext3_*) and results/sections/ext3_bos_mechanism.md
+  (verdict in results/sections/ext3_conclusion.md, appended by the script).
+- Verdict: H1 in a Mistral-specific form. <s>'s only channel is its prompt-independent per-layer K/V (sinkfull = BOS run,
+  agreement 0.99); Mixtral forms no position-0 sink without it; the massive-norm state forms on the first delimiter /
+  function word and, in 63/256 prompts (58 without any delimiter), on the FINAL preposition of the cloze. Those 63 are
+  the whole L19 effect: their final residual is the sink state (router logits identical to <s>'s, sd 0.008), routed to
+  E006 in 63/63 (31/63 with BOS; agreement 0.06 vs 0.75 elsewhere). E006 is the L19 sink expert (P(E006|<s>) = 1.00,
+  P(E006|1st content token) = 0.67 vs base 0.25) and otherwise an ordinary expert (corpus usage 0.24-0.25, position
+  entropy 0.997, protocol Delta < 0.01). H2 rejected in strict form: '\n', ',', ':', attached '.', lone space and 'of' at
+  position 0 restore BOS-run routing (agreement 0.76-0.80, E002 selected, spec +0.09..+0.15); '▁.', 'the', 'workspace'
+  do not; </s> and <unk> are destructive. Key-only sink (value 0) breaks the model: absorber AND value bias both needed.
+  H3 degenerate (RoPE relative; shift1 = nobos to bf16 noise). Qwen3: L44E069 survives <|endoftext|> (rescue +0.46,
+  spec +0.40; no position-0 sink in Qwen3 either way). OOD: prompts 0.16 nats/token less likely without BOS, weakly
+  related to the routing change (AUC 0.585); norm ratio of the final position predicts it (r = 0.59).
+- Engine changes verified: verify_olmoe.json identical to verify_olmoe_before_ext3.json on every metric (gate output in
+  logs/ext3_chain.log). Files owned: moetrace/engine.py, data.py, protocol.py, moetrace/ext3_variants.py,
+  scripts/ext3_{run_variants,corpus_routing,analyze,verify_diag,gate,chain,chain2}.{py,sh}. Not committed (coordinator).
+
+## 2026-09-14 05:15 — coordinator: wave 1 complete (Directions 1 and 3)
+- ext1-joint-search, ext3-bos-mechanism, ext3-literature all delivered; sections in results/sections/, assembled into
+  results/EXTENSIONS_REPORT.md by scripts/build_extensions_report.py. Key findings recorded in CLAUDE.md section 2b.
+- ext3-bos-mechanism was killed once by the account usage limit (01:2x UTC, reset 05:00) after all its GPU passes had
+  finished; resumed at 05:02 from disk, no GPU work repeated. Engine diagnostics verified (verify_olmoe identical).
+- Wave-1 GPU total: ext1 ~14 min, ext3 ~16 min.
+- Next: wave 2 (ext2-model-zoo, ext2-attn-patch, ext4-codefact-data) with two brief changes from wave 1: model-zoo
+  runs the all-layer expert pass (joint search) as standard, and every run reports the fraction of prompts whose
+  final token carries the sink state (final-position norm ratio / attention-on-self) as a protocol diagnostic.

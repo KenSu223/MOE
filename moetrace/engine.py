@@ -60,40 +60,71 @@ def apply_rope(x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -> torch.T
     return (x * cos) + (rotate_half(x) * sin)
 
 
-def attn_prefill(q, k, v, causal: torch.Tensor, scale: float) -> torch.Tensor:
-    """q [B, nH, T, D], k/v [B, nKV, T, D] -> [B, nH, T, D] (eager-style, softmax in fp32)."""
+def attn_prefill(q, k, v, causal: torch.Tensor, scale: float, final_t: Optional[torch.Tensor] = None,
+                 row_chunk: Optional[int] = None):
+    """q [B, nH, T, D], k/v [B, nKV, T, D] -> [B, nH, T, D] (eager-style, softmax in fp32).
+
+    If final_t [B] is given, also returns the fp32 attention distribution of each row's final position over all
+    positions, [B, nH, T] (diagnostics). row_chunk processes the batch in row chunks (rows are independent, so the
+    result is identical; it only bounds the [B, nH, T, T] score tensor).
+    """
     B, nH, T, D = q.shape
+    Tk = k.shape[2]  # = T, or T + 1 when slot 0 is an extra (sink) key/value
+    if row_chunk is not None and row_chunk < B:
+        outs, pfs = [], []
+        for s0 in range(0, B, row_chunk):
+            r = attn_prefill(q[s0 : s0 + row_chunk], k[s0 : s0 + row_chunk], v[s0 : s0 + row_chunk],
+                             causal[s0 : s0 + row_chunk] if causal.dim() == 5 else causal, scale,
+                             None if final_t is None else final_t[s0 : s0 + row_chunk])
+            if final_t is None:
+                outs.append(r)
+            else:
+                outs.append(r[0])
+                pfs.append(r[1])
+        out = torch.cat(outs, 0)
+        return out if final_t is None else (out, torch.cat(pfs, 0))
     nkv = k.shape[1]
     rep = nH // nkv
     qg = q.view(B, nkv, rep, T, D)
-    scores = torch.matmul(qg, k[:, :, None].transpose(-1, -2)) * scale  # [B, nkv, rep, T, T]
+    scores = torch.matmul(qg, k[:, :, None].transpose(-1, -2)) * scale  # [B, nkv, rep, T, Tk]
     scores = scores.masked_fill(~causal, float("-inf"))
-    p = torch.softmax(scores.float(), dim=-1).to(q.dtype)
+    p32 = torch.softmax(scores.float(), dim=-1)
+    p = p32.to(q.dtype)
     out = torch.matmul(p, v[:, :, None])  # [B, nkv, rep, T, D]
-    return out.view(B, nH, T, D)
+    out = out.view(B, nH, T, D)
+    if final_t is None:
+        return out
+    ar = torch.arange(B, device=q.device)
+    p_final = p32.view(B, nH, T, Tk)[ar, :, final_t, :]  # [B, nH, Tk]
+    return out, p_final
 
 
-def attn_wavefront(qw, kw, vw, K, V, parent, valid_len, scale: float, chunk: int = 8192) -> torch.Tensor:
+def attn_wavefront(qw, kw, vw, K, V, parent, valid_len, scale: float, chunk: int = 8192,
+                   sink_valid: Optional[torch.Tensor] = None) -> torch.Tensor:
     """Single-token queries attending to a parent prefill row's K/V plus their own K/V.
 
     qw [W, nH, 1, D]; kw/vw [W, nKV, 1, D]; K/V [P, nKV, T, D]; parent [W] long; valid_len [W] long (= parent len - 1:
     the parent's own final-position key is excluded and replaced by the row's own key).
+    sink_valid (bool [P], ext3): K/V then carry an extra slot 0 (an attendable sink key/value that is not a token of
+    the row); it is visible to the rows whose parent has sink_valid set.
     """
     W, nH, _, D = qw.shape
     nkv = kw.shape[1]
     rep = nH // nkv
-    T = K.shape[2]
+    T = K.shape[2] - (1 if sink_valid is not None else 0)  # token positions of the parent
     out = torch.empty(W, nH, 1, D, dtype=qw.dtype, device=qw.device)
     ar_T = torch.arange(T, device=qw.device)
     for s in range(0, W, chunk):
         e = min(W, s + chunk)
-        pk = K[parent[s:e]]  # [w, nkv, T, D]
+        pk = K[parent[s:e]]  # [w, nkv, T(+1), D]
         pv = V[parent[s:e]]
-        kk = torch.cat([pk, kw[s:e]], dim=2)  # [w, nkv, T+1, D]
+        kk = torch.cat([pk, kw[s:e]], dim=2)  # [w, nkv, T(+1)+1, D]
         vv = torch.cat([pv, vw[s:e]], dim=2)
         qg = qw[s:e].view(e - s, nkv, rep, 1, D)
-        scores = torch.matmul(qg, kk[:, :, None].transpose(-1, -2)) * scale  # [w, nkv, rep, 1, T+1]
+        scores = torch.matmul(qg, kk[:, :, None].transpose(-1, -2)) * scale  # [w, nkv, rep, 1, T(+1)+1]
         valid = ar_T[None, :] < valid_len[s:e, None]  # [w, T]
+        if sink_valid is not None:
+            valid = torch.cat([sink_valid[parent[s:e]][:, None], valid], dim=1)
         valid = torch.cat([valid, torch.ones(e - s, 1, dtype=torch.bool, device=qw.device)], dim=1)
         scores = scores.masked_fill(~valid[:, None, None, None, :], float("-inf"))
         p = torch.softmax(scores.float(), dim=-1).to(qw.dtype)
@@ -102,11 +133,12 @@ def attn_wavefront(qw, kw, vw, K, V, parent, valid_len, scale: float, chunk: int
 
 
 def moe_forward(x: torch.Tensor, w: LayerWeights, spec: ArchSpec, final_map: Optional[torch.Tensor], n_final: int,
-                token_chunk: int = 8192):
+                token_chunk: int = 8192, return_logits: bool = False):
     """Sparse MoE block on flattened tokens x [N, H] (bf16).
 
     Returns (out_bf16 [N, H], acc_fp32 [N, H], topi [N, k], topv [N, k] fp32, contrib [n_final, k, H] fp32 or None).
     contrib[j, s] is the contribution of the expert in slot s of the token with final_map[token] == j.
+    With return_logits=True the raw router logits (bf16 [N, E]) are appended as a sixth element.
     """
     N, Hd = x.shape
     k, E = spec.top_k, spec.n_experts
@@ -148,6 +180,8 @@ def moe_forward(x: torch.Tensor, w: LayerWeights, spec: ArchSpec, final_map: Opt
                 contrib[fm, sl] = ce
     if contrib is not None:
         contrib = contrib[:n_final]
+    if return_logits:
+        return acc.to(x.dtype), acc, topi, topv, contrib, logits
     return acc.to(x.dtype), acc, topi, topv, contrib
 
 
@@ -161,6 +195,37 @@ class PrefillSpec:
     foil_id: int
     noise_pos: Optional[list[int]] = None
     noise_eps: Optional[torch.Tensor] = None  # fp32 [len(noise_pos), hidden] on CPU
+    pos_offset: int = 0  # RoPE position of ids[0] (default 0); lets a row keep the positions of a longer prompt
+    sink_donor: int = -1  # ext3: prefill row whose position-0 key/value (every layer) is added as an extra attendable
+    #                       slot for this row (a "transplanted sink" that is not a token of the row); -1 = none
+    sink_vscale: float = 1.0  # scale of the transplanted VALUE (1 = donor's value; 0 = key-only sink, pure absorber)
+
+
+@dataclass
+class DiagSpec:
+    """Optional per-layer diagnostics of the prefill rows (ext3). All off by default; results in PassResult.extra['diag'].
+
+    attn_final          final-position attention distribution over all positions, per head: fp16 [L, B, nH, T]
+    resid_norms         L2 norm of the residual stream at every position after each layer: fp32 [L, B, T]
+    router_logits_final raw router logits at the final position: fp32 [L, B, E]
+    resid_final         final-position residual after each layer: bf16 [L, B, H] (as a torch tensor on CPU)
+    token_logprobs      log p(ids[t+1] | ids[..t]) at every prefill position: fp32 [B, T] (NaN where undefined), plus
+                        logprob_true / logprob_foil [B] at the final position
+    route_all_layers    layers at which the routing of EVERY prefill token is recorded: dict layer -> (topi int16
+                        [B, T, k], topv fp32 [B, T, k], router logits fp32 [B, T, E])
+    attn_sink           (with attn_final, only when some row has a sink_donor) final-position attention mass on the
+                        transplanted sink slot: fp16 [L, B, nH]
+    """
+    attn_final: bool = False
+    resid_norms: bool = False
+    router_logits_final: bool = False
+    resid_final: bool = False
+    token_logprobs: bool = False
+    route_all_layers: tuple = ()
+
+    @property
+    def any_layer(self) -> bool:
+        return self.attn_final or self.resid_norms or self.router_logits_final or self.resid_final or bool(self.route_all_layers)
 
 
 @dataclass
@@ -301,12 +366,18 @@ class Engine:
     # -- main pass ------------------------------------------------------------------------------------------------
     @torch.no_grad()
     def run(self, prefill: list[PrefillSpec], spawns: list[SpawnSpec], record_routing: bool = True,
-            log=None, wf_chunk: int = 8192) -> PassResult:
+            log=None, wf_chunk: int = 8192, diag: Optional[DiagSpec] = None,
+            attn_score_budget: int = 768 * 2**20, bv_chunk: int = 8192) -> PassResult:
         s, dev = self.spec, self.device
         Hd = self.hidden
         B = len(prefill)
         lens = np.array([len(p.ids) for p in prefill], dtype=np.int64)
         T = int(lens.max())
+        offsets = np.array([int(getattr(p, "pos_offset", 0)) for p in prefill], dtype=np.int64)
+        use_offsets = bool((offsets != 0).any())
+        sink_donor = np.array([int(getattr(p, "sink_donor", -1)) for p in prefill], dtype=np.int64)
+        use_sink = bool((sink_donor >= 0).any())
+        diag = diag or DiagSpec()
         ids = torch.zeros(B, T, dtype=torch.long)
         for b, p in enumerate(prefill):
             ids[b, : len(p.ids)] = torch.tensor(p.ids, dtype=torch.long)
@@ -342,9 +413,25 @@ class Engine:
         sp_np = np.zeros(S, dtype=np.float32)
         sp_vnorm = np.zeros(S, dtype=np.float32)
 
-        cos_all, sin_all = rope_tables(T, s.head_dim, s.rope_theta, dev)
+        cos_all, sin_all = rope_tables(T + int(offsets.max()), s.head_dim, s.rope_theta, dev)
+        offsets_t = torch.tensor(offsets, device=dev)
+        if use_offsets:  # per-row RoPE positions t + offset; gathered tables [B, 1, T, D]
+            pos_ids = torch.arange(T, device=dev)[None, :] + offsets_t[:, None]
+            cos_pre, sin_pre = cos_all[pos_ids][:, None], sin_all[pos_ids][:, None]
+        else:  # identical numerics to the original shared-table path
+            cos_pre, sin_pre = cos_all[:T], sin_all[:T]
         causal = torch.ones(T, T, dtype=torch.bool, device=dev).tril()
         scale = s.head_dim ** -0.5
+        if use_sink:
+            assert (sink_donor < B).all() and (sink_donor[sink_donor >= 0] != np.arange(B)[sink_donor >= 0]).all()
+            has_sink_t = torch.tensor(sink_donor >= 0, device=dev)
+            donor_t = torch.tensor(np.where(sink_donor >= 0, sink_donor, 0), device=dev)
+            vscale_t = torch.tensor([float(getattr(p, "sink_vscale", 1.0)) for p in prefill], device=dev, dtype=BF16)[:, None, None, None]
+            mask_ext = torch.cat([has_sink_t[:, None, None, None, None].expand(B, 1, 1, T, 1),
+                                  causal[None, None, None].expand(B, 1, 1, T, T)], dim=-1)  # [B, 1, 1, T, T+1]
+        # attention score tensor [B, nH, T, T] fp32 is bounded by attn_score_budget bytes via row chunking
+        score_bytes = B * s.n_heads * T * T * 4
+        row_chunk = None if score_bytes <= attn_score_budget else max(1, attn_score_budget // (s.n_heads * T * T * 4))
         final_idx = ar * T + final_t
         final_map = torch.full((B * T + S,), -1, dtype=torch.long, device=dev)
         final_map[final_idx] = ar
@@ -356,6 +443,20 @@ class Engine:
             route_cn = np.zeros((L, B, s.top_k), dtype=np.float32)
         else:
             route_idx = route_w = route_cn = None
+        dg: dict = {}
+        if diag.attn_final:
+            dg["attn_final"] = np.zeros((L, B, s.n_heads, T), dtype=np.float16)
+            if use_sink:
+                dg["attn_sink"] = np.zeros((L, B, s.n_heads), dtype=np.float16)
+        if diag.resid_norms:
+            dg["resid_norms"] = np.zeros((L, B, T), dtype=np.float32)
+        if diag.router_logits_final:
+            dg["router_logits_final"] = np.zeros((L, B, s.n_experts), dtype=np.float32)
+        if diag.resid_final:
+            dg["resid_final"] = torch.empty((L, B, Hd), dtype=BF16)
+        if diag.route_all_layers:
+            dg["route_all"] = {}
+        valid_pos = (torch.arange(T, device=dev)[None, :] < lens_t[:, None])  # [B, T]
         layer_times = []
         t_start = time.time()
         t_prev = t_start
@@ -364,9 +465,24 @@ class Engine:
             # ---- attention: prefill rows
             x = rmsnorm(Hs, w.ln1, s.rms_eps)
             q, k, v = self._qk(x, w, B, T)
-            q = apply_rope(q, cos_all, sin_all)
-            k = apply_rope(k, cos_all, sin_all)
-            o = attn_prefill(q, k, v, causal, scale)
+            q = apply_rope(q, cos_pre, sin_pre)
+            k = apply_rope(k, cos_pre, sin_pre)
+            if use_sink:  # extra slot 0 = donor row's position-0 key/value (zero and masked for rows without a donor)
+                hs4 = has_sink_t[:, None, None, None].to(BF16)
+                k_att = torch.cat([k[donor_t, :, 0:1, :] * hs4, k], dim=2)  # [B, nkv, T+1, D]
+                v_att = torch.cat([v[donor_t, :, 0:1, :] * hs4 * vscale_t, v], dim=2)
+                mask_att = mask_ext
+            else:
+                k_att, v_att, mask_att = k, v, causal
+            if diag.attn_final:
+                o, p_final = attn_prefill(q, k_att, v_att, mask_att, scale, final_t, row_chunk)
+                if use_sink:
+                    dg["attn_sink"][l] = p_final[:, :, 0].to(torch.float16).cpu().numpy()
+                    p_final = p_final[:, :, 1:]
+                dg["attn_final"][l] = p_final.to(torch.float16).cpu().numpy()
+                del p_final
+            else:
+                o = attn_prefill(q, k_att, v_att, mask_att, scale, None, row_chunk)
             o = F.linear(o.transpose(1, 2).reshape(B, T, s.n_heads * s.head_dim), w.wo)
             Hs = Hs + o
             # ---- attention: wavefront rows
@@ -375,24 +491,41 @@ class Engine:
                 xw = rmsnorm(hw, w.ln1, s.rms_eps)
                 qw, kw, vw = self._qk(xw, w, n_wf, 1)
                 pos = final_t[wf_parent[:n_wf]]
-                cw = cos_all[pos][:, None, None, :]
-                sw = sin_all[pos][:, None, None, :]
+                rpos = pos + offsets_t[wf_parent[:n_wf]]  # RoPE position of the wavefront token
+                cw = cos_all[rpos][:, None, None, :]
+                sw = sin_all[rpos][:, None, None, :]
                 qw = apply_rope(qw, cw, sw)
                 kw = apply_rope(kw, cw, sw)
-                ow = attn_wavefront(qw, kw, vw, k, v, wf_parent[:n_wf], pos, scale, chunk=wf_chunk)
+                ow = attn_wavefront(qw, kw, vw, k_att, v_att, wf_parent[:n_wf], pos, scale, chunk=wf_chunk,
+                                    sink_valid=has_sink_t if use_sink else None)
                 ow = F.linear(ow.reshape(n_wf, s.n_heads * s.head_dim), w.wo)
                 wf_H[:n_wf] = hw + ow
-            del q, k, v, o, x
+            del q, k, v, o, x, k_att, v_att
             # ---- MoE
             x2 = rmsnorm(Hs, w.ln2, s.rms_eps).view(B * T, Hd)
             if n_wf > 0:
                 x2 = torch.cat([x2, rmsnorm(wf_H[:n_wf], w.ln2, s.rms_eps)], 0)
             need_contrib = record_routing or (l in by_layer)
-            out_bf, acc, topi, topv, contrib = moe_forward(x2, w, s, final_map[: B * T + n_wf] if need_contrib else None, B)
+            want_logits = diag.router_logits_final or (l in diag.route_all_layers)
+            mo = moe_forward(x2, w, s, final_map[: B * T + n_wf] if need_contrib else None, B, return_logits=want_logits)
+            out_bf, acc, topi, topv, contrib = mo[:5]
+            if want_logits:
+                rlog = mo[5]
+                if diag.router_logits_final:
+                    dg["router_logits_final"][l] = rlog[final_idx].float().cpu().numpy()
+                if l in diag.route_all_layers:
+                    dg["route_all"][int(l)] = (topi[: B * T].view(B, T, -1).to(torch.int16).cpu().numpy(),
+                                               topv[: B * T].view(B, T, -1).float().cpu().numpy(),
+                                               rlog[: B * T].view(B, T, -1).float().cpu().numpy())
+                del rlog
             resid_final = Hs[ar, final_t]  # pre-MoE residual at the final position (bf16)
             Hs = Hs + out_bf[: B * T].view(B, T, Hd)
             if n_wf > 0:
                 wf_H[:n_wf] += out_bf[B * T :]
+            if diag.resid_norms:
+                dg["resid_norms"][l] = (Hs.float().norm(dim=-1) * valid_pos).cpu().numpy()
+            if diag.resid_final:
+                dg["resid_final"][l] = Hs[ar, final_t].cpu()
             acc_f = acc[final_idx]
             topi_f = topi[final_idx]
             topv_f = topv[final_idx]
@@ -403,7 +536,11 @@ class Engine:
             # ---- spawns at this layer
             if l in by_layer:
                 idx = by_layer[l]
-                vvec = self._build_v(spawns, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np)
+                if len(idx) <= bv_chunk:
+                    vvec = self._build_v(spawns, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np)
+                else:  # bound the [n, k, H] fp32 temporaries of _build_v (identical result)
+                    vvec = torch.cat([self._build_v(spawns, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np)
+                                      for c0 in range(0, len(idx), bv_chunk)], 0)
                 sp_vnorm[idx] = vvec.norm(dim=-1).cpu().numpy()
                 parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
                 h_new = resid_final[parents] + (acc_f[parents] + vvec).to(BF16)
@@ -436,6 +573,8 @@ class Engine:
             lf_full[c0 : c0 + 512] = lg[arb, foil_ids[c0 : c0 + 512]].float()
         lt = self._pair_logits(hN, head, true_ids)
         lf = self._pair_logits(hN, head, foil_ids)
+        if diag.token_logprobs:
+            dg.update(self._token_logprobs(Hs, ids, lens_t, norm, head, true_ids, foil_ids))
         # wavefront rows
         sp_lt = np.zeros(S, dtype=np.float32)
         sp_lf = np.zeros(S, dtype=np.float32)
@@ -456,8 +595,38 @@ class Engine:
             logit_true_full=lt_full.cpu().numpy(), logit_foil_full=lf_full.cpu().numpy(), top1=top1.cpu().numpy(),
             route_idx=route_idx, route_w=route_w, route_cnorm=route_cn,
             sp_logit_true=sp_lt, sp_logit_foil=sp_lf, sp_alpha=sp_alpha, sp_norm_e=sp_ne, sp_norm_partner=sp_np,
-            sp_vnorm=sp_vnorm, layer_times=layer_times, extra={"total_s": total, "T": T},
+            sp_vnorm=sp_vnorm, layer_times=layer_times,
+            extra={"total_s": total, "T": T, "diag": dg, "row_chunk": row_chunk, "use_offsets": use_offsets, "use_sink": use_sink},
         )
+
+    def _token_logprobs(self, Hs, ids, lens_t, norm, head, true_ids, foil_ids) -> dict:
+        """Next-token log-probabilities at every prefill position (fp32 log-softmax of the bf16 logits)."""
+        s = self.spec
+        B, T, Hd = Hs.shape
+        dev = Hs.device
+        lp = torch.full((B, T), float("nan"), dtype=torch.float32, device=dev)
+        lp_true = torch.zeros(B, dtype=torch.float32, device=dev)
+        lp_foil = torch.zeros(B, dtype=torch.float32, device=dev)
+        top1_all = torch.full((B, T), -1, dtype=torch.long, device=dev)
+        rows_per_chunk = max(1, int(2**28 // (T * s.vocab)))  # ~1 GB of fp32 log-probs per chunk
+        arT = torch.arange(T, device=dev)
+        for c0 in range(0, B, rows_per_chunk):
+            c1 = min(B, c0 + rows_per_chunk)
+            hN = rmsnorm(Hs[c0:c1], norm, s.rms_eps).view(-1, Hd)
+            lg = F.linear(hN, head).float().view(c1 - c0, T, -1)
+            logp = torch.log_softmax(lg, dim=-1)
+            top1_all[c0:c1] = lg.argmax(-1)
+            nxt = torch.cat([ids[c0:c1, 1:], torch.zeros(c1 - c0, 1, dtype=torch.long, device=dev)], dim=1)
+            g = logp.gather(-1, nxt[..., None])[..., 0]  # [b, T]
+            valid = arT[None, :] < (lens_t[c0:c1, None] - 1)
+            lp[c0:c1] = torch.where(valid, g, torch.full_like(g, float("nan")))
+            fin = lens_t[c0:c1] - 1
+            arb = torch.arange(c1 - c0, device=dev)
+            lp_true[c0:c1] = logp[arb, fin, true_ids[c0:c1]]
+            lp_foil[c0:c1] = logp[arb, fin, foil_ids[c0:c1]]
+            del lg, logp
+        return {"token_logprobs": lp.cpu().numpy(), "logprob_true": lp_true.cpu().numpy(), "logprob_foil": lp_foil.cpu().numpy(),
+                "top1_all": top1_all.cpu().numpy()}
 
     @staticmethod
     def _pair_logits(h: torch.Tensor, head: torch.Tensor, ids: torch.Tensor) -> torch.Tensor:

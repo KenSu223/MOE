@@ -1,0 +1,19 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "experiment": "ext3 corpus-level routing statistics (H4)",
+ "agent": "ext3-bos-mechanism",
+ "protocol": "bos",
+ "corpus": "wiki",
+ "source": "/opt/dlami/nvme/moe_ext3/corpus/wikitext103_test.parquet",
+ "window": 127,
+ "n_windows": 400,
+ "pass_shared_with": "mixtral_nobos_corpus_wiki",
+ "raw": "/opt/dlami/nvme/moe_ext3/mixtral_corpus_wiki/route_all.npz",
+ "pass_time_s": 97.54637742042542,
+ "command": "python scripts/ext3_corpus_routing.py mixtral --corpus wiki",
+ "created_utc": "2026-09-14T01:19:27Z",
+ "outputs": [
+  "corpus_stats.json (identical copy in both protocol dirs; per-layer/per-expert usage, agreement, entropies)"
+ ]
+}

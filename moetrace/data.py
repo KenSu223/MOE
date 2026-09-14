@@ -70,8 +70,13 @@ def _object_token(tok, prompt_ids: list[int], prompt: str, obj: str, token_rule:
     return _single_token_continuation(tok, prompt_ids, prompt, obj, special_tokens)
 
 
-def prepare_case(rec: dict, tok, token_rule: str = "space", special_tokens: bool = True) -> tuple[Optional[Case], str]:
-    """Tokenise one CounterFact record. Returns (Case or None, reason)."""
+def prepare_case(rec: dict, tok, token_rule: str = "space", special_tokens: bool = True,
+                 prefix_ids: Optional[list[int]] = None) -> tuple[Optional[Case], str]:
+    """Tokenise one CounterFact record. Returns (Case or None, reason).
+
+    prefix_ids (ext3): token ids prepended to the tokenised prompt AFTER the object tokens have been resolved on the
+    un-prefixed prompt; subject positions are shifted accordingly. Combined with special_tokens=False this puts an
+    arbitrary token at position 0 in place of the BOS token (substitution controls)."""
     rw = rec["requested_rewrite"]
     tpl, subj = rw["prompt"], rw["subject"]
     if tpl.count("{}") != 1:
@@ -97,6 +102,10 @@ def prepare_case(rec: dict, tok, token_rule: str = "space", special_tokens: bool
         return None, "multi_token"
     if true_id == foil_id:
         return None, "same_token"
+    if prefix_ids:
+        k = len(prefix_ids)
+        ids = [int(t) for t in prefix_ids] + ids
+        subject_pos = [p + k for p in subject_pos]
     return Case(case_id=int(rec["case_id"]), relation=rw["relation_id"], prompt=prompt, subject=subj,
                 true_str=rw["target_true"]["str"], foil_str=rw["target_new"]["str"], ids=ids,
                 subject_pos=subject_pos, true_id=true_id, foil_id=foil_id), "ok"

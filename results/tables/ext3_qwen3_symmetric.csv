@@ -1,0 +1,3 @@
+variant,position 0,RoPE pos of 1st content token,strict pass,mean Δ_clean,L* (disc),val rescue @L44,agree@L44 w/ default (set/top1),agree@L44 w/ eot (set/top1),E069 active disc/val,selected e* (cands),e* val rescue,e* spec,E069 val rescue / spec,coalition top-k / union
+default,no token (tokenizer default = paper protocol),0,235/256,+6.28,L44,+0.925,1.00/1.00,0.40/0.84,112/117,E069 (6),"+0.511 [+0.374, +0.664]","+0.462 [+0.323, +0.613]",+0.511 / +0.462,+0.919 / +0.925
+eot,<|endoftext|> at position 0,1,233/256,+5.95,L44,+0.894,0.40/0.84,1.00/1.00,115/113,E069 (6),"+0.462 [+0.344, +0.592]","+0.403 [+0.283, +0.535]",+0.462 / +0.403,+0.886 / +0.894

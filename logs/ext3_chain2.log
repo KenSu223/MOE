@@ -1,0 +1,37 @@
+2026-09-14T01:14:03Z START ext3-mixtral-passD (waited 20s): python scripts/ext3_run_variants.py mixtral --variants dot2,colon,of,space,unk
+01:14:15 variant dot2       -> mixtral_nobos_prefix_dot2: T range 5-19, example ids[:4]=[28723, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:14:15 variant colon      -> mixtral_nobos_prefix_colon: T range 5-19, example ids[:4]=[28747, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:14:15 variant of         -> mixtral_nobos_prefix_of: T range 5-19, example ids[:4]=[302, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:14:15 variant space      -> mixtral_nobos_prefix_space: T range 5-19, example ids[:4]=[28705, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:14:16 variant unk        -> mixtral_nobos_prefix_unk: T range 5-19, example ids[:4]=[0, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:14:17 pass: 5 variants, 2560 prefill rows, 55040 spawn rows, expert layers [19]
+01:14:24   layer   0: load-wait 6.05s compute 1.20s  wf_rows=1280
+01:14:42   layer   8: load-wait 0.81s compute 0.88s  wf_rows=11520
+01:14:57   layer  16: load-wait 1.13s compute 1.04s  wf_rows=21760
+01:15:13   layer  24: load-wait 0.75s compute 1.44s  wf_rows=46080
+01:15:31   layer  31: load-wait 1.15s compute 1.58s  wf_rows=55040
+01:15:31   pass done: 2560 prefill rows (T=19), 55040 spawn rows, 74.6s
+01:15:31 pass time 74.9s  T=19 row_chunk=None offsets=False sink=False
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:15:33 dot2: L*=19 disc=+0.552 val@L*=+0.482 val argmax L19 +0.482 strict 243/256; 1406 expert rows; sink mass pos0 @L1 0.812
+01:15:33    L19 clean-active disc/val: E000 22/19, E002 73/79, E003 8/9, E004 51/42, E005 15/17, E006 70/71, E007 12/13
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:15:34 colon: L*=19 disc=+0.598 val@L*=+0.582 val argmax L19 +0.582 strict 243/256; 1402 expert rows; sink mass pos0 @L1 0.808
+01:15:34    L19 clean-active disc/val: E000 19/19, E002 72/83, E003 9/8, E004 53/40, E005 15/16, E006 72/72, E007 12/12
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:15:35 of: L*=19 disc=+0.536 val@L*=+0.561 val argmax L19 +0.561 strict 241/256; 1416 expert rows; sink mass pos0 @L1 0.806
+01:15:35    L19 clean-active disc/val: E000 18/12, E002 67/82, E004 55/39, E005 18/20, E006 76/78, E007 12/14
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:15:36 space: L*=19 disc=+0.588 val@L*=+0.535 val argmax L19 +0.535 strict 243/256; 1399 expert rows; sink mass pos0 @L1 0.802
+01:15:36    L19 clean-active disc/val: E000 17/15, E002 73/80, E003 7/8, E004 56/45, E005 11/16, E006 73/75, E007 14/13
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:15:37 unk: L*=21 disc=+0.149 val@L*=+0.156 val argmax L21 +0.156 strict 141/256; 1410 expert rows; sink mass pos0 @L1 0.202
+01:15:37    L19 clean-active disc/val: E000 17/17, E002 39/49, E003 18/18, E004 36/28, E005 12/19, E006 99/88, E007 33/36
+01:15:37 done
+2026-09-14T01:15:41Z END   ext3-mixtral-passD rc=0 (98s)
+2026-09-14T01:15:41Z chain2 done

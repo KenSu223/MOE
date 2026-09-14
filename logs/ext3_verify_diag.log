@@ -1,0 +1,27 @@
+2026-09-14T01:00:40Z START ext3-verify-diag (waited 283s): python scripts/ext3_verify_diag.py 6
+01:00:52 6 cases; T = [8, 14, 8, 5, 9, 6]
+01:00:56   layer   0: load-wait 1.82s compute 0.56s  wf_rows=0
+01:01:08   layer   8: load-wait 1.64s compute 0.02s  wf_rows=0
+01:01:20   layer  15: load-wait 1.64s compute 0.03s  wf_rows=0
+01:01:20   pass done: 12 prefill rows (T=14), 0 spawn rows, 26.9s
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   3%|▎         | 5/179 [00:00<00:03, 47.44it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 69.32it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 77.47it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 81.43it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 79.23it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 79.61it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 81.04it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 81.27it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 82.08it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 82.81it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 83.43it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 82.63it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 82.11it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 82.09it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 82.61it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 83.60it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 85.54it/s]
+01:01:29 n_cases: 6
+01:01:29 prefix_ids_check: ok
+01:01:29 use_offsets: True
+01:01:29 attn_final_maxdiff: 0.103271484375
+01:01:29 attn_final_mean_maxdiff: 0.01361846923828125
+01:01:29 resid_norm_max_reldiff_hidden_states[l+1]: 0.014844237826764584
+01:01:29 resid_norm_max_reldiff_hidden_states[l]: 2.7594573497772217
+01:01:29 router_logits_final_maxdiff: 0.09130859375
+01:01:29 router_logits_final_mean_maxdiff: 0.02499993642171224
+01:01:29 route_all_set_agreement: 143/150
+01:01:29 token_logprobs_maxdiff: 0.1663961410522461
+01:01:29 delta_default_maxdiff_vs_hf: 0.0625
+01:01:29 delta_pos_offset1_maxdiff_vs_hf_position_ids: 0.1875
+01:01:29 delta_pos_offset1_mean_diff: 0.0625
+01:01:29 hf_delta_change_from_offset_mean_abs: 0.10416666666666667
+01:01:29 engine_delta_change_from_offset_mean_abs: 0.06640625
+01:01:29 resid_final_shape: [16, 12, 2048]
+01:01:29 attn_final_shape: [16, 12, 16, 14]
+01:01:29 logprob_true_matches_final_logprob: True
+2026-09-14T01:01:30Z END   ext3-verify-diag rc=0 (50s)

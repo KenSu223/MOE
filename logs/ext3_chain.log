@@ -1,0 +1,263 @@
+2026-09-14T01:07:05Z chain start
+2026-09-14T01:07:05Z START ext3-verify-diag2 (waited 0s): python scripts/ext3_verify_diag.py 6
+01:07:14 6 cases; T = [8, 14, 8, 5, 9, 6]
+01:07:18   layer   0: load-wait 1.83s compute 0.57s  wf_rows=0
+01:07:30   layer   8: load-wait 1.65s compute 0.02s  wf_rows=0
+01:07:42   layer  15: load-wait 1.65s compute 0.02s  wf_rows=0
+01:07:42   pass done: 12 prefill rows (T=14), 0 spawn rows, 26.9s
+01:07:42   layer   0: load-wait 0.15s compute 0.11s  wf_rows=12
+01:07:44   layer   8: load-wait 0.07s compute 0.09s  wf_rows=108
+01:07:45   layer  15: load-wait 0.08s compute 0.03s  wf_rows=192
+01:07:45   pass done: 36 prefill rows (T=15), 192 spawn rows, 2.6s
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:04, 37.68it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 62.71it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:02, 71.41it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 73.76it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 78.96it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 78.68it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 77.65it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 78.44it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 76.69it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 77.70it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 77.33it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 79.14it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 79.62it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 78.87it/s]Loading weights:  88%|████████▊ | 158/179 [00:02<00:00, 79.53it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 79.16it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 81.24it/s]
+01:07:53 n_cases: 6
+01:07:53 prefix_ids_check: ok
+01:07:53 use_offsets: True
+01:07:53 sink_identity_delta_maxdiff_clean: 0.0
+01:07:53 sink_identity_delta_maxdiff_noised: 0.0
+01:07:53 sink_identity_routing_set_agreement_clean: 1.0
+01:07:53 sink_identity_layer_rescue_maxdiff: 0.0
+01:07:53 sink_identity_layer_rescue_mean_absdiff: 0.0
+01:07:53 sink_keyonly_delta_mean_absdiff_vs_donor: 4.560465335845947
+01:07:53 sink_keyonly_delta_mean_absdiff_vs_plain: 4.684163570404053
+01:07:53 shift1_identity_delta_maxdiff_vs_default: 0.359375
+01:07:53 sink_slot_mass_transplant_vs_donor_pos0_maxdiff: 0.0
+01:07:53 sink_slot_mass_keyonly_mean: 0.662320613861084
+01:07:53 sink_slot_mass_transplant_mean: 0.592710554599762
+01:07:53 attn_final_maxdiff: 0.103271484375
+01:07:53 attn_final_mean_maxdiff: 0.01361846923828125
+01:07:53 resid_norm_max_reldiff_hidden_states[l+1]: 0.014844237826764584
+01:07:53 resid_norm_max_reldiff_hidden_states[l]: 2.7594573497772217
+01:07:53 router_logits_final_maxdiff: 0.09130859375
+01:07:53 router_logits_final_mean_maxdiff: 0.02499993642171224
+01:07:53 route_all_set_agreement: 143/150
+01:07:53 token_logprobs_maxdiff: 0.1663961410522461
+01:07:53 delta_default_maxdiff_vs_hf: 0.0625
+01:07:53 delta_pos_offset1_maxdiff_vs_hf_position_ids: 0.1875
+01:07:53 delta_pos_offset1_mean_diff: 0.0625
+01:07:53 hf_delta_change_from_offset_mean_abs: 0.10416666666666667
+01:07:53 engine_delta_change_from_offset_mean_abs: 0.06640625
+01:07:53 resid_final_shape: [16, 12, 2048]
+01:07:53 attn_final_shape: [16, 12, 16, 14]
+01:07:53 logprob_true_matches_final_logprob: True
+2026-09-14T01:07:54Z END   ext3-verify-diag2 rc=0 (49s)
+2026-09-14T01:07:54Z START ext3-verify-olmoe (waited 0s): python scripts/verify_olmoe.py
+01:07:58 picked 50 cases; first prompt: 'Virginia State Route 33 is located in' true=Virginia foil=Milan subj_pos=[0, 1, 2, 3, 4]
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:05, 34.70it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 64.30it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:02, 74.14it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 74.52it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 78.67it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 82.26it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 82.92it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 83.47it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 83.46it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 82.51it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 82.33it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 83.34it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 82.73it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 81.75it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 82.32it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 82.25it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 84.78it/s]
+01:08:08 HF forwards done for 50 cases
+01:08:11 HF layer patches done: 50
+01:08:48 HF expert patches done: 221
+01:08:49   layer   0: load-wait 1.24s compute 0.15s  wf_rows=209
+01:08:51   layer   8: load-wait 0.11s compute 0.06s  wf_rows=843
+01:08:52   layer  15: load-wait 0.10s compute 0.03s  wf_rows=1421
+01:08:52   pass done: 100 prefill rows (T=14), 1421 spawn rows, 3.7s
+01:08:52 embed_std_engine: 0.009373849257826805
+01:08:52 embed_std_hf: 0.009373849257826805
+01:08:52 engine_pass_s: 3.7521958351135254
+01:08:52 delta_clean_maxdiff_vs_hf: 0.3828125
+01:08:52 delta_noised_maxdiff_vs_hf: 0.61328125
+01:08:52 delta_clean_frac_within_0.1: 0.72
+01:08:52 delta_noised_frac_within_0.1: 0.46
+01:08:52 delta_bmm_vs_fullmatmul_maxdiff: 0.0
+01:08:52 delta_bmm_vs_fullmatmul_frac_equal: 1.0
+01:08:52 top1_agreement_clean: 0.98
+01:08:52 logit_true_clean_maxdiff_vs_hf: 0.28125
+01:08:52 zero_on_noised_maxdiff: 0.40625
+01:08:52 zero_on_clean_maxdiff: 0.125
+01:08:52 layer_patch_vs_hf_n: 50
+01:08:52 layer_patch_vs_hf_maxdiff: 0.578125
+01:08:52 layer_patch_vs_hf_frac_within_0.1: 0.58
+01:08:52 layer_rescue_vs_hf_maxdiff: 0.498046875
+01:08:52 expert_patch_vs_hf_n: 221
+01:08:52 expert_patch_vs_hf_maxdiff: 1.07421875
+01:08:52 expert_patch_vs_hf_frac_within_0.1: 0.334841628959276
+01:08:52 routing_set_agreement: 38/40
+01:08:52 union_vs_layer_maxdiff: 0.0
+01:08:52 union_vs_layer_frac_equal: 1.0
+01:08:52 pass_total_s: 3.725574254989624
+01:08:52 curve: [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]
+2026-09-14T01:08:54Z END   ext3-verify-olmoe rc=0 (60s)
+delta_bmm_vs_fullmatmul_frac_equal            before     1.0000  after     1.0000  diff 0.0000
+delta_bmm_vs_fullmatmul_maxdiff               before     0.0000  after     0.0000  diff 0.0000
+delta_clean_frac_within_0.1                   before     0.7200  after     0.7200  diff 0.0000
+delta_clean_maxdiff_vs_hf                     before     0.3828  after     0.3828  diff 0.0000
+delta_noised_frac_within_0.1                  before     0.4600  after     0.4600  diff 0.0000
+delta_noised_maxdiff_vs_hf                    before     0.6133  after     0.6133  diff 0.0000
+embed_std_engine                              before     0.0094  after     0.0094  diff 0.0000
+embed_std_hf                                  before     0.0094  after     0.0094  diff 0.0000
+expert_patch_vs_hf_frac_within_0.1            before     0.3348  after     0.3348  diff 0.0000
+expert_patch_vs_hf_maxdiff                    before     1.0742  after     1.0742  diff 0.0000
+expert_patch_vs_hf_n                          before   221.0000  after   221.0000  diff 0.0000
+layer_patch_vs_hf_frac_within_0.1             before     0.5800  after     0.5800  diff 0.0000
+layer_patch_vs_hf_maxdiff                     before     0.5781  after     0.5781  diff 0.0000
+layer_patch_vs_hf_n                           before    50.0000  after    50.0000  diff 0.0000
+layer_rescue_vs_hf_maxdiff                    before     0.4980  after     0.4980  diff 0.0000
+logit_true_clean_maxdiff_vs_hf                before     0.2812  after     0.2812  diff 0.0000
+routing_set_agreement                         before      38/40  after      38/40
+top1_agreement_clean                          before     0.9800  after     0.9800  diff 0.0000
+union_vs_layer_frac_equal                     before     1.0000  after     1.0000  diff 0.0000
+union_vs_layer_maxdiff                        before     0.0000  after     0.0000  diff 0.0000
+zero_on_clean_maxdiff                         before     0.1250  after     0.1250  diff 0.0000
+zero_on_noised_maxdiff                        before     0.4062  after     0.4062  diff 0.0000
+mean_layer_rescue_curve max |diff|            0.0000
+sink_identity_routing_set_agreement_clean            1.0  >= 0.9
+sink_identity_delta_maxdiff_clean                    0.0  <= 0.7
+sink_identity_layer_rescue_mean_absdiff              0.0  <= 0.1
+shift1_identity_delta_maxdiff_vs_default        0.359375  <= 0.7
+attn_final_mean_maxdiff                       0.01361846923828125  <= 0.05
+router_logits_final_mean_maxdiff              0.02499993642171224  <= 0.1
+resid_norm_max_reldiff_hidden_states[l+1]     0.014844237826764584  <= 0.05
+token_logprobs_maxdiff                        0.1663961410522461  <= 0.5
+delta_pos_offset1_maxdiff_vs_hf_position_ids      0.1875  <= 0.7
+sink_slot_mass_transplant_vs_donor_pos0_maxdiff        0.0  <= 0.05
+GATE PASS
+2026-09-14T01:08:54Z gate passed
+2026-09-14T01:08:54Z START ext3-mixtral-passA (waited 0s): python scripts/ext3_run_variants.py mixtral --variants bos,nobos,shift1,eos,bosbos
+01:08:58 variant bos        -> mixtral_bos_diag: T range 5-19, example ids[:4]=[1, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:08:58 variant nobos      -> mixtral_nobos_diag: T range 4-18, example ids[:4]=[6427, 28725, 11567, 302] subject_pos[:3]=[0, 1, 2] offset=0
+01:08:59 variant shift1     -> mixtral_nobos_shift1: T range 4-18, example ids[:4]=[6427, 28725, 11567, 302] subject_pos[:3]=[0, 1, 2] offset=1
+01:08:59 variant eos        -> mixtral_nobos_prefix_eos: T range 5-19, example ids[:4]=[2, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:08:59 variant bosbos     -> mixtral_bos_prefix_bos: T range 6-20, example ids[:4]=[1, 1, 6427, 28725] subject_pos[:3]=[2, 3, 4] offset=0
+01:09:00 pass: 5 variants, 2560 prefill rows, 55040 spawn rows, expert layers [19]
+01:09:08   layer   0: load-wait 6.78s compute 1.18s  wf_rows=1280
+01:09:31   layer   8: load-wait 1.84s compute 0.92s  wf_rows=11520
+01:09:54   layer  16: load-wait 0.86s compute 3.59s  wf_rows=21760
+01:10:08   layer  24: load-wait 0.31s compute 1.52s  wf_rows=46080
+01:10:27   layer  31: load-wait 1.20s compute 1.69s  wf_rows=55040
+01:10:28   pass done: 2560 prefill rows (T=20), 55040 spawn rows, 87.5s
+01:10:28 pass time 87.7s  T=20 row_chunk=None offsets=True sink=False
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:10:30 bos: L*=19 disc=+0.620 val@L*=+0.580 val argmax L19 +0.580 strict 233/256; 1392 expert rows; sink mass pos0 @L1 0.830
+01:10:30    L19 clean-active disc/val: E000 15/13, E001 6/9, E002 77/84, E003 10/6, E004 51/47, E005 15/18, E006 71/67, E007 11/12
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:10:31 nobos: L*=19 disc=+0.406 val@L*=+0.431 val argmax L21 +0.502 strict 249/256; 1444 expert rows; sink mass pos0 @L1 0.094
+01:10:31    L19 clean-active disc/val: E000 9/13, E002 59/70, E003 10/9, E004 44/35, E005 10/13, E006 91/84, E007 31/30
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:10:32 shift1: L*=19 disc=+0.425 val@L*=+0.470 val argmax L21 +0.517 strict 249/256; 1442 expert rows; sink mass pos0 @L1 0.094
+01:10:32    L19 clean-active disc/val: E000 10/12, E002 59/70, E003 9/8, E004 45/36, E005 10/14, E006 90/83, E007 31/31
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:10:33 eos: L*=21 disc=+0.192 val@L*=+0.161 val argmax L21 +0.161 strict 154/256; 1398 expert rows; sink mass pos0 @L1 0.189
+01:10:33    L19 clean-active disc/val: E000 20/19, E002 39/53, E003 8/11, E004 32/23, E005 16/19, E006 95/86, E007 46/43
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:10:35 bosbos: L*=19 disc=+0.598 val@L*=+0.583 val argmax L19 +0.583 strict 232/256; 1393 expert rows; sink mass pos0 @L1 0.446
+01:10:35    L19 clean-active disc/val: E000 13/12, E001 6/11, E002 78/86, E003 10/7, E004 55/43, E005 15/19, E006 67/66, E007 12/12
+01:10:35 done
+2026-09-14T01:10:39Z END   ext3-mixtral-passA rc=0 (105s)
+2026-09-14T01:10:39Z START ext3-mixtral-passB (waited 0s): python scripts/ext3_run_variants.py mixtral --variants nl,dot,comma,the,rare
+01:10:49 variant nl         -> mixtral_nobos_prefix_nl: T range 5-19, example ids[:4]=[13, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:10:49 variant dot        -> mixtral_nobos_prefix_dot: T range 5-19, example ids[:4]=[842, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:10:50 variant comma      -> mixtral_nobos_prefix_comma: T range 5-19, example ids[:4]=[28725, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:10:50 variant the        -> mixtral_nobos_prefix_the: T range 5-19, example ids[:4]=[272, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:10:50 variant rare       -> mixtral_nobos_prefix_rare: T range 5-19, example ids[:4]=[28640, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:10:51 pass: 5 variants, 2560 prefill rows, 55040 spawn rows, expert layers [19]
+01:10:58   layer   0: load-wait 5.72s compute 1.30s  wf_rows=1280
+01:11:17   layer   8: load-wait 1.27s compute 0.87s  wf_rows=11520
+01:11:36   layer  16: load-wait 0.93s compute 1.04s  wf_rows=21760
+01:11:51   layer  24: load-wait 0.28s compute 1.50s  wf_rows=46080
+01:12:11   layer  31: load-wait 1.35s compute 1.58s  wf_rows=55040
+01:12:12   pass done: 2560 prefill rows (T=19), 55040 spawn rows, 80.3s
+01:12:12 pass time 80.6s  T=19 row_chunk=None offsets=False sink=False
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:12:13 nl: L*=19 disc=+0.595 val@L*=+0.505 val argmax L19 +0.505 strict 237/256; 1400 expert rows; sink mass pos0 @L1 0.774
+01:12:13    L19 clean-active disc/val: E000 18/18, E002 73/80, E003 12/9, E004 52/41, E005 14/18, E006 68/73, E007 13/11
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:12:14 dot: L*=21 disc=+0.352 val@L*=+0.416 val argmax L21 +0.416 strict 241/256; 1435 expert rows; sink mass pos0 @L1 0.079
+01:12:14    L19 clean-active disc/val: E000 17/23, E002 53/61, E003 8/8, E004 40/27, E005 9/14, E006 90/84, E007 37/37
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:12:15 comma: L*=19 disc=+0.591 val@L*=+0.517 val argmax L21 +0.529 strict 239/256; 1402 expert rows; sink mass pos0 @L1 0.811
+01:12:15    L19 clean-active disc/val: E000 16/15, E002 74/78, E004 52/44, E005 13/19, E006 77/74, E007 13/13
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:12:17 the: L*=19 disc=+0.347 val@L*=+0.367 val argmax L21 +0.447 strict 235/256; 1425 expert rows; sink mass pos0 @L1 0.151
+01:12:17    L19 clean-active disc/val: E000 10/5, E002 60/71, E003 13/14, E004 44/34, E005 13/19, E006 88/88, E007 26/24
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:12:18 rare: L*=21 disc=+0.420 val@L*=+0.478 val argmax L21 +0.478 strict 233/256; 1438 expert rows; sink mass pos0 @L1 0.059
+01:12:18    L19 clean-active disc/val: E000 14/13, E002 58/67, E003 8/11, E004 41/29, E005 13/17, E006 92/91, E007 28/27
+01:12:18 done
+2026-09-14T01:12:25Z END   ext3-mixtral-passB rc=0 (106s)
+2026-09-14T01:12:25Z START ext3-mixtral-passC (waited 0s): python scripts/ext3_run_variants.py mixtral --variants bos,sinkfull,sinkkey --skip-outputs bos
+01:12:36 variant bos        -> mixtral_bos_diag: T range 5-19, example ids[:4]=[1, 6427, 28725, 11567] subject_pos[:3]=[1, 2, 3] offset=0
+01:12:36 variant sinkfull   -> mixtral_nobos_sink_full: T range 4-18, example ids[:4]=[6427, 28725, 11567, 302] subject_pos[:3]=[0, 1, 2] offset=1
+01:12:36 variant sinkkey    -> mixtral_nobos_sink_keyonly: T range 4-18, example ids[:4]=[6427, 28725, 11567, 302] subject_pos[:3]=[0, 1, 2] offset=1
+01:12:37 pass: 3 variants, 1536 prefill rows, 33024 spawn rows, expert layers [19]
+01:12:44   layer   0: load-wait 5.79s compute 0.89s  wf_rows=768
+01:13:02   layer   8: load-wait 1.62s compute 0.54s  wf_rows=6912
+01:13:18   layer  16: load-wait 1.02s compute 0.72s  wf_rows=13056
+01:13:34   layer  24: load-wait 1.23s compute 0.86s  wf_rows=27648
+01:13:52   layer  31: load-wait 0.96s compute 0.95s  wf_rows=33024
+01:13:52   pass done: 1536 prefill rows (T=19), 33024 spawn rows, 74.9s
+01:13:52 pass time 75.1s  T=19 row_chunk=None offsets=True sink=True
+01:13:52 bos: outputs skipped (--skip-outputs)
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:13:54 sinkfull: L*=19 disc=+0.612 val@L*=+0.583 val argmax L19 +0.583 strict 234/256; 1395 expert rows; sink mass pos0 @L1 0.014
+01:13:54    L19 clean-active disc/val: E000 16/13, E001 6/9, E002 77/84, E003 10/6, E004 50/46, E005 15/18, E006 71/68, E007 11/12
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:13:55 sinkkey: L*=19 disc=+0.161 val@L*=+0.209 val argmax L23 +0.261 strict 172/256; 1486 expert rows; sink mass pos0 @L1 0.046
+01:13:55    L19 clean-active disc/val: E000 33/32, E001 11/4, E002 42/49, E003 8/7, E004 52/49, E005 16/22, E006 84/82, E007 10/11
+01:13:55 done
+2026-09-14T01:14:02Z END   ext3-mixtral-passC rc=0 (97s)
+2026-09-14T01:15:41Z START ext3-qwen3-pass (waited 98s): python scripts/ext3_run_variants.py qwen3 --variants default,eot
+01:15:53 variant default    -> qwen3_nobos_diag: T range 3-16, example ids[:4]=[10141, 440, 65262, 22328] subject_pos[:3]=[0, 1, 2] offset=0
+01:15:53 variant eot        -> qwen3_bos_prefix_eot: T range 4-17, example ids[:4]=[151643, 10141, 440, 65262] subject_pos[:3]=[1, 2, 3] offset=0
+01:15:54 pass: 2 variants, 1024 prefill rows, 91648 spawn rows, expert layers [44]
+01:15:58   layer   0: load-wait 2.88s compute 0.69s  wf_rows=512
+01:16:07   layer   8: load-wait 1.12s compute 0.12s  wf_rows=4608
+01:16:17   layer  16: load-wait 1.10s compute 0.15s  wf_rows=8704
+01:16:27   layer  24: load-wait 1.08s compute 0.17s  wf_rows=12800
+01:16:37   layer  32: load-wait 1.05s compute 0.19s  wf_rows=16896
+01:16:47   layer  40: load-wait 1.02s compute 0.22s  wf_rows=20992
+01:16:56   layer  47: load-wait 0.60s compute 0.63s  wf_rows=91648
+01:16:56   pass done: 1024 prefill rows (T=17), 91648 spawn rows, 61.6s
+01:16:56 pass time 61.9s  T=17 row_chunk=None offsets=False sink=False
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:17:03 default: L*=44 disc=+0.975 val@L*=+0.925 val argmax L44 +0.925 strict 235/256; 3536 expert rows; sink mass pos0 @L1 0.154
+01:17:03    L44 clean-active disc/val: E006 64/70, E009 22/22, E015 11/11, E020 10/9, E022 36/39, E027 72/74, E029 14/12, E030 20/12, E037 20/22, E038 18/14, E039 22/25, E044 11/10, E045 10/12, E047 7/9, E048 4/9, E052 19/29, E054 111/97, E056 84/85, E069 112/117, E071 101/94, E080 28/26, E081 19/36, E083 18/25, E094 10/7, E098 16/11, E104 15/19, E107 26/14, E108 12/10, E116 8/4, E121 13/17
+/home/ubuntu/MOE/scripts/ext3_run_variants.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:17:09 eot: L*=44 disc=+0.941 val@L*=+0.894 val argmax L44 +0.894 strict 233/256; 3459 expert rows; sink mass pos0 @L1 0.128
+01:17:09    L44 clean-active disc/val: E006 69/76, E009 22/24, E015 11/10, E022 37/36, E027 76/73, E029 13/13, E030 8/5, E037 20/21, E038 15/16, E039 18/25, E044 10/12, E045 6/11, E047 9/11, E048 4/9, E052 22/27, E054 111/97, E056 80/86, E069 115/113, E071 100/94, E080 24/23, E081 18/32, E083 17/21, E094 16/14, E098 20/12, E104 19/19, E107 28/17, E108 10/9, E121 15/20
+01:17:09 done
+2026-09-14T01:17:15Z END   ext3-qwen3-pass rc=0 (94s)
+2026-09-14T01:17:15Z START ext3-corpus-wiki (waited 0s): python scripts/ext3_corpus_routing.py mixtral --corpus wiki
+01:17:27 wiki: 1222040 chars, 309596 tokens, 400 windows of 127
+01:17:36   layer   0: load-wait 6.48s compute 1.88s  wf_rows=0
+01:17:59   layer   8: load-wait 1.42s compute 1.47s  wf_rows=0
+01:18:22   layer  16: load-wait 1.41s compute 1.48s  wf_rows=0
+01:18:45   layer  24: load-wait 1.40s compute 1.48s  wf_rows=0
+01:19:05   layer  31: load-wait 1.42s compute 1.47s  wf_rows=0
+01:19:05   pass done: 800 prefill rows (T=128), 0 spawn rows, 97.5s
+01:19:05 pass time 97.8s  T=128 row_chunk=384
+01:19:28 L19 usage (top-k membership) bos:   E0=0.242 E1=0.257 E2=0.237 E3=0.246 E4=0.256 E5=0.273 E6=0.243 E7=0.247
+01:19:28 L19 usage (top-k membership) nobos: E0=0.239 E1=0.242 E2=0.235 E3=0.249 E4=0.256 E5=0.266 E6=0.254 E7=0.260
+01:19:28 L19 set agreement bos vs nobos: 0.870; by position (first 8): [0.225, 0.5, 0.522, 0.575, 0.7, 0.708, 0.722, 0.758]
+01:19:28 mean logprob bos -2.187 nobos -2.092
+01:19:28 done
+2026-09-14T01:19:34Z END   ext3-corpus-wiki rc=0 (139s)
+2026-09-14T01:19:34Z START ext3-corpus-code (waited 0s): python scripts/ext3_corpus_routing.py mixtral --corpus code
+01:19:43 code: 2057056 chars, 615398 tokens, 400 windows of 127
+01:19:51   layer   0: load-wait 6.06s compute 1.88s  wf_rows=0
+01:20:11   layer   8: load-wait 0.85s compute 1.48s  wf_rows=0
+01:20:30   layer  16: load-wait 0.96s compute 1.87s  wf_rows=0
+01:20:52   layer  24: load-wait 1.42s compute 1.48s  wf_rows=0
+01:21:12   layer  31: load-wait 1.42s compute 1.48s  wf_rows=0
+01:21:13   pass done: 800 prefill rows (T=128), 0 spawn rows, 89.0s
+01:21:13 pass time 89.2s  T=128 row_chunk=384
+01:21:37 L19 usage (top-k membership) bos:   E0=0.249 E1=0.218 E2=0.285 E3=0.243 E4=0.257 E5=0.260 E6=0.234 E7=0.253
+01:21:37 L19 usage (top-k membership) nobos: E0=0.246 E1=0.212 E2=0.275 E3=0.246 E4=0.263 E5=0.259 E6=0.231 E7=0.267
+01:21:37 L19 set agreement bos vs nobos: 0.825; by position (first 8): [0.138, 0.335, 0.47, 0.482, 0.552, 0.588, 0.648, 0.718]
+01:21:37 mean logprob bos -1.448 nobos -1.358
+01:21:37 done
+2026-09-14T01:21:43Z END   ext3-corpus-code rc=0 (129s)
+2026-09-14T01:21:43Z chain done

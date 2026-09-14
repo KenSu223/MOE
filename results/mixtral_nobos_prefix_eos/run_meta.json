@@ -1,0 +1,48 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "experiment": "ext3 BOS mechanism (RESEARCH_PLAN Direction 3)",
+ "agent": "ext3-bos-mechanism",
+ "variant": {
+  "key": "eos",
+  "model": "mixtral",
+  "run_dir": "mixtral_nobos_prefix_eos",
+  "label": "</s> at position 0",
+  "special_tokens": false,
+  "prefix_ids": [
+   2
+  ],
+  "pos_offset": 0,
+  "note": "special token, not BOS",
+  "sink_from": "",
+  "sink_vscale": 1.0
+ },
+ "special_tokens": false,
+ "prefix_ids": [
+  2
+ ],
+ "pos_offset": 0,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "expert_layers": [
+  19
+ ],
+ "pass_variants": [
+  "bos",
+  "nobos",
+  "shift1",
+  "eos",
+  "bosbos"
+ ],
+ "pass_time_s": 87.52431774139404,
+ "command": "python scripts/ext3_run_variants.py mixtral --variants bos,nobos,shift1,eos,bosbos",
+ "created_utc": "2026-09-14T01:10:33Z",
+ "outputs": [
+  "sweep_rows/sweep_routing/sweep_cases.parquet, sweep_summary.json (layer sweep, paper set)",
+  "expert_rows.parquet (kinds: layer, coalition_clean, coalition_union, expert, expert_noised_only; all experts patched at L[19]; no expert_scaled)",
+  "diag_summary.json (per-layer means); raw diagnostics at /opt/dlami/nvme/moe_ext3/mixtral_nobos_prefix_eos (diag.npz, resid_final.pt)"
+ ]
+}

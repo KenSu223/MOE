@@ -1,0 +1,42 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "experiment": "ext3 BOS mechanism (RESEARCH_PLAN Direction 3)",
+ "agent": "ext3-bos-mechanism",
+ "variant": {
+  "key": "sinkfull",
+  "model": "mixtral",
+  "run_dir": "mixtral_nobos_sink_full",
+  "label": "no token; <s> key+value transplanted as an extra slot",
+  "special_tokens": false,
+  "prefix_ids": [],
+  "pos_offset": 1,
+  "note": "identity check of the transplant mechanism: must equal the BOS run (position 0's K/V is the only channel of <s>)",
+  "sink_from": "bos",
+  "sink_vscale": 1.0
+ },
+ "special_tokens": false,
+ "prefix_ids": [],
+ "pos_offset": 1,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "expert_layers": [
+  19
+ ],
+ "pass_variants": [
+  "bos",
+  "sinkfull",
+  "sinkkey"
+ ],
+ "pass_time_s": 74.85195064544678,
+ "command": "python scripts/ext3_run_variants.py mixtral --variants bos,sinkfull,sinkkey --skip-outputs bos",
+ "created_utc": "2026-09-14T01:13:54Z",
+ "outputs": [
+  "sweep_rows/sweep_routing/sweep_cases.parquet, sweep_summary.json (layer sweep, paper set)",
+  "expert_rows.parquet (kinds: layer, coalition_clean, coalition_union, expert, expert_noised_only; all experts patched at L[19]; no expert_scaled)",
+  "diag_summary.json (per-layer means); raw diagnostics at /opt/dlami/nvme/moe_ext3/mixtral_nobos_sink_full (diag.npz, resid_final.pt)"
+ ]
+}

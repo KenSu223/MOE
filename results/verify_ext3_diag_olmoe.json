@@ -1,0 +1,49 @@
+{
+ "n_cases": 6,
+ "prompts": [
+  "Virginia State Route 33 is located in",
+  "Verkehrsverbund Berlin-Brandenburg was formed in",
+  "Charles, Prince of Viana died in",
+  "Boiling Points premiered on",
+  "Lannick Gautry spoke the language",
+  "Adobe Flash is created by"
+ ],
+ "prefix_ids_check": "ok",
+ "use_offsets": true,
+ "sink_identity_delta_maxdiff_clean": 0.0,
+ "sink_identity_delta_maxdiff_noised": 0.0,
+ "sink_identity_routing_set_agreement_clean": 1.0,
+ "sink_identity_layer_rescue_maxdiff": 0.0,
+ "sink_identity_layer_rescue_mean_absdiff": 0.0,
+ "sink_keyonly_delta_mean_absdiff_vs_donor": 4.560465335845947,
+ "sink_keyonly_delta_mean_absdiff_vs_plain": 4.684163570404053,
+ "shift1_identity_delta_maxdiff_vs_default": 0.359375,
+ "sink_slot_mass_transplant_vs_donor_pos0_maxdiff": 0.0,
+ "sink_slot_mass_keyonly_mean": 0.662320613861084,
+ "sink_slot_mass_transplant_mean": 0.592710554599762,
+ "attn_final_maxdiff": 0.103271484375,
+ "attn_final_mean_maxdiff": 0.01361846923828125,
+ "resid_norm_max_reldiff_hidden_states[l+1]": 0.014844237826764584,
+ "resid_norm_max_reldiff_hidden_states[l]": 2.7594573497772217,
+ "router_logits_final_maxdiff": 0.09130859375,
+ "router_logits_final_mean_maxdiff": 0.02499993642171224,
+ "route_all_set_agreement": "143/150",
+ "token_logprobs_maxdiff": 0.1663961410522461,
+ "delta_default_maxdiff_vs_hf": 0.0625,
+ "delta_pos_offset1_maxdiff_vs_hf_position_ids": 0.1875,
+ "delta_pos_offset1_mean_diff": 0.0625,
+ "hf_delta_change_from_offset_mean_abs": 0.10416666666666667,
+ "engine_delta_change_from_offset_mean_abs": 0.06640625,
+ "resid_final_shape": [
+  16,
+  12,
+  2048
+ ],
+ "attn_final_shape": [
+  16,
+  12,
+  16,
+  14
+ ],
+ "logprob_true_matches_final_logprob": true
+}
