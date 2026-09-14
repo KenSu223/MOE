@@ -1,0 +1,20 @@
+2026-09-14T05:37:39Z START ext4-smoke (waited 367s): python scripts/ext4_scan.py qwen3 --out codefact_smoke --limit 48 --chunk 48
+05:37:58 qwen3 protocol=raw: 6448 items with tokenizer flag, 6448 resolved, 0 rejected ({}); chat prefix 0 tokens
+05:37:58 resolved per category: {'S1': 48}
+05:37:58 embed_std=0.020654 sigma=0.061961 hidden=2048 layers=48 top_k=8; diag layers [1, 5, 24, 44]
+05:37:58 chunk 1/1: 48 items, T=7, 96 prefill rows, 2304 spawn rows
+05:38:02   layer   0: load-wait 3.02s compute 0.82s  wf_rows=48
+05:38:11   layer   8: load-wait 1.18s compute 0.04s  wf_rows=432
+05:38:21   layer  16: load-wait 1.19s compute 0.04s  wf_rows=816
+05:38:31   layer  24: load-wait 1.20s compute 0.04s  wf_rows=1200
+05:38:41   layer  32: load-wait 1.20s compute 0.04s  wf_rows=1584
+05:38:51   layer  40: load-wait 1.20s compute 0.04s  wf_rows=1968
+05:39:00   layer  47: load-wait 1.23s compute 0.03s  wf_rows=2304
+05:39:00   pass done: 96 prefill rows (T=7), 2304 spawn rows, 60.9s
+05:39:00 pass time 61.1s; peak GPU memory 3.6 GB
+05:39:00 chunk 1 written; cumulative per category:
+           n  strict  relaxed  rel25  top1  dclean   drop
+category                                                 
+S1        48      40       42     28   0.0  11.344  4.219
+05:39:00 done: {"model": "qwen3", "repo": "Qwen/Qwen3-30B-A3B-Base", "protocol": "raw", "special_tokens": true, "chat_prefix_len": 0, "items_file": "/home/ubuntu/MOE/data/codefact/items.jsonl", "n_items_flagged": 6448, "n_resolved": 6448, "n_scanned": 48, "rejects": {}, "sigma_mult": 3.0, "sigma": 0.06196054257452488, "embed_std": 0.020653514191508293, "max_tokens": 160, "chunk": 48, "per_category_max": null, "n_chunks": 1, "diag_layers": [1, 5, 24, 44], "command": "scripts/ext4_scan.py qwen3 --out codefact_smoke --limit 48 --chunk 48", "agent": "ext4-codefact", "created_utc": "2026-09-14T05:37:58Z", "tokenizer_vocab": 151669, "pass_times_s": [61.1], "peak_mem_gb": [3.58], "total_gpu_s": 61.1}
+2026-09-14T05:39:07Z END   ext4-smoke rc=0 (88s)

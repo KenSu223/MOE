@@ -1,0 +1,11 @@
+2026-09-14T05:55:11Z [ext4-chain codefact_mixtral_nobos] scan start (chunk 768 --per-category-max 800)
+2026-09-14T06:21:02Z [ext4-chain codefact_mixtral_nobos] scan rc=0
+2026-09-14T06:21:02Z [ext4-chain codefact_mixtral_nobos] select
+| ALL | 4671 | +6.38 | +0.50 | 2265 (48 %) | 2738 (59 %) | 1057 (23 %) | 325 (7 %) | 82 % / 88 % | 77 % / 82 % | 92 % | 50 % | 0.0 % |
+
+06:21:05 done
+06:21:32 [dry-run] 1521 cases, layers 24..27 (4), 3042 prefill rows, 32436 spawn rows, T=160
+06:21:32 [dry-run] 1521 cases, layers 28..31 (4), 3042 prefill rows, 32347 spawn rows, T=160
+06:21:32 [dry-run] total spawn rows 255866
+2026-09-14T06:21:33Z [ext4-chain codefact_mixtral_nobos] expert pass start (layer chunks 8)
+2026-09-14T06:32:20Z [ext4-chain codefact_mixtral_nobos] expert rc=1

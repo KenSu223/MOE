@@ -1,0 +1,42 @@
+2026-09-14T05:40:08Z [ext4-chain codefact_qwen3_raw] scan start (chunk 1024 )
+2026-09-14T05:40:10Z [ext4-chain codefact_mixtral_nobos] scan start (chunk 768 --per-category-max 800)
+2026-09-14T05:53:41Z [ext4-chain codefact_qwen3_raw] scan rc=1
+2026-09-14T05:55:10Z [ext4-chain codefact_qwen3_raw] scan start (chunk 1024 )
+2026-09-14T05:55:11Z [ext4-chain codefact_mixtral_nobos] scan start (chunk 768 --per-category-max 800)
+2026-09-14T06:10:27Z [ext4-chain codefact_qwen3_raw] scan rc=0
+2026-09-14T06:10:27Z [ext4-chain codefact_qwen3_raw] select
+| ALL | 6448 | +7.00 | +0.88 | 3737 (58 %) | 4304 (67 %) | 2105 (33 %) | 896 (14 %) | 67 % / 89 % | 59 % / 78 % | 91 % | 60 % | 0.0 % |
+
+06:10:30 done
+06:11:07 [dry-run] 1536 cases, layers 40..43 (4), 3072 prefill rows, 78613 spawn rows, T=160
+06:11:07 [dry-run] 1536 cases, layers 44..47 (4), 3072 prefill rows, 80670 spawn rows, T=160
+06:11:07 [dry-run] total spawn rows 925420
+2026-09-14T06:11:11Z [ext4-chain codefact_qwen3_raw] expert pass start (layer chunks 12)
+2026-09-14T06:21:02Z [ext4-chain codefact_mixtral_nobos] scan rc=0
+2026-09-14T06:21:02Z [ext4-chain codefact_mixtral_nobos] select
+| ALL | 4671 | +6.38 | +0.50 | 2265 (48 %) | 2738 (59 %) | 1057 (23 %) | 325 (7 %) | 82 % / 88 % | 77 % / 82 % | 92 % | 50 % | 0.0 % |
+
+06:21:05 done
+06:21:32 [dry-run] 1521 cases, layers 24..27 (4), 3042 prefill rows, 32436 spawn rows, T=160
+06:21:32 [dry-run] 1521 cases, layers 28..31 (4), 3042 prefill rows, 32347 spawn rows, T=160
+06:21:32 [dry-run] total spawn rows 255866
+2026-09-14T06:21:33Z [ext4-chain codefact_mixtral_nobos] expert pass start (layer chunks 8)
+2026-09-14T06:31:49Z [ext4-chain codefact_qwen3_raw] expert rc=1
+2026-09-14T06:32:20Z [ext4-chain codefact_mixtral_nobos] expert rc=1
+2026-09-14T10:10:26Z [ext4-chain2] expert codefact_qwen3_raw start (prefill-tokens 160000, wf-rows 45000)
+2026-09-14T10:34:02Z [ext4-chain2] expert codefact_qwen3_raw rc=0
+2026-09-14T10:34:02Z [ext4-chain2] expert codefact_mixtral_nobos start (prefill-tokens 110000, wf-rows 24000)
+2026-09-14T10:51:39Z [ext4-chain2] expert codefact_mixtral_nobos rc=0
+2026-09-14T10:51:39Z [ext4-chain2] scan codefact_qwen3_coder_raw start
+2026-09-14T10:59:32Z [ext4-chain2] scan codefact_qwen3_coder_raw rc=0
+
+10:59:35 done
+2026-09-14T10:59:35Z [ext4-chain2] expert codefact_qwen3_coder_raw start (prefill-tokens 160000, wf-rows 45000)
+2026-09-14T11:22:32Z [ext4-chain2] expert codefact_qwen3_coder_raw rc=0
+2026-09-14T11:22:32Z [ext4-chain2] scan codefact_qwen3_coder_chat start
+2026-09-14T11:31:13Z [ext4-chain2] scan codefact_qwen3_coder_chat rc=0
+
+11:31:17 done
+2026-09-14T11:31:17Z [ext4-chain2] expert codefact_qwen3_coder_chat start (prefill-tokens 160000, wf-rows 45000)
+2026-09-14T11:56:09Z [ext4-chain2] expert codefact_qwen3_coder_chat rc=0
+2026-09-14T11:56:09Z [ext4-chain2] chain2 done

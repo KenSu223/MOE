@@ -1,0 +1,11 @@
+**Qwen3-Coder-30B-A3B-Instruct (raw code prefix): Jaccard overlap of the recurrent (layer, expert) pairs (all layers, discovery activity ≥ threshold) between categories**
+
+| recurrent pairs: Jaccard | S1 | S2 | S3 | R1 | R2 | R3 | all |
+|---|---|---|---|---|---|---|---|
+| S1 | 1.00 | 0.06 | 0.20 | 0.15 | 0.17 | 0.10 | 0.19 |
+| S2 | 0.06 | 1.00 | 0.03 | 0.08 | 0.09 | 0.03 | 0.07 |
+| S3 | 0.20 | 0.03 | 1.00 | 0.08 | 0.21 | 0.05 | 0.15 |
+| R1 | 0.15 | 0.08 | 0.08 | 1.00 | 0.14 | 0.10 | 0.21 |
+| R2 | 0.17 | 0.09 | 0.21 | 0.14 | 1.00 | 0.05 | 0.11 |
+| R3 | 0.10 | 0.03 | 0.05 | 0.10 | 0.05 | 1.00 | 0.10 |
+| all | 0.19 | 0.07 | 0.15 | 0.21 | 0.11 | 0.10 | 1.00 |

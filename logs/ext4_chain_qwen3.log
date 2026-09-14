@@ -1,0 +1,11 @@
+2026-09-14T05:55:10Z [ext4-chain codefact_qwen3_raw] scan start (chunk 1024 )
+2026-09-14T06:10:27Z [ext4-chain codefact_qwen3_raw] scan rc=0
+2026-09-14T06:10:27Z [ext4-chain codefact_qwen3_raw] select
+| ALL | 6448 | +7.00 | +0.88 | 3737 (58 %) | 4304 (67 %) | 2105 (33 %) | 896 (14 %) | 67 % / 89 % | 59 % / 78 % | 91 % | 60 % | 0.0 % |
+
+06:10:30 done
+06:11:07 [dry-run] 1536 cases, layers 40..43 (4), 3072 prefill rows, 78613 spawn rows, T=160
+06:11:07 [dry-run] 1536 cases, layers 44..47 (4), 3072 prefill rows, 80670 spawn rows, T=160
+06:11:07 [dry-run] total spawn rows 925420
+2026-09-14T06:11:11Z [ext4-chain codefact_qwen3_raw] expert pass start (layer chunks 12)
+2026-09-14T06:31:49Z [ext4-chain codefact_qwen3_raw] expert rc=1

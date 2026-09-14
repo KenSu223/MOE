@@ -1,0 +1,44 @@
+**Qwen3-Coder-30B-A3B-Instruct (chat template + ```python fence): interior (layer, expert) pairs recurrent in ≥ 2 categories**
+
+| pair (interior) | n categories | categories |
+|---|---|---|
+| L2E026 | 6 | S1, S2, S3, R1, R2, R3 |
+| L4E084 | 6 | S1, S2, S3, R1, R2, R3 |
+| L15E031 | 6 | S1, S2, S3, R1, R2, R3 |
+| L17E023 | 6 | S1, S2, S3, R1, R2, R3 |
+| L29E023 | 6 | S1, S2, S3, R1, R2, R3 |
+| L17E025 | 5 | S2, S3, R1, R2, R3 |
+| L26E107 | 5 | S1, S2, R1, R2, R3 |
+| L41E023 | 5 | S1, S2, S3, R1, R2 |
+| L8E007 | 4 | S1, S3, R1, R2 |
+| L20E038 | 4 | S1, S2, R1, R3 |
+| L40E038 | 4 | S1, S2, R1, R2 |
+| L43E086 | 4 | S1, S2, R1, R2 |
+| L2E096 | 3 | S1, S3, R2 |
+| L4E036 | 3 | S1, S3, R2 |
+| L8E038 | 3 | S2, R1, R3 |
+| L9E003 | 3 | S1, R2, R3 |
+| L9E075 | 3 | S2, S3, R2 |
+| L12E082 | 3 | S1, S2, R1 |
+| L14E005 | 3 | S2, R1, R3 |
+| L15E065 | 3 | S1, S3, R2 |
+| L16E038 | 3 | S2, R1, R2 |
+| L16E115 | 3 | S2, R1, R3 |
+| L21E000 | 3 | S2, R1, R3 |
+| L22E079 | 3 | S2, R1, R2 |
+| L22E106 | 3 | S1, S3, R2 |
+| L23E035 | 3 | S1, S3, R2 |
+| L24E082 | 3 | S1, S2, R1 |
+| L25E046 | 3 | S1, S2, R2 |
+| L27E031 | 3 | S2, R1, R2 |
+| L28E038 | 3 | S2, R1, R2 |
+| L29E025 | 3 | S2, R1, R2 |
+| L31E055 | 3 | S1, S3, R2 |
+| L31E057 | 3 | S1, R1, R2 |
+| L33E003 | 3 | S1, R1, R2 |
+| L33E031 | 3 | S1, S3, R2 |
+| L34E044 | 3 | S2, R1, R2 |
+| L34E079 | 3 | S2, R1, R2 |
+| L34E106 | 3 | S1, S3, R2 |
+| L35E035 | 3 | S1, S3, R2 |
+| L35E091 | 3 | S2, R1, R2 |

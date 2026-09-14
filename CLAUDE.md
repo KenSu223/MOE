@@ -40,7 +40,7 @@ paper-vs-ours, both Figure 1 variants, verification, deviations). Repository: gi
 
 ## 2b. Extensions (RESEARCH_PLAN.md; results in results/EXTENSIONS_REPORT.md, sections in results/sections/)
 
-Wave 1 done 2026-09-14 (Directions 1 and 3); wave 2 (Directions 2 and 4) follows.
+Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b and 4). GPU total for the extensions ≈ 4 h.
 - **Direction 1 (joint layer×expert search, all-layer expert passes in `results/*_alllayers`)**: the two-stage
   procedure does not miss a *better* expert in Qwen3 (L44E069 is the joint argmax) but misses a *second locus*:
   L42E115 (126/128 recurrent, val +0.447 [0.363, 0.537], Spec +0.423) wins the discovery argmax on the strict and
@@ -57,6 +57,37 @@ Wave 1 done 2026-09-14 (Directions 1 and 3); wave 2 (Directions 2 and 4) follows
   route the final token like a sink. Engine gained optional diagnostics (`DiagSpec`), `PrefillSpec.pos_offset`,
   sink transplant (`sink_donor`), `prefix_ids` in `prepare_case`; verify_olmoe unchanged.
 - Literature: docs/ext3_literature_review.md (Mistral is the documented exception: BOS is its sole sink driver).
+- **Direction 2b (attention vs MoE patching; engine kinds `attn_layer`, `block`, `resid`, `block_diff`, runs
+  `results/*_attnsweep`)**: the paper's MoE-only patch misses the largest single-sublayer locus. Qwen3: attention
+  output at **L40 +1.59 [1.41, 1.79]** (block L40 +1.95) vs MoE L44 +0.93; L44 is a pure-MoE layer (attention share
+  2%) but overall attention carries 51% of the positive rescue. Mixtral: attention L18 +0.99, MoE L19 +0.56, block L19
+  +1.37; at L19 attention carries 62% [58, 66]. block = attn + MoE to bf16 noise (r 0.96-0.99), slight sub-additivity
+  only at shared peaks. Reading: attention moves the information in a few discrete steps (Qwen3 L40/L43, Mixtral
+  L15/L18/L19), MoE of the same and following layers transforms it. Verified vs transformers hooks on OLMoE.
+- **Direction 2 (model zoo; runs `results/{qwen3_instruct,qwen3_coder,mixtral_instruct,olmoe,olmoe_instruct}_
+  {default,nobos,chat}`, usage specs in `data/model_usage/`)**: all five new checkpoints show **pattern A** (one
+  layer, one positive specific expert) under their intended protocol: Qwen3-Instruct-2507 and Qwen3-Coder keep
+  **L44E069** (and L42E115 as the second locus) under raw and chat protocols with rescue/Spec at or above the base;
+  Mixtral-Instruct with BOS = base (L19E002, 86% identical L19 routing); OLMoE base L13E056, OLMoE-Instruct
+  L12E040/L13E056. **Pattern B** (selected expert not specific) occurs only for Mixtral base and Instruct under the
+  paper's no-BOS protocol (identical 91/83 E006 activity in both; joint winner L18E001); pattern C never. Post-training
+  moves neither layer nor expert. Chat wrapping raises margins and absolute rescues but not the drop-normalised layer
+  share; one exception: Mixtral-Instruct chat's argmax jumps to the last layer L31 (+1.79) while the L19-L21 band
+  stays. Sink-carrying final tokens: 24% of prompts in both Mixtrals without BOS, 0% in every other run.
+- **Direction 4 (CodeFact; `data/codefact/items.jsonl`, 6,795 Python next-token counterfactuals in six categories from
+  HumanEval, MBPP and CodeSearchNet; runs `results/codefact_{qwen3_raw,mixtral_nobos,qwen3_coder_raw,qwen3_coder_chat}`)**:
+  pass rates under the paper's thresholds separate categories by how the answer is determined: S1 closing bracket 90%
+  (read from the opener like a fact, drop +4.4), R1 variable recall 79%, R2/R3 57-59%, S2/S3 keywords 33-36% (redundantly
+  determined, median drop +0.25/+0.12). On code the last MoE block acts as a read-out (L47/L31 selected almost
+  everywhere), so an interior-layer variant (≤ L−5) is reported alongside. Localised single experts: S1 (Qwen3
+  L47E025 Spec +0.97, interior L42E048 +0.87; Mixtral L31E000 +1.44), R1 in Qwen3 (L43E126 +0.32, CounterFact-like),
+  S2 (Qwen3 L41E041 +0.55, Mixtral L17E003 +0.32); S3/R2/R3 weak. Categories are near-disjoint in their top experts
+  (mean Jaccard 0.05); the factual experts L44E069/L42E115 rescue nothing on code; Mixtral E006 is negatively specific
+  again (R1). Qwen3-Coder keeps the same code experts as the base (L47E025, L43E126, L41E041) and adds an S3 expert
+  L47E014. The axis that matters is single-token vs distributed determination, not syntax vs recall.
+- Open method questions raised by the agents: (a) last-layer read-out vs localisation (interior-layer rule?);
+  (b) select layers by block (attention + MoE) rescue rather than MoE rescue?; (c) flag sink-carrying prompts as a
+  protocol check; (d) recurrence threshold relative to top-k.
 
 ## 3. What is NOT done / known gaps
 

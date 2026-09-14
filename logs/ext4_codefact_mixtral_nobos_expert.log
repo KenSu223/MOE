@@ -1,0 +1,49 @@
+2026-09-14T10:34:02Z START ext4-expert-codefact_mixtral_nobos (waited 0s): python scripts/ext4_run_expert.py mixtral --out codefact_mixtral_nobos --protocol nobos --no-pairs --prefill-tokens 110000 --wf-rows 24000
+10:34:32 mixtral nobos: 1521 cases, 3 case chunks, 13 passes, 255866 spawn rows total
+10:34:32 pass 1/13 part_c00_L00-04: 785 cases T=70, 1570 prefill rows, 20575 spawn rows, wf_chunk=2285
+10:34:41   layer   0: load-wait 6.44s compute 2.35s  wf_rows=4196
+10:35:04   layer   8: load-wait 0.84s compute 2.03s  wf_rows=20575
+10:35:27   layer  16: load-wait 0.86s compute 2.03s  wf_rows=20575
+10:35:50   layer  24: load-wait 0.86s compute 2.03s  wf_rows=20575
+10:36:11   layer  31: load-wait 0.86s compute 2.03s  wf_rows=20575
+10:36:11   pass done: 1570 prefill rows (T=70), 20575 spawn rows, 98.2s
+10:36:11 pass time 98.4s; peak GPU memory 13.49 GB
+10:36:11 part_c00_L00-04: 20575 rows; expert_rows.parquet now 20575 rows, 785 cases, 5 layers
+10:36:12 pass 2/13 part_c00_L05-09: 785 cases T=70, 1570 prefill rows, 20522 spawn rows, wf_chunk=2285
+10:37:46 pass time 93.6s; peak GPU memory 13.48 GB
+10:37:46 part_c00_L05-09: 20522 rows; expert_rows.parquet now 41097 rows, 785 cases, 10 layers
+10:37:47 pass 3/13 part_c00_L10-14: 785 cases T=70, 1570 prefill rows, 20550 spawn rows, wf_chunk=2285
+10:39:11 pass time 84.0s; peak GPU memory 13.49 GB
+10:39:11 part_c00_L10-14: 20550 rows; expert_rows.parquet now 61647 rows, 785 cases, 15 layers
+10:39:12 pass 4/13 part_c00_L15-19: 785 cases T=70, 1570 prefill rows, 20494 spawn rows, wf_chunk=2285
+10:40:24 pass time 72.7s; peak GPU memory 13.48 GB
+10:40:25 part_c00_L15-19: 20494 rows; expert_rows.parquet now 82141 rows, 785 cases, 20 layers
+10:40:25 pass 5/13 part_c00_L20-24: 785 cases T=70, 1570 prefill rows, 20795 spawn rows, wf_chunk=2285
+10:41:36 pass time 71.1s; peak GPU memory 13.5 GB
+10:41:37 part_c00_L20-24: 20795 rows; expert_rows.parquet now 102936 rows, 785 cases, 25 layers
+10:41:38 pass 6/13 part_c00_L25-29: 785 cases T=70, 1570 prefill rows, 20819 spawn rows, wf_chunk=2285
+10:42:45 pass time 67.7s; peak GPU memory 13.5 GB
+10:42:46 part_c00_L25-29: 20819 rows; expert_rows.parquet now 123755 rows, 785 cases, 30 layers
+10:42:46 pass 7/13 part_c00_L30-31: 785 cases T=70, 1570 prefill rows, 8379 spawn rows, wf_chunk=2285
+10:43:56 pass time 69.8s; peak GPU memory 12.37 GB
+10:43:56 part_c00_L30-31: 8379 rows; expert_rows.parquet now 132134 rows, 785 cases, 32 layers
+10:43:57 pass 8/13 part_c01_L00-08: 466 cases T=118, 932 prefill rows, 21838 spawn rows, wf_chunk=1355
+10:45:16 pass time 79.2s; peak GPU memory 13.5 GB
+10:45:17 part_c01_L00-08: 21838 rows; expert_rows.parquet now 153972 rows, 1251 cases, 32 layers
+10:45:18 pass 9/13 part_c01_L09-17: 466 cases T=118, 932 prefill rows, 21928 spawn rows, wf_chunk=1355
+10:46:34 pass time 76.1s; peak GPU memory 13.51 GB
+10:46:34 part_c01_L09-17: 21928 rows; expert_rows.parquet now 175900 rows, 1251 cases, 32 layers
+10:46:35 pass 10/13 part_c01_L18-26: 466 cases T=118, 932 prefill rows, 22174 spawn rows, wf_chunk=1355
+10:47:43 pass time 68.1s; peak GPU memory 13.52 GB
+10:47:47 part_c01_L18-26: 22174 rows; expert_rows.parquet now 198074 rows, 1251 cases, 32 layers
+10:47:48 pass 11/13 part_c01_L27-31: 466 cases T=118, 932 prefill rows, 12390 spawn rows, wf_chunk=1355
+10:48:59 pass time 71.1s; peak GPU memory 12.69 GB
+10:49:00 part_c01_L27-31: 12390 rows; expert_rows.parquet now 210464 rows, 1251 cases, 32 layers
+10:49:00 pass 12/13 part_c02_L00-16: 270 cases T=160, 540 prefill rows, 23883 spawn rows, wf_chunk=1000
+10:50:16 pass time 76.1s; peak GPU memory 12.24 GB
+10:50:17 part_c02_L00-16: 23883 rows; expert_rows.parquet now 234347 rows, 1521 cases, 32 layers
+10:50:18 pass 13/13 part_c02_L17-31: 270 cases T=160, 540 prefill rows, 21519 spawn rows, wf_chunk=1000
+10:51:30 pass time 72.0s; peak GPU memory 11.98 GB
+10:51:31 part_c02_L17-31: 21519 rows; expert_rows.parquet now 255866 rows, 1521 cases, 32 layers
+10:51:31 done: 255866 rows over 32 layers, 1000s GPU in 13 passes (+0 resumed)
+2026-09-14T10:51:39Z END   ext4-expert-codefact_mixtral_nobos rc=0 (1057s)

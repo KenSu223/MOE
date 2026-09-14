@@ -1,0 +1,11 @@
+**Qwen3-Coder-30B-A3B-Instruct (raw code prefix): selected layers, experts and recurrent sets per category**
+
+| Set | L* (paper rule) | two-stage e* | joint winner (all layers) | L* interior | two-stage e* interior | joint winner (interior) | recurrent pairs (all layers) | recurrent pairs (interior) | recurrent experts at L* |
+|---|---|---|---|---|---|---|---|---|---|
+| S1 | L47 | L47E025 | L47E025 | L41 | L41E108 | L41E108 | 92 | 76 | E011, E014, E025, E122 |
+| S2 | L47 | L47E077 | L41E041 | L39 | L39E092 | L41E041 | 227 | 215 | E045, E065, E077 |
+| S3 | L47 | L47E014 | L47E014 | L42 | L42E048 | L3E057 | 74 | 64 | E011, E014, E025 |
+| R1 | L47 | L47E060 | L43E126 | L43 | L43E126 | L43E126 | 82 | 67 | E001, E033, E060, E062, E066, E097, E115 |
+| R2 | L47 | L47E116 | L47E116 | L39 | L39E065 | L43E051 | 148 | 133 | E005, E016, E025, E052, E098, E116 |
+| R3 | L47 | L47E002 | L47E002 | L42 | L42E039 | L40E069 | 88 | 84 | E002, E046, E101, E125 |
+| all | L47 | none | L45E014 | L43 | L43E086 | L2E026 | 20 | 17 | - |

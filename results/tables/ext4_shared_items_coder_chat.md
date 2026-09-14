@@ -1,0 +1,10 @@
+**Items scanned by both Base and Qwen3-Coder-30B-A3B-Instruct (chat template + ```python fence): filter agreement**
+
+| Category | items scanned by both | pass Base | pass coder_chat | pass both | corr Δ_clean | corr drop |
+|---|---|---|---|---|---|---|
+| S1 | 964 | 871 | 876 | 816 | 0.73 | 0.54 |
+| S2 | 1200 | 399 | 484 | 274 | 0.89 | 0.45 |
+| S3 | 1195 | 430 | 409 | 282 | 0.88 | 0.62 |
+| R1 | 1132 | 896 | 899 | 767 | 0.85 | 0.60 |
+| R2 | 794 | 451 | 606 | 382 | 0.80 | 0.52 |
+| R3 | 1163 | 690 | 756 | 540 | 0.85 | 0.58 |

@@ -21,3 +21,8 @@ scripts/claude_bin.txt
 hf/
 offload/
 logs/gpu.lock
+
+# large CodeFact intermediates (regenerable from scan_rows + items.jsonl)
+results/codefact_*/scan_routing.parquet
+results/codefact_*/expert_parts/
+results/codefact_smoke/

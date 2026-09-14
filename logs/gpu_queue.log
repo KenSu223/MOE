@@ -129,3 +129,8 @@
 2026-09-14T10:51:39Z START ext4-scan-codefact_qwen3_coder_raw (waited 0s): python scripts/ext4_scan.py qwen3_coder --out codefact_qwen3_coder_raw --protocol raw --chunk 1024
 2026-09-14T10:59:32Z END   ext4-scan-codefact_qwen3_coder_raw rc=0 (473s)
 2026-09-14T10:59:35Z START ext4-expert-codefact_qwen3_coder_raw (waited 0s): python scripts/ext4_run_expert.py qwen3_coder --out codefact_qwen3_coder_raw --protocol raw --no-pairs --prefill-tokens 160000 --wf-rows 45000
+2026-09-14T11:22:32Z END   ext4-expert-codefact_qwen3_coder_raw rc=0 (1377s)
+2026-09-14T11:22:32Z START ext4-scan-codefact_qwen3_coder_chat (waited 0s): python scripts/ext4_scan.py qwen3_coder --out codefact_qwen3_coder_chat --protocol chat --chunk 1024
+2026-09-14T11:31:13Z END   ext4-scan-codefact_qwen3_coder_chat rc=0 (521s)
+2026-09-14T11:31:17Z START ext4-expert-codefact_qwen3_coder_chat (waited 0s): python scripts/ext4_run_expert.py qwen3_coder --out codefact_qwen3_coder_chat --protocol chat --no-pairs --prefill-tokens 160000 --wf-rows 45000
+2026-09-14T11:56:09Z END   ext4-expert-codefact_qwen3_coder_chat rc=0 (1492s)

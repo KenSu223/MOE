@@ -411,3 +411,46 @@
   L19 routing). Chat wrapping raises margins, drops and absolute rescues but not the drop-normalised share (Qwen3 15-17%) and does not move the
   Qwen3/OLMoE loci; for Mixtral-Instruct it moves the argmax to the final layer L31. Attention-output patches peak earlier and higher than
   MoE-output patches in every model; block = attn + MoE within 0.01-0.11.
+
+## 2026-09-14 16:05 UTC — ext4-codefact: Phases B and C complete, section written
+- GPU (all via scripts/gpu_queue.sh, 14 jobs, 134 min total = 128 min of successful work + 6 min of failed attempts): scans 4 x 7-10 min
+  (qwen3_raw 466 s, mixtral_nobos 635 s, qwen3_coder_raw 473 s, qwen3_coder_chat 521 s), memory-bounded all-layer expert passes
+  (qwen3_raw 23 passes / 1,416 s, mixtral_nobos 13 / 1,057 s, coder_raw 23 / 1,377 s, coder_chat 25 / 1,492 s; peak 13.4-13.5 GB), smoke 221 s.
+  OOM fix (no engine change): the 06:31 failures were the prefill rmsnorm on 3,072 rows x T=160; ext4_run_expert.py now sorts cases by length
+  and groups them so that 2 x cases x T <= 160k row-tokens (Qwen3) / 110k (Mixtral), groups layers so that wavefront rows <= 45k / 24k, passes
+  the engine's wf_chunk = 160k // T, writes resumable per-pass part files (results/<run>/expert_parts/) and concatenates them into
+  expert_rows.parquet. The earlier 05:53 scan OOM (attn_wavefront at wf_chunk 8192, T 71) was fixed the same way (wf_chunk from T, item
+  chunks bounded by items x T <= 80k). Coder tokenizer identical to Base on the items; chat protocol = user turn "Complete the following
+  Python code." + open assistant turn + ```python fence (17 tokens), analogous to ext2's convention.
+- Analysis (scripts/ext4_analyze.py, moetrace.analysis + ext1_analysis APIs; per-run pickle cache): per category two-stage selection at the
+  paper's L*, the same restricted to interior layers (<= L-5), joint search over all recurrent pairs, coalitions, rank among active experts,
+  factual-expert check, Jaccard overlaps (recurrent sets, top-10 pairs, interior variants), Coder-vs-Base on shared items. 172 tables
+  results/tables/ext4_*, figures ext4_calibration*.png, ext4_curves_{qwen3,mixtral,coder_raw,coder_chat}.png, ext4_overlap_*.png,
+  results/ext4_summary.json, section results/sections/ext4_codefact.md (+ ext4_codefact_narrative.md, embedded).
+- Findings: (1) paper filter pass rates (Qwen3) S1 90 %, S2 33 %, S3 36 %, R1 79 %, R2 57 %, R3 59 % (Mixtral 86/40/30/47/48/40): block
+  keywords and `in`/`:` are redundantly determined (median drop +0.25/+0.12), closing brackets are read from the opener like a fact from its
+  subject (drop +4.4). (2) On code the LAST MoE block is a read-out: L47/L31 selected for nearly every category (CounterFact: -0.13/-0.08 there);
+  interior peaks in a shared band L41-43 (Qwen3) / L17-22 (Mixtral); final-layer experts follow the final token's class (identifier vs
+  indentation vs quote), so the mixed set has no recurrent expert at L47/L31 in any run. (3) S1 localises like a fact in both models
+  (Qwen3 L47E025 rescue +1.15, Spec +0.97; Mixtral L31E000 +1.66 / +1.44, active 128/128; Qwen3 interior L42E048 +0.92 / +0.87); R1 in Qwen3 is
+  the CounterFact-like case (L43E126 +0.33 / +0.32, 83 % of the block, rank-1 in 87/118); S2 Qwen3 interior L41E041 +0.55 / +0.55, Mixtral
+  L17E003 +0.36 / +0.32; S3, R2, R3 weak (Spec <= 0.26) except Mixtral R2 L31E005 (Spec +0.50 on 70/128 active); Mixtral R1 -> L31E006 with
+  Spec -0.24 (E006 negatively specific again, coalition +0.30). (4) Top-10 joint pairs almost disjoint across categories (mean Jaccard 0.05 /
+  0.04); recurrent-set overlap 0.08-0.47 through always-on experts that rescue nothing; S1 is as close to R1/R2 as to S3 -> the S/R split is
+  not the axis, single-token vs distributed determination is. (5) L44E069 / L42E115 clean-active in <= 4 / <= 17 of 128 and rescue nothing on
+  every code category; L18E001 inactive; L19E002 / L19E006 recurrent only on Mixtral S2 (E002 +0.32, E006 Spec -0.27). (6) Coder-Instruct:
+  same items pass (r(Δ_clean) 0.83-0.92), same experts for S1 (L47E025 in all three runs), R1 (L43E126) and R2/R3 (chat), S2's joint winner
+  L41E041 in all runs; Coder adds a strong S3 expert L47E014 (+0.77/+0.99, Spec +0.70/+0.78); chat template raises block rescue, not experts.
+- Storage note: results/codefact_* are 19-83 MB each, dominated by scan_routing.parquet (34 MB per Qwen3 run: routing of ALL 6,448 scanned
+  items at every layer); it is only an intermediate for ext4_select.py (sweep_routing.parquet, 8 MB, is the subset the expert pass and the
+  analysis use) and expert_rows.parquet (16-17 MB). scan_routing can be dropped from the commit; scan_cases/scan_rows (2.7 + 1.4 MB) hold
+  every calibration statistic. expert_parts/ duplicates expert_rows.parquet (resume files) and can be deleted.
+
+## 2026-09-14 16:20 — coordinator: wave 2 complete (Directions 2, 2b, 4); all four extension directions delivered
+- ext2-attn-patch, ext2-model-zoo, ext4-codefact all delivered sections; assembled into results/EXTENSIONS_REPORT.md.
+  CLAUDE.md section 2b summarises every direction and the open method questions.
+- Usage-limit incidents: three wave-2 agents killed at ~06:30 (reset 10:00) and ext4 again at ~11:5x (reset 15:00);
+  all GPU chains ran to completion detached; agents resumed from disk without repeating GPU work.
+- Storage: results/codefact_*/scan_routing.parquet (34 MB each) and expert_parts/ are gitignored as regenerable
+  intermediates; raw diagnostics live on the ephemeral NVMe (/opt/dlami/nvme/moe_ext2, moe_ext3).
+- GPU minutes: wave 1 ≈ 30, wave 2 ≈ 10 (attn) + 55 (zoo) + 134 (codefact) → extensions total ≈ 3.8 h.

@@ -1,0 +1,113 @@
+2026-09-14T11:22:32Z START ext4-scan-codefact_qwen3_coder_chat (waited 0s): python scripts/ext4_scan.py qwen3_coder --out codefact_qwen3_coder_chat --protocol chat --chunk 1024
+11:22:51 qwen3_coder protocol=chat: 6448 items with tokenizer flag, 6448 resolved, 0 rejected ({}); chat prefix 17 tokens
+11:22:52 resolved per category: {'S2': 1200, 'S3': 1195, 'R3': 1163, 'R1': 1132, 'S1': 964, 'R2': 794}
+11:22:52 embed_std=0.018560 sigma=0.055679 hidden=2048 layers=48 top_k=8; diag layers [1, 5, 24, 44]
+11:22:52 chunk 1/9: 1024 items, T=40, 2048 prefill rows, 49152 spawn rows, wf_chunk=4000
+11:22:56   layer   0: load-wait 2.94s compute 0.86s  wf_rows=1024
+11:23:02   layer   8: load-wait 0.27s compute 0.45s  wf_rows=9216
+11:23:08   layer  16: load-wait 0.29s compute 0.53s  wf_rows=17408
+11:23:15   layer  24: load-wait 0.26s compute 0.59s  wf_rows=25600
+11:23:24   layer  32: load-wait 0.49s compute 0.66s  wf_rows=33792
+11:23:34   layer  40: load-wait 0.29s compute 0.73s  wf_rows=41984
+11:23:42   layer  47: load-wait 0.47s compute 0.80s  wf_rows=49152
+11:23:42   pass done: 2048 prefill rows (T=40), 49152 spawn rows, 49.3s
+11:23:42 pass time 49.5s; peak GPU memory 9.0 GB
+11:23:43 chunk 1 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        218     173      183    116  0.803  13.812  3.844
+R2         94      71       75     21  0.809  12.938  1.375
+R3          6       4        5      2  0.833   9.062  0.781
+S1        313     291      295    167  0.083  15.156  4.094
+S2         63      30       35     22  0.810   9.375  0.375
+S3        330     107      119     64  0.397   3.250 -0.375
+11:23:43 chunk 2/9: 1024 items, T=53, 2048 prefill rows, 49152 spawn rows, wf_chunk=3018
+11:24:28 pass time 44.4s; peak GPU memory 10.5 GB
+11:24:29 chunk 2 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        495     387      403    240  0.855  15.250  3.625
+R2        199     144      151     64  0.854  12.750  1.750
+R3         58      41       44     23  0.862  13.312  2.000
+S1        491     449      458    264  0.077  16.000  4.250
+S2        258     106      126     52  0.775   7.312  0.375
+S3        547     174      192     99  0.380   3.125 -0.375
+11:24:30 chunk 3/9: 1024 items, T=69, 2048 prefill rows, 49152 spawn rows, wf_chunk=2318
+11:25:22 pass time 52.8s; peak GPU memory 12.4 GB
+11:25:23 chunk 3 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        709     561      584    328  0.870  15.750  3.500
+R2        318     240      249    104  0.887  13.000  1.875
+R3        199     136      143     64  0.824  14.875  2.000
+S1        634     578      593    330  0.085  16.102  4.125
+S2        470     200      235     87  0.794   7.250  0.375
+S3        742     237      262    131  0.375   2.938 -0.375
+11:25:24 chunk 4/9: 930 items, T=86, 1860 prefill rows, 44640 spawn rows, wf_chunk=1860
+11:26:21 pass time 57.5s; peak GPU memory 13.4 GB
+11:26:23 chunk 4 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        872     690      719    397  0.869  15.562  3.250
+R2        452     342      358    158  0.881  13.625  2.000
+R3        390     252      272    131  0.833  14.688  1.750
+S1        748     681      700    384  0.084  16.188  4.125
+S2        666     289      330    129  0.800   6.938  0.375
+S3        874     288      315    160  0.376   3.250 -0.375
+11:26:23 chunk 5/9: 769 items, T=104, 1538 prefill rows, 36912 spawn rows, wf_chunk=1538
+11:27:21 pass time 57.5s; peak GPU memory 13.1 GB
+11:27:22 chunk 5 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        977     775      806    440  0.869  15.500  3.250
+R2        552     416      438    190  0.884  13.375  2.000
+R3        599     392      427    188  0.851  15.000  1.688
+S1        824     750      771    426  0.083  16.188  4.125
+S2        842     354      411    160  0.802   6.625  0.375
+S3        977     328      359    182  0.375   3.250 -0.375
+11:27:23 chunk 6/9: 645 items, T=124, 1290 prefill rows, 30960 spawn rows, wf_chunk=1290
+11:28:19 pass time 56.6s; peak GPU memory 12.9 GB
+11:28:24 chunk 6 written; cumulative per category:
+             n  strict  relaxed  rel25   top1  dclean   drop
+category                                                    
+R1        1039     828      859    467  0.868   15.50  3.188
+R2         643     485      514    221  0.883   14.00  2.000
+R3         806     522      564    243  0.855   15.50  1.562
+S1         885     804      827    459  0.088   16.25  4.125
+S2         983     407      484    179  0.803    6.50  0.375
+S3        1060     362      397    206  0.379    3.25 -0.375
+11:28:24 chunk 7/9: 547 items, T=145, 1094 prefill rows, 26256 spawn rows, wf_chunk=1103
+11:29:21 pass time 56.6s; peak GPU memory 12.7 GB
+11:29:26 chunk 7 written; cumulative per category:
+             n  strict  relaxed  rel25   top1  dclean   drop
+category                                                    
+R1        1094     871      902    489  0.869  15.500  3.125
+R2         720     546      578    247  0.878  13.500  2.000
+R3         980     641      689    289  0.860  15.625  1.562
+S1         927     842      867    484  0.090  16.188  4.125
+S2        1102     450      537    196  0.804   6.250  0.250
+S3        1140     396      432    223  0.379   3.250 -0.375
+11:29:26 chunk 8/9: 457 items, T=175, 914 prefill rows, 21936 spawn rows, wf_chunk=914
+11:30:24 pass time 57.3s; peak GPU memory 12.6 GB
+11:30:26 chunk 8 written; cumulative per category:
+             n  strict  relaxed  rel25   top1  dclean   drop
+category                                                    
+R1        1130     897      930    498  0.870  15.500  3.094
+R2         787     600      634    265  0.886  13.750  2.000
+R3        1148     748      808    327  0.861  15.750  1.500
+S1         962     874      899    500  0.088  16.188  4.109
+S2        1198     483      577    206  0.799   6.250  0.250
+S3        1195     409      449    231  0.376   3.125 -0.375
+11:30:26 chunk 9/9: 28 items, T=177, 56 prefill rows, 1344 spawn rows, wf_chunk=903
+11:31:02 pass time 35.7s; peak GPU memory 4.6 GB
+11:31:04 chunk 9 written; cumulative per category:
+             n  strict  relaxed  rel25   top1  dclean   drop
+category                                                    
+R1        1132     899      932    499  0.870  15.500  3.094
+R2         794     606      640    270  0.887  14.000  2.000
+R3        1163     756      818    331  0.860  15.750  1.500
+S1         964     876      901    501  0.088  16.188  4.109
+S2        1200     484      578    207  0.799   6.250  0.250
+S3        1195     409      449    231  0.376   3.125 -0.375
+11:31:05 done: {"model": "qwen3_coder", "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct", "protocol": "chat", "special_tokens": true, "chat_prefix_len": 17, "items_file": "/home/ubuntu/MOE/data/codefact/items.jsonl", "n_items_flagged": 6448, "n_resolved": 6448, "n_scanned": 6448, "rejects": {}, "sigma_mult": 3.0, "sigma": 0.05567941814661026, "embed_std": 0.018559806048870087, "max_tokens": 160, "chunk": 1024, "chunk_tokens": 80000, "wf_tokens": 160000, "per_category_max": null, "n_chunks": 9, "diag_layers": [1, 5, 24, 44], "command": "scripts/ext4_scan.py qwen3_coder --out codefact_qwen3_coder_chat --protocol chat --chunk 1024", "agent": "ext4-codefact", "created_utc": "2026-09-14T11:22:52Z", "tokenizer_vocab": 151669, "pass_times_s": [49.5, 44.4, 52.8, 57.5, 57.5, 56.6, 56.6, 57.3, 35.7], "peak_mem_gb": [9.03, 10.5, 12.45, 13.4, 13.12, 12.91, 12.67, 12.6, 4.57], "total_gpu_s": 467.9}
+2026-09-14T11:31:13Z END   ext4-scan-codefact_qwen3_coder_chat rc=0 (521s)

@@ -1,0 +1,51 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "protocol": "nobos",
+ "special_tokens": false,
+ "chat_prefix_len": 0,
+ "chat_prefix_text": null,
+ "items_file": "/home/ubuntu/MOE/data/codefact/items.jsonl",
+ "n_items_flagged": 5771,
+ "n_resolved": 4671,
+ "n_scanned": 4671,
+ "rejects": {},
+ "sigma_mult": 3.0,
+ "sigma": 0.03345493320375681,
+ "embed_std": 0.01115164440125227,
+ "max_tokens": 160,
+ "chunk": 768,
+ "chunk_tokens": 80000,
+ "wf_tokens": 160000,
+ "per_category_max": 800,
+ "n_chunks": 7,
+ "diag_layers": [
+  1,
+  5,
+  16,
+  28
+ ],
+ "command": "scripts/ext4_scan.py mixtral --out codefact_mixtral_nobos --protocol nobos --chunk 768 --per-category-max 800",
+ "agent": "ext4-codefact",
+ "created_utc": "2026-09-14T06:10:44Z",
+ "tokenizer_vocab": 32000,
+ "pass_times_s": [
+  97.9,
+  84.0,
+  74.0,
+  83.2,
+  98.1,
+  94.8,
+  68.2
+ ],
+ "peak_mem_gb": [
+  10.05,
+  11.42,
+  12.99,
+  14.91,
+  16.32,
+  16.07,
+  12.2
+ ],
+ "total_gpu_s": 600.2
+}

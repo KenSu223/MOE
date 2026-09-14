@@ -1,0 +1,5 @@
+05:30:31 units: 22995 usable (Counter({'csn': 21857, 'mbpp': 974, 'humaneval': 164})), unusable {'csn': 143}
+05:30:39 raw candidates: {'S1': 46223, 'S2': 3235, 'S3': 6921, 'R1': 27866, 'R2': 1133, 'R3': 5429} after per-unit cap: {'S1': 13801, 'S2': 2775, 'S3': 5437, 'R1': 10352, 'R2': 933, 'R3': 3756}
+05:31:09 wrote 6795 items -> /home/ubuntu/MOE/data/codefact/items.jsonl; per category: {'S1': 1200, 'S2': 1200, 'S3': 1200, 'R1': 1200, 'R3': 1200, 'R2': 795}
+05:31:09 qwen3 ok per category: {'S2': 1200, 'S3': 1195, 'R3': 1163, 'R1': 1132, 'S1': 964, 'R2': 794}
+05:31:09 mixtral ok per category: {'S1': 1127, 'S3': 1124, 'S2': 1070, 'R1': 955, 'R3': 824, 'R2': 671}

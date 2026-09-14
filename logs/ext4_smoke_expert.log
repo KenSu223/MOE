@@ -1,0 +1,17 @@
+2026-09-14T05:55:09Z START ext4-smoke-expert (waited 882s): python scripts/ext4_run_expert.py qwen3 --out codefact_smoke --protocol raw --no-pairs --layer-chunks 2
+05:55:26 qwen3 raw: chunk 1/2: 40 cases, layers 0..23 (24), 80 prefill rows, 12463 spawn rows
+05:55:30   layer   0: load-wait 2.87s compute 0.77s  wf_rows=477
+05:55:38   layer   8: load-wait 1.19s compute 0.05s  wf_rows=4599
+05:55:48   layer  16: load-wait 1.17s compute 0.06s  wf_rows=8804
+05:55:58   layer  24: load-wait 1.16s compute 0.07s  wf_rows=12463
+05:56:08   layer  32: load-wait 0.94s compute 0.07s  wf_rows=12463
+05:56:18   layer  40: load-wait 1.17s compute 0.07s  wf_rows=12463
+05:56:27   layer  47: load-wait 1.17s compute 0.07s  wf_rows=12463
+05:56:27   pass done: 80 prefill rows (T=7), 12463 spawn rows, 60.6s
+05:56:27 pass time 60.8s; peak GPU memory 3.9 GB
+05:56:27 chunk 1: wrote 12463 rows; total 12463 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+05:56:27 qwen3 raw: chunk 2/2: 40 cases, layers 24..47 (24), 80 prefill rows, 11949 spawn rows
+05:57:13 pass time 46.1s; peak GPU memory 3.9 GB
+05:57:14 chunk 2: wrote 11949 rows; total 24412 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+05:57:14 done
+2026-09-14T05:57:22Z END   ext4-smoke-expert rc=0 (133s)

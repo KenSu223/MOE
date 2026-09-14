@@ -1,0 +1,53 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "protocol": "raw",
+ "special_tokens": true,
+ "chat_prefix_len": 0,
+ "chat_prefix_text": null,
+ "items_file": "/home/ubuntu/MOE/data/codefact/items.jsonl",
+ "n_items_flagged": 6448,
+ "n_resolved": 6448,
+ "n_scanned": 6448,
+ "rejects": {},
+ "sigma_mult": 3.0,
+ "sigma": 0.06196054257452488,
+ "embed_std": 0.020653514191508293,
+ "max_tokens": 160,
+ "chunk": 1024,
+ "chunk_tokens": 80000,
+ "wf_tokens": 160000,
+ "per_category_max": null,
+ "n_chunks": 8,
+ "diag_layers": [
+  1,
+  5,
+  24,
+  44
+ ],
+ "command": "scripts/ext4_scan.py qwen3 --out codefact_qwen3_raw --protocol raw --chunk 1024",
+ "agent": "ext4-codefact",
+ "created_utc": "2026-09-14T06:02:56Z",
+ "tokenizer_vocab": 151669,
+ "pass_times_s": [
+  61.4,
+  46.4,
+  49.1,
+  54.7,
+  56.7,
+  59.0,
+  56.4,
+  41.2
+ ],
+ "peak_mem_gb": [
+  7.94,
+  8.77,
+  10.38,
+  12.69,
+  13.29,
+  12.99,
+  12.76,
+  7.15
+ ],
+ "total_gpu_s": 424.9
+}

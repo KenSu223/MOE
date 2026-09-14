@@ -1,0 +1,44 @@
+**Qwen3-30B-A3B-Base (tokenizer defaults): interior (layer, expert) pairs recurrent in ≥ 2 categories**
+
+| pair (interior) | n categories | categories |
+|---|---|---|
+| L2E026 | 6 | S1, S2, S3, R1, R2, R3 |
+| L4E084 | 6 | S1, S2, S3, R1, R2, R3 |
+| L17E023 | 6 | S1, S2, S3, R1, R2, R3 |
+| L17E025 | 6 | S1, S2, S3, R1, R2, R3 |
+| L26E065 | 6 | S1, S2, S3, R1, R2, R3 |
+| L29E023 | 6 | S1, S2, S3, R1, R2, R3 |
+| L31E057 | 6 | S1, S2, S3, R1, R2, R3 |
+| L35E119 | 6 | S1, S2, S3, R1, R2, R3 |
+| L41E023 | 6 | S1, S2, S3, R1, R2, R3 |
+| L43E086 | 6 | S1, S2, S3, R1, R2, R3 |
+| L1E110 | 5 | S1, S3, R1, R2, R3 |
+| L8E007 | 5 | S1, S3, R1, R2, R3 |
+| L12E088 | 5 | S1, S2, R1, R2, R3 |
+| L13E022 | 5 | S1, S2, S3, R1, R2 |
+| L13E046 | 5 | S1, S2, S3, R1, R3 |
+| L16E061 | 5 | S1, S2, R1, R2, R3 |
+| L16E120 | 5 | S1, S3, R1, R2, R3 |
+| L19E057 | 5 | S1, S2, R1, R2, R3 |
+| L21E003 | 5 | S1, S2, R1, R2, R3 |
+| L22E044 | 5 | S1, S2, R1, R2, R3 |
+| L22E079 | 5 | S1, S2, R1, R2, R3 |
+| L24E088 | 5 | S1, S2, R1, R2, R3 |
+| L25E022 | 5 | S1, S2, S3, R1, R2 |
+| L25E046 | 5 | S1, S2, R1, R2, R3 |
+| L26E056 | 5 | S1, S2, S3, R1, R2 |
+| L28E061 | 5 | S1, S2, S3, R1, R2 |
+| L28E125 | 5 | S1, S2, S3, R1, R2 |
+| L29E025 | 5 | S1, S2, S3, R1, R2 |
+| L33E003 | 5 | S1, S2, S3, R1, R2 |
+| L34E044 | 5 | S1, S2, S3, R1, R2 |
+| L34E049 | 5 | S1, S3, R1, R2, R3 |
+| L34E079 | 5 | S1, S2, S3, R1, R2 |
+| L35E091 | 5 | S1, S2, S3, R1, R2 |
+| L36E088 | 5 | S1, S2, S3, R1, R2 |
+| L37E022 | 5 | S1, S2, S3, R1, R2 |
+| L37E046 | 5 | S1, S2, S3, R1, R2 |
+| L37E054 | 5 | S1, S3, R1, R2, R3 |
+| L38E056 | 5 | S1, S2, S3, R1, R2 |
+| L38E065 | 5 | S1, S2, S3, R1, R2 |
+| L39E042 | 5 | S1, S2, S3, R1, R2 |

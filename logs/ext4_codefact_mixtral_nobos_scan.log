@@ -1,0 +1,93 @@
+2026-09-14T06:10:27Z START ext4-scan-codefact_mixtral_nobos (waited 916s): python scripts/ext4_scan.py mixtral --out codefact_mixtral_nobos --protocol nobos --chunk 768 --per-category-max 800
+06:10:44 mixtral protocol=nobos: 5771 items with tokenizer flag, 4671 resolved, 0 rejected ({}); chat prefix 0 tokens
+06:10:44 resolved per category: {'S1': 800, 'S3': 800, 'R1': 800, 'S2': 800, 'R3': 800, 'R2': 671}
+06:10:44 embed_std=0.011152 sigma=0.033455 hidden=4096 layers=32 top_k=2; diag layers [1, 5, 16, 28]
+06:10:44 chunk 1/7: 768 items, T=30, 1536 prefill rows, 24576 spawn rows, wf_chunk=5333
+06:10:53   layer   0: load-wait 6.89s compute 1.21s  wf_rows=768
+06:11:15   layer   8: load-wait 2.15s compute 0.77s  wf_rows=6912
+06:11:39   layer  16: load-wait 2.02s compute 0.88s  wf_rows=13056
+06:12:02   layer  24: load-wait 1.91s compute 0.99s  wf_rows=19200
+06:12:22   layer  31: load-wait 1.82s compute 1.08s  wf_rows=24576
+06:12:22   pass done: 1536 prefill rows (T=30), 24576 spawn rows, 97.7s
+06:12:22 pass time 97.9s; peak GPU memory 10.1 GB
+06:12:23 chunk 1 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        151      64       84     27  0.841   6.312  0.375
+R2         74      16       27      5  0.838   5.250  0.125
+R3          9       1        1      0  0.667   4.438 -0.125
+S1        276     253      264    143  0.275  12.562  3.125
+S2         38      18       19     11  0.816   3.438  0.250
+S3        220      45       72     17  0.914   4.250 -0.125
+06:12:23 chunk 2/7: 768 items, T=46, 1536 prefill rows, 24576 spawn rows, wf_chunk=3478
+06:13:47 pass time 84.0s; peak GPU memory 11.4 GB
+06:13:48 chunk 2 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        340     151      191     72  0.868   6.594  0.375
+R2        162      48       70     16  0.877   4.562  0.125
+R3         55      12       18      6  0.782   5.500  0.125
+S1        434     390      405    220  0.403  12.750  3.125
+S2        172      84       94     62  0.744   2.812  0.500
+S3        373      94      131     26  0.933   4.500 -0.125
+06:13:48 chunk 3/7: 768 items, T=64, 1536 prefill rows, 24576 spawn rows, wf_chunk=2500
+06:15:02 pass time 74.0s; peak GPU memory 13.0 GB
+06:15:03 chunk 3 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        491     221      274     96  0.872   6.938  0.375
+R2        268     104      142     37  0.881   5.000  0.250
+R3        179      63       85     27  0.782   6.250  0.219
+S1        541     481      504    265  0.449  12.875  3.125
+S2        319     154      177    104  0.793   3.000  0.500
+S3        506     133      189     40  0.931   4.500 -0.062
+06:15:03 chunk 4/7: 768 items, T=86, 1536 prefill rows, 24576 spawn rows, wf_chunk=1860
+06:16:27 pass time 83.2s; peak GPU memory 14.9 GB
+06:16:27 chunk 4 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        622     279      351    123  0.881   7.000  0.375
+R2        400     173      228     53  0.895   5.500  0.375
+R3        329     119      153     44  0.824   6.500  0.188
+S1        637     556      588    302  0.482  13.062  3.000
+S2        480     219      262    152  0.798   3.000  0.375
+S3        604     162      228     54  0.939   4.500 -0.062
+06:16:28 chunk 5/7: 710 items, T=112, 1420 prefill rows, 22720 spawn rows, wf_chunk=1428
+[W914 06:17:46.136737849 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W914 06:17:54.458579096 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W914 06:18:03.654161324 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+06:18:06 pass time 98.1s; peak GPU memory 16.3 GB
+06:18:07 chunk 5 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        713     322      404    144  0.879   7.000  0.375
+R2        514     241      308     71  0.901   5.625  0.438
+R3        515     197      254     78  0.845   6.625  0.250
+S1        723     626      662    337  0.503  13.125  2.938
+S2        613     264      326    182  0.796   2.875  0.375
+S3        704     195      273     71  0.946   4.625  0.000
+06:18:08 chunk 6/7: 571 items, T=140, 1142 prefill rows, 18272 spawn rows, wf_chunk=1142
+[W914 06:19:30.545093620 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+06:19:42 pass time 94.8s; peak GPU memory 16.1 GB
+06:19:43 chunk 6 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        769     356      441    162  0.879   7.125  0.375
+R2        615     295      378     82  0.906   5.875  0.500
+R3        696     271      349    106  0.856   6.719  0.250
+S1        777     671      710    360  0.519  13.188  2.938
+S2        732     299      376    204  0.788   2.875  0.375
+S3        764     225      304     87  0.950   4.562  0.000
+06:19:44 chunk 7/7: 318 items, T=160, 636 prefill rows, 10176 spawn rows, wf_chunk=1000
+06:20:52 pass time 68.2s; peak GPU memory 12.2 GB
+06:20:53 chunk 7 written; cumulative per category:
+            n  strict  relaxed  rel25   top1  dclean   drop
+category                                                   
+R1        800     379      467    171  0.882   7.125  0.438
+R2        671     321      410     88  0.903   5.875  0.500
+R3        800     318      404    120  0.862   6.750  0.250
+S1        800     690      730    368  0.521  13.188  2.906
+S2        800     316      402    215  0.789   2.750  0.250
+S3        800     241      325     95  0.950   4.625  0.000
+06:20:54 done: {"model": "mixtral", "repo": "mistralai/Mixtral-8x7B-v0.1", "protocol": "nobos", "special_tokens": false, "chat_prefix_len": 0, "items_file": "/home/ubuntu/MOE/data/codefact/items.jsonl", "n_items_flagged": 5771, "n_resolved": 4671, "n_scanned": 4671, "rejects": {}, "sigma_mult": 3.0, "sigma": 0.03345493320375681, "embed_std": 0.01115164440125227, "max_tokens": 160, "chunk": 768, "chunk_tokens": 80000, "wf_tokens": 160000, "per_category_max": 800, "n_chunks": 7, "diag_layers": [1, 5, 16, 28], "command": "scripts/ext4_scan.py mixtral --out codefact_mixtral_nobos --protocol nobos --chunk 768 --per-category-max 800", "agent": "ext4-codefact", "created_utc": "2026-09-14T06:10:44Z", "tokenizer_vocab": 32000, "pass_times_s": [97.9, 84.0, 74.0, 83.2, 98.1, 94.8, 68.2], "peak_mem_gb": [10.05, 11.42, 12.99, 14.91, 16.32, 16.07, 12.2], "total_gpu_s": 600.2}
+2026-09-14T06:21:02Z END   ext4-scan-codefact_mixtral_nobos rc=0 (635s)

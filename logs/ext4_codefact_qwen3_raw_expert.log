@@ -1,0 +1,81 @@
+2026-09-14T10:10:26Z START ext4-expert-codefact_qwen3_raw (waited 0s): python scripts/ext4_run_expert.py qwen3 --out codefact_qwen3_raw --protocol raw --no-pairs --prefill-tokens 160000 --wf-rows 45000
+10:10:55 qwen3 raw: 1536 cases, 2 case chunks, 23 passes, 925420 spawn rows total
+10:10:56 pass 1/23 part_c00_L00-02: 1066 cases T=75, 2132 prefill rows, 37308 spawn rows, wf_chunk=2133
+10:11:01   layer   0: load-wait 2.86s compute 1.32s  wf_rows=12188
+10:11:11   layer   8: load-wait 0.11s compute 1.18s  wf_rows=37308
+10:11:21   layer  16: load-wait 0.11s compute 1.19s  wf_rows=37308
+10:11:32   layer  24: load-wait 0.11s compute 1.18s  wf_rows=37308
+10:11:42   layer  32: load-wait 0.11s compute 1.18s  wf_rows=37308
+10:11:53   layer  40: load-wait 0.11s compute 1.19s  wf_rows=37308
+10:12:02   layer  47: load-wait 0.11s compute 1.18s  wf_rows=37308
+10:12:02   pass done: 2132 prefill rows (T=75), 37308 spawn rows, 65.2s
+10:12:02 pass time 65.5s; peak GPU memory 13.23 GB
+10:12:02 part_c00_L00-02: 37308 rows; expert_rows.parquet now 37308 rows, 1066 cases, 3 layers
+10:12:03 pass 2/23 part_c00_L03-05: 1066 cases T=75, 2132 prefill rows, 39191 spawn rows, wf_chunk=2133
+10:13:06 pass time 63.3s; peak GPU memory 13.3 GB
+10:13:10 part_c00_L03-05: 39191 rows; expert_rows.parquet now 76499 rows, 1066 cases, 6 layers
+10:13:10 pass 3/23 part_c00_L06-08: 1066 cases T=75, 2132 prefill rows, 40280 spawn rows, wf_chunk=2133
+10:14:13 pass time 62.6s; peak GPU memory 13.34 GB
+10:14:16 part_c00_L06-08: 40280 rows; expert_rows.parquet now 116779 rows, 1066 cases, 9 layers
+10:14:17 pass 4/23 part_c00_L09-11: 1066 cases T=75, 2132 prefill rows, 40716 spawn rows, wf_chunk=2133
+10:15:16 pass time 59.4s; peak GPU memory 13.36 GB
+10:15:21 part_c00_L09-11: 40716 rows; expert_rows.parquet now 157495 rows, 1066 cases, 12 layers
+10:15:22 pass 5/23 part_c00_L12-14: 1066 cases T=75, 2132 prefill rows, 40958 spawn rows, wf_chunk=2133
+10:16:20 pass time 58.2s; peak GPU memory 13.36 GB
+10:16:24 part_c00_L12-14: 40958 rows; expert_rows.parquet now 198453 rows, 1066 cases, 15 layers
+10:16:25 pass 6/23 part_c00_L15-17: 1066 cases T=75, 2132 prefill rows, 40381 spawn rows, wf_chunk=2133
+10:17:21 pass time 56.4s; peak GPU memory 13.34 GB
+10:17:25 part_c00_L15-17: 40381 rows; expert_rows.parquet now 238834 rows, 1066 cases, 18 layers
+10:17:26 pass 7/23 part_c00_L18-20: 1066 cases T=75, 2132 prefill rows, 40526 spawn rows, wf_chunk=2133
+10:18:21 pass time 55.0s; peak GPU memory 13.35 GB
+10:18:25 part_c00_L18-20: 40526 rows; expert_rows.parquet now 279360 rows, 1066 cases, 21 layers
+10:18:26 pass 8/23 part_c00_L21-23: 1066 cases T=75, 2132 prefill rows, 40470 spawn rows, wf_chunk=2133
+10:19:19 pass time 53.9s; peak GPU memory 13.35 GB
+10:19:20 part_c00_L21-23: 40470 rows; expert_rows.parquet now 319830 rows, 1066 cases, 24 layers
+10:19:21 pass 9/23 part_c00_L24-26: 1066 cases T=75, 2132 prefill rows, 40688 spawn rows, wf_chunk=2133
+10:20:16 pass time 55.3s; peak GPU memory 13.35 GB
+10:20:17 part_c00_L24-26: 40688 rows; expert_rows.parquet now 360518 rows, 1066 cases, 27 layers
+10:20:17 pass 10/23 part_c00_L27-29: 1066 cases T=75, 2132 prefill rows, 39863 spawn rows, wf_chunk=2133
+10:21:10 pass time 52.5s; peak GPU memory 13.32 GB
+10:21:11 part_c00_L27-29: 39863 rows; expert_rows.parquet now 400381 rows, 1066 cases, 30 layers
+10:21:12 pass 11/23 part_c00_L30-32: 1066 cases T=75, 2132 prefill rows, 39916 spawn rows, wf_chunk=2133
+10:22:01 pass time 49.6s; peak GPU memory 13.32 GB
+10:22:03 part_c00_L30-32: 39916 rows; expert_rows.parquet now 440297 rows, 1066 cases, 33 layers
+10:22:04 pass 12/23 part_c00_L33-35: 1066 cases T=75, 2132 prefill rows, 39912 spawn rows, wf_chunk=2133
+10:22:52 pass time 48.5s; peak GPU memory 13.33 GB
+10:22:55 part_c00_L33-35: 39912 rows; expert_rows.parquet now 480209 rows, 1066 cases, 36 layers
+10:22:56 pass 13/23 part_c00_L36-38: 1066 cases T=75, 2132 prefill rows, 40263 spawn rows, wf_chunk=2133
+10:23:43 pass time 47.4s; peak GPU memory 13.34 GB
+10:23:46 part_c00_L36-38: 40263 rows; expert_rows.parquet now 520472 rows, 1066 cases, 39 layers
+10:23:47 pass 14/23 part_c00_L39-41: 1066 cases T=75, 2132 prefill rows, 40197 spawn rows, wf_chunk=2133
+10:24:33 pass time 45.9s; peak GPU memory 13.33 GB
+10:24:37 part_c00_L39-41: 40197 rows; expert_rows.parquet now 560669 rows, 1066 cases, 42 layers
+10:24:38 pass 15/23 part_c00_L42-44: 1066 cases T=75, 2132 prefill rows, 41504 spawn rows, wf_chunk=2133
+10:25:22 pass time 44.1s; peak GPU memory 13.39 GB
+10:25:26 part_c00_L42-44: 41504 rows; expert_rows.parquet now 602173 rows, 1066 cases, 45 layers
+10:25:26 pass 16/23 part_c00_L45-47: 1066 cases T=75, 2132 prefill rows, 41783 spawn rows, wf_chunk=2133
+10:26:10 pass time 43.8s; peak GPU memory 12.72 GB
+10:26:11 part_c00_L45-47: 41783 rows; expert_rows.parquet now 643956 rows, 1066 cases, 48 layers
+10:26:12 pass 17/23 part_c01_L00-07: 470 cases T=160, 940 prefill rows, 44460 spawn rows, wf_chunk=1000
+10:27:34 pass time 82.3s; peak GPU memory 12.81 GB
+10:27:39 part_c01_L00-07: 44460 rows; expert_rows.parquet now 688416 rows, 1536 cases, 48 layers
+10:27:40 pass 18/23 part_c01_L08-14: 470 cases T=160, 940 prefill rows, 40967 spawn rows, wf_chunk=1000
+10:28:53 pass time 72.9s; peak GPU memory 12.69 GB
+10:28:53 part_c01_L08-14: 40967 rows; expert_rows.parquet now 729383 rows, 1536 cases, 48 layers
+10:28:54 pass 19/23 part_c01_L15-21: 470 cases T=160, 940 prefill rows, 40998 spawn rows, wf_chunk=1000
+10:30:00 pass time 66.3s; peak GPU memory 12.69 GB
+10:30:05 part_c01_L15-21: 40998 rows; expert_rows.parquet now 770381 rows, 1536 cases, 48 layers
+10:30:05 pass 20/23 part_c01_L22-28: 470 cases T=160, 940 prefill rows, 41163 spawn rows, wf_chunk=1000
+10:31:06 pass time 60.3s; peak GPU memory 12.7 GB
+10:31:07 part_c01_L22-28: 41163 rows; expert_rows.parquet now 811544 rows, 1536 cases, 48 layers
+10:31:07 pass 21/23 part_c01_L29-35: 470 cases T=160, 940 prefill rows, 41024 spawn rows, wf_chunk=1000
+10:32:02 pass time 54.3s; peak GPU memory 12.69 GB
+10:32:06 part_c01_L29-35: 41024 rows; expert_rows.parquet now 852568 rows, 1536 cases, 48 layers
+10:32:07 pass 22/23 part_c01_L36-42: 470 cases T=160, 940 prefill rows, 41907 spawn rows, wf_chunk=1000
+10:32:55 pass time 48.3s; peak GPU memory 12.73 GB
+10:33:04 part_c01_L36-42: 41907 rows; expert_rows.parquet now 894475 rows, 1536 cases, 48 layers
+10:33:05 pass 23/23 part_c01_L43-47: 470 cases T=160, 940 prefill rows, 30945 spawn rows, wf_chunk=1000
+10:33:47 pass time 42.4s; peak GPU memory 12.06 GB
+10:33:53 part_c01_L43-47: 30945 rows; expert_rows.parquet now 925420 rows, 1536 cases, 48 layers
+10:33:54 done: 925420 rows over 48 layers, 1288s GPU in 23 passes (+0 resumed)
+2026-09-14T10:34:02Z END   ext4-expert-codefact_qwen3_raw rc=0 (1416s)
