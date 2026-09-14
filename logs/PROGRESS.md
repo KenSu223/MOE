@@ -127,3 +127,15 @@
   mean 0.14, top-1 5/5; Mixtral max 0.0625, mean 0.0125, top-1 5/5. Within the bf16 noise floor measured on OLMoE.
 - Final REPORT.md rebuilt (sections 1-8 + 6b Mixtral no-BOS); results/DONE written. All paper tables (1-16), Figure 1 (default and no-BOS
   Mixtral variants), row-level parquet for every pass, and the comparison JSONs are under results/.
+
+## 2026-09-14 — extensions phase started (RESEARCH_PLAN.md)
+- Four directions planned: (1) joint layer×expert search vs the paper's two-stage selection; (2) generalisation to
+  Qwen3-Instruct-2507, Qwen3-Coder-Instruct, Mixtral-Instruct, OLMoE base/Instruct + attention-vs-MoE attribution
+  (new spawn kinds attn_layer/block); (3) mechanism of the BOS effect on Mixtral routing (H1 sink relocation,
+  H2 BOS semantics, H3 position shift, H4 default expert); (4) CodeFact: CounterFact-style code counterfactuals
+  (S1-S3 syntax, R1-R3 recall) on Python.
+- User decisions: core model set only; instruct models under both raw and chat-template protocols; Python,
+  HumanEval+MBPP+The Stack, paper's absolute thresholds primary; two waves (1+3 first, then 2+4).
+- Infrastructure: scripts/gpu_queue.sh (flock-serialised GPU jobs; all agents must use it). Report target:
+  results/EXTENSIONS_REPORT.md. Run dirs: results/<model>_<bos|nobos>_<experiment>/ with run_meta.json.
+- Wave 1 agents launching: ext1-joint-search, ext3-bos-mechanism, ext3-literature.
