@@ -1,0 +1,82 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "base_run": "mixtral",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper",
+  "strict",
+  "relaxed"
+ ],
+ "layers": "0-31 (all 32)",
+ "pairs": false,
+ "layer_chunks": 4,
+ "command": "python scripts/run_expert.py mixtral --layers 0,...,31 --no-pairs --layer-chunks 4 --out mixtral_bos_alllayers",
+ "experiment": "ext1 joint layer x expert search (RESEARCH_PLAN Direction 1)",
+ "agent": "ext1-joint-search",
+ "created_utc": "2026-09-14T00:49:34Z",
+ "inputs_copied_from_base": [
+  "case_sets.json",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet",
+  "sweep_rows.parquet",
+  "sweep_summary.json"
+ ],
+ "outputs": [
+  "expert_rows.parquet (kinds: layer, coalition_clean, coalition_union, expert, expert_noised_only; no expert_scaled)",
+  "expert_prefill_L<a>-<b>.parquet per chunk"
+ ],
+ "completed_utc": "2026-09-14T01:00:32Z",
+ "n_passes": 4,
+ "pass_times_s": [
+  98.6,
+  89.6,
+  73.8,
+  68.6
+ ],
+ "gpu_time_s": 330.6,
+ "n_cases": 527,
+ "n_layers_done": 32,
+ "n_rows": 91142,
+ "rows_by_kind": {
+  "expert": 33728,
+  "layer": 16864,
+  "coalition_clean": 16864,
+  "coalition_union": 16864,
+  "expert_noised_only": 6822
+ },
+ "chunks": [
+  {
+   "cases": 527,
+   "layers": "0-7",
+   "n_layers": 8,
+   "prefill_rows": 1054,
+   "spawn_rows": 22376
+  },
+  {
+   "cases": 527,
+   "layers": "8-15",
+   "n_layers": 8,
+   "prefill_rows": 1054,
+   "spawn_rows": 22714
+  },
+  {
+   "cases": 527,
+   "layers": "16-23",
+   "n_layers": 8,
+   "prefill_rows": 1054,
+   "spawn_rows": 22851
+  },
+  {
+   "cases": 527,
+   "layers": "24-31",
+   "n_layers": 8,
+   "prefill_rows": 1054,
+   "spawn_rows": 23201
+  }
+ ],
+ "complete": true,
+ "log": "logs/ext1_expert_mixtral_bos_alllayers.log"
+}

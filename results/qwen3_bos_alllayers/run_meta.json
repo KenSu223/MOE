@@ -1,0 +1,82 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "base_run": "qwen3",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper",
+  "strict",
+  "relaxed"
+ ],
+ "layers": "0-47 (all 48)",
+ "pairs": false,
+ "layer_chunks": 4,
+ "command": "python scripts/run_expert.py qwen3 --layers 0,...,47 --no-pairs --layer-chunks 4 --out qwen3_bos_alllayers",
+ "experiment": "ext1 joint layer x expert search (RESEARCH_PLAN Direction 1)",
+ "agent": "ext1-joint-search",
+ "created_utc": "2026-09-14T00:49:34Z",
+ "inputs_copied_from_base": [
+  "case_sets.json",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet",
+  "sweep_rows.parquet",
+  "sweep_summary.json"
+ ],
+ "outputs": [
+  "expert_rows.parquet (kinds: layer, coalition_clean, coalition_union, expert, expert_noised_only; no expert_scaled)",
+  "expert_prefill_L<a>-<b>.parquet per chunk"
+ ],
+ "completed_utc": "2026-09-14T00:54:29Z",
+ "n_passes": 4,
+ "pass_times_s": [
+  61.6,
+  52.8,
+  46.2,
+  49.6
+ ],
+ "gpu_time_s": 210.2,
+ "n_cases": 528,
+ "n_layers_done": 48,
+ "n_rows": 350056,
+ "rows_by_kind": {
+  "expert": 202752,
+  "expert_noised_only": 71272,
+  "layer": 25344,
+  "coalition_clean": 25344,
+  "coalition_union": 25344
+ },
+ "chunks": [
+  {
+   "cases": 528,
+   "layers": "0-11",
+   "n_layers": 12,
+   "prefill_rows": 1056,
+   "spawn_rows": 86064
+  },
+  {
+   "cases": 528,
+   "layers": "12-23",
+   "n_layers": 12,
+   "prefill_rows": 1056,
+   "spawn_rows": 90305
+  },
+  {
+   "cases": 528,
+   "layers": "24-35",
+   "n_layers": 12,
+   "prefill_rows": 1056,
+   "spawn_rows": 89287
+  },
+  {
+   "cases": 528,
+   "layers": "36-47",
+   "n_layers": 12,
+   "prefill_rows": 1056,
+   "spawn_rows": 84400
+  }
+ ],
+ "complete": true,
+ "log": "logs/ext1_expert_qwen3_bos_alllayers.log"
+}

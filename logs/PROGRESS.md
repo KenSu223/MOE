@@ -139,3 +139,93 @@
 - Infrastructure: scripts/gpu_queue.sh (flock-serialised GPU jobs; all agents must use it). Report target:
   results/EXTENSIONS_REPORT.md. Run dirs: results/<model>_<bos|nobos>_<experiment>/ with run_meta.json.
 - Wave 1 agents launching: ext1-joint-search, ext3-bos-mechanism, ext3-literature.
+
+## 2026-09-14 00:59 — ext3-literature
+- Wrote docs/ext3_literature_review.md (Direction 3 desk research, no GPU): attention sinks / massive activations and BOS
+  removal, first-token effects on MoE routing, ROME/MEMIT/EasyEdit tokenisation conventions, patching-robustness tooling
+  (TransformerLens prepend_bos, PR #1773), Mistral/Mixtral BOS documentation; H1-H4 evidence table; 9 cheap engine
+  experiments; unverified items listed. 30 references, all opened this session.
+- Decision-relevant findings: (1) Peng et al. 2026 (arXiv 2603.06591): for Mistral-7B "[BOS] is the sole driver of the
+  sink", unlike Llama where a position-0 sink re-forms without BOS; Oh et al. 2025 (arXiv 2410.01866): Mistral/Mixtral
+  without BOS put massive activations on the first delimiter, and BOS at position 0 takes them over; Sun et al. 2024 App.
+  A.3: Mixtral massive activations partly shift to <s> when BOS is prepended. (2) RoPE is relative (RoFormer), so H3
+  cannot act alone; the shifted-position control should equal the no-BOS run up to bf16 noise. (3) ROME/MEMIT/EasyEdit
+  rely on tokenizer defaults (no BOS for GPT-2/GPT-J, BOS for Llama/Mistral); the paper's Appendix A never mentions
+  special tokens, consistent with a Qwen3-first pipeline that disables them. Literature favours H1 in a Mistral-specific
+  form entangled with H2; H4 has only indirect support.
+
+## 2026-09-14 01:10 UTC — ext3-bos-mechanism: engine diagnostics built and verified; GPU chain launched
+- Engine (backward compatible, all behind new optional arguments): `PrefillSpec.pos_offset` (RoPE position of the first
+  token), `PrefillSpec.sink_donor/sink_vscale` (an extra attendable key/value slot copied from another row's position 0,
+  value optionally scaled to 0 = key-only absorber), `DiagSpec` passed to `Engine.run(diag=...)` recording per layer the
+  final position's attention distribution per head, every position's residual norm, final-position router logits and
+  residual, next-token log-probs, and (optionally) the routing of every token at chosen layers; `moe_forward(...,
+  return_logits)`; row-chunked prefill attention (memory bound, identical numerics); chunked `_build_v`.
+  `prepare_case(..., prefix_ids)` / `cases_by_id(..., prefix_ids)` prepend arbitrary tokens after object resolution.
+- Verified on OLMoE vs transformers 5.16 (results/verify_ext3_diag_olmoe.json): attention probs mean max-diff 0.014,
+  hidden norms (hidden_states[l+1] = output of layer l) <= 1.5 % rel., router logits mean max-diff 0.025, all-token
+  routing 143/150, token log-probs max-diff 0.17, pos_offset vs HF position_ids max 0.19 (HF's own Delta moves 0.10 on
+  average under a +1 shift = bf16 floor). Pilot check re-run and gate (scripts/ext3_gate.py) precede every experiment pass.
+- Design changes after the literature review (docs/ext3_literature_review.md): H3 is degenerate (RoPE is relative), so
+  `shift1` is only an identity check; the literal "sink transplant" (BOS K/V at every layer) equals the BOS run by
+  construction and is used as an identity check of the mechanism (`sinkfull`), the informative variant is the key-only
+  sink (`sinkkey`, value = 0); added ',' at position 0; diagnostics record every position for the sink-location analysis.
+- Chain scripts/ext3_chain.sh (logs/ext3_chain.log): verify -> gate -> Mixtral passes A (bos, nobos, shift1, eos, bosbos),
+  B (nl, dot, comma, the, rare), C (sinkfull, sinkkey) -> Qwen3 (default, eot) -> corpus wiki, code. 8 GPU jobs.
+
+## 2026-09-14 01:12 UTC — ext3-bos-mechanism: gate passed, experiment passes running
+- Pilot verification re-run after the engine changes (results/verify_olmoe.json vs verify_olmoe_before_ext3.json): every
+  metric identical to the backup (all diffs 0.0000, routing 38/40, rescue curve max |diff| 0.0000): the default engine
+  path is byte-identical. Sink-transplant identity check on OLMoE: transplanted-K/V rows reproduce the donor rows
+  exactly (Delta max diff 0.0, routing 100 %, layer-patch rescues identical, sink-slot mass identical); shift-by-one
+  rows differ from the unshifted ones by <= 0.36 in Delta (bf16 noise; HF itself moves 0.10 on average).
+- GPU chain continues: Mixtral pass A started 01:08:54 (5 variants, 2,560 prefill rows, 55,040 spawn rows).
+
+## 2026-09-14 01:15 UTC — ext3-bos-mechanism: Mixtral pass A done (bos, nobos, shift1, eos, bosbos; 88 s)
+- bos reproduces the main run (L19 E002 77/84, E006 71/67, strict 233/256), nobos reproduces mixtral_nobos (E006 91/84,
+  E002 59/70, strict 249/256). shift1 = nobos to bf16 noise (E006 90/83): RoPE relativity confirmed numerically.
+- Final position's attention on position 0 at layer 1: 0.83 with <s>, 0.09 without any token (no position-0 sink
+  re-forms in Mixtral without BOS), 0.19 with </s>, 0.45 with <s><s>. </s> at position 0 is destructive (strict pass
+  154/256, L* moves to L21, E006 95/86) - not a BOS substitute. <s><s> behaves like <s> (E002 78/86, E006 67/66).
+
+## 2026-09-14 01:20 UTC — ext3-bos-mechanism: Mixtral pass B done (nl, dot, comma, the, rare; 106 s)
+- Routing follows the sink, not the token: '\n' (final-position attention on pos 0 at L1: 0.77) and ',' (0.81) reproduce
+  the BOS run (E002 73-74/128 disc, E006 68-77, L19 selected, strict 237-239/256); '▁.' (0.08), '▁the' (0.15),
+  '▁workspace' (0.06) behave like no token (E006 88-92/128, val argmax L21). H2 (BOS-specific semantics) rejected in its
+  strict form; sink formation is token-selective (Mistral: <s> and some delimiters), consistent with Oh et al. 2025.
+- Queued one extra batched pass (chain2): attached '.' (28723), ':', '▁of', lone '▁', <unk>.
+
+## 2026-09-14 01:25 UTC — ext3-bos-mechanism: Mixtral pass C done (sink transplant)
+- sinkfull (no token; <s> key+value from the BOS run as an extra attendable slot at every layer) = BOS run: L19 routing
+  agreement 0.99, E002 77/84, E006 71/68, E002 selected with spec +0.189 - the whole BOS effect is carried by position
+  0's K/V (as the causal-attention argument predicts). sinkkey (key only, value 0): attention parks on the slot
+  (~0.75 mass) but the model breaks (strict 172/256, Delta_clean +2.9, agreement 0.37 with BOS / 0.29 with no-BOS):
+  the sink is an absorber AND a constant value bias; pure mass absorption is not the mechanism.
+- Strata (passes A+B): prompts whose final position carries the maximal residual norm without BOS (63/256) have L19
+  routing agreement 0.06 (0.75 elsewhere), E006 active 31 -> 63, E002 44 -> 15; subject-at-position-0 prompts 0.51
+  vs 0.88 when the subject comes later; E006's contribution norm at L19 is 61 without BOS vs 24 with BOS.
+
+## 2026-09-14 01:18 UTC — ext1-joint-search
+- GPU (all through scripts/gpu_queue.sh): expert pass at EVERY layer, `--no-pairs`, layer-chunked to bound wavefront rows (one Qwen3 pass
+  at 86k rows used 16 GB, so 4 chunks per run): `results/qwen3_bos_alllayers` (48 layers, 350,056 rows, 4 x ~50 s), `results/mixtral_bos_alllayers`
+  (32 layers, 91,142 rows, 4 x ~80 s), `results/mixtral_nobos_alllayers` (paper set, `--no-special-tokens`, 46,560 rows, 4 x ~78 s); ~14 min GPU.
+  `scripts/run_expert.py` gained `--layer-chunks N` and `--dry-run`; per-chunk parquet merge; `run_meta.json` in each run dir.
+- Analysis (`moetrace/ext1_analysis.py`, `scripts/ext1_analyze.py`): per-layer recurrence-first best expert (curves + Spec), joint argmax over
+  all recurrent (layer, expert) pairs on discovery evaluated on validation, concentration Rescue(e*)/Rescue(block), Appendix-D grid for the joint
+  search, exhaustive scan of L42/43/45 (Qwen3) and L20/21 (Mixtral), paired winner-vs-two-stage tests. Fast path verified identical to
+  analysis.evaluate_expert. bf16 fingerprints vs the base passes: L44E069 +0.499 vs +0.503, L19E002 +0.363 vs +0.352, L19E006 +0.063 vs +0.073.
+- Qwen3 (paper set): joint winner = two-stage winner L44E069 (val +0.499 [+0.357, +0.659], Spec +0.443). BUT L42E115 (active 126/128 disc,
+  123/128 val) is a second near-equivalent expert: val +0.447 [+0.363, +0.537], Spec +0.423 [+0.339, +0.510]; joint discovery argmax on the
+  strict and relaxed sets and in 30/75 grid cells (5/10/15); L42 concentrates 72% of its block rescue in E115 vs 53% at L44; per-case
+  correlation with E069 r = 0.27, union rescues 89% of val cases (per-case max +0.75 vs L44 block +0.94). No expert of L43/L45 comes close.
+- Mixtral BOS: joint = two-stage L19E002 in all sets, 17/25 grid cells; the 8 others are threshold 80/96 cells where L19 has no recurrent
+  expert at all (two-stage returns nothing) and the joint search falls back to L21E001 (+0.27) / L18E001 (+0.24).
+- Mixtral no-BOS (paper protocol): joint winner L18E001 (rank 1 disc.; val +0.139 [+0.081, +0.205], Spec +0.098 [+0.040, +0.162]) vs two-stage
+  L19E006 (rank 4; +0.063 [-0.009, +0.134], Spec -0.159). Paired: rescue +0.077 (p = 0.08), Spec +0.257 (p < 1e-4). L19E006 never wins in
+  25 grid cells (winners L21E001 x12 at thresholds 32-48, L22E001 x8, L18E001 x2); the per-split two-stage layer flips to L21 in 4/5 seeds
+  where nothing is recurrent at >= 64. L21E001 has the best validation rescue of anything evaluated (+0.29) but is active in only 59/128.
+  E001 is the strongest expert of L17/L18/L21/L22 under BOTH protocols (not a BOS artefact); L19E002 is the strongest L19 expert even
+  without BOS (+0.22) but fails recurrence there.
+- Outputs: results/sections/ext1_joint_search.md, results/ext1_summary.json, results/figures/ext1_curves_{qwen3_bos,mixtral_bos,mixtral_nobos}.{png,pdf},
+  results/tables/ext1_{top10,stability,neighbours,concentration,best_expert_by_layer}_<run>.{md,csv}, ext1_layer_curve_*.csv,
+  ext1_all_candidates_*.csv, ext1_neighbours_all_*.csv, ext1_mixtral_E001_by_layer.{md,csv}, ext1_summary.{md,csv}.

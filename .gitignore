@@ -20,3 +20,4 @@ scripts/claude_bin.txt
 # model weights are never stored here (HF_HOME=/opt/dlami/nvme/hf)
 hf/
 offload/
+logs/gpu.lock

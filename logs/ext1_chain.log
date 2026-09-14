@@ -1,0 +1,7 @@
+2026-09-14T00:50:35Z ext1_chain: launching ext1-qwen3-alllayers
+2026-09-14T00:53:33Z ext1_chain: parent shell stopped by ext1 agent after the Qwen3 job started; Mixtral jobs re-queued via ext1_chain_mixtral.sh with --layer-chunks 4
+2026-09-14T00:53:33Z ext1_chain_mixtral: launching ext1-mixtral-bos-alllayers
+2026-09-14T01:00:40Z ext1_chain_mixtral: ext1-mixtral-bos-alllayers rc=0
+2026-09-14T01:00:40Z ext1_chain_mixtral: launching ext1-mixtral-nobos-alllayers
+2026-09-14T01:07:02Z ext1_chain_mixtral: ext1-mixtral-nobos-alllayers rc=0
+2026-09-14T01:07:02Z ext1_chain_mixtral: DONE

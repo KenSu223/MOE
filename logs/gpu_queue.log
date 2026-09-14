@@ -1,0 +1,26 @@
+2026-09-14T00:50:35Z START ext1-qwen3-alllayers (waited 0s): python scripts/run_expert.py qwen3 --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47 --no-pairs --layer-chunks 4 --out qwen3_bos_alllayers
+2026-09-14T00:54:37Z END   ext1-qwen3-alllayers rc=0 (242s)
+2026-09-14T00:54:37Z START ext1-mixtral-bos-alllayers (waited 64s): python scripts/run_expert.py mixtral --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31 --no-pairs --layer-chunks 4 --out mixtral_bos_alllayers
+2026-09-14T01:00:40Z END   ext1-mixtral-bos-alllayers rc=0 (363s)
+2026-09-14T01:00:40Z START ext3-verify-diag (waited 283s): python scripts/ext3_verify_diag.py 6
+2026-09-14T01:01:30Z END   ext3-verify-diag rc=0 (50s)
+2026-09-14T01:01:30Z START ext1-mixtral-nobos-alllayers (waited 50s): python scripts/run_expert.py mixtral --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31 --no-pairs --layer-chunks 4 --no-special-tokens --out mixtral_nobos_alllayers
+2026-09-14T01:07:02Z END   ext1-mixtral-nobos-alllayers rc=0 (332s)
+2026-09-14T01:07:05Z START ext3-verify-diag2 (waited 0s): python scripts/ext3_verify_diag.py 6
+2026-09-14T01:07:54Z END   ext3-verify-diag2 rc=0 (49s)
+2026-09-14T01:07:54Z START ext3-verify-olmoe (waited 0s): python scripts/verify_olmoe.py
+2026-09-14T01:08:54Z END   ext3-verify-olmoe rc=0 (60s)
+2026-09-14T01:08:54Z START ext3-mixtral-passA (waited 0s): python scripts/ext3_run_variants.py mixtral --variants bos,nobos,shift1,eos,bosbos
+2026-09-14T01:10:39Z END   ext3-mixtral-passA rc=0 (105s)
+2026-09-14T01:10:39Z START ext3-mixtral-passB (waited 0s): python scripts/ext3_run_variants.py mixtral --variants nl,dot,comma,the,rare
+2026-09-14T01:12:25Z END   ext3-mixtral-passB rc=0 (106s)
+2026-09-14T01:12:25Z START ext3-mixtral-passC (waited 0s): python scripts/ext3_run_variants.py mixtral --variants bos,sinkfull,sinkkey --skip-outputs bos
+2026-09-14T01:14:02Z END   ext3-mixtral-passC rc=0 (97s)
+2026-09-14T01:14:03Z START ext3-mixtral-passD (waited 20s): python scripts/ext3_run_variants.py mixtral --variants dot2,colon,of,space,unk
+2026-09-14T01:15:41Z END   ext3-mixtral-passD rc=0 (98s)
+2026-09-14T01:15:41Z START ext3-qwen3-pass (waited 98s): python scripts/ext3_run_variants.py qwen3 --variants default,eot
+2026-09-14T01:17:15Z END   ext3-qwen3-pass rc=0 (94s)
+2026-09-14T01:17:15Z START ext3-corpus-wiki (waited 0s): python scripts/ext3_corpus_routing.py mixtral --corpus wiki
+2026-09-14T01:19:34Z END   ext3-corpus-wiki rc=0 (139s)
+2026-09-14T01:19:34Z START ext3-corpus-code (waited 0s): python scripts/ext3_corpus_routing.py mixtral --corpus code
+2026-09-14T01:21:43Z END   ext3-corpus-code rc=0 (129s)
