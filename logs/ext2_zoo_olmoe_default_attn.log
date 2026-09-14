@@ -1,0 +1,13 @@
+2026-09-14T05:45:27Z START ext2zoo-olmoe_default-attn (waited 802s): python scripts/ext2_zoo_attn.py olmoe --protocol default
+05:45:34 olmoe -> olmoe_default_attnsweep: sets=['strict'] union=256 cases, kinds=['attn_layer', 'layer', 'block'], special_tokens=True
+05:45:42 running pass: 512 prefill rows, 12288 spawn rows
+05:45:44   layer   0: load-wait 1.81s compute 0.61s  wf_rows=768
+05:45:57   layer   8: load-wait 1.59s compute 0.09s  wf_rows=6912
+05:46:09   layer  15: load-wait 1.55s compute 0.12s  wf_rows=12288
+05:46:09   pass done: 512 prefill rows (T=17), 12288 spawn rows, 26.9s
+05:46:09 pass time 27.1s
+05:46:09 set strict kind attn_layer: L*=13 disc=+2.734 val@L*=+2.929 val argmax L13 +2.929
+05:46:09 set strict kind layer     : L*=13 disc=+1.419 val@L*=+1.422 val argmax L12 +1.534
+05:46:09 set strict kind block     : L*=13 disc=+3.706 val@L*=+3.869 val argmax L12 +3.987
+05:46:09 done
+2026-09-14T05:46:11Z END   ext2zoo-olmoe_default-attn rc=0 (44s)

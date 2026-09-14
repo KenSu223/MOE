@@ -1,0 +1,15 @@
+2026-09-14T06:55:32Z START ext2zoo-mixtral_instruct_chat-attn (waited 0s): python scripts/ext2_zoo_attn.py mixtral_instruct --protocol chat
+06:55:46 mixtral_instruct -> mixtral_instruct_chat_attnsweep: sets=['paper'] union=256 cases, kinds=['attn_layer', 'layer', 'block'], special_tokens=False
+06:55:47 running pass: 512 prefill rows, 24576 spawn rows
+06:55:54   layer   0: load-wait 5.62s compute 0.80s  wf_rows=768
+06:56:12   layer   8: load-wait 2.51s compute 0.40s  wf_rows=6912
+06:56:28   layer  16: load-wait 1.11s compute 0.51s  wf_rows=13056
+06:56:43   layer  24: load-wait 1.53s compute 0.63s  wf_rows=19200
+06:57:00   layer  31: load-wait 1.07s compute 0.72s  wf_rows=24576
+06:57:00   pass done: 512 prefill rows (T=37), 24576 spawn rows, 72.8s
+06:57:00 pass time 73.0s
+06:57:00 set paper kind attn_layer: L*=24 disc=+2.982 val@L*=+2.834 val argmax L24 +2.834
+06:57:00 set paper kind layer     : L*=31 disc=+2.003 val@L*=+1.760 val argmax L31 +1.760
+06:57:00 set paper kind block     : L*=18 disc=+3.404 val@L*=+2.851 val argmax L24 +3.241
+06:57:00 done
+2026-09-14T06:57:07Z END   ext2zoo-mixtral_instruct_chat-attn rc=0 (95s)

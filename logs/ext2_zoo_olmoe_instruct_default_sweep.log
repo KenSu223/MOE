@@ -1,0 +1,13 @@
+2026-09-14T05:31:45Z START ext2zoo-olmoe_instruct_default-sweep (waited 230s): python scripts/ext2_zoo_sweep.py olmoe_instruct --protocol default
+05:31:47 olmoe_instruct: sets=['strict', 'relaxed'] union=512 cases
+05:31:53 running pass: 1024 prefill rows, 8192 spawn rows
+05:31:55   layer   0: load-wait 1.54s compute 0.41s  wf_rows=512
+05:32:00   layer   8: load-wait 0.72s compute 0.12s  wf_rows=4608
+05:32:06   layer  15: load-wait 0.69s compute 0.14s  wf_rows=8192
+05:32:06   pass done: 1024 prefill rows (T=18), 8192 spawn rows, 13.4s
+05:32:06 pass time 13.5s
+05:32:06 set strict: L*=13 disc=+1.499 val@L*=+1.175 val argmax L13 +1.175 funnel strict 253/256
+05:32:06 set relaxed: L*=13 disc=+1.408 val@L*=+1.190 val argmax L13 +1.190 funnel strict 488/512
+05:32:06 done
+05:32:07 sink diag: layer 2: final-is-max-norm 0.000, final-attends-mostly-to-itself 0.029, pos0 mass 0.532, any-early-layer final-is-max 0.014
+2026-09-14T05:32:09Z END   ext2zoo-olmoe_instruct_default-sweep rc=0 (24s)

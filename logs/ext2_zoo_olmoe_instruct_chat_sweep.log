@@ -1,0 +1,15 @@
+2026-09-14T06:26:08Z START ext2zoo-olmoe_instruct_chat-sweep (waited 1487s): python scripts/ext2_zoo_sweep.py olmoe_instruct --protocol chat
+06:26:21 olmoe_instruct: sets=['strict', 'relaxed'] union=512 cases
+06:26:22 running pass: 1024 prefill rows, 8192 spawn rows
+06:26:25   layer   0: load-wait 1.54s compute 0.62s  wf_rows=512
+06:26:31   layer   8: load-wait 0.60s compute 0.25s  wf_rows=4608
+[W914 06:26:33.719864633 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 991952896 bytes (free: 53936128, total: 23686938624).
+[W914 06:26:36.059502659 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1321205760 bytes (free: 1234632704, total: 23686938624).
+06:26:37   layer  15: load-wait 0.56s compute 0.46s  wf_rows=8192
+06:26:37   pass done: 1024 prefill rows (T=42), 8192 spawn rows, 13.9s
+06:26:37 pass time 14.2s
+06:26:37 set strict: L*=12 disc=+1.415 val@L*=+1.286 val argmax L13 +1.475 funnel strict 255/256
+06:26:37 set relaxed: L*=13 disc=+1.552 val@L*=+1.308 val argmax L13 +1.308 funnel strict 499/512
+06:26:37 done
+06:26:38 sink diag: layer 2: final-is-max-norm 0.000, final-attends-mostly-to-itself 0.000, pos0 mass 0.240, any-early-layer final-is-max 0.000
+2026-09-14T06:26:40Z END   ext2zoo-olmoe_instruct_chat-sweep rc=0 (32s)

@@ -1,0 +1,20 @@
+05:45:38 runs: ['olmoe_default', 'olmoe_instruct_default', 'qwen3_instruct_default', 'qwen3_coder_default', 'qwen3_bos_alllayers', 'mixtral_bos_alllayers', 'mixtral_nobos_alllayers']
+05:45:38 olmoe_default: cached
+05:45:38 olmoe_instruct_default: cached
+05:45:38 qwen3_instruct_default: cached
+05:45:41 qwen3_coder_default / paper: layer analysis
+05:45:41 qwen3_coder_default / paper: two-stage selection at L44
+05:45:45 qwen3_coder_default / paper: joint search
+05:46:18 qwen3_coder_default / paper: per-layer best-expert curve
+05:46:26 qwen3_coder_default / strict: layer analysis
+05:46:26 qwen3_coder_default / strict: two-stage selection at L44
+05:46:30 qwen3_coder_default / strict: joint search
+05:47:03 qwen3_coder_default / strict: per-layer best-expert curve
+05:47:11 qwen3_coder_default / relaxed: layer analysis
+05:47:11 qwen3_coder_default / relaxed: two-stage selection at L44
+05:47:17 qwen3_coder_default / relaxed: joint search
+05:48:04 qwen3_coder_default / relaxed: per-layer best-expert curve
+05:48:15 qwen3_bos_alllayers: cached
+05:48:15 mixtral_bos_alllayers: cached
+05:48:15 mixtral_nobos_alllayers: cached
+05:48:18 section written (32463 chars); attn curves pending

@@ -1,0 +1,34 @@
+05:37:55 runs: ['olmoe_default', 'olmoe_instruct_default', 'qwen3_instruct_default', 'qwen3_coder_default', 'qwen3_bos_alllayers', 'mixtral_bos_alllayers', 'mixtral_nobos_alllayers']
+05:37:55 olmoe_default: cached
+05:37:55 olmoe_instruct_default / strict: layer analysis
+05:37:55 olmoe_instruct_default / relaxed: layer analysis
+05:37:58 qwen3_instruct_default / paper: layer analysis
+05:37:58 qwen3_instruct_default / paper: two-stage selection at L44
+05:38:02 qwen3_instruct_default / paper: joint search
+05:38:34 qwen3_instruct_default / paper: per-layer best-expert curve
+05:38:42 qwen3_instruct_default / strict: layer analysis
+05:38:42 qwen3_instruct_default / strict: two-stage selection at L44
+05:38:46 qwen3_instruct_default / strict: joint search
+05:39:18 qwen3_instruct_default / strict: per-layer best-expert curve
+05:39:25 qwen3_instruct_default / relaxed: layer analysis
+05:39:25 qwen3_instruct_default / relaxed: two-stage selection at L44
+05:39:31 qwen3_instruct_default / relaxed: joint search
+05:40:17 qwen3_instruct_default / relaxed: per-layer best-expert curve
+05:40:28 qwen3_coder_default / paper: layer analysis
+05:40:29 qwen3_coder_default / strict: layer analysis
+05:40:29 qwen3_coder_default / relaxed: layer analysis
+05:40:29 qwen3_bos_alllayers: cached
+05:40:29 mixtral_bos_alllayers: cached
+05:40:31 mixtral_nobos_alllayers / paper: layer analysis
+05:40:31 mixtral_nobos_alllayers / paper: two-stage selection at L19
+05:40:33 mixtral_nobos_alllayers / paper: joint search
+05:40:36 mixtral_nobos_alllayers / paper: per-layer best-expert curve
+05:40:39 mixtral_nobos_alllayers / strict: layer analysis
+05:40:39 mixtral_nobos_alllayers / strict: two-stage selection at L21
+05:40:40 mixtral_nobos_alllayers / strict: joint search
+05:40:42 mixtral_nobos_alllayers / strict: per-layer best-expert curve
+05:40:45 mixtral_nobos_alllayers / relaxed: layer analysis
+05:40:45 mixtral_nobos_alllayers / relaxed: two-stage selection at L21
+05:40:45 mixtral_nobos_alllayers / relaxed: joint search
+05:40:48 mixtral_nobos_alllayers / relaxed: per-layer best-expert curve
+05:40:52 section written (29883 chars); attn curves pending

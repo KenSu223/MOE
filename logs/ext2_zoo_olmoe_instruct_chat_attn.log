@@ -1,0 +1,14 @@
+2026-09-14T06:41:08Z START ext2zoo-olmoe_instruct_chat-attn (waited 55s): python scripts/ext2_zoo_attn.py olmoe_instruct --protocol chat
+06:41:22 olmoe_instruct -> olmoe_instruct_chat_attnsweep: sets=['strict'] union=256 cases, kinds=['attn_layer', 'layer', 'block'], special_tokens=False
+06:41:23 running pass: 512 prefill rows, 12288 spawn rows
+06:41:26   layer   0: load-wait 1.55s compute 0.61s  wf_rows=768
+06:41:31   layer   8: load-wait 0.69s compute 0.16s  wf_rows=6912
+[W914 06:41:32.473861698 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1189085184 bytes (free: 1119289344, total: 23686938624).
+06:41:37   layer  15: load-wait 0.64s compute 0.20s  wf_rows=12288
+06:41:37   pass done: 512 prefill rows (T=41), 12288 spawn rows, 13.4s
+06:41:37 pass time 13.7s
+06:41:37 set strict kind attn_layer: L*=12 disc=+2.703 val@L*=+2.492 val argmax L12 +2.492
+06:41:37 set strict kind layer     : L*=12 disc=+1.436 val@L*=+1.277 val argmax L13 +1.471
+06:41:37 set strict kind block     : L*=12 disc=+3.544 val@L*=+3.502 val argmax L12 +3.502
+06:41:37 done
+2026-09-14T06:41:39Z END   ext2zoo-olmoe_instruct_chat-attn rc=0 (31s)

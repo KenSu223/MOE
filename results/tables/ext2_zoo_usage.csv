@@ -1,0 +1,6 @@
+model,family,base,adds BOS,adds EOS,BOS token,EOS token,dtype (config),chat template,default system prompt,prefix tokens,rendered chat prefix,protocols
+Qwen3-30B-A3B-Instruct-2507,qwen3_moe,qwen3,no,no,-,<|im_end|>,bfloat16,tokenizer_config.json,none,19,'<|im_start|>user\nComplete the sentence with the single most likely next word.<|im_end|>\n<|im_start|>assistant\n',"default, nobos, chat"
+Qwen3-Coder-30B-A3B-Instruct,qwen3_moe,qwen3,no,no,-,<|im_end|>,bfloat16,tokenizer_config.json,none,19,'<|im_start|>user\nComplete the sentence with the single most likely next word.<|im_end|>\n<|im_start|>assistant\n',"default, nobos, chat"
+Mixtral-8x7B-Instruct-v0.1,mixtral,mixtral,yes,no,<s>,</s>,bfloat16,tokenizer_config.json,none,19,'<s> [INST] Complete the sentence with the single most likely next word. [/INST]',"default, nobos, chat"
+OLMoE-1B-7B-0125,olmoe,-,no,no,-,<|endoftext|>,float32,none,none,-,-,"default, nobos"
+OLMoE-1B-7B-0125-Instruct,olmoe,olmoe,no,no,|||IP_ADDRESS|||,|||IP_ADDRESS|||,bfloat16,tokenizer_config.json,none,24,'|||IP_ADDRESS|||<|user|>\nComplete the sentence with the single most likely next word.\n<|assistant|>\n',"default, nobos, chat"

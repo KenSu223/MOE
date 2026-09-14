@@ -1,0 +1,18 @@
+2026-09-14T05:29:06Z START ext2zoo-qwen3_instruct_default-sweep (waited 169s): python scripts/ext2_zoo_sweep.py qwen3_instruct --protocol default
+05:29:09 qwen3_instruct: sets=['paper', 'strict', 'relaxed'] union=527 cases
+05:29:15 running pass: 1054 prefill rows, 25296 spawn rows
+05:29:18   layer   0: load-wait 2.98s compute 0.63s  wf_rows=527
+05:29:27   layer   8: load-wait 1.12s compute 0.13s  wf_rows=4743
+05:29:37   layer  16: load-wait 1.09s compute 0.16s  wf_rows=8959
+05:29:47   layer  24: load-wait 1.07s compute 0.18s  wf_rows=13175
+05:29:57   layer  32: load-wait 0.97s compute 0.21s  wf_rows=17391
+05:30:07   layer  40: load-wait 1.02s compute 0.23s  wf_rows=21607
+05:30:17   layer  47: load-wait 1.05s compute 0.25s  wf_rows=25296
+05:30:17   pass done: 1054 prefill rows (T=18), 25296 spawn rows, 62.3s
+05:30:17 pass time 62.4s
+05:30:17 set paper: L*=44 disc=+1.095 val@L*=+1.065 val argmax L44 +1.065 funnel strict 234/256
+05:30:17 set strict: L*=44 disc=+1.042 val@L*=+0.964 val argmax L44 +0.964 funnel strict 254/256
+05:30:17 set relaxed: L*=44 disc=+0.929 val@L*=+0.879 val argmax L44 +0.879 funnel strict 486/512
+05:30:17 done
+05:30:22 sink diag: layer 3: final-is-max-norm 0.000, final-attends-mostly-to-itself 0.000, pos0 mass 0.719, any-early-layer final-is-max 0.000
+2026-09-14T05:30:27Z END   ext2zoo-qwen3_instruct_default-sweep rc=0 (81s)

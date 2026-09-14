@@ -1,0 +1,87 @@
+2026-09-14T05:22:13Z chain[olmoe]: waiting for download marker logs/ext2_zoo_download.log.olmoe.done
+2026-09-14T05:23:14Z chain[olmoe]: protocols: default
+2026-09-14T05:23:14Z chain[olmoe]: launching olmoe_default filter
+2026-09-14T05:23:50Z chain[olmoe]: olmoe_default filter rc=0
+2026-09-14T05:23:50Z chain[olmoe]: launching olmoe_default sweep
+2026-09-14T05:24:29Z chain[olmoe]: olmoe_default sweep rc=0
+2026-09-14T05:24:29Z chain[olmoe]: launching olmoe_default expert
+2026-09-14T05:24:48Z chain[qwen3_instruct]: protocols: default chat
+2026-09-14T05:24:48Z chain[qwen3_instruct]: launching qwen3_instruct_default filter
+2026-09-14T05:24:50Z chain[qwen3_coder]: protocols: default chat
+2026-09-14T05:24:50Z chain[qwen3_coder]: launching qwen3_coder_default filter
+2026-09-14T05:25:01Z chain[olmoe]: olmoe_default expert rc=0
+2026-09-14T05:25:01Z chain[olmoe]: DONE
+2026-09-14T05:25:50Z chain[olmoe_instruct]: protocols: default chat
+2026-09-14T05:25:50Z chain[olmoe_instruct]: launching olmoe_instruct_default filter
+2026-09-14T05:26:17Z chain[qwen3_instruct]: qwen3_instruct_default filter rc=0
+2026-09-14T05:26:17Z chain[qwen3_instruct]: launching qwen3_instruct_default sweep
+2026-09-14T05:27:34Z chain[qwen3_coder]: qwen3_coder_default filter rc=0
+2026-09-14T05:27:34Z chain[qwen3_coder]: launching qwen3_coder_default sweep
+2026-09-14T05:27:55Z chain[olmoe_instruct]: olmoe_instruct_default filter rc=0
+2026-09-14T05:27:55Z chain[olmoe_instruct]: launching olmoe_instruct_default sweep
+2026-09-14T05:30:27Z chain[qwen3_instruct]: qwen3_instruct_default sweep rc=0
+2026-09-14T05:30:27Z chain[qwen3_instruct]: launching qwen3_instruct_default expert
+2026-09-14T05:31:34Z chain[mixtral_instruct]: protocols: default nobos chat
+2026-09-14T05:31:34Z chain[mixtral_instruct]: launching mixtral_instruct_default filter
+2026-09-14T05:31:45Z chain[qwen3_coder]: qwen3_coder_default sweep rc=0
+2026-09-14T05:31:45Z chain[qwen3_coder]: launching qwen3_coder_default expert
+2026-09-14T05:32:05Z attn-chain: waiting for results/olmoe_default/expert_rows.parquet
+2026-09-14T05:32:05Z attn-chain: launching olmoe_default attn sweep
+2026-09-14T05:32:09Z chain[olmoe_instruct]: olmoe_instruct_default sweep rc=0
+2026-09-14T05:32:09Z chain[olmoe_instruct]: launching olmoe_instruct_default expert
+2026-09-14T05:37:39Z chain[qwen3_instruct]: qwen3_instruct_default expert rc=0
+2026-09-14T05:37:39Z chain[qwen3_instruct]: launching qwen3_instruct_chat filter
+2026-09-14T05:41:03Z chain[mixtral_instruct]: mixtral_instruct_default filter rc=0
+2026-09-14T05:41:03Z chain[mixtral_instruct]: launching mixtral_instruct_default sweep
+2026-09-14T05:45:27Z chain[qwen3_coder]: qwen3_coder_default expert rc=0
+2026-09-14T05:45:27Z chain[qwen3_coder]: launching qwen3_coder_chat filter
+2026-09-14T05:46:11Z attn-chain: olmoe_default attn rc=0
+2026-09-14T05:46:11Z attn-chain: waiting for results/olmoe_instruct_chat/expert_rows.parquet
+2026-09-14T05:46:44Z chain[olmoe_instruct]: olmoe_instruct_default expert rc=0
+2026-09-14T05:46:44Z chain[olmoe_instruct]: launching olmoe_instruct_chat filter
+2026-09-14T05:50:00Z chain[qwen3_instruct]: qwen3_instruct_chat filter rc=0
+2026-09-14T05:50:00Z chain[qwen3_instruct]: launching qwen3_instruct_chat sweep
+2026-09-14T05:59:27Z chain[mixtral_instruct]: mixtral_instruct_default sweep rc=0
+2026-09-14T05:59:27Z chain[mixtral_instruct]: launching mixtral_instruct_default expert
+2026-09-14T06:00:50Z chain[qwen3_coder]: qwen3_coder_chat filter rc=0
+2026-09-14T06:00:50Z chain[qwen3_coder]: launching qwen3_coder_chat sweep
+2026-09-14T06:01:21Z chain[olmoe_instruct]: olmoe_instruct_chat filter rc=0
+2026-09-14T06:01:21Z chain[olmoe_instruct]: launching olmoe_instruct_chat sweep
+2026-09-14T06:02:41Z chain[qwen3_instruct]: qwen3_instruct_chat sweep rc=0
+2026-09-14T06:02:41Z chain[qwen3_instruct]: launching qwen3_instruct_chat expert
+2026-09-14T06:24:34Z chain[mixtral_instruct]: mixtral_instruct_default expert rc=0
+2026-09-14T06:24:34Z chain[mixtral_instruct]: launching mixtral_instruct_nobos filter
+2026-09-14T06:26:08Z chain[qwen3_coder]: qwen3_coder_chat sweep rc=0
+2026-09-14T06:26:08Z chain[qwen3_coder]: launching qwen3_coder_chat expert
+2026-09-14T06:26:40Z chain[olmoe_instruct]: olmoe_instruct_chat sweep rc=0
+2026-09-14T06:26:40Z chain[olmoe_instruct]: launching olmoe_instruct_chat expert
+2026-09-14T06:31:02Z chain[qwen3_instruct]: qwen3_instruct_chat expert rc=0
+2026-09-14T06:31:03Z chain[qwen3_instruct]: DONE
+2026-09-14T06:34:14Z chain[mixtral_instruct]: mixtral_instruct_nobos filter rc=0
+2026-09-14T06:34:14Z chain[mixtral_instruct]: launching mixtral_instruct_nobos sweep
+2026-09-14T06:38:33Z chain[qwen3_coder]: qwen3_coder_chat expert rc=0
+2026-09-14T06:38:33Z chain[qwen3_coder]: DONE
+2026-09-14T06:39:15Z chain[olmoe_instruct]: olmoe_instruct_chat expert rc=0
+2026-09-14T06:39:15Z chain[olmoe_instruct]: DONE
+2026-09-14T06:40:13Z attn-chain: launching olmoe_instruct_chat attn sweep
+2026-09-14T06:41:08Z chain[mixtral_instruct]: mixtral_instruct_nobos sweep rc=0
+2026-09-14T06:41:08Z chain[mixtral_instruct]: launching mixtral_instruct_nobos expert
+2026-09-14T06:41:39Z attn-chain: olmoe_instruct_chat attn rc=0
+2026-09-14T06:41:39Z attn-chain: waiting for results/qwen3_instruct_chat/expert_rows.parquet
+2026-09-14T06:41:39Z attn-chain: launching qwen3_instruct_chat attn sweep
+2026-09-14T06:44:57Z chain[mixtral_instruct]: mixtral_instruct_nobos expert rc=0
+2026-09-14T06:44:57Z chain[mixtral_instruct]: launching mixtral_instruct_chat filter
+2026-09-14T06:46:17Z attn-chain: qwen3_instruct_chat attn rc=0
+2026-09-14T06:46:17Z attn-chain: waiting for results/qwen3_coder_chat/expert_rows.parquet
+2026-09-14T06:46:17Z attn-chain: launching qwen3_coder_chat attn sweep
+2026-09-14T06:48:12Z chain[mixtral_instruct]: mixtral_instruct_chat filter rc=0
+2026-09-14T06:48:12Z chain[mixtral_instruct]: launching mixtral_instruct_chat sweep
+2026-09-14T06:49:32Z attn-chain: qwen3_coder_chat attn rc=0
+2026-09-14T06:49:32Z attn-chain: waiting for results/mixtral_instruct_chat/expert_rows.parquet
+2026-09-14T06:51:32Z chain[mixtral_instruct]: mixtral_instruct_chat sweep rc=0
+2026-09-14T06:51:32Z chain[mixtral_instruct]: launching mixtral_instruct_chat expert
+2026-09-14T06:54:57Z chain[mixtral_instruct]: mixtral_instruct_chat expert rc=0
+2026-09-14T06:54:57Z chain[mixtral_instruct]: DONE
+2026-09-14T06:55:32Z attn-chain: launching mixtral_instruct_chat attn sweep
+2026-09-14T06:57:07Z attn-chain: mixtral_instruct_chat attn rc=0
+2026-09-14T06:57:07Z attn-chain: attn DONE

@@ -1,0 +1,11 @@
+2026-09-14T06:00:50Z START ext2zoo-olmoe_instruct_chat-filter (waited 846s): python scripts/ext2_zoo_filter.py olmoe_instruct --protocol chat
+06:01:03 olmoe_instruct / chat -> olmoe_instruct_chat: special_tokens=False prefix_len=24 prefix='|||IP_ADDRESS|||<|user|>\nComplete the sentence with the single most likely next word.\n<|assistant|>\n'
+06:01:04 embed_std=0.009436 sigma=0.028309 hidden=2048 layers=16
+06:01:07   layer   0: load-wait 1.55s compute 0.80s  wf_rows=0
+06:01:13   layer   8: load-wait 0.45s compute 0.39s  wf_rows=0
+06:01:18   layer  15: load-wait 0.45s compute 0.38s  wf_rows=0
+06:01:18   pass done: 2048 prefill rows (T=42), 0 spawn rows, 13.6s
+06:01:18 chunk done (1024 records, 13.9s, T=42): scanned=1249 tokenizable=1024 strict=836 relaxed=855
+06:01:19 scan summary: {"records_scanned": 1249, "tokenizable": 1024, "rejected": 225, "n_strict_total": 836, "n_relaxed_total": 855, "strict_pass_rate_tokenizable": 0.81640625, "relaxed_pass_rate_tokenizable": 0.8349609375, "reject_reasons": {"multi_token": 225}, "embed_std": 0.009436455555260181, "sigma": 0.028309366665780544, "protocol": "chat", "special_tokens": false, "prefix_len": 24, "mean_delta_clean": 6.402722716331482, "mean_drop": 5.9016576409339905, "top1_clean_is_true_rate": 0.19921875}
+06:01:19 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/olmoe_instruct_chat
+2026-09-14T06:01:21Z END   ext2zoo-olmoe_instruct_chat-filter rc=0 (31s)

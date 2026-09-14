@@ -1,0 +1,9 @@
+model,protocol,case set,run,attention output: peak (AUC+),MoE output: peak (AUC+),whole layer: peak (AUC+),additivity gap attn+MoE-block: mean |gap| / at block peak
+OLMoE-1B-7B-0125,default (= nobos),strict,olmoe_default_attnsweep,L13 +2.929 (AUC+ 11.9),L12 +1.534 (AUC+ 4.7),L12 +3.987 (AUC+ 14.9),0.108 / +0.213
+OLMoE-1B-7B-0125-Instruct,chat,strict,olmoe_instruct_chat_attnsweep,L12 +2.492 (AUC+ 10.8),L13 +1.471 (AUC+ 4.8),L12 +3.502 (AUC+ 14.3),0.089 / +0.267
+Qwen3-30B-A3B-Instruct-2507,chat,paper,qwen3_instruct_chat_attnsweep,L40 +2.127 (AUC+ 4.9),L44 +1.351 (AUC+ 5.1),L40 +2.559 (AUC+ 9.8),0.017 / +0.121
+Qwen3-Coder-30B-A3B-Instruct,chat,paper,qwen3_coder_chat_attnsweep,L40 +2.105 (AUC+ 4.8),L44 +1.224 (AUC+ 5.4),L40 +2.428 (AUC+ 9.9),0.015 / +0.069
+Mixtral-8x7B-Instruct-v0.1,chat,paper,mixtral_instruct_chat_attnsweep,L24 +2.834 (AUC+ 14.1),L31 +1.760 (AUC+ 10.6),L24 +3.241 (AUC+ 22.3),0.085 / +0.183
+Qwen3-30B-A3B-Base,default,paper,qwen3_bos_attnsweep,L40 +1.594 (AUC+ 3.9),L44 +0.925 (AUC+ 3.8),L40 +1.946 (AUC+ 7.3),0.015 / +0.076
+Mixtral-8x7B-v0.1,default,paper,mixtral_bos_attnsweep,L18 +0.988 (AUC+ 4.9),L19 +0.561 (AUC+ 4.0),L19 +1.374 (AUC+ 8.4),0.012 / +0.108
+Mixtral-8x7B-v0.1,nobos,paper,mixtral_nobos_attnsweep,L24 +0.929 (AUC+ 4.9),L21 +0.531 (AUC+ 3.3),L19 +1.183 (AUC+ 7.9),0.028 / +0.107

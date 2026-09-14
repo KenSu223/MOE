@@ -1,0 +1,117 @@
+2026-09-14T06:21:02Z START ext2zoo-mixtral_instruct_default-expert (waited 1295s): python scripts/ext2_zoo_expert.py mixtral_instruct --protocol default --resume
+06:21:09 mixtral_instruct/default -> mixtral_instruct_default: 32 layers, 91048 spawn rows, 2 chunks
+06:21:22 mixtral_instruct: chunk 1/2: 525 cases, layers 0..15 (16), 1050 prefill rows, 44892 spawn rows
+06:21:32   layer   0: load-wait 8.85s compute 0.97s  wf_rows=2809
+06:21:55   layer   8: load-wait 2.28s compute 0.66s  wf_rows=25200
+06:22:18   layer  16: load-wait 1.91s compute 1.01s  wf_rows=44892
+06:22:41   layer  24: load-wait 1.85s compute 1.01s  wf_rows=44892
+06:23:02   layer  31: load-wait 1.88s compute 1.01s  wf_rows=44892
+06:23:02   pass done: 1050 prefill rows (T=19), 44892 spawn rows, 99.6s
+06:23:02 pass time 99.9s
+06:23:02 L0 set paper: 1 candidates (>= 64 active); best E004 all-case mean +0.003 active 73/128; top5: {4: 0.003}
+06:23:02 L0 set strict: 1 candidates (>= 64 active); best E004 all-case mean +0.001 active 65/128; top5: {4: 0.001}
+06:23:02 L0 set relaxed: 1 candidates (>= 128 active); best E004 all-case mean +0.002 active 166/256; top5: {4: 0.002}
+06:23:02 L1 set paper: no candidate meets the recurrence threshold; max activity 58
+06:23:02 L1 set strict: no candidate meets the recurrence threshold; max activity 54
+06:23:02 L1 set relaxed: no candidate meets the recurrence threshold; max activity 100
+06:23:02 L2 set paper: 1 candidates (>= 64 active); best E006 all-case mean -0.005 active 73/128; top5: {6: -0.005}
+06:23:02 L2 set strict: 1 candidates (>= 64 active); best E006 all-case mean +0.008 active 68/128; top5: {6: 0.008}
+06:23:02 L2 set relaxed: no candidate meets the recurrence threshold; max activity 122
+06:23:02 L3 set paper: no candidate meets the recurrence threshold; max activity 61
+06:23:02 L3 set strict: no candidate meets the recurrence threshold; max activity 63
+06:23:02 L3 set relaxed: no candidate meets the recurrence threshold; max activity 121
+06:23:02 L4 set paper: 2 candidates (>= 64 active); best E002 all-case mean +0.009 active 78/128; top5: {2: 0.009, 7: -0.009}
+06:23:02 L4 set strict: 2 candidates (>= 64 active); best E002 all-case mean +0.022 active 72/128; top5: {2: 0.022, 7: 0.01}
+06:23:02 L4 set relaxed: 2 candidates (>= 128 active); best E002 all-case mean +0.020 active 158/256; top5: {2: 0.02, 7: 0.011}
+06:23:02 L5 set paper: 1 candidates (>= 64 active); best E000 all-case mean +0.007 active 94/128; top5: {0: 0.007}
+06:23:02 L5 set strict: 1 candidates (>= 64 active); best E000 all-case mean -0.008 active 83/128; top5: {0: -0.008}
+06:23:02 L5 set relaxed: 1 candidates (>= 128 active); best E000 all-case mean +0.006 active 180/256; top5: {0: 0.006}
+06:23:02 L6 set paper: 1 candidates (>= 64 active); best E007 all-case mean +0.011 active 89/128; top5: {7: 0.011}
+06:23:02 L6 set strict: 1 candidates (>= 64 active); best E007 all-case mean +0.010 active 86/128; top5: {7: 0.01}
+06:23:02 L6 set relaxed: 1 candidates (>= 128 active); best E007 all-case mean +0.012 active 178/256; top5: {7: 0.012}
+06:23:02 L7 set paper: no candidate meets the recurrence threshold; max activity 63
+06:23:02 L7 set strict: 1 candidates (>= 64 active); best E004 all-case mean +0.014 active 66/128; top5: {4: 0.014}
+06:23:02 L7 set relaxed: no candidate meets the recurrence threshold; max activity 117
+06:23:02 L8 set paper: 1 candidates (>= 64 active); best E006 all-case mean -0.011 active 71/128; top5: {6: -0.011}
+06:23:02 L8 set strict: 1 candidates (>= 64 active); best E006 all-case mean -0.016 active 73/128; top5: {6: -0.016}
+06:23:02 L8 set relaxed: 1 candidates (>= 128 active); best E006 all-case mean +0.004 active 148/256; top5: {6: 0.004}
+06:23:02 L9 set paper: 2 candidates (>= 64 active); best E004 all-case mean +0.012 active 79/128; top5: {4: 0.012, 0: -0.003}
+06:23:02 L9 set strict: 2 candidates (>= 64 active); best E004 all-case mean +0.006 active 82/128; top5: {4: 0.006, 0: 0.005}
+06:23:02 L9 set relaxed: 2 candidates (>= 128 active); best E000 all-case mean +0.003 active 179/256; top5: {0: 0.003, 4: -0.001}
+06:23:02 L10 set paper: 2 candidates (>= 64 active); best E007 all-case mean +0.023 active 109/128; top5: {7: 0.023, 4: 0.01}
+06:23:02 L10 set strict: 2 candidates (>= 64 active); best E004 all-case mean +0.015 active 108/128; top5: {4: 0.015, 7: 0.006}
+06:23:02 L10 set relaxed: 2 candidates (>= 128 active); best E007 all-case mean +0.004 active 217/256; top5: {7: 0.004, 4: 0.004}
+06:23:02 L11 set paper: 2 candidates (>= 64 active); best E000 all-case mean +0.026 active 101/128; top5: {0: 0.026, 6: -0.015}
+06:23:02 L11 set strict: 2 candidates (>= 64 active); best E000 all-case mean +0.025 active 103/128; top5: {0: 0.025, 6: -0.0}
+06:23:02 L11 set relaxed: 2 candidates (>= 128 active); best E000 all-case mean +0.026 active 204/256; top5: {0: 0.026, 6: 0.01}
+06:23:02 L12 set paper: no candidate meets the recurrence threshold; max activity 61
+06:23:02 L12 set strict: 1 candidates (>= 64 active); best E001 all-case mean +0.010 active 69/128; top5: {1: 0.01}
+06:23:02 L12 set relaxed: 1 candidates (>= 128 active); best E001 all-case mean +0.011 active 137/256; top5: {1: 0.011}
+06:23:02 L13 set paper: 1 candidates (>= 64 active); best E000 all-case mean +0.015 active 80/128; top5: {0: 0.015}
+06:23:02 L13 set strict: 1 candidates (>= 64 active); best E000 all-case mean +0.022 active 96/128; top5: {0: 0.022}
+06:23:02 L13 set relaxed: 2 candidates (>= 128 active); best E004 all-case mean +0.003 active 133/256; top5: {4: 0.003, 0: -0.001}
+06:23:02 L14 set paper: 2 candidates (>= 64 active); best E001 all-case mean +0.026 active 97/128; top5: {1: 0.026, 5: 0.007}
+06:23:02 L14 set strict: 2 candidates (>= 64 active); best E001 all-case mean +0.023 active 98/128; top5: {1: 0.023, 5: 0.013}
+06:23:02 L14 set relaxed: 2 candidates (>= 128 active); best E001 all-case mean +0.021 active 202/256; top5: {1: 0.021, 5: 0.019}
+06:23:02 L15 set paper: 2 candidates (>= 64 active); best E005 all-case mean +0.055 active 75/128; top5: {5: 0.055, 6: 0.009}
+06:23:02 L15 set strict: 2 candidates (>= 64 active); best E005 all-case mean +0.089 active 81/128; top5: {5: 0.089, 6: 0.021}
+06:23:02 L15 set relaxed: 2 candidates (>= 128 active); best E005 all-case mean +0.061 active 155/256; top5: {5: 0.061, 6: 0.016}
+06:23:02 chunk 1: wrote 44892 new rows; /home/ubuntu/MOE/results/mixtral_instruct_default/expert_rows.parquet now holds 44892 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+06:23:03 mixtral_instruct: chunk 2/2: 525 cases, layers 16..31 (16), 1050 prefill rows, 46156 spawn rows
+06:23:05   layer   0: load-wait 2.10s compute 0.28s  wf_rows=0
+06:23:27   layer   8: load-wait 2.20s compute 0.28s  wf_rows=0
+06:23:47   layer  16: load-wait 2.08s compute 0.33s  wf_rows=2789
+06:24:07   layer  24: load-wait 1.74s compute 0.67s  wf_rows=25900
+06:24:24   layer  31: load-wait 1.04s compute 1.00s  wf_rows=46156
+06:24:24   pass done: 1050 prefill rows (T=19), 46156 spawn rows, 81.2s
+06:24:24 pass time 81.3s
+06:24:26 L16 set paper: 2 candidates (>= 64 active); best E005 all-case mean +0.047 active 77/128; top5: {5: 0.047, 7: 0.021}
+06:24:26 L16 set strict: 2 candidates (>= 64 active); best E007 all-case mean +0.028 active 112/128; top5: {7: 0.028, 5: 0.027}
+06:24:26 L16 set relaxed: 2 candidates (>= 128 active); best E007 all-case mean +0.048 active 212/256; top5: {7: 0.048, 5: 0.027}
+06:24:26 L17 set paper: 2 candidates (>= 64 active); best E001 all-case mean +0.059 active 114/128; top5: {1: 0.059, 5: 0.046}
+06:24:26 L17 set strict: 2 candidates (>= 64 active); best E005 all-case mean +0.069 active 87/128; top5: {5: 0.069, 1: 0.058}
+06:24:26 L17 set relaxed: 2 candidates (>= 128 active); best E001 all-case mean +0.073 active 226/256; top5: {1: 0.073, 5: 0.054}
+06:24:26 L18 set paper: 2 candidates (>= 64 active); best E001 all-case mean +0.223 active 99/128; top5: {1: 0.223, 6: 0.049}
+06:24:26 L18 set strict: 2 candidates (>= 64 active); best E001 all-case mean +0.276 active 99/128; top5: {1: 0.276, 6: 0.035}
+06:24:26 L18 set relaxed: 2 candidates (>= 128 active); best E001 all-case mean +0.272 active 211/256; top5: {1: 0.272, 6: 0.043}
+06:24:26 L19 set paper: 2 candidates (>= 64 active); best E002 all-case mean +0.374 active 78/128; top5: {2: 0.374, 6: 0.094}
+06:24:26 L19 set strict: 1 candidates (>= 64 active); best E002 all-case mean +0.431 active 92/128; top5: {2: 0.431}
+06:24:26 L19 set relaxed: 2 candidates (>= 128 active); best E002 all-case mean +0.349 active 170/256; top5: {2: 0.349, 6: 0.08}
+06:24:26 L20 set paper: 1 candidates (>= 64 active); best E005 all-case mean +0.148 active 69/128; top5: {5: 0.148}
+06:24:26 L20 set strict: 1 candidates (>= 64 active); best E005 all-case mean +0.185 active 64/128; top5: {5: 0.185}
+06:24:26 L20 set relaxed: 1 candidates (>= 128 active); best E005 all-case mean +0.153 active 137/256; top5: {5: 0.153}
+06:24:26 L21 set paper: 1 candidates (>= 64 active); best E001 all-case mean +0.337 active 87/128; top5: {1: 0.337}
+06:24:26 L21 set strict: 1 candidates (>= 64 active); best E001 all-case mean +0.415 active 93/128; top5: {1: 0.415}
+06:24:26 L21 set relaxed: 2 candidates (>= 128 active); best E001 all-case mean +0.343 active 168/256; top5: {1: 0.343, 6: 0.078}
+06:24:26 L22 set paper: 1 candidates (>= 64 active); best E001 all-case mean +0.176 active 95/128; top5: {1: 0.176}
+06:24:26 L22 set strict: 1 candidates (>= 64 active); best E001 all-case mean +0.211 active 96/128; top5: {1: 0.211}
+06:24:26 L22 set relaxed: 1 candidates (>= 128 active); best E001 all-case mean +0.195 active 194/256; top5: {1: 0.195}
+06:24:26 L23 set paper: no candidate meets the recurrence threshold; max activity 60
+06:24:26 L23 set strict: 1 candidates (>= 64 active); best E002 all-case mean +0.069 active 64/128; top5: {2: 0.069}
+06:24:26 L23 set relaxed: 1 candidates (>= 128 active); best E002 all-case mean +0.102 active 129/256; top5: {2: 0.102}
+06:24:26 L24 set paper: no candidate meets the recurrence threshold; max activity 63
+06:24:26 L24 set strict: 1 candidates (>= 64 active); best E007 all-case mean +0.038 active 70/128; top5: {7: 0.038}
+06:24:26 L24 set relaxed: 1 candidates (>= 128 active); best E007 all-case mean +0.037 active 132/256; top5: {7: 0.037}
+06:24:26 L25 set paper: 1 candidates (>= 64 active); best E003 all-case mean +0.069 active 71/128; top5: {3: 0.069}
+06:24:26 L25 set strict: 1 candidates (>= 64 active); best E003 all-case mean +0.099 active 73/128; top5: {3: 0.099}
+06:24:26 L25 set relaxed: 1 candidates (>= 128 active); best E003 all-case mean +0.079 active 137/256; top5: {3: 0.079}
+06:24:26 L26 set paper: 1 candidates (>= 64 active); best E003 all-case mean +0.054 active 69/128; top5: {3: 0.054}
+06:24:26 L26 set strict: 1 candidates (>= 64 active); best E003 all-case mean +0.062 active 76/128; top5: {3: 0.062}
+06:24:26 L26 set relaxed: 1 candidates (>= 128 active); best E003 all-case mean +0.045 active 135/256; top5: {3: 0.045}
+06:24:26 L27 set paper: no candidate meets the recurrence threshold; max activity 59
+06:24:26 L27 set strict: 1 candidates (>= 64 active); best E007 all-case mean +0.076 active 66/128; top5: {7: 0.076}
+06:24:26 L27 set relaxed: 1 candidates (>= 128 active); best E007 all-case mean +0.085 active 130/256; top5: {7: 0.085}
+06:24:26 L28 set paper: 1 candidates (>= 64 active); best E002 all-case mean +0.091 active 79/128; top5: {2: 0.091}
+06:24:26 L28 set strict: 1 candidates (>= 64 active); best E002 all-case mean +0.107 active 76/128; top5: {2: 0.107}
+06:24:26 L28 set relaxed: 1 candidates (>= 128 active); best E002 all-case mean +0.117 active 148/256; top5: {2: 0.117}
+06:24:26 L29 set paper: 2 candidates (>= 64 active); best E004 all-case mean +0.047 active 104/128; top5: {4: 0.047, 3: -0.015}
+06:24:26 L29 set strict: 2 candidates (>= 64 active); best E003 all-case mean -0.000 active 92/128; top5: {3: -0.0, 4: -0.028}
+06:24:26 L29 set relaxed: 2 candidates (>= 128 active); best E003 all-case mean +0.023 active 179/256; top5: {3: 0.023, 4: -0.013}
+06:24:26 L30 set paper: 1 candidates (>= 64 active); best E004 all-case mean +0.022 active 84/128; top5: {4: 0.022}
+06:24:26 L30 set strict: 1 candidates (>= 64 active); best E004 all-case mean -0.024 active 84/128; top5: {4: -0.024}
+06:24:26 L30 set relaxed: 2 candidates (>= 128 active); best E007 all-case mean +0.025 active 129/256; top5: {7: 0.025, 4: -0.024}
+06:24:26 L31 set paper: 2 candidates (>= 64 active); best E007 all-case mean +0.004 active 103/128; top5: {7: 0.004, 2: -0.017}
+06:24:26 L31 set strict: 2 candidates (>= 64 active); best E007 all-case mean -0.045 active 101/128; top5: {7: -0.045, 2: -0.076}
+06:24:26 L31 set relaxed: 2 candidates (>= 128 active); best E007 all-case mean -0.015 active 212/256; top5: {7: -0.015, 2: -0.026}
+06:24:26 chunk 2: wrote 46156 new rows; /home/ubuntu/MOE/results/mixtral_instruct_default/expert_rows.parquet now holds 91048 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+2026-09-14T06:24:34Z END   ext2zoo-mixtral_instruct_default-expert rc=0 (212s)

@@ -1,0 +1,49 @@
+2026-09-14T05:46:11Z START ext2zoo-olmoe_instruct_default-expert (waited 842s): python scripts/ext2_zoo_expert.py olmoe_instruct --protocol default --resume
+05:46:14 olmoe_instruct/default -> olmoe_instruct_default: 16 layers, 115110 spawn rows, 2 chunks
+05:46:22 olmoe_instruct: chunk 1/2: 512 cases, layers 0..7 (8), 1024 prefill rows, 56623 spawn rows
+05:46:25   layer   0: load-wait 1.54s compute 0.51s  wf_rows=6686
+05:46:30   layer   8: load-wait 0.42s compute 0.42s  wf_rows=56623
+05:46:36   layer  15: load-wait 0.34s compute 0.42s  wf_rows=56623
+05:46:36   pass done: 1024 prefill rows (T=18), 56623 spawn rows, 13.7s
+05:46:36 pass time 13.8s
+05:46:37 L0 set strict: 1 candidates (>= 64 active); best E006 all-case mean -0.018 active 127/128; top5: {6: -0.018}
+05:46:37 L0 set relaxed: 1 candidates (>= 128 active); best E006 all-case mean +0.014 active 253/256; top5: {6: 0.014}
+05:46:37 L1 set strict: 1 candidates (>= 64 active); best E012 all-case mean -0.010 active 81/128; top5: {12: -0.01}
+05:46:37 L1 set relaxed: 2 candidates (>= 128 active); best E040 all-case mean +0.014 active 131/256; top5: {40: 0.014, 12: -0.007}
+05:46:37 L2 set strict: 2 candidates (>= 64 active); best E020 all-case mean +0.029 active 72/128; top5: {20: 0.029, 44: -0.011}
+05:46:37 L2 set relaxed: 2 candidates (>= 128 active); best E020 all-case mean +0.024 active 138/256; top5: {20: 0.024, 44: -0.012}
+05:46:37 L3 set strict: 3 candidates (>= 64 active); best E049 all-case mean +0.000 active 82/128; top5: {49: 0.0, 40: -0.016, 61: -0.082}
+05:46:37 L3 set relaxed: 3 candidates (>= 128 active); best E049 all-case mean +0.010 active 175/256; top5: {49: 0.01, 40: -0.014, 61: -0.038}
+05:46:37 L4 set strict: 5 candidates (>= 64 active); best E058 all-case mean +0.032 active 69/128; top5: {58: 0.032, 33: 0.018, 26: 0.011, 7: -0.0, 38: -0.012}
+05:46:37 L4 set relaxed: 5 candidates (>= 128 active); best E058 all-case mean +0.019 active 155/256; top5: {58: 0.019, 7: 0.018, 38: -0.008, 33: -0.012, 26: -0.018}
+05:46:37 L5 set strict: 4 candidates (>= 64 active); best E044 all-case mean +0.041 active 74/128; top5: {44: 0.041, 13: 0.025, 54: 0.023, 63: -0.01}
+05:46:37 L5 set relaxed: 4 candidates (>= 128 active); best E054 all-case mean +0.030 active 178/256; top5: {54: 0.03, 13: 0.023, 44: 0.019, 63: -0.001}
+05:46:37 L6 set strict: 5 candidates (>= 64 active); best E063 all-case mean +0.020 active 84/128; top5: {63: 0.02, 23: 0.006, 28: 0.003, 45: -0.009, 58: -0.018}
+05:46:37 L6 set relaxed: 5 candidates (>= 128 active); best E063 all-case mean +0.029 active 174/256; top5: {63: 0.029, 28: 0.025, 45: 0.016, 23: 0.012, 58: 0.001}
+05:46:37 L7 set strict: 5 candidates (>= 64 active); best E019 all-case mean +0.023 active 83/128; top5: {19: 0.023, 52: -0.006, 1: -0.012, 38: -0.02, 13: -0.021}
+05:46:37 L7 set relaxed: 5 candidates (>= 128 active); best E001 all-case mean +0.040 active 249/256; top5: {1: 0.04, 52: 0.016, 19: 0.014, 13: -0.027, 38: -0.059}
+05:46:37 chunk 1: wrote 56623 new rows; /home/ubuntu/MOE/results/olmoe_instruct_default/expert_rows.parquet now holds 56623 rows over layers [0, 1, 2, 3, 4, 5, 6, 7]
+05:46:37 olmoe_instruct: chunk 2/2: 512 cases, layers 8..15 (8), 1024 prefill rows, 58487 spawn rows
+05:46:37   layer   0: load-wait 0.17s compute 0.09s  wf_rows=0
+05:46:38   layer   8: load-wait 0.06s compute 0.13s  wf_rows=7592
+05:46:41   layer  15: load-wait 0.06s compute 0.42s  wf_rows=58487
+05:46:41   pass done: 1024 prefill rows (T=18), 58487 spawn rows, 4.1s
+05:46:41 pass time 4.1s
+05:46:41 L8 set strict: 4 candidates (>= 64 active); best E015 all-case mean +0.043 active 118/128; top5: {15: 0.043, 62: 0.027, 28: -0.008, 18: -0.065}
+05:46:41 L8 set relaxed: 5 candidates (>= 128 active); best E015 all-case mean +0.049 active 235/256; top5: {15: 0.049, 62: 0.028, 28: 0.013, 17: 0.001, 18: -0.018}
+05:46:41 L9 set strict: 7 candidates (>= 64 active); best E050 all-case mean +0.032 active 80/128; top5: {50: 0.032, 61: 0.011, 32: 0.004, 18: 0.004, 54: -0.0}
+05:46:41 L9 set relaxed: 7 candidates (>= 128 active); best E043 all-case mean +0.030 active 176/256; top5: {43: 0.03, 50: 0.028, 53: 0.016, 61: 0.007, 32: 0.007}
+05:46:41 L10 set strict: 5 candidates (>= 64 active); best E054 all-case mean +0.139 active 115/128; top5: {54: 0.139, 14: 0.021, 1: 0.011, 62: 0.002, 36: -0.02}
+05:46:41 L10 set relaxed: 5 candidates (>= 128 active); best E054 all-case mean +0.162 active 230/256; top5: {54: 0.162, 14: 0.045, 62: 0.001, 1: -0.004, 36: -0.015}
+05:46:41 L11 set strict: 7 candidates (>= 64 active); best E055 all-case mean +0.256 active 85/128; top5: {55: 0.256, 6: 0.104, 43: 0.034, 45: 0.032, 8: 0.019}
+05:46:41 L11 set relaxed: 7 candidates (>= 128 active); best E055 all-case mean +0.284 active 177/256; top5: {55: 0.284, 6: 0.059, 45: 0.038, 8: 0.017, 31: 0.011}
+05:46:41 L12 set strict: 6 candidates (>= 64 active); best E040 all-case mean +0.500 active 95/128; top5: {40: 0.5, 19: 0.142, 32: 0.12, 47: 0.028, 0: 0.024}
+05:46:41 L12 set relaxed: 6 candidates (>= 128 active); best E040 all-case mean +0.522 active 195/256; top5: {40: 0.522, 32: 0.128, 19: 0.123, 47: 0.058, 0: 0.022}
+05:46:41 L13 set strict: 3 candidates (>= 64 active); best E056 all-case mean +0.953 active 103/128; top5: {56: 0.953, 1: 0.059, 34: -0.006}
+05:46:41 L13 set relaxed: 3 candidates (>= 128 active); best E056 all-case mean +0.986 active 200/256; top5: {56: 0.986, 34: -0.001, 1: -0.011}
+05:46:41 L14 set strict: 7 candidates (>= 64 active); best E053 all-case mean +0.090 active 86/128; top5: {53: 0.09, 3: 0.087, 20: 0.024, 12: 0.008, 37: -0.017}
+05:46:41 L14 set relaxed: 7 candidates (>= 128 active); best E003 all-case mean +0.105 active 167/256; top5: {3: 0.105, 53: 0.053, 20: 0.024, 37: -0.019, 12: -0.028}
+05:46:41 L15 set strict: 6 candidates (>= 64 active); best E048 all-case mean +0.093 active 83/128; top5: {48: 0.093, 7: 0.076, 56: 0.053, 61: 0.025, 59: -0.012}
+05:46:41 L15 set relaxed: 6 candidates (>= 128 active); best E048 all-case mean +0.098 active 168/256; top5: {48: 0.098, 56: 0.068, 7: 0.063, 61: 0.056, 59: -0.005}
+05:46:41 chunk 2: wrote 58487 new rows; /home/ubuntu/MOE/results/olmoe_instruct_default/expert_rows.parquet now holds 115110 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+2026-09-14T05:46:44Z END   ext2zoo-olmoe_instruct_default-expert rc=0 (33s)

@@ -1,0 +1,3 @@
+| case set | n disc/val | L* | layer rescue (val) [CI] | selected expert | active disc/val | expert rescue [CI] | Spec [CI] | coalition top-k | routing union | joint-search winner (val rescue / Spec) | pattern |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| paper | 128/128 | L19 | +0.446 [+0.318, +0.569] | L19E006 | 91/83 | +0.063 [-0.009, +0.134] | -0.159 [-0.252, -0.065] | +0.442 [+0.321, +0.561] | +0.426 [+0.303, +0.547] | L18E001 +0.139 / Spec +0.098 (differs) | B |

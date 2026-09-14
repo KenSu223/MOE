@@ -1,0 +1,16 @@
+2026-09-14T06:49:32Z START ext2zoo-mixtral_instruct_chat-sweep (waited 80s): python scripts/ext2_zoo_sweep.py mixtral_instruct --protocol chat
+06:49:42 mixtral_instruct: sets=['paper', 'strict', 'relaxed'] union=547 cases
+06:49:43 running pass: 1094 prefill rows, 17504 spawn rows
+06:49:51   layer   0: load-wait 6.06s compute 0.99s  wf_rows=547
+06:50:13   layer   8: load-wait 2.23s compute 0.67s  wf_rows=4923
+06:50:37   layer  16: load-wait 2.15s compute 0.75s  wf_rows=9299
+06:51:00   layer  24: load-wait 2.07s compute 0.83s  wf_rows=13675
+06:51:20   layer  31: load-wait 2.07s compute 0.90s  wf_rows=17504
+06:51:20   pass done: 1094 prefill rows (T=37), 17504 spawn rows, 96.7s
+06:51:20 pass time 97.0s
+06:51:21 set paper: L*=31 disc=+1.995 val@L*=+1.785 val argmax L31 +1.785 funnel strict 218/256
+06:51:21 set strict: L*=31 disc=+2.289 val@L*=+2.544 val argmax L31 +2.544 funnel strict 253/256
+06:51:21 set relaxed: L*=31 disc=+1.949 val@L*=+2.435 val argmax L31 +2.435 funnel strict 498/512
+06:51:21 done
+06:51:26 sink diag: layer 1: final-is-max-norm 0.000, final-attends-mostly-to-itself 0.000, pos0 mass 0.581, any-early-layer final-is-max 0.000
+2026-09-14T06:51:32Z END   ext2zoo-mixtral_instruct_chat-sweep rc=0 (120s)

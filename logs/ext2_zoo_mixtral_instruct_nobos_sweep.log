@@ -1,0 +1,16 @@
+2026-09-14T06:39:15Z START ext2zoo-mixtral_instruct_nobos-sweep (waited 301s): python scripts/ext2_zoo_sweep.py mixtral_instruct --protocol nobos
+06:39:16 mixtral_instruct: sets=['paper', 'strict', 'relaxed'] union=533 cases
+06:39:19 running pass: 1066 prefill rows, 17056 spawn rows
+06:39:29   layer   0: load-wait 8.56s compute 0.63s  wf_rows=533
+06:39:52   layer   8: load-wait 2.55s compute 0.35s  wf_rows=4797
+06:40:15   layer  16: load-wait 2.44s compute 0.42s  wf_rows=9061
+06:40:38   layer  24: load-wait 2.41s compute 0.73s  wf_rows=13325
+06:40:58   layer  31: load-wait 2.35s compute 0.54s  wf_rows=17056
+06:40:58   pass done: 1066 prefill rows (T=18), 17056 spawn rows, 98.8s
+06:40:58 pass time 98.9s
+06:40:59 set paper: L*=19 disc=+0.425 val@L*=+0.512 val argmax L21 +0.554 funnel strict 226/256
+06:40:59 set strict: L*=19 disc=+0.564 val@L*=+0.444 val argmax L21 +0.522 funnel strict 256/256
+06:40:59 set relaxed: L*=19 disc=+0.470 val@L*=+0.481 val argmax L19 +0.481 funnel strict 476/512
+06:40:59 done
+06:41:01 sink diag: layer 1: final-is-max-norm 0.238, final-attends-mostly-to-itself 0.054, pos0 mass 0.106, any-early-layer final-is-max 0.248
+2026-09-14T06:41:08Z END   ext2zoo-mixtral_instruct_nobos-sweep rc=0 (113s)

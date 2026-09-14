@@ -1,0 +1,76 @@
+06:03:46 runs: ['olmoe_default', 'olmoe_instruct_default', 'qwen3_instruct_default', 'qwen3_instruct_chat', 'qwen3_coder_default', 'mixtral_instruct_default', 'qwen3_bos_alllayers', 'mixtral_bos_alllayers', 'mixtral_nobos_alllayers']
+06:03:55 olmoe_default / strict: layer analysis
+06:03:55 olmoe_default / strict: two-stage selection at L13
+06:03:59 olmoe_default / strict: joint search
+06:04:09 olmoe_default / strict: per-layer best-expert curve
+06:04:12 olmoe_default / relaxed: layer analysis
+06:04:12 olmoe_default / relaxed: two-stage selection at L12
+06:04:17 olmoe_default / relaxed: joint search
+06:04:33 olmoe_default / relaxed: per-layer best-expert curve
+06:04:39 olmoe_instruct_default / strict: layer analysis
+06:04:39 olmoe_instruct_default / strict: two-stage selection at L13
+06:04:43 olmoe_instruct_default / strict: joint search
+06:04:52 olmoe_instruct_default / strict: per-layer best-expert curve
+06:04:55 olmoe_instruct_default / relaxed: layer analysis
+06:04:55 olmoe_instruct_default / relaxed: two-stage selection at L13
+06:05:01 olmoe_instruct_default / relaxed: joint search
+06:05:23 olmoe_instruct_default / relaxed: per-layer best-expert curve
+06:05:35 qwen3_instruct_default / paper: layer analysis
+06:05:35 qwen3_instruct_default / paper: two-stage selection at L44
+06:05:39 qwen3_instruct_default / paper: joint search
+06:06:13 qwen3_instruct_default / paper: per-layer best-expert curve
+06:06:21 qwen3_instruct_default / strict: layer analysis
+06:06:21 qwen3_instruct_default / strict: two-stage selection at L44
+06:06:26 qwen3_instruct_default / strict: joint search
+06:07:00 qwen3_instruct_default / strict: per-layer best-expert curve
+06:07:09 qwen3_instruct_default / relaxed: layer analysis
+06:07:09 qwen3_instruct_default / relaxed: two-stage selection at L44
+06:07:15 qwen3_instruct_default / relaxed: joint search
+06:08:04 qwen3_instruct_default / relaxed: per-layer best-expert curve
+06:08:17 qwen3_instruct_chat / paper: layer analysis
+06:08:17 qwen3_instruct_chat / strict: layer analysis
+06:08:17 qwen3_instruct_chat / relaxed: layer analysis
+06:08:22 qwen3_coder_default / paper: layer analysis
+06:08:22 qwen3_coder_default / paper: two-stage selection at L44
+06:08:26 qwen3_coder_default / paper: joint search
+06:09:02 qwen3_coder_default / paper: per-layer best-expert curve
+06:09:09 qwen3_coder_default / strict: layer analysis
+06:09:10 qwen3_coder_default / strict: two-stage selection at L44
+06:09:14 qwen3_coder_default / strict: joint search
+06:09:49 qwen3_coder_default / strict: per-layer best-expert curve
+06:09:57 qwen3_coder_default / relaxed: layer analysis
+06:10:09 qwen3_coder_default / relaxed: two-stage selection at L44
+06:10:15 qwen3_coder_default / relaxed: joint search
+06:11:01 qwen3_coder_default / relaxed: per-layer best-expert curve
+06:11:13 mixtral_instruct_default / paper: layer analysis
+06:11:13 mixtral_instruct_default / strict: layer analysis
+06:11:14 mixtral_instruct_default / relaxed: layer analysis
+06:11:18 qwen3_bos_alllayers / paper: layer analysis
+06:11:19 qwen3_bos_alllayers / paper: two-stage selection at L44
+06:11:22 qwen3_bos_alllayers / paper: joint search
+06:11:56 qwen3_bos_alllayers / paper: per-layer best-expert curve
+06:12:04 qwen3_bos_alllayers / strict: layer analysis
+06:12:04 qwen3_bos_alllayers / strict: two-stage selection at L44
+06:12:08 qwen3_bos_alllayers / strict: joint search
+06:12:39 qwen3_bos_alllayers / strict: per-layer best-expert curve
+06:12:46 qwen3_bos_alllayers / relaxed: layer analysis
+06:12:47 qwen3_bos_alllayers / relaxed: two-stage selection at L44
+06:12:52 qwen3_bos_alllayers / relaxed: joint search
+06:13:36 qwen3_bos_alllayers / relaxed: per-layer best-expert curve
+06:13:50 mixtral_bos_alllayers / paper: layer analysis
+06:13:50 mixtral_bos_alllayers / paper: two-stage selection at L19
+06:13:52 mixtral_bos_alllayers / paper: joint search
+06:13:57 mixtral_bos_alllayers / paper: per-layer best-expert curve
+06:14:01 mixtral_bos_alllayers / strict: layer analysis
+06:14:02 mixtral_bos_alllayers / strict: two-stage selection at L19
+06:14:04 mixtral_bos_alllayers / strict: joint search
+06:14:10 mixtral_bos_alllayers / strict: per-layer best-expert curve
+06:14:15 mixtral_bos_alllayers / relaxed: layer analysis
+06:14:16 mixtral_bos_alllayers / relaxed: two-stage selection at L19
+06:14:21 mixtral_bos_alllayers / relaxed: joint search
+06:14:29 mixtral_bos_alllayers / relaxed: per-layer best-expert curve
+06:14:38 mixtral_nobos_alllayers / paper: layer analysis
+06:14:38 mixtral_nobos_alllayers / paper: two-stage selection at L19
+06:14:40 mixtral_nobos_alllayers / paper: joint search
+06:14:43 mixtral_nobos_alllayers / paper: per-layer best-expert curve
+06:14:51 section written (39382 chars); attn curves pending

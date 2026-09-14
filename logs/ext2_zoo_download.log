@@ -1,0 +1,16 @@
+2026-09-14T05:16:51Z START allenai/OLMoE-1B-7B-0125-Instruct (need 14 GB, free 263 GB)
+2026-09-14T05:17:25Z DONE allenai/OLMoE-1B-7B-0125-Instruct rc=0 elapsed=34s free_after=250 GB
+2026-09-14T05:17:25Z START Qwen/Qwen3-30B-A3B-Instruct-2507 (need 62 GB, free 250 GB)
+2026-09-14T05:19:32Z DONE Qwen/Qwen3-30B-A3B-Instruct-2507 rc=0 elapsed=127s free_after=193 GB
+2026-09-14T05:19:32Z START Qwen/Qwen3-Coder-30B-A3B-Instruct (need 62 GB, free 193 GB)
+2026-09-14T05:21:44Z DONE Qwen/Qwen3-Coder-30B-A3B-Instruct rc=0 elapsed=132s free_after=136 GB
+2026-09-14T05:21:44Z START mistralai/Mixtral-8x7B-Instruct-v0.1 (need 94 GB, free 136 GB)
+2026-09-14T05:24:59Z DONE mistralai/Mixtral-8x7B-Instruct-v0.1 rc=0 elapsed=195s free_after=49 GB
+2026-09-14T05:24:59Z ALL_DOWNLOADS_DONE
+61G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base
+57G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Instruct-2507
+57G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-Coder-30B-A3B-Instruct
+39G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125
+13G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125-Instruct
+87G	/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-Instruct-v0.1
+93G	/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1

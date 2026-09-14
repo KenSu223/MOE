@@ -1,0 +1,17 @@
+2026-09-14T06:48:12Z START ext2zoo-qwen3_coder_chat-attn (waited 115s): python scripts/ext2_zoo_attn.py qwen3_coder --protocol chat
+06:48:22 qwen3_coder -> qwen3_coder_chat_attnsweep: sets=['paper'] union=256 cases, kinds=['attn_layer', 'layer', 'block'], special_tokens=False
+06:48:23 running pass: 512 prefill rows, 36864 spawn rows
+06:48:27   layer   0: load-wait 2.85s compute 0.65s  wf_rows=768
+06:48:36   layer   8: load-wait 1.10s compute 0.15s  wf_rows=6912
+06:48:46   layer  16: load-wait 1.05s compute 0.20s  wf_rows=13056
+06:48:55   layer  24: load-wait 1.01s compute 0.24s  wf_rows=19200
+06:49:05   layer  32: load-wait 0.96s compute 0.29s  wf_rows=25344
+06:49:16   layer  40: load-wait 1.55s compute 0.34s  wf_rows=31488
+06:49:24   layer  47: load-wait 0.86s compute 0.38s  wf_rows=36864
+06:49:24   pass done: 512 prefill rows (T=35), 36864 spawn rows, 60.8s
+06:49:24 pass time 61.1s
+06:49:25 set paper kind attn_layer: L*=40 disc=+2.312 val@L*=+2.105 val argmax L40 +2.105
+06:49:25 set paper kind layer     : L*=44 disc=+1.213 val@L*=+1.224 val argmax L44 +1.224
+06:49:25 set paper kind block     : L*=40 disc=+2.672 val@L*=+2.428 val argmax L40 +2.428
+06:49:25 done
+2026-09-14T06:49:32Z END   ext2zoo-qwen3_coder_chat-attn rc=0 (80s)

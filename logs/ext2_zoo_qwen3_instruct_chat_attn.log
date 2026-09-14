@@ -1,0 +1,17 @@
+2026-09-14T06:44:57Z START ext2zoo-qwen3_instruct_chat-attn (waited 198s): python scripts/ext2_zoo_attn.py qwen3_instruct --protocol chat
+06:45:07 qwen3_instruct -> qwen3_instruct_chat_attnsweep: sets=['paper'] union=256 cases, kinds=['attn_layer', 'layer', 'block'], special_tokens=False
+06:45:09 running pass: 512 prefill rows, 36864 spawn rows
+06:45:13   layer   0: load-wait 2.85s compute 0.65s  wf_rows=768
+06:45:22   layer   8: load-wait 1.10s compute 0.15s  wf_rows=6912
+06:45:31   layer  16: load-wait 1.06s compute 0.19s  wf_rows=13056
+06:45:41   layer  24: load-wait 1.00s compute 0.24s  wf_rows=19200
+06:45:52   layer  32: load-wait 1.64s compute 0.29s  wf_rows=25344
+06:46:01   layer  40: load-wait 0.91s compute 0.34s  wf_rows=31488
+06:46:10   layer  47: load-wait 0.86s compute 0.39s  wf_rows=36864
+06:46:10   pass done: 512 prefill rows (T=35), 36864 spawn rows, 60.9s
+06:46:10 pass time 61.1s
+06:46:11 set paper kind attn_layer: L*=40 disc=+2.308 val@L*=+2.127 val argmax L40 +2.127
+06:46:11 set paper kind layer     : L*=44 disc=+1.359 val@L*=+1.351 val argmax L44 +1.351
+06:46:11 set paper kind block     : L*=40 disc=+2.829 val@L*=+2.559 val argmax L40 +2.559
+06:46:11 done
+2026-09-14T06:46:17Z END   ext2zoo-qwen3_instruct_chat-attn rc=0 (80s)

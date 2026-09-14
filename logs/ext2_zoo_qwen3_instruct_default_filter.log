@@ -1,0 +1,16 @@
+2026-09-14T05:25:01Z START ext2zoo-qwen3_instruct_default-filter (waited 13s): python scripts/ext2_zoo_filter.py qwen3_instruct --protocol default
+05:25:08 qwen3_instruct / default -> qwen3_instruct_default: special_tokens=True prefix_len=0 prefix=''
+05:25:09 embed_std=0.020008 sigma=0.060023 hidden=2048 layers=48
+05:25:13   layer   0: load-wait 2.91s compute 0.54s  wf_rows=0
+05:25:22   layer   8: load-wait 1.08s compute 0.18s  wf_rows=0
+05:25:32   layer  16: load-wait 1.08s compute 0.17s  wf_rows=0
+05:25:41   layer  24: load-wait 1.08s compute 0.16s  wf_rows=0
+05:25:51   layer  32: load-wait 1.03s compute 0.17s  wf_rows=0
+05:26:01   layer  40: load-wait 1.08s compute 0.17s  wf_rows=0
+05:26:10   layer  47: load-wait 1.07s compute 0.17s  wf_rows=0
+05:26:10   pass done: 2048 prefill rows (T=18), 0 spawn rows, 60.7s
+05:26:10 chunk done (1024 records, 60.9s, T=18): scanned=1048 tokenizable=1024 strict=843 relaxed=887
+05:26:11 scan summary: {"records_scanned": 1048, "tokenizable": 1024, "rejected": 24, "n_strict_total": 843, "n_relaxed_total": 887, "strict_pass_rate_tokenizable": 0.8232421875, "relaxed_pass_rate_tokenizable": 0.8662109375, "reject_reasons": {"multi_token": 24}, "embed_std": 0.020007502287626266, "sigma": 0.0600225068628788, "protocol": "default", "special_tokens": true, "prefix_len": 0, "mean_delta_clean": 6.141845703125, "mean_drop": 5.739164352416992, "top1_clean_is_true_rate": 0.212890625}
+05:26:11 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 389, "paper_ids_scan_rank_median": 196, "our_scan_last_rank": 1048, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 235, "paper_ids_relaxed_in_scan": 241, "overlap_paper_vs_our_strict256": 189, "overlap_paper_vs_our_relaxed512": 241, "paper_ids_not_tokenizable": []}
+05:26:11 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/qwen3_instruct_default
+2026-09-14T05:26:17Z END   ext2zoo-qwen3_instruct_default-filter rc=0 (76s)

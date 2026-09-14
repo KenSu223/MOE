@@ -1,0 +1,14 @@
+model,protocol,run,prompts,sink layer,pos-0 is max-norm,FINAL is max-norm,final is max-norm at any early layer,final attends mostly to itself,final-position mass on pos 0,max-norm position: mode (fraction; token)
+Qwen3-30B-A3B-Base,default,qwen3_bos_alllayers,256,L3,1.000,0.000,0.000,0.000,0.719,"pos 0 (1.00; 'The' x43, 'D' x7)"
+Qwen3-30B-A3B-Instruct-2507,default (= nobos),qwen3_instruct_default,527,L3,0.998,0.000,0.000,0.000,0.719,"pos 0 (1.00; 'The' x92, 'D' x11)"
+Qwen3-30B-A3B-Instruct-2507,chat,qwen3_instruct_chat,530,L3,0.000,0.000,0.000,0.000,0.012,pos 1 (1.00; 'user' x530)
+Qwen3-Coder-30B-A3B-Instruct,default (= nobos),qwen3_coder_default,548,L2,1.000,0.000,0.000,0.000,0.632,"pos 0 (1.00; 'The' x85, 'B' x13)"
+Qwen3-Coder-30B-A3B-Instruct,chat,qwen3_coder_chat,539,L2,0.000,0.000,0.000,0.353,0.069,pos 2 (1.00; 'Ċ' x539)
+Mixtral-8x7B-v0.1,default,mixtral_bos_alllayers,256,L1,1.000,0.000,0.000,0.000,0.830,pos 0 (1.00; '<s>' x256)
+Mixtral-8x7B-v0.1,nobos,mixtral_nobos_alllayers,256,L1,0.199,0.246,0.270,0.078,0.094,"pos 0 (0.20; ',' x73, '▁of' x51)"
+Mixtral-8x7B-Instruct-v0.1,default,mixtral_instruct_default,525,L1,1.000,0.000,0.000,0.000,0.683,pos 0 (1.00; '<s>' x525)
+Mixtral-8x7B-Instruct-v0.1,nobos,mixtral_instruct_nobos,533,L1,0.193,0.238,0.248,0.054,0.106,"pos 0 (0.19; ',' x148, '▁of' x99)"
+Mixtral-8x7B-Instruct-v0.1,chat,mixtral_instruct_chat,547,L1,1.000,0.000,0.000,0.000,0.581,pos 0 (1.00; '<s>' x547)
+OLMoE-1B-7B-0125,default (= nobos),olmoe_default,512,L2,1.000,0.000,0.002,0.027,0.540,"pos 0 (1.00; 'The' x97, 'In' x14)"
+OLMoE-1B-7B-0125-Instruct,default (= nobos),olmoe_instruct_default,512,L2,1.000,0.000,0.014,0.029,0.532,"pos 0 (1.00; 'The' x92, 'In' x12)"
+OLMoE-1B-7B-0125-Instruct,chat,olmoe_instruct_chat,512,L2,1.000,0.000,0.000,0.000,0.240,pos 0 (1.00; '|||IP_ADDRESS|||' x512)

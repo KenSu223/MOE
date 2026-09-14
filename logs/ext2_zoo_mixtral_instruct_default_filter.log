@@ -1,0 +1,14 @@
+2026-09-14T05:39:07Z START ext2zoo-mixtral_instruct_default-filter (waited 453s): python scripts/ext2_zoo_filter.py mixtral_instruct --protocol default
+05:39:20 mixtral_instruct / default -> mixtral_instruct_default: special_tokens=True prefix_len=0 prefix=''
+05:39:21 embed_std=0.011152 sigma=0.033457 hidden=4096 layers=32
+05:39:30   layer   0: load-wait 7.29s compute 1.12s  wf_rows=0
+05:39:52   layer   8: load-wait 2.23s compute 0.66s  wf_rows=0
+05:40:16   layer  16: load-wait 2.24s compute 0.66s  wf_rows=0
+05:40:39   layer  24: load-wait 2.28s compute 0.66s  wf_rows=0
+05:40:59   layer  31: load-wait 2.22s compute 0.67s  wf_rows=0
+05:40:59   pass done: 2048 prefill rows (T=23), 0 spawn rows, 97.7s
+05:40:59 chunk done (1024 records, 98.0s, T=23): scanned=2034 tokenizable=1024 strict=879 relaxed=906
+05:40:59 scan summary: {"records_scanned": 2034, "tokenizable": 1024, "rejected": 1010, "n_strict_total": 879, "n_relaxed_total": 906, "strict_pass_rate_tokenizable": 0.8583984375, "relaxed_pass_rate_tokenizable": 0.884765625, "reject_reasons": {"multi_token": 1010}, "embed_std": 0.011152197606861591, "sigma": 0.033456592820584774, "protocol": "default", "special_tokens": true, "prefix_len": 0, "mean_delta_clean": 6.279106140136719, "mean_drop": 4.882560729980469, "top1_clean_is_true_rate": 0.28125}
+05:40:59 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 580, "paper_ids_scan_rank_median": 300, "our_scan_last_rank": 2034, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 236, "paper_ids_relaxed_in_scan": 243, "overlap_paper_vs_our_strict256": 231, "overlap_paper_vs_our_relaxed512": 243, "paper_ids_not_tokenizable": []}
+05:40:59 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/mixtral_instruct_default
+2026-09-14T05:41:03Z END   ext2zoo-mixtral_instruct_default-filter rc=0 (116s)

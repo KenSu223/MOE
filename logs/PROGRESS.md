@@ -361,3 +361,53 @@
   `block` (both sublayer outputs of layer l, the reading consistent with the additivity invariant), and `block_diff` as a permanent
   numerics-check kind; gate threshold for block vs block_diff max |d| set to 0.7 (same as the HF maxdiff floors) after the first
   gate run failed at 0.557 (mean |d| 0.042, signed mean +0.002: bf16 rounding, no bias). Not committed (coordinator).
+
+## 2026-09-14 05:58 UTC — ext4-codefact: GPU incident and fix
+- ext4-scan-codefact_qwen3_raw (chunk 1024 items, sweep rows for 48 layers) OOMed at chunk 4/7 (T=71) in engine.attn_wavefront: the broadcast
+  matmul expands the gathered K over the head-repeat factor, so the operand is [wf_chunk, n_heads, D, T] = 4.5 GiB at wf_chunk 8192, T 71
+  (fine for CounterFact's T ~ 20). The Mixtral scan that started next would have failed the same way and was stopped (my own job, 1 chunk lost).
+- Fix without touching engine.py: pass the engine's existing `wf_chunk` argument from my scripts (wf_chunk = 160,000 // T, i.e. 1,000 rows at
+  T = 160), bound item chunks by items x T <= 80,000 (so 1,024 items at T <= 78, ~500 at T = 160) and set PYTORCH_CUDA_ALLOC_CONF=expandable_segments.
+  Same in ext4_run_expert.py. Both chains re-queued at 05:55 UTC (ext4-scan-codefact_qwen3_raw, ext4-scan-codefact_mixtral_nobos). If a chunk still
+  fails, fallback = the coordinator's plan (prefill-only calibration scan; sweep only the <= 256 filtered items per category with chunk <= 256).
+- Smoke test (48 items): scan 61 s / 3.6 GB, expert pass 2 x ~55 s / 3.9 GB, ext4_select + ext4_run_expert + ext4_analyze verified end to end.
+
+## 2026-09-14 10:15 UTC — ext4-codefact: resumed after the usage-limit reset; scans + selection done, expert passes re-planned
+- Scans (filter + every-layer block patch in one job): codefact_qwen3_raw 6,448 items in 8 length-sorted chunks (466 s GPU, peak 13.3 GB);
+  codefact_mixtral_nobos 4,671 items (<= 800 per category, --no-special-tokens) in 7 chunks (635 s, peak 16.3 GB). Selection (ext4_select.py):
+  Qwen3 all six categories reach 256 (pass counts S1 871/964, S2 399/1200, S3 430/1195, R1 896/1132, R2 451/794, R3 690/1163), union 1,536;
+  Mixtral S3 partial (241 pass -> 120/121), the rest 256 (S1 690/800, S2 316, R1 379, R2 321, R3 318), union 1,521. Mixed `all` set = 256
+  stratified (43/43/43/43/42/42). Calibration tables results/tables/ext4_calibration_*.md, figure results/figures/ext4_calibration.png.
+- Calibration finding (Qwen3): S1 passes 90 % (median Δ_clean +13.6, drop +4.4: noising the opener DOES move the closer), S2 33 % and S3 36 %
+  (median drop +0.25 / +0.12: block keywords and `in`/`:` are redundantly determined), R1 79 %, R2 57 %, R3 59 %. Relative rule (25 %): 62/15/20/50/24/29 %.
+  Top-1 = true: S1 18 % exact but 87 % "starts with true" (the model prefers merged tokens like `):`), S3 38 % / 96 %, R1 89 %, R2 90 %.
+  No prompt has its final token as the max-norm (sink) position at L5 in either model (0.0 %).
+- Layer sweeps: on code the LAST MoE block dominates the curve in both models (Qwen3 L47 selected for S1/S2/S3/R2/R3/all, R1 -> L43; Mixtral
+  L31 for all but S2 -> L17), whereas CounterFact's last layer rescues nothing (-0.13 / -0.08). Interior maxima sit in a shared band: Qwen3
+  L41-43 (S1 +1.26 at L42, R1 +0.39 at L43), Mixtral L17-22 (the ext1 E001 band). Analysis extended with an "interior" selection (layers <= L-5).
+- Expert passes OOMed at 06:31 (prefill rmsnorm on 3,072 rows x T=160, not the wavefront). Rewritten ext4_run_expert.py: cases sorted by length
+  and grouped so that 2 x cases x T <= 160k (Qwen3) / 110k (Mixtral) row-tokens, layers grouped so that wavefront rows <= 45k / 24k, engine
+  wf_chunk = 160k // T, resumable per-pass part files. Plans: Qwen3 2 case chunks x 23 passes (925k spawn rows), Mixtral 3 x 13 passes (256k).
+  Chain scripts/ext4_chain2.sh (detached) runs: Qwen3 expert -> Mixtral expert -> Coder raw scan/select/expert -> Coder chat scan/select/expert.
+
+## 2026-09-14 10:40 UTC — ext2-model-zoo: all runs done, section written (agent resumed 10:03 after the usage-limit reset; no GPU work redone)
+- GPU: 10 run configurations x (filter 1 pass, sweep 1 pass, all-layer expert pass 2-5 chunks) + 5 attention/MoE/block sweeps = 46 ext2zoo jobs,
+  all rc=0 by 06:57 UTC (queue log), about 55 GPU-minutes; every run dir carries run_meta.json (rendered chat prefix, protocol, chunking, row
+  counts) and sink_diag.json; raw diagnostics on /opt/dlami/nvme/moe_ext2/<run>/sweep_diag.npz.
+- Runs: olmoe_default; olmoe_instruct_{default,chat}; qwen3_instruct_{default,chat}; qwen3_coder_{default,chat}; mixtral_instruct_{default,nobos,chat};
+  attention sweeps {olmoe_default,olmoe_instruct_chat,qwen3_instruct_chat,qwen3_coder_chat,mixtral_instruct_chat}_attnsweep (kinds attn_layer,
+  layer, block on the intended case set) plus the ext2-attn-patch agent's qwen3_bos/mixtral_bos/mixtral_nobos sweeps used for the base rows.
+- Analysis (`scripts/ext2_zoo_analyze.py`, cached per run in results/<run>/zoo_summary.json): two-stage selection, evaluate_expert, coalitions,
+  all-active rank, Appendix-D grid, joint search + per-layer best-expert curves (ext1 functions), base experts as fixed hypotheses, routing
+  agreement with the base runs, sink fractions (+ sink position/token), drop-normalised rescue shares, attention/MoE/block peaks and additivity.
+  Outputs: results/tables/ext2_zoo_{summary,usage,sink,reference_experts,base_vs_instruct,routing_agreement,attn}.{md,csv}, ext2_zoo_run_<run>.*,
+  ext2_zoo_layer_curve_<run>_<set>.csv; figures ext2_zoo_{curves,expert_curves,attn_curves}.{png,pdf}; results/ext2_zoo_summary.json;
+  results/sections/ext2_model_zoo.md (assembled into results/EXTENSIONS_REPORT.md).
+- Headline: every model is pattern A under its intended protocol (OLMoE L13E056 Spec +0.87; OLMoE-Instruct chat L12E040 / L13E056; Qwen3-Instruct
+  chat L44E069 +0.72 / Spec +0.62; Coder chat L44E069 +0.66 / +0.59; Mixtral-Instruct chat L31E002 +1.19 / +0.71 with the L19-L21 band still
+  present). Pattern B only for Mixtral base/Instruct without BOS (E006 91/83 active in both, Spec -0.16 / -0.22, joint L18E001, final-token sink
+  in 24-25% of prompts); pattern C never. Post-training keeps L44E069 and L42E115 in Qwen3-Instruct and Coder (rescue/Spec equal or higher than
+  the base) although the L44 top-8 set matches the base in only 27% / 13% of prompts; Mixtral-Instruct with BOS = base (L19E002, 86% identical
+  L19 routing). Chat wrapping raises margins, drops and absolute rescues but not the drop-normalised share (Qwen3 15-17%) and does not move the
+  Qwen3/OLMoE loci; for Mixtral-Instruct it moves the argmax to the final layer L31. Attention-output patches peak earlier and higher than
+  MoE-output patches in every model; block = attn + MoE within 0.01-0.11.

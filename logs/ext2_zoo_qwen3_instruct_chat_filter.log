@@ -1,0 +1,16 @@
+2026-09-14T05:48:37Z START ext2zoo-qwen3_instruct_chat-filter (waited 658s): python scripts/ext2_zoo_filter.py qwen3_instruct --protocol chat
+05:48:50 qwen3_instruct / chat -> qwen3_instruct_chat: special_tokens=False prefix_len=19 prefix='<|im_start|>user\nComplete the sentence with the single most likely next word.<|im_end|>\n<|im_start|>assistant\n'
+05:48:52 embed_std=0.020008 sigma=0.060023 hidden=2048 layers=48
+05:48:56   layer   0: load-wait 3.25s compute 0.86s  wf_rows=0
+05:49:05   layer   8: load-wait 0.91s compute 0.33s  wf_rows=0
+05:49:15   layer  16: load-wait 0.91s compute 0.33s  wf_rows=0
+05:49:25   layer  24: load-wait 0.91s compute 0.33s  wf_rows=0
+05:49:35   layer  32: load-wait 0.91s compute 0.33s  wf_rows=0
+05:49:45   layer  40: load-wait 0.91s compute 0.33s  wf_rows=0
+05:49:54   layer  47: load-wait 0.40s compute 0.33s  wf_rows=0
+05:49:54   pass done: 2048 prefill rows (T=37), 0 spawn rows, 61.5s
+05:49:54 chunk done (1024 records, 61.7s, T=37): scanned=1048 tokenizable=1024 strict=856 relaxed=876
+05:49:54 scan summary: {"records_scanned": 1048, "tokenizable": 1024, "rejected": 24, "n_strict_total": 856, "n_relaxed_total": 876, "strict_pass_rate_tokenizable": 0.8359375, "relaxed_pass_rate_tokenizable": 0.85546875, "reject_reasons": {"multi_token": 24}, "embed_std": 0.020007502287626266, "sigma": 0.0600225068628788, "protocol": "chat", "special_tokens": false, "prefix_len": 19, "mean_delta_clean": 7.621105074882507, "mean_drop": 6.851299166679382, "top1_clean_is_true_rate": 0.259765625}
+05:49:54 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 389, "paper_ids_scan_rank_median": 196, "our_scan_last_rank": 1048, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 236, "paper_ids_relaxed_in_scan": 238, "overlap_paper_vs_our_strict256": 187, "overlap_paper_vs_our_relaxed512": 238, "paper_ids_not_tokenizable": []}
+05:49:54 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/qwen3_instruct_chat
+2026-09-14T05:50:00Z END   ext2zoo-qwen3_instruct_chat-filter rc=0 (83s)

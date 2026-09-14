@@ -1,0 +1,162 @@
+10:04:05 runs: ['olmoe_default', 'olmoe_instruct_default', 'olmoe_instruct_chat', 'qwen3_instruct_default', 'qwen3_instruct_chat', 'qwen3_coder_default', 'qwen3_coder_chat', 'mixtral_instruct_default', 'mixtral_instruct_nobos', 'mixtral_instruct_chat', 'qwen3_bos_alllayers', 'mixtral_bos_alllayers', 'mixtral_nobos_alllayers']
+10:04:18 olmoe_default / strict: layer analysis
+10:04:18 olmoe_default / strict: two-stage selection at L13
+10:04:21 olmoe_default / strict: joint search
+10:04:30 olmoe_default / strict: per-layer best-expert curve
+10:04:33 olmoe_default / relaxed: layer analysis
+10:04:33 olmoe_default / relaxed: two-stage selection at L12
+10:04:38 olmoe_default / relaxed: joint search
+10:04:52 olmoe_default / relaxed: per-layer best-expert curve
+10:04:57 olmoe_instruct_default / strict: layer analysis
+10:04:57 olmoe_instruct_default / strict: two-stage selection at L13
+10:05:00 olmoe_instruct_default / strict: joint search
+10:05:09 olmoe_instruct_default / strict: per-layer best-expert curve
+10:05:12 olmoe_instruct_default / relaxed: layer analysis
+10:05:12 olmoe_instruct_default / relaxed: two-stage selection at L13
+10:05:17 olmoe_instruct_default / relaxed: joint search
+10:05:33 olmoe_instruct_default / relaxed: per-layer best-expert curve
+10:05:37 olmoe_instruct_chat / strict: layer analysis
+10:05:38 olmoe_instruct_chat / strict: two-stage selection at L12
+10:05:41 olmoe_instruct_chat / strict: joint search
+10:05:51 olmoe_instruct_chat / strict: per-layer best-expert curve
+10:05:53 olmoe_instruct_chat / relaxed: layer analysis
+10:05:53 olmoe_instruct_chat / relaxed: two-stage selection at L13
+10:05:59 olmoe_instruct_chat / relaxed: joint search
+10:06:14 olmoe_instruct_chat / relaxed: per-layer best-expert curve
+10:06:21 qwen3_instruct_default / paper: layer analysis
+10:06:22 qwen3_instruct_default / paper: two-stage selection at L44
+10:06:25 qwen3_instruct_default / paper: joint search
+10:06:56 qwen3_instruct_default / paper: per-layer best-expert curve
+10:07:03 qwen3_instruct_default / strict: layer analysis
+10:07:03 qwen3_instruct_default / strict: two-stage selection at L44
+10:07:06 qwen3_instruct_default / strict: joint search
+10:07:37 qwen3_instruct_default / strict: per-layer best-expert curve
+10:07:44 qwen3_instruct_default / relaxed: layer analysis
+10:07:45 qwen3_instruct_default / relaxed: two-stage selection at L44
+10:07:50 qwen3_instruct_default / relaxed: joint search
+10:08:35 qwen3_instruct_default / relaxed: per-layer best-expert curve
+10:08:49 qwen3_instruct_chat / paper: layer analysis
+10:08:49 qwen3_instruct_chat / paper: two-stage selection at L44
+10:08:53 qwen3_instruct_chat / paper: joint search
+10:09:23 qwen3_instruct_chat / paper: per-layer best-expert curve
+10:09:30 qwen3_instruct_chat / strict: layer analysis
+10:09:31 qwen3_instruct_chat / strict: two-stage selection at L44
+10:09:34 qwen3_instruct_chat / strict: joint search
+10:10:04 qwen3_instruct_chat / strict: per-layer best-expert curve
+10:10:11 qwen3_instruct_chat / relaxed: layer analysis
+10:10:12 qwen3_instruct_chat / relaxed: two-stage selection at L44
+10:10:17 qwen3_instruct_chat / relaxed: joint search
+10:11:01 qwen3_instruct_chat / relaxed: per-layer best-expert curve
+10:11:16 qwen3_coder_default / paper: layer analysis
+10:11:16 qwen3_coder_default / paper: two-stage selection at L44
+10:11:20 qwen3_coder_default / paper: joint search
+10:11:55 qwen3_coder_default / paper: per-layer best-expert curve
+10:12:02 qwen3_coder_default / strict: layer analysis
+10:12:03 qwen3_coder_default / strict: two-stage selection at L44
+10:12:07 qwen3_coder_default / strict: joint search
+10:12:43 qwen3_coder_default / strict: per-layer best-expert curve
+10:12:50 qwen3_coder_default / relaxed: layer analysis
+10:12:51 qwen3_coder_default / relaxed: two-stage selection at L44
+10:12:57 qwen3_coder_default / relaxed: joint search
+10:13:45 qwen3_coder_default / relaxed: per-layer best-expert curve
+10:14:00 qwen3_coder_chat / paper: layer analysis
+10:14:00 qwen3_coder_chat / paper: two-stage selection at L44
+10:14:04 qwen3_coder_chat / paper: joint search
+10:14:43 qwen3_coder_chat / paper: per-layer best-expert curve
+10:14:51 qwen3_coder_chat / strict: layer analysis
+10:14:51 qwen3_coder_chat / strict: two-stage selection at L44
+10:14:55 qwen3_coder_chat / strict: joint search
+10:15:34 qwen3_coder_chat / strict: per-layer best-expert curve
+10:15:42 qwen3_coder_chat / relaxed: layer analysis
+10:15:43 qwen3_coder_chat / relaxed: two-stage selection at L44
+10:15:48 qwen3_coder_chat / relaxed: joint search
+10:16:41 qwen3_coder_chat / relaxed: per-layer best-expert curve
+10:16:55 mixtral_instruct_default / paper: layer analysis
+10:16:56 mixtral_instruct_default / paper: two-stage selection at L19
+10:16:58 mixtral_instruct_default / paper: joint search
+10:17:03 mixtral_instruct_default / paper: per-layer best-expert curve
+10:17:07 mixtral_instruct_default / strict: layer analysis
+10:17:07 mixtral_instruct_default / strict: two-stage selection at L19
+10:17:10 mixtral_instruct_default / strict: joint search
+10:17:16 mixtral_instruct_default / strict: per-layer best-expert curve
+10:17:20 mixtral_instruct_default / relaxed: layer analysis
+10:17:22 mixtral_instruct_default / relaxed: two-stage selection at L19
+10:17:30 mixtral_instruct_default / relaxed: joint search
+10:17:39 mixtral_instruct_default / relaxed: per-layer best-expert curve
+10:17:48 mixtral_instruct_nobos / paper: layer analysis
+10:17:48 mixtral_instruct_nobos / paper: two-stage selection at L19
+10:17:51 mixtral_instruct_nobos / paper: joint search
+10:17:55 mixtral_instruct_nobos / paper: per-layer best-expert curve
+10:17:59 mixtral_instruct_nobos / strict: layer analysis
+10:17:59 mixtral_instruct_nobos / strict: two-stage selection at L19
+10:18:02 mixtral_instruct_nobos / strict: joint search
+10:18:06 mixtral_instruct_nobos / strict: per-layer best-expert curve
+10:18:10 mixtral_instruct_nobos / relaxed: layer analysis
+10:18:10 mixtral_instruct_nobos / relaxed: two-stage selection at L19
+10:18:15 mixtral_instruct_nobos / relaxed: joint search
+10:18:21 mixtral_instruct_nobos / relaxed: per-layer best-expert curve
+10:18:29 mixtral_instruct_chat / paper: layer analysis
+10:18:29 mixtral_instruct_chat / paper: two-stage selection at L31
+10:18:32 mixtral_instruct_chat / paper: joint search
+10:18:37 mixtral_instruct_chat / paper: per-layer best-expert curve
+10:18:41 mixtral_instruct_chat / strict: layer analysis
+10:18:42 mixtral_instruct_chat / strict: two-stage selection at L31
+10:18:45 mixtral_instruct_chat / strict: joint search
+10:18:50 mixtral_instruct_chat / strict: per-layer best-expert curve
+10:18:55 mixtral_instruct_chat / relaxed: layer analysis
+10:18:55 mixtral_instruct_chat / relaxed: two-stage selection at L31
+10:19:00 mixtral_instruct_chat / relaxed: joint search
+10:19:09 mixtral_instruct_chat / relaxed: per-layer best-expert curve
+10:19:23 qwen3_bos_alllayers / paper: layer analysis
+10:19:23 qwen3_bos_alllayers / paper: two-stage selection at L44
+10:19:28 qwen3_bos_alllayers / paper: joint search
+10:19:59 qwen3_bos_alllayers / paper: per-layer best-expert curve
+10:20:07 qwen3_bos_alllayers / strict: layer analysis
+10:20:07 qwen3_bos_alllayers / strict: two-stage selection at L44
+10:20:11 qwen3_bos_alllayers / strict: joint search
+10:20:42 qwen3_bos_alllayers / strict: per-layer best-expert curve
+10:20:49 qwen3_bos_alllayers / relaxed: layer analysis
+10:20:50 qwen3_bos_alllayers / relaxed: two-stage selection at L44
+10:20:56 qwen3_bos_alllayers / relaxed: joint search
+10:21:41 qwen3_bos_alllayers / relaxed: per-layer best-expert curve
+10:21:55 mixtral_bos_alllayers / paper: layer analysis
+10:21:55 mixtral_bos_alllayers / paper: two-stage selection at L19
+10:21:58 mixtral_bos_alllayers / paper: joint search
+10:22:03 mixtral_bos_alllayers / paper: per-layer best-expert curve
+10:22:07 mixtral_bos_alllayers / strict: layer analysis
+10:22:07 mixtral_bos_alllayers / strict: two-stage selection at L19
+10:22:10 mixtral_bos_alllayers / strict: joint search
+10:22:16 mixtral_bos_alllayers / strict: per-layer best-expert curve
+10:22:21 mixtral_bos_alllayers / relaxed: layer analysis
+10:22:21 mixtral_bos_alllayers / relaxed: two-stage selection at L19
+10:22:26 mixtral_bos_alllayers / relaxed: joint search
+10:22:35 mixtral_bos_alllayers / relaxed: per-layer best-expert curve
+10:22:44 mixtral_nobos_alllayers / paper: layer analysis
+10:22:44 mixtral_nobos_alllayers / paper: two-stage selection at L19
+10:22:46 mixtral_nobos_alllayers / paper: joint search
+10:22:49 mixtral_nobos_alllayers / paper: per-layer best-expert curve
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:449: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:456: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+10:23:13 section written (68199 chars); attn curves included

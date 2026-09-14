@@ -1,0 +1,19 @@
+2026-09-14T06:24:34Z START ext2zoo-qwen3_coder_chat-sweep (waited 1424s): python scripts/ext2_zoo_sweep.py qwen3_coder --protocol chat
+06:24:48 qwen3_coder: sets=['paper', 'strict', 'relaxed'] union=539 cases
+06:24:50 running pass: 1078 prefill rows, 25872 spawn rows
+06:24:54   layer   0: load-wait 2.86s compute 0.69s  wf_rows=539
+06:25:03   layer   8: load-wait 1.02s compute 0.23s  wf_rows=4851
+[W914 06:25:11.935490815 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2518679552 bytes (free: 406257664, total: 23686938624).
+06:25:13   layer  16: load-wait 0.86s compute 0.27s  wf_rows=9163
+06:25:22   layer  24: load-wait 0.94s compute 0.30s  wf_rows=13475
+06:25:32   layer  32: load-wait 0.91s compute 0.34s  wf_rows=17787
+06:25:42   layer  40: load-wait 0.87s compute 0.37s  wf_rows=22099
+06:25:55   layer  47: load-wait 0.96s compute 0.40s  wf_rows=25872
+06:25:55   pass done: 1078 prefill rows (T=37), 25872 spawn rows, 65.1s
+06:25:55 pass time 65.4s
+06:25:56 set paper: L*=44 disc=+1.209 val@L*=+1.181 val argmax L44 +1.181 funnel strict 223/256
+06:25:56 set strict: L*=44 disc=+1.124 val@L*=+1.066 val argmax L44 +1.066 funnel strict 251/256
+06:25:56 set relaxed: L*=44 disc=+1.007 val@L*=+1.248 val argmax L44 +1.248 funnel strict 493/512
+06:25:56 done
+06:26:03 sink diag: layer 2: final-is-max-norm 0.000, final-attends-mostly-to-itself 0.353, pos0 mass 0.069, any-early-layer final-is-max 0.000
+2026-09-14T06:26:08Z END   ext2zoo-qwen3_coder_chat-sweep rc=0 (94s)

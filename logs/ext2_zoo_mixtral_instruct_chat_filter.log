@@ -1,0 +1,14 @@
+2026-09-14T06:46:17Z START ext2zoo-mixtral_instruct_chat-filter (waited 80s): python scripts/ext2_zoo_filter.py mixtral_instruct --protocol chat
+06:46:27 mixtral_instruct / chat -> mixtral_instruct_chat: special_tokens=False prefix_len=19 prefix='<s> [INST] Complete the sentence with the single most likely next word. [/INST]'
+06:46:28 embed_std=0.011152 sigma=0.033457 hidden=4096 layers=32
+06:46:36   layer   0: load-wait 6.10s compute 1.60s  wf_rows=0
+06:46:59   layer   8: load-wait 1.70s compute 1.18s  wf_rows=0
+06:47:22   layer  16: load-wait 1.71s compute 1.18s  wf_rows=0
+06:47:45   layer  24: load-wait 1.66s compute 1.18s  wf_rows=0
+06:48:05   layer  31: load-wait 1.71s compute 1.18s  wf_rows=0
+06:48:05   pass done: 2048 prefill rows (T=41), 0 spawn rows, 96.6s
+06:48:05 chunk done (1024 records, 96.9s, T=41): scanned=2034 tokenizable=1024 strict=803 relaxed=820
+06:48:06 scan summary: {"records_scanned": 2034, "tokenizable": 1024, "rejected": 1010, "n_strict_total": 803, "n_relaxed_total": 820, "strict_pass_rate_tokenizable": 0.7841796875, "relaxed_pass_rate_tokenizable": 0.80078125, "reject_reasons": {"multi_token": 1010}, "embed_std": 0.011152197606861591, "sigma": 0.033456592820584774, "protocol": "chat", "special_tokens": false, "prefix_len": 19, "mean_delta_clean": 10.370212614536285, "mean_drop": 7.54762863740325, "top1_clean_is_true_rate": 0.072265625}
+06:48:06 paper check: {"paper_ids_scan_rank_min": 0, "paper_ids_scan_rank_max": 580, "paper_ids_scan_rank_median": 300, "our_scan_last_rank": 2034, "paper_ids_within_scanned_prefix": 256, "paper_ids_tokenizable_in_scan": 256, "paper_ids_strict_in_scan": 220, "paper_ids_relaxed_in_scan": 221, "overlap_paper_vs_our_strict256": 220, "overlap_paper_vs_our_relaxed512": 221, "paper_ids_not_tokenizable": []}
+06:48:06 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/mixtral_instruct_chat
+2026-09-14T06:48:12Z END   ext2zoo-mixtral_instruct_chat-filter rc=0 (115s)

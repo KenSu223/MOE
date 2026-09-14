@@ -1,0 +1,80 @@
+{
+ "key": "olmoe",
+ "repo": "allenai/OLMoE-1B-7B-0125",
+ "label": "OLMoE-1B-7B-0125",
+ "family": "olmoe",
+ "base_counterpart": null,
+ "instruct": false,
+ "snapshot": "/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125/snapshots/9b0c1aa87e34a20052389dce1f0cf01da783f654",
+ "written_utc": "2026-09-14T05:20:09Z",
+ "architecture": [
+  "OlmoeForCausalLM"
+ ],
+ "n_layers": 16,
+ "n_experts": 64,
+ "top_k": 8,
+ "recommended_dtype": "float32",
+ "dtype_source": "config.json torch_dtype",
+ "tokenizer": {
+  "class": "GPTNeoXTokenizer",
+  "add_bos_token_field": false,
+  "add_eos_token_field": false,
+  "bos_token": null,
+  "eos_token": "<|endoftext|>",
+  "pad_token": "<|padding|>",
+  "special_tokens_map": {
+   "eos_token": "<|endoftext|>",
+   "pad_token": "<|padding|>"
+  },
+  "adds_bos": false,
+  "adds_eos": false,
+  "empirical_probe": "The Eiffel Tower is located in",
+  "ids_default": [
+   510,
+   444,
+   1648,
+   293,
+   20610,
+   310,
+   4441,
+   275
+  ],
+  "ids_no_special": [
+   510,
+   444,
+   1648,
+   293,
+   20610,
+   310,
+   4441,
+   275
+  ],
+  "tokens_added_front": [],
+  "tokens_added_back": [],
+  "verification": "tok(probe) vs tok(probe, add_special_tokens=False) on the downloaded snapshot"
+ },
+ "generation_config": {
+  "eos_token_id": 50279,
+  "pad_token_id": 1
+ },
+ "config_token_ids": {
+  "bos_token_id": null,
+  "eos_token_id": 50279,
+  "pad_token_id": 1
+ },
+ "chat_template": null,
+ "chat_template_source": null,
+ "default_system_prompt": null,
+ "chat_prefix_instruction": null,
+ "rendered_chat_prefix": null,
+ "rendered_chat_prefix_ids": null,
+ "rendered_chat_prefix_len": null,
+ "model_card": {
+  "present": false
+ },
+ "protocols": {
+  "default": "tokenizer defaults, raw cloze (identical to nobos: tokenizer adds nothing)",
+  "nobos": "no special tokens, raw cloze (paper protocol) (= default)",
+  "chat": "not applicable"
+ }
+}

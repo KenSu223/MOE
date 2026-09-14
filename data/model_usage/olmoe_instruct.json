@@ -1,0 +1,106 @@
+{
+ "key": "olmoe_instruct",
+ "repo": "allenai/OLMoE-1B-7B-0125-Instruct",
+ "label": "OLMoE-1B-7B-0125-Instruct",
+ "family": "olmoe",
+ "base_counterpart": "olmoe",
+ "instruct": true,
+ "snapshot": "/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125-Instruct/snapshots/b89a7c4bc24fb9e55ce2543c9458ce0ca5c4650e",
+ "written_utc": "2026-09-14T05:22:28Z",
+ "architecture": [
+  "OlmoeForCausalLM"
+ ],
+ "n_layers": 16,
+ "n_experts": 64,
+ "top_k": 8,
+ "recommended_dtype": "bfloat16",
+ "dtype_source": "config.json torch_dtype",
+ "tokenizer": {
+  "class": "GPTNeoXTokenizer",
+  "add_bos_token_field": false,
+  "add_eos_token_field": false,
+  "bos_token": "|||IP_ADDRESS|||",
+  "eos_token": "|||IP_ADDRESS|||",
+  "pad_token": "<pad>",
+  "special_tokens_map": {
+   "bos_token": "|||IP_ADDRESS|||",
+   "eos_token": "|||IP_ADDRESS|||",
+   "pad_token": "<pad>"
+  },
+  "adds_bos": false,
+  "adds_eos": false,
+  "empirical_probe": "The Eiffel Tower is located in",
+  "ids_default": [
+   510,
+   444,
+   1648,
+   293,
+   20610,
+   310,
+   4441,
+   275
+  ],
+  "ids_no_special": [
+   510,
+   444,
+   1648,
+   293,
+   20610,
+   310,
+   4441,
+   275
+  ],
+  "tokens_added_front": [],
+  "tokens_added_back": [],
+  "verification": "tok(probe) vs tok(probe, add_special_tokens=False) on the downloaded snapshot"
+ },
+ "generation_config": {
+  "eos_token_id": 50279,
+  "pad_token_id": 1
+ },
+ "config_token_ids": {
+  "bos_token_id": null,
+  "eos_token_id": 50279,
+  "pad_token_id": 1
+ },
+ "chat_template": "{{ bos_token }}{% for message in messages %}{% if message['role'] == 'system' %}{{ '<|system|>\n' + message['content'] + '\n' }}{% elif message['role'] == 'user' %}{{ '<|user|>\n' + message['content'] + '\n' }}{% elif message['role'] == 'assistant' %}{% if not loop.last %}{{ '<|assistant|>\n'  + message['content'] + eos_token + '\n' }}{% else %}{{ '<|assistant|>\n'  + message['content'] + eos_token }}{% endif %}{% endif %}{% if loop.last and add_generation_prompt %}{{ '<|assistant|>\n' }}{% endif %}{% endfor %}",
+ "chat_template_source": "tokenizer_config.json",
+ "default_system_prompt": null,
+ "chat_prefix_instruction": "Complete the sentence with the single most likely next word.",
+ "rendered_chat_prefix": "|||IP_ADDRESS|||<|user|>\nComplete the sentence with the single most likely next word.\n<|assistant|>\n",
+ "rendered_chat_prefix_ids": [
+  50279,
+  29,
+  93,
+  4537,
+  49651,
+  187,
+  26626,
+  253,
+  6197,
+  342,
+  253,
+  2014,
+  954,
+  2779,
+  1735,
+  3159,
+  15,
+  187,
+  29,
+  93,
+  515,
+  5567,
+  49651,
+  187
+ ],
+ "rendered_chat_prefix_len": 24,
+ "model_card": {
+  "present": false
+ },
+ "protocols": {
+  "default": "tokenizer defaults, raw cloze (identical to nobos: tokenizer adds nothing)",
+  "nobos": "no special tokens, raw cloze (paper protocol) (= default)",
+  "chat": "chat template + opened assistant turn as prefix_ids, cloze inside the assistant turn"
+ }
+}

@@ -1,0 +1,39 @@
+10:23:29 runs: ['olmoe_default', 'olmoe_instruct_default', 'olmoe_instruct_chat', 'qwen3_instruct_default', 'qwen3_instruct_chat', 'qwen3_coder_default', 'qwen3_coder_chat', 'mixtral_instruct_default', 'mixtral_instruct_nobos', 'mixtral_instruct_chat', 'qwen3_bos_alllayers', 'mixtral_bos_alllayers', 'mixtral_nobos_alllayers']
+10:23:29 olmoe_default: cached
+10:23:29 olmoe_instruct_default: cached
+10:23:29 olmoe_instruct_chat: cached
+10:23:29 qwen3_instruct_default: cached
+10:23:29 qwen3_instruct_chat: cached
+10:23:29 qwen3_coder_default: cached
+10:23:29 qwen3_coder_chat: cached
+10:23:29 mixtral_instruct_default: cached
+10:23:29 mixtral_instruct_nobos: cached
+10:23:29 mixtral_instruct_chat: cached
+10:23:29 qwen3_bos_alllayers: cached
+10:23:29 mixtral_bos_alllayers: cached
+10:23:29 mixtral_nobos_alllayers: cached
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:460: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = piv.mean(0)
+/home/ubuntu/MOE/scripts/ext2_zoo_analyze.py:467: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  add = (pa + pl - pb).mean(0)
+10:23:47 section written (68870 chars); attn curves included

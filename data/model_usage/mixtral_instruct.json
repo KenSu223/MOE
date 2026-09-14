@@ -1,0 +1,115 @@
+{
+ "key": "mixtral_instruct",
+ "repo": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+ "label": "Mixtral-8x7B-Instruct-v0.1",
+ "family": "mixtral",
+ "base_counterpart": "mixtral",
+ "instruct": true,
+ "snapshot": "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-Instruct-v0.1/snapshots/eba92302a2861cdc0098cc54bc9f17cb2c47eb61",
+ "written_utc": "2026-09-14T05:31:14Z",
+ "architecture": [
+  "MixtralForCausalLM"
+ ],
+ "n_layers": 32,
+ "n_experts": 8,
+ "top_k": 2,
+ "recommended_dtype": "bfloat16",
+ "dtype_source": "config.json torch_dtype",
+ "tokenizer": {
+  "class": "LlamaTokenizer",
+  "add_bos_token_field": true,
+  "add_eos_token_field": false,
+  "bos_token": "<s>",
+  "eos_token": "</s>",
+  "pad_token": null,
+  "special_tokens_map": {
+   "bos_token": "<s>",
+   "eos_token": "</s>",
+   "unk_token": "<unk>"
+  },
+  "adds_bos": true,
+  "adds_eos": false,
+  "empirical_probe": "The Eiffel Tower is located in",
+  "ids_default": [
+   1,
+   415,
+   413,
+   2728,
+   301,
+   19895,
+   349,
+   5651,
+   297
+  ],
+  "ids_no_special": [
+   415,
+   413,
+   2728,
+   301,
+   19895,
+   349,
+   5651,
+   297
+  ],
+  "tokens_added_front": [
+   1
+  ],
+  "tokens_added_back": null,
+  "verification": "tok(probe) vs tok(probe, add_special_tokens=False) on the downloaded snapshot"
+ },
+ "generation_config": {
+  "bos_token_id": 1,
+  "eos_token_id": 2
+ },
+ "config_token_ids": {
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": null
+ },
+ "chat_template": "{%- if messages[0]['role'] == 'system' %}\n    {%- set system_message = messages[0]['content'] %}\n    {%- set loop_messages = messages[1:] %}\n{%- else %}\n    {%- set loop_messages = messages %}\n{%- endif %}\n\n{{- bos_token }}\n{%- for message in loop_messages %}\n    {%- if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}\n        {{- raise_exception('After the optional system message, conversation roles must alternate user/assistant/user/assistant/...') }}\n    {%- endif %}\n    {%- if message['role'] == 'user' %}\n        {%- if loop.first and system_message is defined %}\n            {{- ' [INST] ' + system_message + '\\n\\n' + message['content'] + ' [/INST]' }}\n        {%- else %}\n            {{- ' [INST] ' + message['content'] + ' [/INST]' }}\n        {%- endif %}\n    {%- elif message['role'] == 'assistant' %}\n        {{- ' ' + message['content'] + eos_token}}\n    {%- else %}\n        {{- raise_exception('Only user and assistant roles are supported, with the exception of an initial optional system message!') }}\n    {%- endif %}\n{%- endfor %}\n",
+ "chat_template_source": "tokenizer_config.json",
+ "default_system_prompt": null,
+ "chat_prefix_instruction": "Complete the sentence with the single most likely next word.",
+ "rendered_chat_prefix": "<s> [INST] Complete the sentence with the single most likely next word. [/INST]",
+ "rendered_chat_prefix_ids": [
+  1,
+  733,
+  16289,
+  28793,
+  21929,
+  272,
+  12271,
+  395,
+  272,
+  2692,
+  1080,
+  3917,
+  1679,
+  1707,
+  28723,
+  733,
+  28748,
+  16289,
+  28793
+ ],
+ "rendered_chat_prefix_len": 19,
+ "model_card": {
+  "present": true,
+  "chars": 8727,
+  "dtype_mentions": [
+   "float16",
+   "torch.float16"
+  ],
+  "mentions_system_prompt": false,
+  "mentions_bos": true,
+  "mentions_thinking": false,
+  "mentions_apply_chat_template": true,
+  "recommended_sampling": null,
+  "license_line": "apache-2.0"
+ },
+ "protocols": {
+  "default": "tokenizer defaults, raw cloze (adds BOS)",
+  "nobos": "no special tokens, raw cloze (paper protocol)",
+  "chat": "chat template + opened assistant turn as prefix_ids, cloze inside the assistant turn"
+ }
+}

@@ -1,0 +1,11 @@
+2026-09-14T05:23:14Z START ext2zoo-olmoe_default-filter (waited 0s): python scripts/ext2_zoo_filter.py olmoe --protocol default
+05:23:25 olmoe / default -> olmoe_default: special_tokens=True prefix_len=0 prefix=''
+05:23:26 embed_std=0.009374 sigma=0.028122 hidden=2048 layers=16
+05:23:34   layer   0: load-wait 6.79s compute 1.15s  wf_rows=0
+05:23:37   layer   8: load-wait 0.21s compute 0.17s  wf_rows=0
+05:23:44   layer  15: load-wait 1.51s compute 0.17s  wf_rows=0
+05:23:45   pass done: 2048 prefill rows (T=18), 0 spawn rows, 18.4s
+05:23:45 chunk done (1024 records, 18.5s, T=18): scanned=1249 tokenizable=1024 strict=762 relaxed=789
+05:23:45 scan summary: {"records_scanned": 1249, "tokenizable": 1024, "rejected": 225, "n_strict_total": 762, "n_relaxed_total": 789, "strict_pass_rate_tokenizable": 0.744140625, "relaxed_pass_rate_tokenizable": 0.7705078125, "reject_reasons": {"multi_token": 225}, "embed_std": 0.009373849257826805, "sigma": 0.028121547773480415, "protocol": "default", "special_tokens": true, "prefix_len": 0, "mean_delta_clean": 4.755350112915039, "mean_drop": 4.144863054156303, "top1_clean_is_true_rate": 0.2099609375}
+05:23:45 strict=256 relaxed=512 written to /home/ubuntu/MOE/results/olmoe_default
+2026-09-14T05:23:50Z END   ext2zoo-olmoe_default-filter rc=0 (36s)
