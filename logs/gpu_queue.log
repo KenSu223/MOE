@@ -24,3 +24,50 @@
 2026-09-14T01:19:34Z END   ext3-corpus-wiki rc=0 (139s)
 2026-09-14T01:19:34Z START ext3-corpus-code (waited 0s): python scripts/ext3_corpus_routing.py mixtral --corpus code
 2026-09-14T01:21:43Z END   ext3-corpus-code rc=0 (129s)
+2026-09-14T05:18:06Z START ext2attn-verify (waited 0s): python scripts/verify_olmoe.py
+2026-09-14T05:19:58Z END   ext2attn-verify rc=0 (112s)
+2026-09-14T05:19:58Z START ext2attn-verify-newkinds (waited 0s): python scripts/ext2_attn_verify.py 20
+2026-09-14T05:22:05Z END   ext2attn-verify-newkinds rc=0 (127s)
+2026-09-14T05:22:05Z START ext2attn-olmoe-smoke (waited 92s): python scripts/ext2_attn_sweep.py olmoe --out olmoe_attnsweep --sets paper,strict --kinds attn_layer,layer,block,resid,block_diff
+2026-09-14T05:22:31Z END   ext2attn-olmoe-smoke rc=0 (26s)
+2026-09-14T05:23:14Z START ext2zoo-olmoe_default-filter (waited 0s): python scripts/ext2_zoo_filter.py olmoe --protocol default
+2026-09-14T05:23:50Z END   ext2zoo-olmoe_default-filter rc=0 (36s)
+2026-09-14T05:23:50Z START ext2zoo-olmoe_default-sweep (waited 0s): python scripts/ext2_zoo_sweep.py olmoe --protocol default
+2026-09-14T05:24:29Z END   ext2zoo-olmoe_default-sweep rc=0 (39s)
+2026-09-14T05:24:29Z START ext2zoo-olmoe_default-expert (waited 0s): python scripts/ext2_zoo_expert.py olmoe --protocol default --resume
+2026-09-14T05:25:01Z END   ext2zoo-olmoe_default-expert rc=0 (32s)
+2026-09-14T05:25:01Z START ext2zoo-qwen3_instruct_default-filter (waited 13s): python scripts/ext2_zoo_filter.py qwen3_instruct --protocol default
+2026-09-14T05:26:17Z END   ext2zoo-qwen3_instruct_default-filter rc=0 (76s)
+2026-09-14T05:26:17Z START ext2zoo-qwen3_coder_default-filter (waited 87s): python scripts/ext2_zoo_filter.py qwen3_coder --protocol default
+2026-09-14T05:27:33Z END   ext2zoo-qwen3_coder_default-filter rc=0 (76s)
+2026-09-14T05:27:34Z START ext2zoo-olmoe_instruct_default-filter (waited 104s): python scripts/ext2_zoo_filter.py olmoe_instruct --protocol default
+2026-09-14T05:27:55Z END   ext2zoo-olmoe_instruct_default-filter rc=0 (21s)
+2026-09-14T05:27:55Z START ext2attn-sweep-qwen3 (waited 98s): python scripts/ext2_attn_sweep.py qwen3 --out qwen3_bos_attnsweep --sets paper
+2026-09-14T05:29:06Z END   ext2attn-sweep-qwen3 rc=0 (71s)
+2026-09-14T05:29:06Z START ext2zoo-qwen3_instruct_default-sweep (waited 169s): python scripts/ext2_zoo_sweep.py qwen3_instruct --protocol default
+2026-09-14T05:30:27Z END   ext2zoo-qwen3_instruct_default-sweep rc=0 (81s)
+2026-09-14T05:30:27Z START ext2zoo-qwen3_coder_default-sweep (waited 173s): python scripts/ext2_zoo_sweep.py qwen3_coder --protocol default
+2026-09-14T05:31:45Z END   ext2zoo-qwen3_coder_default-sweep rc=0 (78s)
+2026-09-14T05:31:45Z START ext2zoo-olmoe_instruct_default-sweep (waited 230s): python scripts/ext2_zoo_sweep.py olmoe_instruct --protocol default
+2026-09-14T05:32:09Z END   ext2zoo-olmoe_instruct_default-sweep rc=0 (24s)
+2026-09-14T05:32:09Z START ext2attn-sweep-mixtral-bos (waited 183s): python scripts/ext2_attn_sweep.py mixtral --out mixtral_bos_attnsweep --sets paper
+2026-09-14T05:33:59Z END   ext2attn-sweep-mixtral-bos rc=0 (110s)
+2026-09-14T05:33:59Z START ext2zoo-qwen3_instruct_default-expert (waited 212s): python scripts/ext2_zoo_expert.py qwen3_instruct --protocol default --resume
+2026-09-14T05:37:39Z END   ext2zoo-qwen3_instruct_default-expert rc=0 (220s)
+2026-09-14T05:37:39Z START ext4-smoke (waited 367s): python scripts/ext4_scan.py qwen3 --out codefact_smoke --limit 48 --chunk 48
+2026-09-14T05:39:07Z END   ext4-smoke rc=0 (88s)
+2026-09-14T05:39:07Z START ext2zoo-mixtral_instruct_default-filter (waited 453s): python scripts/ext2_zoo_filter.py mixtral_instruct --protocol default
+2026-09-14T05:41:03Z END   ext2zoo-mixtral_instruct_default-filter rc=0 (116s)
+2026-09-14T05:41:03Z START ext2zoo-qwen3_coder_default-expert (waited 558s): python scripts/ext2_zoo_expert.py qwen3_coder --protocol default --resume
+2026-09-14T05:45:27Z END   ext2zoo-qwen3_coder_default-expert rc=0 (264s)
+2026-09-14T05:45:27Z START ext2zoo-olmoe_default-attn (waited 802s): python scripts/ext2_zoo_attn.py olmoe --protocol default
+2026-09-14T05:46:11Z END   ext2zoo-olmoe_default-attn rc=0 (44s)
+2026-09-14T05:46:11Z START ext2zoo-olmoe_instruct_default-expert (waited 842s): python scripts/ext2_zoo_expert.py olmoe_instruct --protocol default --resume
+2026-09-14T05:46:44Z END   ext2zoo-olmoe_instruct_default-expert rc=0 (33s)
+2026-09-14T05:46:44Z START ext2attn-sweep-mixtral-nobos (waited 765s): python scripts/ext2_attn_sweep.py mixtral --out mixtral_nobos_attnsweep --sets paper --base-run mixtral_nobos --no-special-tokens
+2026-09-14T05:48:37Z END   ext2attn-sweep-mixtral-nobos rc=0 (113s)
+2026-09-14T05:48:37Z START ext2zoo-qwen3_instruct_chat-filter (waited 658s): python scripts/ext2_zoo_filter.py qwen3_instruct --protocol chat
+2026-09-14T05:50:00Z END   ext2zoo-qwen3_instruct_chat-filter rc=0 (83s)
+2026-09-14T05:50:00Z START ext4-scan-codefact_qwen3_raw (waited 592s): python scripts/ext4_scan.py qwen3 --out codefact_qwen3_raw --protocol raw --chunk 1024
+2026-09-14T05:53:41Z END   ext4-scan-codefact_qwen3_raw rc=1 (221s)
+2026-09-14T05:53:41Z START ext4-scan-codefact_mixtral_nobos (waited 811s): python scripts/ext4_scan.py mixtral --out codefact_mixtral_nobos --protocol nobos --chunk 768 --per-category-max 800

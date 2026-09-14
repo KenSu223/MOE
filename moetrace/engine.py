@@ -10,6 +10,20 @@ One decoder layer is resident on the GPU at a time (see weights.LayerStreamer). 
       h = resid_pre_moe_noised[final] + bf16(MoEOut_noised_fp32 + v)
   and then runs layers l+1..L-1 attending to the parent's K/V (positions 0..len-2) plus its own K/V (position len-1).
 
+  Sublayer kinds (ext2, attention-vs-MoE attribution). Writing the decoder layer as
+      h_attn = h_pre + Attn_l(h_pre);   h_out = h_attn + MoE_l(h_attn)
+  with all quantities at the final position of the noised (parent) or clean run:
+    * attn_layer  spawns BEFORE the MoE of layer l:  h = h_pre_noised + Attn_l_clean  (bf16, the same op order as the
+                  clean run), the MoE of layer l then runs on the patched residual, and the row continues from l+1.
+    * block       h = (h_pre_noised + Attn_l_clean) + MoE_l_clean: both sublayer outputs of layer l replaced by the
+                  clean run's, i.e. attention + MoE patched together (equals `resid` only if h_pre agreed).
+    * resid       h = h_out_clean: the clean final-position residual after layer l (classic hidden-state restoration);
+                  differs from `block` by the upstream difference h_pre_clean - h_pre_noised.
+    * block_diff  numerics check for `block`: h = h_pre_moe_noised + bf16(MoE_noised + (MoE_clean - MoE_noised) +
+                  (Attn_clean - Attn_noised)), the two sublayer differences added to the noised residual.
+  `layer` (MoE output patch) is unchanged. PassResult.sp_vnorm holds |Attn_clean - Attn_noised| (attn_layer),
+  |dAttn + dMoE| (block, block_diff) and |h_out_clean - h_out_noised| (resid) in fp32.
+
 Numerics follow transformers 5.16 modeling files (RMSNorm in fp32 then cast; RoPE tables fp32 -> bf16; router logits
 bf16, softmax fp32, top-k, optional renormalisation; routing weights cast to bf16 for Qwen3/OLMoE and kept fp32 for
 Mixtral; expert MLP in bf16; residual stream bf16).
@@ -29,7 +43,10 @@ from .arch import ArchSpec, load_spec
 from .weights import CheckpointStore, LayerStreamer, LayerWeights
 
 BF16 = torch.bfloat16
-KINDS = ("zero", "layer", "expert", "expert_scaled", "coalition_clean", "coalition_union")
+KINDS = ("zero", "layer", "expert", "expert_scaled", "coalition_clean", "coalition_union",
+         "attn_layer", "block", "resid", "block_diff")
+PRE_MOE_KINDS = ("attn_layer",)  # spawned after the attention sublayer, before the MoE of the spawn layer
+DIRECT_KINDS = ("block", "resid")  # spawned after the MoE with a directly constructed residual (no _build_v vector)
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -215,6 +232,8 @@ class DiagSpec:
                         [B, T, k], topv fp32 [B, T, k], router logits fp32 [B, T, E])
     attn_sink           (with attn_final, only when some row has a sink_donor) final-position attention mass on the
                         transplanted sink slot: fp16 [L, B, nH]
+    attn_out_final      (ext2) final-position attention-sublayer output (after o_proj, the vector added to the
+                        residual) at each layer: bf16 [L, B, H] (torch tensor on CPU)
     """
     attn_final: bool = False
     resid_norms: bool = False
@@ -222,10 +241,12 @@ class DiagSpec:
     resid_final: bool = False
     token_logprobs: bool = False
     route_all_layers: tuple = ()
+    attn_out_final: bool = False
 
     @property
     def any_layer(self) -> bool:
-        return self.attn_final or self.resid_norms or self.router_logits_final or self.resid_final or bool(self.route_all_layers)
+        return (self.attn_final or self.resid_norms or self.router_logits_final or self.resid_final
+                or bool(self.route_all_layers) or self.attn_out_final)
 
 
 @dataclass
@@ -303,8 +324,9 @@ class Engine:
             k = rmsnorm(k, w.k_norm, s.rms_eps)
         return q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2)
 
-    def _build_v(self, spawns, idx, acc_f, topi_f, contrib, out_alpha, out_ne, out_np):
-        """Intervention vectors for the spawn indices idx (all at the current layer). Returns [n, H] fp32."""
+    def _build_v(self, spawns, idx, acc_f, topi_f, contrib, out_alpha, out_ne, out_np, attn_f=None):
+        """Intervention vectors for the spawn indices idx (all at the current layer). Returns [n, H] fp32.
+        attn_f (bf16 [B, H], ext2): final-position attention-sublayer output of the prefill rows (kind block_diff)."""
         dev = self.device
         n = len(idx)
         Hd = self.hidden
@@ -356,6 +378,9 @@ class Engine:
                     # experts routed only in the noised run contribute delta_e = -c_e^noised
                     vv = vv - (contrib[p] * (1.0 - in_clean)[..., None]).sum(1)
                 v[sel] = vv
+            elif kind == "block_diff":  # ext2 numerics check: both sublayer differences of this layer
+                assert attn_f is not None
+                v[sel] = (acc_f[c] - acc_f[p]) + (attn_f[c].float() - attn_f[p].float())
             else:
                 raise ValueError(kind)
         out_alpha[idx] = alpha.cpu().numpy()
@@ -400,10 +425,22 @@ class Engine:
 
         # spawns grouped by layer
         S = len(spawns)
-        by_layer: dict[int, list[int]] = {}
+        by_layer: dict[int, list[int]] = {}  # vector kinds, spawned after the MoE: h = resid_pre_moe + bf16(acc + v)
+        by_layer_pre: dict[int, list[int]] = {}  # ext2 attn_layer: spawned after attention, before this layer's MoE
+        by_layer_direct: dict[int, list[int]] = {}  # ext2 block / resid: spawned after the MoE, residual built directly
+        need_attn_f: set[int] = set()  # layers whose final-position attention output is needed for spawns
         for i, sp in enumerate(spawns):
             assert sp.kind in KINDS, sp.kind
-            by_layer.setdefault(sp.layer, []).append(i)
+            if sp.kind in PRE_MOE_KINDS:
+                by_layer_pre.setdefault(sp.layer, []).append(i)
+                need_attn_f.add(sp.layer)
+            elif sp.kind in DIRECT_KINDS:
+                by_layer_direct.setdefault(sp.layer, []).append(i)
+                need_attn_f.add(sp.layer)
+            else:
+                by_layer.setdefault(sp.layer, []).append(i)
+                if sp.kind == "block_diff":
+                    need_attn_f.add(sp.layer)
         wf_H = torch.empty(S, Hd, dtype=BF16, device=dev)
         wf_parent = torch.empty(S, dtype=torch.long, device=dev)
         wf_row_of_spawn = np.full(S, -1, dtype=np.int64)
@@ -454,6 +491,8 @@ class Engine:
             dg["router_logits_final"] = np.zeros((L, B, s.n_experts), dtype=np.float32)
         if diag.resid_final:
             dg["resid_final"] = torch.empty((L, B, Hd), dtype=BF16)
+        if diag.attn_out_final:
+            dg["attn_out_final"] = torch.empty((L, B, Hd), dtype=BF16)
         if diag.route_all_layers:
             dg["route_all"] = {}
         valid_pos = (torch.arange(T, device=dev)[None, :] < lens_t[:, None])  # [B, T]
@@ -484,6 +523,13 @@ class Engine:
             else:
                 o = attn_prefill(q, k_att, v_att, mask_att, scale, None, row_chunk)
             o = F.linear(o.transpose(1, 2).reshape(B, T, s.n_heads * s.head_dim), w.wo)
+            attn_f = pre_attn_f = None
+            if l in need_attn_f or diag.attn_out_final:
+                attn_f = o[ar, final_t]  # final-position attention-sublayer output (added to the residual), bf16 [B, H]
+                if diag.attn_out_final:
+                    dg["attn_out_final"][l] = attn_f.cpu()
+            if l in need_attn_f:
+                pre_attn_f = Hs[ar, final_t]  # residual entering layer l at the final position, bf16 [B, H]
             Hs = Hs + o
             # ---- attention: wavefront rows
             if n_wf > 0:
@@ -500,6 +546,18 @@ class Engine:
                                     sink_valid=has_sink_t if use_sink else None)
                 ow = F.linear(ow.reshape(n_wf, s.n_heads * s.head_dim), w.wo)
                 wf_H[:n_wf] = hw + ow
+            # ---- ext2 spawns before the MoE: attn_layer rows start as h_pre_noised + Attn_l_clean (same op order as
+            #      the clean run's residual add) and go through this layer's MoE with the other wavefront rows
+            if l in by_layer_pre:
+                idx = by_layer_pre[l]
+                n = len(idx)
+                parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
+                cleans = torch.tensor([spawns[i].clean for i in idx], device=dev)
+                wf_H[n_wf : n_wf + n] = pre_attn_f[parents] + attn_f[cleans]
+                sp_vnorm[idx] = (attn_f[cleans].float() - attn_f[parents].float()).norm(dim=-1).cpu().numpy()
+                wf_parent[n_wf : n_wf + n] = parents
+                wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
+                n_wf += n
             del q, k, v, o, x, k_att, v_att
             # ---- MoE
             x2 = rmsnorm(Hs, w.ln2, s.rms_eps).view(B * T, Hd)
@@ -537,10 +595,10 @@ class Engine:
             if l in by_layer:
                 idx = by_layer[l]
                 if len(idx) <= bv_chunk:
-                    vvec = self._build_v(spawns, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np)
+                    vvec = self._build_v(spawns, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np, attn_f=attn_f)
                 else:  # bound the [n, k, H] fp32 temporaries of _build_v (identical result)
-                    vvec = torch.cat([self._build_v(spawns, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np)
-                                      for c0 in range(0, len(idx), bv_chunk)], 0)
+                    vvec = torch.cat([self._build_v(spawns, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np,
+                                                    attn_f=attn_f) for c0 in range(0, len(idx), bv_chunk)], 0)
                 sp_vnorm[idx] = vvec.norm(dim=-1).cpu().numpy()
                 parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
                 h_new = resid_final[parents] + (acc_f[parents] + vvec).to(BF16)
@@ -549,6 +607,35 @@ class Engine:
                 wf_parent[n_wf : n_wf + n] = parents
                 wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
                 n_wf += n
+            # ---- ext2 direct kinds (after the MoE): block = (h_pre_noised + Attn_clean) + MoE_clean; resid = h_out_clean
+            if l in by_layer_direct:
+                idx = by_layer_direct[l]
+                n = len(idx)
+                kinds_d = np.array([spawns[i].kind for i in idx])
+                parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
+                cleans = torch.tensor([spawns[i].clean for i in idx], device=dev)
+                h_out_f = Hs[ar, final_t]  # residual after layer l at the final position, bf16 [B, H]
+                out_f = out_bf[final_idx]  # bf16 MoE output of the prefill rows at the final position
+                h_new = torch.empty(n, Hd, dtype=BF16, device=dev)
+                vn = torch.zeros(n, dtype=torch.float32, device=dev)
+                sel_np = np.nonzero(kinds_d == "block")[0]
+                if len(sel_np):
+                    sel = torch.tensor(sel_np, device=dev)
+                    p, c = parents[sel], cleans[sel]
+                    h_new[sel] = (pre_attn_f[p] + attn_f[c]) + out_f[c]
+                    vn[sel] = ((attn_f[c].float() - attn_f[p].float()) + (acc_f[c] - acc_f[p])).norm(dim=-1)
+                sel_np = np.nonzero(kinds_d == "resid")[0]
+                if len(sel_np):
+                    sel = torch.tensor(sel_np, device=dev)
+                    p, c = parents[sel], cleans[sel]
+                    h_new[sel] = h_out_f[c]
+                    vn[sel] = (h_out_f[c].float() - h_out_f[p].float()).norm(dim=-1)
+                wf_H[n_wf : n_wf + n] = h_new
+                sp_vnorm[idx] = vn.cpu().numpy()
+                wf_parent[n_wf : n_wf + n] = parents
+                wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
+                n_wf += n
+                del h_out_f, out_f, h_new, vn
             del x2, out_bf, acc, topi, topv, contrib
             torch.cuda.synchronize()
             t_done = time.time()

@@ -1,0 +1,20 @@
+2026-09-14T05:27:55Z START ext2attn-sweep-qwen3 (waited 98s): python scripts/ext2_attn_sweep.py qwen3 --out qwen3_bos_attnsweep --sets paper
+05:27:56 qwen3 -> qwen3_bos_attnsweep: sets=['paper'] union=256 cases, kinds=['attn_layer', 'layer', 'block', 'resid'], special_tokens=True
+05:28:00 running pass: 512 prefill rows, 49152 spawn rows
+05:28:04   layer   0: load-wait 3.08s compute 0.52s  wf_rows=1024
+05:28:13   layer   8: load-wait 1.10s compute 0.12s  wf_rows=9216
+05:28:23   layer  16: load-wait 1.10s compute 0.15s  wf_rows=17408
+05:28:33   layer  24: load-wait 1.04s compute 0.20s  wf_rows=25600
+05:28:43   layer  32: load-wait 1.00s compute 0.24s  wf_rows=33792
+05:28:53   layer  40: load-wait 0.96s compute 0.29s  wf_rows=41984
+05:29:02   layer  47: load-wait 0.91s compute 0.33s  wf_rows=49152
+05:29:02   pass done: 512 prefill rows (T=16), 49152 spawn rows, 61.0s
+05:29:02 pass time 61.2s
+/home/ubuntu/MOE/scripts/ext2_attn_sweep.py:152: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+05:29:02 set paper kind attn_layer: L*=40 disc=+1.718 val@L*=+1.594 val argmax L40 +1.594
+05:29:02 set paper kind layer     : L*=44 disc=+0.989 val@L*=+0.925 val argmax L44 +0.925
+05:29:02 set paper kind block     : L*=40 disc=+2.089 val@L*=+1.946 val argmax L40 +1.946
+05:29:02 set paper kind resid     : L*=47 disc=+6.241 val@L*=+5.639 val argmax L47 +5.639
+05:29:02 done
+2026-09-14T05:29:06Z END   ext2attn-sweep-qwen3 rc=0 (71s)

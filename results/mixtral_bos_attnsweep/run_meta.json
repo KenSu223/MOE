@@ -1,0 +1,44 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "base_run": "mixtral",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "kinds": [
+  "attn_layer",
+  "layer",
+  "block",
+  "resid"
+ ],
+ "agent": "ext2-attn-patch",
+ "experiment": "ext2 attention-vs-MoE attribution sweep (RESEARCH_PLAN Direction 2, Question B)",
+ "command": "python scripts/ext2_attn_sweep.py mixtral --out mixtral_bos_attnsweep --sets paper",
+ "created_utc": "2026-09-14T05:32:13Z",
+ "n_cases": 256,
+ "rejected": [],
+ "complete": true,
+ "layers": "0-31 (32 of 32)",
+ "completed_utc": "2026-09-14T05:33:52Z",
+ "pass_time_s": 97.61517071723938,
+ "n_rows": 33280,
+ "prefill_rows": 512,
+ "spawn_rows": 32768,
+ "rows_by_kind": {
+  "attn_layer": 8192,
+  "layer": 8192,
+  "block": 8192,
+  "resid": 8192,
+  "clean": 256,
+  "noised": 256
+ },
+ "outputs": [
+  "sweep_rows.parquet",
+  "sweep_routing.parquet",
+  "sweep_cases.parquet",
+  "sweep_summary.json"
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "model": "olmoe",
+ "repo": "allenai/OLMoE-1B-7B-0125",
+ "base_run": "olmoe",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "strict"
+ ],
+ "kinds": [
+  "attn_layer",
+  "layer",
+  "block",
+  "resid",
+  "block_diff"
+ ],
+ "agent": "ext2-attn-patch",
+ "experiment": "ext2 attention-vs-MoE attribution sweep (RESEARCH_PLAN Direction 2, Question B)",
+ "command": "python scripts/ext2_attn_sweep.py olmoe --out olmoe_attnsweep --sets paper,strict --kinds attn_layer,layer,block,resid,block_diff",
+ "created_utc": "2026-09-14T05:22:17Z",
+ "n_cases": 32,
+ "rejected": [],
+ "complete": true,
+ "layers": "0-15 (16 of 16)",
+ "completed_utc": "2026-09-14T05:22:26Z",
+ "pass_time_s": 8.321129560470581,
+ "n_rows": 2624,
+ "prefill_rows": 64,
+ "spawn_rows": 2560,
+ "rows_by_kind": {
+  "attn_layer": 512,
+  "layer": 512,
+  "block": 512,
+  "resid": 512,
+  "block_diff": 512,
+  "clean": 32,
+  "noised": 32
+ },
+ "outputs": [
+  "sweep_rows.parquet",
+  "sweep_routing.parquet",
+  "sweep_cases.parquet",
+  "sweep_summary.json"
+ ]
+}

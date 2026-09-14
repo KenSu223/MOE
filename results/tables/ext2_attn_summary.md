@@ -1,0 +1,20 @@
+**Attention vs MoE attribution: peaks per model and patched component**
+
+| Model / protocol | Patched component | L* (disc.) | Val. rescue at L* [CI] | Val. argmax | Val. max [CI] | AUC+ | CoM |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base (tokenizer defaults) | attention output | L40 | +1.594 [+1.410, +1.791] | L40 | +1.594 [+1.410, +1.791] | 3.95 | 36.3 |
+| Qwen3-30B-A3B-Base (tokenizer defaults) | MoE output | L44 | +0.925 [+0.774, +1.096] | L44 | +0.925 [+0.774, +1.096] | 3.76 | 38.6 |
+| Qwen3-30B-A3B-Base (tokenizer defaults) | attention + MoE (block) | L40 | +1.946 [+1.734, +2.169] | L40 | +1.946 [+1.734, +2.169] | 7.30 | 37.6 |
+| Qwen3-30B-A3B-Base (tokenizer defaults) | residual after layer (hidden state) | L47 | +5.639 [+5.020, +6.292] | L47 | +5.639 [+5.020, +6.292] | 94.13 | 36.0 |
+| Mixtral-8x7B-v0.1 (BOS, tokenizer default) | attention output | L18 | +0.988 [+0.820, +1.164] | L18 | +0.988 [+0.820, +1.164] | 4.93 | 20.1 |
+| Mixtral-8x7B-v0.1 (BOS, tokenizer default) | MoE output | L19 | +0.561 [+0.451, +0.683] | L19 | +0.561 [+0.451, +0.683] | 3.95 | 20.6 |
+| Mixtral-8x7B-v0.1 (BOS, tokenizer default) | attention + MoE (block) | L19 | +1.374 [+1.180, +1.577] | L19 | +1.374 [+1.180, +1.577] | 8.44 | 20.0 |
+| Mixtral-8x7B-v0.1 (BOS, tokenizer default) | residual after layer (hidden state) | L31 | +4.954 [+4.384, +5.526] | L31 | +4.954 [+4.384, +5.526] | 72.96 | 22.9 |
+| Mixtral-8x7B-v0.1 (no BOS, paper protocol) | attention output | L24 | +0.929 [+0.786, +1.082] | L24 | +0.929 [+0.786, +1.082] | 4.94 | 21.1 |
+| Mixtral-8x7B-v0.1 (no BOS, paper protocol) | MoE output | L21 | +0.531 [+0.417, +0.656] | L21 | +0.531 [+0.417, +0.656] | 3.29 | 19.8 |
+| Mixtral-8x7B-v0.1 (no BOS, paper protocol) | attention + MoE (block) | L19 | +1.183 [+0.980, +1.381] | L19 | +1.183 [+0.980, +1.381] | 7.91 | 20.1 |
+| Mixtral-8x7B-v0.1 (no BOS, paper protocol) | residual after layer (hidden state) | L31 | +4.919 [+4.463, +5.384] | L31 | +4.919 [+4.463, +5.384] | 67.39 | 22.9 |
+| OLMoE-1B-7B-0125 (pilot) | attention output | L13 | +2.713 [+1.596, +3.959] | L12 | +2.942 [+1.816, +4.176] | 11.37 | 11.7 |
+| OLMoE-1B-7B-0125 (pilot) | MoE output | L12 | +1.223 [+0.677, +1.824] | L13 | +1.434 [+0.815, +2.084] | 3.94 | 11.1 |
+| OLMoE-1B-7B-0125 (pilot) | attention + MoE (block) | L12 | +3.955 [+2.687, +5.320] | L12 | +3.955 [+2.687, +5.320] | 13.07 | 11.7 |
+| OLMoE-1B-7B-0125 (pilot) | residual after layer (hidden state) | L14 | +6.509 [+4.476, +8.691] | L14 | +6.509 [+4.476, +8.691] | 31.46 | 12.5 |

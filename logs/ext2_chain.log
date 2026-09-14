@@ -1,0 +1,47 @@
+2026-09-14T05:26:17Z chain start
+delta_bmm_vs_fullmatmul_frac_equal            before                    1.0  after                    1.0
+delta_bmm_vs_fullmatmul_maxdiff               before                    0.0  after                    0.0
+delta_clean_frac_within_0.1                   before                   0.72  after                   0.72
+delta_clean_maxdiff_vs_hf                     before              0.3828125  after              0.3828125
+delta_noised_frac_within_0.1                  before                   0.46  after                   0.46
+delta_noised_maxdiff_vs_hf                    before             0.61328125  after             0.61328125
+embed_std_engine                              before   0.009373849257826805  after   0.009373849257826805
+embed_std_hf                                  before   0.009373849257826805  after   0.009373849257826805
+expert_patch_vs_hf_frac_within_0.1            before      0.334841628959276  after      0.334841628959276
+expert_patch_vs_hf_maxdiff                    before             1.07421875  after             1.07421875
+expert_patch_vs_hf_n                          before                    221  after                    221
+layer_patch_vs_hf_frac_within_0.1             before                   0.58  after                   0.58
+layer_patch_vs_hf_maxdiff                     before               0.578125  after               0.578125
+layer_patch_vs_hf_n                           before                     50  after                     50
+layer_rescue_vs_hf_maxdiff                    before            0.498046875  after            0.498046875
+logit_true_clean_maxdiff_vs_hf                before                0.28125  after                0.28125
+mean_layer_rescue_curve                       before [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]  after [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]
+routing_set_agreement                         before                  38/40  after                  38/40
+top1_agreement_clean                          before                   0.98  after                   0.98
+union_vs_layer_frac_equal                     before                    1.0  after                    1.0
+union_vs_layer_maxdiff                        before                    0.0  after                    0.0
+zero_on_clean_maxdiff                         before                  0.125  after                  0.125
+zero_on_noised_maxdiff                        before                0.40625  after                0.40625
+verify_olmoe identity: 23/23 non-timing metrics bit-identical
+bf16 noise floor (layer_vs_hf_maxdiff)        1.1211
+attn_layer_vs_hf_maxdiff                        1.609375  <= 1.682
+block_vs_hf_maxdiff                               1.1875  <= 1.682
+resid_vs_hf_maxdiff                             0.953125  <= 1.682
+attn_layer_vs_hf_meanabsdiff                  0.18733903765678406  <= 0.225
+block_vs_hf_meanabsdiff                       0.17974528670310974  <= 0.225
+resid_vs_hf_meanabsdiff                       0.13118667900562286  <= 0.225
+attn_layer_mean_curve_maxdiff_vs_hf           0.08056640641443664  <= 0.148
+block_mean_curve_maxdiff_vs_hf                0.07205810588784511  <= 0.148
+resid_mean_curve_maxdiff_vs_hf                0.06914059817790985  <= 0.148
+attn_layer_rescue_corr_vs_hf                  0.9899363676660085  >= 0.950
+block_rescue_corr_vs_hf                       0.9935673564110311  >= 0.950
+resid_rescue_corr_vs_hf                       0.9984821546178613  >= 0.950
+identity_attn_layer_maxdiff                      0.09375  <= 0.500
+identity_block_maxdiff                           0.09375  <= 0.500
+identity_resid_maxdiff                           0.09375  <= 0.500
+block_vs_block_diff_maxdiff                   0.556640625  <= 0.700
+block_vs_block_diff_frac_within_0.1             0.903125  >= 0.800
+vnorm_vs_hf: {"attn_layer": {"max_reldiff": 0.05729157766794766, "mean_engine": 0.8676166534423828, "mean_hf": 0.8688024316215888}, "layer": {"max_reldiff": 0.09726377675509218, "mean_engine": 1.1869819164276123, "mean_hf": 1.1895748556824401}, "resid": {"max_reldiff": 0.14906621992767122, "mean_engine": 2.591315746307373, "mean_hf": 2.597141926200129}}
+GATE PASS
+2026-09-14T05:26:17Z gate passed
+2026-09-14T05:48:37Z chain done

@@ -1,0 +1,18 @@
+2026-09-14T05:46:44Z START ext2attn-sweep-mixtral-nobos (waited 765s): python scripts/ext2_attn_sweep.py mixtral --out mixtral_nobos_attnsweep --sets paper --base-run mixtral_nobos --no-special-tokens
+05:46:46 mixtral -> mixtral_nobos_attnsweep: sets=['paper'] union=256 cases, kinds=['attn_layer', 'layer', 'block', 'resid'], special_tokens=False
+05:46:51 running pass: 512 prefill rows, 32768 spawn rows
+05:47:00   layer   0: load-wait 7.54s compute 0.65s  wf_rows=1024
+05:47:22   layer   8: load-wait 2.61s compute 0.27s  wf_rows=9216
+05:47:46   layer  16: load-wait 2.50s compute 0.41s  wf_rows=17408
+05:48:09   layer  24: load-wait 2.33s compute 0.54s  wf_rows=25600
+05:48:29   layer  31: load-wait 2.25s compute 0.65s  wf_rows=32768
+05:48:29   pass done: 512 prefill rows (T=18), 32768 spawn rows, 97.9s
+05:48:29 pass time 98.1s
+/home/ubuntu/MOE/scripts/ext2_attn_sweep.py:152: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+05:48:30 set paper kind attn_layer: L*=24 disc=+0.918 val@L*=+0.929 val argmax L24 +0.929
+05:48:30 set paper kind layer     : L*=21 disc=+0.387 val@L*=+0.531 val argmax L21 +0.531
+05:48:30 set paper kind block     : L*=19 disc=+1.053 val@L*=+1.183 val argmax L19 +1.183
+05:48:30 set paper kind resid     : L*=31 disc=+4.664 val@L*=+4.919 val argmax L31 +4.919
+05:48:30 done
+2026-09-14T05:48:37Z END   ext2attn-sweep-mixtral-nobos rc=0 (113s)

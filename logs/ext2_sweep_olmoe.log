@@ -1,0 +1,17 @@
+2026-09-14T05:22:05Z START ext2attn-olmoe-smoke (waited 92s): python scripts/ext2_attn_sweep.py olmoe --out olmoe_attnsweep --sets paper,strict --kinds attn_layer,layer,block,resid,block_diff
+05:22:10 olmoe -> olmoe_attnsweep: sets=['strict'] union=32 cases, kinds=['attn_layer', 'layer', 'block', 'resid', 'block_diff'], special_tokens=True
+05:22:18 running pass: 64 prefill rows, 2560 spawn rows
+05:22:20   layer   0: load-wait 1.85s compute 0.42s  wf_rows=160
+05:22:22   layer   8: load-wait 0.12s compute 0.05s  wf_rows=1440
+05:22:26   layer  15: load-wait 0.73s compute 0.03s  wf_rows=2560
+05:22:26   pass done: 64 prefill rows (T=14), 2560 spawn rows, 8.3s
+05:22:26 pass time 8.5s
+/home/ubuntu/MOE/scripts/ext2_attn_sweep.py:152: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+05:22:26 set strict kind attn_layer: L*=13 disc=+3.310 val@L*=+2.713 val argmax L12 +2.942
+05:22:26 set strict kind layer     : L*=12 disc=+2.020 val@L*=+1.223 val argmax L13 +1.434
+05:22:26 set strict kind block     : L*=12 disc=+4.331 val@L*=+3.955 val argmax L12 +3.955
+05:22:26 set strict kind resid     : L*=14 disc=+7.879 val@L*=+6.509 val argmax L14 +6.509
+05:22:26 set strict kind block_diff: L*=12 disc=+4.345 val@L*=+3.946 val argmax L12 +3.946
+05:22:26 done
+2026-09-14T05:22:31Z END   ext2attn-olmoe-smoke rc=0 (26s)

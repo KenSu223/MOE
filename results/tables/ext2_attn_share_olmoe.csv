@@ -1,0 +1,5 @@
+Where,Layer,Attention rescue,MoE rescue,Attention share attn/(attn+moe) [95% CI]
+at the MoE-peak layer,L12,+2.942,+1.223,"+0.706 [+0.585, +0.810]"
+at the attention-peak layer,L13,+2.713,+1.434,"+0.654 [+0.545, +0.756]"
+at the block-peak layer,L12,+2.942,+1.223,"+0.706 [+0.585, +0.810]"
+overall (AUC+ of the validation curves),all,11.37,3.94,"+0.743 [+0.687, +0.779]"

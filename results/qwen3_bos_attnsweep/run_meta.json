@@ -1,0 +1,44 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "base_run": "qwen3",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "kinds": [
+  "attn_layer",
+  "layer",
+  "block",
+  "resid"
+ ],
+ "agent": "ext2-attn-patch",
+ "experiment": "ext2 attention-vs-MoE attribution sweep (RESEARCH_PLAN Direction 2, Question B)",
+ "command": "python scripts/ext2_attn_sweep.py qwen3 --out qwen3_bos_attnsweep --sets paper",
+ "created_utc": "2026-09-14T05:27:59Z",
+ "n_cases": 256,
+ "rejected": [],
+ "complete": true,
+ "layers": "0-47 (48 of 48)",
+ "completed_utc": "2026-09-14T05:29:02Z",
+ "pass_time_s": 61.01825404167175,
+ "n_rows": 49664,
+ "prefill_rows": 512,
+ "spawn_rows": 49152,
+ "rows_by_kind": {
+  "attn_layer": 12288,
+  "layer": 12288,
+  "block": 12288,
+  "resid": 12288,
+  "clean": 256,
+  "noised": 256
+ },
+ "outputs": [
+  "sweep_rows.parquet",
+  "sweep_routing.parquet",
+  "sweep_cases.parquet",
+  "sweep_summary.json"
+ ]
+}

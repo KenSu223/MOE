@@ -260,3 +260,104 @@
 - Next: wave 2 (ext2-model-zoo, ext2-attn-patch, ext4-codefact-data) with two brief changes from wave 1: model-zoo
   runs the all-layer expert pass (joint search) as standard, and every run reports the fraction of prompts whose
   final token carries the sink state (final-position norm ratio / attention-on-self) as a protocol diagnostic.
+
+## 2026-09-14 05:26 UTC — ext2-model-zoo
+- Setup: registry entries for `olmoe_instruct`, `qwen3_instruct`, `qwen3_coder`, `mixtral_instruct` in moetrace/models.py (+ family/base/instruct
+  fields on all models); `moetrace/ext2_zoo.py` (protocols default/nobos/chat, chat-prefix rendering, run_meta, sink diagnostic, pattern label);
+  scripts `ext2_zoo_usage.py` (data/model_usage/<key>.json from tokenizer_config/generation_config/config/chat template/model card + empirical
+  tokenizer probe), `ext2_zoo_filter.py` (run_filter with --protocol/--out, prefix_ids, base model's paper set), `ext2_zoo_sweep.py` /
+  `ext2_zoo_expert.py` (wrappers around run_sweep/run_expert: prefix_ids bound into cases_by_id, DiagSpec(attn_final, resid_norms) ->
+  sink_diag.json, automatic layer chunking at <= 90k rows), `ext2_zoo_chain.sh` (filter -> sweep -> all-layer expert per protocol via gpu_queue),
+  `ext2_zoo_download.sh` (sequential downloads with a 15 GB floor).
+- Downloads (NVMe, HF cache): OLMoE-Instruct 13.8 GB (34 s), Qwen3-Instruct-2507 61 GB (127 s), Qwen3-Coder 61 GB (132 s) done; Mixtral-Instruct
+  93 GB in progress. Model cards (README.md) fetched for all 7 repos. Free space after all four: ~42 GB (the 65 GB `/opt/dlami/nvme/offload`
+  folder from hf_reference_check and 11 GB of `.incomplete` blobs in the OLMoE base cache are not mine and were left alone).
+- Usage specs: OLMoE base/Instruct and Qwen3 family add no special tokens (`default` == `nobos`, run once). OLMoE-Instruct quirk: its tokenizer
+  names id 50279 `|||IP_ADDRESS|||` (bos = eos) while the model card writes `<|endoftext|>`; the rendered template starts with id 50279 either
+  way. Qwen3-Instruct-2507 / Coder: non-thinking templates, prefix `<|im_start|>user\n...<|im_end|>\n<|im_start|>assistant\n` (19 tokens).
+- OLMoE-1B-7B-0125 (base), `results/olmoe_default`: filter 1 pass (1249 records scanned, 1024 tokenizable, strict pass rate 0.74), sweep
+  (512 cases, L*=13 strict / L*=12 relaxed, val +1.42 / +1.29), all-layer expert pass (16 layers, 114,660 rows, 2 chunks); sink diagnostic:
+  position 0 is the max-norm position in 100% of prompts from layer 2, the final position never (0/512). GPU total ~1.5 min.
+- Chains for qwen3_instruct, qwen3_coder (default + chat) and olmoe_instruct launched behind the GPU queue.
+
+## 2026-09-14 05:30 UTC — ext2-attn-patch: engine extension verified, sweeps queued
+- Engine (`moetrace/engine.py`, backward compatible): new SpawnSpec kinds `attn_layer` (spawn BEFORE the MoE of layer l as
+  h_pre_noised + Attn_l^clean at the final position; that layer's MoE then recomputes on the patched residual), `block`
+  ((h_pre_noised + Attn^clean) + MoE^clean, both sublayer outputs patched together), `resid` (clean residual after layer l,
+  classic hidden-state restoration = block + upstream difference) and `block_diff` (numerics check: both sublayer
+  differences added to the noised residual). `DiagSpec.attn_out_final` records the final-position attention-sublayer
+  output per layer (bf16 [L, B, H]). `PassResult.sp_vnorm` carries |dAttn|, |dAttn + dMoE|, |dResid| for the new kinds.
+- Identity gate: `results/verify_olmoe.json` after the change is bit-identical to `results/verify_olmoe_before_ext2.json`
+  on all 23 non-timing metrics (only the cold-page-cache load-wait differs).
+- New-kinds verification vs transformers hooks on OLMoE (20 cases x 16 layers, `scripts/ext2_attn_verify.py`,
+  `results/verify_ext2_attn_olmoe.json`): mean |dDelta| vs HF 0.187 / 0.180 / 0.131 (attn_layer / block / resid) against
+  0.150 for the already-verified `layer` kind on the same rows (max 1.61 / 1.19 / 0.95 vs 1.12); rescue correlation with
+  HF 0.990 / 0.994 / 0.998 (layer 0.983); 20-case mean curves within 0.081 / 0.072 / 0.069 (layer 0.099). Invariants:
+  identity on the clean run max 0.094 (mean 0.015); block vs block_diff mean |d| 0.042, 90% within 0.1, max 0.56
+  (bf16 rounding of the residual; signed mean on the OLMoE smoke sweep ~0); vnorms match HF norms within 0.3% (means).
+- OLMoE smoke sweep `results/olmoe_attnsweep` (strict set 16/16, 5 kinds, 8.5 s): attention output rescue +2.9 at L12
+  vs MoE +1.4 at L13, block +4.0 at L12, block vs attn+moe gap -0.21 (r 0.97). Analysis code `moetrace/ext2_attn.py`,
+  `scripts/ext2_attn_analyze.py` tested on it (figures/tables/section generated).
+- GPU chain `scripts/ext2_attn_chain.sh` (gate -> Qwen3 tokenizer defaults -> Mixtral BOS -> Mixtral no-BOS, paper set,
+  4 kinds x every layer, one pass each) launched through gpu_queue.sh; waits behind the model-zoo agent's jobs.
+
+## 2026-09-14 05:36 UTC — ext4-codefact: Phase A (dataset) done
+- Sources: HumanEval (164, MIT) + MBPP full (974, CC-BY-4.0) + CodeSearchNet Python test split (seed-0 sample of 6,000 functions <= 1,500 chars,
+  ASCII; +16,000 validation-split functions used for R3 only). The Stack is gated on the Hub (no token here) -> CodeSearchNet fallback as
+  documented; per-function repo + URL recorded (data/codefact/csn_sample_repos.csv). Docstrings removed, CRLF normalised, units must parse.
+- Builder scripts/ext4_build_codefact.py (ast/tokenize extractors for S1 closer, S2 block keyword, S3 for-in / if-colon / from-import,
+  R1 variable recall (name bound earlier, <= 2 prior occurrences, foil = most recently bound other name), R2 attribute of a literal-typed local
+  or imported module (foil = same-type attribute), R3 str / single-digit literal reuse). Case construction moetrace/ext4_data.py: true and foil
+  must be single-token continuations of the prefix; boundary back-off <= 4 punctuation/whitespace chars when the tokenizer merges (Qwen
+  ` else`, `.append`); copy exclusion (true token in last 3 prefix tokens); prefix <= 160 tokens. CodeCase subclasses data.Case (category,
+  source, item_id) so engine/noise/analysis code is reused unchanged.
+- data/codefact/items.jsonl: 6,795 items; Qwen3-valid per category S1 964, S2 1200, S3 1195, R1 1132, R2 794, R3 1163; Mixtral-valid
+  S1 1127, S2 1070, S3 1124, R1 955, R2 671, R3 824 (build_stats.md has raw -> capped -> written yields and reject reasons; samples.md 20
+  random items per category). Qwen3-Coder tokenizer identical to Qwen3-Base on the items (2,000/2,000 identical ids); Coder snapshot complete.
+- GPU scripts written (not yet run): scripts/ext4_scan.py (clean + noised + every-layer block patch + routing + resid-norm sink diagnostic per
+  chunk of <= 1,024 items = filter and sweep in one job), ext4_select.py (case sets 256 -> 128/128 per category + mixed `all`, calibration
+  tables/figure, sweep_* files for analysis.load_model), ext4_run_expert.py (all-layer expert pass, --no-pairs, layer-chunked; reuses
+  run_expert.build_spawns/rows_from_result/merge_rows), ext4_analyze.py (per-category two-stage + joint search via ext1_analysis, Jaccard
+  overlaps, factual-expert check, figures, section). Smoke test queued as ext4-smoke behind the ext2 chains.
+
+## 2026-09-14 05:52 UTC — ext2-model-zoo: raw-protocol runs of the Qwen3 family and OLMoE-Instruct done
+- `results/qwen3_instruct_default` (Qwen3-30B-A3B-Instruct-2507, tokenizer defaults = no special tokens): filter 1 pass (strict pass rate 0.82;
+  234/256 of the base's paper IDs pass strict, exactly as for the base), sweep L*=44 on paper/strict/relaxed (paper val +1.065 vs base +0.941),
+  all-layer expert pass (351,304 rows, 4 chunks, 18.5 GB peak). Two-stage and joint search both select **L44E069** (active 110/128 disc, 115/128 val;
+  rescue +0.549 [+0.422, +0.690], Spec +0.464 [+0.333, +0.609]); L42E115 remains the second locus (124/123 active, +0.520 / Spec +0.490). Pattern A.
+- `results/qwen3_coder_default` (Qwen3-Coder-30B-A3B-Instruct, raw): 218/256 paper IDs pass strict; L*=44 (paper val +0.962); **L44E069** selected
+  (111/110 active, rescue +0.615 [+0.479, +0.763], Spec +0.551 [+0.413, +0.699]); L42E115 118/113 active (+0.514 / +0.490). Pattern A. Expert pass
+  369,040 rows in 5 chunks (row cap lowered to 80k after the 18.5 GB reading).
+- Final-position top-8 routing agreement with the base at L44 (paper prompts): Jaccard 0.80 (Instruct), 0.71 (Coder); identical sets in 27% / 13%.
+- `results/olmoe_instruct_default`: filter (strict pass rate 0.72), sweep L*=13 (strict val +1.18), all-layer expert pass done. `results/olmoe_default_attnsweep`
+  (kinds attn_layer, layer, block; strict set): L13 attention-output rescue +2.93, MoE-output +1.42, whole-layer +3.87 (val).
+- Sink diagnostic: final position is never the max-norm position in any Qwen3/OLMoE run so far (0/512-1024 prompts); position 0 is the sink in 100%.
+- Chat-protocol scans running (Qwen3-Instruct chat: T=37, strict pass rate 0.84, mean Delta_clean +7.6 vs +6.1 raw, 236/256 paper IDs pass strict).
+  Mixtral-Instruct BOS filter done (236/256 paper IDs pass strict). Analysis driver `scripts/ext2_zoo_analyze.py` written; incremental tables in
+  results/tables/ext2_zoo_*.md, section draft results/sections/ext2_model_zoo.md.
+
+## 2026-09-14 05:55 UTC — ext2-attn-patch: sweeps done, analysis and section written
+- GPU (gpu_queue.sh, chain scripts/ext2_attn_chain.sh after the gate passed): `results/qwen3_bos_attnsweep` (paper set, 256 cases,
+  4 kinds x 48 layers = 49,152 rows, 61 s), `results/mixtral_bos_attnsweep` (32,768 rows, 98 s), `results/mixtral_nobos_attnsweep`
+  (`--no-special-tokens`, 32,768 rows, 98 s); ~4.5 min GPU plus ~5 min of OLMoE verification/smoke runs. run_meta.json in each.
+- Analysis `scripts/ext2_attn_analyze.py` -> results/tables/ext2_attn_{peaks,share,additivity,layer_curves}_<run>.*,
+  ext2_attn_{summary,shares,protocol_mixtral}.*, results/figures/ext2_attn_curves_{qwen3_bos,mixtral_bos,mixtral_nobos,olmoe,
+  mixtral_bos_vs_nobos}.{png,pdf}, results/ext2_attn_summary.json, results/sections/ext2_attn_patch.md (+ ext2_attn_interpretation.md).
+- Qwen3 (validation, paper set): attention-output rescue peaks L40 +1.594 [+1.410, +1.791] (96% of cases positive) and L43 +1.10;
+  MoE-output L44 +0.925 [+0.774, +1.096] (paper's layer), L42 +0.62; block L40 +1.946 [+1.734, +2.169]. Attention share at L44 = 2%
+  [-2%, 6%] (pure MoE layer), overall (AUC+) 51% [48%, 55%]. Additivity: block = attn + moe to bf16 noise (per-case r 0.96-0.99),
+  slight sub-additivity only at L40 (-0.08 [-0.12, -0.03]) and L43 (-0.10). Hidden-state restoration: half of the drop present by
+  L33, largest increments +1.48 at L40, +0.36 at L43.
+- Mixtral BOS: attention L18 +0.988 [+0.820, +1.164], L19 +0.92, L24 +0.84, L15 +0.44; MoE L19 +0.561 [+0.451, +0.683], L20/21
+  +0.49/+0.48; block L19 +1.374 [+1.180, +1.577]. Attention share at L19 = 62% [58%, 66%]; overall 56%. Gap at L19 -0.11 [-0.18, -0.05],
+  r 0.97. No BOS: same curves (layer correlation 0.96-0.98), block argmax L19 +1.18, attention argmax L24 +0.93 (L18 +0.80 within CI),
+  MoE argmax L21 +0.53 (L19 +0.46 within CI); attention share at L19 64%, overall 60% [54%, 65%]. BOS run stronger at the L18
+  attention step by +0.19 [+0.02, +0.36] (paired).
+- Reading: information arrives at the final position in a few attention steps (Qwen3 L40/L43, Mixtral L15/L18/L19/L24) and is
+  transformed by the MoE of the same and following layers; the paper's MoE-only patch sees the transformation channel only
+  (right object for Qwen3 L44, minority share of the layer effect at Mixtral L19; misses the largest single-sublayer locus,
+  Qwen3 L40 attention). Suggested follow-up: per-head attn_layer patch at those layers.
+- Deviations: added `resid` (clean residual after layer l, the coordinator's "= h_clean_after_layer_l" reading) as a 4th kind next to
+  `block` (both sublayer outputs of layer l, the reading consistent with the additivity invariant), and `block_diff` as a permanent
+  numerics-check kind; gate threshold for block vs block_diff max |d| set to 0.7 (same as the HF maxdiff floors) after the first
+  gate run failed at 0.557 (mean |d| 0.042, signed mean +0.002: bf16 rounding, no bias). Not committed (coordinator).
