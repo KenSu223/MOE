@@ -109,6 +109,8 @@ Base reproduction:
   exact noise samples are unrecoverable; only selections and CI-level agreement are comparable.
 
 Extensions:
+- **Phase 2 follow-ups (F1 expert rankings / minimal sets, F2 attention heads, F3 gradient attribution,
+  F4 subject-token patching, F5 probability metrics) are planned in RESEARCH_PLAN.md "Phase 2" and NOT started.**
 - The five open method questions in 2b (user decisions pending); the final wording of EXTENSIONS_REPORT.md follows them.
 - CodeFact: Mixtral S3 is partial (241 passing items → 120/121 split); The Stack was not used (gated; CodeSearchNet
   instead); R3 has a single-digit sub-category that may deserve exclusion; no HF-hook verification of the code runs
