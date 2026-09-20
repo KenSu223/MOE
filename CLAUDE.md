@@ -2,19 +2,20 @@
 
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
-Details live in the documents listed in section 8; this file is the map.
+Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20.
 
 ## 1. What this project is
 
 A full-scale, independent reproduction of **Lu, Modarressi, Liu, Schütze (2026), "Expert-Aware Causal Tracing of
-Factual Recall in Sparse MoE Language Models"** (arXiv:2606.03780). The paper released no code. We re-implemented the
-protocol from the text and re-ran every table and Figure 1 on the paper's exact models, Qwen3-30B-A3B-Base and
-Mixtral-8x7B-v0.1, in bf16, on this machine's single 24 GB A10G.
+Factual Recall in Sparse MoE Language Models"** (arXiv:2606.03780), followed by four extension studies. The paper
+released no code. We re-implemented the protocol from the text and re-ran every table and Figure 1 on the paper's exact
+models, Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1, in bf16, on this machine's single 24 GB A10G.
 
-**Status: COMPLETE** (2026-09-03 16:34 UTC, marker `results/DONE`). Deliverable: `results/REPORT.md` (all 16 tables
-paper-vs-ours, both Figure 1 variants, verification, deviations). Repository: github.com/KenSu223/MOE (branch `main`).
+**Status.** Base reproduction COMPLETE (2026-09-03, marker `results/DONE`, deliverable `results/REPORT.md`).
+Extensions COMPLETE (2026-09-14, deliverable `results/EXTENSIONS_REPORT.md`, plan `RESEARCH_PLAN.md`). Everything
+is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
 
-## 2. Results in one screen
+## 2. Results in one screen (base reproduction)
 
 | Model | Run | Layer | Layer rescue (val) | Expert | Expert rescue | Specificity |
 |---|---|---|---|---|---|---|
@@ -37,6 +38,11 @@ paper-vs-ours, both Figure 1 variants, verification, deviations). Repository: gi
   77% for our default). It does not change any conclusion; reported as a secondary run.
 - Numerics: our engine's deviation from transformers equals transformers' own bf16 noise (fp32 CPU reference on
   OLMoE); big-model checks vs transformers-with-offload on 5 prompts each: max |ΔΔ| 0.25 (Qwen3), 0.06 (Mixtral).
+
+Vocabulary used everywhere: Δ = logit(true) − logit(foil) at the final position; drop = Δ_clean − Δ_noised;
+rescue = Δ_patched − Δ_noised (all in logits, validation-set means of 128 cases unless stated); Spec = rescue of the
+selected expert minus the mean rescue of other clean-active experts of the same prompt and layer; "clean-active" =
+routed to in the clean run at the final position; recurrence gate = clean-active in ≥ 64 of 128 discovery cases.
 
 ## 2b. Extensions (RESEARCH_PLAN.md; results in results/EXTENSIONS_REPORT.md, sections in results/sections/)
 
@@ -84,110 +90,184 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
   S2 (Qwen3 L41E041 +0.55, Mixtral L17E003 +0.32); S3/R2/R3 weak. Categories are near-disjoint in their top experts
   (mean Jaccard 0.05); the factual experts L44E069/L42E115 rescue nothing on code; Mixtral E006 is negatively specific
   again (R1). Qwen3-Coder keeps the same code experts as the base (L47E025, L43E126, L41E041) and adds an S3 expert
-  L47E014. The axis that matters is single-token vs distributed determination, not syntax vs recall.
-- Open method questions raised by the agents: (a) last-layer read-out vs localisation (interior-layer rule?);
-  (b) select layers by block (attention + MoE) rescue rather than MoE rescue?; (c) flag sink-carrying prompts as a
-  protocol check; (d) recurrence threshold relative to top-k.
+  L47E014. Code prompts are 36-84 tokens median (CounterFact: 8) with a single-token "subject"; the axis that matters
+  is single-token vs distributed determination, not syntax vs recall.
+- Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
+  paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
+  (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
+  (d) flag sink-carrying prompts and the object-token rule as protocol checks; (e) recurrence threshold relative to top-k.
 
 ## 3. What is NOT done / known gaps
 
+Base reproduction:
 - Mixtral **relaxed-filter set (Tables 14, 15)** was run only under the BOS default. A no-BOS filter scan → sweep →
-  expert pass (about 4 passes, 7 min GPU) would complete it. Runs: `run_filter.py mixtral --out mixtral_nobos
-  --no-special-tokens` then sweep/expert with the same flags.
+  expert pass (about 4 passes, 7 min GPU) would complete it: `run_filter.py mixtral --out mixtral_nobos_relaxed
+  --no-special-tokens`, then `run_sweep.py` / `run_expert.py` with the same flags.
 - The paper's relaxed 512-case set used a different record order (only 15 overlaps with its strict set); its IDs are
   unpublished, so Table 15 subset sizes cannot match.
 - Zero-row definition (Table 3), fold assignment (Table 12), split function (Appendix D), active-random draws and the
   exact noise samples are unrecoverable; only selections and CI-level agreement are comparable.
+
+Extensions:
+- The five open method questions in 2b (user decisions pending); the final wording of EXTENSIONS_REPORT.md follows them.
+- CodeFact: Mixtral S3 is partial (241 passing items → 120/121 split); The Stack was not used (gated; CodeSearchNet
+  instead); R3 has a single-digit sub-category that may deserve exclusion; no HF-hook verification of the code runs
+  beyond the shared engine.
+- Model zoo: Qwen3-Coder has no public Base checkpoint (Instruct only); OLMoE-Instruct's strict/relaxed sets pick
+  L13E056 vs L12E040 (no shared case set); Mixtral-Instruct chat's last-layer argmax is unresolved (question b).
+- Direction 2b: no per-head decomposition of the attention patches (natural follow-up: mover heads at Qwen3 L40/L43,
+  Mixtral L15/L18/L19/L24).
+- Raw diagnostics (`/opt/dlami/nvme/moe_ext2`, `moe_ext3`, 3 GB) and all checkpoints sit on the ephemeral NVMe.
 
 ## 4. Machine and environment (verify before relying on it)
 
 - AWS g5.4xlarge: 1× A10G 24 GB, 16 vCPU, 62 GB RAM. An unrelated user process (`repo-world-model`) holds ~9 GB RAM;
   do not kill processes you did not start.
 - Python venv: `. /home/ubuntu/MOE/.venv/bin/activate` (Python 3.14, torch 2.14+cu130, transformers 5.16.1,
-  safetensors, pandas, pyarrow, scipy, matplotlib).
-- **Always `export HF_HOME=/opt/dlami/nvme/hf`** before any script. Checkpoints (Qwen3 61 GB, Mixtral 93 GB, OLMoE
-  39 GB fp32) live on the NVMe instance store `/opt/dlami/nvme` (521 GB, 1.6 GB/s). It is **ephemeral**: an instance
-  stop wipes it; re-download with `scripts/download_models.sh` (~20 min).
-- Root disk holds code and results (`results/` is 9 MB). Never write weights or offload folders to the root disk.
-- Before launching GPU work: `pgrep -af "run_sweep|run_expert|run_filter|hf_reference|chain"` and `nvidia-smi`.
+  safetensors, pandas, pyarrow, scipy, matplotlib, datasets). `~/.local/bin/claude` and `~/.local/bin/gh` exist.
+- **Always `export HF_HOME=/opt/dlami/nvme/hf`** before any script (`scripts/gpu_queue.sh` does it for you).
+  Seven checkpoints live there (≈ 407 GiB): Qwen3-30B-A3B-Base 61 G, Qwen3-30B-A3B-Instruct-2507 57 G,
+  Qwen3-Coder-30B-A3B-Instruct 57 G, Mixtral-8x7B-v0.1 93 G, Mixtral-8x7B-Instruct-v0.1 87 G, OLMoE-1B-7B-0125 39 G
+  (fp32 shards), OLMoE-1B-7B-0125-Instruct 13 G. NVMe free ≈ 49 GB; `/opt/dlami/nvme/offload` (65 GB, transformers
+  offload scratch from the reference checks) is reclaimable. The NVMe is **ephemeral**: an instance stop wipes it;
+  re-download with `scripts/download_models.sh` (base three) and `scripts/ext2_zoo_download.sh` (zoo four).
+- Root disk holds code and results: `results/` is 380 MB on disk, ~110 MB tracked (gitignored: `codefact_*/
+  scan_routing.parquet`, `codefact_*/expert_parts/`, `codefact_smoke/`); `.git` is 240 MB. Never write weights or
+  offload folders to the root disk.
+- Before launching GPU work: `pgrep -af "run_sweep|run_expert|run_filter|hf_reference|chain|ext[1-4]_|gpu_queue"`
+  and `nvidia-smi`. Submit every GPU job through `bash scripts/gpu_queue.sh <job-name> -- python ...` (flock lock,
+  `logs/gpu_queue.log`), even when you believe you are alone.
 
 ## 5. Codebase map and how to use it
 
 Engine idea: one decoder layer resident on the GPU at a time (streamed from safetensors with prefetch); all runs of a
 pass advance layer by layer. *Prefill rows* = full clean/noised prompts (record final-position MoE in/out, routing,
-per-expert contributions c_e = w_e·E_e(x)). *Wavefront rows* = single tokens implementing interventions from layer l
-upward, attending to the parent noised run's K/V. One pass = one read of the checkpoint (Qwen3 ~60 s, Mixtral ~95 s)
-regardless of how many interventions are batched. See README section "How it runs on one 24 GB GPU".
+per-expert contributions c_e = w_e·E_e(x), optionally attention outputs and diagnostics). *Wavefront rows* = single
+tokens implementing interventions from layer l upward, attending to the parent noised run's K/V. One pass = one read
+of the checkpoint (Qwen3 ~60 s, Mixtral ~95 s, OLMoE ~4 s) regardless of how many interventions are batched; the only
+limit is wavefront rows × prompt length (about 45k rows at T ≈ 15, far fewer at code lengths T ≈ 40-140: chunk by
+layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`).
 
-`moetrace/`
+`moetrace/` (base)
 - `arch.py` ArchSpec from config.json (Qwen3-MoE, Mixtral, OLMoE key templates, q/k-norm variant, top-k renorm).
 - `weights.py` CheckpointStore + LayerStreamer (mmap safetensors, per-layer expert stacking, pinned double buffer).
-- `engine.py` `Engine(repo)`, `PrefillSpec(ids, true_id, foil_id, subject_pos=None, noise=None)`,
-  `SpawnSpec(layer, parent_row, clean_row, kind, ...)`; kinds: `zero`, `layer`, `expert`, `expert_scaled`,
-  `coalition_clean`, `coalition_union`. `eng.run(prefill, spawns, record_routing=...)` → deltas, logits, routing.
+- `engine.py` `Engine(repo)`; `PrefillSpec(ids, true_id, foil_id, noise_pos=None, noise_eps=None, pos_offset=0,
+  sink_donor=-1, sink_vscale=1.0)`; `SpawnSpec(layer, parent, clean, kind, expert=-1, partner=-1)`; `DiagSpec(...)`
+  (per-layer attention mass, residual norms, router logits, residuals, token log-probs, all-token routing, attention
+  outputs); kinds = `zero`, `layer` (MoE output), `expert`, `expert_scaled`, `coalition_clean`, `coalition_union`,
+  `attn_layer`, `block` (attention + MoE), `resid` (whole residual after the layer), `block_diff` (numerics check).
+  `eng.run(prefill, spawns, record_routing=True, diag=None)` → `PassResult` (delta, logits, sp_delta, sp_vnorm,
+  route_idx/route_w/route_cnorm [L, B, k], extra["diag"]).
 - `data.py` CounterFact loading, seed-0 shuffle, `prepare_case(rec, tok, token_rule="space"|"paper_like",
-  special_tokens=True|False)`, filters (STRICT 1.0/0.5, relaxed 0.5/0.25), splits.
+  special_tokens=True|False, prefix_ids=None)`, filters (STRICT 1.0/0.5, RELAXED 0.5/0.25), splits.
 - `noise.py` σ = mult × embed std; per-case `torch.Generator(0 + case_id)`.
-- `protocol.py` `cases_by_id`, `load_case_sets`, `active_controls` (random.Random(1000 + case_id)).
+- `protocol.py` `cases_by_id(model, ids, token_rule, special_tokens, prefix_ids)`, `load_case_sets`,
+  `active_controls` (random.Random(1000 + case_id)).
 - `stats.py` `summarize` (mean, 5,000-resample percentile bootstrap CI, positive fraction, 10,000 sign-flip p), `fmt`.
-- `analysis.py` post-processing: `load_model(run)`, `layer_analysis`, `expert_table`, `select_expert`
+- `analysis.py` post-processing on a run dir: `load_model(run)`, `layer_analysis`, `expert_table`, `select_expert`
   (recurrence-first), `evaluate_expert`, `gate_matched_control`, `all_active_rank`, `active_pair_equal_norm`,
   `coalitions`, `stability_grid`, `relation_heldout`, `noise_table`, `funnel_check`.
-- `report.py` `build()` → Tables 1–16 (md+csv) + `figure1()`; `alt_summary(suffix=...)` for secondary runs.
-- `write_report.py` `write(res, tables, alt_table, extra_verdict, extra_sections)` → `results/REPORT.md`.
-- `models.py` `MODELS` registry: `qwen3`, `mixtral`, `olmoe` → repo, label, n_controls, paper_layer, paper_expert.
+- `report.py` `build()` → Tables 1–16 (md+csv) + `figure1()`; `alt_summary(suffix=...)` for secondary runs;
+  `write_report.py` `write(...)` → `results/REPORT.md`.
+- `models.py` `MODELS` registry: `qwen3`, `mixtral`, `olmoe`, `olmoe_instruct`, `qwen3_instruct`, `qwen3_coder`,
+  `mixtral_instruct` → repo, label, n_controls (3 for top-8, 1 for top-2), paper_layer, paper_expert.
 
-`scripts/` (all take a model key; `--out <run_name>` selects `results/<run_name>/`; `--token-rule space|paper_like`;
-`--no-special-tokens` = no BOS)
-- `run_filter.py` filter scan → `case_sets.json` (keys `scan`, `strict`, `relaxed`, `paper`, `paper_check`).
-- `run_sweep.py [--sets paper,strict,relaxed]` layer sweep → `sweep_rows`, `sweep_routing`, `sweep_cases`, `sweep_summary.json`.
-- `run_expert.py --layers 44[,19]` expert pass → `expert_rows`, `expert_prefill_L*`. `auto_expert.sh` picks layers.
-- `run_noise.py` σ ∈ {1,2,4} (Table 13). `hf_reference_check.py <model> 5` transformers-with-offload check (slow).
-- `verify_olmoe.py`, `verify_olmoe_fp32.py` engine-vs-transformers verification on the pilot model.
-- `mixtral_compare.py`, `mixtral_run_section.py` compare Mixtral runs / build the no-BOS report section.
-- `build_final_report.py [--done]` rebuilds every table, both figures, secondary sections, REPORT.md (and DONE).
-- `chain1/2/3.sh` the exact GPU sequences that were run; `run_agent.sh` headless-agent supervisor (section 7).
+`moetrace/` (extensions, one module per direction, none edits the base modules)
+- `ext1_analysis.py` per-layer best expert, joint (layer, expert) search, concentration, grid robustness.
+- `ext2_attn.py` attention / MoE / block curves, peaks, shares, additivity.
+- `ext2_zoo.py` chat-template prefixes, usage specs, cross-model summaries, sink fractions.
+- `ext3_variants.py` position-0 substitutions, sink transplant, corpus routing helpers.
+- `ext4_data.py` CodeFact item → `data.Case` (categories S1-S3, R1-R3; single-token continuation with boundary back-off).
 
-`results/` run directories: `qwen3`, `mixtral` (tokenizer defaults, all three case sets), `mixtral_nobos` (paper set,
-no BOS), `qwen3_alt`, `mixtral_alt` (paper_like token rule, paper set), `olmoe` (pilot). Row-level Parquet schemas:
-`sweep_rows` (case_id, kind clean|noised|layer, layer, logit_true, logit_foil, delta, rescue, ...);
-`sweep_routing` (case_id, run, layer, slot, expert, weight, cnorm); `expert_rows` (case_id, layer, kind, expert,
-partner, alpha, rescue, clean_active, noised_active, clean_weight, n_clean_active, ...). `summary.json` and
-`mixtral_compare.json` hold the analysed numbers.
+`scripts/` — base CLIs take a model key; `--out <run>` selects `results/<run>/`; `--token-rule space|paper_like`;
+`--no-special-tokens` = no BOS; `--layer-chunks N` bounds wavefront rows.
+- Base: `run_filter.py`, `run_sweep.py [--sets paper,strict,relaxed]`, `run_expert.py --layers ... [--no-pairs]`,
+  `auto_expert.sh`, `run_noise.py`, `hf_reference_check.py`, `verify_olmoe.py`, `verify_olmoe_fp32.py`,
+  `mixtral_compare.py`, `mixtral_run_section.py`, `build_final_report.py [--done]`, `chain1/2/3.sh`.
+- Infrastructure: `gpu_queue.sh` (mandatory lock for GPU jobs), `build_extensions_report.py` (assembles
+  `results/sections/ext*.md` into `results/EXTENSIONS_REPORT.md`), `run_agent.sh` (headless supervisor, section 7),
+  `download_models.sh`, `ext2_zoo_download.sh`, `setup_env.sh`.
+- Direction 1: `ext1_analyze.py` (reads `results/<run>_alllayers`), `ext1_chain*.sh`.
+- Direction 2b: `ext2_attn_sweep.py <model> --out <run> --sets paper [--no-special-tokens]`, `ext2_attn_verify.py`,
+  `ext2_attn_gate.py`, `ext2_attn_analyze.py`, `ext2_attn_chain.sh`.
+- Direction 2: `ext2_zoo_usage.py` (writes `data/model_usage/<key>.json`), `ext2_zoo_filter.py <key> --protocol
+  default|nobos|chat`, `ext2_zoo_sweep.py`, `ext2_zoo_expert.py [--resume]`, `ext2_zoo_attn.py`, `ext2_zoo_analyze.py`,
+  `ext2_zoo_chain.sh <key>`.
+- Direction 3: `ext3_run_variants.py <model> --variants bos,nobos,nl,dot,...,sinkfull,sinkkey`, `ext3_corpus_routing.py
+  <model> --corpus wiki|code`, `ext3_verify_diag.py`, `ext3_gate.py`, `ext3_analyze.py`, `ext3_chain*.sh`.
+- Direction 4: `ext4_build_codefact.py` → `data/codefact/items.jsonl`; `ext4_scan.py <model> --out <run> --protocol
+  raw|nobos|chat` (calibration scan + layer patches, token-budget chunking); `ext4_select.py`; `ext4_run_expert.py
+  --no-pairs`; `ext4_analyze.py`; `ext4_chain*.sh`.
 
-Typical new experiment: copy `results/<base>/case_sets.json` into a new run dir → `run_sweep.py --out <run>` →
-`run_expert.py --layers <L> --out <run>` → analyse with `analysis.load_model("<run>")` → add to the report via
-`report.alt_summary(suffix=...)` or a section script → `build_final_report.py`.
+`results/` run directories (each has `run_meta.json`; row-level Parquet: `sweep_rows`, `sweep_routing`,
+`sweep_cases`, `expert_rows`, `expert_prefill_*`; extension runs add `zoo_summary.json`, `sink_diag.json`, ...):
+- base: `qwen3`, `mixtral` (tokenizer defaults, three case sets), `mixtral_nobos` (paper set, no BOS), `qwen3_alt`,
+  `mixtral_alt` (paper_like token rule), `olmoe` (pilot);
+- Direction 1: `{qwen3_bos,mixtral_bos,mixtral_nobos}_alllayers`;
+- Direction 3: `mixtral_{bos,nobos}_diag`, `mixtral_nobos_prefix_<tok>`, `mixtral_nobos_shift1`,
+  `mixtral_nobos_sink_{full,keyonly}`, `mixtral_bos_prefix_bos`, `mixtral_{bos,nobos}_corpus_{wiki,code}`,
+  `qwen3_nobos_diag`, `qwen3_bos_prefix_eot`;
+- Direction 2b: `{qwen3_bos,mixtral_bos,mixtral_nobos,olmoe}_attnsweep`;
+- Direction 2: `<key>_{default,nobos,chat}` for the five zoo models (+ `_attnsweep`), `olmoe_default`;
+- Direction 4: `codefact_{qwen3_raw,mixtral_nobos,qwen3_coder_raw,qwen3_coder_chat}`.
+Tables: `results/tables/table_01..16` (base) and `ext{1,2,2_attn,2_zoo,3,4}_*`; figures likewise; sections in
+`results/sections/`; analysed numbers in `results/{summary,ext1_summary,ext2_attn_summary,ext2_zoo_summary,
+ext3_numbers,ext4_summary,mixtral_compare}.json`.
+
+Recipes:
+- *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other
+  families need `arch.py` key templates and possibly engine work), write `data/model_usage/<key>.json` with
+  `ext2_zoo_usage.py`, then `ext2_zoo_filter.py` → `ext2_zoo_sweep.py` → `ext2_zoo_expert.py` → `ext2_zoo_analyze.py`.
+- *New intervention*: add a kind to `KINDS` and its vector in the engine's spawn-vector builder; verify on OLMoE
+  against transformers hooks as `ext2_attn_verify.py` does; re-run `verify_olmoe.py` and confirm identity with the
+  previous `results/verify_olmoe*.json`.
+- *New counterfactual dataset*: produce `data.Case`-compatible objects (ids, subject_pos, true_id, foil_id) as
+  `ext4_data.py` does, then reuse `ext4_scan.py` / `ext4_run_expert.py` / `ext4_analyze.py`.
+- *Rebuild deliverables*: `python scripts/build_final_report.py` (base) and `python scripts/build_extensions_report.py`.
 
 ## 6. Conventions and rules for work here
 
 - The paper's Table 8 case IDs (`data/paper_case_ids.json`) are the PRIMARY case set; our own strict/relaxed sets are
-  secondary. Keep the discovery/validation assignment from the paper.
-- Keep the main tables on the documented default protocol and report variants (no BOS, paper_like) as labelled
-  secondary runs. For any Mixtral experiment meant to match the paper, use `--no-special-tokens`.
+  secondary. Keep the discovery/validation assignment from the paper. Instruct variants are evaluated on their base
+  model's paper case set for comparability, plus their own strict set.
+- Protocol labels: `default` = tokenizer defaults, raw cloze; `nobos` = no special tokens (the paper's protocol; for
+  Qwen3 and OLMoE `default` ≡ `nobos`); `chat` = chat template with the cloze prompt inside the assistant turn. Keep the
+  main tables on the documented default and report variants as labelled runs. For any Mixtral experiment meant to
+  match the paper, use `--no-special-tokens`.
 - Prefer counts and set membership (activity counts, funnel pass counts, selections) as "fingerprints" when comparing
   with the paper; means carry bf16 noise (per-case rescue ±0.1–0.6, 128-case means ±0.02–0.05).
 - No quantization, ever: bf16 weights and activations are the object of study.
-- Log every milestone to `logs/PROGRESS.md` (append-only, UTC timestamps). Save row-level Parquet after every pass.
-- Commits: trailer `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`. Pushing requires the user's GitHub
-  credentials (VSCode source-control push or `gh auth login` in their terminal); agents in this shell have none.
+- Every run dir gets a `run_meta.json` (model, flags, case sets, chunking, command). Save row-level Parquet after
+  every pass. Log every milestone to `logs/PROGRESS.md` (append-only, UTC timestamps).
+- Parallel agents own disjoint files (base modules vs `ext*` modules, one script prefix per direction) and share the
+  GPU only through `gpu_queue.sh`; never stop a running chain to edit it, append a new chain.
+- Commits: trailer `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`. Pushing works from this shell (the
+  user's GitHub credentials are configured); commit sub-agent outputs selectively with `git add <paths>`.
 
 ## 7. Unattended / headless workflow (see PLAYBOOK.md)
 
-Roles: an interactive session does research, planning and handoff; a headless `claude -p` agent in tmux executes
-`HANDOFF.md` until `results/DONE`; `scripts/run_agent.sh` supervises it (resumes the same session, parses usage-limit
-reset times and sleeps until then). Rules learned the hard way: the **user** must start the supervisor (the permission
-classifier blocks an agent from launching another Claude process); queue GPU work as detached `setsid nohup` chains
-that outlive the agent; never stop a running chain to edit it, append a new chain instead; on resume, read
-`logs/agent_status.txt`, `logs/PROGRESS.md`, `logs/chain*.log`, then the last tool calls in the newest
-`logs/agent_run*.jsonl` to find the first unexecuted step.
+Two patterns were used and both are documented in PLAYBOOK.md:
+- *Headless agent* (2026-09-03): an interactive session wrote `HANDOFF.md`, the **user** started
+  `scripts/run_agent.sh` in tmux (the permission classifier blocks an agent from launching another Claude process),
+  the agent executed until `results/DONE`; the supervisor now parses usage-limit reset times and sleeps until then.
+- *Coordinator + sub-agents* (2026-09-14): one session planned (`RESEARCH_PLAN.md`), launched one sub-agent per
+  direction with a brief (goal, owned files, deliverable section, PROGRESS entries, final-report format), serialised
+  the GPU with `gpu_queue.sh`, reviewed sections and committed. Sub-agents die at the account usage limit; GPU chains
+  run detached and finish anyway; on reset, resume the agent with "resume from disk, do not redo GPU work".
+- On any resume: read `logs/PROGRESS.md` (tail), `logs/gpu_queue.log`, `logs/chain*.log`, `logs/agent_status.txt`
+  if present, then the run dirs' `run_meta.json`, to find the first unexecuted step.
 
 ## 8. Document map
 
-- `README.md` public overview, headline table, how to reproduce.
+- `README.md` public overview, headline table, how to reproduce, extension summary.
 - `PLAN.md` feasibility analysis (why layer streaming), full implementation checklist, assumptions.
-- `HANDOFF.md` the operational brief the headless agent executed (model facts, engine design, protocol defaults).
-- `PLAYBOOK.md` the unattended-run process, timeline of 2026-09-03, problems and fixes.
-- `results/REPORT.md` the deliverable: sections 1–8 plus 6b (Mixtral without BOS).
-- `logs/PROGRESS.md` timestamped log of everything that happened, including the handover.
+- `RESEARCH_PLAN.md` the four extension directions, experiments, agent assignment, user decisions.
+- `HANDOFF.md` the operational brief the headless agent executed for the base reproduction.
+- `PLAYBOOK.md` the unattended-run process, timelines, problems and fixes (both patterns).
+- `results/REPORT.md` base deliverable: sections 1–8 plus 6b (Mixtral without BOS).
+- `results/EXTENSIONS_REPORT.md` extension deliverable, assembled from `results/sections/ext*.md`.
+- `docs/ext3_literature_review.md` attention sinks, BOS, MoE routing, tokenisation conventions (30 references).
+- `data/codefact/build_stats.md`, `data/codefact/samples.md` CodeFact construction and eyeballed examples;
+  `data/model_usage/*.json` per-model tokenisation / template specs.
+- `logs/PROGRESS.md` timestamped log of everything that happened, including handovers and incidents.
 - Paper PDF / LaTeX are gitignored (`2606.03780.pdf`, `paper.txt`, `paper_src/`); present locally on this machine.

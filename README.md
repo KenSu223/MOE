@@ -62,6 +62,32 @@ python scripts/build_final_report.py             # tables, figures, REPORT.md
 
 `scripts/chain1.sh`, `chain2.sh`, `chain3.sh` are the exact sequences that were run.
 
+## Extensions (2026-09-14)
+
+Four follow-up studies, planned in [RESEARCH_PLAN.md](RESEARCH_PLAN.md) and reported in
+[results/EXTENSIONS_REPORT.md](results/EXTENSIONS_REPORT.md) (sections in `results/sections/`):
+
+1. **Joint layer × expert search.** Expert patches at every layer instead of only the selected one. Qwen3 has a second,
+   near-equivalent locus, L42E115 (126/128 recurrent, val +0.447, Spec +0.423). Under the paper's Mixtral protocol the
+   joint winner is L18E001 with positive specificity (+0.098 [0.040, 0.162]); the paper's L19E006 (Spec −0.159) is an
+   artefact of restricting the expert search to L19.
+2. **Why BOS moves Mixtral's router.** `<s>` is Mistral's only attention-sink carrier: transplanting its per-layer K/V
+   into no-BOS prompts restores the BOS-run routing (agreement 0.99); without it a quarter of the CounterFact prompts
+   turn their final token into the sink state and route it to E006, the L19 "sink expert". Substitution controls,
+   corpus routing statistics and a Qwen3 symmetric test are in `results/sections/ext3_bos_mechanism.md`; literature in
+   `docs/ext3_literature_review.md`.
+3. **Generalisation and attention-vs-MoE attribution.** Five more checkpoints (Qwen3-Instruct-2507, Qwen3-Coder,
+   Mixtral-Instruct, OLMoE base and Instruct) all show one layer with one positive specific expert under their intended
+   protocol; post-training moves neither layer nor expert. New engine kinds patch the attention-sublayer output and the
+   whole layer: the largest single-sublayer locus is the attention output (Qwen3 L40 +1.59 vs MoE L44 +0.93; 62% of
+   Mixtral's L19 rescue is attention), and block = attention + MoE to bf16 noise.
+4. **CodeFact.** 6,795 Python next-token counterfactuals in six categories (`data/codefact/`). Pass rates separate
+   categories by how the answer is determined (closing brackets 90%, keywords 33-36%); the last MoE block is a
+   read-out on code; categories have near-disjoint experts and the factual experts rescue nothing on code.
+
+Extension scripts follow the `scripts/ext<N>_*` naming; GPU jobs go through `scripts/gpu_queue.sh`; the report is
+assembled by `scripts/build_extensions_report.py`. Total GPU time for all four directions was about 4 hours.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),
