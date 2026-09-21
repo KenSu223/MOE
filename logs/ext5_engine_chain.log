@@ -1,0 +1,260 @@
+2026-09-21T02:05:54Z >>> sweep-qwen3_metrics
+2026-09-21T02:07:13Z START ext5eng-sweep-qwen3_metrics (waited 79s): python scripts/run_sweep.py qwen3 --out qwen3_metrics --sets paper --metrics --agent ext5-engine
+02:07:19 qwen3: sets=['paper'] union=256 cases
+02:07:26 running pass: 512 prefill rows, 12288 spawn rows
+02:07:30   layer   0: load-wait 2.85s compute 0.65s  wf_rows=256
+02:07:38   layer   8: load-wait 1.16s compute 0.08s  wf_rows=2304
+02:07:48   layer  16: load-wait 1.15s compute 0.11s  wf_rows=4352
+02:07:58   layer  24: load-wait 1.14s compute 0.09s  wf_rows=6400
+02:08:08   layer  32: load-wait 1.04s compute 0.11s  wf_rows=8448
+02:08:18   layer  40: load-wait 1.15s compute 0.11s  wf_rows=10496
+02:08:27   layer  47: load-wait 0.90s compute 0.12s  wf_rows=12288
+02:08:27   pass done: 512 prefill rows (T=16), 12288 spawn rows, 61.3s (metrics 0.5s)
+02:08:27 pass time 61.5s (metrics 0.5s)
+/home/ubuntu/MOE/scripts/run_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:135: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+02:08:28 set paper: L*=44 disc=+0.978 val@L*=+0.952 val argmax L44 +0.952 funnel strict 235/256
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/run_sweep.py", line 154, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/run_sweep.py", line 149, in main
+    _write_meta(od, {"sweep": meta})
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/run_sweep.py", line 27, in _write_meta
+    json.dump(cur, f, indent=1)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/json/__init__.py", line 181, in dump
+    for chunk in iterable:
+                 ^^^^^^^^
+  File "/usr/lib/python3.14/json/encoder.py", line 444, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/usr/lib/python3.14/json/encoder.py", line 413, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.14/json/encoder.py", line 451, in _iterencode
+    newobj = _default(o)
+  File "/usr/lib/python3.14/json/encoder.py", line 182, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type DataFrame is not JSON serializable
+when serializing dict item 'sweep'
+2026-09-21T02:08:35Z END   ext5eng-sweep-qwen3_metrics rc=1 (82s)
+2026-09-21T02:08:35Z <<< sweep-qwen3_metrics rc=1
+2026-09-21T02:08:35Z >>> expert-qwen3_metrics
+2026-09-21T02:11:55Z START ext5eng-expert-qwen3_metrics (waited 200s): python scripts/run_expert.py qwen3 --out qwen3_metrics --layers 42,44 --no-pairs --metrics --agent ext5-engine
+02:12:09 qwen3: chunk 1/1: 256 cases, layers 42..44 (2), 512 prefill rows, 6883 spawn rows
+02:12:13   layer   0: load-wait 2.85s compute 0.60s  wf_rows=0
+02:12:21   layer   8: load-wait 1.18s compute 0.06s  wf_rows=0
+02:12:31   layer  16: load-wait 1.18s compute 0.06s  wf_rows=0
+02:12:41   layer  24: load-wait 1.19s compute 0.05s  wf_rows=0
+02:12:51   layer  32: load-wait 1.18s compute 0.06s  wf_rows=0
+02:13:02   layer  40: load-wait 0.69s compute 0.06s  wf_rows=0
+02:13:10   layer  47: load-wait 1.16s compute 0.08s  wf_rows=6883
+02:13:10   pass done: 512 prefill rows (T=16), 6883 spawn rows, 61.2s (metrics 0.3s)
+02:13:10 pass time 61.4s (metrics 0.3s)
+02:13:10 L42 set paper: 5 candidates (>= 64 active); best E115 all-case mean +0.477 active 125/128; top5: {115: 0.477, 55: 0.018, 65: 0.013, 23: 0.005, 101: 0.005}
+02:13:10 L42 set strict: 2 candidates (>= 64 active); best E115 all-case mean +0.366 active 88/128; top5: {115: 0.366, 101: 0.002}
+02:13:10 L42 set relaxed: no candidate meets the recurrence threshold; max activity 119
+02:13:10 L44 set paper: 5 candidates (>= 64 active); best E069 all-case mean +0.483 active 114/128; top5: {69: 0.483, 27: 0.035, 54: 0.021, 71: -0.003, 56: -0.018}
+02:13:10 L44 set strict: 3 candidates (>= 64 active); best E069 all-case mean +0.337 active 82/128; top5: {69: 0.337, 54: 0.013, 71: -0.002}
+02:13:10 L44 set relaxed: no candidate meets the recurrence threshold; max activity 112
+02:13:10 chunk 1: wrote 6883 new rows; /home/ubuntu/MOE/results/qwen3_metrics/expert_rows.parquet now holds 6883 rows over layers [42, 44]
+2026-09-21T02:13:17Z END   ext5eng-expert-qwen3_metrics rc=0 (82s)
+2026-09-21T02:13:17Z <<< expert-qwen3_metrics rc=0
+2026-09-21T02:13:17Z >>> sweep-mixtral_nobos_metrics
+2026-09-21T02:15:07Z START ext5eng-sweep-mixtral_nobos_metrics (waited 111s): python scripts/run_sweep.py mixtral --out mixtral_nobos_metrics --sets paper --metrics --agent ext5-engine --no-special-tokens
+02:15:14 mixtral: sets=['paper'] union=256 cases
+02:15:20 running pass: 512 prefill rows, 8192 spawn rows
+02:15:27   layer   0: load-wait 6.13s compute 0.66s  wf_rows=256
+02:15:49   layer   8: load-wait 2.71s compute 0.17s  wf_rows=2304
+02:16:10   layer  16: load-wait 1.91s compute 0.20s  wf_rows=4352
+02:16:28   layer  24: load-wait 1.80s compute 0.24s  wf_rows=6400
+02:16:47   layer  31: load-wait 2.50s compute 0.27s  wf_rows=8192
+02:16:47   pass done: 512 prefill rows (T=18), 8192 spawn rows, 86.1s (metrics 0.1s)
+02:16:47 pass time 86.4s (metrics 0.1s)
+/home/ubuntu/MOE/scripts/run_sweep.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:157: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+02:16:52 set paper: L*=19 disc=+0.436 val@L*=+0.446 val argmax L21 +0.531 funnel strict 249/256
+02:16:52 done
+2026-09-21T02:16:59Z END   ext5eng-sweep-mixtral_nobos_metrics rc=0 (111s)
+2026-09-21T02:16:59Z <<< sweep-mixtral_nobos_metrics rc=0
+2026-09-21T02:16:59Z >>> expert-mixtral_nobos_metrics
+2026-09-21T02:16:59Z START ext5eng-expert-mixtral_nobos_metrics (waited 0s): python scripts/run_expert.py mixtral --out mixtral_nobos_metrics --layers 18,19 --no-pairs --metrics --agent ext5-engine --no-special-tokens
+02:17:12 mixtral: chunk 1/1: 256 cases, layers 18..19 (2), 512 prefill rows, 2848 spawn rows
+02:17:18   layer   0: load-wait 5.55s compute 0.61s  wf_rows=0
+02:17:39   layer   8: load-wait 2.32s compute 0.13s  wf_rows=0
+02:18:01   layer  16: load-wait 2.37s compute 0.14s  wf_rows=0
+02:18:20   layer  24: load-wait 2.34s compute 0.18s  wf_rows=2848
+02:18:39   layer  31: load-wait 2.48s compute 0.18s  wf_rows=2848
+02:18:40   pass done: 512 prefill rows (T=18), 2848 spawn rows, 87.4s (metrics 0.1s)
+02:18:40 pass time 87.6s (metrics 0.1s)
+02:18:40 L18 set paper: 2 candidates (>= 64 active); best E001 all-case mean +0.162 active 76/128; top5: {1: 0.162, 6: 0.026}
+02:18:40 L18 set strict: 2 candidates (>= 64 active); best E001 all-case mean +0.161 active 76/128; top5: {1: 0.161, 6: 0.032}
+02:18:40 L18 set relaxed: no candidate meets the recurrence threshold; max activity 79
+02:18:40 L19 set paper: 1 candidates (>= 64 active); best E006 all-case mean +0.074 active 91/128; top5: {6: 0.074}
+02:18:40 L19 set strict: 1 candidates (>= 64 active); best E006 all-case mean +0.092 active 82/128; top5: {6: 0.092}
+02:18:40 L19 set relaxed: no candidate meets the recurrence threshold; max activity 85
+02:18:40 chunk 1: wrote 2848 new rows; /home/ubuntu/MOE/results/mixtral_nobos_metrics/expert_rows.parquet now holds 2848 rows over layers [18, 19]
+2026-09-21T02:18:48Z END   ext5eng-expert-mixtral_nobos_metrics rc=0 (109s)
+2026-09-21T02:18:48Z <<< expert-mixtral_nobos_metrics rc=0
+2026-09-21T02:18:48Z >>> sweep-mixtral_bos_metrics
+2026-09-21T02:18:48Z START ext5eng-sweep-mixtral_bos_metrics (waited 0s): python scripts/run_sweep.py mixtral --out mixtral_bos_metrics --sets paper --metrics --agent ext5-engine
+02:18:55 mixtral: sets=['paper'] union=256 cases
+02:19:01 running pass: 512 prefill rows, 8192 spawn rows
+02:19:08   layer   0: load-wait 5.87s compute 0.63s  wf_rows=256
+02:19:26   layer   8: load-wait 2.62s compute 0.18s  wf_rows=2304
+02:19:47   layer  16: load-wait 1.93s compute 0.23s  wf_rows=4352
+02:20:03   layer  24: load-wait 1.96s compute 0.25s  wf_rows=6400
+02:20:20   layer  31: load-wait 2.43s compute 0.27s  wf_rows=8192
+02:20:21   pass done: 512 prefill rows (T=19), 8192 spawn rows, 79.2s (metrics 0.1s)
+02:20:21 pass time 79.4s (metrics 0.1s)
+/home/ubuntu/MOE/scripts/run_sweep.py:156: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[dsc].mean(0)
+/home/ubuntu/MOE/scripts/run_sweep.py:157: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[val].mean(0)
+02:20:21 set paper: L*=19 disc=+0.623 val@L*=+0.557 val argmax L19 +0.557 funnel strict 234/256
+02:20:21 done
+2026-09-21T02:20:28Z END   ext5eng-sweep-mixtral_bos_metrics rc=0 (100s)
+2026-09-21T02:20:28Z <<< sweep-mixtral_bos_metrics rc=0
+2026-09-21T02:20:28Z >>> expert-mixtral_bos_metrics
+2026-09-21T02:20:28Z START ext5eng-expert-mixtral_bos_metrics (waited 0s): python scripts/run_expert.py mixtral --out mixtral_bos_metrics --layers 18,19 --no-pairs --metrics --agent ext5-engine
+02:20:42 mixtral: chunk 1/1: 256 cases, layers 18..19 (2), 512 prefill rows, 2732 spawn rows
+02:20:48   layer   0: load-wait 5.88s compute 0.59s  wf_rows=0
+02:21:10   layer   8: load-wait 2.74s compute 0.14s  wf_rows=0
+02:21:27   layer  16: load-wait 1.71s compute 0.14s  wf_rows=0
+02:21:40   layer  24: load-wait 2.06s compute 0.19s  wf_rows=2732
+02:21:59   layer  31: load-wait 2.51s compute 0.19s  wf_rows=2732
+02:21:59   pass done: 512 prefill rows (T=19), 2732 spawn rows, 77.5s (metrics 0.1s)
+02:21:59 pass time 77.7s (metrics 0.1s)
+02:22:00 L18 set paper: 2 candidates (>= 64 active); best E001 all-case mean +0.188 active 98/128; top5: {1: 0.188, 6: 0.043}
+02:22:00 L18 set strict: 1 candidates (>= 64 active); best E001 all-case mean +0.201 active 94/128; top5: {1: 0.201}
+02:22:00 L18 set relaxed: no candidate meets the recurrence threshold; max activity 104
+02:22:00 L19 set paper: 2 candidates (>= 64 active); best E002 all-case mean +0.378 active 76/128; top5: {2: 0.378, 6: 0.108}
+02:22:00 L19 set strict: 2 candidates (>= 64 active); best E002 all-case mean +0.352 active 73/128; top5: {2: 0.352, 6: 0.091}
+02:22:00 L19 set relaxed: no candidate meets the recurrence threshold; max activity 84
+02:22:00 chunk 1: wrote 2732 new rows; /home/ubuntu/MOE/results/mixtral_bos_metrics/expert_rows.parquet now holds 2732 rows over layers [18, 19]
+2026-09-21T02:22:08Z END   ext5eng-expert-mixtral_bos_metrics rc=0 (100s)
+2026-09-21T02:22:08Z <<< expert-mixtral_bos_metrics rc=0
+2026-09-21T02:22:08Z >>> heads-qwen3
+2026-09-21T02:22:08Z START ext5eng-heads-qwen3 (waited 0s): python scripts/ext5_heads_sweep.py qwen3 --out qwen3_heads --layers 40,43,44 --base-run qwen3
+02:22:21 qwen3 -> qwen3_heads: 256 cases, layers [40, 43, 44], special_tokens=True
+02:22:22 running pass: 512 prefill rows, 26880 spawn rows (32 heads x 3 layers + 3 reference kinds)
+02:22:25   layer   0: load-wait 2.85s compute 0.66s  wf_rows=0
+02:22:34   layer   8: load-wait 1.18s compute 0.07s  wf_rows=0
+02:22:44   layer  16: load-wait 1.17s compute 0.07s  wf_rows=0
+02:22:54   layer  24: load-wait 1.16s compute 0.07s  wf_rows=0
+02:23:04   layer  32: load-wait 1.17s compute 0.08s  wf_rows=0
+02:23:15   layer  40: load-wait 0.94s compute 0.37s  wf_rows=8960
+02:23:25   layer  47: load-wait 0.63s compute 0.21s  wf_rows=26880
+02:23:25   pass done: 512 prefill rows (T=16), 26880 spawn rows, 63.3s
+02:23:25 pass time 63.6s
+02:23:25 set paper L40: attn_layer +1.577 layer +0.436 block +1.925 sum heads +1.590; top heads (val) {13: 0.946, 15: 0.455, 14: 0.413, 11: 0.225, 12: 0.173}
+02:23:25 set paper L43: attn_layer +1.103 layer +0.591 block +1.596 sum heads +1.143; top heads (val) {11: 0.298, 15: 0.268, 28: 0.206, 14: 0.163, 25: 0.099}
+02:23:25 set paper L44: attn_layer +0.041 layer +0.946 block +0.965 sum heads +0.062; top heads (val) {4: 0.014, 0: 0.014, 2: 0.01, 21: 0.009, 9: 0.008}
+02:23:25 done
+2026-09-21T02:23:32Z END   ext5eng-heads-qwen3 rc=0 (84s)
+2026-09-21T02:23:32Z <<< heads-qwen3 rc=0
+2026-09-21T02:23:32Z >>> heads-mixtral_nobos
+2026-09-21T02:23:32Z START ext5eng-heads-mixtral_nobos (waited 0s): python scripts/ext5_heads_sweep.py mixtral --out mixtral_nobos_heads --layers 15,18,19,24 --base-run mixtral_nobos --no-special-tokens
+02:23:45 mixtral -> mixtral_nobos_heads: 256 cases, layers [15, 18, 19, 24], special_tokens=False
+02:23:45 running pass: 512 prefill rows, 35840 spawn rows (32 heads x 4 layers + 3 reference kinds)
+02:23:52   layer   0: load-wait 6.20s compute 0.77s  wf_rows=0
+02:24:15   layer   8: load-wait 2.75s compute 0.14s  wf_rows=0
+02:24:38   layer  16: load-wait 2.47s compute 0.30s  wf_rows=8960
+02:25:01   layer  24: load-wait 2.32s compute 0.69s  wf_rows=35840
+02:25:21   layer  31: load-wait 2.18s compute 0.71s  wf_rows=35840
+02:25:21   pass done: 512 prefill rows (T=18), 35840 spawn rows, 96.1s
+02:25:21 pass time 96.3s
+02:25:22 set paper L15: attn_layer +0.337 layer +0.065 block +0.439 sum heads +0.141; top heads (val) {1: 0.183, 3: 0.126, 7: 0.058, 31: 0.036, 0: 0.031}
+02:25:22 set paper L18: attn_layer +0.805 layer +0.204 block +1.006 sum heads +0.791; top heads (val) {4: 0.609, 12: 0.141, 14: 0.108, 15: 0.036, 13: 0.029}
+02:25:22 set paper L19: attn_layer +0.838 layer +0.459 block +1.204 sum heads +0.743; top heads (val) {29: 0.34, 30: 0.191, 31: 0.072, 7: 0.047, 21: 0.021}
+02:25:22 set paper L24: attn_layer +0.902 layer +0.138 block +1.036 sum heads +0.961; top heads (val) {22: 0.776, 23: 0.312, 21: 0.261, 12: 0.013, 4: 0.009}
+02:25:22 done
+2026-09-21T02:25:29Z END   ext5eng-heads-mixtral_nobos rc=0 (117s)
+2026-09-21T02:25:29Z <<< heads-mixtral_nobos rc=0
+2026-09-21T02:25:29Z >>> heads-mixtral_bos
+2026-09-21T02:25:29Z START ext5eng-heads-mixtral_bos (waited 0s): python scripts/ext5_heads_sweep.py mixtral --out mixtral_bos_heads --layers 15,18,19,24 --base-run mixtral
+02:25:42 mixtral -> mixtral_bos_heads: 256 cases, layers [15, 18, 19, 24], special_tokens=True
+02:25:42 running pass: 512 prefill rows, 35840 spawn rows (32 heads x 4 layers + 3 reference kinds)
+02:25:49   layer   0: load-wait 6.14s compute 0.65s  wf_rows=0
+02:26:07   layer   8: load-wait 2.23s compute 0.14s  wf_rows=0
+02:26:28   layer  16: load-wait 2.25s compute 0.31s  wf_rows=8960
+02:26:46   layer  24: load-wait 1.72s compute 0.70s  wf_rows=35840
+02:27:04   layer  31: load-wait 2.16s compute 0.73s  wf_rows=35840
+02:27:04   pass done: 512 prefill rows (T=19), 35840 spawn rows, 81.8s
+02:27:04 pass time 82.1s
+02:27:06 set paper L15: attn_layer +0.446 layer +0.105 block +0.580 sum heads +0.361; top heads (val) {1: 0.236, 3: 0.192, 7: 0.078, 0: 0.062, 31: 0.053}
+02:27:06 set paper L18: attn_layer +0.989 layer +0.318 block +1.288 sum heads +0.970; top heads (val) {4: 0.79, 12: 0.146, 14: 0.136, 5: 0.064, 13: 0.042}
+02:27:06 set paper L19: attn_layer +0.933 layer +0.570 block +1.393 sum heads +0.775; top heads (val) {29: 0.412, 30: 0.225, 31: 0.091, 7: 0.052, 28: 0.014}
+02:27:06 set paper L24: attn_layer +0.856 layer +0.178 block +0.988 sum heads +0.878; top heads (val) {22: 0.704, 23: 0.235, 21: 0.19, 12: 0.011, 16: 0.006}
+02:27:06 done
+2026-09-21T02:27:13Z END   ext5eng-heads-mixtral_bos rc=0 (104s)
+2026-09-21T02:27:13Z <<< heads-mixtral_bos rc=0
+2026-09-21T02:27:13Z >>> subsets-qwen3-L44
+2026-09-21T02:27:13Z START ext5eng-subsets-qwen3-L44 (waited 0s): python scripts/ext5_subsets_run.py qwen3 --out qwen3_subsets --layers 44 --base-run qwen3_metrics
+02:27:27 qwen3 -> qwen3_subsets L44: 256 cases, 66048 spawn rows
+02:27:30   layer   0: load-wait 2.85s compute 0.64s  wf_rows=0
+02:27:39   layer   8: load-wait 1.17s compute 0.40s  wf_rows=0
+02:27:49   layer  16: load-wait 1.17s compute 0.07s  wf_rows=0
+02:27:59   layer  24: load-wait 1.17s compute 0.08s  wf_rows=0
+02:28:09   layer  32: load-wait 1.16s compute 0.07s  wf_rows=0
+02:28:19   layer  40: load-wait 1.15s compute 0.07s  wf_rows=0
+02:28:28   layer  47: load-wait 0.81s compute 0.43s  wf_rows=66048
+02:28:28   pass done: 512 prefill rows (T=16), 66048 spawn rows, 60.9s
+02:28:28 pass time 61.2s
+02:28:28 L44: in-pass clean routing equals the base run's for 223/256 cases
+02:28:28 L44 set paper (val, n=128): block +0.973 layer +0.950 coalition_clean +0.931 best single +0.821; best single >= 0.8*block in 74/128 cases
+02:28:28 L44: wrote 66048 rows; /home/ubuntu/MOE/results/qwen3_subsets/subset_rows.parquet holds 66048 rows over layers [44]
+02:28:28 done
+2026-09-21T02:28:35Z END   ext5eng-subsets-qwen3-L44 rc=0 (82s)
+2026-09-21T02:28:35Z <<< subsets-qwen3-L44 rc=0
+2026-09-21T02:28:35Z >>> subsets-qwen3-L42
+2026-09-21T02:28:35Z START ext5eng-subsets-qwen3-L42 (waited 0s): python scripts/ext5_subsets_run.py qwen3 --out qwen3_subsets --layers 42 --base-run qwen3_metrics
+02:28:44 qwen3 -> qwen3_subsets L42: 256 cases, 66048 spawn rows
+02:28:49   layer   0: load-wait 3.26s compute 0.63s  wf_rows=0
+02:28:57   layer   8: load-wait 1.16s compute 0.07s  wf_rows=0
+02:29:06   layer  16: load-wait 1.16s compute 0.07s  wf_rows=0
+02:29:16   layer  24: load-wait 1.17s compute 0.07s  wf_rows=0
+02:29:26   layer  32: load-wait 1.17s compute 0.07s  wf_rows=0
+02:29:36   layer  40: load-wait 1.17s compute 0.07s  wf_rows=0
+02:29:45   layer  47: load-wait 0.51s compute 0.43s  wf_rows=66048
+02:29:45   pass done: 512 prefill rows (T=16), 66048 spawn rows, 60.4s
+02:29:45 pass time 60.6s
+02:29:45 L42: in-pass clean routing equals the base run's for 228/256 cases
+02:29:47 L42 set paper (val, n=128): block +0.652 layer +0.611 coalition_clean +0.589 best single +0.551; best single >= 0.8*block in 78/128 cases
+02:29:47 L42: wrote 66048 rows; /home/ubuntu/MOE/results/qwen3_subsets/subset_rows.parquet holds 132096 rows over layers [42, 44]
+02:29:47 done
+2026-09-21T02:29:54Z END   ext5eng-subsets-qwen3-L42 rc=0 (79s)
+2026-09-21T02:29:54Z <<< subsets-qwen3-L42 rc=0
+2026-09-21T02:29:54Z >>> subsets-mixtral_nobos
+2026-09-21T02:29:54Z START ext5eng-subsets-mixtral_nobos (waited 0s): python scripts/ext5_subsets_run.py mixtral --out mixtral_nobos_subsets --layers 18,19 --base-run mixtral_nobos_metrics --no-special-tokens
+02:30:03 mixtral -> mixtral_nobos_subsets L18: 256 cases, 1536 spawn rows
+02:30:13   layer   0: load-wait 8.61s compute 0.74s  wf_rows=0
+02:30:35   layer   8: load-wait 2.75s compute 0.14s  wf_rows=0
+02:30:58   layer  16: load-wait 2.79s compute 0.14s  wf_rows=0
+02:31:21   layer  24: load-wait 2.73s compute 0.16s  wf_rows=1536
+02:31:42   layer  31: load-wait 2.73s compute 0.16s  wf_rows=1536
+02:31:42   pass done: 512 prefill rows (T=18), 1536 spawn rows, 98.5s
+02:31:42 pass time 98.7s
+02:31:42 L18: in-pass clean routing equals the base run's for 252/256 cases
+02:31:42 L18 set paper (val, n=128): block +1.003 layer +0.199 coalition_clean +0.204 best single +0.212; best single >= 0.8*block in 34/128 cases
+02:31:42 L18: wrote 1536 rows; /home/ubuntu/MOE/results/mixtral_nobos_subsets/subset_rows.parquet holds 1536 rows over layers [18]
+02:31:42 mixtral -> mixtral_nobos_subsets L19: 256 cases, 1536 spawn rows
+02:31:45   layer   0: load-wait 2.48s compute 0.14s  wf_rows=0
+02:32:08   layer   8: load-wait 2.75s compute 0.14s  wf_rows=0
+02:32:31   layer  16: load-wait 2.57s compute 0.14s  wf_rows=0
+02:32:54   layer  24: load-wait 2.72s compute 0.16s  wf_rows=1536
+02:33:13   layer  31: load-wait 2.71s compute 0.16s  wf_rows=1536
+02:33:13   pass done: 512 prefill rows (T=18), 1536 spawn rows, 91.2s
+02:33:13 pass time 91.3s
+02:33:13 L19: in-pass clean routing equals the base run's for 252/256 cases
+02:33:15 L19 set paper (val, n=128): block +1.201 layer +0.450 coalition_clean +0.433 best single +0.411; best single >= 0.8*block in 26/128 cases
+02:33:15 L19: wrote 1536 rows; /home/ubuntu/MOE/results/mixtral_nobos_subsets/subset_rows.parquet holds 3072 rows over layers [18, 19]
+02:33:16 done
+2026-09-21T02:33:23Z END   ext5eng-subsets-mixtral_nobos rc=0 (209s)
+2026-09-21T02:33:23Z <<< subsets-mixtral_nobos rc=0
+2026-09-21T02:33:23Z chain finished

@@ -1,0 +1,63 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "base_run": "mixtral_nobos",
+ "special_tokens": false,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "layers": [
+  15,
+  18,
+  19,
+  24
+ ],
+ "kinds": [
+  "attn_head",
+  "attn_layer",
+  "layer",
+  "block"
+ ],
+ "agent": "ext5-engine",
+ "experiment": "ext5 F2 per-head attention patching at the final position",
+ "command": "python scripts/ext5_heads_sweep.py mixtral --out mixtral_nobos_heads --layers 15,18,19,24 --base-run mixtral_nobos --no-special-tokens",
+ "created_utc": "2026-09-21T02:23:45Z",
+ "n_cases": 256,
+ "rejected": [],
+ "complete": true,
+ "spawn_rows": 35840,
+ "completed_utc": "2026-09-21T02:25:22Z",
+ "pass_time_s": 96.07520604133606,
+ "n_rows": 35840,
+ "prefill_rows": 512,
+ "rows_by_kind": {
+  "attn_head": 32768,
+  "attn_layer": 1024,
+  "layer": 1024,
+  "block": 1024
+ },
+ "outputs": [
+  "head_rows.parquet",
+  "head_prefill.parquet",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet",
+  "head_attn_final.npz",
+  "head_summary.json"
+ ],
+ "head_rows_columns": [
+  "case_id",
+  "layer",
+  "head",
+  "kind",
+  "logit_true",
+  "logit_foil",
+  "delta",
+  "rescue",
+  "vnorm",
+  "delta_clean",
+  "delta_noised",
+  "sigma_mult"
+ ]
+}

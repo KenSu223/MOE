@@ -52,24 +52,69 @@ def build_spawns(ids, layers, rt, n, no_pairs):
     return spawns, tags
 
 
-def rows_from_result(res, tags, ids, rt, sigma_mult):
+METRICS = ("logp_true", "logp_foil", "p_true", "p_foil", "rank_true", "kl_to_clean")
+
+
+def _mcols(md, j: int) -> dict:
+    """ext5: the six metric columns of row j (empty when metrics are off)."""
+    if md is None:
+        return {}
+    return {k: (int(md[k][j]) if k == "rank_true" else float(md[k][j])) for k in METRICS}
+
+
+def rows_from_result(res, tags, ids, rt, sigma_mult, metrics: bool = False):
     d = res.delta
     sd = res.sp_delta
     n = len(ids)
     pos = {c: i for i, c in enumerate(ids)}
+    mp, ms = (res.metrics_prefill, res.metrics_spawn) if metrics else (None, None)
     rows = []
     for j, (c, l, kind, e, p) in enumerate(tags):
         i = pos[c]
         ce = rt[(c, "clean", l)]
         ne = rt[(c, "noised", l)]
+        extra = _mcols(ms, j)
+        if mp is not None:  # the noised prefill row's values of the same pass (for probability-scale rescue)
+            extra.update(p_true_noised=float(mp["p_true"][n + i]), logp_true_noised=float(mp["logp_true"][n + i]))
         rows.append(dict(case_id=c, layer=l, kind=kind, expert=e, partner=p, alpha=float(res.sp_alpha[j]),
                          norm_e=float(res.sp_norm_e[j]), norm_partner=float(res.sp_norm_partner[j]), vnorm=float(res.sp_vnorm[j]),
                          logit_true=float(res.sp_logit_true[j]), logit_foil=float(res.sp_logit_foil[j]), delta=float(sd[j]),
                          delta_clean=float(d[i]), delta_noised=float(d[n + i]), rescue=float(sd[j] - d[n + i]),
                          clean_active=bool(e in ce), noised_active=bool(e in ne),
                          clean_weight=float(ce.get(e, np.nan)), noised_weight=float(ne.get(e, np.nan)),
-                         n_clean_active=len(ce), sigma_mult=sigma_mult))
+                         n_clean_active=len(ce), sigma_mult=sigma_mult, **extra))
     return pd.DataFrame(rows)
+
+
+def _json_safe(o):
+    """Keep only JSON-native values (numpy scalars/arrays converted; DataFrames and other objects dropped as their type name)."""
+    import numpy as _np
+    if isinstance(o, dict):
+        return {str(k): _json_safe(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_json_safe(v) for v in o]
+    if isinstance(o, (str, int, float, bool)) or o is None:
+        return o
+    if isinstance(o, _np.generic):
+        return o.item()
+    if isinstance(o, _np.ndarray):
+        return o.tolist()
+    return f"<dropped {type(o).__name__}>"
+
+
+def _write_meta(od: str, upd: dict):
+    """Merge upd into results/<run>/run_meta.json (ext5; only written when --agent or --metrics is given).
+    A corrupt existing file is replaced; values are sanitised to JSON-native types."""
+    p = os.path.join(od, "run_meta.json")
+    cur = {}
+    if os.path.exists(p):
+        try:
+            cur = json.load(open(p))
+        except Exception:
+            cur = {}
+    cur.update(_json_safe(upd))
+    with open(p, "w") as f:
+        json.dump(cur, f, indent=1, default=str)
 
 
 def layer_tag(layers: list[int]) -> str:
@@ -114,10 +159,18 @@ def main():
     ap.add_argument("--no-pairs", action="store_true")
     ap.add_argument("--layer-chunks", type=int, default=1, help="split the layer list into this many passes")
     ap.add_argument("--dry-run", action="store_true", help="build the job, print row counts, do not run the engine")
+    ap.add_argument("--metrics", action="store_true",
+                    help="ext5 (F5): full-vocabulary metrics on every row (+ p_true_noised, logp_true_noised of the same pass)")
+    ap.add_argument("--agent", default=None, help="agent name recorded in run_meta.json (written when --agent or --metrics is given)")
     args = ap.parse_args()
     layers = sorted(set(int(x) for x in args.layers.split(",")))
     m = MODELS[args.model]
     od = out_dir(args.out or args.model)
+    write_meta = bool(args.agent) or args.metrics
+    meta = {"model": args.model, "repo": m["repo"], "special_tokens": not args.no_special_tokens, "token_rule": args.token_rule,
+            "sigma_mult": args.sigma_mult, "layers": layers, "pairs": not args.no_pairs, "layer_chunks": args.layer_chunks,
+            "metrics": args.metrics, "agent": args.agent, "command": "python " + " ".join(sys.argv),
+            "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "complete": False}
     sets = load_case_sets(args.out or args.model)
     ct = pd.read_parquet(os.path.join(od, "sweep_cases.parquet"))
     ids = ct.case_id.tolist()
@@ -143,21 +196,33 @@ def main():
     pre += [PrefillSpec(cases[c].ids, cases[c].true_id, cases[c].foil_id, cases[c].subject_pos,
                         noise_draw(c, len(cases[c].subject_pos), Hd, sigma)) for c in ids]
     path = os.path.join(od, "expert_rows.parquet")
+    if write_meta:
+        _write_meta(od, {"expert": meta})
+    pass_times = []
     for ci, ch in enumerate(chunks):
         spawns, tags = build_spawns(ids, ch, rt, n, args.no_pairs)
         log(f"{args.model}: chunk {ci + 1}/{len(chunks)}: {n} cases, layers {ch[0]}..{ch[-1]} ({len(ch)}), {len(pre)} prefill rows, {len(spawns)} spawn rows")
         t0 = time.time()
-        res = eng.run(pre, spawns, record_routing=False, log=log)
-        log(f"pass time {time.time() - t0:.1f}s")
-        df = rows_from_result(res, tags, ids, rt, args.sigma_mult)
+        res = eng.run(pre, spawns, record_routing=False, log=log, metrics=args.metrics)
+        log(f"pass time {time.time() - t0:.1f}s" + (f" (metrics {res.extra.get('metrics_s', 0):.1f}s)" if args.metrics else ""))
+        pass_times.append(res.extra["total_s"])
+        df = rows_from_result(res, tags, ids, rt, args.sigma_mult, metrics=args.metrics)
         d = res.delta
         pf = pd.DataFrame(dict(case_id=ids, delta_clean=d[:n], delta_noised=d[n:]))
+        if args.metrics:  # the prefill rows' full-vocabulary metrics of this pass (clean_ref of noised row n+i is row i)
+            for k in METRICS:
+                pf[f"{k}_clean"] = res.metrics_prefill[k][:n]
+                pf[f"{k}_noised"] = res.metrics_prefill[k][n:]
         pf.to_parquet(os.path.join(od, f"expert_prefill_L{layer_tag(ch)}.parquet"), index=False)
         all_df = merge_rows(path, df, ch)
         log_selection_summary(df, sets, ch)
         log(f"chunk {ci + 1}: wrote {len(df)} new rows; {path} now holds {len(all_df)} rows over layers {sorted(all_df.layer.unique().tolist())}")
         del res, df
         torch.cuda.empty_cache()
+    if write_meta:
+        meta.update({"completed_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "n_cases": n, "pass_times_s": pass_times,
+                     "n_rows_total": len(all_df), "columns": all_df.columns.tolist(), "complete": True})
+        _write_meta(od, {"expert": meta})
 
 
 if __name__ == "__main__":

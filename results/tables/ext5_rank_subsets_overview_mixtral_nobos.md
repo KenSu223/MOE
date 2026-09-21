@@ -1,0 +1,6 @@
+**Mixtral-8x7B-v0.1 (no BOS, paper protocol): subset-pass overview**
+
+| Layer | Eligible | Exact full set - block [95% CI] | Full set / block | Mean pairwise interaction, all pairs [95% CI] | Pairs with negative interaction |
+|---|---|---|---|---|---|
+| L18 | 150/256 | -0.023 [-0.042, -0.005] | 95% | +0.029 [+0.007, +0.052] | 25% |
+| L19 | 185/256 | -0.042 [-0.080, -0.011] | 94% | -0.029 [-0.078, +0.009] | 34% |

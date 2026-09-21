@@ -459,3 +459,225 @@
 - User decisions: F4 before F3; F4 = subject-last-token column only; F5 metrics alongside Δ. Plan: RESEARCH_PLAN.md
   "Phase 2 execution plan". Engine ownership: ext5-engine only; ext5-subject implements suffix rows in a separate module.
 - Pre-launch state: GPU idle, no queue waiters, git clean at 2a27fbc+, NVMe 49 GB free (new runs are small).
+
+## 2026-09-21 01:55 UTC — ext5-subject: verification of the suffix-row executor done (F4, last-subject-token patching)
+- New executor `moetrace/ext5_subject.py` (`SubjectEngine.run_subject`; engine.py untouched, helpers reused): suffix wavefront rows
+  spawned at (layer l, position p) carry positions p..T-1, attend to the parent noised run's K/V for < p and their own for >= p;
+  kinds zero/layer/expert/coalition_*/attn_layer/block/resid at p. Scripts `scripts/ext5_subject_{verify,gate,sweep,select,expert,analyze}.py`,
+  chain `scripts/ext5_subject_chain.sh`.
+- OLMoE verification (20 cases x 16 layers, `results/verify_ext5_subject_olmoe.json`, 93 s): vs transformers hooks replacing the
+  self_attn / MoE / decoder-layer output at p: mean |dDelta| 0.139 / 0.150 / 0.168 (max 0.62 / 0.80 / 1.13) for attn_layer / layer /
+  resid = ext2's final-token floor (0.19 / 0.15 / 0.13); 20-case mean-curve max dev 0.078 / 0.106 / 0.143; rescue corr 0.92 / 0.95 / 1.00
+  (attention rescue at p is small in OLMoE, HF std 0.54, so its correlation is floor-limited). Null (zero vector at p = noised run) max
+  0.49 mean 0.047; identity (clean donor on clean run) max 0.11. Consistency: the same prefill batch through run_subject at p = T-1 and
+  through Engine.run is BIT-IDENTICAL (960/960 rows, prefill, vnorm); vs the stored olmoe_attnsweep rows (different batch) mean |dDelta|
+  0.13-0.17, rescue corr 0.98-1.00, mean-curve max dev <= 0.094. Patched-vector norms vs HF within 2-10 %.
+- Noise reference on these 20 cases: whole-span drop 7.12, last-subject-token-only 4.25, rest-of-span 5.68.
+- Gate rule for the per-case correlation made noise-aware (corr >= min(0.95, r_exp - 0.03), r_exp = 1 - s_diff^2 / 2 s_HF^2); chain launched
+  detached (re-runs verify with the extra field, gate, then 3 sweeps + 3 expert passes through gpu_queue.sh).
+
+## 2026-09-21 01:55 UTC — ext5-analysis: F1.1 rankings and F1.2 population-level minimal sets done (zero GPU); F1.3 / F5 code ready, waiting for data
+- Code (new files only): moetrace/ext5_rank.py (full ranking of every (layer, expert) pair with vectorised seed-0 bootstrap CIs identical to
+  stats.summarize, all-case Spec matrix via protocol.active_controls, Kendall tau, additive greedy + per-case coverage greedy, cross-layer
+  sum/max curves, F1.3 per-case minimal sets / interaction matrix / non-additivity decomposition), moetrace/ext5_metrics.py (F5: metric
+  columns, rescue swap so analysis.py / ext1_analysis.py run unchanged under Δp, Δlog p, rank, KL, per-case ratio; funnel alternative),
+  scripts/ext5_rank_analyze.py (+ ext5_rank_text.py), scripts/ext5_rank_subsets.py, scripts/ext5_metrics_analyze.py (+ ext5_metrics_text.py).
+  Outputs: results/tables/ext5_rank_* (92 files), results/figures/ext5_rank_minimal_{qwen3_bos,mixtral_bos,mixtral_nobos}.png,
+  results/ext5_rank_summary.json, results/sections/ext5_f1_rankings.md (F1.3 part pending), results/sections/ext5_f5_metrics.md (method + pending).
+- Documented defaults: block = MoE-block patch (kind layer, same pass); orderings on discovery, evaluation on validation; block share defined
+  only where the block CI excludes zero; recurrence 64/128. Observation: under additivity the greedy objective is linear in S, so greedy
+  forward selection = descending all-case discovery rescue and the curve = its cumulative sum; a non-linear per-case coverage greedy was added.
+- F1.1 headline: rankings agree wherever the effect is clear. Same 2-3 pairs lead under all-case rescue, active-only rescue, Spec and the
+  discovery statistic in all three runs (tau rescue vs active-only 0.94-0.97; rescue vs Spec 0.53/0.35/0.43 among pairs with rescue CI > 0,
+  0.64-0.73 within L*; over ALL recurrent pairs rescue vs Spec 0.38 Qwen3, 0.01-0.03 Mixtral = noise of near-zero pairs). Systematic
+  disagreements: (a) junior partners (rescue > 0, Spec < 0: Qwen3 L43E046/E104; Mixtral L19E006, L20E005, L21E000, L20E000, L18E006),
+  (b) Spec without rescue in layers whose block hurts (Qwen3 L47E032/E034, Mixtral L29-L31), (c) share/percentile reward weak layers.
+  L44E069 rank 1/1/1/7/11/1, L42E115 2/2/2/2/1/2 (rescue, active-only, Spec, share, percentile, disc); Mixtral no-BOS L19E006 4/4/28/6/29/4.
+- F1.2 headline (|S| for 50/80/90 % of the validation block rescue, discovery order): Qwen3 L44 1/6/9 (E069 alone 53 %), L42 1/2/6 (E115
+  72 %), L43 3/7/8, L40 2/6/10; Mixtral BOS L19 1/3/4 (E002 63 %), L18 1/2/2 (E001 77 %), L21 1/3/5; no-BOS L19 1/4/5 (E002 51 %, fails
+  recurrence), L18 1/3/3, L21 1/3/6. Additive end point vs exact coalition: equal on average at every layer (Qwen3 L44 sum +0.935 /
+  coalition +0.916 / block +0.941, r 0.93, mean |diff| 0.36, 50 % of cases within 0.25; Mixtral 92-99 % within 0.25, r 0.90-0.98).
+  Coverage (case reaches 80 % of own block): max 60-72 % Qwen3, 62-86 % Mixtral even with all active experts. Cross-layer: E069+E115 =
+  80 % (per-case max) to 101 % (sum) of the L44 block; the sum over layers is an over-count (3.4x block at 59 pairs) -> F1.4.
+- F1.3 driver tested on a synthetic subset_rows fixture (schema case_id, layer, experts, n_experts, rescue) for Qwen3 L44 (255 subsets x
+  528 cases) and Mixtral L19; F5 driver tested on synthetic metric columns fabricated onto results/qwen3 and results/mixtral_nobos
+  (identity Δ = logp_true - logp_foil exact by construction). Both write to a scratch dir in test mode. Waiting for results/*_subsets and
+  results/*_metrics from ext5-engine.
+
+## 2026-09-21 02:02 UTC — ext5-subject: Qwen3 subject-site sweep + expert pass done (Mixtral no-BOS/BOS queued)
+- Gate passed 01:54 (noise-aware correlation rule). `results/qwen3_bos_subject`: 2 chunked passes (61 s + 49 s; 18,432 suffix rows /
+  76k suffix tokens each, Smax 8, T 16), expert pass at L2,4,5 (+ fixed L42/L44) 76 s.
+- Early site found: MoE-output patch at the last subject token peaks at **L4 +0.927 [0.647, 1.252]** (val; disc. argmax L4 +0.912), as large as
+  the final-token L44 peak (+0.925); the curve is confined to L0-L9 (centre of mass 8.9 vs 38.6) and is ~0 at L42/L44. Attention output at p
+  small (L1 +0.30); `resid` at p rises to +3.8 at L9-L11 (0.67 of the drop) then decays to 0 by L44 as the information leaves the token.
+- No shared early-site expert: recurrent candidates exist (L4 E060 120/128, E046 96/128) but the best rescues +0.02-0.07 with Spec ~0; the clean
+  top-8 coalition recovers the layer effect (+0.75 vs +0.88 at L4). Per case the best single expert gives ~90 % of the coalition, but it is a
+  different expert per prompt (36-38 distinct winners / 128, most common in <= 19). L44E069 / L42E115 patched at p: rescue ~0.
+- Noise on the last subject token alone causes 0.52 [0.46, 0.57] of the whole-span drop (5.95 -> 3.07); the rest of the span 0.87; strongly
+  sub-additive. Clean/noised routing overlap at p only 0.33 (0.19-0.47) vs 0.65 at the final token.
+- Analyzer `scripts/ext5_subject_analyze.py` produces tables ext5_subject_{peaks,experts,concentration,fixed}_<short>, noise_attribution,
+  figure ext5_subject_curves_<short>.png, section results/sections/ext5_f4_subject.md (auto-filled).
+
+## 2026-09-21 02:06 UTC — ext5-engine: engine extensions verified (F5 metrics, F2 attn_head, F1 coalition_set/multi); GPU chain launched
+- Engine API (`moetrace/engine.py`, all backward compatible; `results/verify_olmoe.json` bit-identical to
+  `results/verify_olmoe_before_ext5.json` on all 23 non-timing metrics, re-checked after the last edit):
+  * `Engine.run(..., metrics=False, metrics_chunk=512)` -> `PassResult.metrics_prefill` / `.metrics_spawn` (dicts, keys
+    `logp_true, logp_foil, p_true, p_foil` fp32, `rank_true` int32 (1 + #vocab logits strictly greater), `kl_to_clean` fp32 =
+    KL(softmax(row) || softmax(clean prefill row of the same case)); arrays [B] and [S]). Clean reference of a prefill row:
+    `PrefillSpec.clean_ref` (new, default -1 = inferred from spawns parent->clean, else itself -> KL = 0 exactly).
+    Full log-softmax of the bf16 logits in fp32, row chunks; cost 0.03 s for 1.4k rows on OLMoE.
+  * kind `attn_head` (`SpawnSpec.expert` = head index): v_h = W_o[:, h](H_h_clean - H_h_noised) in fp32, row starts before the
+    MoE of layer l as h_pre_noised + bf16(Attn_noised + v_h); `DiagSpec.attn_heads_final=(layers)` records the pre-o_proj
+    per-head outputs [B, nH, D] bf16; `DiagSpec.spawn_vectors=True` stores every spawn's fp32 vector (verification only).
+  * kind `coalition_set` (`SpawnSpec.experts` = tuple): v = sum_{e in S} c_e_clean - c_e_noised (c_e = 0 if not routed).
+  * kind `multi` (`SpawnSpec.steps` = ((layer, kind, experts), ...), increasing layers, kinds layer/expert/coalition_set/
+    coalition_clean/zero): later steps replace the live row's OWN component by the clean one (v = clean - own).
+  * `scripts/run_sweep.py` / `run_expert.py`: new flags `--metrics`, `--agent` (defaults unchanged; run_meta.json written when either is given).
+- Verification `scripts/ext5_engine_verify.py` -> `results/verify_ext5_engine_olmoe.json` (OLMoE, 20 cases, 2 passes + HF):
+  metrics: delta == logp_true - logp_foil to 9.5e-7 (prefill) / 1.5e-5 (spawn rows); KL(clean||clean) = 0 exactly, min KL 0;
+  p_true + p_foil <= 1 on all 1400 rows; logp_true vs HF log-softmax max 0.33/0.54 (= the delta noise floor vs HF, 0.44/0.53);
+  KL(noised||clean) 4.47 engine vs 4.49 HF; rank_true agrees with HF for 9/10 rows with HF rank <= 10 (max off by 2; tail ranks
+  are bf16-sensitive). attn_head: sum_h v_h = W_o(H_clean - H_noised) to 6e-8 (fp32), = attn_layer vector to 0.2% rel. norm
+  (bf16); vs HF hooks (o_proj input slice replaced) mean |dDelta| 0.147, 79% within 0.25, same floor as the whole-attention
+  replace (0.147) and `layer` in verify_olmoe; identity on the clean run max 0.11. coalition_set/multi (on the 31/40 (case,
+  layer) pairs whose in-pass routing equals pass 1's; the others are the known cross-pass bf16 routing flips): S = clean set ==
+  coalition_clean EXACT (vector and delta), S = clean u noised == layer (vec 2e-7, delta exact), S = all == layer (exact delta),
+  {e} == expert EXACT (248/248), single-step multi == single kind EXACT, multi (layer, coalition_set S=all) == multi (layer,
+  layer) exact; multi (layer, layer) at 3 pairs + 1 triple vs HF double/triple replace hooks: mean |dDelta| 0.119, 91% within
+  0.25, rescue r 0.99.
+- Chain launched 02:05 UTC: `setsid nohup bash scripts/ext5_engine_chain.sh > logs/ext5_engine_chain.log 2>&1 &` (idempotent:
+  steps with existing outputs are skipped). 12 gpu_queue jobs in order: ext5eng-sweep-qwen3_metrics, ext5eng-expert-qwen3_metrics,
+  ext5eng-sweep-mixtral_nobos_metrics, ext5eng-expert-mixtral_nobos_metrics, ext5eng-sweep-mixtral_bos_metrics,
+  ext5eng-expert-mixtral_bos_metrics, ext5eng-heads-qwen3 (L40,43,44), ext5eng-heads-mixtral_nobos (L15,18,19,24),
+  ext5eng-heads-mixtral_bos (L15,18,19,24), ext5eng-subsets-qwen3-L44, ext5eng-subsets-qwen3-L42, ext5eng-subsets-mixtral_nobos
+  (L18,19). ~16 min GPU; interleaves with ext5subj-* jobs.
+- Output paths / schemas for ext5-analysis (all paper set, 128/128, Qwen3 defaults, Mixtral no-BOS and BOS):
+  * F5 `results/{qwen3,mixtral_nobos,mixtral_bos}_metrics/`: `case_sets.json` (copied from base), `sweep_rows.parquet`
+    (run_sweep schema + `logp_true, logp_foil, p_true, p_foil, rank_true, kl_to_clean` on clean/noised/layer rows; clean rows have
+    kl_to_clean = 0), `sweep_routing.parquet`, `sweep_cases.parquet`, `sweep_summary.json`, `expert_rows.parquet` (layers 42,44 /
+    18,19, `--no-pairs`: kinds layer, coalition_clean, coalition_union, expert, expert_noised_only; run_expert schema + the six
+    metric columns of the patched row + `p_true_noised`, `logp_true_noised` of the same pass), `expert_prefill_L42_44.parquet` /
+    `expert_prefill_L18_19.parquet` (case_id, delta_clean, delta_noised, `<metric>_clean`, `<metric>_noised` for all six),
+    `run_meta.json` (keys `sweep`, `expert`).
+  * F1.3 `results/{qwen3_subsets,mixtral_nobos_subsets}/subset_rows.parquet`: case_id, layer, kind (`coalition_set` | `layer` |
+    `coalition_clean` | `block` reference rows of the SAME pass), experts (sorted comma-joined, '' for reference kinds), n_experts
+    (0 for reference kinds), logit_true, logit_foil, delta, rescue, vnorm, delta_clean, delta_noised, n_clean_active, sigma_mult;
+    `subset_prefill_L<l>.parquet`; inputs copied from the `_metrics` run (case_sets.json, sweep_cases, sweep_routing; the clean
+    sets come from that routing, in-pass agreement logged in run_meta.json). Qwen3 L44 and L42 (255 subsets x 256 cases each),
+    Mixtral no-BOS L18, L19 (3 subsets). Run names are in ext5-analysis' auto-detect list.
+  * F2 `results/{qwen3,mixtral_nobos,mixtral_bos}_heads/head_rows.parquet`: case_id, layer, head (-1 for reference kinds), kind
+    (`attn_head` | `attn_layer` | `layer` | `block`), logit_true, logit_foil, delta, rescue, vnorm, delta_clean, delta_noised,
+    sigma_mult; `head_prefill.parquet`, `sweep_cases.parquet`, `sweep_routing.parquet`, `head_attn_final.npz` (attn [n_layers, 2n,
+    nH, T] fp16, rows clean 0..n-1 then noised), `head_summary.json`, `run_meta.json`. Pilot `results/olmoe_heads` (strict+relaxed,
+    L8,10,12,13) already written.
+
+## 2026-09-21 02:13 UTC — ext5-engine: run_sweep.py meta crash fixed (pass outputs unaffected)
+- `ext5eng-sweep-qwen3_metrics` (02:07-02:08) wrote all outputs (sweep_rows/routing/cases.parquet, sweep_summary.json; L*=44,
+  val +0.952, 25,344 layer rows + 512 prefill rows with the six metric columns; clean-row KL = 0, Δ ≡ logp_true − logp_foil) and
+  then crashed (rc=1) in `_write_meta`: the script's case-table code reuses the name `meta` for a DataFrame, which clobbered the
+  new run-meta dict. Fix: dict renamed `run_meta` in run_sweep.py; `_write_meta` in run_sweep.py and run_expert.py now sanitises
+  values to JSON-native types (`_json_safe`, numpy → python, other objects dropped), tolerates a corrupt existing run_meta.json
+  (starts from {}) and dumps with `default=str`. `results/qwen3_metrics/run_meta.json` rebuilt on CPU from the summary/parquet.
+  The chain skips the completed sweep (done-file present); the queued expert step picks up the fixed run_expert.py.
+
+## 2026-09-21 02:25 UTC — ext5-subject: all runs done (chain "chain done" 02:15:07, six ext5subj-* jobs rc=0); section written
+- Runs: `results/qwen3_bos_subject` (sweep 61+49 s, expert L2/4/5 + fixed 42/44, 76 s), `results/mixtral_nobos_subject` (sweep 97+93 s,
+  expert L1/4/6 + fixed 18/19, 113 s), `results/mixtral_bos_subject` (sweep 2 passes, expert L3/4/6 + fixed 18/19). GPU total ≈ 15 min
+  incl. two verification runs. All row-level Parquet + run_meta.json / expert_meta.json / expert_layers.json saved.
+- Early site in all three runs (MoE-output patch at the last subject token, validation): Qwen3 L4 +0.927 [0.647, 1.252] (= final-token L44
+  +0.925; both 0.16 of the drop); Mixtral no-BOS L6 +1.197 [0.940, 1.469] (val argmax L4 +1.349) vs final L21 +0.531 (0.24 vs 0.11 of the
+  drop); Mixtral BOS L4 +2.312 [1.870, 2.779] vs final L19 +0.561 (0.47 vs 0.11). Bands disjoint (L0-L9 vs L40-L44 / L18-L24; curve
+  correlation -0.16 to -0.28). Attention output at p only at L1 (+0.30 / +0.73 / +0.78). `resid` at p plateaus at 0.58-0.76 of the drop
+  (L4-L11) then decays to 0 by the last layer.
+- Noise attribution: last subject token alone = 0.52 / 0.47 / 0.51 of the whole-span drop; rest of span 0.87 / 0.94 / 0.93; sub-additive.
+- No shared early-site expert: Qwen3 recurrent candidates at L2/4/5 rescue +0.02-0.07, Spec ~0 (L4 E046 -0.04); Mixtral has no expert above
+  64/128 at L1/4/6 (max 38-60); per case the best single expert carries 88-99 % of the coalition but differs across prompts (Qwen3 36-38
+  distinct winners /128; Mixtral all 8). Final-token experts at p: L44E069 -0.005 (active 70/128), L42E115 -0.005, L19E002 +0.01-0.02
+  (Spec < 0), L19E006 / L18E001 active <= 6/128. Late layers at p: MoE patch -0.003 to +0.07.
+- Mixtral BOS vs no BOS at p: curves r 0.94-0.96; MoE peak L4 under both, BOS larger (+0.96 [0.60, 1.35] paired at L4); attention identical.
+- Outputs: tables `results/tables/ext5_subject_{peaks,experts,concentration,fixed}_{qwen3_bos,mixtral_nobos,mixtral_bos}`,
+  `ext5_subject_noise_attribution`, `ext5_subject_protocol_mixtral`, `ext5_subject_comparison`; figures `results/figures/
+  ext5_subject_curves_<short>.{png,pdf}`, `ext5_subject_mixtral_protocols`; `results/ext5_subject_summary.json`; section
+  `results/sections/ext5_f4_subject.md` (auto-filled by `scripts/ext5_subject_analyze.py`, summary from `ext5_f4_subject_summary.md`,
+  reading from `ext5_f4_subject_interpretation.md`). To append to EXTENSIONS_REPORT.md: add `ext5_f4_subject.md` to build_extensions_report.py.
+
+## 2026-09-21 02:40 UTC — ext5-engine: F5 metrics runs, F2 head sweeps and F1.3 subset passes DONE (chain finished 02:33:23 UTC, 12/12 rc=0 after the meta fix)
+- F5 `results/{qwen3,mixtral_nobos,mixtral_bos}_metrics/`: sweep_rows 12,800 / 8,704 / 8,704 rows (kinds clean, noised, layer; 16 columns incl.
+  logp_true, logp_foil, p_true, p_foil, rank_true, kl_to_clean), expert_rows 6,883 / 2,848 / 2,732 rows (layers 42,44 / 18,19 / 18,19; kinds
+  layer, coalition_clean, coalition_union, expert, expert_noised_only; 29 columns incl. the six metrics + p_true_noised, logp_true_noised),
+  expert_prefill_L42_44 / L18_19.parquet (delta_clean, delta_noised, <metric>_clean, <metric>_noised), sweep_routing, sweep_cases,
+  sweep_summary.json, run_meta.json (keys sweep, expert). Sanity on all three: clean-row KL = 0 exactly, p_true + p_foil <= 1 on every row,
+  max |Δ − (logp_true − logp_foil)| = 0.125 (one bf16 ulp of a logit in [16, 32); Δ uses the bf16 pair dot product, logp the full-vocabulary
+  GEMM). Selections unchanged: Qwen3 L44 E069 (114/128 active, all-case +0.483), L42 E115 (125/128, +0.477); Mixtral no-BOS L19 E006 (91/128,
+  +0.074), L18 E001 (76/128, +0.162); Mixtral BOS L19 E002 (76/128, +0.378). Metrics cost 0.1 s per pass.
+- F2 `results/{qwen3,mixtral_nobos,mixtral_bos}_heads/`: head_rows 26,880 / 35,840 / 35,840 rows (attn_head 32 heads x 3 or 4 layers x 256 cases +
+  attn_layer, layer, block reference rows; layers 40,43,44 / 15,18,19,24), head_prefill, sweep_cases, sweep_routing, head_attn_final.npz,
+  head_summary.json, run_meta.json. Pilot results/olmoe_heads (strict+relaxed, L8,10,12,13).
+- F1.3 `results/qwen3_subsets/subset_rows.parquet` 132,096 rows (L44 and L42: 255 coalition_set subsets x 256 cases + layer, coalition_clean,
+  block reference rows per case and layer, same pass) and `results/mixtral_nobos_subsets/subset_rows.parquet` 3,072 rows (L18, L19: 3 subsets);
+  subset_prefill_L<l>.parquet; run_meta.json with per-pass routing agreement with the `_metrics` base routing (Qwen3 223/256 at L44, 228/256
+  at L42; Mixtral 252/256) — for the non-matching cases the enumerated clean set is the base run's, so the in-pass clean set may differ by one
+  expert (known cross-pass bf16 routing flips). Quick look (validation): Qwen3 L44 block +0.973, layer +0.950, coalition_clean +0.931, best
+  single expert +0.821, best single >= 80% of block in 74/128 cases; L42 block +0.652 / best single +0.551 / 78/128; Mixtral no-BOS L18 block
+  +1.003 vs layer +0.199 (34/128), L19 block +1.201 vs layer +0.450 (26/128).
+- GPU: chain 12 jobs 1,259 s (21.0 min) incl. the 82 s crashed-then-complete sweep; verifications + OLMoE pilot 322 s (5.4 min); total 26.4 min.
+
+## 2026-09-21 02:40 UTC — ext5-engine: F2 analysis done, section written
+- `python scripts/ext5_heads_analyze.py` (moetrace/ext5_heads.py, ext5_heads_section.py) on qwen3_heads, mixtral_nobos_heads, mixtral_bos_heads
+  (+ pilot olmoe_heads): tables results/tables/ext5_heads_{ranking_<run>_L<l>,ranking_<run>_all,additivity,minimal,attention}_*.{csv,md},
+  figures results/figures/ext5_heads_{qwen3,mixtral_nobos,mixtral_bos,olmoe}.{png,pdf}, results/ext5_heads_summary.json, section
+  results/sections/ext5_f2_heads.md (summary ≤ 250 words on top; method; OLMoE verification; per-run per-layer bullets; figures; tables;
+  cross-run reading; caveats).
+- Headline: mover heads carry the attention rescue — Qwen3 L40 h13 +0.95 [0.81, 1.09] (60% of +1.58, Spec +0.93; h15 +0.46, h14 +0.41; 2 heads
+  for 80%), L43 distributed (h11/h15/h28, 4 heads), L44 null (attention +0.04, best head +0.014); Mixtral L18 h4 +0.61 / +0.79 (no BOS / BOS;
+  76% / 80%, alone sufficient in 57% / 55% of cases), L24 h22 +0.78 / +0.70 (86% / 82%), L19 h29-31 (h29 +0.34 / +0.41; 4-5 heads for 80%),
+  L15 h1/h3; identical heads under both Mixtral protocols. Mover heads read the last subject token (clean mass 0.4-0.5, halved by the noise,
+  mass moves to relation tokens without BOS and to the position-0 sink with BOS). Σ heads = attention rescue on the mean at every layer (gaps
+  within [-0.20, +0.06], CIs cover 0), per-case r 0.3-0.7 (bf16 noise x 32 rows) — minimal sets are additive estimates.
+
+## 2026-09-21 02:38 UTC — ext5-analysis: F5 probability-scale metrics analysed (results/{qwen3,mixtral_nobos,mixtral_bos}_metrics), section written
+- Code: moetrace/ext5_metrics.py (metric columns, same-pass references for expert rows from expert_prefill_L*.parquet, rescue-column swap so
+  analysis.py / ext1_analysis.py run unchanged under Δp, Δlog p, rank, KL, per-case Δ/drop; funnel alternative; clean top-1 decoding; tail
+  concentration), scripts/ext5_metrics_analyze.py (+ ext5_metrics_text.py). Outputs: results/tables/ext5_metrics_{layers,experts,fixed,joint,
+  normalised,tail,funnel,funnel_sets,layer_curves,percase_*}_<run>.{md,csv}, results/figures/ext5_metrics_{curves,percase}_<run>.{png,pdf},
+  results/ext5_metrics_summary.json, results/sections/ext5_f5_metrics.md.
+- Identity: max |Δ − (log p_true − log p_foil)| = 0.125 in every run = one bf16 ulp of the stored Δ (holds to rounding). Expert rows must use
+  their own pass's noised reference: cross-pass Δ_noised differs by up to 1.375 in 79 % of expert rows.
+- Findings: (1) the clean p(true) is small (median 0.024-0.044); the true object is the clean top-1 in only 29-32 % of paper cases and otherwise
+  the top-1 is ' the' / ' a' / ' of' / whitespace in 84-90 % of them; p_clean >= 0.5 would keep 26-45 of 256 paper cases (Jaccard 0.10-0.19
+  with the Δ funnel). (2) Qwen3 and Mixtral-BOS: layer (L44 / L19) and expert (E069 / E002) identical under all six metrics; Spec positive under
+  five (Δp underpowered: every Spec CI includes 0). L42E115 is joint top-1 under Δlog p and rank (Qwen3), L18E001 under Δp (BOS). (3) Mixtral
+  no-BOS: Δ and Δ/drop -> L19E006 (Spec < 0 under all six metrics); Δp and rank -> L18E001 (Spec > 0); Δlog p and KL -> L0, a heavy-tail
+  artefact (66 % of the L0 KL rescue from the 26 most disrupted noised cases, KL(noised||clean) >= 4.2, rank in the 100s-16,000s; r 0.87; with
+  BOS the L0 KL rescue is 0.001) = the no-BOS sink-state prompts of ext3 that Δ cannot see. (4) Normalised rescue: 17 % (Qwen3 L44), 11 % / 9 %
+  (Mixtral L19 BOS / no-BOS) of the lost log-odds vs 2.6-4.7 % of the lost probability mass; the 24-28 % top-1-flipped cases carry 52-83 % of
+  the Δp rescue vs 24-41 % of the Δ rescue; per-case r(Δ, Δp) 0.08-0.21, r(Δ, rank) 0.42-0.87, r(Δ, Δlog p) 0.48-0.84.
+- Recommendation (section): alongside Δ report normalised rescue, rank recovery (+ top-1 recovery), clean top-1 rate / median p_clean; Δp only
+  descriptively; KL / Δlog p as protocol diagnostics; keep the Δ funnel.
+
+## 2026-09-21 02:40 UTC — ext5-analysis: F1.3 per-case minimal sets analysed (results/{qwen3,mixtral_nobos}_subsets), F1 section complete
+- scripts/ext5_rank_subsets.py on the delivered schema (kind column; same-pass layer / coalition_clean / block reference rows). Outputs:
+  results/tables/ext5_rank_subsets_{overview,sizes,singletons,interactions,decomposition}_<short>.{md,csv}, per-layer percase / interaction
+  matrix / counts / pairs / decomposition CSVs, results/figures/ext5_rank_subsets_{qwen3,mixtral_nobos}.{png,pdf}, results/ext5_subsets_summary.json,
+  fragment results/tables/ext5_rank_subsets_section.md embedded in results/sections/ext5_f1_rankings.md (<= 250-word summary added at the top).
+- Checks: exhaustive (255 x 256 per Qwen3 layer, 130,560 rows; 3 subsets Mixtral); full clean set = same-pass coalition_clean to 0.004; full
+  set = 94-98 % of the block.
+- Findings: per-case minimal set for 80 % of the case's own block: one expert in 59-60 % of eligible Qwen3 cases, <= 2 in 87-88 % (median 1;
+  2 cases never); Mixtral one of two in 53-54 %. {E115} alone suffices (80 %) in 52 % of its active cases and is the size-1 set in 81 % of
+  them; {E069} in 32 % / 48 %; {L18E001} 46 %, {L19E002} 43 %, {L19E006} 31 %. Additive prediction = exact minimal size in 97 % (L44) / 91 %
+  (L42) of cases, same set in 90 % / 84 %, reaches the target when patched exactly in 95 % / 90 % (Mixtral 100 % / 97 %). Mean pairwise
+  interaction +0.004 / +0.007 (CI > 0; 26-28 % negative; quantised at the bf16 ulp 0.125); E069 / E115 additive with partners (+0.005 / +0.003);
+  redundancy only between strong pairs (L44 E060+E069 -0.10; L19 E002+E006 -0.034, E002+E004 -0.26); L18 E001+E006 synergistic +0.029
+  [+0.007, +0.052]. Higher-order decomposition not resolvable at bf16 precision (pairwise sum overshoots, remainder cancels).
+
+## 2026-09-21 02:50 UTC — coordinator: Phase 2 wave 1 complete (F4, F1, F2, F5)
+- Agents ext5-subject, ext5-engine, ext5-analysis all delivered final reports. GPU: subject chain 6 jobs ≈ 15 min
+  (01:52–02:15), engine chain 12 jobs 21 min + verifications/pilot 5.4 min (01:51–02:33); GPU idle since 02:33.
+- Incidents: all three agents killed by the account usage limit at ~00:49 UTC (reset 01:50), resumed from disk at
+  01:51 with no GPU work lost; `run_sweep.py` meta write crashed after a complete pass (variable name clash), fixed by
+  ext5-engine within 2 min, before the queued expert job started; the subject agent's Monitor woke it on every queue
+  event (stopped to save tokens).
+- Deliverables: results/sections/ext5_{f4_subject,f1_rankings,f2_heads,f5_metrics}.md assembled into
+  results/EXTENSIONS_REPORT.md (Directions 5-F4/5-F1/5-F2/5-F5 registered in scripts/build_extensions_report.py);
+  CLAUDE.md sections 1/2b/3/5, README, RESEARCH_PLAN.md updated. Wave 2 (F3, F1.4, optional F2 Qwen3-Instruct, F4 grid)
+  awaits the user's go-ahead.

@@ -1,0 +1,10 @@
+**Mixtral-8x7B-v0.1 (BOS, tokenizer default): concentration of each metric's block rescue (at its own discovery argmax and at the Δ layer) in the 26 cases whose noised distribution is farthest from the clean one**
+
+| Metric | Layer | Mean rescue (256 cases) | Mean, top-10% KL(noised‖clean) cases | Mean, other 90% | Share of summed rescue from the top-10% | r(rescue, KL noised) |
+|---|---|---|---|---|---|---|
+| Δ | L19 | +0.590 | +0.815 | +0.564 | 14% | 0.24 |
+| Δp | L19 | +0.009 | +0.017 | +0.008 | 19% | 0.27 |
+| Δlog p | L19 | +0.684 | +1.002 | +0.648 | 15% | 0.34 |
+| rank | L19 | +0.888 | +1.416 | +0.828 | 16% | 0.32 |
+| KL | L19 | +0.203 | +0.437 | +0.177 | 22% | 0.54 |
+| Δ/drop | L19 | +0.107 | +0.104 | +0.108 | 10% | 0.05 |

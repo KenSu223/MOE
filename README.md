@@ -88,6 +88,26 @@ Four follow-up studies, planned in [RESEARCH_PLAN.md](RESEARCH_PLAN.md) and repo
 Extension scripts follow the `scripts/ext<N>_*` naming; GPU jobs go through `scripts/gpu_queue.sh`; the report is
 assembled by `scripts/build_extensions_report.py`. Total GPU time for all four directions was about 4 hours.
 
+### Phase 2 follow-ups (2026-09-21, wave 1; `results/sections/ext5_*.md`, Directions 5-F4/5-F1/5-F2/5-F5 of the report)
+
+- **Patching at the last subject token (F4).** A new suffix-row executor (`moetrace/ext5_subject.py`) patches position
+  p = last subject token instead of the final position. The MoE-output patch then peaks in the first ten layers (Qwen3
+  L4 +0.93, equal to the final-token L44 peak; Mixtral L4-L6 +1.2 to +2.3, 2-4x its L19 peak) and is zero at the
+  paper's layers, but there is **no shared early-site expert**: the layer effect is carried by a different expert per
+  prompt, and the paper's experts rescue nothing at p. Expert-level localisation is a property of the late read-out.
+- **Rankings and minimal sets (F1).** Rescue, active-only rescue, Spec and the discovery statistic agree wherever the
+  effect is clear; disagreements are "junior partners" (rescue > 0, Spec < 0, e.g. Mixtral L19E006). One expert is 53%
+  (Qwen3 L44E069) to 77% (Mixtral L18E001) of its layer's block rescue; 80% needs 2-6 experts. Exhaustive subset
+  patches (all 2^k-1 clean-active subsets) show near-zero pairwise interactions and confirm the additive estimates.
+- **Attention heads (F2).** New engine kind `attn_head`: a few mover heads that read the last subject token carry the
+  attention rescue (Qwen3 L40 head 13 = 60%, Mixtral L18 head 4 = 76-80%, L24 head 22 = 82-86%); noise halves their
+  attention on the subject and sends it to the relation tokens or, with BOS, to the position-0 sink.
+- **Probability metrics (F5).** Δ is exactly the log-odds log p(true) - log p(foil). Qwen3 and Mixtral-BOS selections
+  are metric-independent; under Δp and rank the paper's Mixtral protocol selects L18E001 instead of L19E006. The true
+  object is the clean top-1 token in only 29-32% of the paper's cases.
+
+Wave 1 used about 45 GPU minutes. Wave 2 (gradient attribution, multi-layer minimal sets) is planned, not started.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),

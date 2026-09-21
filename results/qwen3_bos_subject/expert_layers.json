@@ -1,0 +1,66 @@
+{
+ "run": "qwen3_bos_subject",
+ "set": "paper",
+ "rule": "top-3 discovery-mean layers of the MoE-output patch at the last subject token + fixed hypothesis layers",
+ "peak_layers": [
+  4,
+  5,
+  2
+ ],
+ "peak_disc_means": [
+  0.9119,
+  0.8396,
+  0.7378
+ ],
+ "fixed": [
+  [
+   44,
+   69
+  ],
+  [
+   42,
+   115
+  ]
+ ],
+ "layers": [
+  2,
+  4,
+  5,
+  42,
+  44
+ ],
+ "disc_top8": [
+  [
+   4,
+   0.9119
+  ],
+  [
+   5,
+   0.8396
+  ],
+  [
+   2,
+   0.7378
+  ],
+  [
+   3,
+   0.6941
+  ],
+  [
+   7,
+   0.6934
+  ],
+  [
+   1,
+   0.5601
+  ],
+  [
+   0,
+   0.5398
+  ],
+  [
+   6,
+   0.5352
+  ]
+ ]
+}

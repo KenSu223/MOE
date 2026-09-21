@@ -24,6 +24,31 @@ One decoder layer is resident on the GPU at a time (see weights.LayerStreamer). 
   `layer` (MoE output patch) is unchanged. PassResult.sp_vnorm holds |Attn_clean - Attn_noised| (attn_layer),
   |dAttn + dMoE| (block, block_diff) and |h_out_clean - h_out_noised| (resid) in fp32.
 
+  ext5 (Phase 2) additions, all behind new kinds / arguments; existing kinds and outputs are unchanged:
+    * attn_head     per-head attention patch (F2). With H_h the head-h output of the final position BEFORE o_proj
+                    (bf16 [head_dim]) and W_o[:, h] the matching column block of o_proj,
+                        v_h = W_o[:, h] . (H_h_clean - H_h_noised)     (fp32; SpawnSpec.expert = head index)
+                    and the row starts before the MoE of layer l as  h = h_pre_noised + bf16(Attn_l_noised + v_h).
+                    Because o_proj is linear, sum_h v_h = W_o (H_clean - H_noised) = Attn_clean - Attn_noised up to
+                    bf16 rounding of the o_proj outputs; sp_vnorm = |v_h|.
+    * coalition_set explicit expert list S (SpawnSpec.experts):  v = sum_{e in S} (c_e_clean - c_e_noised), c_e = 0 when
+                    e is not routed in that run. S = clean top-k reproduces coalition_clean exactly, S = every expert
+                    (or clean ∪ noised) reproduces `layer` to fp32 summation order.
+    * multi         one wavefront row carrying interventions at several layers (SpawnSpec.steps = ((layer, kind,
+                    experts), ...), strictly increasing layers; step kinds layer / expert / coalition_set /
+                    coalition_clean / zero). The first step spawns the row exactly like the single-layer kind; at every
+                    later step layer l' the live row's own MoE output is replaced component-wise by the clean run's:
+                        h = h_pre_moe_own + bf16(MoE_own + v),   v = sum_{e in S} (c_e_clean - c_e_own)
+                    (kind layer: v = MoE_clean - MoE_own), i.e. "set the patched component to its clean value" with
+                    everything else taken from the row's own (already patched upstream) computation.
+    * metrics=True  (F5) full-vocabulary softmax statistics for every prefill and wavefront row at the head:
+                    logp_true, logp_foil (log-softmax of the bf16 logits in fp32), p_true, p_foil, rank_true (1 +
+                    number of vocabulary logits strictly greater than the true logit) and kl_to_clean =
+                    KL(softmax(row) || softmax(clean prefill row of the same case)), computed in row chunks. The
+                    clean row of a prefill row is PrefillSpec.clean_ref, or inferred from the spawns (parent -> clean),
+                    else itself (KL = 0 exactly). Note delta = logit_true - logit_foil = logp_true - logp_foil (the
+                    log-odds; the normaliser cancels).
+
 Numerics follow transformers 5.16 modeling files (RMSNorm in fp32 then cast; RoPE tables fp32 -> bf16; router logits
 bf16, softmax fp32, top-k, optional renormalisation; routing weights cast to bf16 for Qwen3/OLMoE and kept fp32 for
 Mixtral; expert MLP in bf16; residual stream bf16).
@@ -44,9 +69,11 @@ from .weights import CheckpointStore, LayerStreamer, LayerWeights
 
 BF16 = torch.bfloat16
 KINDS = ("zero", "layer", "expert", "expert_scaled", "coalition_clean", "coalition_union",
-         "attn_layer", "block", "resid", "block_diff")
-PRE_MOE_KINDS = ("attn_layer",)  # spawned after the attention sublayer, before the MoE of the spawn layer
+         "attn_layer", "block", "resid", "block_diff",
+         "attn_head", "coalition_set", "multi")  # ext5
+PRE_MOE_KINDS = ("attn_layer", "attn_head")  # spawned after the attention sublayer, before the MoE of the spawn layer
 DIRECT_KINDS = ("block", "resid")  # spawned after the MoE with a directly constructed residual (no _build_v vector)
+MULTI_STEP_KINDS = ("layer", "expert", "coalition_set", "coalition_clean", "zero")  # ext5: kinds allowed in `multi` steps
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -216,6 +243,7 @@ class PrefillSpec:
     sink_donor: int = -1  # ext3: prefill row whose position-0 key/value (every layer) is added as an extra attendable
     #                       slot for this row (a "transplanted sink" that is not a token of the row); -1 = none
     sink_vscale: float = 1.0  # scale of the transplanted VALUE (1 = donor's value; 0 = key-only sink, pure absorber)
+    clean_ref: int = -1  # ext5 metrics: prefill row whose softmax is the KL reference (-1: inferred from spawns, else self)
 
 
 @dataclass
@@ -234,6 +262,11 @@ class DiagSpec:
                         transplanted sink slot: fp16 [L, B, nH]
     attn_out_final      (ext2) final-position attention-sublayer output (after o_proj, the vector added to the
                         residual) at each layer: bf16 [L, B, H] (torch tensor on CPU)
+    attn_heads_final    (ext5) layers at which the final position's per-head attention outputs BEFORE o_proj are
+                        recorded: dict layer -> bf16 [B, n_heads, head_dim] (torch tensor on CPU)
+    spawn_vectors       (ext5, verification only) the fp32 intervention vector of every vector-kind spawn (attn_head,
+                        attn_layer difference, _build_v kinds, multi steps): dict spawn index -> fp32 [H] CPU tensor
+                        (multi: list per step). Memory-heavy; use on small passes.
     """
     attn_final: bool = False
     resid_norms: bool = False
@@ -242,11 +275,13 @@ class DiagSpec:
     token_logprobs: bool = False
     route_all_layers: tuple = ()
     attn_out_final: bool = False
+    attn_heads_final: tuple = ()
+    spawn_vectors: bool = False
 
     @property
     def any_layer(self) -> bool:
         return (self.attn_final or self.resid_norms or self.router_logits_final or self.resid_final
-                or bool(self.route_all_layers) or self.attn_out_final)
+                or bool(self.route_all_layers) or self.attn_out_final or bool(self.attn_heads_final))
 
 
 @dataclass
@@ -255,8 +290,33 @@ class SpawnSpec:
     parent: int  # prefill row index of the run whose residual/K/V is continued (the noised run)
     clean: int  # prefill row index of the clean run of the same case
     kind: str  # one of KINDS
-    expert: int = -1
+    expert: int = -1  # expert index (expert, expert_scaled) or head index (attn_head)
     partner: int = -1  # equal-norm partner expert (kind == 'expert_scaled')
+    experts: tuple = ()  # ext5 coalition_set: explicit expert list S
+    steps: tuple = ()  # ext5 multi: ((layer, kind, experts), ...) with strictly increasing layers; layer == steps[0][0]
+
+
+def _norm_step(step) -> tuple[int, str, tuple]:
+    """(layer, kind, experts) of a multi step with experts normalised to a sorted tuple (expert kind: one element)."""
+    layer, kind, ex = step
+    assert kind in MULTI_STEP_KINDS, kind
+    if kind == "expert":
+        ex = (int(ex),) if not isinstance(ex, (tuple, list)) else tuple(int(e) for e in ex)
+        assert len(ex) == 1, "expert step takes one expert"
+    elif kind == "coalition_set":
+        ex = tuple(sorted({int(e) for e in (ex if isinstance(ex, (tuple, list)) else [ex])}))
+        assert len(ex) > 0, "empty coalition_set"
+    else:
+        ex = ()
+    return int(layer), kind, ex
+
+
+def _first_step_spec(sp: "SpawnSpec") -> "SpawnSpec":
+    """The single-layer SpawnSpec equivalent to the first step of a multi spawn."""
+    layer, kind, ex = _norm_step(sp.steps[0])
+    assert layer == sp.layer, "multi spawn: layer must equal steps[0][0]"
+    return SpawnSpec(layer, sp.parent, sp.clean, kind, expert=ex[0] if kind == "expert" else -1,
+                     experts=ex if kind == "coalition_set" else ())
 
 
 @dataclass
@@ -278,6 +338,10 @@ class PassResult:
     sp_vnorm: np.ndarray
     layer_times: list = field(default_factory=list)
     extra: dict = field(default_factory=dict)
+    # ext5 metrics (None unless run(metrics=True)): dicts with keys logp_true, logp_foil, p_true, p_foil (fp32),
+    # rank_true (int32), kl_to_clean (fp32); arrays [B] (prefill rows) and [S] (spawn rows)
+    metrics_prefill: Optional[dict] = None
+    metrics_spawn: Optional[dict] = None
 
     @property
     def delta(self):
@@ -286,6 +350,9 @@ class PassResult:
     @property
     def sp_delta(self):
         return self.sp_logit_true - self.sp_logit_foil
+
+
+METRIC_NAMES = ("logp_true", "logp_foil", "p_true", "p_foil", "rank_true", "kl_to_clean")
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -323,6 +390,24 @@ class Engine:
             q = rmsnorm(q, w.q_norm, s.rms_eps)
             k = rmsnorm(k, w.k_norm, s.rms_eps)
         return q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2)
+
+    def _set_mask(self, expert_lists, n_experts: int) -> torch.Tensor:
+        """bool [m, E] membership mask from a list of m expert tuples."""
+        m = len(expert_lists)
+        mask = np.zeros((m, n_experts), dtype=bool)
+        lens = np.array([len(s) for s in expert_lists], dtype=np.int64)
+        if lens.sum():
+            rows = np.repeat(np.arange(m), lens)
+            cols = np.concatenate([np.asarray(s, dtype=np.int64) for s in expert_lists if len(s)])
+            mask[rows, cols] = True
+        return torch.from_numpy(mask).to(self.device)
+
+    @staticmethod
+    def _set_delta(mask, contrib_a, topi_a, contrib_b, topi_b) -> torch.Tensor:
+        """sum_{e in S} c_e(a) - c_e(b) for per-row sets S (mask bool [m, E]); contrib [m, k, H] fp32, topi [m, k]."""
+        in_a = torch.gather(mask, 1, topi_a).float()  # [m, k]: slot's expert in S
+        in_b = torch.gather(mask, 1, topi_b).float()
+        return (contrib_a * in_a[..., None]).sum(1) - (contrib_b * in_b[..., None]).sum(1)
 
     def _build_v(self, spawns, idx, acc_f, topi_f, contrib, out_alpha, out_ne, out_np, attn_f=None):
         """Intervention vectors for the spawn indices idx (all at the current layer). Returns [n, H] fp32.
@@ -378,6 +463,9 @@ class Engine:
                     # experts routed only in the noised run contribute delta_e = -c_e^noised
                     vv = vv - (contrib[p] * (1.0 - in_clean)[..., None]).sum(1)
                 v[sel] = vv
+            elif kind == "coalition_set":  # ext5: explicit expert list S per spawn
+                mask = self._set_mask([spawns[idx[j]].experts for j in sel_np], self.spec.n_experts)
+                v[sel] = self._set_delta(mask, contrib[c], topi_f[c], contrib[p], topi_f[p])
             elif kind == "block_diff":  # ext2 numerics check: both sublayer differences of this layer
                 assert attn_f is not None
                 v[sel] = (acc_f[c] - acc_f[p]) + (attn_f[c].float() - attn_f[p].float())
@@ -392,7 +480,10 @@ class Engine:
     @torch.no_grad()
     def run(self, prefill: list[PrefillSpec], spawns: list[SpawnSpec], record_routing: bool = True,
             log=None, wf_chunk: int = 8192, diag: Optional[DiagSpec] = None,
-            attn_score_budget: int = 768 * 2**20, bv_chunk: int = 8192) -> PassResult:
+            attn_score_budget: int = 768 * 2**20, bv_chunk: int = 8192,
+            metrics: bool = False, metrics_chunk: int = 512) -> PassResult:
+        """metrics / metrics_chunk (ext5): full-vocabulary softmax statistics for every row (see module docstring),
+        computed in chunks of metrics_chunk rows at the head; fills PassResult.metrics_prefill / metrics_spawn."""
         s, dev = self.spec, self.device
         Hd = self.hidden
         B = len(prefill)
@@ -429,18 +520,35 @@ class Engine:
         by_layer_pre: dict[int, list[int]] = {}  # ext2 attn_layer: spawned after attention, before this layer's MoE
         by_layer_direct: dict[int, list[int]] = {}  # ext2 block / resid: spawned after the MoE, residual built directly
         need_attn_f: set[int] = set()  # layers whose final-position attention output is needed for spawns
+        need_heads: set[int] = set(int(l) for l in diag.attn_heads_final)  # ext5: per-head pre-o_proj outputs
+        multi_later: dict[int, list[tuple[int, int]]] = {}  # ext5: layer -> [(spawn idx, step idx)] for steps >= 1
+        spawn_view = list(spawns)  # multi spawns replaced by their first-step single-layer spec (for _build_v)
         for i, sp in enumerate(spawns):
             assert sp.kind in KINDS, sp.kind
             if sp.kind in PRE_MOE_KINDS:
                 by_layer_pre.setdefault(sp.layer, []).append(i)
                 need_attn_f.add(sp.layer)
+                if sp.kind == "attn_head":
+                    assert 0 <= sp.expert < s.n_heads, f"attn_head: head index {sp.expert} out of range"
+                    need_heads.add(sp.layer)
             elif sp.kind in DIRECT_KINDS:
                 by_layer_direct.setdefault(sp.layer, []).append(i)
                 need_attn_f.add(sp.layer)
+            elif sp.kind == "multi":
+                steps = [_norm_step(st) for st in sp.steps]
+                assert steps, "multi spawn without steps"
+                assert all(steps[j][0] < steps[j + 1][0] for j in range(len(steps) - 1)), "multi: layers must increase"
+                spawn_view[i] = _first_step_spec(sp)
+                by_layer.setdefault(sp.layer, []).append(i)
+                for j in range(1, len(steps)):
+                    multi_later.setdefault(steps[j][0], []).append((i, j))
             else:
+                if sp.kind == "coalition_set":
+                    assert len(sp.experts) > 0, "coalition_set with an empty expert list"
                 by_layer.setdefault(sp.layer, []).append(i)
                 if sp.kind == "block_diff":
                     need_attn_f.add(sp.layer)
+        multi_vnorm: dict[int, list] = {i: [] for l_ in multi_later for (i, _) in multi_later[l_]}
         wf_H = torch.empty(S, Hd, dtype=BF16, device=dev)
         wf_parent = torch.empty(S, dtype=torch.long, device=dev)
         wf_row_of_spawn = np.full(S, -1, dtype=np.int64)
@@ -495,6 +603,10 @@ class Engine:
             dg["attn_out_final"] = torch.empty((L, B, Hd), dtype=BF16)
         if diag.route_all_layers:
             dg["route_all"] = {}
+        if diag.attn_heads_final:
+            dg["attn_heads_final"] = {}
+        if diag.spawn_vectors:
+            dg["spawn_v"] = {}
         valid_pos = (torch.arange(T, device=dev)[None, :] < lens_t[:, None])  # [B, T]
         layer_times = []
         t_start = time.time()
@@ -522,6 +634,11 @@ class Engine:
                 del p_final
             else:
                 o = attn_prefill(q, k_att, v_att, mask_att, scale, None, row_chunk)
+            heads_f = None
+            if l in need_heads:  # ext5: final-position per-head outputs before o_proj, bf16 [B, nH, D]
+                heads_f = o[ar, :, final_t, :]
+                if l in diag.attn_heads_final:
+                    dg["attn_heads_final"][int(l)] = heads_f.cpu()
             o = F.linear(o.transpose(1, 2).reshape(B, T, s.n_heads * s.head_dim), w.wo)
             attn_f = pre_attn_f = None
             if l in need_attn_f or diag.attn_out_final:
@@ -551,21 +668,63 @@ class Engine:
             if l in by_layer_pre:
                 idx = by_layer_pre[l]
                 n = len(idx)
+                kinds_p = np.array([spawns[i].kind for i in idx])
                 parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
                 cleans = torch.tensor([spawns[i].clean for i in idx], device=dev)
-                wf_H[n_wf : n_wf + n] = pre_attn_f[parents] + attn_f[cleans]
-                sp_vnorm[idx] = (attn_f[cleans].float() - attn_f[parents].float()).norm(dim=-1).cpu().numpy()
+                h_new = torch.empty(n, Hd, dtype=BF16, device=dev)
+                vn = torch.zeros(n, dtype=torch.float32, device=dev)
+                sel_np = np.nonzero(kinds_p == "attn_layer")[0]
+                if len(sel_np):
+                    sel = torch.tensor(sel_np, device=dev)
+                    p, c = parents[sel], cleans[sel]
+                    h_new[sel] = pre_attn_f[p] + attn_f[c]
+                    dv = attn_f[c].float() - attn_f[p].float()
+                    vn[sel] = dv.norm(dim=-1)
+                    if diag.spawn_vectors:
+                        for jj, i in enumerate(sel_np):
+                            dg["spawn_v"][int(idx[i])] = dv[jj].cpu()
+                sel_np = np.nonzero(kinds_p == "attn_head")[0]
+                if len(sel_np):  # ext5: v_h = W_o[:, h] (H_h_clean - H_h_noised), h = h_pre_noised + bf16(Attn_noised + v_h)
+                    sel = torch.tensor(sel_np, device=dev)
+                    p, c = parents[sel], cleans[sel]
+                    heads = np.array([spawns[idx[i]].expert for i in sel_np])
+                    heads_t = torch.tensor(heads, device=dev)
+                    dh = heads_f[c, heads_t].float() - heads_f[p, heads_t].float()  # [m, D]
+                    vh = torch.zeros(len(sel_np), Hd, dtype=torch.float32, device=dev)
+                    D = s.head_dim
+                    for h in np.unique(heads):
+                        sh = torch.tensor(np.nonzero(heads == h)[0], device=dev)
+                        wo_h = w.wo[:, int(h) * D : (int(h) + 1) * D].float()  # [H, D]
+                        vh[sh] = dh[sh] @ wo_h.t()
+                    h_new[sel] = pre_attn_f[p] + (attn_f[p].float() + vh).to(BF16)
+                    vn[sel] = vh.norm(dim=-1)
+                    if diag.spawn_vectors:
+                        for jj, i in enumerate(sel_np):
+                            dg["spawn_v"][int(idx[i])] = vh[jj].cpu()
+                    del dh, vh
+                wf_H[n_wf : n_wf + n] = h_new
+                sp_vnorm[idx] = vn.cpu().numpy()
                 wf_parent[n_wf : n_wf + n] = parents
                 wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
                 n_wf += n
-            del q, k, v, o, x, k_att, v_att
+                del h_new, vn
+            del q, k, v, o, x, k_att, v_att, heads_f
             # ---- MoE
             x2 = rmsnorm(Hs, w.ln2, s.rms_eps).view(B * T, Hd)
             if n_wf > 0:
                 x2 = torch.cat([x2, rmsnorm(wf_H[:n_wf], w.ln2, s.rms_eps)], 0)
-            need_contrib = record_routing or (l in by_layer)
+            need_contrib = record_routing or (l in by_layer) or (l in multi_later)
             want_logits = diag.router_logits_final or (l in diag.route_all_layers)
-            mo = moe_forward(x2, w, s, final_map[: B * T + n_wf] if need_contrib else None, B, return_logits=want_logits)
+            n_multi = 0
+            if l in multi_later:  # ext5: live rows receiving a later step here also get their contributions recorded
+                ml = multi_later[l]
+                m_rows = wf_row_of_spawn[np.array([i for i, _ in ml])]
+                assert (m_rows >= 0).all(), "multi step on a row that has not been spawned yet"
+                m_rows_t = torch.tensor(m_rows, device=dev)
+                n_multi = len(ml)
+                final_map[B * T + m_rows_t] = B + torch.arange(n_multi, device=dev)
+                wf_pre_multi = wf_H[m_rows_t].clone()  # the rows' own pre-MoE residual at this layer
+            mo = moe_forward(x2, w, s, final_map[: B * T + n_wf] if need_contrib else None, B + n_multi, return_logits=want_logits)
             out_bf, acc, topi, topv, contrib = mo[:5]
             if want_logits:
                 rlog = mo[5]
@@ -590,16 +749,56 @@ class Engine:
             if record_routing:
                 route_idx[l] = topi_f.cpu().numpy()
                 route_w[l] = topv_f.cpu().numpy()
-                route_cn[l] = contrib.norm(dim=-1).cpu().numpy()
+                route_cn[l] = contrib[:B].norm(dim=-1).cpu().numpy()
+            # ---- ext5 multi: later steps on live rows, h = h_pre_moe_own + bf16(MoE_own + v), v = clean - own
+            if n_multi:
+                own_contrib = contrib[B : B + n_multi]  # [n_multi, k, H] fp32
+                own_topi = topi[B * T + m_rows_t]
+                own_acc = acc[B * T + m_rows_t]
+                cleans_m = torch.tensor([spawns[i].clean for i, _ in ml], device=dev)
+                steps_m = [_norm_step(spawns[i].steps[j]) for i, j in ml]
+                kinds_m = np.array([st[1] for st in steps_m])
+                vm = torch.zeros(n_multi, Hd, dtype=torch.float32, device=dev)
+                for kind in np.unique(kinds_m):
+                    sel_np = np.nonzero(kinds_m == kind)[0]
+                    sel = torch.tensor(sel_np, device=dev)
+                    c = cleans_m[sel]
+                    if kind == "zero":
+                        continue
+                    elif kind == "layer":
+                        vm[sel] = acc_f[c] - own_acc[sel]
+                    elif kind in ("expert", "coalition_set"):
+                        mask = self._set_mask([steps_m[j][2] for j in sel_np], s.n_experts)
+                        vm[sel] = self._set_delta(mask, contrib[c], topi_f[c], own_contrib[sel], own_topi[sel])
+                    elif kind == "coalition_clean":  # S = the clean run's top-k set
+                        mask = torch.zeros(len(sel_np), s.n_experts, dtype=torch.bool, device=dev)
+                        mask.scatter_(1, topi_f[c], True)
+                        vm[sel] = self._set_delta(mask, contrib[c], topi_f[c], own_contrib[sel], own_topi[sel])
+                    else:
+                        raise ValueError(kind)
+                wf_H[m_rows_t] = wf_pre_multi + (own_acc + vm).to(BF16)
+                vn_m = vm.norm(dim=-1).cpu().numpy()
+                for jj, (i, j) in enumerate(ml):
+                    multi_vnorm[i].append(float(vn_m[jj]))
+                    if diag.spawn_vectors:
+                        dg["spawn_v"].setdefault(int(i), []).append(vm[jj].cpu())
+                final_map[B * T + m_rows_t] = -1
+                del own_contrib, own_topi, own_acc, vm, wf_pre_multi
             # ---- spawns at this layer
             if l in by_layer:
                 idx = by_layer[l]
                 if len(idx) <= bv_chunk:
-                    vvec = self._build_v(spawns, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np, attn_f=attn_f)
+                    vvec = self._build_v(spawn_view, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np, attn_f=attn_f)
                 else:  # bound the [n, k, H] fp32 temporaries of _build_v (identical result)
-                    vvec = torch.cat([self._build_v(spawns, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np,
+                    vvec = torch.cat([self._build_v(spawn_view, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np,
                                                     attn_f=attn_f) for c0 in range(0, len(idx), bv_chunk)], 0)
                 sp_vnorm[idx] = vvec.norm(dim=-1).cpu().numpy()
+                if diag.spawn_vectors:
+                    for jj, i in enumerate(idx):
+                        if spawns[i].kind == "multi":
+                            dg["spawn_v"].setdefault(int(i), []).insert(0, vvec[jj].cpu())
+                        else:
+                            dg["spawn_v"][int(i)] = vvec[jj].cpu()
                 parents = torch.tensor([spawns[i].parent for i in idx], device=dev)
                 h_new = resid_final[parents] + (acc_f[parents] + vvec).to(BF16)
                 n = len(idx)
@@ -665,6 +864,7 @@ class Engine:
         # wavefront rows
         sp_lt = np.zeros(S, dtype=np.float32)
         sp_lf = np.zeros(S, dtype=np.float32)
+        hw = None
         if n_wf > 0:
             hw = rmsnorm(wf_H[:n_wf], norm, s.rms_eps)
             par = wf_parent[:n_wf]
@@ -674,17 +874,90 @@ class Engine:
             wlf = wlf.cpu().numpy()
             sp_lt[:] = wlt[wf_row_of_spawn]
             sp_lf[:] = wlf[wf_row_of_spawn]
+        # ext5: full-vocabulary metrics
+        metrics_prefill = metrics_spawn = None
+        metrics_s = 0.0
+        if metrics:
+            t_m = time.time()
+            clean_of = np.arange(B)
+            inferred: dict[int, int] = {}
+            for sp in spawns:
+                inferred.setdefault(sp.parent, sp.clean)
+            for b, p in enumerate(prefill):
+                cr = int(getattr(p, "clean_ref", -1))
+                clean_of[b] = cr if cr >= 0 else inferred.get(b, b)
+            sp_clean = np.array([sp.clean for sp in spawns], dtype=np.int64)
+            # log-softmax of every prefill row once (fp32 [B, V]); it is both the prefill rows' own distribution and the
+            # KL reference of every row, so a row referencing itself gets KL = 0 exactly
+            lp_all = self._logp_cache(hN, head, metrics_chunk)
+            metrics_prefill = self._metrics(hN, head, true_ids, foil_ids, lp_all, torch.tensor(clean_of, device=dev),
+                                            metrics_chunk, lp_rows=lp_all)
+            if n_wf > 0:
+                spawn_of_row = np.empty(n_wf, dtype=np.int64)
+                spawn_of_row[wf_row_of_spawn] = np.arange(S)
+                cmap = torch.tensor(sp_clean[spawn_of_row], device=dev)
+                mrow = self._metrics(hw, head, true_ids[par], foil_ids[par], lp_all, cmap, metrics_chunk)
+                metrics_spawn = {k_: v_[wf_row_of_spawn] for k_, v_ in mrow.items()}
+            else:
+                metrics_spawn = {k_: np.zeros(0, dtype=np.int32 if k_ == "rank_true" else np.float32) for k_ in METRIC_NAMES}
+            del lp_all
+            metrics_s = time.time() - t_m
         total = time.time() - t_start
         if log is not None:
-            log(f"  pass done: {B} prefill rows (T={T}), {S} spawn rows, {total:.1f}s")
+            log(f"  pass done: {B} prefill rows (T={T}), {S} spawn rows, {total:.1f}s" + (f" (metrics {metrics_s:.1f}s)" if metrics else ""))
         return PassResult(
             lens=lens, logit_true=lt.cpu().numpy(), logit_foil=lf.cpu().numpy(),
             logit_true_full=lt_full.cpu().numpy(), logit_foil_full=lf_full.cpu().numpy(), top1=top1.cpu().numpy(),
             route_idx=route_idx, route_w=route_w, route_cnorm=route_cn,
             sp_logit_true=sp_lt, sp_logit_foil=sp_lf, sp_alpha=sp_alpha, sp_norm_e=sp_ne, sp_norm_partner=sp_np,
             sp_vnorm=sp_vnorm, layer_times=layer_times,
-            extra={"total_s": total, "T": T, "diag": dg, "row_chunk": row_chunk, "use_offsets": use_offsets, "use_sink": use_sink},
+            extra={"total_s": total, "T": T, "diag": dg, "row_chunk": row_chunk, "use_offsets": use_offsets, "use_sink": use_sink,
+                   "metrics_s": metrics_s, "multi_vnorm": multi_vnorm},
+            metrics_prefill=metrics_prefill, metrics_spawn=metrics_spawn,
         )
+
+    # -- ext5 metrics helpers ------------------------------------------------------------------------------------
+    @staticmethod
+    def _logp_cache(hN: torch.Tensor, head: torch.Tensor, chunk: int) -> torch.Tensor:
+        """fp32 log-softmax [n, V] of the bf16 logits of the normed rows hN [n, H] (row chunks)."""
+        n = hN.shape[0]
+        out = torch.empty(n, head.shape[0], dtype=torch.float32, device=hN.device)
+        for c0 in range(0, n, chunk):
+            lg = F.linear(hN[c0 : c0 + chunk], head).float()
+            out[c0 : c0 + chunk] = torch.log_softmax(lg, dim=-1)
+            del lg
+        return out
+
+    @staticmethod
+    def _metrics(hN: torch.Tensor, head: torch.Tensor, true_ids: torch.Tensor, foil_ids: torch.Tensor,
+                 cache: torch.Tensor, cache_map: torch.Tensor, chunk: int, lp_rows: Optional[torch.Tensor] = None) -> dict:
+        """Full-vocabulary metrics of the rows hN [n, H] (bf16, final-normed): log-softmax in fp32 of the bf16 logits,
+        rank of the true token (1 + number of strictly larger logits), KL(row || cache[cache_map[row]]).
+        lp_rows (fp32 [n, V], optional): the rows' log-softmax if already computed (prefill rows: the same tensor as
+        the cache, so a row referencing itself gets KL = 0 exactly)."""
+        n = hN.shape[0]
+        dev = hN.device
+        lp_t = torch.empty(n, dtype=torch.float32, device=dev)
+        lp_f = torch.empty(n, dtype=torch.float32, device=dev)
+        rank = torch.empty(n, dtype=torch.int32, device=dev)
+        kl = torch.empty(n, dtype=torch.float32, device=dev)
+        for c0 in range(0, n, chunk):
+            c1 = min(n, c0 + chunk)
+            arb = torch.arange(c1 - c0, device=dev)
+            if lp_rows is not None:
+                lp = lp_rows[c0:c1]
+            else:
+                lp = torch.log_softmax(F.linear(hN[c0:c1], head).float(), dim=-1)  # [b, V]
+            t_ = lp[arb, true_ids[c0:c1]]
+            lp_t[c0:c1] = t_
+            lp_f[c0:c1] = lp[arb, foil_ids[c0:c1]]
+            rank[c0:c1] = (lp > t_[:, None]).sum(-1).to(torch.int32) + 1
+            ref = cache[cache_map[c0:c1]]
+            kl[c0:c1] = (lp.exp() * (lp - ref)).sum(-1)
+            del lp, ref
+        return {"logp_true": lp_t.cpu().numpy(), "logp_foil": lp_f.cpu().numpy(),
+                "p_true": lp_t.exp().cpu().numpy(), "p_foil": lp_f.exp().cpu().numpy(),
+                "rank_true": rank.cpu().numpy(), "kl_to_clean": kl.cpu().numpy()}
 
     def _token_logprobs(self, Hs, ids, lens_t, norm, head, true_ids, foil_ids) -> dict:
         """Next-token log-probabilities at every prefill position (fp32 log-softmax of the bf16 logits)."""

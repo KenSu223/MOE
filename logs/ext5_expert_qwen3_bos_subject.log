@@ -1,0 +1,19 @@
+2026-09-21T01:57:16Z START ext5subj-expert-qwen3_bos_subject (waited 0s): python scripts/ext5_subject_expert.py qwen3 --out qwen3_bos_subject --layers 2,4,5,42,44 --fixed 44:69,42:115
+01:57:29 chunk 1/1: layers [2, 4, 5, 42, 44], 512 prefill rows, 25859 suffix rows
+01:57:33   layer   0: load-wait 3.12s compute 0.82s  wf_rows=0 wf_tokens=0
+01:57:38   layer   8: load-wait 0.27s compute 0.46s  wf_rows=15425 wf_tokens=63931
+01:57:46   layer  16: load-wait 0.59s compute 0.46s  wf_rows=15425 wf_tokens=63931
+01:57:55   layer  24: load-wait 0.80s compute 0.46s  wf_rows=15425 wf_tokens=63931
+01:58:05   layer  32: load-wait 0.77s compute 0.46s  wf_rows=15425 wf_tokens=63931
+01:58:15   layer  40: load-wait 1.16s compute 0.46s  wf_rows=15425 wf_tokens=63931
+[W921 01:58:21.941166312 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3391094784 bytes (free: 1404502016, total: 23686938624).
+01:58:24   layer  47: load-wait 0.25s compute 0.74s  wf_rows=25859 wf_tokens=107311
+01:58:24   pass done: 512 prefill rows (T=16), 25859 suffix rows (Smax=8, 107311 tokens), 55.2s
+01:58:24 pass time 55.3s
+01:58:25 L2: 90 distinct clean-active experts at p; max activity 209/256; top5 all-case mean: E097 +0.077 (165), E104 +0.062 (178), E005 +0.028 (14), E103 +0.025 (16), E017 +0.025 (124)
+01:58:25 L4: 93 distinct clean-active experts at p; max activity 242/256; top5 all-case mean: E046 +0.076 (199), E124 +0.063 (39), E023 +0.046 (54), E070 +0.043 (103), E057 +0.031 (97)
+01:58:25 L5: 90 distinct clean-active experts at p; max activity 165/256; top5 all-case mean: E031 +0.093 (130), E093 +0.061 (154), E036 +0.059 (31), E081 +0.039 (37), E079 +0.037 (40)
+01:58:25 L42: 71 distinct clean-active experts at p; max activity 228/256; top5 all-case mean: E114 +0.003 (57), E071 +0.002 (23), E074 +0.002 (61), E017 +0.002 (110), E025 +0.001 (32)
+01:58:25 L44: 75 distinct clean-active experts at p; max activity 247/256; top5 all-case mean: E009 +0.003 (138), E045 +0.002 (32), E039 +0.002 (59), E060 +0.001 (12), E121 +0.001 (12)
+01:58:25 done
+2026-09-21T01:58:32Z END   ext5subj-expert-qwen3_bos_subject rc=0 (76s)

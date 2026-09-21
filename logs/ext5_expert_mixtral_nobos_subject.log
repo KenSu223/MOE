@@ -1,0 +1,16 @@
+2026-09-21T02:05:20Z START ext5subj-expert-mixtral_nobos_subject (waited 103s): python scripts/ext5_subject_expert.py mixtral --out mixtral_nobos_subject --layers 1,4,6,18,19 --fixed 19:2,19:6,18:1 --no-special-tokens
+02:05:25 chunk 1/1: layers [1, 4, 6, 18, 19], 512 prefill rows, 12607 suffix rows
+02:05:35   layer   0: load-wait 9.43s compute 0.49s  wf_rows=0 wf_tokens=0
+02:05:59   layer   8: load-wait 2.25s compute 0.64s  wf_rows=7137 wf_tokens=29909
+02:06:22   layer  16: load-wait 2.05s compute 0.64s  wf_rows=7137 wf_tokens=29909
+02:06:45   layer  24: load-wait 1.86s compute 1.03s  wf_rows=12607 wf_tokens=52854
+02:07:05   layer  31: load-wait 1.86s compute 1.03s  wf_rows=12607 wf_tokens=52854
+02:07:06   pass done: 512 prefill rows (T=18), 12607 suffix rows (Smax=8, 52854 tokens), 100.2s
+02:07:06 pass time 100.3s
+02:07:06 L1: 8 distinct clean-active experts at p; max activity 107/256; top5 all-case mean: E004 +0.108 (85), E001 +0.090 (51), E005 +0.083 (68), E002 +0.082 (76), E000 +0.080 (107)
+02:07:06 L4: 8 distinct clean-active experts at p; max activity 87/256; top5 all-case mean: E007 +0.241 (87), E001 +0.192 (67), E003 +0.146 (69), E000 +0.125 (77), E002 +0.124 (57)
+02:07:06 L6: 8 distinct clean-active experts at p; max activity 138/256; top5 all-case mean: E006 +0.273 (138), E000 +0.215 (108), E007 +0.124 (60), E005 +0.089 (65), E001 +0.087 (45)
+02:07:06 L18: 6 distinct clean-active experts at p; max activity 219/256; top5 all-case mean: E004 +0.020 (219), E002 +0.014 (212), E005 +0.005 (30), E007 +0.003 (26), E006 +0.002 (16)
+02:07:06 L19: 8 distinct clean-active experts at p; max activity 148/256; top5 all-case mean: E000 +0.020 (148), E002 +0.016 (95), E007 +0.011 (66), E001 +0.008 (72), E003 +0.003 (100)
+02:07:06 done
+2026-09-21T02:07:13Z END   ext5subj-expert-mixtral_nobos_subject rc=0 (113s)

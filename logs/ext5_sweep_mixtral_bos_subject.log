@@ -1,0 +1,28 @@
+2026-09-21T02:08:35Z START ext5subj-sweep-mixtral_bos_subject (waited 82s): python scripts/ext5_subject_sweep.py mixtral --out mixtral_bos_subject --base-run mixtral --sets paper
+02:08:47 mixtral -> mixtral_bos_subject: sets=['paper'] n=256 kinds=['attn_layer', 'layer', 'resid'] special=True layers=32 chunks=2 Smax=8 spawn rows=24576 suffix tokens=103008
+02:08:48 chunk 1/2: layers 0..15, 1024 prefill rows, 12288 suffix rows
+02:08:58   layer   0: load-wait 8.68s compute 0.93s  wf_rows=768 wf_tokens=1073
+02:09:20   layer   8: load-wait 2.00s compute 0.74s  wf_rows=6912 wf_tokens=26825
+[W921 02:09:40.404455004 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1509949440 bytes (free: 1454833664, total: 23686938624).
+02:09:43   layer  16: load-wait 0.83s compute 1.16s  wf_rows=12288 wf_tokens=51504
+02:10:02   layer  24: load-wait 1.14s compute 1.16s  wf_rows=12288 wf_tokens=51504
+02:10:22   layer  31: load-wait 1.73s compute 1.15s  wf_rows=12288 wf_tokens=51504
+02:10:22   pass done: 1024 prefill rows (T=19), 12288 suffix rows (Smax=8, 51504 tokens), 94.2s
+02:10:22 pass time 94.4s
+02:10:23 chunk 2/2: layers 16..31, 1024 prefill rows, 12288 suffix rows
+02:10:26   layer   0: load-wait 2.10s compute 0.28s  wf_rows=0 wf_tokens=0
+02:10:46   layer   8: load-wait 2.61s compute 0.28s  wf_rows=0 wf_tokens=0
+02:11:07   layer  16: load-wait 1.74s compute 0.30s  wf_rows=768 wf_tokens=1073
+02:11:26   layer  24: load-wait 1.15s compute 0.74s  wf_rows=6912 wf_tokens=26825
+[W921 02:11:43.711583072 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1543503872 bytes (free: 74907648, total: 23686938624).
+02:11:44   layer  31: load-wait 1.21s compute 1.27s  wf_rows=12288 wf_tokens=49358
+02:11:44   pass done: 1024 prefill rows (T=19), 12288 suffix rows (Smax=8, 51504 tokens), 80.7s
+02:11:44 pass time 80.8s
+/home/ubuntu/MOE/scripts/ext5_subject_sweep.py:177: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+02:11:47 set paper kind attn_layer: L*= 1 disc=+0.547 val@L*=+0.777 val argmax L1 +0.777
+02:11:47 set paper kind layer     : L*= 4 disc=+2.221 val@L*=+2.312 val argmax L3 +2.412
+02:11:47 set paper kind resid     : L*= 5 disc=+3.771 val@L*=+3.749 val argmax L4 +3.849
+02:11:47 drop: full +4.963 last-only +2.525 except-last +4.634
+02:11:47 done
+2026-09-21T02:11:55Z END   ext5subj-sweep-mixtral_bos_subject rc=0 (200s)

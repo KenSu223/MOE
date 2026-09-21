@@ -1,0 +1,7 @@
+Metric,Layer,Mean rescue (256 cases),"Mean, top-10% KL(noised‖clean) cases","Mean, other 90%",Share of summed rescue from the top-10%,"r(rescue, KL noised)"
+Δ,L44,+0.965,+1.412,+0.914,15%,0.34
+Δp,L44,+0.005,+0.007,+0.004,16%,0.18
+Δlog p,L44,+0.808,+1.242,+0.759,16%,0.32
+rank,L44,+1.102,+1.866,+1.016,17%,0.34
+KL,L44,+0.248,+0.524,+0.217,21%,0.48
+Δ/drop,L44,+0.167,+0.153,+0.169,10%,0.02

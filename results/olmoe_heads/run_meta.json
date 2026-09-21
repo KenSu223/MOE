@@ -1,0 +1,64 @@
+{
+ "model": "olmoe",
+ "repo": "allenai/OLMoE-1B-7B-0125",
+ "base_run": "olmoe",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "strict",
+  "relaxed"
+ ],
+ "layers": [
+  8,
+  10,
+  12,
+  13
+ ],
+ "kinds": [
+  "attn_head",
+  "attn_layer",
+  "layer",
+  "block"
+ ],
+ "agent": "ext5-engine",
+ "experiment": "ext5 F2 per-head attention patching at the final position",
+ "command": "python scripts/ext5_heads_sweep.py olmoe --out olmoe_heads --layers 8,10,12,13 --sets strict,relaxed --base-run olmoe",
+ "created_utc": "2026-09-21T02:05:13Z",
+ "n_cases": 64,
+ "rejected": [],
+ "complete": true,
+ "spawn_rows": 4864,
+ "completed_utc": "2026-09-21T02:05:18Z",
+ "pass_time_s": 4.5893518924713135,
+ "n_rows": 4864,
+ "prefill_rows": 128,
+ "rows_by_kind": {
+  "attn_head": 4096,
+  "attn_layer": 256,
+  "layer": 256,
+  "block": 256
+ },
+ "outputs": [
+  "head_rows.parquet",
+  "head_prefill.parquet",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet",
+  "head_attn_final.npz",
+  "head_summary.json"
+ ],
+ "head_rows_columns": [
+  "case_id",
+  "layer",
+  "head",
+  "kind",
+  "logit_true",
+  "logit_foil",
+  "delta",
+  "rescue",
+  "vnorm",
+  "delta_clean",
+  "delta_noised",
+  "sigma_mult"
+ ]
+}

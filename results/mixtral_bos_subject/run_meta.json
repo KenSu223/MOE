@@ -1,0 +1,89 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "base_run": "mixtral",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "kinds": [
+  "attn_layer",
+  "layer",
+  "resid"
+ ],
+ "agent": "ext5-subject",
+ "patch_position": "last subject token",
+ "experiment": "ext5 F4: causal tracing at the last subject token (suffix wavefront rows)",
+ "command": "python scripts/ext5_subject_sweep.py mixtral --out mixtral_bos_subject --base-run mixtral --sets paper",
+ "created_utc": "2026-09-21T02:08:47Z",
+ "n_cases": 256,
+ "rejected": [],
+ "complete": true,
+ "layers": "0-31 (32 of 32)",
+ "layer_chunks": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ]
+ ],
+ "Smax": 8,
+ "suffix_tokens_per_layer_kind": 1073,
+ "padded_token_rows_total": 196608,
+ "completed_utc": "2026-09-21T02:11:47Z",
+ "pass_times_s": [
+  94.16989493370056,
+  80.70858907699585
+ ],
+ "n_rows": 25600,
+ "prefill_rows": 1024,
+ "spawn_rows": 24576,
+ "rows_by_kind": {
+  "attn_layer": 8192,
+  "layer": 8192,
+  "resid": 8192,
+  "clean": 256,
+  "noised": 256,
+  "noised_lastonly": 256,
+  "noised_exceptlast": 256
+ },
+ "outputs": [
+  "sweep_rows.parquet",
+  "sweep_routing.parquet",
+  "sweep_cases.parquet",
+  "sweep_summary.json"
+ ]
+}

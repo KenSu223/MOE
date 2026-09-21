@@ -1,0 +1,4 @@
+Model / protocol,n,multi-token subjects,"Drop, whole span [CI]","Drop, last subject token only [CI]","Drop, span minus last token [CI]",Last-only / whole [CI],"Last-only / whole, multi-token subjects [CI]",Rest / whole [CI],Whole − last − rest [CI],Cases with last-only drop ≥ 0.5
+Qwen3-30B-A3B-Base (tokenizer defaults),256,251,"+5.951 [+5.527, +6.406]","+3.074 [+2.696, +3.481]","+5.206 [+4.780, +5.632]","0.52 [0.46, 0.57]","0.51 [0.45, 0.56]","0.87 [0.84, 0.91]","-2.329 [-2.778, -1.883]",79%
+"Mixtral-8x7B-v0.1 (no BOS, paper protocol)",256,251,"+4.768 [+4.434, +5.109]","+2.223 [+1.934, +2.517]","+4.481 [+4.128, +4.828]","0.47 [0.41, 0.52]","0.46 [0.40, 0.52]","0.94 [0.91, 0.97]","-1.935 [-2.254, -1.619]",79%
+"Mixtral-8x7B-v0.1 (BOS, tokenizer default)",256,251,"+4.963 [+4.560, +5.372]","+2.525 [+2.148, +2.917]","+4.634 [+4.216, +5.061]","0.51 [0.45, 0.57]","0.50 [0.44, 0.57]","0.93 [0.91, 0.96]","-2.195 [-2.604, -1.804]",72%

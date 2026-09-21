@@ -1,0 +1,10 @@
+**Qwen3-30B-A3B-Base (tokenizer defaults): peaks of the rescue curves when the patch is applied at the last subject token versus the final token (paper set, 128 discovery / 128 validation cases)**
+
+| Patched component | Site | L* (disc.) | Disc. mean at L* | Val. rescue at L* [95% CI] | Val. pos. frac. | Val. argmax | Val. max [95% CI] | Rescue / drop at L* [CI] | AUC+ (val.) | Centre of mass |
+|---|---|---|---|---|---|---|---|---|---|---|
+| MoE output | last subject token | L4 | +0.912 | +0.927 [+0.647, +1.252] | 70% | L4 | +0.927 [+0.647, +1.252] | +0.16 [+0.12, +0.22] | 7.53 | 8.9 |
+| MoE output | final token | L44 | +0.989 | +0.925 [+0.774, +1.096] | 86% | L44 | +0.925 [+0.774, +1.096] | +0.16 [+0.14, +0.19] | 3.76 | 38.6 |
+| attention output | last subject token | L1 | +0.362 | +0.301 [+0.177, +0.435] | 62% | L1 | +0.301 [+0.177, +0.435] | +0.05 [+0.03, +0.08] | 0.98 | 6.6 |
+| attention output | final token | L40 | +1.718 | +1.594 [+1.410, +1.791] | 96% | L40 | +1.594 [+1.410, +1.791] | +0.28 [+0.25, +0.31] | 3.95 | 36.3 |
+| residual after layer (hidden state) | last subject token | L11 | +4.254 | +3.759 [+3.285, +4.272] | 97% | L9 | +3.855 [+3.362, +4.388] | +0.67 [+0.60, +0.73] | 118.87 | 18.2 |
+| residual after layer (hidden state) | final token | L47 | +6.241 | +5.639 [+5.020, +6.292] | 96% | L47 | +5.639 [+5.020, +6.292] | +1.00 [+1.00, +1.00] | 94.13 | 36.0 |

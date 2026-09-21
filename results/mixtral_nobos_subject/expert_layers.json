@@ -1,0 +1,70 @@
+{
+ "run": "mixtral_nobos_subject",
+ "set": "paper",
+ "rule": "top-3 discovery-mean layers of the MoE-output patch at the last subject token + fixed hypothesis layers",
+ "peak_layers": [
+  6,
+  1,
+  4
+ ],
+ "peak_disc_means": [
+  1.1312,
+  1.0846,
+  0.9824
+ ],
+ "fixed": [
+  [
+   19,
+   2
+  ],
+  [
+   19,
+   6
+  ],
+  [
+   18,
+   1
+  ]
+ ],
+ "layers": [
+  1,
+  4,
+  6,
+  18,
+  19
+ ],
+ "disc_top8": [
+  [
+   6,
+   1.1312
+  ],
+  [
+   1,
+   1.0846
+  ],
+  [
+   4,
+   0.9824
+  ],
+  [
+   3,
+   0.912
+  ],
+  [
+   5,
+   0.8145
+  ],
+  [
+   0,
+   0.7264
+  ],
+  [
+   2,
+   0.5491
+  ],
+  [
+   7,
+   0.4843
+  ]
+ ]
+}

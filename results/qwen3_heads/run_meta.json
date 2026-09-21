@@ -1,0 +1,62 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "base_run": "qwen3",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "layers": [
+  40,
+  43,
+  44
+ ],
+ "kinds": [
+  "attn_head",
+  "attn_layer",
+  "layer",
+  "block"
+ ],
+ "agent": "ext5-engine",
+ "experiment": "ext5 F2 per-head attention patching at the final position",
+ "command": "python scripts/ext5_heads_sweep.py qwen3 --out qwen3_heads --layers 40,43,44 --base-run qwen3",
+ "created_utc": "2026-09-21T02:22:21Z",
+ "n_cases": 256,
+ "rejected": [],
+ "complete": true,
+ "spawn_rows": 26880,
+ "completed_utc": "2026-09-21T02:23:25Z",
+ "pass_time_s": 63.3300883769989,
+ "n_rows": 26880,
+ "prefill_rows": 512,
+ "rows_by_kind": {
+  "attn_head": 24576,
+  "attn_layer": 768,
+  "layer": 768,
+  "block": 768
+ },
+ "outputs": [
+  "head_rows.parquet",
+  "head_prefill.parquet",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet",
+  "head_attn_final.npz",
+  "head_summary.json"
+ ],
+ "head_rows_columns": [
+  "case_id",
+  "layer",
+  "head",
+  "kind",
+  "logit_true",
+  "logit_foil",
+  "delta",
+  "rescue",
+  "vnorm",
+  "delta_clean",
+  "delta_noised",
+  "sigma_mult"
+ ]
+}

@@ -1,0 +1,12 @@
+2026-09-21T01:52:30Z chain start
+2026-09-21T01:54:12Z gate passed
+/home/ubuntu/MOE/scripts/ext5_subject_select.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[disc].mean(0).sort_values(ascending=False)
+2026-09-21T01:57:16Z qwen3_bos_subject expert layers: 2,4,5,42,44
+/home/ubuntu/MOE/scripts/ext5_subject_select.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[disc].mean(0).sort_values(ascending=False)
+2026-09-21T02:03:37Z mixtral_nobos_subject expert layers: 1,4,6,18,19
+/home/ubuntu/MOE/scripts/ext5_subject_select.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[disc].mean(0).sort_values(ascending=False)
+2026-09-21T02:11:56Z mixtral_bos_subject expert layers: 3,4,6,18,19
+2026-09-21T02:15:07Z chain done

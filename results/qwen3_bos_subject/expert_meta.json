@@ -1,0 +1,40 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "run": "qwen3_bos_subject",
+ "layers": [
+  2,
+  4,
+  5,
+  42,
+  44
+ ],
+ "fixed": [
+  [
+   44,
+   69
+  ],
+  [
+   42,
+   115
+  ]
+ ],
+ "special_tokens": true,
+ "patch_position": "last subject token",
+ "command": "python scripts/ext5_subject_expert.py qwen3 --out qwen3_bos_subject --layers 2,4,5,42,44 --fixed 44:69,42:115",
+ "created_utc": "2026-09-21T01:57:28Z",
+ "complete": true,
+ "completed_utc": "2026-09-21T01:58:25Z",
+ "n_rows": 25859,
+ "rows_by_kind": {
+  "expert": 10240,
+  "expert_noised_only": 7427,
+  "layer": 1280,
+  "coalition_clean": 1280,
+  "coalition_union": 1280,
+  "block": 1280,
+  "attn_layer": 1280,
+  "resid": 1280,
+  "expert_fixed": 512
+ }
+}

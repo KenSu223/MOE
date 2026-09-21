@@ -1,0 +1,24 @@
+Pair,Val. active,Rescue,Active-only,Spec,Block / share,Percentile,rk rescue,rk active-only,rk Spec,rk share,rk percentile,rk disc.,Spread,Best under,Worst under
+L18E001,76/128,+0.139,+0.235,+0.098,+0.187 / 75%,67%,1,2,1,1,8,1,7,val_rescue,mean_percentile
+L20E005,66/128,+0.123,+0.238,-0.087,+0.368 / 33%,61%,2,1,27,4,20,3,26,val_active_only,val_spec
+L22E001,94/128,+0.100,+0.136,+0.024,+0.246 / 41%,67%,3,3,6,3,9,2,7,disc_allcase,mean_percentile
+L19E006,83/128,+0.063,+0.097,-0.159,+0.427 / 15%,49%,4,4,28,6,29,4,25,val_rescue,mean_percentile
+L28E002,87/128,+0.059,+0.086,+0.027,+0.059 / n/a,61%,5,7,4,n/a,19,6,15,val_spec,mean_percentile
+L17E001,102/128,+0.051,+0.064,+0.007,+0.102 / 50%,59%,6,8,8,2,22,5,20,block_share,mean_percentile
+L21E000,58/128,+0.043,+0.096,-0.232,+0.513 / 8%,59%,7,5,30,8,23,9,25,val_active_only,val_spec
+L20E000,58/128,+0.040,+0.087,-0.171,+0.368 / 11%,76%,8,6,29,7,2,8,27,mean_percentile,val_spec
+L18E006,78/128,+0.037,+0.061,-0.082,+0.187 / 20%,54%,9,9,26,5,26,10,21,block_share,val_spec
+L27E004,76/128,+0.035,+0.059,+0.002,+0.066 / n/a,70%,10,10,11,n/a,6,25,19,mean_percentile,disc_allcase
+L9E004,75/128,+0.033,+0.056,+0.027,-0.044 / n/a,65%,11,11,5,n/a,12,19,14,val_spec,disc_allcase
+L26E003,82/128,+0.028,+0.043,-0.008,+0.058 / n/a,57%,12,12,13,n/a,24,7,17,disc_allcase,mean_percentile
+L6E007,81/128,+0.025,+0.039,-0.021,+0.021 / n/a,70%,13,14,18,n/a,5,11,13,mean_percentile,val_spec
+L27E005,59/128,+0.019,+0.040,-0.044,+0.066 / n/a,71%,14,13,25,n/a,4,12,21,mean_percentile,val_spec
+L5E000,70/128,+0.014,+0.026,+0.003,+0.008 / n/a,77%,15,15,9,n/a,1,23,22,mean_percentile,disc_allcase
+L10E007,76/128,+0.006,+0.010,+0.002,+0.022 / n/a,70%,18,18,10,n/a,6,21,15,mean_percentile,disc_allcase
+L31E002,89/128,+0.006,+0.008,+0.065,-0.066 / n/a,47%,19,19,3,n/a,30,29,27,val_spec,mean_percentile
+L14E001,70/128,-0.004,-0.007,-0.005,+0.017 / n/a,71%,21,21,12,n/a,3,13,18,mean_percentile,val_rescue
+L4E007,89/128,-0.009,-0.014,-0.044,+0.027 / n/a,63%,23,23,24,n/a,16,26,10,mean_percentile,disc_allcase
+L29E003,89/128,-0.018,-0.026,+0.018,-0.052 / n/a,53%,25,25,7,n/a,28,16,21,val_spec,mean_percentile
+L0E004,61/128,-0.026,-0.054,-0.027,+0.009 / n/a,64%,26,29,21,n/a,14,27,15,mean_percentile,val_active_only
+L11E006,103/128,-0.030,-0.037,-0.024,-0.010 / n/a,67%,27,27,20,n/a,10,24,17,mean_percentile,val_rescue
+L30E004,99/128,-0.032,-0.042,+0.094,-0.173 / n/a,64%,29,28,2,n/a,15,28,27,val_spec,val_rescue

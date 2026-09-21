@@ -369,3 +369,9 @@ Rules as in Phase 1: every GPU job through `scripts/gpu_queue.sh`; detached chai
 entries; final reports under 450 words; coordinator commits selectively and rebuilds `EXTENSIONS_REPORT.md`
 (sections ext5_* appended to `scripts/build_extensions_report.py`).
 
+
+**Wave 1 status (2026-09-21 02:45 UTC): COMPLETE.** All three agents delivered; sections `results/sections/ext5_f4_subject.md`,
+`ext5_f1_rankings.md`, `ext5_f2_heads.md`, `ext5_f5_metrics.md` are assembled in `results/EXTENSIONS_REPORT.md` (Directions
+5-F4, 5-F1, 5-F2, 5-F5). GPU ≈ 15 min (F4) + 26 min (F5/F2/F1.3 incl. verifications). Headlines are summarised in
+CLAUDE.md section 2b; open questions for the user are listed there and in the sections. Wave 2 (F3, F1.4, optional F2 on
+Qwen3-Instruct, F4 full grid) not started.

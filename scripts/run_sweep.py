@@ -18,6 +18,44 @@ def log(*a):
     print(time.strftime("%H:%M:%S"), *a, flush=True)
 
 
+def _json_safe(o):
+    """Keep only JSON-native values (numpy scalars/arrays converted; DataFrames and other objects dropped as their type name)."""
+    import numpy as _np
+    if isinstance(o, dict):
+        return {str(k): _json_safe(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_json_safe(v) for v in o]
+    if isinstance(o, (str, int, float, bool)) or o is None:
+        return o
+    if isinstance(o, _np.generic):
+        return o.item()
+    if isinstance(o, _np.ndarray):
+        return o.tolist()
+    return f"<dropped {type(o).__name__}>"
+
+
+def _write_meta(od: str, upd: dict):
+    """Merge upd into results/<run>/run_meta.json (ext5; only written when --agent or --metrics is given).
+    A corrupt existing file is replaced; values are sanitised to JSON-native types."""
+    p = os.path.join(od, "run_meta.json")
+    cur = {}
+    if os.path.exists(p):
+        try:
+            cur = json.load(open(p))
+        except Exception:
+            cur = {}
+    cur.update(_json_safe(upd))
+    with open(p, "w") as f:
+        json.dump(cur, f, indent=1, default=str)
+
+
+def _metric_cols(md: dict, j: int) -> dict:
+    """The six ext5 metric columns of row j of a metrics dict (empty when metrics are off)."""
+    if md is None:
+        return {}
+    return {k: (int(md[k][j]) if k == "rank_true" else float(md[k][j])) for k in ("logp_true", "logp_foil", "p_true", "p_foil", "rank_true", "kl_to_clean")}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("model")
@@ -26,9 +64,18 @@ def main():
     ap.add_argument("--out", default=None, help="results subdir name (default: model key)")
     ap.add_argument("--no-special-tokens", action="store_true", help="tokenise without BOS/special tokens")
     ap.add_argument("--sets", default=None, help="comma list; default all available")
+    ap.add_argument("--metrics", action="store_true",
+                    help="ext5 (F5): full-vocabulary metrics logp_true, logp_foil, p_true, p_foil, rank_true, kl_to_clean on every row")
+    ap.add_argument("--agent", default=None, help="agent name recorded in run_meta.json (written when --agent or --metrics is given)")
     args = ap.parse_args()
     m = MODELS[args.model]
     od = out_dir(args.out or args.model)
+    write_meta = bool(args.agent) or args.metrics
+    run_meta = {"model": args.model, "repo": m["repo"], "special_tokens": not args.no_special_tokens, "token_rule": args.token_rule,
+            "sigma_mult": args.sigma_mult, "sets": args.sets, "metrics": args.metrics, "agent": args.agent,
+            "command": "python " + " ".join(sys.argv), "created_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "complete": False}
+    if write_meta:
+        _write_meta(od, {"sweep": run_meta})
     sets = load_case_sets(args.out or args.model)
     names = args.sets.split(",") if args.sets else set_names(sets)
     all_ids = []
@@ -55,23 +102,24 @@ def main():
             tags.append((c, l))
     log(f"running pass: {len(pre)} prefill rows, {len(spawns)} spawn rows")
     t0 = time.time()
-    res = eng.run(pre, spawns, record_routing=True, log=log)
-    log(f"pass time {time.time() - t0:.1f}s")
+    res = eng.run(pre, spawns, record_routing=True, log=log, metrics=args.metrics)
+    log(f"pass time {time.time() - t0:.1f}s" + (f" (metrics {res.extra.get('metrics_s', 0):.1f}s)" if args.metrics else ""))
     d = res.delta
     dfull = res.logit_true_full - res.logit_foil_full
+    mp, ms = (res.metrics_prefill, res.metrics_spawn) if args.metrics else (None, None)
     rows = []
     for i, c in enumerate(ids):
         for kind, j in (("clean", i), ("noised", n + i)):
             rows.append(dict(case_id=c, kind=kind, layer=-1, sigma_mult=args.sigma_mult, logit_true=float(res.logit_true[j]),
                              logit_foil=float(res.logit_foil[j]), delta=float(d[j]), delta_full=float(dfull[j]),
-                             top1=int(res.top1[j]), rescue=np.nan))
+                             top1=int(res.top1[j]), rescue=np.nan, **_metric_cols(mp, j)))
     sd = res.sp_delta
     idx_of = {c: i for i, c in enumerate(ids)}
     for j, (c, l) in enumerate(tags):
         i = idx_of[c]
         rows.append(dict(case_id=c, kind="layer", layer=l, sigma_mult=args.sigma_mult, logit_true=float(res.sp_logit_true[j]),
                          logit_foil=float(res.sp_logit_foil[j]), delta=float(sd[j]), delta_full=np.nan, top1=-1,
-                         rescue=float(sd[j] - d[n + i])))
+                         rescue=float(sd[j] - d[n + i]), **_metric_cols(ms, j)))
     df = pd.DataFrame(rows)
     df.to_parquet(os.path.join(od, "sweep_rows.parquet"), index=False)
     # routing tables
@@ -117,6 +165,10 @@ def main():
             f"funnel strict {summ[s]['funnel_strict_pass']}/{len(dsc)+len(val)}")
     with open(os.path.join(od, "sweep_summary.json"), "w") as f:
         json.dump(summ, f, indent=1)
+    if write_meta:
+        run_meta.update({"completed_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "n_cases": n, "pass_time_s": res.extra["total_s"],
+                     "metrics_s": res.extra.get("metrics_s", 0.0), "n_rows": len(df), "columns": df.columns.tolist(), "complete": True})
+        _write_meta(od, {"sweep": run_meta})
     log("done")
 
 

@@ -1,0 +1,36 @@
+2026-09-21T01:55:11Z START ext5subj-sweep-qwen3_bos_subject (waited 59s): python scripts/ext5_subject_sweep.py qwen3 --out qwen3_bos_subject --base-run qwen3 --sets paper
+01:55:15 qwen3 -> qwen3_bos_subject: sets=['paper'] n=256 kinds=['attn_layer', 'layer', 'resid'] special=True layers=48 chunks=2 Smax=8 spawn rows=36864 suffix tokens=152496
+01:55:16 chunk 1/2: layers 0..23, 1024 prefill rows, 18432 suffix rows
+01:55:20   layer   0: load-wait 2.87s compute 0.62s  wf_rows=768 wf_tokens=1059
+01:55:28   layer   8: load-wait 1.01s compute 0.26s  wf_rows=6912 wf_tokens=26475
+[W921 01:55:37.697156001 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1509949440 bytes (free: 561446912, total: 23686938624).
+01:55:38   layer  16: load-wait 0.75s compute 0.42s  wf_rows=13056 wf_tokens=51891
+[W921 01:55:43.924935375 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2013265920 bytes (free: 966197248, total: 23686938624).
+[W921 01:55:47.639368144 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2315255808 bytes (free: 2291597312, total: 23686938624).
+01:55:49   layer  24: load-wait 0.57s compute 0.58s  wf_rows=18432 wf_tokens=76248
+01:55:59   layer  32: load-wait 0.67s compute 0.58s  wf_rows=18432 wf_tokens=76248
+01:56:09   layer  40: load-wait 0.88s compute 0.58s  wf_rows=18432 wf_tokens=76248
+01:56:17   layer  47: load-wait 0.66s compute 0.58s  wf_rows=18432 wf_tokens=76248
+01:56:17   pass done: 1024 prefill rows (T=16), 18432 suffix rows (Smax=8, 76248 tokens), 61.1s
+01:56:17 pass time 61.3s
+01:56:18 chunk 2/2: layers 24..47, 1024 prefill rows, 18432 suffix rows
+01:56:19   layer   0: load-wait 0.72s compute 0.10s  wf_rows=0 wf_tokens=0
+01:56:28   layer   8: load-wait 1.14s compute 0.09s  wf_rows=0 wf_tokens=0
+01:56:37   layer  16: load-wait 0.69s compute 0.10s  wf_rows=0 wf_tokens=0
+01:56:44   layer  24: load-wait 0.94s compute 0.10s  wf_rows=768 wf_tokens=1059
+01:56:52   layer  32: load-wait 1.06s compute 0.26s  wf_rows=6912 wf_tokens=26475
+[W921 01:56:58.275154578 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1509949440 bytes (free: 91684864, total: 23686938624).
+01:57:00   layer  40: load-wait 0.11s compute 0.42s  wf_rows=13056 wf_tokens=51891
+[W921 01:57:04.391023946 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2013265920 bytes (free: 1169620992, total: 23686938624).
+[W921 01:57:06.800066216 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2315255808 bytes (free: 2176253952, total: 23686938624).
+01:57:07   layer  47: load-wait 0.20s compute 0.75s  wf_rows=18432 wf_tokens=74130
+01:57:07   pass done: 1024 prefill rows (T=16), 18432 suffix rows (Smax=8, 76248 tokens), 48.8s
+01:57:07 pass time 48.9s
+/home/ubuntu/MOE/scripts/ext5_subject_sweep.py:177: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md_, mv = R.loc[dsc].mean(0), R.loc[val].mean(0)
+01:57:07 set paper kind attn_layer: L*= 1 disc=+0.362 val@L*=+0.301 val argmax L1 +0.301
+01:57:07 set paper kind layer     : L*= 4 disc=+0.912 val@L*=+0.927 val argmax L4 +0.927
+01:57:07 set paper kind resid     : L*=11 disc=+4.254 val@L*=+3.759 val argmax L9 +3.855
+01:57:07 drop: full +5.951 last-only +3.074 except-last +5.206
+01:57:07 done
+2026-09-21T01:57:15Z END   ext5subj-sweep-qwen3_bos_subject rc=0 (124s)

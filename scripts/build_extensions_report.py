@@ -22,6 +22,19 @@ SECTIONS = [
     ("4", "Expert-aware tracing on code (CodeFact)", "results/sections/ext4_codefact.md",
      "CounterFact-style code counterfactuals (S1-S3 syntax, R1-R3 recall) on Python; per-category localisation and cross-category "
      "expert overlap."),
+    # Phase 2 follow-ups (RESEARCH_PLAN.md "Phase 2"), wave 1: F4, F1, F2, F5.
+    ("5-F4", "Patching at the last subject token", "results/sections/ext5_f4_subject.md",
+     "Where does the noised subject's information get repaired when the patch is applied at the last subject token instead "
+     "of the final position, and is there a shared expert there? (suffix-row executor moetrace/ext5_subject.py)"),
+    ("5-F1", "Expert rankings and minimal sufficient sets", "results/sections/ext5_f1_rankings.md",
+     "Do rescue, active-only rescue, Spec, block share and per-case percentile rank experts the same way; how many experts of a "
+     "layer carry 50/80/90% of the block rescue; exhaustive subsets vs the additive approximation."),
+    ("5-F2", "Attention heads at the final position", "results/sections/ext5_f2_heads.md",
+     "Per-head decomposition of the attention-output rescue at the peak layers (Qwen3 L40/L43/L44, Mixtral L15/L18/L19/L24): "
+     "mover heads, their specificity, additivity and minimal head sets."),
+    ("5-F5", "Probability metrics alongside the logit difference", "results/sections/ext5_f5_metrics.md",
+     "Do the layer/expert selections and effect sizes change under log p(true), p(true), rank of the true token and KL to the "
+     "clean distribution instead of logit(true) - logit(foil)?"),
 ]
 
 

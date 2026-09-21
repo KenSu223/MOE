@@ -1,0 +1,64 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "base_run": "qwen3_metrics",
+ "special_tokens": true,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "layers": [
+  42,
+  44
+ ],
+ "agent": "ext5-engine",
+ "experiment": "ext5 F1.3 exhaustive clean-active expert subsets (coalition_set)",
+ "command": "python scripts/ext5_subsets_run.py qwen3 --out qwen3_subsets --layers 42 --base-run qwen3_metrics",
+ "created_utc": "2026-09-21T02:27:26Z",
+ "n_cases": 256,
+ "inputs_copied_from_base": [
+  "case_sets.json",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet"
+ ],
+ "complete": true,
+ "passes": {
+  "L44": {
+   "spawn_rows": 66048,
+   "pass_time_s": 60.90750193595886,
+   "T": 16,
+   "routing_agreement_with_base": "223/256",
+   "completed_utc": "2026-09-21T02:28:28Z"
+  },
+  "L42": {
+   "spawn_rows": 66048,
+   "pass_time_s": 60.36824941635132,
+   "T": 16,
+   "routing_agreement_with_base": "228/256",
+   "completed_utc": "2026-09-21T02:29:47Z"
+  }
+ },
+ "completed_utc": "2026-09-21T02:29:47Z",
+ "n_rows_total": 132096,
+ "outputs": [
+  "subset_rows.parquet",
+  "subset_prefill_L<l>.parquet"
+ ],
+ "subset_rows_columns": [
+  "case_id",
+  "layer",
+  "kind",
+  "experts",
+  "n_experts",
+  "logit_true",
+  "logit_foil",
+  "delta",
+  "rescue",
+  "vnorm",
+  "delta_clean",
+  "delta_noised",
+  "n_clean_active",
+  "sigma_mult"
+ ]
+}

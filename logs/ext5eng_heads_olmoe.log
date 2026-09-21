@@ -1,0 +1,18 @@
+2026-09-21T02:05:09Z START ext5eng-heads-olmoe-pilot (waited 166s): python scripts/ext5_heads_sweep.py olmoe --out olmoe_heads --layers 8,10,12,13 --sets strict,relaxed --base-run olmoe
+02:05:13 olmoe -> olmoe_heads: 64 cases, layers [8, 10, 12, 13], special_tokens=True
+02:05:13 running pass: 128 prefill rows, 4864 spawn rows (16 heads x 4 layers + 3 reference kinds)
+02:05:15   layer   0: load-wait 1.48s compute 0.57s  wf_rows=0
+02:05:16   layer   8: load-wait 0.07s compute 0.14s  wf_rows=1216
+02:05:18   layer  15: load-wait 0.07s compute 0.05s  wf_rows=4864
+02:05:18   pass done: 128 prefill rows (T=14), 4864 spawn rows, 4.6s
+02:05:18 pass time 4.7s
+02:05:18 set strict L8: attn_layer -0.005 layer -0.174 block -0.148 sum heads -0.570; top heads (val) {15: 0.082, 9: 0.053, 8: 0.035, 0: 0.023, 14: -0.008}
+02:05:18 set strict L10: attn_layer +0.966 layer +0.053 block +1.110 sum heads +0.245; top heads (val) {1: 0.509, 10: 0.034, 15: 0.027, 9: 0.014, 12: 0.008}
+02:05:18 set strict L12: attn_layer +2.826 layer +1.227 block +3.867 sum heads +2.033; top heads (val) {12: 1.873, 10: 0.235, 3: 0.154, 2: 0.109, 9: 0.037}
+02:05:18 set strict L13: attn_layer +2.805 layer +1.443 block +3.809 sum heads +2.670; top heads (val) {10: 2.484, 11: 0.408, 8: 0.332, 14: 0.123, 4: 0.056}
+02:05:18 set relaxed L8: attn_layer -0.289 layer -0.022 block -0.161 sum heads -0.715; top heads (val) {5: 0.02, 14: 0.015, 9: 0.014, 12: 0.011, 2: -0.008}
+02:05:18 set relaxed L10: attn_layer +1.024 layer +0.116 block +1.390 sum heads +0.611; top heads (val) {1: 0.625, 9: 0.067, 15: 0.032, 12: 0.027, 2: 0.015}
+02:05:18 set relaxed L12: attn_layer +2.486 layer +1.226 block +3.589 sum heads +1.946; top heads (val) {12: 1.942, 2: 0.106, 11: 0.089, 10: 0.076, 4: 0.046}
+02:05:18 set relaxed L13: attn_layer +3.098 layer +1.553 block +4.101 sum heads +3.126; top heads (val) {10: 2.781, 8: 0.314, 14: 0.273, 11: 0.248, 6: 0.054}
+02:05:18 done
+2026-09-21T02:05:20Z END   ext5eng-heads-olmoe-pilot rc=0 (11s)

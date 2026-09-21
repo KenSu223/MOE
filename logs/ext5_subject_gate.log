@@ -1,0 +1,32 @@
+bf16 floor (layer_vs_hf_maxdiff / meanabs / curve)   0.8047 / 0.1498 / 0.1059
+delta_clean_maxdiff_vs_hf                                  0.25  <= 0.700
+delta_noised_maxdiff_vs_hf                           0.373046875  <= 1.500
+delta_noised_lastonly_maxdiff_vs_hf                      0.5625  <= 1.500
+delta_noised_exceptlast_maxdiff_vs_hf                1.1650390625  <= 1.500
+prefill_rec_pos_vs_final_maxdiff                            0.0  <= 0.000
+layer_vs_hf_maxdiff                                   0.8046875  <= 1.500
+layer_vs_hf_meanabsdiff                              0.1498057097196579  <= 0.300
+layer_rescue_corr_vs_hf                              0.9523155254095946  >= 0.950
+attn_layer_vs_hf_maxdiff                              0.6171875  <= 1.207
+attn_layer_vs_hf_meanabsdiff                         0.1387036144733429  <= 0.225
+attn_layer_mean_curve_maxdiff_vs_hf                  0.07760200581979002  <= 0.159
+attn_layer_rescue_corr_vs_hf                         0.916331198414545  >= 0.883
+resid_vs_hf_maxdiff                                  1.134765625  <= 1.207
+resid_vs_hf_meanabsdiff                              0.1684582531452179  <= 0.225
+resid_mean_curve_maxdiff_vs_hf                       0.14291269211098534  <= 0.159
+resid_rescue_corr_vs_hf                              0.995646011640506  >= 0.950
+block_vs_hf_maxdiff                                  0.8388671875  <= 1.207
+block_vs_hf_meanabsdiff                              0.1607426404953003  <= 0.225
+block_mean_curve_maxdiff_vs_hf                       0.06912116440362304  <= 0.159
+block_rescue_corr_vs_hf                              0.965902506170244  >= 0.935
+zero_on_noised_maxdiff                               0.48828125  <= 0.500
+identity_attn_layer_maxdiff                            0.109375  <= 0.500
+identity_layer_maxdiff                                 0.109375  <= 0.500
+identity_resid_maxdiff                                 0.109375  <= 0.500
+identity_block_maxdiff                                 0.109375  <= 0.500
+in-process consistency (run_subject vs Engine.run) n=960: prefill maxdiff 0.0000 (== 0), spawn delta maxdiff 0.0000 (<= 0.6) meanabs 0.0000 (<= 0.1) frac_equal 1.00 vnorm maxdiff 0.0000
+stored-rows consistency attn_layer n=320 delta meanabs 0.1690 (<= 0.225) rescue corr 0.987 (>= 0.95) mean-curve maxdiff 0.0798 (<= 0.15)
+stored-rows consistency layer      n=320 delta meanabs 0.1459 (<= 0.225) rescue corr 0.983 (>= 0.95) mean-curve maxdiff 0.0944 (<= 0.15)
+stored-rows consistency resid      n=320 delta meanabs 0.1287 (<= 0.225) rescue corr 0.998 (>= 0.95) mean-curve maxdiff 0.0739 (<= 0.15)
+vnorm_vs_hf: {"attn_layer": {"max_reldiff": 0.038955700101872756, "mean_engine": 1.1140458583831787, "mean_hf": 1.114230842096731}, "layer": {"max_reldiff": 0.09594494660902253, "mean_engine": 1.308783769607544, "mean_hf": 1.3062691433122382}, "resid": {"max_reldiff": 0.0200208063626884, "mean_engine": 5.901989936828613, "mean_hf": 5.901611232757569}}
+GATE PASS

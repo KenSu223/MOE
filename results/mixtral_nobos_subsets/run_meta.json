@@ -1,0 +1,64 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "base_run": "mixtral_nobos_metrics",
+ "special_tokens": false,
+ "token_rule": "space",
+ "sigma_mult": 3.0,
+ "case_sets": [
+  "paper"
+ ],
+ "layers": [
+  18,
+  19
+ ],
+ "agent": "ext5-engine",
+ "experiment": "ext5 F1.3 exhaustive clean-active expert subsets (coalition_set)",
+ "command": "python scripts/ext5_subsets_run.py mixtral --out mixtral_nobos_subsets --layers 18,19 --base-run mixtral_nobos_metrics --no-special-tokens",
+ "created_utc": "2026-09-21T02:30:03Z",
+ "n_cases": 256,
+ "inputs_copied_from_base": [
+  "case_sets.json",
+  "sweep_cases.parquet",
+  "sweep_routing.parquet"
+ ],
+ "complete": true,
+ "passes": {
+  "L18": {
+   "spawn_rows": 1536,
+   "pass_time_s": 98.49050164222717,
+   "T": 18,
+   "routing_agreement_with_base": "252/256",
+   "completed_utc": "2026-09-21T02:31:42Z"
+  },
+  "L19": {
+   "spawn_rows": 1536,
+   "pass_time_s": 91.20497417449951,
+   "T": 18,
+   "routing_agreement_with_base": "252/256",
+   "completed_utc": "2026-09-21T02:33:15Z"
+  }
+ },
+ "completed_utc": "2026-09-21T02:33:15Z",
+ "n_rows_total": 3072,
+ "outputs": [
+  "subset_rows.parquet",
+  "subset_prefill_L<l>.parquet"
+ ],
+ "subset_rows_columns": [
+  "case_id",
+  "layer",
+  "kind",
+  "experts",
+  "n_experts",
+  "logit_true",
+  "logit_foil",
+  "delta",
+  "rescue",
+  "vnorm",
+  "delta_clean",
+  "delta_noised",
+  "n_clean_active",
+  "sigma_mult"
+ ]
+}

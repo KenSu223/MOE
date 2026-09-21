@@ -1,0 +1,4 @@
+Model / protocol,Subject site L*,Val. rescue [CI],Share of drop [CI],Final-token L*,Val. rescue [CI],Share of drop [CI],Subject / final,"Band ≥ 25% of the peak, contiguous (subject vs final)",Whole-span drop [CI],Drop from the last subject token alone / whole,Rest of span / whole
+Qwen3-30B-A3B-Base (tokenizer defaults),L4,"+0.927 [+0.647, +1.252]","0.16 [0.12, 0.22]",L44,"+0.925 [+0.774, +1.096]","0.16 [0.14, 0.19]",1.0x,L0–L8 vs L40–L44,"+5.951 [+5.527, +6.406]","0.52 [0.46, 0.57]",0.87
+"Mixtral-8x7B-v0.1 (no BOS, paper protocol)",L6,"+1.197 [+0.940, +1.469]","0.24 [0.19, 0.30]",L21,"+0.531 [+0.417, +0.656]","0.11 [0.09, 0.13]",2.3x,L0–L8 vs L18–L25,"+4.768 [+4.434, +5.109]","0.47 [0.41, 0.52]",0.94
+"Mixtral-8x7B-v0.1 (BOS, tokenizer default)",L4,"+2.312 [+1.870, +2.779]","0.47 [0.39, 0.54]",L19,"+0.561 [+0.451, +0.683]","0.11 [0.09, 0.13]",4.1x,L0–L6 vs L17–L28,"+4.963 [+4.560, +5.372]","0.51 [0.45, 0.57]",0.93

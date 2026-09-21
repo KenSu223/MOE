@@ -1,0 +1,7 @@
+**Mixtral-8x7B-v0.1 (BOS, tokenizer default): per case set**
+
+| Set | n | pass strict Δ | pass p_clean >= 0.5 | clean top-1 | noise flips top-1 | median p_clean | p_clean >= 0.9 |
+|---|---|---|---|---|---|---|---|
+| paper | 256 | 234 | 45 | 83 | 62 | 0.044 | 2 |
+| strict | 230 | 230 | 42 | 78 | 60 | 0.058 | 2 |
+| relaxed | 241 | 234 | 45 | 83 | 62 | 0.059 | 2 |

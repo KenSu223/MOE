@@ -1,0 +1,36 @@
+2026-09-21T01:51:39Z START ext5eng-verify (waited 0s): python scripts/verify_olmoe.py
+01:51:43 picked 50 cases; first prompt: 'Virginia State Route 33 is located in' true=Virginia foil=Milan subj_pos=[0, 1, 2, 3, 4]
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   3%|▎         | 5/179 [00:00<00:03, 46.29it/s]Loading weights:   9%|▉         | 16/179 [00:00<00:01, 81.82it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 84.22it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 84.00it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 84.52it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 84.75it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 85.71it/s]Loading weights:  45%|████▌     | 81/179 [00:00<00:01, 87.41it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:00, 88.65it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 87.09it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 86.01it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 85.69it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 85.49it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 86.58it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 88.87it/s]Loading weights:  94%|█████████▍| 169/179 [00:01<00:00, 90.13it/s]Loading weights: 100%|██████████| 179/179 [00:01<00:00, 91.08it/s]
+01:51:53 HF forwards done for 50 cases
+01:51:56 HF layer patches done: 50
+01:52:34 HF expert patches done: 221
+01:52:35   layer   0: load-wait 1.21s compute 0.15s  wf_rows=209
+01:52:37   layer   8: load-wait 0.11s compute 0.06s  wf_rows=843
+01:52:38   layer  15: load-wait 0.10s compute 0.03s  wf_rows=1421
+01:52:38   pass done: 100 prefill rows (T=14), 1421 spawn rows, 3.7s
+01:52:39 embed_std_engine: 0.009373849257826805
+01:52:39 embed_std_hf: 0.009373849257826805
+01:52:39 engine_pass_s: 3.764002799987793
+01:52:39 delta_clean_maxdiff_vs_hf: 0.3828125
+01:52:39 delta_noised_maxdiff_vs_hf: 0.61328125
+01:52:39 delta_clean_frac_within_0.1: 0.72
+01:52:39 delta_noised_frac_within_0.1: 0.46
+01:52:39 delta_bmm_vs_fullmatmul_maxdiff: 0.0
+01:52:39 delta_bmm_vs_fullmatmul_frac_equal: 1.0
+01:52:39 top1_agreement_clean: 0.98
+01:52:39 logit_true_clean_maxdiff_vs_hf: 0.28125
+01:52:39 zero_on_noised_maxdiff: 0.40625
+01:52:39 zero_on_clean_maxdiff: 0.125
+01:52:39 layer_patch_vs_hf_n: 50
+01:52:39 layer_patch_vs_hf_maxdiff: 0.578125
+01:52:39 layer_patch_vs_hf_frac_within_0.1: 0.58
+01:52:39 layer_rescue_vs_hf_maxdiff: 0.498046875
+01:52:39 expert_patch_vs_hf_n: 221
+01:52:39 expert_patch_vs_hf_maxdiff: 1.07421875
+01:52:39 expert_patch_vs_hf_frac_within_0.1: 0.334841628959276
+01:52:39 routing_set_agreement: 38/40
+01:52:39 union_vs_layer_maxdiff: 0.0
+01:52:39 union_vs_layer_frac_equal: 1.0
+01:52:39 pass_total_s: 3.73754620552063
+01:52:39 curve: [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]
+2026-09-21T01:52:40Z END   ext5eng-verify rc=0 (61s)

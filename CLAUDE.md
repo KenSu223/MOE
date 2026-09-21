@@ -2,7 +2,7 @@
 
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
-Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20.
+Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21.
 
 ## 1. What this project is
 
@@ -12,8 +12,11 @@ released no code. We re-implemented the protocol from the text and re-ran every 
 models, Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1, in bf16, on this machine's single 24 GB A10G.
 
 **Status.** Base reproduction COMPLETE (2026-09-03, marker `results/DONE`, deliverable `results/REPORT.md`).
-Extensions COMPLETE (2026-09-14, deliverable `results/EXTENSIONS_REPORT.md`, plan `RESEARCH_PLAN.md`). Everything
-is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
+Extensions COMPLETE (2026-09-14, deliverable `results/EXTENSIONS_REPORT.md`, plan `RESEARCH_PLAN.md`).
+**Phase 2 wave 1 COMPLETE (2026-09-21: F4 subject-token patching, F1 rankings/minimal sets, F2 attention heads,
+F5 probability metrics; sections `results/sections/ext5_*.md`, assembled into `EXTENSIONS_REPORT.md` as Directions
+5-F4/5-F1/5-F2/5-F5).** Wave 2 (F3 gradient attribution, F1.4 multi-layer sets) NOT started. Everything is committed
+and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
 
 ## 2. Results in one screen (base reproduction)
 
@@ -92,6 +95,43 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
   again (R1). Qwen3-Coder keeps the same code experts as the base (L47E025, L43E126, L41E041) and adds an S3 expert
   L47E014. Code prompts are 36-84 tokens median (CounterFact: 8) with a single-token "subject"; the axis that matters
   is single-token vs distributed determination, not syntax vs recall.
+- **Phase 2 wave 1 (2026-09-21, ≈ 45 GPU min; plan in RESEARCH_PLAN.md "Phase 2 execution plan")**:
+  - *F4 subject-token patching* (`moetrace/ext5_subject.py`, suffix wavefront rows from the last subject token p;
+    runs `results/{qwen3_bos,mixtral_nobos,mixtral_bos}_subject`; verified vs transformers hooks on OLMoE, bit-identical
+    to `Engine.run` at p = T−1): the MoE-output patch at p peaks in the **first ten layers** — Qwen3 **L4 +0.93**
+    [0.65, 1.25] (= the final-token L44 peak +0.93), Mixtral no-BOS L6 +1.20, Mixtral BOS **L4 +2.31** (4× the L19
+    peak); ≈ 0 from L9 on and at L42/L44/L18/L19. **No shared early-site expert**: recurrent candidates rescue
+    ≤ +0.07 with Spec ≈ 0, the clean top-k coalition recovers the layer effect, and the per-case best expert (88–99% of
+    the coalition) differs across prompts (36–38 distinct winners/128 in Qwen3). L44E069/L42E115/L19E002 patched at p
+    rescue nothing. Noise on the last subject token alone = 0.47–0.52 of the whole-span drop. Reading: expert-level
+    localisation is a property of the shared late read-out, not of the early subject-enrichment site.
+  - *F1 rankings / minimal sets* (`moetrace/ext5_rank.py`, existing `*_alllayers` passes + exhaustive subset passes
+    `results/{qwen3,mixtral_nobos}_subsets`, engine kind `coalition_set`): rankings by all-case rescue, active-only
+    rescue, Spec and the discovery statistic agree wherever the effect is clear (τ 0.94–0.97 rescue vs active-only;
+    L44E069 rank 1/1/1, L42E115 2/2/2, L19E002 1/1/1); disagreements are systematic: "junior partners" (rescue > 0,
+    Spec < 0: Mixtral L19E006, Qwen3 L43E046) and Spec-without-rescue in layers whose block hurts. Minimal sets for
+    50/80/90 % of the block rescue: Qwen3 L44 1/6/9 experts (E069 alone 53 %), L42 1/2/6 (E115 72 %); Mixtral BOS
+    L19 1/3/4 (E002 63 %), L18 1/2/2 (E001 77 %). Exact subsets: one expert reaches 80 % of a case's own block in
+    59–60 % of Qwen3 cases (≤ 2 in 87–88 %); pairwise interactions ≈ 0 (bf16 ulp), redundancy only between strong
+    pairs; the additive approximation predicts the exact minimal size in 91–97 % of cases. Cross-layer sums over-count
+    (F1.4 open).
+  - *F2 attention heads* (engine kind `attn_head`, runs `results/{qwen3,mixtral_nobos,mixtral_bos}_heads`): the
+    attention rescue is carried by a few **mover heads reading the last subject token**: Qwen3 L40 **head 13 +0.95**
+    [0.81, 1.09] (60 % of +1.58, Spec +0.93; two heads for 80 %), L43 distributed (4 heads), L44 null; Mixtral L18
+    **head 4** +0.61/+0.79 (no BOS/BOS, 76–80 %), L24 head 22 (82–86 %), L19 heads 29–31 (one GQA group), L15 heads
+    1/3; identical heads under both protocols. Mover heads put 0.4–0.5 of clean attention on the last subject token,
+    noise halves it (→ relation tokens without BOS, → the position-0 sink with BOS). Σ heads = attention rescue on the
+    mean; per-case r 0.3–0.7, so minimal head sets are additive estimates.
+  - *F5 probability metrics* (engine `--metrics`: `logp_true, logp_foil, p_true, p_foil, rank_true, kl_to_clean`;
+    runs `results/{qwen3,mixtral_nobos,mixtral_bos}_metrics`): Δ = log p(true) − log p(foil) exactly (log-odds; checked
+    to one bf16 ulp). Qwen3 and Mixtral-BOS selections are metric-independent (L44E069, L19E002 under all six).
+    Mixtral no-BOS: Δp and rank select **L18E001** (Spec > 0) instead of L19E006 (Spec < 0 under every metric); Δlog p
+    and KL pick L0, a heavy-tail artefact of the 26 most-disrupted (sink-state) cases. Dataset descriptor: the true
+    object is the clean top-1 in only 29–32 % of paper cases (median clean p(true) 0.02–0.04). Recommendation adopted
+    in the section: keep Δ primary, report normalised rescue, rank recovery and clean top-1 rate alongside; Δp
+    descriptive only; KL/Δlog p as protocol diagnostics.
+  - Incident: `run_sweep.py` crashed after a complete pass when writing `run_meta.json` (variable `meta` reused for a
+    DataFrame); fixed with JSON sanitising in `run_sweep.py`/`run_expert.py`; no GPU work lost.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -109,8 +149,12 @@ Base reproduction:
   exact noise samples are unrecoverable; only selections and CI-level agreement are comparable.
 
 Extensions:
-- **Phase 2 follow-ups (F1 expert rankings / minimal sets, F2 attention heads, F3 gradient attribution,
-  F4 subject-token patching, F5 probability metrics) are planned in RESEARCH_PLAN.md "Phase 2" and NOT started.**
+- **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
+  minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
+  grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
+  additive estimates); MoE-side cross-check of mover heads (patch L40 heads, read E069 routing at L44) needs wavefront
+  routing; consolidate `ext5_subject._build_v_at` into `engine.py`; join ext3 per-case sink flags to the F5 L0 KL tail;
+  early-site expert statistic stratified by subject token / relation instead of recurrence.
 - The five open method questions in 2b (user decisions pending); the final wording of EXTENSIONS_REPORT.md follows them.
 - CodeFact: Mixtral S3 is partial (241 passing items → 120/121 split); The Stack was not used (gated; CodeSearchNet
   instead); R3 has a single-digit sub-category that may deserve exclusion; no HF-hook verification of the code runs
@@ -180,6 +224,16 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
 - `ext2_zoo.py` chat-template prefixes, usage specs, cross-model summaries, sink fractions.
 - `ext3_variants.py` position-0 substitutions, sink transplant, corpus routing helpers.
 - `ext4_data.py` CodeFact item → `data.Case` (categories S1-S3, R1-R3; single-token continuation with boundary back-off).
+- Phase 2 (ext5): `ext5_subject.py` (`SubjectEngine.run_subject`, `SubjectPrefill(rec_pos)`, `SubjectSpawn(pos)`: suffix
+  wavefront rows patched at position p; copies engine's `_build_v` as `_build_v_at`), `ext5_rank.py` (full (layer,
+  expert) rankings, Kendall τ, greedy/coverage minimal sets, exact-subset analysis), `ext5_metrics.py` (F5 metric
+  columns, rescue swap so `analysis.py`/`ext1_analysis.py` run under Δp/Δlog p/rank/KL), `ext5_heads.py` +
+  `ext5_heads_section.py` (per-head rankings, Spec, additivity, attention-mass classes, section writer).
+  Engine additions by ext5-engine (in `engine.py`, backward compatible): `Engine.run(..., metrics=True)` →
+  `PassResult.metrics_prefill/.metrics_spawn`; `PrefillSpec.clean_ref`; kinds `attn_head` (`SpawnSpec.expert` = head),
+  `coalition_set` (`SpawnSpec.experts`), `multi` (`SpawnSpec.steps`); `DiagSpec.attn_heads_final`, `spawn_vectors`;
+  `run_sweep.py`/`run_expert.py` flags `--metrics`, `--agent`. Verification: `results/verify_ext5_engine_olmoe.json`,
+  `results/verify_ext5_subject_olmoe.json`; `verify_olmoe.json` unchanged vs `verify_olmoe_before_ext5.json`.
 
 `scripts/` — base CLIs take a model key; `--out <run>` selects `results/<run>/`; `--token-rule space|paper_like`;
 `--no-special-tokens` = no BOS; `--layer-chunks N` bounds wavefront rows.
@@ -200,6 +254,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
 - Direction 4: `ext4_build_codefact.py` → `data/codefact/items.jsonl`; `ext4_scan.py <model> --out <run> --protocol
   raw|nobos|chat` (calibration scan + layer patches, token-budget chunking); `ext4_select.py`; `ext4_run_expert.py
   --no-pairs`; `ext4_analyze.py`; `ext4_chain*.sh`.
+- Phase 2: `ext5_subject_{verify,gate,sweep,select,expert,analyze}.py`, `ext5_subject_chain.sh` (F4);
+  `ext5_engine_verify.py`, `ext5_engine_chain.sh`, `ext5_heads_sweep.py <model> --out <run> --layers ... --base-run
+  <run>`, `ext5_heads_analyze.py`, `ext5_subsets_run.py <model> --out <run> --layers ... --base-run <metrics-run>`
+  (F2, F1.3, F5 runs); `ext5_rank_analyze.py`, `ext5_rank_subsets.py`, `ext5_rank_text.py`, `ext5_metrics_analyze.py`,
+  `ext5_metrics_text.py` (F1, F5 analysis; CPU only).
 
 `results/` run directories (each has `run_meta.json`; row-level Parquet: `sweep_rows`, `sweep_routing`,
 `sweep_cases`, `expert_rows`, `expert_prefill_*`; extension runs add `zoo_summary.json`, `sink_diag.json`, ...):
@@ -211,10 +270,15 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `qwen3_nobos_diag`, `qwen3_bos_prefix_eot`;
 - Direction 2b: `{qwen3_bos,mixtral_bos,mixtral_nobos,olmoe}_attnsweep`;
 - Direction 2: `<key>_{default,nobos,chat}` for the five zoo models (+ `_attnsweep`), `olmoe_default`;
-- Direction 4: `codefact_{qwen3_raw,mixtral_nobos,qwen3_coder_raw,qwen3_coder_chat}`.
-Tables: `results/tables/table_01..16` (base) and `ext{1,2,2_attn,2_zoo,3,4}_*`; figures likewise; sections in
-`results/sections/`; analysed numbers in `results/{summary,ext1_summary,ext2_attn_summary,ext2_zoo_summary,
-ext3_numbers,ext4_summary,mixtral_compare}.json`.
+- Direction 4: `codefact_{qwen3_raw,mixtral_nobos,qwen3_coder_raw,qwen3_coder_chat}`;
+- Phase 2: `{qwen3_bos,mixtral_nobos,mixtral_bos}_subject` (F4; `sweep_rows` has `pos`, prefill kinds clean/noised/
+  noised_lastonly/noised_exceptlast, expert kinds incl. `expert_fixed`), `{qwen3,mixtral_nobos,mixtral_bos}_metrics`
+  (F5; six metric columns), `{qwen3,mixtral_nobos,mixtral_bos,olmoe}_heads` (`head_rows.parquet`, `head_attn_final.npz`),
+  `{qwen3,mixtral_nobos}_subsets` (`subset_rows.parquet`, all 2^k−1 clean-active subsets + same-pass reference rows).
+Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*` and `ext5_{subject,rank,heads,metrics}_*`;
+figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
+ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
+ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary}.json`.
 
 Recipes:
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other

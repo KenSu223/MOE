@@ -134,3 +134,55 @@
 2026-09-14T11:31:13Z END   ext4-scan-codefact_qwen3_coder_chat rc=0 (521s)
 2026-09-14T11:31:17Z START ext4-expert-codefact_qwen3_coder_chat (waited 0s): python scripts/ext4_run_expert.py qwen3_coder --out codefact_qwen3_coder_chat --protocol chat --no-pairs --prefill-tokens 160000 --wf-rows 45000
 2026-09-14T11:56:09Z END   ext4-expert-codefact_qwen3_coder_chat rc=0 (1492s)
+2026-09-21T00:42:13Z START ext5subj-verify (waited 0s): python scripts/ext5_subject_verify.py 20
+2026-09-21T00:44:05Z END   ext5subj-verify rc=0 (112s)
+2026-09-21T00:46:17Z START ext5subj-verify2 (waited 0s): python scripts/ext5_subject_verify.py 20
+2026-09-21T00:47:50Z END   ext5subj-verify2 rc=0 (93s)
+2026-09-21T01:51:39Z START ext5eng-verify (waited 0s): python scripts/verify_olmoe.py
+2026-09-21T01:52:40Z END   ext5eng-verify rc=0 (61s)
+2026-09-21T01:52:40Z START ext5subj-verify (waited 10s): python scripts/ext5_subject_verify.py 20
+2026-09-21T01:54:12Z END   ext5subj-verify rc=0 (92s)
+2026-09-21T01:54:12Z START ext5eng-verify-ext5 (waited 82s): python scripts/ext5_engine_verify.py 20
+2026-09-21T01:55:11Z END   ext5eng-verify-ext5 rc=0 (59s)
+2026-09-21T01:55:11Z START ext5subj-sweep-qwen3_bos_subject (waited 59s): python scripts/ext5_subject_sweep.py qwen3 --out qwen3_bos_subject --base-run qwen3 --sets paper
+2026-09-21T01:57:15Z END   ext5subj-sweep-qwen3_bos_subject rc=0 (124s)
+2026-09-21T01:57:16Z START ext5subj-expert-qwen3_bos_subject (waited 0s): python scripts/ext5_subject_expert.py qwen3 --out qwen3_bos_subject --layers 2,4,5,42,44 --fixed 44:69,42:115
+2026-09-21T01:58:32Z END   ext5subj-expert-qwen3_bos_subject rc=0 (76s)
+2026-09-21T01:58:32Z START ext5eng-verify2 (waited 48s): python scripts/verify_olmoe.py
+2026-09-21T02:00:09Z END   ext5eng-verify2 rc=0 (97s)
+2026-09-21T02:00:09Z START ext5subj-sweep-mixtral_nobos_subject (waited 97s): python scripts/ext5_subject_sweep.py mixtral --out mixtral_nobos_subject --base-run mixtral_nobos --sets paper --no-special-tokens
+2026-09-21T02:03:35Z END   ext5subj-sweep-mixtral_nobos_subject rc=0 (206s)
+2026-09-21T02:03:35Z START ext5eng-verify-ext5b (waited 206s): python scripts/ext5_engine_verify.py 20
+2026-09-21T02:05:09Z END   ext5eng-verify-ext5b rc=0 (94s)
+2026-09-21T02:05:09Z START ext5eng-heads-olmoe-pilot (waited 166s): python scripts/ext5_heads_sweep.py olmoe --out olmoe_heads --layers 8,10,12,13 --sets strict,relaxed --base-run olmoe
+2026-09-21T02:05:20Z END   ext5eng-heads-olmoe-pilot rc=0 (11s)
+2026-09-21T02:05:20Z START ext5subj-expert-mixtral_nobos_subject (waited 103s): python scripts/ext5_subject_expert.py mixtral --out mixtral_nobos_subject --layers 1,4,6,18,19 --fixed 19:2,19:6,18:1 --no-special-tokens
+2026-09-21T02:07:13Z END   ext5subj-expert-mixtral_nobos_subject rc=0 (113s)
+2026-09-21T02:07:13Z START ext5eng-sweep-qwen3_metrics (waited 79s): python scripts/run_sweep.py qwen3 --out qwen3_metrics --sets paper --metrics --agent ext5-engine
+2026-09-21T02:08:35Z END   ext5eng-sweep-qwen3_metrics rc=1 (82s)
+2026-09-21T02:08:35Z START ext5subj-sweep-mixtral_bos_subject (waited 82s): python scripts/ext5_subject_sweep.py mixtral --out mixtral_bos_subject --base-run mixtral --sets paper
+2026-09-21T02:11:55Z END   ext5subj-sweep-mixtral_bos_subject rc=0 (200s)
+2026-09-21T02:11:55Z START ext5eng-expert-qwen3_metrics (waited 200s): python scripts/run_expert.py qwen3 --out qwen3_metrics --layers 42,44 --no-pairs --metrics --agent ext5-engine
+2026-09-21T02:13:17Z END   ext5eng-expert-qwen3_metrics rc=0 (82s)
+2026-09-21T02:13:17Z START ext5subj-expert-mixtral_bos_subject (waited 81s): python scripts/ext5_subject_expert.py mixtral --out mixtral_bos_subject --layers 3,4,6,18,19 --fixed 19:2,19:6,18:1
+2026-09-21T02:15:07Z END   ext5subj-expert-mixtral_bos_subject rc=0 (110s)
+2026-09-21T02:15:07Z START ext5eng-sweep-mixtral_nobos_metrics (waited 111s): python scripts/run_sweep.py mixtral --out mixtral_nobos_metrics --sets paper --metrics --agent ext5-engine --no-special-tokens
+2026-09-21T02:16:59Z END   ext5eng-sweep-mixtral_nobos_metrics rc=0 (111s)
+2026-09-21T02:16:59Z START ext5eng-expert-mixtral_nobos_metrics (waited 0s): python scripts/run_expert.py mixtral --out mixtral_nobos_metrics --layers 18,19 --no-pairs --metrics --agent ext5-engine --no-special-tokens
+2026-09-21T02:18:48Z END   ext5eng-expert-mixtral_nobos_metrics rc=0 (109s)
+2026-09-21T02:18:48Z START ext5eng-sweep-mixtral_bos_metrics (waited 0s): python scripts/run_sweep.py mixtral --out mixtral_bos_metrics --sets paper --metrics --agent ext5-engine
+2026-09-21T02:20:28Z END   ext5eng-sweep-mixtral_bos_metrics rc=0 (100s)
+2026-09-21T02:20:28Z START ext5eng-expert-mixtral_bos_metrics (waited 0s): python scripts/run_expert.py mixtral --out mixtral_bos_metrics --layers 18,19 --no-pairs --metrics --agent ext5-engine
+2026-09-21T02:22:08Z END   ext5eng-expert-mixtral_bos_metrics rc=0 (100s)
+2026-09-21T02:22:08Z START ext5eng-heads-qwen3 (waited 0s): python scripts/ext5_heads_sweep.py qwen3 --out qwen3_heads --layers 40,43,44 --base-run qwen3
+2026-09-21T02:23:32Z END   ext5eng-heads-qwen3 rc=0 (84s)
+2026-09-21T02:23:32Z START ext5eng-heads-mixtral_nobos (waited 0s): python scripts/ext5_heads_sweep.py mixtral --out mixtral_nobos_heads --layers 15,18,19,24 --base-run mixtral_nobos --no-special-tokens
+2026-09-21T02:25:29Z END   ext5eng-heads-mixtral_nobos rc=0 (117s)
+2026-09-21T02:25:29Z START ext5eng-heads-mixtral_bos (waited 0s): python scripts/ext5_heads_sweep.py mixtral --out mixtral_bos_heads --layers 15,18,19,24 --base-run mixtral
+2026-09-21T02:27:13Z END   ext5eng-heads-mixtral_bos rc=0 (104s)
+2026-09-21T02:27:13Z START ext5eng-subsets-qwen3-L44 (waited 0s): python scripts/ext5_subsets_run.py qwen3 --out qwen3_subsets --layers 44 --base-run qwen3_metrics
+2026-09-21T02:28:35Z END   ext5eng-subsets-qwen3-L44 rc=0 (82s)
+2026-09-21T02:28:35Z START ext5eng-subsets-qwen3-L42 (waited 0s): python scripts/ext5_subsets_run.py qwen3 --out qwen3_subsets --layers 42 --base-run qwen3_metrics
+2026-09-21T02:29:54Z END   ext5eng-subsets-qwen3-L42 rc=0 (79s)
+2026-09-21T02:29:54Z START ext5eng-subsets-mixtral_nobos (waited 0s): python scripts/ext5_subsets_run.py mixtral --out mixtral_nobos_subsets --layers 18,19 --base-run mixtral_nobos_metrics --no-special-tokens
+2026-09-21T02:33:23Z END   ext5eng-subsets-mixtral_nobos rc=0 (209s)

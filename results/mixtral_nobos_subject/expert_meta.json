@@ -1,0 +1,44 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "run": "mixtral_nobos_subject",
+ "layers": [
+  1,
+  4,
+  6,
+  18,
+  19
+ ],
+ "fixed": [
+  [
+   19,
+   2
+  ],
+  [
+   19,
+   6
+  ],
+  [
+   18,
+   1
+  ]
+ ],
+ "special_tokens": false,
+ "patch_position": "last subject token",
+ "command": "python scripts/ext5_subject_expert.py mixtral --out mixtral_nobos_subject --layers 1,4,6,18,19 --fixed 19:2,19:6,18:1 --no-special-tokens",
+ "created_utc": "2026-09-21T02:05:25Z",
+ "complete": true,
+ "completed_utc": "2026-09-21T02:07:06Z",
+ "n_rows": 12607,
+ "rows_by_kind": {
+  "expert": 2560,
+  "expert_noised_only": 1599,
+  "layer": 1280,
+  "coalition_clean": 1280,
+  "coalition_union": 1280,
+  "block": 1280,
+  "attn_layer": 1280,
+  "resid": 1280,
+  "expert_fixed": 768
+ }
+}
