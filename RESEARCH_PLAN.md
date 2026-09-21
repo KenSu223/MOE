@@ -343,3 +343,29 @@ same file-ownership and gpu_queue rules as Phase 1. Decisions for the user: whic
 a day of engine work), whether F4 should include the full position × layer grid or only the subject-last-token
 column, and whether probability-scale metrics should replace or accompany Δ in the reports.
 
+## Phase 2 execution plan (decided 2026-09-21)
+
+User decisions: F4 before F3; F4 this round = the **subject-last-token column only** (no full position × layer grid);
+F5 probability-scale metrics are reported **alongside** Δ (main tables stay on Δ). Two waves again.
+
+**Wave 1 (three sub-agents in parallel, coordinator serialises the GPU and merges):**
+
+| Agent | Owns (files) | Work | GPU |
+|---|---|---|---|
+| `ext5-engine` | `moetrace/engine.py`, `scripts/run_sweep.py`, `scripts/run_expert.py` (flag additions only), `scripts/ext5_engine_*`, `scripts/ext5_heads_*`, `scripts/ext5_subsets_*`, `moetrace/ext5_heads.py`, `moetrace/ext5_subsets.py`, section `ext5_f2_heads.md` | (1) F5 engine fields: chunked full-vocabulary log-sum-exp for prefill and wavefront rows → `logp_true`, `logp_foil`, `p_true`, `p_foil`, `rank_true`, KL(patched‖clean) stored in `sweep_rows`/`expert_rows` behind `--metrics`; (2) F2 `attn_head` kind (per-head pre-`o_proj` outputs, v = W_o[:, h]·(head_clean − head_noised)); (3) F1 `coalition_set` kind (explicit expert list) and multi-layer intervention lists on one spawn; OLMoE verification for all three (verify_olmoe identity, HF-hook check for `attn_head`); then runs: F5 re-runs of the base sweeps + L*/L42/L18 expert passes with metrics on (`results/<run>_metrics`), F2 head sweeps at Qwen3 L40/L43/L44 and Mixtral L15/L18/L19/L24 (`results/<run>_heads`), F1.3 exhaustive subset passes at Qwen3 L44/L42 and Mixtral no-BOS L18/L19 (`results/<run>_subsets`); F2 analysis + section | ~12 passes |
+| `ext5-analysis` | `moetrace/ext5_rank.py`, `moetrace/ext5_metrics.py`, `scripts/ext5_rank_*`, `scripts/ext5_metrics_*`, sections `ext5_f1_rankings.md`, `ext5_f5_metrics.md` | F1.1 rankings and F1.2 population-level minimal sets from the existing all-layer data (zero GPU, start immediately); analysis code for F1.3 subsets and F5 metrics written against the agreed schemas, run when `ext5-engine` delivers the parquet files (coordinator relays); sections | 0 |
+| `ext5-subject` | `moetrace/ext5_subject.py` (new executor path for suffix rows; may import helpers from engine.py but must not edit it), `scripts/ext5_subject_*`, section `ext5_f4_subject.md` | F4: suffix wavefront rows starting at the **last subject token** p; kinds `layer` (MoE output), `attn_layer`, `resid` at p for every layer; verification vs transformers hooks on OLMoE; runs on Qwen3 (paper set, defaults), Mixtral no-BOS and BOS (paper set); expert-level pass at the subject-site peak layers; comparison with the final-token curves; section | ~12 passes |
+
+Schemas agreed up front (so analysis can be written before the data exists): new columns `logp_true`, `logp_foil`,
+`p_true`, `p_foil`, `rank_true`, `kl_to_clean` on every row of `sweep_rows`/`expert_rows` in `*_metrics` runs;
+head rows in `expert_rows`-like `head_rows.parquet` (case_id, layer, head, kind=`attn_head`, rescue, …); subset rows
+in `subset_rows.parquet` (case_id, layer, experts as sorted comma list, n_experts, rescue); subject rows in
+`sweep_rows.parquet` of `*_subject` runs with an extra `pos` column (= subject last token index) and the same kinds.
+
+**Wave 2 (after wave 1 merges):** F3 gradient attribution (reverse layer streaming, attribution-patching validation),
+F1.4 multi-layer minimal sets, optional F2 on Qwen3-Instruct. F4's full position × layer grid stays deferred.
+
+Rules as in Phase 1: every GPU job through `scripts/gpu_queue.sh`; detached chains; `run_meta.json`; PROGRESS.md
+entries; final reports under 450 words; coordinator commits selectively and rebuilds `EXTENSIONS_REPORT.md`
+(sections ext5_* appended to `scripts/build_extensions_report.py`).
+

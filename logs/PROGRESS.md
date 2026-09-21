@@ -454,3 +454,8 @@
 - Storage: results/codefact_*/scan_routing.parquet (34 MB each) and expert_parts/ are gitignored as regenerable
   intermediates; raw diagnostics live on the ephemeral NVMe (/opt/dlami/nvme/moe_ext2, moe_ext3).
 - GPU minutes: wave 1 ≈ 30, wave 2 ≈ 10 (attn) + 55 (zoo) + 134 (codefact) → extensions total ≈ 3.8 h.
+
+## 2026-09-21 — coordinator: Phase 2 wave 1 launched (F1, F2, F5 via ext5-engine + ext5-analysis; F4 via ext5-subject)
+- User decisions: F4 before F3; F4 = subject-last-token column only; F5 metrics alongside Δ. Plan: RESEARCH_PLAN.md
+  "Phase 2 execution plan". Engine ownership: ext5-engine only; ext5-subject implements suffix rows in a separate module.
+- Pre-launch state: GPU idle, no queue waiters, git clean at 2a27fbc+, NVMe 49 GB free (new runs are small).
