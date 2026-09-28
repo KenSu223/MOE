@@ -681,3 +681,42 @@
   results/EXTENSIONS_REPORT.md (Directions 5-F4/5-F1/5-F2/5-F5 registered in scripts/build_extensions_report.py);
   CLAUDE.md sections 1/2b/3/5, README, RESEARCH_PLAN.md updated. Wave 2 (F3, F1.4, optional F2 Qwen3-Instruct, F4 grid)
   awaits the user's go-ahead.
+
+## 2026-09-28 02:15 UTC — ext6-str: symmetric token replacement (Zhang & Nanda 2024) started
+- Motivation: best-practices comparison with arXiv:2309.16042 (PDF gitignored at repo root): the paper's corruption (GN) is the method
+  that paper recommends against; STR on CounterFact is feasible on the paper set.
+- User decisions (2026-09-28): (1) case set = paper IDs + split restricted to cases with a symmetric donor, recurrence = half of the
+  retained discovery cases; (2) up to 5 donors per case, uniformly random among qualifying (random.Random(2000 + case_id) order),
+  per-case = donor mean, single-donor (slot 0) as sensitivity; (3) donor qualifies when logit(foil) - logit(true) >= 1.0 on the donor
+  prompt (foil = target_new = the donor subject's true object); (4) runs: Qwen3, Mixtral no-BOS, Mixtral BOS.
+- Donor = same relation, true object == case foil, same template, identical token positions and template tokens, same continuation ids.
+  Candidates: Qwen3 3883 over 221/256 cases, Mixtral 3397 over 218/256 (quartiles 2/6/18 per case).
+- Code: moetrace/ext6_str.py, scripts/ext6_str_{filter,sweep,expert,verify}.py (no engine change; corrupted run = plain prefill row).
+- 02:11 UTC verification on OLMoE vs transformers hooks (results/verify_ext6_str_olmoe.json, 12 case/donor pairs): prefill Δ max diff 0.125
+  (one ulp); layer patch max 0.31, mean |diff| 0.05, 98% within 0.25, rescue r 0.994; expert patch (111 rows) max 0.19, r 0.992; identity
+  0.125. GN calibration (verify_ext2_attn_olmoe.json, layer kind): max 1.12, r 0.983. STR adds no new numerics.
+- 02:18 UTC chain scripts/ext6_str_chain.sh launched (log logs/ext6_str_chain.log): phase A filter -> sweep -> key-layer expert for
+  qwen3_str, mixtral_nobos_str, mixtral_bos_str; phase B remaining layers; analysis scripts/ext6_str_analyze.py.
+
+## 2026-09-28 03:05 UTC — codewino design (interactive session): WinoGrande-style single-token twin benchmark on code
+- User request: study WinoGrande in depth and design a code benchmark where one swapped token keeps the code valid and
+  in-distribution but changes the expected next token, following Zhang & Nanda 2024 (STR, logit difference).
+- Deliverable: docs/codewino_design.md (WinoGrande dossier summary, Z&N requirements, twin definition C1-C8, trigger-answer
+  relations T1-T4, families BRK/CONT/NEG/COMPL/EXEC/GEN/NULL, build pipeline, tracing protocol incl. GN-vs-STR control,
+  risks, 7 user decisions). No repo code written, no GPU used.
+- CPU probe (scratchpad only) on the 36,996 CodeFact functions, both tokenizers aligned: BRK 6,742 (~1,657 tuple<->list in
+  runtime-safe contexts; 2,770 in invalid contexts such as `except [A, B`), CONT 1,939, NEG 253 (45 True/False), COMPL 173;
+  MBPP seed asserts for EXEC 474. NEG needs the CSN train split (412k functions).
+- Verified from the official WinoGrande v1.1 zip: XL train = 40,398 lines (paper says 40,938); dev qID suffix equals the
+  gold label in 1,267/1,267 items and test.jsonl keeps the suffixes.
+- 02:14-03:10 UTC chain complete, all jobs rc=0 (GPU ≈ 58 min: filters 2+3.5+2.8 min, sweeps 2+3+3 min, key-layer expert passes
+  2+3+3 min, remaining-layer passes 17+8.5+8 min). Retained cases 215 / 212 / 213 (disc 107/106/107, val 108/106/106), donor rows
+  852 / 848 / 858 (4.0 per case), qualify rate 0.86-0.89; mean Δ_clean +5.8 / +5.4 / +6.6, Δ_corrupt -6.4 / -5.1 / -6.3.
+- Results (results/sections/ext6_str.md, tables results/tables/ext6_str_*, results/ext6_str_summary.json): Qwen3 L44 (val +2.06) and
+  L44E069 (Spec +0.95; per unit drop 0.082 vs GN 0.075), L42E115 second; all-layer joint top-1 L44E069 (GN same cases: L42E115/E069
+  tie). Mixtral no BOS L19, E006 only recurrent candidate, Spec -0.29, top-2 coalition +0.80 = block +0.82, L18E001 +0.15. Mixtral BOS
+  discovery L21 ≈ L20 ≈ L19 (+1.11/+1.07/+1.07) → L21E001 (Spec +0.40); L19E002 Spec +0.30; first donor picks L19E002. Normalised
+  block rescue 0.177/0.077/0.085 vs GN 0.167/0.089/0.113; STR-GN curve r 0.99/0.94/0.94. Equal-norm active pair at L19 under STR ≈ 0
+  for E006 and E002 (GN: E002 +0.07-0.11, E006 -0.07). Donor dispersion at the paper layer: median SD 0.34-0.42, sign agreement 0.89-0.95.
+- Docs: section registered as Direction 6 in scripts/build_extensions_report.py, EXTENSIONS_REPORT.md rebuilt; CLAUDE.md, README updated.
+  Not committed (awaiting the user).

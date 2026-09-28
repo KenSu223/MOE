@@ -108,6 +108,17 @@ assembled by `scripts/build_extensions_report.py`. Total GPU time for all four d
 
 Wave 1 used about 45 GPU minutes. Wave 2 (gradient attribution, multi-layer minimal sets) is planned, not started.
 
+### Best-practices check: symmetric token replacement (2026-09-28; `results/sections/ext6_str.md`, Direction 6)
+
+Zhang & Nanda (2024, arXiv:2309.16042) recommend symmetric token replacement (STR) instead of the Gaussian subject noise
+the paper uses. We replaced each case's subject by other CounterFact subjects of the same relation whose true object is
+the case's foil (same template, identical token positions; up to 5 facts the model knows per case; 212-215 of the 256
+paper cases), which turns the paper's Δ into Zhang & Nanda's logit difference, and re-ran the whole procedure. The
+paper's selections survive: Qwen3 L44 / L44E069 (now also the joint top-1 over all layers), Mixtral (no BOS) L19 /
+L19E006 with negative Spec and coalition recovery. Drop-normalised layer effects equal GN's in Qwen3 and are 13-25%
+lower in Mixtral. With BOS, Mixtral's L19-L21 tie resolves to L21E001 instead of L19E002; at equal norm Mixtral's L19
+experts no longer differ from their partner under STR. About 1 GPU hour.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),

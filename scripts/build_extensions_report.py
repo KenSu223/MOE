@@ -35,6 +35,10 @@ SECTIONS = [
     ("5-F5", "Probability metrics alongside the logit difference", "results/sections/ext5_f5_metrics.md",
      "Do the layer/expert selections and effect sizes change under log p(true), p(true), rank of the true token and KL to the "
      "clean distribution instead of logit(true) - logit(foil)?"),
+    # Best-practices check (Zhang & Nanda 2024, arXiv:2309.16042): corruption by symmetric token replacement.
+    ("6", "Symmetric token replacement instead of Gaussian noise", "results/sections/ext6_str.md",
+     "Do the paper's layer and expert selections survive when the subject is replaced by a same-relation subject whose answer is "
+     "the foil (STR, the corruption recommended by Zhang & Nanda) instead of being noised (GN)?"),
 ]
 
 

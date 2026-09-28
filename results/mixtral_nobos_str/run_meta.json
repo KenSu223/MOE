@@ -1,0 +1,106 @@
+{
+ "filter": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": false,
+  "k": 5,
+  "margin": 1.0,
+  "seed_base": 2000,
+  "command": "python scripts/ext6_str_filter.py mixtral --out mixtral_nobos_str --no-special-tokens",
+  "created_utc": "2026-09-28T02:18:41Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:21:50Z",
+  "pass_times_s": [
+   97.40269255638123,
+   88.73343682289124
+  ]
+ },
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": false,
+  "layer_chunks": 2,
+  "metrics": true,
+  "n_cases": 212,
+  "n_donor_rows": 848,
+  "command": "python scripts/ext6_str_sweep.py mixtral --out mixtral_nobos_str --layer-chunks 2 --no-special-tokens",
+  "created_utc": "2026-09-28T02:22:12Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:24:48Z",
+  "pass_times_s": [
+   81.6736912727356,
+   69.99177527427673
+  ],
+  "n_rows": 28196
+ },
+ "expert_L18_19_20_21": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": false,
+  "layers": [
+   18,
+   19,
+   20,
+   21
+  ],
+  "pairs": true,
+  "layer_chunks": 1,
+  "command": "python scripts/ext6_str_expert.py mixtral --out mixtral_nobos_str --layers 18,19,20,21 --pairs --max-spawn 25000 --no-special-tokens",
+  "created_utc": "2026-09-28T02:25:09Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:27:46Z",
+  "pass_times_s": [
+   75.53027176856995,
+   77.26676774024963
+  ]
+ },
+ "expert_L0-31": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": false,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "pairs": false,
+  "layer_chunks": 1,
+  "command": "python scripts/ext6_str_expert.py mixtral --out mixtral_nobos_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,23,24,25,26,27,28,29,30,31 --max-spawn 25000 --no-special-tokens",
+  "created_utc": "2026-09-28T02:54:16Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T03:02:16Z",
+  "pass_times_s": [
+   98.41122269630432,
+   89.80206727981567,
+   75.13727116584778,
+   63.15919494628906,
+   60.831820487976074,
+   68.32486915588379
+  ]
+ }
+}

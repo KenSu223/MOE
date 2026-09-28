@@ -1,0 +1,106 @@
+{
+ "filter": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "k": 5,
+  "margin": 1.0,
+  "seed_base": 2000,
+  "command": "python scripts/ext6_str_filter.py mixtral --out mixtral_bos_str",
+  "created_utc": "2026-09-28T02:28:09Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:30:35Z",
+  "pass_times_s": [
+   74.43242144584656,
+   69.82758045196533
+  ]
+ },
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "layer_chunks": 2,
+  "metrics": true,
+  "n_cases": 213,
+  "n_donor_rows": 858,
+  "command": "python scripts/ext6_str_sweep.py mixtral --out mixtral_bos_str --layer-chunks 2",
+  "created_utc": "2026-09-28T02:30:56Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:33:29Z",
+  "pass_times_s": [
+   78.1413631439209,
+   70.17539525032043
+  ],
+  "n_rows": 28527
+ },
+ "expert_L18_19_20_21": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "layers": [
+   18,
+   19,
+   20,
+   21
+  ],
+  "pairs": true,
+  "layer_chunks": 1,
+  "command": "python scripts/ext6_str_expert.py mixtral --out mixtral_bos_str --layers 18,19,20,21 --pairs --max-spawn 25000",
+  "created_utc": "2026-09-28T02:33:50Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T02:36:32Z",
+  "pass_times_s": [
+   82.24051690101624,
+   75.73921990394592
+  ]
+ },
+ "expert_L0-31": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "pairs": false,
+  "layer_chunks": 1,
+  "command": "python scripts/ext6_str_expert.py mixtral --out mixtral_bos_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,23,24,25,26,27,28,29,30,31 --max-spawn 25000",
+  "created_utc": "2026-09-28T03:02:42Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T03:10:19Z",
+  "pass_times_s": [
+   72.53525948524475,
+   67.19360256195068,
+   65.67243766784668,
+   67.59984278678894,
+   80.2998559474945,
+   80.457763671875
+  ]
+ }
+}

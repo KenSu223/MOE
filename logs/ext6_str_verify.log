@@ -1,0 +1,36 @@
+2026-09-28T02:09:43Z START ext6-str-verify-olmoe (waited 0s): python scripts/ext6_str_verify.py 12
+02:09:47 12 (case, donor) pairs; first: 'Charles, Prince of Viana died in' -> 'Henry Pickering Bowditch died in' (Barcelona / Boston)
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:20,  8.53it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:23,  7.03it/s]Loading weights:  15%|█▍        | 26/179 [00:03<00:22,  6.81it/s]Loading weights:  21%|██        | 37/179 [00:05<00:21,  6.67it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:19,  6.64it/s]Loading weights:  33%|███▎      | 59/179 [00:08<00:18,  6.64it/s]Loading weights:  39%|███▉      | 70/179 [00:10<00:16,  6.62it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:14,  6.57it/s]Loading weights:  51%|█████▏    | 92/179 [00:13<00:13,  6.60it/s]Loading weights:  58%|█████▊    | 103/179 [00:15<00:11,  6.58it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.60it/s]Loading weights:  70%|██████▉   | 125/179 [00:18<00:08,  6.60it/s]Loading weights:  76%|███████▌  | 136/179 [00:20<00:06,  6.59it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:04,  6.58it/s]Loading weights:  88%|████████▊ | 158/179 [00:23<00:03,  6.58it/s]Loading weights:  94%|█████████▍| 169/179 [00:25<00:01,  6.59it/s]Loading weights: 100%|██████████| 179/179 [00:25<00:00,  7.00it/s]
+02:10:40 HF: 4/12
+02:10:43 HF: 8/12
+02:10:47 HF: 12/12
+02:10:48   layer   0: load-wait 1.31s compute 0.14s  wf_rows=24
+02:10:50   layer   8: load-wait 0.11s compute 0.10s  wf_rows=205
+02:10:51   layer  15: load-wait 0.08s compute 0.02s  wf_rows=339
+02:10:51   pass done: 24 prefill rows (T=10), 339 spawn rows, 3.8s
+02:10:51 n_pairs: 12
+02:10:51 n_expert_cases: 4
+02:10:51 expert_layers: [3, 8, 13]
+02:10:51 delta_clean_maxdiff_vs_hf: 0.125
+02:10:51 delta_donor_maxdiff_vs_hf: 0.125
+02:10:51 mean_delta_clean_hf: 3.9205729166666665
+02:10:51 mean_delta_donor_hf: -4.326497395833333
+02:10:51 layer_n: 192
+02:10:51 layer_maxdiff: 0.3125
+02:10:51 layer_meanabsdiff: 0.051534016927083336
+02:10:51 layer_frac_within_0.1: 0.859375
+02:10:51 layer_frac_within_0.25: 0.984375
+02:10:51 layer_rescue_corr_vs_hf: 0.9939256588823628
+02:10:51 layer_mean_curve_engine: [-0.001, 0.037, 0.079, -0.057, 0.04, -0.018, 0.005, -0.01, 0.087, 0.038, 0.262, 0.366, 1.062, 1.379, -0.03, 0.368]
+02:10:51 layer_mean_curve_hf: [-0.003, 0.018, 0.074, -0.05, 0.069, -0.039, 0.025, -0.007, 0.061, 0.045, 0.215, 0.352, 1.028, 1.36, -0.027, 0.395]
+02:10:51 layer_mean_curve_maxdiff: 0.047770187569161265
+02:10:51 expert_n: 111
+02:10:51 expert_maxdiff: 0.1875
+02:10:51 expert_meanabsdiff: 0.04068130630630631
+02:10:51 expert_frac_within_0.1: 0.9369369369369369
+02:10:51 expert_frac_within_0.25: 1.0
+02:10:51 expert_rescue_corr_vs_hf: 0.9917573987192182
+02:10:51 identity_maxdiff: 0.125
+02:10:51 calibration_gn_layer: {'maxdiff': 1.12109375, 'meanabsdiff': 0.14991874992847443, 'frac_within_0.1': 0.490625, 'frac_within_0.25': 0.803125, 'rescue_corr': 0.9833392668586902}
+02:10:51 pass_total_s: 3.8425345420837402
+2026-09-28T02:10:53Z END   ext6-str-verify-olmoe rc=0 (70s)

@@ -186,3 +186,29 @@
 2026-09-21T02:29:54Z END   ext5eng-subsets-qwen3-L42 rc=0 (79s)
 2026-09-21T02:29:54Z START ext5eng-subsets-mixtral_nobos (waited 0s): python scripts/ext5_subsets_run.py mixtral --out mixtral_nobos_subsets --layers 18,19 --base-run mixtral_nobos_metrics --no-special-tokens
 2026-09-21T02:33:23Z END   ext5eng-subsets-mixtral_nobos rc=0 (209s)
+2026-09-28T02:09:43Z START ext6-str-verify-olmoe (waited 0s): python scripts/ext6_str_verify.py 12
+2026-09-28T02:10:53Z END   ext6-str-verify-olmoe rc=0 (70s)
+2026-09-28T02:12:23Z START ext6-str-filter-qwen3_str (waited 0s): python scripts/ext6_str_filter.py qwen3 --out qwen3_str
+2026-09-28T02:14:25Z END   ext6-str-filter-qwen3_str rc=0 (122s)
+2026-09-28T02:14:25Z START ext6-str-sweep-qwen3_str (waited 0s): python scripts/ext6_str_sweep.py qwen3 --out qwen3_str --layer-chunks 2
+2026-09-28T02:16:29Z END   ext6-str-sweep-qwen3_str rc=0 (124s)
+2026-09-28T02:16:30Z START ext6-str-expert-key-qwen3_str (waited 0s): python scripts/ext6_str_expert.py qwen3 --out qwen3_str --layers 42,43,44 --max-spawn 25000
+2026-09-28T02:18:26Z END   ext6-str-expert-key-qwen3_str rc=0 (116s)
+2026-09-28T02:18:26Z START ext6-str-filter-mixtral_nobos_str (waited 0s): python scripts/ext6_str_filter.py mixtral --out mixtral_nobos_str --no-special-tokens
+2026-09-28T02:21:58Z END   ext6-str-filter-mixtral_nobos_str rc=0 (212s)
+2026-09-28T02:21:58Z START ext6-str-sweep-mixtral_nobos_str (waited 0s): python scripts/ext6_str_sweep.py mixtral --out mixtral_nobos_str --layer-chunks 2 --no-special-tokens
+2026-09-28T02:24:55Z END   ext6-str-sweep-mixtral_nobos_str rc=0 (177s)
+2026-09-28T02:24:55Z START ext6-str-expert-key-mixtral_nobos_str (waited 0s): python scripts/ext6_str_expert.py mixtral --out mixtral_nobos_str --layers 18,19,20,21 --pairs --max-spawn 25000 --no-special-tokens
+2026-09-28T02:27:54Z END   ext6-str-expert-key-mixtral_nobos_str rc=0 (179s)
+2026-09-28T02:27:54Z START ext6-str-filter-mixtral_bos_str (waited 0s): python scripts/ext6_str_filter.py mixtral --out mixtral_bos_str
+2026-09-28T02:30:42Z END   ext6-str-filter-mixtral_bos_str rc=0 (168s)
+2026-09-28T02:30:43Z START ext6-str-sweep-mixtral_bos_str (waited 0s): python scripts/ext6_str_sweep.py mixtral --out mixtral_bos_str --layer-chunks 2
+2026-09-28T02:33:36Z END   ext6-str-sweep-mixtral_bos_str rc=0 (173s)
+2026-09-28T02:33:36Z START ext6-str-expert-key-mixtral_bos_str (waited 0s): python scripts/ext6_str_expert.py mixtral --out mixtral_bos_str --layers 18,19,20,21 --pairs --max-spawn 25000
+2026-09-28T02:36:39Z END   ext6-str-expert-key-mixtral_bos_str rc=0 (183s)
+2026-09-28T02:36:59Z START ext6-str-expert-rest-qwen3_str (waited 0s): python scripts/ext6_str_expert.py qwen3 --out qwen3_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,45,46,47 --max-spawn 25000
+2026-09-28T02:53:58Z END   ext6-str-expert-rest-qwen3_str rc=0 (1019s)
+2026-09-28T02:53:58Z START ext6-str-expert-rest-mixtral_nobos_str (waited 0s): python scripts/ext6_str_expert.py mixtral --out mixtral_nobos_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,23,24,25,26,27,28,29,30,31 --max-spawn 25000 --no-special-tokens
+2026-09-28T03:02:24Z END   ext6-str-expert-rest-mixtral_nobos_str rc=0 (506s)
+2026-09-28T03:02:24Z START ext6-str-expert-rest-mixtral_bos_str (waited 0s): python scripts/ext6_str_expert.py mixtral --out mixtral_bos_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,23,24,25,26,27,28,29,30,31 --max-spawn 25000
+2026-09-28T03:10:27Z END   ext6-str-expert-rest-mixtral_bos_str rc=0 (483s)

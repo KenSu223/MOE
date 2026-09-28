@@ -2,7 +2,8 @@
 
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
-Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21.
+Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
+Direction 6 (STR best-practices check) added 2026-09-28.
 
 ## 1. What this project is
 
@@ -15,8 +16,11 @@ models, Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1, in bf16, on this machine's sin
 Extensions COMPLETE (2026-09-14, deliverable `results/EXTENSIONS_REPORT.md`, plan `RESEARCH_PLAN.md`).
 **Phase 2 wave 1 COMPLETE (2026-09-21: F4 subject-token patching, F1 rankings/minimal sets, F2 attention heads,
 F5 probability metrics; sections `results/sections/ext5_*.md`, assembled into `EXTENSIONS_REPORT.md` as Directions
-5-F4/5-F1/5-F2/5-F5).** Wave 2 (F3 gradient attribution, F1.4 multi-layer sets) NOT started. Everything is committed
-and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
+5-F4/5-F1/5-F2/5-F5).** Wave 2 (F3 gradient attribution, F1.4 multi-layer sets) NOT started.
+**Direction 6 COMPLETE (2026-09-28): symmetric token replacement (STR) instead of Gaussian noise, the corruption recommended
+by Zhang & Nanda 2024 (arXiv:2309.16042, PDF gitignored at repo root); section `results/sections/ext6_str.md`.**
+Everything, including Direction 6, is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is
+running. Open items are in section 3.
 
 ## 2. Results in one screen (base reproduction)
 
@@ -132,6 +136,21 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     descriptive only; KL/Δlog p as protocol diagnostics.
   - Incident: `run_sweep.py` crashed after a complete pass when writing `run_meta.json` (variable `meta` reused for a
     DataFrame); fixed with JSON sanitising in `run_sweep.py`/`run_expert.py`; no GPU work lost.
+- **Direction 6 (2026-09-28, ≈ 58 GPU min; `moetrace/ext6_str.py`, `scripts/ext6_str_*.py`, runs
+  `results/{qwen3_str,mixtral_nobos_str,mixtral_bos_str}`)**: best-practices check against Zhang & Nanda (STR over GN,
+  normalised logit difference, single-layer patching, several corruption sites; the paper follows all but STR and
+  normalisation). STR donor = another CounterFact subject of the same relation whose true object is the case's foil,
+  same template and token positions, known by the model (logit(foil) − logit(true) ≥ 1 on the donor prompt); up to 5
+  donors per case in `random.Random(2000 + case_id)` order, donor mean primary, first donor as sensitivity; paper IDs and
+  split restricted to 215 / 212 / 213 cases (Qwen3 / Mixtral no BOS / BOS), recurrence = half the retained discovery.
+  The paper's Δ becomes LD(r, r′). Verified vs transformers hooks on OLMoE (layer r 0.994, expert r 0.992). Results:
+  **every selection of the paper survives** — Qwen3 L44 / L44E069 (Spec +0.95, per unit drop 0.082 vs GN 0.075; now
+  also the all-layer joint top-1, where GN had L42E115/E069 tied), Mixtral no BOS L19 / L19E006 (Spec −0.29, coalition
+  +0.80 ≈ block +0.82), L18E001 positive. STR drop ≈ 2× GN (Δ_corrupt ≈ −5 to −6.4); drop-normalised block rescue
+  0.177 / 0.077 / 0.085 vs GN 0.167 / 0.089 / 0.113 (no GN inflation in Qwen3, 13–25 % in Mixtral); curves r 0.94–0.99.
+  Changes: Mixtral BOS L19–L21 tie now resolves to L21E001 (two-stage and joint; first donor still L19E002); at equal
+  norm Mixtral L19 experts (E006 and E002) no longer differ from their co-active partner under STR (GN: E002 +0.07–0.11).
+  Mixtral no-BOS joint top-1 L21E001 on the reduced set only (59/128 < 64 on the full set).
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -156,6 +175,8 @@ Extensions:
   routing; consolidate `ext5_subject._build_v_at` into `engine.py`; join ext3 per-case sink flags to the F5 L0 KL tail;
   early-site expert statistic stratified by subject token / relation instead of recurrence.
 - The five open method questions in 2b (user decisions pending); the final wording of EXTENSIONS_REPORT.md follows them.
+- Direction 6 (STR) not done: Qwen3 gate-matched / equal-norm control (needs `--pairs` at L44), relaxed and own strict
+  sets, the zoo models, CodeFact, subject-token (F4) and attention/head patches under STR, the reverse (noising) direction.
 - CodeFact: Mixtral S3 is partial (241 passing items → 120/121 split); The Stack was not used (gated; CodeSearchNet
   instead); R3 has a single-digit sub-category that may deserve exclusion; no HF-hook verification of the code runs
   beyond the shared engine.
@@ -234,6 +255,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `coalition_set` (`SpawnSpec.experts`), `multi` (`SpawnSpec.steps`); `DiagSpec.attn_heads_final`, `spawn_vectors`;
   `run_sweep.py`/`run_expert.py` flags `--metrics`, `--agent`. Verification: `results/verify_ext5_engine_olmoe.json`,
   `results/verify_ext5_subject_olmoe.json`; `verify_olmoe.json` unchanged vs `verify_olmoe_before_ext5.json`.
+- Direction 6: `ext6_str.py` (STR donors: `donor_index`, `candidates` = same relation, true object == case foil, same template,
+  identical token positions and continuation ids; `select` (margin 1.0, K = 5, `random.Random(2000 + case_id)`);
+  `model_data(run, donors='mean'|'first')` → `analysis.ModelData` with donor-aggregated rows so every `analysis.py`
+  function runs unchanged; `normalised` = mean rescue / mean drop). No engine change: the corrupted run is a plain
+  prefill row, spawns use parent = donor row.
 
 `scripts/` — base CLIs take a model key; `--out <run>` selects `results/<run>/`; `--token-rule space|paper_like`;
 `--no-special-tokens` = no BOS; `--layer-chunks N` bounds wavefront rows.
@@ -259,6 +285,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   <run>`, `ext5_heads_analyze.py`, `ext5_subsets_run.py <model> --out <run> --layers ... --base-run <metrics-run>`
   (F2, F1.3, F5 runs); `ext5_rank_analyze.py`, `ext5_rank_subsets.py`, `ext5_rank_text.py`, `ext5_metrics_analyze.py`,
   `ext5_metrics_text.py` (F1, F5 analysis; CPU only).
+- Direction 6: `ext6_str_filter.py <model> --out <run> [--no-special-tokens]` (all symmetric candidates → Δ_donor →
+  selection, case_sets.json), `ext6_str_sweep.py` (layer patch per donor row, routing), `ext6_str_expert.py --layers ...
+  [--pairs] [--max-spawn N]`, `ext6_str_verify.py` (OLMoE vs transformers hooks → `results/verify_ext6_str_olmoe.json`),
+  `ext6_str_analyze.py` (STR vs GN on the same cases; tables, figure, `results/ext6_str_summary.json`), `ext6_str_text.py`
+  (section), `ext6_str_chain.sh`.
 
 `results/` run directories (each has `run_meta.json`; row-level Parquet: `sweep_rows`, `sweep_routing`,
 `sweep_cases`, `expert_rows`, `expert_prefill_*`; extension runs add `zoo_summary.json`, `sink_diag.json`, ...):
@@ -275,10 +306,14 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   noised_lastonly/noised_exceptlast, expert kinds incl. `expert_fixed`), `{qwen3,mixtral_nobos,mixtral_bos}_metrics`
   (F5; six metric columns), `{qwen3,mixtral_nobos,mixtral_bos,olmoe}_heads` (`head_rows.parquet`, `head_attn_final.npz`),
   `{qwen3,mixtral_nobos}_subsets` (`subset_rows.parquet`, all 2^k−1 clean-active subsets + same-pass reference rows).
-Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*` and `ext5_{subject,rank,heads,metrics}_*`;
+- Direction 6: `{qwen3,mixtral_nobos,mixtral_bos}_str` (`str_candidates.parquet` every symmetric candidate + Δ_donor +
+  slot; donor-level `str_sweep_rows` (kinds clean/corrupt/layer, `slot`), `str_sweep_routing` (slot −1 = clean),
+  `str_expert_rows` (all layers; Mixtral L18–21 with `expert_scaled` pairs), `sweep_cases` (delta_corrupt = donor mean));
+  GN baselines = the Direction-1 `*_alllayers` runs restricted to the same cases.
+Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`;
 figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
-ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary}.json`.
+ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary}.json`.
 
 Recipes:
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other
@@ -337,3 +372,4 @@ Two patterns were used and both are documented in PLAYBOOK.md:
   `data/model_usage/*.json` per-model tokenisation / template specs.
 - `logs/PROGRESS.md` timestamped log of everything that happened, including handovers and incidents.
 - Paper PDF / LaTeX are gitignored (`2606.03780.pdf`, `paper.txt`, `paper_src/`); present locally on this machine.
+  Also gitignored: `2309.16042.pdf` (Zhang & Nanda 2024, activation-patching best practices; basis of Direction 6).

@@ -1,0 +1,7 @@
+**STR construction and descriptors (same cases for STR and GN)**
+
+| Model / protocol | Symmetric candidates | Cases with a candidate | Cases kept (disc/val) | Qualify rate | Donor rows | Donor top-1 = foil | Mean Δ clean | Mean Δ corrupt (STR) | Mean drop STR / GN | r(val curve STR, GN) | Per-case r at paper layer | Donor dispersion at paper layer (median SD) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 3883 | 221/256 | 215 (107/108) | 0.86 | 852 (4.0/case) | 0.28 | +5.79 | -6.39 | +12.18 / +5.69 | 0.987 | 0.77 | 0.42 (|mean| 1.68); sign agreement 0.95 |
+| Mixtral-8x7B, no BOS (paper protocol) | 3397 | 218/256 | 212 (106/106) | 0.88 | 848 (4.0/case) | 0.26 | +5.43 | -5.09 | +10.52 / +4.72 | 0.937 | 0.60 | 0.34 (|mean| 0.51); sign agreement 0.89 |
+| Mixtral-8x7B, BOS (tokenizer default) | 3397 | 218/256 | 213 (107/106) | 0.89 | 858 (4.0/case) | 0.30 | +6.57 | -6.25 | +12.82 / +5.03 | 0.935 | 0.67 | 0.42 (|mean| 0.85); sign agreement 0.90 |
