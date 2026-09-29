@@ -61,6 +61,8 @@ class SubjectSpawn:
     kind: str  # one of KINDS
     pos: int  # patch position p (absolute token index); must equal rec_pos of both prefill rows
     expert: int = -1
+    window: int = 1  # ext6 (kind 'layer' only): the MoE output at p is set to the clean one at layers layer..layer+window-1
+    #                  (sliding-window restoration, Meng et al. 2022 / Zhang & Nanda 2024); 1 = the single-layer patch
 
 
 @dataclass
@@ -174,7 +176,14 @@ class SubjectEngine(Engine):
 
     @torch.no_grad()
     def run_subject(self, prefill: list[SubjectPrefill], spawns: list[SubjectSpawn], log=None, wf_chunk: int = 4096,
-                    attn_score_budget: int = 768 * 2**20) -> SubjectResult:
+                    attn_score_budget: int = 768 * 2**20, metrics: bool = False, metrics_chunk: int = 512) -> SubjectResult:
+        """ext6 additions (defaults reproduce the ext5 behaviour bit for bit):
+        SubjectSpawn.window > 1 (kind 'layer'): at every later layer l' <= layer + window - 1 the row's own MoE output at
+            its first token (position p) is replaced by the clean row's MoE output at p (h = h_pre_moe_own + MoE_clean),
+            i.e. a joint restoration of `window` consecutive MoE outputs at p.
+        metrics=True: full-vocabulary log-softmax (fp32 of the bf16 logits) at the final position for every prefill and
+            suffix row -> extra['metrics_prefill'] / extra['metrics_spawn'] with logp_true, logp_foil, p_true, p_foil,
+            rank_true (no KL)."""
         s, dev = self.spec, self.device
         Hd = self.hidden
         B = len(prefill)
@@ -217,13 +226,17 @@ class SubjectEngine(Engine):
             assert sp.kind in KINDS, sp.kind
             assert rec[sp.parent] == sp.pos == rec[sp.clean], (i, sp)
             assert lens[sp.parent] == lens[sp.clean]
+            assert sp.window >= 1 and (sp.window == 1 or sp.kind == "layer"), (i, sp)
             (by_pre if sp.kind in PRE_KINDS else by_direct if sp.kind in DIRECT_KINDS else by_vec).setdefault(sp.layer, []).append(i)
+        has_window = any(sp.window > 1 for sp in spawns)
         Smax = int(sp_len.max()) if S else 1
         Nw_max = int(sp_len.sum())
         wf_H = torch.empty(S, Smax, Hd, dtype=BF16, device=dev)
         wf_parent = torch.empty(S, dtype=torch.long, device=dev)
         wf_pos = torch.empty(S, dtype=torch.long, device=dev)
         wf_len = torch.empty(S, dtype=torch.long, device=dev)
+        wf_clean = torch.empty(S, dtype=torch.long, device=dev)  # ext6 window: clean prefill row of each suffix row
+        wf_winend = torch.full((S,), -1, dtype=torch.long, device=dev)  # ext6 window: last layer whose MoE output at p is clean
         wf_row_of_spawn = np.full(S, -1, dtype=np.int64)
         n_wf = 0
         sp_ne = np.zeros(S, dtype=np.float32)
@@ -259,6 +272,9 @@ class SubjectEngine(Engine):
             wf_parent[n_wf : n_wf + n] = parents
             wf_pos[n_wf : n_wf + n] = pos
             wf_len[n_wf : n_wf + n] = lens_t[parents] - pos
+            if has_window:
+                wf_clean[n_wf : n_wf + n] = torch.tensor([spawns[i].clean for i in idx], device=dev)
+                wf_winend[n_wf : n_wf + n] = torch.tensor([spawns[i].layer + spawns[i].window - 1 for i in idx], device=dev)
             wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
             n_wf += n
 
@@ -308,7 +324,13 @@ class SubjectEngine(Engine):
             pre_moe_r = Hs[ar, rec_t]  # pre-MoE residual at the recorded position (bf16)
             Hs = Hs + out_bf[: B * T].view(B, T, Hd)
             if n_wf > 0:
+                win = torch.nonzero(wf_winend[:n_wf] >= l).view(-1) if has_window else None  # rows spawned below l
+                if win is not None and len(win):
+                    pre0 = wf_H[win, 0].clone()  # pre-MoE residual at the row's first token (position p)
                 wf_H[:n_wf][vm] += out_bf[B * T :]
+                if win is not None and len(win):  # ext6 window: MoE output at p := the clean row's at this layer
+                    wf_H[win, 0] = pre0 + out_bf[rec_idx][wf_clean[win]]
+                    del pre0
             acc_r, topi_r, topv_r = acc[rec_idx], topi[rec_idx], topv[rec_idx]
             out_r = out_bf[rec_idx]
             h_out_r = Hs[ar, rec_t]  # residual after layer l at the recorded position
@@ -379,6 +401,14 @@ class SubjectEngine(Engine):
             wlf = self._pair_logits(hw, head, foil_ids[par]).cpu().numpy()
             sp_lt[:] = wlt[wf_row_of_spawn]
             sp_lf[:] = wlf[wf_row_of_spawn]
+        extra_m = {}
+        if metrics:  # ext6: full-vocabulary probabilities of the two objects at the final position
+            t_m = time.time()
+            extra_m["metrics_prefill"] = self._logp_pair(hN, head, true_ids, foil_ids, metrics_chunk)
+            if n_wf > 0:
+                mw = self._logp_pair(hw, head, true_ids[par], foil_ids[par], metrics_chunk)
+                extra_m["metrics_spawn"] = {k_: v_[wf_row_of_spawn] for k_, v_ in mw.items()}
+            extra_m["metrics_s"] = time.time() - t_m
         total = time.time() - t_start
         if log is not None:
             log(f"  pass done: {B} prefill rows (T={T}), {S} suffix rows (Smax={Smax}, {Nw_max} tokens), {total:.1f}s")
@@ -387,8 +417,29 @@ class SubjectEngine(Engine):
             logit_true_full=lt_full.cpu().numpy(), logit_foil_full=lf_full.cpu().numpy(), top1=top1.cpu().numpy(),
             route_idx=route_idx, route_w=route_w, route_cnorm=route_cn,
             sp_logit_true=sp_lt, sp_logit_foil=sp_lf, sp_vnorm=sp_vnorm, sp_norm_e=sp_ne, layer_times=layer_times,
-            extra={"total_s": total, "T": T, "Smax": Smax, "n_wf_tokens": Nw_max, "row_chunk": row_chunk},
+            extra={"total_s": total, "T": T, "Smax": Smax, "n_wf_tokens": Nw_max, "row_chunk": row_chunk, **extra_m},
         )
+
+    @staticmethod
+    def _logp_pair(h: torch.Tensor, head: torch.Tensor, true_ids: torch.Tensor, foil_ids: torch.Tensor, chunk: int) -> dict:
+        """ext6: log-softmax (fp32 of the bf16 logits, as Engine._metrics) of the rows h [n, H] (final-normed) at the true
+        and foil ids, their probabilities and the rank of the true token (1 + number of strictly larger logits)."""
+        n = h.shape[0]
+        dev = h.device
+        lp_t = torch.empty(n, dtype=torch.float32, device=dev)
+        lp_f = torch.empty(n, dtype=torch.float32, device=dev)
+        rank = torch.empty(n, dtype=torch.int32, device=dev)
+        for c0 in range(0, n, chunk):
+            c1 = min(n, c0 + chunk)
+            arb = torch.arange(c1 - c0, device=dev)
+            lp = torch.log_softmax(F.linear(h[c0:c1], head).float(), dim=-1)
+            t_ = lp[arb, true_ids[c0:c1]]
+            lp_t[c0:c1] = t_
+            lp_f[c0:c1] = lp[arb, foil_ids[c0:c1]]
+            rank[c0:c1] = (lp > t_[:, None]).sum(-1).to(torch.int32) + 1
+            del lp
+        return {"logp_true": lp_t.cpu().numpy(), "logp_foil": lp_f.cpu().numpy(), "p_true": lp_t.exp().cpu().numpy(),
+                "p_foil": lp_f.exp().cpu().numpy(), "rank_true": rank.cpu().numpy()}
 
 
 # ----------------------------------------------------------------------------------------------------------------

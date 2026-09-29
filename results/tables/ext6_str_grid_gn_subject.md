@@ -1,0 +1,6 @@
+**Single-layer MoE patch at the last subject token: STR (this grid) vs GN (F4 runs *_subject) on the same cases, each normalised by its own drop**
+
+| Model | n cases | STR peak (rescue / drop) | GN peak (rescue / drop) | STR sum over layers | GN sum over layers | GN / STR (sum) | Mean drop STR / GN |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 215 | L0 +0.187 [+0.165, +0.211] | L4 +0.160 [+0.124, +0.199] | +1.27 | +1.34 | 1.06 | +12.20 / +5.72 |
+| Mixtral-8x7B, BOS | 213 | L0 +0.304 [+0.279, +0.330] | L4 +0.487 [+0.427, +0.544] | +1.60 | +2.83 | 1.77 | +12.81 / +5.01 |

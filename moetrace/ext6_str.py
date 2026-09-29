@@ -95,6 +95,27 @@ def candidates(case: Case, rec: dict, tok, index: dict, special_tokens: bool, to
     return out
 
 
+POS_CATS = ("first subject token", "middle subject tokens", "last subject token", "first subsequent token", "further tokens",
+            "last token")
+
+
+def position_category(p: int, subject_pos: list[int], T: int) -> str:
+    """Meng et al. / Zhang & Nanda token groups (prefix positions before the subject are 'prefix'). Priority: the final
+    position is always 'last token'; a one-token subject counts as 'last subject token'."""
+    first, last = subject_pos[0], subject_pos[-1]
+    if p == T - 1:
+        return "last token"
+    if p == last:
+        return "last subject token"
+    if p == first:
+        return "first subject token"
+    if first < p < last:
+        return "middle subject tokens"
+    if p == last + 1:
+        return "first subsequent token"
+    return "further tokens" if p > last else "prefix"
+
+
 def select(cand: pd.DataFrame, k: int = K_DONORS, margin: float = MARGIN) -> pd.DataFrame:
     """Mark qualifying donors (delta_donor <= -margin) and the first k qualifying in each case's fixed order."""
     cand = cand.sort_values(["case_id", "order"]).copy()

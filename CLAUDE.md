@@ -3,7 +3,7 @@
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
 Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
-Direction 6 (STR best-practices check) added 2026-09-28.
+Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28.
 
 ## 1. What this project is
 
@@ -19,8 +19,9 @@ F5 probability metrics; sections `results/sections/ext5_*.md`, assembled into `E
 5-F4/5-F1/5-F2/5-F5).** Wave 2 (F3 gradient attribution, F1.4 multi-layer sets) NOT started.
 **Direction 6 COMPLETE (2026-09-28): symmetric token replacement (STR) instead of Gaussian noise, the corruption recommended
 by Zhang & Nanda 2024 (arXiv:2309.16042, PDF gitignored at repo root); section `results/sections/ext6_str.md`.**
-Everything, including Direction 6, is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is
-running. Open items are in section 3.
+**Direction 6b COMPLETE for Qwen3 and Mixtral BOS (2026-09-28): STR layer × position grid, section
+`results/sections/ext6_str_grid.md`; Mixtral without BOS awaits the user's decision.** Everything, including Direction 6b,
+is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
 
 ## 2. Results in one screen (base reproduction)
 
@@ -151,6 +152,18 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
   Changes: Mixtral BOS L19–L21 tie now resolves to L21E001 (two-stage and joint; first donor still L19E002); at equal
   norm Mixtral L19 experts (E006 and E002) no longer differ from their co-active partner under STR (GN: E002 +0.07–0.11).
   Mixtral no-BOS joint top-1 L21E001 on the reduced set only (59/128 < 64 on the full set).
+- **Direction 6b (2026-09-28, ≈ 40 GPU min; `scripts/ext6_str_grid*.py`, rows `results/{qwen3,mixtral_bos}_str/str_grid_w{1,5}_*`)**:
+  Zhang & Nanda Section 4.1 / Figure 4 for the paper's MoE-output patch under STR: every position from the first subject
+  token × every layer, all donors, single layer and 5-layer centred window, Δ/drop and Δp(true). Executor additions in
+  `ext5_subject.py` (`SubjectSpawn.window`, `run_subject(metrics=True)`), F4 verification unchanged (70/70 fields), new
+  OLMoE check `results/verify_ext6_str_grid_olmoe.json` (r 0.991 / 0.998). Two sites: last subject token at L0–L8 (peak
+  L0: Qwen3 +0.187, Mixtral BOS +0.304 of the drop) and the final position at the paper's band (Qwen3 L44 +0.176,
+  Mixtral L19–L21 +0.086); positions in between ≤ 0.007. Last/middle subject-token ratio agrees across metrics with
+  single layers (LD 2.9× / 4.8×, p 2.7× / 6.5×); with window 5 probability over-weights it (LD 3.2× / 5.0×, p 4.0× /
+  14.9×) and windows are additive or sub-additive in LD (0.60–1.09) but super-additive in Δp (2.8–6.1): Zhang & Nanda's
+  GPT-2 XL effects come from the softmax once windows are used. GN vs STR at the last subject token (F4 runs, same
+  cases, normalised): GN peaks at L4 not L0; layer sum 1.06× STR (Qwen3), 1.77× (Mixtral BOS) = GN inflation at the
+  early site, not at the paper's final-position site.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -176,7 +189,9 @@ Extensions:
   early-site expert statistic stratified by subject token / relation instead of recurrence.
 - The five open method questions in 2b (user decisions pending); the final wording of EXTENSIONS_REPORT.md follows them.
 - Direction 6 (STR) not done: Qwen3 gate-matched / equal-norm control (needs `--pairs` at L44), relaxed and own strict
-  sets, the zoo models, CodeFact, subject-token (F4) and attention/head patches under STR, the reverse (noising) direction.
+  sets, the zoo models, CodeFact, attention/head and residual (`resid`) patches under STR, the reverse (noising) direction.
+  Direction 6b: Mixtral no BOS grid (user decision pending; `python scripts/ext6_str_grid.py mixtral --out mixtral_nobos_str
+  --no-special-tokens --window 1|5`, ≈ 11 min each), expert-level analysis at the early site under STR.
 - CodeFact: Mixtral S3 is partial (241 passing items → 120/121 split); The Stack was not used (gated; CodeSearchNet
   instead); R3 has a single-digit sub-category that may deserve exclusion; no HF-hook verification of the code runs
   beyond the shared engine.
@@ -290,6 +305,9 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   [--pairs] [--max-spawn N]`, `ext6_str_verify.py` (OLMoE vs transformers hooks → `results/verify_ext6_str_olmoe.json`),
   `ext6_str_analyze.py` (STR vs GN on the same cases; tables, figure, `results/ext6_str_summary.json`), `ext6_str_text.py`
   (section), `ext6_str_chain.sh`.
+- Direction 6b: `ext6_str_grid.py <model> --out <str run> [--window 1|5] [--no-special-tokens]` (layer × position grid,
+  units packed by suffix length), `ext6_str_grid_verify.py`, `ext6_str_grid_analyze.py` (heatmaps, peaks, last/middle
+  ratio, sliding vs adding, GN comparison with the F4 `*_subject` runs), `ext6_str_grid_text.py`, `ext6_str_grid_chain.sh`.
 
 `results/` run directories (each has `run_meta.json`; row-level Parquet: `sweep_rows`, `sweep_routing`,
 `sweep_cases`, `expert_rows`, `expert_prefill_*`; extension runs add `zoo_summary.json`, `sink_diag.json`, ...):
@@ -309,11 +327,13 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
 - Direction 6: `{qwen3,mixtral_nobos,mixtral_bos}_str` (`str_candidates.parquet` every symmetric candidate + Δ_donor +
   slot; donor-level `str_sweep_rows` (kinds clean/corrupt/layer, `slot`), `str_sweep_routing` (slot −1 = clean),
   `str_expert_rows` (all layers; Mixtral L18–21 with `expert_scaled` pairs), `sweep_cases` (delta_corrupt = donor mean));
-  GN baselines = the Direction-1 `*_alllayers` runs restricted to the same cases.
+  GN baselines = the Direction-1 `*_alllayers` runs restricted to the same cases. Direction 6b adds
+  `str_grid_w{1,5}_rows.parquet` (donor level: case, pos, token group, layer, window bounds, Δ, rescue, p(true), rank) and
+  `str_grid_w{1,5}_prefill.parquet` to `qwen3_str` and `mixtral_bos_str`.
 Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`;
 figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
-ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary}.json`.
+ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary,ext6_str_grid_summary}.json`.
 
 Recipes:
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other

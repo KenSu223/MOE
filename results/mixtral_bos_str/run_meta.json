@@ -102,5 +102,63 @@
    80.2998559474945,
    80.457763671875
   ]
+ },
+ "grid_w1": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "window": 1,
+  "window_half": 0,
+  "n_cases": 213,
+  "n_units": 1584,
+  "n_suffix_rows": 198304,
+  "n_suffix_tokens": 868928,
+  "n_passes": 8,
+  "token_budget": 150000,
+  "max_rows": 40000,
+  "command": "python scripts/ext6_str_grid.py mixtral --out mixtral_bos_str --window 1",
+  "created_utc": "2026-09-28T17:09:16Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T17:19:45Z",
+  "pass_times_s": [
+   98.00513529777527,
+   83.68146681785583,
+   74.10387349128723,
+   65.75415134429932,
+   73.85480833053589,
+   66.95986294746399,
+   68.79405355453491,
+   72.45998334884644
+  ],
+  "n_rows": 198304
+ },
+ "grid_w5": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "window": 5,
+  "window_half": 2,
+  "n_cases": 213,
+  "n_units": 1584,
+  "n_suffix_rows": 198304,
+  "n_suffix_tokens": 868928,
+  "n_passes": 8,
+  "token_budget": 150000,
+  "max_rows": 40000,
+  "command": "python scripts/ext6_str_grid.py mixtral --out mixtral_bos_str --window 5",
+  "created_utc": "2026-09-28T17:29:13Z",
+  "complete": true,
+  "completed_utc": "2026-09-28T17:40:08Z",
+  "pass_times_s": [
+   98.82681918144226,
+   93.9870023727417,
+   83.50105690956116,
+   73.85559034347534,
+   66.72994613647461,
+   72.56759333610535,
+   75.98935008049011,
+   73.77359580993652
+  ],
+  "n_rows": 198304
  }
 }

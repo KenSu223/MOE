@@ -39,6 +39,10 @@ SECTIONS = [
     ("6", "Symmetric token replacement instead of Gaussian noise", "results/sections/ext6_str.md",
      "Do the paper's layer and expert selections survive when the subject is replaced by a same-relation subject whose answer is "
      "the foil (STR, the corruption recommended by Zhang & Nanda) instead of being noised (GN)?"),
+    ("6b", "Layer × position grid under symmetric token replacement", "results/sections/ext6_str_grid.md",
+     "Zhang & Nanda Section 4.1 / Figure 4 for the paper's MoE-output patch: which token positions and layers carry the "
+     "rescue, is the last subject token special, and do logit difference and probability agree? (single layer and 5-layer "
+     "sliding window)"),
 ]
 
 

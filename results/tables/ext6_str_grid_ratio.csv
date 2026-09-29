@@ -1,0 +1,5 @@
+Model,Window,Cases with >= 3 subject tokens,"Ratio last / middle subject tokens, LD","Ratio, probability"
+Qwen3-30B-A3B-Base,1,188,"2.87 [2.40, 3.44]","2.65 [1.30, 5.95]"
+Qwen3-30B-A3B-Base,5,188,"3.18 [2.75, 3.67]","3.99 [2.68, 6.57]"
+"Mixtral-8x7B, BOS",1,196,"4.79 [4.20, 5.48]","6.54 [3.40, 13.53]"
+"Mixtral-8x7B, BOS",5,196,"5.04 [4.47, 5.70]","14.88 [9.74, 23.83]"

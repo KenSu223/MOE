@@ -1,0 +1,33 @@
+{
+ "n_pairs": 8,
+ "n_units": 50,
+ "n_spawns": 1650,
+ "window_half": 2,
+ "delta_clean_maxdiff_vs_hf": 0.125,
+ "delta_donor_maxdiff_vs_hf": 0.3125,
+ "p_true_donor_maxdiff_vs_hf": 0.0008268145611509681,
+ "w1_n": 800,
+ "w1_delta_maxdiff": 0.59375,
+ "w1_delta_meanabsdiff": 0.0772265625,
+ "w1_delta_frac_within_0.25": 0.9275,
+ "w1_rescue_corr_vs_hf": 0.9909118773901212,
+ "w1_hf_rescue_std": 0.7984903801951854,
+ "w1_p_true_maxdiff": 0.005360630340874195,
+ "w1_p_true_meanabsdiff": 0.00019892712932175982,
+ "w5_n": 800,
+ "w5_delta_maxdiff": 0.5,
+ "w5_delta_meanabsdiff": 0.07244873046875,
+ "w5_delta_frac_within_0.25": 0.94125,
+ "w5_rescue_corr_vs_hf": 0.9980070845866488,
+ "w5_hf_rescue_std": 1.8396901573507338,
+ "w5_p_true_maxdiff": 0.03349604457616806,
+ "w5_p_true_meanabsdiff": 0.0004587894802162396,
+ "zero_on_donor_maxdiff": 0.125,
+ "calibration_ext5_layer_at_p_gn": {
+  "maxdiff": 0.8046875,
+  "meanabsdiff": 0.1498057097196579,
+  "frac_within_0.25": 0.79375,
+  "rescue_corr": 0.9523155254095946
+ },
+ "pass_total_s": 3.9133641719818115
+}

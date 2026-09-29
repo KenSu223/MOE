@@ -212,3 +212,15 @@
 2026-09-28T03:02:24Z END   ext6-str-expert-rest-mixtral_nobos_str rc=0 (506s)
 2026-09-28T03:02:24Z START ext6-str-expert-rest-mixtral_bos_str (waited 0s): python scripts/ext6_str_expert.py mixtral --out mixtral_bos_str --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,22,23,24,25,26,27,28,29,30,31 --max-spawn 25000
 2026-09-28T03:10:27Z END   ext6-str-expert-rest-mixtral_bos_str rc=0 (483s)
+2026-09-28T16:56:26Z START ext6-grid-regress-ext5 (waited 0s): python scripts/ext5_subject_verify.py
+2026-09-28T16:58:29Z END   ext6-grid-regress-ext5 rc=0 (123s)
+2026-09-28T16:58:29Z START ext6-grid-verify-olmoe (waited 0s): python scripts/ext6_str_grid_verify.py 8
+2026-09-28T17:00:05Z END   ext6-grid-verify-olmoe rc=0 (96s)
+2026-09-28T17:00:24Z START ext6-grid-qwen3-w1 (waited 0s): python scripts/ext6_str_grid.py qwen3 --out qwen3_str --window 1
+2026-09-28T17:09:01Z END   ext6-grid-qwen3-w1 rc=0 (517s)
+2026-09-28T17:09:01Z START ext6-grid-mixtral_bos-w1 (waited 0s): python scripts/ext6_str_grid.py mixtral --out mixtral_bos_str --window 1
+2026-09-28T17:19:52Z END   ext6-grid-mixtral_bos-w1 rc=0 (651s)
+2026-09-28T17:19:57Z START ext6-grid-qwen3-w5 (waited 0s): python scripts/ext6_str_grid.py qwen3 --out qwen3_str --window 5
+2026-09-28T17:28:58Z END   ext6-grid-qwen3-w5 rc=0 (541s)
+2026-09-28T17:28:58Z START ext6-grid-mixtral_bos-w5 (waited 0s): python scripts/ext6_str_grid.py mixtral --out mixtral_bos_str --window 5
+2026-09-28T17:40:16Z END   ext6-grid-mixtral_bos-w5 rc=0 (678s)

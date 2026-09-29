@@ -720,3 +720,30 @@
   for E006 and E002 (GN: E002 +0.07-0.11, E006 -0.07). Donor dispersion at the paper layer: median SD 0.34-0.42, sign agreement 0.89-0.95.
 - Docs: section registered as Direction 6 in scripts/build_extensions_report.py, EXTENSIONS_REPORT.md rebuilt; CLAUDE.md, README updated.
   Not committed (awaiting the user).
+
+## 2026-09-28 17:00 UTC — ext6-str grid: layer x position heatmap under STR (Zhang & Nanda Section 4.1 / Figure 4)
+- User request: extend the STR run to the layer x position MoE-output patch grid; Qwen3 and Mixtral with BOS first, Mixtral without
+  BOS only after the user has seen those two.
+- Executor: moetrace/ext5_subject.py gained two backward-compatible options: SubjectSpawn.window (joint restoration of the MoE output
+  at p over consecutive layers, kind 'layer') and run_subject(metrics=True) (full-softmax logp/p/rank of true and foil at the final
+  position, no KL). Regression: scripts/ext5_subject_verify.py re-run, results/verify_ext5_subject_olmoe.json identical to the saved
+  copy verify_ext5_subject_olmoe_before_ext6.json in all 70 non-timing fields.
+- Verification (scripts/ext6_str_grid_verify.py -> results/verify_ext6_str_grid_olmoe.json; OLMoE, 8 STR pairs, 50 (case, position)
+  units from the first subject token, 16 layers): window 1 max |ΔΔ| 0.59, mean 0.077, 93% within 0.25, rescue r 0.991; window 5 max
+  0.50, mean 0.072, r 0.998; p(true) mean |diff| 0.0002 / 0.0005; zero-kind null invariant 0.125. GN calibration at p (F4): max 0.80,
+  r 0.952.
+- Grid: scripts/ext6_str_grid.py (units = case x position from the first subject token; prefix positions are exactly 0 under STR),
+  all selected donors, packing by suffix length (<= 150k padded suffix tokens, <= 40k rows per pass): Qwen3 1518 units / 11 passes,
+  Mixtral BOS 1584 units / 8 passes per window. Chain scripts/ext6_str_grid_chain.sh (w1 both, analysis, w5 both, analysis).
+- 17:00-17:40 UTC grid chain complete, all rc=0 (GPU ≈ 40 min: Qwen3 w1 517 s, Mixtral BOS w1 651 s, Qwen3 w5 541 s, Mixtral BOS w5
+  678 s; transient CUDA allocator retry warnings in the log, no failed allocation). Rows complete: Qwen3 284,832 per window, Mixtral
+  BOS 198,304 per window, no NaN. Last-token column = final-position STR sweep (curve r 0.9999, per-case r 0.985 / 0.992).
+- Results (results/sections/ext6_str_grid.md = Direction 6b, tables results/tables/ext6_str_grid_*, figures ext6_str_grid_*,
+  numbers results/ext6_str_grid_summary.json): two sites as in Meng et al. Last subject token peaks at L0 (Qwen3 +0.187, Mixtral BOS
+  +0.304 of the drop), layer sum 1.27 / 1.60 drops; final position peaks at the paper's band (Qwen3 L44 +0.176, Mixtral L19-L21
+  +0.086); first subsequent / further tokens <= 0.007. Last / middle subject-token ratio, single layer: LD 2.87x / 4.79x, probability
+  2.65x / 6.54x (agree); window 5: LD 3.18x / 5.04x, probability 3.99x / 14.9x. Sliding / summed single layers: LD 0.83-0.97 (Qwen3),
+  0.60-1.09 (Mixtral); Δp 3.5-3.7 / 2.8-6.1 (softmax non-linearity). GN (F4 runs) vs STR at the last subject token, same cases,
+  normalised: Qwen3 GN peak L4 +0.160 vs STR L0 +0.187, sums 1.34 vs 1.27 (1.06x); Mixtral BOS GN L4 +0.487 vs STR L0 +0.304, sums
+  2.83 vs 1.60 (1.77x) - Zhang & Nanda's GN inflation at the early site.
+- Mixtral without BOS not run (awaiting the user's decision). Not committed.

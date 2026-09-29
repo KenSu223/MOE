@@ -1,0 +1,89 @@
+2026-09-28T16:56:26Z START ext6-grid-regress-ext5 (waited 0s): python scripts/ext5_subject_verify.py
+16:56:38 20 cases; first: 'Lannick Gautry spoke the language' p=5 T=9
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:01<00:47,  3.69it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:28,  5.74it/s]Loading weights:  13%|█▎        | 24/179 [00:02<00:14, 10.41it/s]Loading weights:  16%|█▌        | 29/179 [00:04<00:23,  6.35it/s]Loading weights:  21%|██        | 37/179 [00:06<00:24,  5.68it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:21,  6.03it/s]Loading weights:  33%|███▎      | 59/179 [00:09<00:19,  6.20it/s]Loading weights:  39%|███▉      | 70/179 [00:11<00:17,  6.35it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:15,  6.43it/s]Loading weights:  51%|█████▏    | 92/179 [00:14<00:13,  6.47it/s]Loading weights:  58%|█████▊    | 103/179 [00:16<00:11,  6.52it/s]Loading weights:  63%|██████▎   | 112/179 [00:16<00:07,  8.69it/s]Loading weights:  65%|██████▍   | 116/179 [00:17<00:09,  6.38it/s]Loading weights:  70%|██████▉   | 125/179 [00:19<00:08,  6.06it/s]Loading weights:  76%|███████▌  | 136/179 [00:21<00:06,  6.22it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:05,  6.35it/s]Loading weights:  88%|████████▊ | 158/179 [00:24<00:03,  6.40it/s]Loading weights:  94%|█████████▍| 169/179 [00:26<00:01,  6.47it/s]Loading weights: 100%|██████████| 179/179 [00:26<00:00,  6.83it/s]
+16:57:26 HF: 5/20 cases done
+16:57:43 HF: 10/20 cases done
+16:58:00 HF: 15/20 cases done
+16:58:17 HF: 20/20 cases done
+16:58:17 HF reference done
+16:58:19   layer   0: load-wait 1.48s compute 0.13s  wf_rows=240 wf_tokens=172
+16:58:20   layer   8: load-wait 0.07s compute 0.07s  wf_rows=1680 wf_tokens=4300
+16:58:21   layer  15: load-wait 0.08s compute 0.07s  wf_rows=2960 wf_tokens=7988
+16:58:21   pass done: 120 prefill rows (T=12), 2960 suffix rows (Smax=6, 8560 tokens), 4.0s
+16:58:28 n_cases: 20
+16:58:28 layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+16:58:28 engine_pass_s: 4.099745512008667
+16:58:28 delta_clean_maxdiff_vs_hf: 0.25
+16:58:28 delta_noised_maxdiff_vs_hf: 0.373046875
+16:58:28 delta_noised_lastonly_maxdiff_vs_hf: 0.5625
+16:58:28 delta_noised_exceptlast_maxdiff_vs_hf: 1.1650390625
+16:58:28 prefill_rec_pos_vs_final_maxdiff: 0.0
+16:58:28 attn_layer_vs_hf_n: 320
+16:58:28 attn_layer_vs_hf_maxdiff: 0.6171875
+16:58:28 attn_layer_vs_hf_meanabsdiff: 0.1387036144733429
+16:58:28 attn_layer_vs_hf_frac_within_0.1: 0.50625
+16:58:28 attn_layer_vs_hf_frac_within_0.25: 0.80625
+16:58:28 attn_layer_rescue_corr_vs_hf: 0.916331198414545
+16:58:28 attn_layer_hf_rescue_std: 0.5409961298495412
+16:58:28 attn_layer_rescue_diff_std: 0.22621086356121117
+16:58:28 attn_layer_mean_curve_maxdiff_vs_hf: 0.07760200581979002
+16:58:28 layer_vs_hf_n: 320
+16:58:28 layer_vs_hf_maxdiff: 0.8046875
+16:58:28 layer_vs_hf_meanabsdiff: 0.1498057097196579
+16:58:28 layer_vs_hf_frac_within_0.1: 0.48125
+16:58:28 layer_vs_hf_frac_within_0.25: 0.79375
+16:58:28 layer_rescue_corr_vs_hf: 0.9523155254095946
+16:58:28 layer_hf_rescue_std: 0.8062259546092815
+16:58:28 layer_rescue_diff_std: 0.24703690364173234
+16:58:28 layer_mean_curve_maxdiff_vs_hf: 0.10585213002050295
+16:58:28 resid_vs_hf_n: 320
+16:58:28 resid_vs_hf_maxdiff: 1.134765625
+16:58:28 resid_vs_hf_meanabsdiff: 0.1684582531452179
+16:58:28 resid_vs_hf_frac_within_0.1: 0.396875
+16:58:28 resid_vs_hf_frac_within_0.25: 0.784375
+16:58:28 resid_rescue_corr_vs_hf: 0.995646011640506
+16:58:28 resid_hf_rescue_std: 2.881455257486507
+16:58:28 resid_rescue_diff_std: 0.2762588753330848
+16:58:28 resid_mean_curve_maxdiff_vs_hf: 0.14291269211098534
+16:58:28 block_vs_hf_n: 320
+16:58:28 block_vs_hf_maxdiff: 0.8388671875
+16:58:28 block_vs_hf_meanabsdiff: 0.1607426404953003
+16:58:28 block_vs_hf_frac_within_0.1: 0.434375
+16:58:28 block_vs_hf_frac_within_0.25: 0.76875
+16:58:28 block_rescue_corr_vs_hf: 0.965902506170244
+16:58:28 block_hf_rescue_std: 0.9658822397209857
+16:58:28 block_rescue_diff_std: 0.2551987837379657
+16:58:28 block_mean_curve_maxdiff_vs_hf: 0.06912116440362304
+16:58:28 zero_on_noised_n: 320
+16:58:28 zero_on_noised_maxdiff: 0.48828125
+16:58:28 zero_on_noised_meanabsdiff: 0.04704918712377548
+16:58:28 identity_attn_layer_n: 100
+16:58:28 identity_attn_layer_maxdiff: 0.109375
+16:58:28 identity_attn_layer_meanabsdiff: 0.026679687201976776
+16:58:28 identity_layer_n: 100
+16:58:28 identity_layer_maxdiff: 0.109375
+16:58:28 identity_layer_meanabsdiff: 0.026679687201976776
+16:58:28 identity_resid_n: 100
+16:58:28 identity_resid_maxdiff: 0.109375
+16:58:28 identity_resid_meanabsdiff: 0.026679687201976776
+16:58:28 identity_block_n: 100
+16:58:28 identity_block_maxdiff: 0.109375
+16:58:28 identity_block_meanabsdiff: 0.026679687201976776
+16:58:28 final_noised_vs_stored_maxdiff: 0.4375
+16:58:28 final_token_consistency_vs_olmoe_attnsweep: {'attn_layer': {'n': 320, 'delta_maxdiff': 1.4453125, 'delta_meanabsdiff': 0.16898374557495116, 'delta_frac_equal': 0.05, 'delta_frac_within_0.1': 0.46875, 'rescue_maxdiff': 1.0343246459960938, 'rescue_meanabsdiff': 0.19072113037109376, 'rescue_corr': 0.9870915889240128, 'mean_curve_maxdiff': 0.07976570907048885}, 'layer': {'n': 320, 'delta_maxdiff': 1.2109375, 'delta_meanabsdiff': 0.14590176343917846, 'delta_frac_equal': 0.028125, 'delta_frac_within_0.1': 0.525, 'rescue_maxdiff': 0.91748046875, 'rescue_meanabsdiff': 0.17441829442977905, 'rescue_corr': 0.9825554089993757, 'mean_curve_maxdiff': 0.09437751646619291}, 'resid': {'n': 320, 'delta_maxdiff': 0.96875, 'delta_meanabsdiff': 0.1286909580230713, 'delta_frac_equal': 0.06875, 'delta_frac_within_0.1': 0.56875, 'rescue_maxdiff': 1.01904296875, 'rescue_meanabsdiff': 0.18371424674987794, 'rescue_corr': 0.9978671037495778, 'mean_curve_maxdiff': 0.07394292950630232}}
+16:58:28 final_token_consistency_in_process: {'prefill_delta_maxdiff': 0.0, 'n': 960, 'delta_maxdiff': 0.0, 'delta_meanabsdiff': 0.0, 'delta_frac_equal': 1.0, 'delta_frac_within_0.1': 1.0, 'vnorm_maxdiff': 0.0, 'attn_layer_delta_maxdiff': 0.0, 'layer_delta_maxdiff': 0.0, 'resid_delta_maxdiff': 0.0}
+16:58:28 vnorm_vs_hf: {'attn_layer': {'max_reldiff': 0.038955700101872756, 'mean_engine': 1.1140458583831787, 'mean_hf': 1.114230842096731}, 'layer': {'max_reldiff': 0.09594494660902253, 'mean_engine': 1.308783769607544, 'mean_hf': 1.3062691433122382}, 'resid': {'max_reldiff': 0.0200208063626884, 'mean_engine': 5.901989936828613, 'mean_hf': 5.901611232757569}}
+16:58:28 pass_total_s: 4.046267032623291
+16:58:28 Smax: 6
+16:58:28 drop_full_mean: 7.123429775238037
+16:58:28 drop_lastonly_mean: 4.252734184265137
+16:58:28 drop_exceptlast_mean: 5.677660942077637
+16:58:28 curve attn_layer engine: [-0.045, 0.066, 0.133, 0.006, -0.121, -0.024, 0.04, -0.167, 0.008, 0.008, 0.088, 0.113, 0.125, 0.081, -0.01, 0.0]
+16:58:28 curve attn_layer hf:     [-0.036, 0.007, 0.059, 0.003, -0.198, -0.04, -0.032, -0.169, 0.033, -0.013, 0.052, 0.098, 0.151, 0.114, 0.013, 0.0]
+16:58:28 curve layer engine: [0.112, 0.116, 0.096, 0.656, 0.384, 0.183, 0.339, 0.224, 0.352, 0.723, 0.69, 0.503, 0.189, 0.111, -0.031, 0.0]
+16:58:28 curve layer hf:     [0.006, 0.062, 0.078, 0.625, 0.39, 0.181, 0.293, 0.196, 0.347, 0.732, 0.683, 0.482, 0.173, 0.109, -0.016, 0.0]
+16:58:28 curve resid engine: [1.627, 2.419, 2.708, 2.817, 2.968, 3.032, 3.047, 3.358, 3.161, 3.514, 4.127, 2.919, 2.649, 0.702, 0.607, 0.0]
+16:58:28 curve resid hf:     [1.484, 2.366, 2.649, 2.725, 2.938, 2.942, 3.003, 3.265, 3.14, 3.488, 4.055, 2.87, 2.646, 0.697, 0.657, 0.0]
+16:58:28 curve block engine: [0.101, 0.253, 0.129, 0.638, 0.334, 0.207, 0.316, 0.076, 0.488, 0.834, 0.945, 0.38, 0.416, 0.282, -0.008, 0.0]
+16:58:28 curve block hf:     [0.051, 0.186, 0.136, 0.621, 0.265, 0.234, 0.28, 0.056, 0.522, 0.801, 0.909, 0.39, 0.428, 0.315, 0.014, 0.0]
+2026-09-28T16:58:29Z END   ext6-grid-regress-ext5 rc=0 (123s)

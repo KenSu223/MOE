@@ -119,6 +119,13 @@ L19E006 with negative Spec and coalition recovery. Drop-normalised layer effects
 lower in Mixtral. With BOS, Mixtral's L19-L21 tie resolves to L21E001 instead of L19E002; at equal norm Mixtral's L19
 experts no longer differ from their partner under STR. About 1 GPU hour.
 
+Layer × position grid under STR (Direction 6b, `results/sections/ext6_str_grid.md`): the MoE-output patch at every
+position and layer (Zhang & Nanda Figure 4) shows the two sites of Meng et al.: the last subject token in the first
+layers and the final position at the paper's layers; nothing in between. With single-layer patches logit difference
+and probability agree; with 5-layer windows probability over-weights the last subject token and windows become
+super-additive, a softmax effect. GN inflates the early site (Mixtral 1.8x) but not the paper's final-position site.
+Qwen3 and Mixtral with BOS; about 40 GPU minutes.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),
