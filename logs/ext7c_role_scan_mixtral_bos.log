@@ -1,0 +1,9 @@
+2026-10-04T07:41:43Z START ext7c-role-scan-mixtral_bos (waited 385s): python scripts/ext7_role_scan.py mixtral_bos
+07:41:57   layer   0: load-wait 6.02s compute 0.61s  wf_rows=0
+07:42:05   layer   8: load-wait 0.22s compute 0.28s  wf_rows=0
+07:42:24   layer  16: load-wait 2.61s compute 0.28s  wf_rows=0
+07:42:47   layer  24: load-wait 2.61s compute 0.28s  wf_rows=0
+07:43:08   layer  31: load-wait 2.35s compute 0.28s  wf_rows=0
+07:43:08   pass done: 588 prefill rows (T=33), 0 spawn rows, 77.1s
+07:43:08 summary: {"n_pairs": 294, "n_twins": 147, "correct_both": 289, "margin": 270, "margin_twins": 146, "margin_twins_both_roles": 124, "margin_top1_both": 54, "mean_d_a_margin": 3.198148148148148, "mean_d_b_margin": -3.3407407407407406, "mean_drop_margin": 6.538888888888889, "mean_d_a_all": 3.24234693877551, "mean_d_b_all": -3.1177721088435373}
+2026-10-04T07:43:14Z END   ext7c-role-scan-mixtral_bos rc=0 (91s)

@@ -1,0 +1,16 @@
+2026-10-04T09:07:28Z START ext7c-w4-role-mixtral_bos (waited 1291s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation --agent ext7-controls
+09:07:30 mixtral -> wino_role_mixtral_bos_str: 512 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+09:07:36 pass 1/1: 1024 prefill rows, 3072 multi rows
+09:07:43   layer   0: load-wait 5.68s compute 1.00s  wf_rows=3072
+09:08:02   layer   8: load-wait 1.72s compute 0.55s  wf_rows=3072
+09:08:21   layer  16: load-wait 0.91s compute 0.55s  wf_rows=3072
+09:08:38   layer  24: load-wait 1.89s compute 0.55s  wf_rows=3072
+09:08:53   layer  31: load-wait 1.53s compute 0.55s  wf_rows=3072
+09:08:53   pass done: 1024 prefill rows (T=33), 3072 spawn rows, 76.3s
+09:08:53 denoise  all_attn  all     : effect/drop +1.000 (mean effect +6.48, drop 6.48)
+09:08:53 denoise  all_block all     : effect/drop +1.000 (mean effect +6.48, drop 6.48)
+09:08:53 denoise  all_moe   all     : effect/drop +0.663 (mean effect +4.30, drop 6.48)
+09:08:53 noise    all_attn  all     : effect/drop +1.000 (mean effect +6.48, drop 6.48)
+09:08:53 noise    all_block all     : effect/drop +1.000 (mean effect +6.48, drop 6.48)
+09:08:53 noise    all_moe   all     : effect/drop +0.662 (mean effect +4.29, drop 6.48)
+2026-10-04T09:09:00Z END   ext7c-w4-role-mixtral_bos rc=0 (92s)

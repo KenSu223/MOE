@@ -1,0 +1,3 @@
+2026-10-04T11:14:07Z START ext7c-w3-ioi-mixtral_bos-s2io (waited 0s): python scripts/ext7_ioi_grid.py --model mixtral --pairs data/ioi/pairs_s2io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s2io_grid.json --out ioi_mixtral_bos_s2io_grid --kinds layer,attn_layer
+11:14:09 ioi_mixtral_bos_s2io_grid: grid_w1 already complete (run_meta.json), nothing to do (use --force to recompute)
+2026-10-04T11:14:09Z END   ext7c-w3-ioi-mixtral_bos-s2io rc=0 (2s)

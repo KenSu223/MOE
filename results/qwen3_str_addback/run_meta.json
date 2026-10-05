@@ -1,0 +1,213 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "task": "cf",
+ "src_run": "qwen3_str",
+ "special_tokens": true,
+ "pool": 32,
+ "beam_cases": 0,
+ "shap_cases": 54,
+ "exact_cases": 0,
+ "noise_cases": 0,
+ "budget": 45000,
+ "greedy_stop": 0.0,
+ "n_cases": 215,
+ "n_rows": 852,
+ "init": {
+  "val_rows": 432,
+  "first_val_rows": 108,
+  "beam_rows": 108,
+  "shap_rows": 54,
+  "exact_rows": 108,
+  "noise_rows": 108,
+  "pool": 32,
+  "queue_groups": 7820,
+  "queue_items": 400830
+ },
+ "command": "python scripts/ext8_addback_run.py qwen3 --task cf --src-run qwen3_str --out qwen3_str_addback --max-passes 5 --pool 32 --shap-cases 54 --budget 45000",
+ "created_utc": "2026-10-04T08:36:00Z",
+ "complete": true,
+ "passes": 15,
+ "pass_notes": [
+  {
+   "val_rows": 432,
+   "first_val_rows": 108,
+   "beam_rows": 108,
+   "shap_rows": 54,
+   "exact_rows": 108,
+   "noise_rows": 108,
+   "pool": 32,
+   "queue_groups": 7820,
+   "queue_items": 400830
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 5252
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 44991,
+   "adaptive": 27000,
+   "static_groups": 1303,
+   "pass_s": 58.7403039932251,
+   "peak_GB": 7.347263336181641,
+   "greedy_left": 432,
+   "beam_left": 108,
+   "queue": "1303/8684"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 44985,
+   "adaptive": 25329,
+   "static_groups": 936,
+   "pass_s": 40.79276156425476,
+   "peak_GB": 8.024889945983887,
+   "greedy_left": 432,
+   "beam_left": 108,
+   "queue": "2239/8684"
+  },
+  {
+   "pass": 2,
+   "spawn_rows": 44994,
+   "adaptive": 24498,
+   "static_groups": 976,
+   "pass_s": 39.69693636894226,
+   "peak_GB": 8.338775157928467,
+   "greedy_left": 432,
+   "beam_left": 108,
+   "queue": "3215/8684"
+  },
+  {
+   "pass": 3,
+   "spawn_rows": 44992,
+   "adaptive": 23677,
+   "static_groups": 1015,
+   "pass_s": 49.570560932159424,
+   "peak_GB": 8.465718269348145,
+   "greedy_left": 432,
+   "beam_left": 108,
+   "queue": "4230/8684"
+  },
+  {
+   "pass": 4,
+   "spawn_rows": 44637,
+   "adaptive": 22839,
+   "static_groups": 947,
+   "pass_s": 42.79603171348572,
+   "peak_GB": 8.530666828155518,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "5177/8684"
+  },
+  {
+   "pass": 5,
+   "spawn_rows": 44640,
+   "adaptive": 11232,
+   "static_groups": 87,
+   "pass_s": 54.649548053741455,
+   "peak_GB": 6.780632019042969,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "5264/8684"
+  },
+  {
+   "pass": 6,
+   "spawn_rows": 44991,
+   "adaptive": 10800,
+   "static_groups": 1317,
+   "pass_s": 46.83315300941467,
+   "peak_GB": 8.146523475646973,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "6581/8792"
+  },
+  {
+   "pass": 7,
+   "spawn_rows": 44817,
+   "adaptive": 10368,
+   "static_groups": 877,
+   "pass_s": 40.53728532791138,
+   "peak_GB": 8.382197380065918,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7458/8792"
+  },
+  {
+   "pass": 8,
+   "spawn_rows": 44718,
+   "adaptive": 9936,
+   "static_groups": 34,
+   "pass_s": 45.39971423149109,
+   "peak_GB": 8.017157554626465,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7492/8792"
+  },
+  {
+   "pass": 9,
+   "spawn_rows": 44286,
+   "adaptive": 9504,
+   "static_groups": 34,
+   "pass_s": 43.93692135810852,
+   "peak_GB": 7.907052993774414,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7526/8792"
+  },
+  {
+   "pass": 10,
+   "spawn_rows": 44731,
+   "adaptive": 9072,
+   "static_groups": 53,
+   "pass_s": 54.75653290748596,
+   "peak_GB": 8.532557010650635,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7579/8792"
+  },
+  {
+   "pass": 11,
+   "spawn_rows": 44642,
+   "adaptive": 8640,
+   "static_groups": 94,
+   "pass_s": 42.75606036186218,
+   "peak_GB": 10.098172664642334,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7673/8792"
+  },
+  {
+   "pass": 12,
+   "spawn_rows": 44976,
+   "adaptive": 8208,
+   "static_groups": 96,
+   "pass_s": 43.352744340896606,
+   "peak_GB": 10.144991397857666,
+   "greedy_left": 432,
+   "beam_left": 0,
+   "queue": "7769/8792"
+  },
+  {
+   "pass": 13,
+   "spawn_rows": 44991,
+   "adaptive": 7776,
+   "static_groups": 893,
+   "pass_s": 47.54743456840515,
+   "peak_GB": 10.038944244384766,
+   "greedy_left": 0,
+   "beam_left": 0,
+   "queue": "8662/8792"
+  },
+  {
+   "pass": 14,
+   "spawn_rows": 2730,
+   "adaptive": 0,
+   "static_groups": 130,
+   "pass_s": 40.41031098365784,
+   "peak_GB": 4.040372848510742,
+   "greedy_left": 0,
+   "beam_left": 0,
+   "queue": "8792/8792"
+  }
+ ],
+ "completed_utc": "2026-10-04T09:24:06Z"
+}

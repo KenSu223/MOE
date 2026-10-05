@@ -1,0 +1,144 @@
+2026-10-04T07:44:49Z START ext8-smoke-filter (waited 410s): python scripts/ext8_smoke_src.py
+07:44:55 WARNING: 38 paper ids not tokenizable: [{'case_id': 4868, 'reason': 'multi_token'}, {'case_id': 17226, 'reason': 'multi_token'}, {'case_id': 6992, 'reason': 'multi_token'}, {'case_id': 9128, 'reason': 'multi_token'}, {'case_id': 16988, 'reason': 'multi_token'}, {'case_id': 6239, 'reason': 'multi_token'}, {'case_id': 17020, 'reason': 'multi_token'}, {'case_id': 14910, 'reason': 'multi_token'}, {'case_id': 15773, 'reason': 'multi_token'}, {'case_id': 17562, 'reason': 'multi_token'}, {'case_id': 12644, 'reason': 'multi_token'}, {'case_id': 4730, 'reason': 'multi_token'}, {'case_id': 13254, 'reason': 'multi_token'}, {'case_id': 4138, 'reason': 'multi_token'}, {'case_id': 7937, 'reason': 'multi_token'}, {'case_id': 11450, 'reason': 'multi_token'}, {'case_id': 17390, 'reason': 'multi_token'}, {'case_id': 5524, 'reason': 'multi_token'}, {'case_id': 21698, 'reason': 'multi_token'}, {'case_id': 11885, 'reason': 'multi_token'}, {'case_id': 15209, 'reason': 'multi_token'}, {'case_id': 11327, 'reason': 'multi_token'}, {'case_id': 8209, 'reason': 'multi_token'}, {'case_id': 633, 'reason': 'multi_token'}, {'case_id': 20189, 'reason': 'multi_token'}, {'case_id': 12106, 'reason': 'multi_token'}, {'case_id': 8143, 'reason': 'multi_token'}, {'case_id': 7420, 'reason': 'multi_token'}, {'case_id': 5091, 'reason': 'multi_token'}, {'case_id': 7255, 'reason': 'multi_token'}, {'case_id': 7178, 'reason': 'multi_token'}, {'case_id': 9983, 'reason': 'multi_token'}, {'case_id': 11552, 'reason': 'multi_token'}, {'case_id': 19277, 'reason': 'multi_token'}, {'case_id': 3680, 'reason': 'multi_token'}, {'case_id': 5451, 'reason': 'multi_token'}, {'case_id': 7037, 'reason': 'multi_token'}, {'case_id': 21305, 'reason': 'multi_token'}]
+07:44:56 olmoe (special_tokens=True): 218 cases, 3189 symmetric candidates; cases with >= 1: 189; per case quartiles [2.0, 6.0, 19.0] max 105
+07:44:57 pass 1/2: 3072 prefill rows
+07:44:59   layer   0: load-wait 1.38s compute 0.52s  wf_rows=0
+07:45:01   layer   8: load-wait 0.07s compute 0.22s  wf_rows=0
+07:45:03   layer  15: load-wait 0.07s compute 0.22s  wf_rows=0
+07:45:03   pass done: 3072 prefill rows (T=16), 0 spawn rows, 6.2s
+07:45:03 pass 2/2: 335 prefill rows
+07:45:06 summary: {"n_cases": 218, "n_candidates": 3189, "cases_with_candidate": 189, "cases_with_qualifying": 186, "cases_kept": 186, "kept_discovery": 97, "kept_validation": 89, "qualify_rate": 0.8689244277202884, "donor_top1_is_foil_rate": 0.27500783944810286, "donor_top1_is_foil_rate_selected": 0.26285714285714284, "n_selected": 350, "selected_per_case": {"1": 22, "2": 164}, "delta_donor_selected_mean": -5.872256382533482, "delta_donor_all_median": -4.875, "delta_clean_mean_kept": 5.016856203797043, "delta_clean_lt1_kept": 22, "top1_clean_is_true_kept": 56, "pass_times_s": [6.238762378692627, 2.629955291748047], "rejected_tokenizer": [{"case_id": 4868, "reason": "multi_token"}, {"case_id": 17226, "reason": "multi_token"}, {"case_id": 6992, "reason": "multi_token"}, {"case_id": 9128, "reason": "multi_token"}, {"case_id": 16988, "reason": "multi_token"}, {"case_id": 6239, "reason": "multi_token"}, {"case_id": 17020, "reason": "multi_token"}, {"case_id": 14910, "reason": "multi_token"}, {"case_id": 15773, "reason": "multi_token"}, {"case_id": 17562, "reason": "multi_token"}, {"case_id": 12644, "reason": "multi_token"}, {"case_id": 4730, "reason": "multi_token"}, {"case_id": 13254, "reason": "multi_token"}, {"case_id": 4138, "reason": "multi_token"}, {"case_id": 7937, "reason": "multi_token"}, {"case_id": 11450, "reason": "multi_token"}, {"case_id": 17390, "reason": "multi_token"}, {"case_id": 5524, "reason": "multi_token"}, {"case_id": 21698, "reason": "multi_token"}, {"case_id": 11885, "reason": "multi_token"}, {"case_id": 15209, "reason": "multi_token"}, {"case_id": 11327, "reason": "multi_token"}, {"case_id": 8209, "reason": "multi_token"}, {"case_id": 633, "reason": "multi_token"}, {"case_id": 20189, "reason": "multi_token"}, {"case_id": 12106, "reason": "multi_token"}, {"case_id": 8143, "reason": "multi_token"}, {"case_id": 7420, "reason": "multi_token"}, {"case_id": 5091, "reason": "multi_token"}, {"case_id": 7255, "reason": "multi_token"}, {"case_id": 7178, "reason": "multi_token"}, {"case_id": 9983, "reason": "multi_token"}, {"case_id": 11552, "reason": "multi_token"}, {"case_id": 19277, "reason": "multi_token"}, {"case_id": 3680, "reason": "multi_token"}, {"case_id": 5451, "reason": "multi_token"}, {"case_id": 7037, "reason": "multi_token"}, {"case_id": 21305, "reason": "multi_token"}]}
+2026-10-04T07:45:08Z END   ext8-smoke-filter rc=0 (19s)
+2026-10-04T07:48:46Z START ext8-smoke-sweep (waited 218s): python scripts/ext6_str_sweep.py olmoe --out olmoe_addback_src --layer-chunks 1
+07:48:50 chunk 1/1: layers 0..15, 536 prefill rows, 5600 spawn rows
+07:48:52   layer   0: load-wait 1.22s compute 0.43s  wf_rows=350
+07:48:53   layer   8: load-wait 0.09s compute 0.08s  wf_rows=3150
+07:48:54   layer  15: load-wait 0.08s compute 0.08s  wf_rows=5600
+07:48:54   pass done: 536 prefill rows (T=16), 5600 spawn rows, 4.2s (metrics 0.1s)
+/home/ubuntu/MOE/scripts/ext6_str_sweep.py:119: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mdc, mvl = R.loc[dsc].mean(0), R.loc[val].mean(0)
+07:48:55 L*=13 disc +1.807 val@L* +1.725 (val argmax L13); disc top5 [(13, 1.807), (12, 1.282), (11, 0.646), (10, 0.229), (14, 0.103)]; Δclean +5.01 Δcorrupt -5.93 drop +10.94
+2026-10-04T07:48:58Z END   ext8-smoke-sweep rc=0 (12s)
+2026-10-04T07:58:53Z START ext8-smoke-expert (waited 595s): python scripts/ext6_str_expert.py olmoe --out olmoe_addback_src --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 --max-spawn 60000
+07:59:01 chunk 1/2: layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 536 prefill rows, 56008 spawn rows
+07:59:03   layer   0: load-wait 1.23s compute 0.48s  wf_rows=4369
+07:59:05   layer   8: load-wait 0.07s compute 0.26s  wf_rows=38894
+07:59:08   layer  15: load-wait 0.07s compute 0.37s  wf_rows=56008
+07:59:08   pass done: 536 prefill rows (T=16), 56008 spawn rows, 6.6s
+07:59:13 L0: 2 recurrent candidates (>= 48/97); best E006 all-case +0.007 active 95; top5 {6: 0.007, 8: -0.0}
+07:59:13 L1: 2 recurrent candidates (>= 48/97); best E012 all-case +0.006 active 62; top5 {12: 0.006, 40: 0.001}
+07:59:13 L2: 3 recurrent candidates (>= 48/97); best E044 all-case +0.010 active 61; top5 {44: 0.01, 20: 0.002, 29: -0.008}
+07:59:13 L3: 4 recurrent candidates (>= 48/97); best E012 all-case +0.005 active 49; top5 {12: 0.005, 40: 0.001, 61: -0.004, 49: -0.01}
+07:59:13 L4: 4 recurrent candidates (>= 48/97); best E026 all-case +0.025 active 89; top5 {26: 0.025, 7: 0.016, 33: -0.002, 58: -0.003}
+07:59:13 L5: 6 recurrent candidates (>= 48/97); best E054 all-case +0.008 active 66; top5 {54: 0.008, 63: 0.006, 57: 0.004, 13: -0.008, 23: -0.012}
+07:59:13 L6: 5 recurrent candidates (>= 48/97); best E023 all-case +0.013 active 69; top5 {23: 0.013, 58: 0.007, 28: 0.004, 45: 0.004, 63: -0.016}
+07:59:13 L7: 6 recurrent candidates (>= 48/97); best E052 all-case +0.005 active 67; top5 {52: 0.005, 13: 0.005, 33: -0.004, 19: -0.013, 1: -0.026}
+07:59:13 L8: 5 recurrent candidates (>= 48/97); best E015 all-case +0.012 active 91; top5 {15: 0.012, 0: -0.0, 28: -0.006, 62: -0.019, 18: -0.06}
+07:59:13 L9: 9 recurrent candidates (>= 48/97); best E018 all-case +0.017 active 60; top5 {18: 0.017, 43: 0.014, 50: 0.012, 61: 0.004, 58: 0.003}
+07:59:13 L10: 6 recurrent candidates (>= 48/97); best E054 all-case +0.155 active 89; top5 {54: 0.155, 14: 0.021, 1: 0.007, 44: 0.005, 62: -0.002}
+07:59:13 L11: 7 recurrent candidates (>= 48/97); best E055 all-case +0.240 active 73; top5 {55: 0.24, 6: 0.075, 43: 0.066, 32: 0.025, 45: 0.006}
+07:59:13 L12: 6 recurrent candidates (>= 48/97); best E040 all-case +0.605 active 67; top5 {40: 0.605, 19: 0.144, 32: 0.131, 0: 0.051, 47: 0.024}
+07:59:13 chunk 1: /home/ubuntu/MOE/results/olmoe_addback_src/str_expert_rows.parquet now 56008 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+07:59:13 chunk 2/2: layers [13, 14, 15], 536 prefill rows, 13206 spawn rows
+07:59:14   layer   0: load-wait 0.19s compute 0.06s  wf_rows=0
+07:59:15   layer   8: load-wait 0.07s compute 0.09s  wf_rows=0
+07:59:16   layer  15: load-wait 0.07s compute 0.11s  wf_rows=13206
+07:59:16   pass done: 536 prefill rows (T=16), 13206 spawn rows, 2.8s
+07:59:18 L13: 3 recurrent candidates (>= 48/97); best E056 all-case +1.146 active 80; top5 {56: 1.146, 1: 0.051, 34: 0.007}
+07:59:18 L14: 7 recurrent candidates (>= 48/97); best E053 all-case +0.061 active 73; top5 {53: 0.061, 3: 0.058, 5: 0.037, 12: 0.035, 20: 0.025}
+07:59:18 L15: 6 recurrent candidates (>= 48/97); best E048 all-case +0.208 active 58; top5 {48: 0.208, 56: 0.102, 7: 0.061, 61: 0.028, 3: 0.005}
+07:59:18 chunk 2: /home/ubuntu/MOE/results/olmoe_addback_src/str_expert_rows.parquet now 69214 rows over layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+2026-10-04T07:59:20Z END   ext8-smoke-expert rc=0 (27s)
+2026-10-04T08:16:16Z START ext8-smoke-addback (waited 1016s): python scripts/ext8_addback_run.py olmoe --task cf --src-run olmoe_addback_src --out olmoe_addback_smoke --pool 32 --budget 30000 --engine main
+08:16:26 task cf olmoe: 186 cases, 350 rows, L=16 k=8 K=128
+08:16:27 initialised: {'val_rows': 167, 'first_val_rows': 89, 'beam_rows': 89, 'shap_rows': 89, 'exact_rows': 89, 'pool': 32, 'queue_groups': 3480, 'queue_items': 205373}
+08:16:29 pass 0: 536 prefill rows, 29987 spawn rows (16202 adaptive, 955 static groups; queue 955/3480)
+08:16:31   layer   0: load-wait 1.25s compute 0.52s  wf_rows=7646
+08:16:33   layer   8: load-wait 0.07s compute 0.18s  wf_rows=18004
+08:16:35   layer  15: load-wait 0.07s compute 0.27s  wf_rows=29987
+08:16:36   pass done: 536 prefill rows (T=16), 29987 spawn rows, 6.3s (metrics 0.4s)
+08:16:37 pass 0: ceilings for 350 rows (mean all-MoE rescue +3.033); DLA rows 44800 (265 candidate pairs not routed in this pass's clean run)
+08:16:37 pass 0 done in 6s, peak 6.0 GB; greedy left 121 (median step 2, median rescue/ceiling 0.74), beam left 89; queue 955/3814
+08:16:38 pass 1: 536 prefill rows, 29986 spawn rows (13819 adaptive, 951 static groups; queue 1906/3814)
+08:16:39   layer   0: load-wait 0.15s compute 0.11s  wf_rows=5965
+08:16:41   layer   8: load-wait 0.07s compute 0.19s  wf_rows=18222
+08:16:43   layer  15: load-wait 0.07s compute 0.28s  wf_rows=29986
+08:16:43   pass done: 536 prefill rows (T=16), 29986 spawn rows, 4.8s (metrics 0.4s)
+08:16:44 pass 1 done in 5s, peak 6.4 GB; greedy left 102 (median step 3, median rescue/ceiling 0.94), beam left 89; queue 1906/3814
+08:16:45 pass 2: 536 prefill rows, 29986 spawn rows (12837 adaptive, 410 static groups; queue 2316/3814)
+08:16:45   layer   0: load-wait 0.15s compute 0.10s  wf_rows=3341
+08:16:47   layer   8: load-wait 0.07s compute 0.16s  wf_rows=17453
+08:16:49   layer  15: load-wait 0.07s compute 0.26s  wf_rows=29986
+08:16:49   pass done: 536 prefill rows (T=16), 29986 spawn rows, 4.4s (metrics 0.4s)
+08:16:50 noise_oracle groups added for 89 rows
+08:16:50 pass 2 done in 4s, peak 6.1 GB; greedy left 89 (median step 4, median rescue/ceiling 0.97), beam left 89; queue 2316/3903
+08:16:51 pass 3: 536 prefill rows, 29899 spawn rows (12028 adaptive, 637 static groups; queue 2953/3903)
+08:16:52   layer   0: load-wait 0.15s compute 0.10s  wf_rows=4100
+08:16:54   layer   8: load-wait 0.07s compute 0.17s  wf_rows=18151
+08:16:56   layer  15: load-wait 0.07s compute 0.29s  wf_rows=29899
+08:16:56   pass done: 536 prefill rows (T=16), 29899 spawn rows, 4.8s (metrics 0.4s)
+08:16:57 pass 3 done in 5s, peak 6.6 GB; greedy left 80 (median step 5, median rescue/ceiling 0.98), beam left 89; queue 2953/3903
+08:16:58 pass 4: 536 prefill rows, 29777 spawn rows (11363 adaptive, 18 static groups; queue 2971/3903)
+08:16:58   layer   0: load-wait 0.15s compute 0.09s  wf_rows=507
+08:17:00   layer   8: load-wait 0.07s compute 0.18s  wf_rows=20573
+08:17:02   layer  15: load-wait 0.07s compute 0.29s  wf_rows=29777
+08:17:03   pass done: 536 prefill rows (T=16), 29777 spawn rows, 4.7s (metrics 0.4s)
+08:17:03 pass 4 done in 5s, peak 6.5 GB; greedy left 72 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 2971/3903
+08:17:04 pass 5: 536 prefill rows, 29493 spawn rows (1872 adaptive, 27 static groups; queue 2998/3903)
+08:17:05   layer   0: load-wait 0.15s compute 0.10s  wf_rows=598
+08:17:06   layer   8: load-wait 0.07s compute 0.17s  wf_rows=20422
+08:17:09   layer  15: load-wait 0.07s compute 0.27s  wf_rows=29493
+08:17:09   pass done: 536 prefill rows (T=16), 29493 spawn rows, 4.5s (metrics 0.4s)
+08:17:09 pass 5 done in 5s, peak 6.4 GB; greedy left 68 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 2998/3903
+08:17:11 pass 6: 536 prefill rows, 29321 spawn rows (1700 adaptive, 27 static groups; queue 3025/3903)
+08:17:11   layer   0: load-wait 0.15s compute 0.09s  wf_rows=597
+08:17:13   layer   8: load-wait 0.07s compute 0.16s  wf_rows=18712
+08:17:15   layer  15: load-wait 0.07s compute 0.29s  wf_rows=29321
+08:17:15   pass done: 536 prefill rows (T=16), 29321 spawn rows, 4.4s (metrics 0.4s)
+08:17:15 pass 6 done in 4s, peak 6.4 GB; greedy left 63 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3025/3903
+08:17:17 pass 7: 536 prefill rows, 29903 spawn rows (1512 adaptive, 153 static groups; queue 3178/3903)
+08:17:18   layer   0: load-wait 0.15s compute 0.15s  wf_rows=16955
+08:17:20   layer   8: load-wait 0.07s compute 0.28s  wf_rows=25617
+08:17:23   layer  15: load-wait 0.07s compute 0.33s  wf_rows=29903
+08:17:24   pass done: 536 prefill rows (T=16), 29903 spawn rows, 6.1s (metrics 0.4s)
+08:17:24 pass 7 done in 6s, peak 6.7 GB; greedy left 56 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3178/3903
+08:17:26 pass 8: 536 prefill rows, 29990 spawn rows (1288 adaptive, 226 static groups; queue 3404/3903)
+08:17:27   layer   0: load-wait 0.16s compute 0.19s  wf_rows=25275
+08:17:30   layer   8: load-wait 0.07s compute 0.35s  wf_rows=29704
+[W1004 08:17:31.212829811 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1811939328 bytes (free: 366411776, total: 23686938624).
+08:17:33   layer  15: load-wait 0.07s compute 0.35s  wf_rows=29990
+08:17:33   pass done: 536 prefill rows (T=16), 29990 spawn rows, 7.2s (metrics 0.4s)
+08:17:34 pass 8 done in 7s, peak 6.9 GB; greedy left 52 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3404/3903
+08:17:35 pass 9: 536 prefill rows, 17987 spawn rows (1144 adaptive, 499 static groups; queue 3903/3903)
+08:17:35   layer   0: load-wait 0.15s compute 0.13s  wf_rows=10160
+08:17:37   layer   8: load-wait 0.07s compute 0.21s  wf_rows=13853
+08:17:39   layer  15: load-wait 0.07s compute 0.27s  wf_rows=17987
+08:17:39   pass done: 536 prefill rows (T=16), 17987 spawn rows, 4.7s (metrics 0.2s)
+08:17:40 pass 9 done in 5s, peak 5.8 GB; greedy left 49 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3903/3903
+08:17:40 pass 10: 536 prefill rows, 1029 spawn rows (1029 adaptive, 0 static groups; queue 3903/3903)
+08:17:40   layer   0: load-wait 0.23s compute 0.11s  wf_rows=105
+08:17:42   layer   8: load-wait 0.07s compute 0.11s  wf_rows=1012
+08:17:43   layer  15: load-wait 0.07s compute 0.06s  wf_rows=1029
+08:17:43   pass done: 536 prefill rows (T=16), 1029 spawn rows, 2.9s (metrics 0.0s)
+08:17:43 pass 10 done in 3s, peak 2.2 GB; greedy left 47 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3903/3903
+08:17:43 pass 11: 536 prefill rows, 940 spawn rows (940 adaptive, 0 static groups; queue 3903/3903)
+08:17:43   layer   0: load-wait 0.15s compute 0.08s  wf_rows=156
+08:17:44   layer   8: load-wait 0.07s compute 0.09s  wf_rows=933
+08:17:45   layer  15: load-wait 0.07s compute 0.06s  wf_rows=940
+08:17:45   pass done: 536 prefill rows (T=16), 940 spawn rows, 2.7s (metrics 0.0s)
+08:17:46 pass 11 done in 3s, peak 2.2 GB; greedy left 47 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3903/3903
+08:17:46 pass 12: 536 prefill rows, 893 spawn rows (893 adaptive, 0 static groups; queue 3903/3903)
+08:17:46   layer   0: load-wait 0.15s compute 0.08s  wf_rows=168
+08:17:47   layer   8: load-wait 0.07s compute 0.09s  wf_rows=888
+08:17:48   layer  15: load-wait 0.07s compute 0.06s  wf_rows=893
+08:17:48   pass done: 536 prefill rows (T=16), 893 spawn rows, 2.6s (metrics 0.0s)
+08:17:48 pass 12 done in 3s, peak 2.2 GB; greedy left 44 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3903/3903
+08:17:48 pass 13: 536 prefill rows, 792 spawn rows (792 adaptive, 0 static groups; queue 3903/3903)
+08:17:49   layer   0: load-wait 0.15s compute 0.09s  wf_rows=160
+08:17:50   layer   8: load-wait 0.07s compute 0.09s  wf_rows=790
+08:17:51   layer  15: load-wait 0.07s compute 0.06s  wf_rows=792
+08:17:51   pass done: 536 prefill rows (T=16), 792 spawn rows, 2.6s (metrics 0.0s)
+08:17:51 pass 13 done in 3s, peak 2.2 GB; greedy left 0 (median step 5, median rescue/ceiling 1.00), beam left 0; queue 3903/3903
+08:17:51 ALL PASSES COMPLETE
+2026-10-04T08:17:54Z END   ext8-smoke-addback rc=0 (98s)
+SMOKE CHAIN DONE

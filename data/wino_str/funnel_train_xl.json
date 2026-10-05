@@ -1,0 +1,282 @@
+{
+ "qwen3": {
+  "hit_groups": 20199,
+  "W1_twins": 20199,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 13462,
+    "remaining": 6737
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 6737
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 1236,
+    "remaining": 5501
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 5501
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 5501
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 933,
+    "remaining": 4568
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 4568
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 4568
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 4568
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 36,
+    "remaining": 4532
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 18,
+    "remaining": 4514
+   }
+  ],
+  "kept": 4514,
+  "special_tokens": true,
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "kept_one_token_option": 4377,
+  "kept_names": 1317,
+  "kept_trigger_in_context": 125,
+  "kept_debiased": 1549,
+  "median_tokens": 18.0,
+  "max_tokens": 35
+ },
+ "mixtral_nobos": {
+  "hit_groups": 20199,
+  "W1_twins": 20199,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 13462,
+    "remaining": 6737
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 6737
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 2700,
+    "remaining": 4037
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 4037
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 4037
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 1583,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 24,
+    "remaining": 2430
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 9,
+    "remaining": 2421
+   }
+  ],
+  "kept": 2421,
+  "special_tokens": false,
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "kept_one_token_option": 2139,
+  "kept_names": 484,
+  "kept_trigger_in_context": 76,
+  "kept_debiased": 845,
+  "median_tokens": 19.0,
+  "max_tokens": 38
+ },
+ "mixtral_bos": {
+  "hit_groups": 20199,
+  "W1_twins": 20199,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 13462,
+    "remaining": 6737
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 6737
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 2700,
+    "remaining": 4037
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 4037
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 4037
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 1583,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 2454
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 24,
+    "remaining": 2430
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 9,
+    "remaining": 2421
+   }
+  ],
+  "kept": 2421,
+  "special_tokens": true,
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "kept_one_token_option": 2139,
+  "kept_names": 484,
+  "kept_trigger_in_context": 76,
+  "kept_debiased": 845,
+  "median_tokens": 20.0,
+  "max_tokens": 39
+ },
+ "olmoe": {
+  "hit_groups": 20199,
+  "W1_twins": 20199,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 13462,
+    "remaining": 6737
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 6737
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 1622,
+    "remaining": 5115
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 5115
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 5115
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 1261,
+    "remaining": 3854
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 3854
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 3854
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 3854
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 31,
+    "remaining": 3823
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 14,
+    "remaining": 3809
+   }
+  ],
+  "kept": 3809,
+  "special_tokens": true,
+  "repo": "allenai/OLMoE-1B-7B-0125",
+  "kept_one_token_option": 3583,
+  "kept_names": 1028,
+  "kept_trigger_in_context": 109,
+  "kept_debiased": 1341,
+  "median_tokens": 18.0,
+  "max_tokens": 33
+ }
+}

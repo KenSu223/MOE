@@ -1,0 +1,13 @@
+10:35:29 qwen3 -> ioi_qwen3_s2io_grid: kinds ['layer', 'attn_layer'], 128 directed cases, 630 units, 60480 suffix rows, 2 passes; units per class {'after_S2': 374, 'final': 128, 'S2': 128}
+10:35:30 pass 1/2: 496 units (S 1..4), 992 prefill rows, 47616 suffix rows
+10:35:33   layer   0: load-wait 2.89s compute 0.72s  wf_rows=992 wf_tokens=1216
+10:35:42   layer   8: load-wait 1.03s compute 0.23s  wf_rows=8928 wf_tokens=20672
+10:35:52   layer  16: load-wait 0.91s compute 0.35s  wf_rows=16864 wf_tokens=40128
+10:36:02   layer  24: load-wait 0.78s compute 0.48s  wf_rows=24800 wf_tokens=59584
+10:36:12   layer  32: load-wait 0.66s compute 0.60s  wf_rows=32736 wf_tokens=79040
+10:36:22   layer  40: load-wait 0.54s compute 0.72s  wf_rows=40672 wf_tokens=98496
+10:36:31   layer  47: load-wait 0.43s compute 0.83s  wf_rows=47616 wf_tokens=115520
+10:36:32   pass done: 992 prefill rows (T=20), 47616 suffix rows (Smax=4, 116736 tokens), 62.5s
+10:36:33 pass 1: 62.5s; 47616 rows saved
+10:36:33 pass 2/2: 134 units (S 5..7), 268 prefill rows, 12864 suffix rows
+10:37:13 pass 2: 39.3s; 60480 rows saved

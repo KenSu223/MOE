@@ -1,0 +1,17 @@
+2026-10-04T11:04:25Z START ext7c-w5-ioi-mixtral_bos-s2io (waited 2310s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/ioi/pairs_s2io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_mixtral_bos_s2io --splits discovery,validation,rep_discovery,rep_validation --layers auto --families main --agent ext7-controls
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+11:04:25 mixtral -> ioi_mixtral_bos_s2io: 512 directed cases, layers [16, 19, 21, 22, 31] (null layer 22), 32 heads, 3 passes, 89600 spawn rows; mentions: pair columns mention_a_pos / mention_b_pos
+11:04:32 pass 1/3: layers [16, 19], 1024 prefill rows, 35840 spawn rows
+11:04:39   layer   0: load-wait 5.79s compute 0.75s  wf_rows=0
+11:04:58   layer   8: load-wait 2.50s compute 0.31s  wf_rows=0
+11:05:19   layer  16: load-wait 2.07s compute 0.75s  wf_rows=17920
+11:05:38   layer  24: load-wait 1.11s compute 0.89s  wf_rows=35840
+11:05:55   layer  31: load-wait 1.66s compute 0.89s  wf_rows=35840
+11:05:55   pass done: 1024 prefill rows (T=21), 35840 spawn rows, 83.1s
+11:05:56 pass 1: 83s; 35840 rows
+11:05:56 pass 2/3: layers [21, 22], 1024 prefill rows, 35840 spawn rows
+11:07:15 pass 2: 79s; 71680 rows
+11:07:15 pass 3/3: layers [31], 1024 prefill rows, 17920 spawn rows
+11:08:30 pass 3: 74s; 89600 rows
+2026-10-04T11:08:36Z END   ext7c-w5-ioi-mixtral_bos-s2io rc=0 (251s)

@@ -1,0 +1,37 @@
+2026-10-04T07:06:30Z START ext7c-cf-verify (waited 0s): python scripts/ext7_cf_verify.py 12
+07:06:35 12 (case, donor) pairs; first: 'Charles, Prince of Viana died in' -> 'Henry Pickering Bowditch died in'
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:04, 38.27it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 72.77it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 79.26it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 79.86it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 81.34it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 81.60it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 82.76it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 81.96it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 81.95it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 82.07it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 82.31it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 84.03it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 85.29it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 85.40it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 84.16it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 84.58it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 86.65it/s]
+07:06:52 HF: 4/12
+07:07:02 HF: 8/12
+07:07:12 HF: 12/12
+07:07:14   layer   0: load-wait 1.54s compute 0.14s  wf_rows=72
+07:07:15   layer   8: load-wait 0.10s compute 0.08s  wf_rows=396
+07:07:16   layer  15: load-wait 0.10s compute 0.03s  wf_rows=684
+07:07:16   pass done: 24 prefill rows (T=10), 684 spawn rows, 4.1s
+07:07:16 n_pairs: 12
+07:07:16 kinds: ['attn_layer', 'block', 'layer']
+07:07:16 layers: 16
+07:07:16 delta_clean_maxdiff_vs_hf: 0.09375
+07:07:16 delta_donor_maxdiff_vs_hf: 0.283203125
+07:07:16 attn_layer_n: 192
+07:07:16 attn_layer_maxdiff: 0.46875
+07:07:16 attn_layer_meanabsdiff: 0.06988271077473958
+07:07:16 attn_layer_frac_within_0.25: 0.953125
+07:07:16 attn_layer_rescue_corr_vs_hf: 0.9962890219407075
+07:07:16 attn_layer_identity_maxdiff: 0.25
+07:07:16 block_n: 192
+07:07:16 block_maxdiff: 0.34375
+07:07:16 block_meanabsdiff: 0.06756591796875
+07:07:16 block_frac_within_0.25: 0.9583333333333334
+07:07:16 block_rescue_corr_vs_hf: 0.9979864163101364
+07:07:16 block_identity_maxdiff: 0.25
+07:07:16 layer_n: 192
+07:07:16 layer_maxdiff: 0.3828125
+07:07:16 layer_meanabsdiff: 0.060333251953125
+07:07:16 layer_frac_within_0.25: 0.9739583333333334
+07:07:16 layer_rescue_corr_vs_hf: 0.9925054784756249
+07:07:16 layer_identity_maxdiff: 0.25
+07:07:16 calibration_gn_ext2: {'attn_layer': {'maxdiff': 1.609375, 'meanabsdiff': 0.18733903765678406, 'rescue_corr': 0.9899363676660085}, 'block': {'maxdiff': 1.1875, 'meanabsdiff': 0.17974528670310974, 'rescue_corr': 0.9935673564110311}, 'layer': {'maxdiff': 1.12109375, 'meanabsdiff': 0.14991874992847443, 'rescue_corr': 0.9833392668586902}}
+07:07:16 pass_total_s: 4.078665256500244
+07:07:16 created_utc: 2026-10-04T07:07:16Z
+2026-10-04T07:07:19Z END   ext7c-cf-verify rc=0 (49s)

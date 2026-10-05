@@ -1,0 +1,9 @@
+2026-10-04T08:15:39Z START ext7-wino-smoke-dla (waited 1079s): python scripts/ext7_wino_dla.py --model olmoe --pairs data/wino_str/pairs_train_xl_olmoe.parquet --case-sets /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/olmoe_smoke_cs.json --out /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke
+08:15:40 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: 24 directed cases, families ['main', 'rep'], 1 prefill-only passes
+08:15:49   layer   0: load-wait 1.79s compute 0.53s  wf_rows=0
+08:16:02   layer   8: load-wait 1.65s compute 0.02s  wf_rows=0
+08:16:14   layer  15: load-wait 1.65s compute 0.02s  wf_rows=0
+08:16:14   pass done: 48 prefill rows (T=25), 0 spawn rows, 26.8s
+08:16:14 pass 1/1: 27s; DLA total - drop: max |.| 0.079
+08:16:14 direct effect / drop: attention +0.201, MoE +0.800, embedding +0.000
+2026-10-04T08:16:16Z END   ext7-wino-smoke-dla rc=0 (37s)

@@ -1,0 +1,11 @@
+10:47:07 mixtral -> ioi_mixtral_bos_s1io_grid: kinds ['layer', 'attn_layer'], 64 directed cases, 443 units, 28352 suffix rows, 2 passes; units per class {'after_S2': 187, 'final': 64, 'S2': 64, 'IO': 64, 'S1': 64}
+10:47:08 pass 1/2: 315 units (S 1..7), 630 prefill rows, 20160 suffix rows
+10:47:15   layer   0: load-wait 6.03s compute 0.75s  wf_rows=630 wf_tokens=983
+10:47:38   layer   8: load-wait 2.43s compute 0.49s  wf_rows=5670 wf_tokens=16711
+10:48:01   layer  16: load-wait 2.01s compute 0.78s  wf_rows=10710 wf_tokens=32439
+10:48:19   layer  24: load-wait 1.19s compute 1.06s  wf_rows=15750 wf_tokens=48167
+10:48:39   layer  31: load-wait 1.81s compute 1.31s  wf_rows=20160 wf_tokens=61929
+10:48:39   pass done: 630 prefill rows (T=21), 20160 suffix rows (Smax=7, 62912 tokens), 90.9s
+10:48:39 pass 1: 90.9s; 20160 rows saved
+10:48:40 pass 2/2: 128 units (S 11..18), 256 prefill rows, 8192 suffix rows
+10:50:08 pass 2: 88.5s; 28352 rows saved

@@ -1,0 +1,27 @@
+{
+ "n_pairs": 2421,
+ "correct_both": 1489,
+ "margin": 1109,
+ "strict": 167,
+ "margin_and_top1_both": 273,
+ "strict_and_top1_both": 40,
+ "margin_assoc": 113,
+ "margin_not_assoc": 996,
+ "strict_not_assoc": 157,
+ "margin_names": 127,
+ "strict_names": 48,
+ "margin_one_token_option": 966,
+ "margin_debiased": 255,
+ "margin_trigger_in_context": 30,
+ "mean_d_clean_a_margin": 3.7185527502254283,
+ "mean_d_clean_b_margin": -3.5520739404869253,
+ "mean_drop_str_margin": 7.270626690712353,
+ "mean_gn_drop_margin": 0.49374436429215507,
+ "frac_gn_drop_ge_thr_both_margin": 0.15058611361587015,
+ "n_passes": 3,
+ "pass_times_s": [
+  98.37095236778259,
+  93.74886894226074,
+  82.1156439781189
+ ]
+}

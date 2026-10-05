@@ -1,0 +1,234 @@
+2026-10-04T08:35:41Z START ext8-addback-qwen3_str_addback-1 (waited 755s): python scripts/ext8_addback_run.py qwen3 --task cf --src-run qwen3_str --out qwen3_str_addback --max-passes 5 --pool 32 --shap-cases 54 --budget 45000
+08:35:56 task cf qwen3: 215 cases, 852 rows, L=48 k=8 K=384
+08:36:00 initialised: {'val_rows': 432, 'first_val_rows': 108, 'beam_rows': 108, 'shap_rows': 54, 'exact_rows': 108, 'noise_rows': 108, 'pool': 32, 'queue_groups': 7820, 'queue_items': 400830}
+08:36:03 pass 0: 1067 prefill rows, 44991 spawn rows (27000 adaptive, 1303 static groups; queue 1303/7820)
+08:36:07   layer   0: load-wait 3.08s compute 0.76s  wf_rows=12907
+08:36:14   layer   8: load-wait 0.57s compute 0.25s  wf_rows=22558
+08:36:23   layer  16: load-wait 0.93s compute 0.29s  wf_rows=27706
+08:36:32   layer  24: load-wait 0.90s compute 0.30s  wf_rows=31104
+08:36:42   layer  32: load-wait 0.91s compute 0.33s  wf_rows=35210
+08:36:52   layer  40: load-wait 0.63s compute 0.37s  wf_rows=38775
+08:37:00   layer  47: load-wait 0.81s compute 0.39s  wf_rows=44991
+08:37:02   pass done: 1067 prefill rows (T=15), 44991 spawn rows, 58.7s (metrics 1.7s)
+08:37:08 pass 0: ceilings for 852 rows (mean all-MoE rescue +6.207); DLA rows 327168 (5252 candidate pairs not routed in this pass's clean run)
+08:37:09 pass 0 done in 59s, peak 7.3 GB; greedy left 432 (median step 2, median rescue/ceiling 0.57), beam left 108; queue 1303/8684
+08:37:12 pass 1: 1067 prefill rows, 44985 spawn rows (25329 adaptive, 936 static groups; queue 2239/8684)
+08:37:14   layer   0: load-wait 0.56s compute 0.12s  wf_rows=7749
+08:37:21   layer   8: load-wait 0.80s compute 0.24s  wf_rows=20817
+08:37:27   layer  16: load-wait 0.37s compute 0.28s  wf_rows=26601
+08:37:33   layer  24: load-wait 0.43s compute 0.30s  wf_rows=30242
+08:37:40   layer  32: load-wait 0.49s compute 0.33s  wf_rows=34974
+08:37:46   layer  40: load-wait 0.46s compute 0.37s  wf_rows=39117
+08:37:52   layer  47: load-wait 0.47s compute 0.39s  wf_rows=44985
+08:37:54   pass done: 1067 prefill rows (T=15), 44985 spawn rows, 40.8s (metrics 1.7s)
+08:37:55 pass 1 done in 41s, peak 8.0 GB; greedy left 432 (median step 3, median rescue/ceiling 0.69), beam left 108; queue 2239/8684
+08:37:58 pass 2: 1067 prefill rows, 44994 spawn rows (24498 adaptive, 976 static groups; queue 3215/8684)
+08:38:00   layer   0: load-wait 0.58s compute 0.13s  wf_rows=7729
+08:38:05   layer   8: load-wait 0.41s compute 0.24s  wf_rows=21018
+08:38:12   layer  16: load-wait 0.53s compute 0.28s  wf_rows=27410
+08:38:18   layer  24: load-wait 0.43s compute 0.30s  wf_rows=31162
+08:38:24   layer  32: load-wait 0.39s compute 0.34s  wf_rows=36068
+08:38:30   layer  40: load-wait 0.41s compute 0.39s  wf_rows=40085
+08:38:37   layer  47: load-wait 0.62s compute 0.41s  wf_rows=44994
+08:38:39   pass done: 1067 prefill rows (T=15), 44994 spawn rows, 39.7s (metrics 1.7s)
+08:38:40 pass 2 done in 40s, peak 8.3 GB; greedy left 432 (median step 4, median rescue/ceiling 0.78), beam left 108; queue 3215/8684
+08:38:43 pass 3: 1067 prefill rows, 44992 spawn rows (23677 adaptive, 1015 static groups; queue 4230/8684)
+08:38:45   layer   0: load-wait 0.69s compute 0.13s  wf_rows=8361
+08:38:51   layer   8: load-wait 0.55s compute 0.26s  wf_rows=22564
+08:38:59   layer  16: load-wait 0.74s compute 0.29s  wf_rows=28792
+08:39:07   layer  24: load-wait 0.79s compute 0.31s  wf_rows=32182
+08:39:15   layer  32: load-wait 0.72s compute 0.34s  wf_rows=37256
+08:39:24   layer  40: load-wait 0.65s compute 0.41s  wf_rows=40860
+08:39:32   layer  47: load-wait 0.58s compute 0.40s  wf_rows=44992
+08:39:33   pass done: 1067 prefill rows (T=15), 44992 spawn rows, 49.6s (metrics 1.7s)
+08:39:34 pass 3 done in 50s, peak 8.5 GB; greedy left 432 (median step 5, median rescue/ceiling 0.85), beam left 108; queue 4230/8684
+08:39:37 pass 4: 1067 prefill rows, 44637 spawn rows (22839 adaptive, 947 static groups; queue 5177/8684)
+08:39:39   layer   0: load-wait 0.58s compute 0.13s  wf_rows=9445
+08:39:45   layer   8: load-wait 0.72s compute 0.26s  wf_rows=23302
+08:39:52   layer  16: load-wait 0.50s compute 0.30s  wf_rows=29279
+08:39:58   layer  24: load-wait 0.52s compute 0.35s  wf_rows=32705
+08:40:05   layer  32: load-wait 0.32s compute 0.35s  wf_rows=37881
+08:40:12   layer  40: load-wait 0.39s compute 0.42s  wf_rows=41008
+08:40:19   layer  47: load-wait 0.60s compute 0.40s  wf_rows=44637
+08:40:21   pass done: 1067 prefill rows (T=15), 44637 spawn rows, 42.8s (metrics 1.7s)
+08:40:22 pass 4 done in 43s, peak 8.5 GB; greedy left 432 (median step 6, median rescue/ceiling 0.88), beam left 0; queue 5177/8684
+2026-10-04T08:40:31Z END   ext8-addback-qwen3_str_addback-1 rc=0 (290s)
+2026-10-04T08:56:32Z START ext8-addback-qwen3_str_addback-2 (waited 961s): python scripts/ext8_addback_run.py qwen3 --task cf --src-run qwen3_str --out qwen3_str_addback --max-passes 5 --pool 32 --shap-cases 54 --budget 45000
+08:56:47 task cf qwen3: 215 cases, 852 rows, L=48 k=8 K=384
+08:56:50 resuming after 5 passes (queue 5177/8684 groups)
+08:56:52 pass 5: 1067 prefill rows, 44640 spawn rows (11232 adaptive, 87 static groups; queue 5264/8684)
+08:56:57   layer   0: load-wait 3.35s compute 0.76s  wf_rows=1403
+08:57:02   layer   8: load-wait 0.65s compute 0.15s  wf_rows=11388
+08:57:10   layer  16: load-wait 0.84s compute 0.21s  wf_rows=18896
+08:57:19   layer  24: load-wait 0.90s compute 0.23s  wf_rows=25739
+08:57:28   layer  32: load-wait 0.92s compute 0.37s  wf_rows=33257
+08:57:37   layer  40: load-wait 0.87s compute 0.35s  wf_rows=39638
+08:57:46   layer  47: load-wait 0.88s compute 0.35s  wf_rows=44640
+08:57:48   pass done: 1067 prefill rows (T=15), 44640 spawn rows, 54.6s (metrics 1.7s)
+08:57:48 pass 5 done in 55s, peak 6.8 GB; greedy left 432 (median step 7, median rescue/ceiling 0.91), beam left 0; queue 5264/8684
+08:57:51 pass 6: 1067 prefill rows, 44991 spawn rows (10800 adaptive, 1317 static groups; queue 6581/8684)
+08:57:52   layer   0: load-wait 0.73s compute 0.15s  wf_rows=9121
+08:58:01   layer   8: load-wait 0.59s compute 0.26s  wf_rows=21472
+08:58:07   layer  16: load-wait 0.62s compute 0.28s  wf_rows=26180
+08:58:14   layer  24: load-wait 0.65s compute 0.31s  wf_rows=29918
+08:58:22   layer  32: load-wait 0.49s compute 0.35s  wf_rows=35407
+08:58:30   layer  40: load-wait 0.44s compute 1.00s  wf_rows=38903
+08:58:37   layer  47: load-wait 0.26s compute 0.43s  wf_rows=44991
+08:58:38   pass done: 1067 prefill rows (T=15), 44991 spawn rows, 46.8s (metrics 1.7s)
+08:58:39 noise_oracle groups added for 108 rows
+08:58:39 pass 6 done in 47s, peak 8.1 GB; greedy left 432 (median step 8, median rescue/ceiling 0.95), beam left 0; queue 6581/8792
+08:58:42 pass 7: 1067 prefill rows, 44817 spawn rows (10368 adaptive, 877 static groups; queue 7458/8792)
+08:58:43   layer   0: load-wait 0.48s compute 0.14s  wf_rows=7851
+08:58:48   layer   8: load-wait 0.45s compute 0.24s  wf_rows=21012
+08:58:54   layer  16: load-wait 0.59s compute 0.28s  wf_rows=28042
+08:59:01   layer  24: load-wait 0.64s compute 0.31s  wf_rows=33240
+08:59:07   layer  32: load-wait 0.49s compute 0.36s  wf_rows=38422
+08:59:14   layer  40: load-wait 0.40s compute 0.44s  wf_rows=41203
+08:59:21   layer  47: load-wait 0.84s compute 0.39s  wf_rows=44817
+08:59:23   pass done: 1067 prefill rows (T=15), 44817 spawn rows, 40.5s (metrics 1.7s)
+08:59:23 pass 7 done in 41s, peak 8.4 GB; greedy left 432 (median step 9, median rescue/ceiling 0.96), beam left 0; queue 7458/8792
+08:59:25 pass 8: 1067 prefill rows, 44718 spawn rows (9936 adaptive, 34 static groups; queue 7492/8792)
+08:59:27   layer   0: load-wait 0.59s compute 0.15s  wf_rows=6415
+08:59:32   layer   8: load-wait 0.61s compute 0.24s  wf_rows=24699
+08:59:39   layer  16: load-wait 0.65s compute 0.28s  wf_rows=31327
+08:59:47   layer  24: load-wait 0.65s compute 0.30s  wf_rows=34526
+08:59:54   layer  32: load-wait 0.60s compute 0.33s  wf_rows=41348
+09:00:02   layer  40: load-wait 0.59s compute 0.40s  wf_rows=43609
+09:00:10   layer  47: load-wait 0.69s compute 0.40s  wf_rows=44718
+09:00:11   pass done: 1067 prefill rows (T=15), 44718 spawn rows, 45.4s (metrics 1.7s)
+09:00:13 pass 8 done in 45s, peak 8.0 GB; greedy left 432 (median step 10, median rescue/ceiling 0.98), beam left 0; queue 7492/8792
+09:00:15 pass 9: 1067 prefill rows, 44286 spawn rows (9504 adaptive, 34 static groups; queue 7526/8792)
+09:00:17   layer   0: load-wait 0.72s compute 0.11s  wf_rows=3614
+09:00:23   layer   8: load-wait 0.59s compute 0.19s  wf_rows=15621
+09:00:30   layer  16: load-wait 0.77s compute 0.23s  wf_rows=23303
+09:00:37   layer  24: load-wait 0.65s compute 0.26s  wf_rows=28188
+09:00:44   layer  32: load-wait 0.49s compute 0.31s  wf_rows=36005
+09:00:51   layer  40: load-wait 0.62s compute 0.41s  wf_rows=41821
+09:00:58   layer  47: load-wait 0.62s compute 0.38s  wf_rows=44286
+09:01:00   pass done: 1067 prefill rows (T=15), 44286 spawn rows, 43.9s (metrics 1.6s)
+09:01:00 pass 9 done in 44s, peak 7.9 GB; greedy left 432 (median step 11, median rescue/ceiling 0.99), beam left 0; queue 7526/8792
+2026-10-04T09:01:09Z END   ext8-addback-qwen3_str_addback-2 rc=0 (277s)
+2026-10-04T09:19:29Z START ext8-addback-qwen3_str_addback-3 (waited 1100s): python scripts/ext8_addback_run.py qwen3 --task cf --src-run qwen3_str --out qwen3_str_addback --max-passes 5 --pool 32 --shap-cases 54 --budget 45000
+09:19:44 task cf qwen3: 215 cases, 852 rows, L=48 k=8 K=384
+09:19:46 resuming after 10 passes (queue 7526/8792 groups)
+09:19:50 pass 10: 1067 prefill rows, 44731 spawn rows (9072 adaptive, 53 static groups; queue 7579/8792)
+09:19:55   layer   0: load-wait 3.10s compute 0.77s  wf_rows=14557
+09:20:01   layer   8: load-wait 0.62s compute 0.30s  wf_rows=26525
+09:20:09   layer  16: load-wait 0.73s compute 0.33s  wf_rows=32350
+09:20:16   layer  24: load-wait 0.46s compute 0.34s  wf_rows=35637
+09:20:25   layer  32: load-wait 0.77s compute 0.38s  wf_rows=41114
+09:20:34   layer  40: load-wait 0.87s compute 0.44s  wf_rows=43265
+09:20:44   layer  47: load-wait 0.86s compute 0.44s  wf_rows=44731
+09:20:46   pass done: 1067 prefill rows (T=15), 44731 spawn rows, 54.8s (metrics 1.7s)
+09:20:47 pass 10 done in 55s, peak 8.5 GB; greedy left 432 (median step 12, median rescue/ceiling 1.00), beam left 0; queue 7579/8792
+09:20:52 pass 11: 1067 prefill rows, 44642 spawn rows (8640 adaptive, 94 static groups; queue 7673/8792)
+09:20:55   layer   0: load-wait 0.59s compute 0.23s  wf_rows=33211
+[W1004 09:21:00.735545822 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2248146944 bytes (free: 412549120, total: 23686938624).
+09:21:01   layer   8: load-wait 0.12s compute 0.50s  wf_rows=41703
+09:21:07   layer  16: load-wait 0.24s compute 0.50s  wf_rows=43170
+09:21:15   layer  24: load-wait 0.56s compute 0.50s  wf_rows=43896
+[W1004 09:21:18.150659620 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2380267520 bytes (free: 699858944, total: 23686938624).
+09:21:22   layer  32: load-wait 0.12s compute 0.52s  wf_rows=44510
+09:21:29   layer  40: load-wait 0.15s compute 0.90s  wf_rows=44627
+[W1004 09:21:29.141370350 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2480930816 bytes (free: 282525696, total: 23686938624).
+09:21:35   layer  47: load-wait 0.36s compute 0.67s  wf_rows=44642
+09:21:37   pass done: 1067 prefill rows (T=15), 44642 spawn rows, 42.8s (metrics 1.6s)
+09:21:38 pass 11 done in 43s, peak 10.1 GB; greedy left 432 (median step 13, median rescue/ceiling 1.00), beam left 0; queue 7673/8792
+09:21:43 pass 12: 1067 prefill rows, 44976 spawn rows (8208 adaptive, 96 static groups; queue 7769/8792)
+09:21:47   layer   0: load-wait 0.74s compute 0.24s  wf_rows=33463
+[W1004 09:21:54.670785721 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2298478592 bytes (free: 123142144, total: 23686938624).
+09:21:54   layer   8: load-wait 0.32s compute 1.11s  wf_rows=42318
+09:22:01   layer  16: load-wait 0.26s compute 0.51s  wf_rows=43765
+09:22:07   layer  24: load-wait 0.16s compute 0.67s  wf_rows=44433
+[W1004 09:22:12.266503217 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2373976064 bytes (free: 1861681152, total: 23686938624).
+09:22:14   layer  32: load-wait 0.12s compute 0.52s  wf_rows=44873
+09:22:20   layer  40: load-wait 0.18s compute 0.76s  wf_rows=44960
+[W1004 09:22:22.928039002 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2592079872 bytes (free: 2021064704, total: 23686938624).
+09:22:28   layer  47: load-wait 0.61s compute 0.51s  wf_rows=44976
+09:22:29   pass done: 1067 prefill rows (T=15), 44976 spawn rows, 43.4s (metrics 1.7s)
+09:22:30 pass 12 done in 43s, peak 10.1 GB; greedy left 432 (median step 14, median rescue/ceiling 1.00), beam left 0; queue 7769/8792
+09:22:35 pass 13: 1067 prefill rows, 44991 spawn rows (7776 adaptive, 893 static groups; queue 8662/8792)
+09:22:38   layer   0: load-wait 0.62s compute 0.19s  wf_rows=21595
+09:22:44   layer   8: load-wait 0.46s compute 0.38s  wf_rows=30378
+[W1004 09:22:49.825706845 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1579155456 bytes (free: 515309568, total: 23686938624).
+09:22:51   layer  16: load-wait 0.57s compute 0.41s  wf_rows=33094
+09:22:59   layer  24: load-wait 0.39s compute 0.40s  wf_rows=34992
+09:23:06   layer  32: load-wait 0.31s compute 0.44s  wf_rows=38500
+[W1004 09:23:07.857949935 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1843396608 bytes (free: 1335296000, total: 23686938624).
+09:23:15   layer  40: load-wait 0.56s compute 0.71s  wf_rows=41585
+[W1004 09:23:19.861787786 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2699034624 bytes (free: 1779892224, total: 23686938624).
+09:23:23   layer  47: load-wait 0.56s compute 0.49s  wf_rows=44991
+09:23:24   pass done: 1067 prefill rows (T=15), 44991 spawn rows, 47.5s (metrics 1.7s)
+09:23:25 pass 13 done in 48s, peak 10.0 GB; greedy left 0 (median step 15, median rescue/ceiling 1.01), beam left 0; queue 8662/8792
+09:23:26 pass 14: 1067 prefill rows, 2730 spawn rows (0 adaptive, 130 static groups; queue 8792/8792)
+09:23:26   layer   0: load-wait 0.64s compute 0.10s  wf_rows=948
+09:23:32   layer   8: load-wait 0.65s compute 0.11s  wf_rows=1471
+09:23:39   layer  16: load-wait 0.67s compute 0.10s  wf_rows=1684
+09:23:46   layer  24: load-wait 0.89s compute 0.11s  wf_rows=1841
+09:23:53   layer  32: load-wait 0.78s compute 0.11s  wf_rows=2196
+09:23:59   layer  40: load-wait 0.72s compute 0.11s  wf_rows=2399
+09:24:06   layer  47: load-wait 0.91s compute 0.11s  wf_rows=2730
+09:24:06   pass done: 1067 prefill rows (T=15), 2730 spawn rows, 40.4s (metrics 0.1s)
+09:24:06 pass 14 done in 40s, peak 4.0 GB; greedy left 0 (median step 15, median rescue/ceiling 1.01), beam left 0; queue 8792/8792
+09:24:06 ALL PASSES COMPLETE
+2026-10-04T09:24:15Z END   ext8-addback-qwen3_str_addback-3 rc=0 (286s)
+2026-10-04T09:48:13Z START ext8-addback-mixtral_bos_str_addback-1 (waited 1438s): python scripts/ext8_addback_run.py mixtral --task cf --src-run mixtral_bos_str --out mixtral_bos_str_addback --max-passes 5 --pool 64 --beam-cases 64 --budget 50000
+09:48:24 task cf mixtral: 213 cases, 858 rows, L=32 k=2 K=64
+09:48:25 resuming after 5 passes (queue 3103/9014 groups)
+09:48:28 pass 5: 1071 prefill rows, 49993 spawn rows (25288 adaptive, 1647 static groups; queue 4750/9014)
+09:48:36   layer   0: load-wait 6.64s compute 0.98s  wf_rows=7131
+09:48:59   layer   8: load-wait 2.22s compute 0.68s  wf_rows=26458
+09:49:22   layer  16: load-wait 2.08s compute 0.84s  wf_rows=35808
+09:49:45   layer  24: load-wait 1.80s compute 1.08s  wf_rows=49001
+09:50:06   layer  31: load-wait 1.82s compute 1.09s  wf_rows=49993
+09:50:06   pass done: 1071 prefill rows (T=16), 49993 spawn rows, 98.0s (metrics 0.5s)
+09:50:07 pass 5 done in 98s, peak 11.0 GB; greedy left 436 (median step 7, median rescue/ceiling 1.08), beam left 0; queue 4750/9014
+09:50:11 pass 6: 1071 prefill rows, 49998 spawn rows (24852 adaptive, 1274 static groups; queue 6024/9014)
+09:50:14   layer   0: load-wait 2.10s compute 0.27s  wf_rows=5831
+09:50:37   layer   8: load-wait 2.29s compute 0.63s  wf_rows=23909
+09:51:00   layer  16: load-wait 2.10s compute 0.82s  wf_rows=34995
+09:51:24   layer  24: load-wait 1.82s compute 1.07s  wf_rows=48069
+09:51:44   layer  31: load-wait 1.67s compute 1.08s  wf_rows=49998
+09:51:45   pass done: 1071 prefill rows (T=16), 49998 spawn rows, 93.4s (metrics 0.5s)
+09:51:46 noise_oracle groups added for 106 rows
+09:51:46 pass 6 done in 93s, peak 10.9 GB; greedy left 436 (median step 8, median rescue/ceiling 1.14), beam left 0; queue 6024/9120
+09:51:49 pass 7: 1071 prefill rows, 49715 spawn rows (24416 adaptive, 1485 static groups; queue 7509/9120)
+09:51:52   layer   0: load-wait 2.10s compute 0.27s  wf_rows=5260
+09:52:15   layer   8: load-wait 1.87s compute 0.64s  wf_rows=24913
+09:52:37   layer  16: load-wait 2.07s compute 0.84s  wf_rows=35711
+09:52:58   layer  24: load-wait 0.93s compute 1.11s  wf_rows=49487
+09:53:16   layer  31: load-wait 1.38s compute 1.07s  wf_rows=49715
+09:53:16   pass done: 1071 prefill rows (T=16), 49715 spawn rows, 86.7s (metrics 0.5s)
+09:53:17 pass 7 done in 87s, peak 11.4 GB; greedy left 436 (median step 9, median rescue/ceiling 1.16), beam left 0; queue 7509/9120
+09:53:21 pass 8: 1071 prefill rows, 49555 spawn rows (23980 adaptive, 25 static groups; queue 7534/9120)
+09:53:23   layer   0: load-wait 1.73s compute 0.26s  wf_rows=2744
+09:53:43   layer   8: load-wait 1.96s compute 0.58s  wf_rows=21419
+09:54:03   layer  16: load-wait 2.06s compute 0.81s  wf_rows=34981
+09:54:24   layer  24: load-wait 1.69s compute 1.10s  wf_rows=49233
+09:54:41   layer  31: load-wait 1.70s compute 1.07s  wf_rows=49555
+09:54:42   pass done: 1071 prefill rows (T=16), 49555 spawn rows, 80.5s (metrics 0.5s)
+09:54:43 pass 8 done in 81s, peak 11.0 GB; greedy left 436 (median step 10, median rescue/ceiling 1.20), beam left 0; queue 7534/9120
+09:54:46 pass 9: 1071 prefill rows, 49119 spawn rows (23544 adaptive, 25 static groups; queue 7559/9120)
+09:54:49   layer   0: load-wait 2.02s compute 0.26s  wf_rows=4420
+09:55:05   layer   8: load-wait 1.55s compute 0.61s  wf_rows=23184
+09:55:23   layer  16: load-wait 1.42s compute 0.88s  wf_rows=39007
+09:55:43   layer  24: load-wait 1.60s compute 1.10s  wf_rows=48817
+09:55:59   layer  31: load-wait 1.35s compute 1.06s  wf_rows=49119
+09:56:00   pass done: 1071 prefill rows (T=16), 49119 spawn rows, 73.2s (metrics 0.5s)
+09:56:01 pass 9 done in 73s, peak 11.0 GB; greedy left 436 (median step 11, median rescue/ceiling 1.23), beam left 0; queue 7559/9120
+2026-10-04T09:56:09Z END   ext8-addback-mixtral_bos_str_addback-1 rc=0 (476s)
+2026-10-04T10:22:39Z START ext8-addback-mixtral_bos_str_addback-2 (waited 1590s): python scripts/ext8_addback_run.py mixtral --task cf --src-run mixtral_bos_str --out mixtral_bos_str_addback --max-passes 5 --pool 64 --beam-cases 64 --budget 50000
+10:22:55 task cf mixtral: 213 cases, 858 rows, L=32 k=2 K=64
+10:22:56 resuming after 14 passes (queue 9120/9120 groups)
+10:22:56 nothing left to run
+2026-10-04T10:22:57Z END   ext8-addback-mixtral_bos_str_addback-2 rc=0 (18s)
+10:22:58 analysing cf_qwen3
+10:23:29 analysing cf_mixtral
+10:23:56 wrote ext8_a0_ceilings (8 rows)
+10:23:56 wrote ext8_a1_summary (28 rows)
+10:23:56 wrote ext8_a3_summary (24 rows)
+10:23:56 wrote ext8_a2_adaptive (2 rows)
+10:23:56 wrote ext8_saturation_cf_vs_wino (2 rows)
+10:23:56 wrote ext8_shapley (2 rows)
+10:23:59 wrote /home/ubuntu/MOE/results/ext8_addback_summary.json
+CF ADDBACK CHAIN DONE

@@ -1,0 +1,22 @@
+2026-10-04T07:55:12Z START ext7c-ioi-attn-qwen3 (waited 462s): python scripts/ext7_ioi_attn.py qwen3
+07:55:24   layer   0: load-wait 2.85s compute 0.60s  wf_rows=0
+07:55:33   layer   8: load-wait 1.17s compute 0.08s  wf_rows=0
+07:55:42   layer  16: load-wait 1.16s compute 0.08s  wf_rows=0
+07:55:52   layer  24: load-wait 1.16s compute 0.08s  wf_rows=0
+07:56:02   layer  32: load-wait 1.16s compute 0.08s  wf_rows=0
+07:56:12   layer  40: load-wait 1.16s compute 0.08s  wf_rows=0
+07:56:21   layer  47: load-wait 1.16s compute 0.07s  wf_rows=0
+07:56:21   pass done: 800 prefill rows (T=20), 0 spawn rows, 60.8s
+07:56:23 rows 800/1536
+07:57:12 rows 1536/1536
+07:57:13 L42H10: clean IO 0.86 S1 0.03 S2 0.02 | s2io IO 0.03 S1 0.87 | s1io IO 0.35
+07:57:13 L44H15: clean IO 0.58 S1 0.02 S2 0.00 | s2io IO 0.02 S1 0.58 | s1io IO 0.30
+07:57:13 L44H26: clean IO 0.40 S1 0.01 S2 0.00 | s2io IO 0.01 S1 0.41 | s1io IO 0.12
+07:57:13 L44H31: clean IO 0.39 S1 0.02 S2 0.02 | s2io IO 0.02 S1 0.40 | s1io IO 0.22
+07:57:13 L38H27: clean IO 0.39 S1 0.10 S2 0.07 | s2io IO 0.11 S1 0.38 | s1io IO 0.21
+07:57:13 L40H13: clean IO 0.38 S1 0.22 S2 0.08 | s2io IO 0.22 S1 0.38 | s1io IO 0.25
+07:57:13 L41H20: clean IO 0.38 S1 0.06 S2 0.03 | s2io IO 0.06 S1 0.38 | s1io IO 0.17
+07:57:13 L45H9: clean IO 0.34 S1 0.07 S2 0.01 | s2io IO 0.07 S1 0.35 | s1io IO 0.21
+07:57:13 L43H7: clean IO 0.34 S1 0.09 S2 0.09 | s2io IO 0.09 S1 0.34 | s1io IO 0.17
+07:57:13 L42H16: clean IO 0.31 S1 0.06 S2 0.01 | s2io IO 0.06 S1 0.30 | s1io IO 0.14
+2026-10-04T07:57:20Z END   ext7c-ioi-attn-qwen3 rc=0 (128s)

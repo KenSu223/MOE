@@ -1,0 +1,202 @@
+{
+ "sweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "pairs": "data/ioi/pairs_s2io_qwen3.parquet",
+  "case_sets": "data/ioi/case_sets_s2io.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   },
+   "rep": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 1024,
+  "max_rows": 60000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+   ],
+   [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   [
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "metrics": true,
+  "agent": "ext7-controls",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/ioi/pairs_s2io_qwen3.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_qwen3_s2io --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --agent ext7-controls",
+  "created_utc": "2026-10-04T08:19:09Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T08:21:53Z",
+  "pass_times_s": [
+   65.24259901046753,
+   45.39040684700012,
+   46.94608688354492
+  ],
+  "n_rows": 149504
+ },
+ "joint": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main",
+   "rep"
+  ],
+  "n_cases": 1024,
+  "spans": {
+   "all": [
+    0,
+    47
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_wino_joint.py --model qwen3 --pairs data/ioi/pairs_s2io_qwen3.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_qwen3_s2io --splits discovery,validation,rep_discovery,rep_validation --agent ext7-controls",
+  "created_utc": "2026-10-04T08:30:05Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T08:31:10Z",
+  "pass_times_s": [
+   62.896307945251465
+  ],
+  "n_rows": 6144
+ },
+ "direct_split": {
+  "model": "qwen3",
+  "pairs": "data/ioi/pairs_s2io_qwen3.parquet",
+  "case_sets": "data/ioi/case_sets_s2io.json",
+  "splits": "discovery,validation,rep_discovery,rep_validation",
+  "n_rows": 1024,
+  "seconds": 72.45277118682861,
+  "command": "python -m moetrace.ext7_controls direct --model qwen3 --pairs data/ioi/pairs_s2io_qwen3.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_qwen3_s2io --splits discovery,validation,rep_discovery,rep_validation",
+  "completed_utc": "2026-10-04T09:14:54Z"
+ },
+ "heads": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "layers": [
+   32,
+   39,
+   42,
+   43,
+   45
+  ],
+  "null_layer": 32,
+  "n_heads": 32,
+  "n_cases": 512,
+  "chunks": [
+   [
+    32,
+    39
+   ],
+   [
+    42,
+    43
+   ],
+   [
+    45
+   ]
+  ],
+  "mentions": "pair columns mention_a_pos / mention_b_pos",
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_wino_heads.py --model qwen3 --pairs data/ioi/pairs_s2io_qwen3.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_qwen3_s2io --splits discovery,validation,rep_discovery,rep_validation --layers auto --families main --agent ext7-controls",
+  "created_utc": "2026-10-04T10:02:36Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T10:05:09Z",
+  "pass_times_s": [
+   60.85028409957886,
+   43.50630331039429,
+   45.96285676956177
+  ],
+  "n_rows": 89600
+ }
+}

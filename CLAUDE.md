@@ -21,7 +21,11 @@ F5 probability metrics; sections `results/sections/ext5_*.md`, assembled into `E
 by Zhang & Nanda 2024 (arXiv:2309.16042, PDF gitignored at repo root); section `results/sections/ext6_str.md`.**
 **Direction 6b COMPLETE for Qwen3 and Mixtral BOS (2026-09-28): STR layer × position grid, section
 `results/sections/ext6_str_grid.md`; Mixtral without BOS awaits the user's decision.** Everything, including Direction 6b,
-is committed and pushed to github.com/KenSu223/MOE (branch `main`). Nothing is running. Open items are in section 3.
+is committed and pushed to github.com/KenSu223/MOE (branch `main`). Open items are in section 3.
+**Phase 3 COMPLETE (2026-10-04, committed and pushed 2026-10-05; plan, decisions, agent split in RESEARCH_PLAN.md "Phase 3"; sections
+`results/sections/ext7_synthesis.md`, `ext7_wino.md`, `ext7_controls.md`, `ext8_addback.md`, assembled into EXTENSIONS_REPORT.md
+as Directions 7-8 / 7 / 7b / 8): expert add-back curves (ext8) and WinoGrande / IOI under STR (ext7). STR only (no GN); Mixtral =
+BOS for Phase 3. Headlines in section 2b.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -164,6 +168,29 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
   GPT-2 XL effects come from the softmax once windows are used. GN vs STR at the last subject token (F4 runs, same
   cases, normalised): GN peaks at L4 not L0; layer sum 1.06× STR (Qwen3), 1.77× (Mixtral BOS) = GN inflation at the
   early site, not at the paper's final-position site.
+- **Phase 3 (2026-10-04, ≈ 3.9 GPU-h; Qwen3 and Mixtral BOS; STR only)**:
+  - *WinoGrande as STR pairs* (`moetrace/ext7_wino.py`, `data/wino_str/`): fill the blank with each twin's answer and predict the
+    sentence-final single-token trigger ("… but the bag was too" → " small" / "… the body was too" → " large"); rules W1–W6
+    (trigger = only and last word, single token, token symmetry, option not final, dedup) + margin ≥ 1 both ways: Qwen3 2,099,
+    Mixtral BOS 1,151 pairs; case set = 776 pairs shared by Qwen3 / Mixtral BOS / no BOS → 128/128 + 128/128 replication
+    (`data/wino_str/case_sets.json`). GN on the option token is ineffective in Qwen3 (binary in-context choice survives noise).
+  - *Attention vs MoE* (W2 single layers, all-MoE patch, direct-path split): IOI ≫ CounterFact > WinoGrande role swap >
+    option swap. Attention share of the positive rescue IOI 0.92 / 0.80, CounterFact 0.54 / 0.58, WinoGrande role 0.32 / 0.39,
+    option 0.16 / 0.34 (Qwen3 / Mixtral); direct-path MoE share WinoGrande 0.95 / 0.71. WinoGrande is NOT IOI-like at the final
+    position; one late specific expert per model (Qwen3 **L41E117** Spec +0.90, Mixtral **L20E000** Spec +0.94; pattern A,
+    replicated; not the CounterFact experts); attention moves the option identity gradually (Qwen3 L19–L41, heads of one KV group
+    cancel within a layer) or in one step (Mixtral L13, coreference-like heads). IOI heads recovered (S2 reader Qwen3 L42H11,
+    name-mover-like L42H10 / Mixtral L19H8, negative movers).
+  - *Joint all-attention patch at a shared final token is degenerate* (A = 1: the MoE is per-token), so W4 = all-MoE M +
+    direct-path split; for symmetric pairs noising(d) = denoising(1 − d).
+  - *Add-back curves* (`moetrace/ext8_addback.py`, engine `multi` with `attn_layer` / `block` steps and noising direction):
+    all-MoE ceiling CounterFact 0.53 / 0.41 of the drop (answer restored in 44 % / 37 %), WinoGrande 0.84 / 0.79 (95 % / 89 %);
+    80 % of the ceiling with 4–6 experts (CounterFact) / 7–10 (WinoGrande) by adaptive greedy (random 48–320); greedy ≈ optimal
+    (beam, exact top-10 optimum ≤ 0.016 better); subsets overshoot the all-MoE ceiling; patch-free DLA ranking ≈ oracle; the
+    paper's layer-first order is below every effect-based ranking (oracle/DLA/pop) but above routing weight / random
+    (k ≤ 15 AUC incl. greedy: `results/tables/ext8_a1_partial_auc_k15.md`). Gradient rankings need F3 (not built).
+  - Fixed: `ext5_subject.py` turned `attn_layer` rows into `block` when a pass also had window > 1 rows (no result affected;
+    regression identical).
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -181,6 +208,9 @@ Base reproduction:
   exact noise samples are unrecoverable; only selections and CI-level agreement are comparable.
 
 Extensions:
+- Phase 3 not done (see ext7_synthesis.md caveats): gradient rankings for add-back (needs F3); Mixtral without BOS on the
+  WinoGrande pairs (decision (e); same case set); head patches at positions other than the final one; add-back on the
+  replication set; role swap vs option swap on identical items. Phase-3 results committed 2026-10-05 (≈ 300 MB).
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
   grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
@@ -270,6 +300,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `coalition_set` (`SpawnSpec.experts`), `multi` (`SpawnSpec.steps`); `DiagSpec.attn_heads_final`, `spawn_vectors`;
   `run_sweep.py`/`run_expert.py` flags `--metrics`, `--agent`. Verification: `results/verify_ext5_engine_olmoe.json`,
   `results/verify_ext5_subject_olmoe.json`; `verify_olmoe.json` unchanged vs `verify_olmoe_before_ext5.json`.
+- Phase 3: `ext7_wino.py` (WinoGrande twins → STR pairs, rules W1–W6), `ext7_pairs.py` (generic STR-pair runner: directed cases
+  2·pair_idx + d, analysis adapter), `ext7_controls.py` (role swap, IOI builder, three-task table, `direct_split_pairs`),
+  `ext8_addback.py` (add-back orderings, greedy / beam / exact, curves). Engine (ext8, additive): `multi` steps `attn_layer` /
+  `block`, every kind in the noising direction (parent = clean row, source = corrupted row), `SpawnSpec.kl_ref`,
+  `DiagSpec.contrib_dla`; verified `results/verify_ext8_engine_olmoe.json`.
 - Direction 6: `ext6_str.py` (STR donors: `donor_index`, `candidates` = same relation, true object == case foil, same template,
   identical token positions and continuation ids; `select` (margin 1.0, K = 5, `random.Random(2000 + case_id)`);
   `model_data(run, donors='mean'|'first')` → `analysis.ModelData` with donor-aggregated rows so every `analysis.py`
@@ -305,6 +340,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   [--pairs] [--max-spawn N]`, `ext6_str_verify.py` (OLMoE vs transformers hooks → `results/verify_ext6_str_olmoe.json`),
   `ext6_str_analyze.py` (STR vs GN on the same cases; tables, figure, `results/ext6_str_summary.json`), `ext6_str_text.py`
   (section), `ext6_str_chain.sh`.
+- Phase 3: `ext7_wino_{build,scan,funnel,casesets}.py` (pairs, competence scan, funnel, case set); generic runners
+  `ext7_wino_{sweep,expert,grid,heads,joint,dla}.py --model --pairs --case-sets --out` (any STR pair parquet: pair_id, ids_a,
+  ids_b, str_pos, trig_a, trig_b), `ext7_wino_{verify,analyze,text}.py`; `ext7_{cf,role,ioi}_*.py` (CounterFact STR attention
+  sweep, role swap, IOI), `python -m moetrace.ext7_controls direct|section`; `ext8_{engine_verify,regress_compare,addback_run,
+  addback_analyze,addback_text}.py`.
 - Direction 6b: `ext6_str_grid.py <model> --out <str run> [--window 1|5] [--no-special-tokens]` (layer × position grid,
   units packed by suffix length), `ext6_str_grid_verify.py`, `ext6_str_grid_analyze.py` (heatmaps, peaks, last/middle
   ratio, sliding vs adding, GN comparison with the F4 `*_subject` runs), `ext6_str_grid_text.py`, `ext6_str_grid_chain.sh`.
@@ -330,6 +370,8 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   GN baselines = the Direction-1 `*_alllayers` runs restricted to the same cases. Direction 6b adds
   `str_grid_w{1,5}_rows.parquet` (donor level: case, pos, token group, layer, window bounds, Δ, rescue, p(true), rank) and
   `str_grid_w{1,5}_prefill.parquet` to `qwen3_str` and `mixtral_bos_str`.
+- Phase 3: `wino_<qwen3|mixtral_bos|mixtral_nobos|olmoe>` (competence scans), `wino_{qwen3,mixtral_bos}_str` (W2–W6, W4, grids,
+  heads), `wino_role_*`, `ioi_*`, `{qwen3,mixtral_bos}_str_attnsweep`, `*_addback` (add-back curves).
 Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`;
 figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,

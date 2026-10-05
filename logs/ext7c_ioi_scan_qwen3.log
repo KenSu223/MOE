@@ -1,0 +1,11 @@
+2026-10-04T07:34:15Z START ext7c-ioi-scan-qwen3 (waited 679s): python scripts/ext7_ioi_scan.py qwen3
+07:34:22   layer   0: load-wait 4.14s compute 0.75s  wf_rows=0
+07:34:28   layer   8: load-wait 0.52s compute 0.41s  wf_rows=0
+07:34:38   layer  16: load-wait 0.78s compute 0.41s  wf_rows=0
+07:34:47   layer  24: load-wait 0.75s compute 0.41s  wf_rows=0
+07:34:57   layer  32: load-wait 1.43s compute 0.41s  wf_rows=0
+07:35:07   layer  40: load-wait 0.68s compute 0.41s  wf_rows=0
+07:35:14   layer  47: load-wait 0.62s compute 0.41s  wf_rows=0
+07:35:14   pass done: 4800 prefill rows (T=20), 0 spawn rows, 57.0s
+07:35:14 summary: {"n_items": 1600, "clean_correct": 1600, "margin_clean": 1597, "margin_s2io": 1593, "top1_clean_io": 1267, "top1_both_s2io": 1150, "mean_d_clean": 6.2678125, "mean_d_s2io": -6.263125, "mean_d_s1io": -1.649453125, "by_template_type_margin_s2io": {"ABBA": 0.993, "BABA": 0.998}}
+2026-10-04T07:35:18Z END   ext7c-ioi-scan-qwen3 rc=0 (63s)

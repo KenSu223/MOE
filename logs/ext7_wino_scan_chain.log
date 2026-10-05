@@ -1,0 +1,80 @@
+2026-10-04T06:07:28Z START ext7-wino-scan-olmoe (waited 0s): python scripts/ext7_wino_scan.py olmoe
+06:07:33 olmoe: 3809 pairs, embed_std=0.009374 sigma=0.028122
+06:07:34 pass 1/4: 9333 rows, T <= 15
+06:07:36   layer   0: load-wait 1.34s compute 1.00s  wf_rows=0
+06:07:42   layer   8: load-wait 0.07s compute 0.62s  wf_rows=0
+06:07:46   layer  15: load-wait 0.07s compute 0.62s  wf_rows=0
+06:07:47   pass done: 9333 prefill rows (T=15), 0 spawn rows, 12.7s
+06:07:47 pass 2/4: 7368 rows, T <= 19
+06:07:58 pass 3/4: 5384 rows, T <= 26
+06:08:09 pass 4/4: 769 rows, T <= 33
+06:08:12 summary: {"n_pairs": 3809, "correct_both": 1952, "margin": 1325, "strict": 1120, "margin_and_top1_both": 290, "strict_and_top1_both": 244, "margin_assoc": 122, "margin_not_assoc": 1203, "strict_not_assoc": 1024, "margin_names": 218, "strict_names": 177, "margin_one_token_option": 1255, "margin_debiased": 283, "margin_trigger_in_context": 32, "mean_d_clean_a_margin": 3.7076639887971696, "mean_d_clean_b_margin": -3.4754283977004716, "mean_drop_str_margin": 7.183092386497641, "mean_gn_drop_margin": 3.169995485701651, "frac_gn_drop_ge_thr_both_margin": 0.8452830188679246, "n_passes": 4}
+2026-10-04T06:08:15Z END   ext7-wino-scan-olmoe rc=0 (47s)
+2026-10-04T06:08:15Z START ext7-wino-scan-qwen3 (waited 0s): python scripts/ext7_wino_scan.py qwen3
+06:08:19 qwen3: 4514 pairs, embed_std=0.020654 sigma=0.061961
+06:08:20 pass 1/4: 9688 rows, T <= 14
+06:08:25   layer   0: load-wait 3.59s compute 0.89s  wf_rows=0
+06:08:34   layer   8: load-wait 0.66s compute 0.58s  wf_rows=0
+06:08:44   layer  16: load-wait 0.66s compute 0.58s  wf_rows=0
+06:08:54   layer  24: load-wait 0.66s compute 0.58s  wf_rows=0
+06:09:04   layer  32: load-wait 0.66s compute 0.58s  wf_rows=0
+06:09:14   layer  40: load-wait 0.66s compute 0.58s  wf_rows=0
+06:09:22   layer  47: load-wait 0.67s compute 0.58s  wf_rows=0
+06:09:23   pass done: 9688 prefill rows (T=14), 0 spawn rows, 62.0s
+06:09:23 pass 2/4: 7777 rows, T <= 18
+06:10:10 pass 3/4: 6363 rows, T <= 22
+06:10:53 pass 4/4: 3256 rows, T <= 35
+06:11:29 summary: {"n_pairs": 4514, "correct_both": 2783, "margin": 2099, "strict": 813, "margin_and_top1_both": 313, "strict_and_top1_both": 118, "margin_assoc": 183, "margin_not_assoc": 1916, "strict_not_assoc": 755, "margin_names": 535, "strict_names": 302, "margin_one_token_option": 2028, "margin_debiased": 495, "margin_trigger_in_context": 60, "mean_d_clean_a_margin": 3.8882950214387804, "mean_d_clean_b_margin": -3.788277155788471, "mean_drop_str_margin": 7.676572177227251, "mean_gn_drop_margin": 1.245287934730824, "frac_gn_drop_ge_thr_both_margin": 0.38732729871367316, "n_passes": 4}
+2026-10-04T06:11:37Z END   ext7-wino-scan-qwen3 rc=0 (202s)
+2026-10-04T06:11:37Z START ext7-wino-scan-mixtral_nobos (waited 0s): python scripts/ext7_wino_scan.py mixtral_nobos
+06:11:50 mixtral_nobos: 2421 pairs, embed_std=0.011152 sigma=0.033455
+06:11:50 pass 1/3: 8074 rows, T <= 17
+06:12:00   layer   0: load-wait 6.67s compute 2.43s  wf_rows=0
+06:12:22   layer   8: load-wait 1.00s compute 1.92s  wf_rows=0
+06:12:46   layer  16: load-wait 0.97s compute 1.92s  wf_rows=0
+06:13:09   layer  24: load-wait 0.98s compute 1.92s  wf_rows=0
+06:13:29   layer  31: load-wait 0.97s compute 1.92s  wf_rows=0
+06:13:29   pass done: 8074 prefill rows (T=17), 0 spawn rows, 98.4s
+06:13:29 pass 2/3: 5600 rows, T <= 25
+[W1004 06:13:31.332058292 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2294284288 bytes (free: 1463222272, total: 23686938624).
+06:15:03 pass 3/3: 852 rows, T <= 38
+06:16:26 summary: {"n_pairs": 2421, "correct_both": 1489, "margin": 1109, "strict": 167, "margin_and_top1_both": 273, "strict_and_top1_both": 40, "margin_assoc": 113, "margin_not_assoc": 996, "strict_not_assoc": 157, "margin_names": 127, "strict_names": 48, "margin_one_token_option": 966, "margin_debiased": 255, "margin_trigger_in_context": 30, "mean_d_clean_a_margin": 3.7185527502254283, "mean_d_clean_b_margin": -3.5520739404869253, "mean_drop_str_margin": 7.270626690712353, "mean_gn_drop_margin": 0.49374436429215507, "frac_gn_drop_ge_thr_both_margin": 0.15058611361587015, "n_passes": 3}
+2026-10-04T06:16:33Z END   ext7-wino-scan-mixtral_nobos rc=0 (296s)
+2026-10-04T06:16:33Z START ext7-wino-scan-mixtral_bos (waited 0s): python scripts/ext7_wino_scan.py mixtral_bos
+06:16:46 mixtral_bos: 2421 pairs, embed_std=0.011152 sigma=0.033455
+06:16:47 pass 1/3: 7777 rows, T <= 18
+06:16:56   layer   0: load-wait 6.50s compute 2.34s  wf_rows=0
+06:17:15   layer   8: load-wait 0.27s compute 1.96s  wf_rows=0
+06:17:35   layer  16: load-wait 0.25s compute 1.95s  wf_rows=0
+06:17:57   layer  24: load-wait 0.58s compute 1.95s  wf_rows=0
+06:18:15   layer  31: load-wait 0.84s compute 1.96s  wf_rows=0
+06:18:15   pass done: 7777 prefill rows (T=18), 0 spawn rows, 87.5s
+06:18:15 pass 2/3: 5600 rows, T <= 25
+06:19:32 pass 3/3: 1149 rows, T <= 39
+06:20:47 summary: {"n_pairs": 2421, "correct_both": 1524, "margin": 1151, "strict": 167, "margin_and_top1_both": 295, "strict_and_top1_both": 43, "margin_assoc": 132, "margin_not_assoc": 1019, "strict_not_assoc": 154, "margin_names": 150, "strict_names": 48, "margin_one_token_option": 1005, "margin_debiased": 279, "margin_trigger_in_context": 30, "mean_d_clean_a_margin": 3.7772589052997394, "mean_d_clean_b_margin": -3.6450912250217202, "mean_drop_str_margin": 7.422350130321459, "mean_gn_drop_margin": 0.4807775847089487, "frac_gn_drop_ge_thr_both_margin": 0.14509122502172025, "n_passes": 3}
+2026-10-04T06:20:54Z END   ext7-wino-scan-mixtral_bos rc=0 (261s)
+2026-10-04T06:21:08Z START ext7-wino-scan-dev-qwen3 (waited 0s): python scripts/ext7_wino_scan.py qwen3 --split dev
+06:21:12 qwen3: 68 pairs, embed_std=0.020654 sigma=0.061961
+06:21:12 pass 1/1: 408 rows, T <= 29
+06:21:16   layer   0: load-wait 2.90s compute 0.65s  wf_rows=0
+06:21:25   layer   8: load-wait 1.18s compute 0.06s  wf_rows=0
+06:21:35   layer  16: load-wait 1.18s compute 0.06s  wf_rows=0
+06:21:45   layer  24: load-wait 1.18s compute 0.06s  wf_rows=0
+06:21:55   layer  32: load-wait 1.18s compute 0.06s  wf_rows=0
+06:22:05   layer  40: load-wait 1.18s compute 0.07s  wf_rows=0
+06:22:14   layer  47: load-wait 1.18s compute 0.06s  wf_rows=0
+06:22:14   pass done: 408 prefill rows (T=29), 0 spawn rows, 60.9s
+06:22:14 summary: {"n_pairs": 68, "correct_both": 35, "margin": 27, "strict": 11, "margin_and_top1_both": 2, "strict_and_top1_both": 1, "margin_assoc": 5, "margin_not_assoc": 22, "strict_not_assoc": 10, "margin_names": 3, "strict_names": 0, "margin_one_token_option": 26, "margin_debiased": 0, "margin_trigger_in_context": 1, "mean_d_clean_a_margin": 3.8333333333333335, "mean_d_clean_b_margin": -2.9953703703703702, "mean_drop_str_margin": 6.828703703703703, "mean_gn_drop_margin": 1.0914351851851851, "frac_gn_drop_ge_thr_both_margin": 0.4074074074074074, "n_passes": 1}
+2026-10-04T06:22:20Z END   ext7-wino-scan-dev-qwen3 rc=0 (72s)
+2026-10-04T06:22:20Z START ext7-wino-scan-dev-mixtral_nobos (waited 0s): python scripts/ext7_wino_scan.py mixtral_nobos --split dev
+06:22:28 mixtral_nobos: 42 pairs, embed_std=0.011152 sigma=0.033455
+06:22:28 pass 1/1: 252 rows, T <= 33
+06:22:36   layer   0: load-wait 6.65s compute 0.61s  wf_rows=0
+06:22:58   layer   8: load-wait 2.78s compute 0.12s  wf_rows=0
+06:23:22   layer  16: load-wait 2.77s compute 0.12s  wf_rows=0
+06:23:45   layer  24: load-wait 2.87s compute 0.12s  wf_rows=0
+06:24:05   layer  31: load-wait 2.77s compute 0.12s  wf_rows=0
+06:24:05   pass done: 252 prefill rows (T=33), 0 spawn rows, 96.5s
+06:24:05 summary: {"n_pairs": 42, "correct_both": 20, "margin": 11, "strict": 1, "margin_and_top1_both": 3, "strict_and_top1_both": 1, "margin_assoc": 1, "margin_not_assoc": 10, "strict_not_assoc": 1, "margin_names": 0, "strict_names": 0, "margin_one_token_option": 10, "margin_debiased": 0, "margin_trigger_in_context": 0, "mean_d_clean_a_margin": 2.9545454545454546, "mean_d_clean_b_margin": -3.4318181818181817, "mean_drop_str_margin": 6.386363636363637, "mean_gn_drop_margin": 0.2727272727272727, "frac_gn_drop_ge_thr_both_margin": 0.09090909090909091, "n_passes": 1}
+2026-10-04T06:24:13Z END   ext7-wino-scan-dev-mixtral_nobos rc=0 (113s)
+chain done

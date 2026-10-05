@@ -1,0 +1,286 @@
+{
+ "qwen3": {
+  "hit_groups": 983,
+  "W1_not_two_items": 699,
+  "W1_twins": 284,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 194,
+    "remaining": 90
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 90
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 11,
+    "remaining": 79
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 79
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 79
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 11,
+    "remaining": 68
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 68
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 68
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 68
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 0,
+    "remaining": 68
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 0,
+    "remaining": 68
+   }
+  ],
+  "kept": 68,
+  "special_tokens": true,
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "kept_one_token_option": 67,
+  "kept_names": 13,
+  "kept_trigger_in_context": 1,
+  "kept_debiased": 0,
+  "median_tokens": 18.0,
+  "max_tokens": 29
+ },
+ "mixtral_nobos": {
+  "hit_groups": 983,
+  "W1_not_two_items": 699,
+  "W1_twins": 284,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 194,
+    "remaining": 90
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 90
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 31,
+    "remaining": 59
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 59
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 59
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 17,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 0,
+    "remaining": 42
+   }
+  ],
+  "kept": 42,
+  "special_tokens": false,
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "kept_one_token_option": 36,
+  "kept_names": 6,
+  "kept_trigger_in_context": 0,
+  "kept_debiased": 0,
+  "median_tokens": 19.5,
+  "max_tokens": 33
+ },
+ "mixtral_bos": {
+  "hit_groups": 983,
+  "W1_not_two_items": 699,
+  "W1_twins": 284,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 194,
+    "remaining": 90
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 90
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 31,
+    "remaining": 59
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 59
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 59
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 17,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 0,
+    "remaining": 42
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 0,
+    "remaining": 42
+   }
+  ],
+  "kept": 42,
+  "special_tokens": true,
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "kept_one_token_option": 36,
+  "kept_names": 6,
+  "kept_trigger_in_context": 0,
+  "kept_debiased": 0,
+  "median_tokens": 20.5,
+  "max_tokens": 34
+ },
+ "olmoe": {
+  "hit_groups": 983,
+  "W1_not_two_items": 699,
+  "W1_twins": 284,
+  "steps": [
+   {
+    "rule": "W2_trigger_not_single_final_word",
+    "dropped": 194,
+    "remaining": 90
+   },
+   {
+    "rule": "W2_blank_position",
+    "dropped": 0,
+    "remaining": 90
+   },
+   {
+    "rule": "W3_trigger_multi_token",
+    "dropped": 15,
+    "remaining": 75
+   },
+   {
+    "rule": "W3_trigger_id_depends_on_prompt",
+    "dropped": 0,
+    "remaining": 75
+   },
+   {
+    "rule": "W3_same_trigger_token",
+    "dropped": 0,
+    "remaining": 75
+   },
+   {
+    "rule": "W4_length_mismatch",
+    "dropped": 18,
+    "remaining": 57
+   },
+   {
+    "rule": "W4_option_span_mismatch",
+    "dropped": 0,
+    "remaining": 57
+   },
+   {
+    "rule": "W4_context_tokens_differ",
+    "dropped": 0,
+    "remaining": 57
+   },
+   {
+    "rule": "W4_identical_prompts",
+    "dropped": 0,
+    "remaining": 57
+   },
+   {
+    "rule": "W5_option_is_final",
+    "dropped": 0,
+    "remaining": 57
+   },
+   {
+    "rule": "W6_duplicate_context",
+    "dropped": 0,
+    "remaining": 57
+   }
+  ],
+  "kept": 57,
+  "special_tokens": true,
+  "repo": "allenai/OLMoE-1B-7B-0125",
+  "kept_one_token_option": 56,
+  "kept_names": 9,
+  "kept_trigger_in_context": 1,
+  "kept_debiased": 0,
+  "median_tokens": 18.0,
+  "max_tokens": 30
+ }
+}

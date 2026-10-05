@@ -1,0 +1,57 @@
+run,model,task,donors,ordering,ceiling,r(1),r(10),r(all clean-active),max r (k),AUC log k,AUC k/K,AUC log k (of ceiling),k50/80/90 ceiling,k50/80/90 drop,"case k80 ceiling (median [IQR], reached)",case k answer restored,top-1 at k=10 / all
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,oracle,0.531,0.201,0.466,0.511,0.607 (320),0.471,0.572,0.887,2/6/16,24/never/never,"5 [3, 24], 1.00","48 [4, never], 0.63",0.06 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,pop,0.531,0.097,0.348,0.511,0.565 (320),0.383,0.524,0.722,6/24/48,48/never/never,"16 [7, 48], 0.98","192 [16, never], 0.58",0.04 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,layerwise,0.531,0.097,0.236,0.511,0.549 (320),0.333,0.507,0.627,16/48/64,96/never/never,"32 [24, 96], 0.98","192 [32, never], 0.56",0.01 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,dla,0.531,0.185,0.491,0.511,0.649 (192),0.505,0.620,0.952,2/6/9,12/never/never,"5 [3, 12], 1.00","16 [4, never], 0.72",0.08 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,vnorm,0.531,0.098,0.253,0.511,0.515 (256),0.332,0.483,0.626,12/48/96,128/never/never,"48 [24, 64], 0.98","never [32, never], 0.44",0.00 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,weight,0.531,0.005,0.078,0.511,0.511 (384),0.208,0.420,0.391,48/192/256,320/never/never,"96 [48, 192], 0.96","never [64, never], 0.44",0.00 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,donor mean,rand,0.531,0.001,0.023,0.511,0.511 (384),0.096,0.267,0.181,192/320/384,384/never/never,"320 [320, 384], 0.95","never [320, never], 0.42",0.00 / 0.07
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,oracle,0.535,0.196,0.454,0.508,0.607 (320),0.464,0.567,0.866,2/7/16,24/never/never,"7 [2, 48], 0.93","48 [5, never], 0.66",0.04 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,pop,0.535,0.100,0.342,0.508,0.566 (320),0.381,0.523,0.712,6/24/48,64/never/never,"24 [7, 128], 0.87","256 [16, never], 0.56",0.03 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,layerwise,0.535,0.102,0.232,0.508,0.548 (320),0.331,0.505,0.619,16/48/64,96/never/never,"48 [24, 128], 0.86","128 [24, never], 0.58",0.01 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,dla,0.535,0.186,0.486,0.508,0.649 (192),0.503,0.619,0.941,2/7/10,12/never/never,"6 [3, 16], 0.94","24 [4, never], 0.73",0.07 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,vnorm,0.535,0.099,0.244,0.508,0.510 (256),0.326,0.478,0.609,16/48/96,192/never/never,"48 [24, 128], 0.84","never [24, never], 0.46",0.00 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,weight,0.535,0.003,0.083,0.508,0.508 (384),0.207,0.417,0.387,48/192/256,384/never/never,"96 [48, 320], 0.82","never [48, never], 0.48",0.00 / 0.05
+cf_qwen3,Qwen3-30B-A3B-Base,cf,first donor,rand,0.535,0.002,0.023,0.508,0.508 (384),0.096,0.266,0.179,256/320/384,384/never/never,"320 [320, 384], 0.79","never [256, never], 0.44",0.00 / 0.05
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,oracle,0.409,0.132,0.431,0.403,0.517 (48),0.371,0.457,0.906,2/5/6,32/never/never,"5 [2, 9], 1.00","48 [7, never], 0.50",0.08 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,pop,0.409,0.065,0.366,0.403,0.484 (48),0.307,0.417,0.749,4/8/12,never/never/never,"9 [5, 16], 1.00","never [16, never], 0.45",0.03 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,layerwise,0.409,0.060,0.352,0.403,0.491 (48),0.292,0.420,0.713,5/9/12,never/never/never,"9 [6, 16], 1.00","never [16, never], 0.49",0.03 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,dla,0.409,0.103,0.440,0.403,0.533 (48),0.367,0.470,0.896,3/6/7,24/never/never,"5 [3, 9], 1.00","24 [7, never], 0.53",0.09 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,vnorm,0.409,-0.021,0.081,0.403,0.403 (64),0.127,0.292,0.309,16/24/32,never/never/never,"24 [24, 32], 0.96","never [24, never], 0.37",0.01 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,weight,0.409,0.032,0.206,0.403,0.403 (64),0.188,0.298,0.460,10/48/48,never/never/never,"32 [12, 48], 0.99","never [48, never], 0.37",0.01 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,donor mean,rand,0.409,0.007,0.079,0.403,0.403 (64),0.111,0.223,0.272,32/64/64,never/never/never,"48 [48, 64], 0.95","never [64, never], 0.37",0.00 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,oracle,0.410,0.130,0.427,0.400,0.514 (48),0.367,0.452,0.894,2/5/6,48/never/never,"5 [3, 12], 0.91","48 [7, never], 0.54",0.08 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,pop,0.410,0.062,0.361,0.400,0.482 (48),0.304,0.414,0.740,4/9/12,never/never/never,"9 [4, 24], 0.89","never [12, never], 0.49",0.05 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,layerwise,0.410,0.058,0.343,0.400,0.489 (48),0.287,0.416,0.700,5/9/16,never/never/never,"10 [6, 24], 0.90","64 [16, never], 0.50",0.04 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,dla,0.410,0.102,0.440,0.400,0.528 (48),0.365,0.467,0.889,3/6/7,24/never/never,"6 [3, 10], 0.92","24 [6, never], 0.58",0.10 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,vnorm,0.410,-0.023,0.076,0.400,0.400 (64),0.122,0.289,0.298,16/24/32,never/never/never,"24 [24, 48], 0.78","never [32, never], 0.37",0.00 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,weight,0.410,0.029,0.205,0.400,0.400 (64),0.185,0.295,0.452,12/48/48,never/never/never,"24 [9, 64], 0.81","never [48, never], 0.37",0.02 / 0.03
+cf_mixtral,Mixtral-8x7B (BOS),cf,first donor,rand,0.410,0.007,0.075,0.400,0.400 (64),0.108,0.220,0.264,32/64/64,never/never/never,"64 [32, never], 0.74","never [64, never], 0.37",0.00 / 0.03
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,oracle,0.843,0.214,0.553,0.837,0.846 (320),0.591,0.779,0.701,4/48/128,7/192/never,"32 [12, 96], 1.00","7 [3, 48], 0.98",0.23 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,pop,0.843,0.124,0.444,0.837,0.837 (384),0.531,0.770,0.630,9/48/96,16/192/never,"32 [24, 96], 1.00","16 [6, 48], 0.97",0.15 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,layerwise,0.843,0.133,0.321,0.837,0.837 (384),0.462,0.750,0.548,24/64/128,32/192/never,"64 [48, 96], 1.00","32 [24, 64], 0.97",0.05 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,dla,0.843,0.174,0.606,0.837,0.888 (256),0.647,0.854,0.768,4/16/32,6/48/never,"16 [10, 24], 1.00","7 [4, 16], 0.98",0.24 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,vnorm,0.843,0.029,0.248,0.837,0.840 (320),0.438,0.768,0.520,24/64/96,32/128/never,"64 [48, 96], 1.00","32 [16, 64], 0.96",0.03 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,weight,0.843,0.020,0.123,0.837,0.837 (384),0.320,0.676,0.379,64/128/192,96/256/never,"128 [96, 192], 1.00","96 [48, 128], 0.95",0.03 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,donor mean,rand,0.843,0.005,0.028,0.837,0.837 (384),0.170,0.481,0.202,192/320/320,192/384/never,"320 [256, 320], 0.99","256 [192, 320], 0.95",0.00 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,oracle,0.843,0.214,0.553,0.837,0.846 (320),0.591,0.779,0.701,4/48/128,7/192/never,"32 [12, 96], 1.00","7 [3, 48], 0.98",0.23 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,pop,0.843,0.124,0.444,0.837,0.837 (384),0.531,0.770,0.630,9/48/96,16/192/never,"32 [24, 96], 1.00","16 [6, 48], 0.97",0.15 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,layerwise,0.843,0.133,0.321,0.837,0.837 (384),0.462,0.750,0.548,24/64/128,32/192/never,"64 [48, 96], 1.00","32 [24, 64], 0.97",0.05 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,dla,0.843,0.174,0.606,0.837,0.888 (256),0.647,0.854,0.768,4/16/32,6/48/never,"16 [10, 24], 1.00","7 [4, 16], 0.98",0.24 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,vnorm,0.843,0.029,0.248,0.837,0.840 (320),0.438,0.768,0.520,24/64/96,32/128/never,"64 [48, 96], 1.00","32 [16, 64], 0.96",0.03 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,weight,0.843,0.020,0.123,0.837,0.837 (384),0.320,0.676,0.379,64/128/192,96/256/never,"128 [96, 192], 1.00","96 [48, 128], 0.95",0.03 / 0.34
+wino_qwen3,Qwen3-30B-A3B-Base,wino,first donor,rand,0.843,0.005,0.028,0.837,0.837 (384),0.170,0.481,0.202,192/320/320,192/384/never,"320 [256, 320], 0.99","256 [192, 320], 0.95",0.00 / 0.34
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,oracle,0.787,0.192,0.674,0.788,0.813 (48),0.580,0.735,0.737,3/8/16,5/48/never,"8 [7, 12], 1.00","5 [3, 8], 0.96",0.44 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,pop,0.787,0.147,0.602,0.788,0.811 (48),0.534,0.717,0.678,4/12/24,7/32/never,"12 [9, 16], 1.00","7 [4, 12], 0.95",0.39 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,layerwise,0.787,0.147,0.550,0.788,0.815 (48),0.494,0.704,0.628,5/16/24,9/32/never,"16 [12, 24], 1.00","9 [5, 16], 0.95",0.35 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,dla,0.787,0.147,0.647,0.788,0.821 (48),0.553,0.735,0.702,4/10/16,6/32/never,"10 [8, 16], 1.00","6 [4, 10], 0.96",0.42 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,vnorm,0.787,-0.049,0.288,0.788,0.788 (64),0.268,0.598,0.340,16/24/32,16/never/never,"24 [24, 24], 1.00","16 [12, 24], 0.88",0.07 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,weight,0.787,0.079,0.443,0.788,0.788 (64),0.416,0.624,0.528,9/24/48,16/never/never,"24 [24, 32], 1.00","16 [6, 32], 0.89",0.20 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,donor mean,rand,0.787,0.018,0.160,0.788,0.788 (64),0.229,0.456,0.291,32/48/64,48/never/never,"48 [48, 48], 1.00","32 [24, 48], 0.88",0.01 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,oracle,0.787,0.192,0.674,0.788,0.813 (48),0.580,0.735,0.737,3/8/16,5/48/never,"8 [7, 12], 1.00","5 [3, 8], 0.96",0.44 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,pop,0.787,0.147,0.602,0.788,0.811 (48),0.534,0.717,0.678,4/12/24,7/32/never,"12 [9, 16], 1.00","7 [4, 12], 0.95",0.39 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,layerwise,0.787,0.147,0.550,0.788,0.815 (48),0.494,0.704,0.628,5/16/24,9/32/never,"16 [12, 24], 1.00","9 [5, 16], 0.95",0.35 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,dla,0.787,0.147,0.647,0.788,0.821 (48),0.553,0.735,0.702,4/10/16,6/32/never,"10 [8, 16], 1.00","6 [4, 10], 0.96",0.42 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,vnorm,0.787,-0.049,0.288,0.788,0.788 (64),0.268,0.598,0.340,16/24/32,16/never/never,"24 [24, 24], 1.00","16 [12, 24], 0.88",0.07 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,weight,0.787,0.079,0.443,0.788,0.788 (64),0.416,0.624,0.528,9/24/48,16/never/never,"24 [24, 32], 1.00","16 [6, 32], 0.89",0.20 / 0.44
+wino_mixtral,Mixtral-8x7B (BOS),wino,first donor,rand,0.787,0.018,0.160,0.788,0.788 (64),0.229,0.456,0.291,32/48/64,48/never/never,"48 [48, 48], 1.00","32 [24, 48], 0.88",0.01 / 0.44

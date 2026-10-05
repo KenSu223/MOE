@@ -1,0 +1,16 @@
+2026-10-04T10:00:47Z START ext7c-w4-ioi-mixtral_bos-s1io (waited 1918s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/ioi/pairs_s1io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s1io.json --out ioi_mixtral_bos_s1io --splits discovery,validation,rep_discovery,rep_validation --agent ext7-controls
+10:00:49 mixtral -> ioi_mixtral_bos_s1io: 512 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+10:00:55 pass 1/1: 1024 prefill rows, 3072 multi rows
+10:01:03   layer   0: load-wait 6.09s compute 0.83s  wf_rows=3072
+10:01:23   layer   8: load-wait 2.47s compute 0.37s  wf_rows=3072
+10:01:45   layer  16: load-wait 2.17s compute 0.37s  wf_rows=3072
+10:02:02   layer  24: load-wait 1.57s compute 0.37s  wf_rows=3072
+10:02:22   layer  31: load-wait 2.23s compute 0.37s  wf_rows=3072
+10:02:22   pass done: 1024 prefill rows (T=21), 3072 spawn rows, 86.1s
+10:02:22 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.22, drop 7.22)
+10:02:22 denoise  all_block all     : effect/drop +1.000 (mean effect +7.22, drop 7.22)
+10:02:22 denoise  all_moe   all     : effect/drop -0.133 (mean effect -0.96, drop 7.22)
+10:02:22 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.22, drop 7.22)
+10:02:22 noise    all_block all     : effect/drop +1.000 (mean effect +7.22, drop 7.22)
+10:02:22 noise    all_moe   all     : effect/drop +0.002 (mean effect +0.01, drop 7.22)
+2026-10-04T10:02:29Z END   ext7c-w4-ioi-mixtral_bos-s1io rc=0 (102s)

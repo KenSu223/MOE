@@ -1,0 +1,245 @@
+{
+ "n_pairs": 12,
+ "kinds": [
+  "attn_layer",
+  "block",
+  "layer"
+ ],
+ "layers": 16,
+ "pairs": [
+  {
+   "case_id": 4626,
+   "prompt": "Charles, Prince of Viana died in",
+   "donor": "Henry Pickering Bowditch died in",
+   "true": "Barcelona",
+   "foil": "Boston"
+  },
+  {
+   "case_id": 6842,
+   "prompt": "Boiling Points premiered on",
+   "donor": "The Leftovers premiered on",
+   "true": "MTV",
+   "foil": "HBO"
+  },
+  {
+   "case_id": 7128,
+   "prompt": "Lannick Gautry spoke the language",
+   "donor": "Cees Nooteboom spoke the language",
+   "true": "French",
+   "foil": "Dutch"
+  },
+  {
+   "case_id": 7515,
+   "prompt": "Adobe Flash is created by",
+   "donor": "iPod Nano is created by",
+   "true": "Adobe",
+   "foil": "Apple"
+  },
+  {
+   "case_id": 17549,
+   "prompt": "Peter Gunn debuted on",
+   "donor": "Wolf Lake debuted on",
+   "true": "NBC",
+   "foil": "CBS"
+  },
+  {
+   "case_id": 3722,
+   "prompt": "The law in Wallonia declares the language",
+   "donor": "The law in Palau declares the language",
+   "true": "French",
+   "foil": "English"
+  },
+  {
+   "case_id": 19965,
+   "prompt": "The Fantastic Journey premieres on",
+   "donor": "Boxing After Dark premieres on",
+   "true": "NBC",
+   "foil": "HBO"
+  },
+  {
+   "case_id": 10618,
+   "prompt": "The original language of Flying Rhino Junior High is",
+   "donor": "The original language of Maria egiziaca is",
+   "true": "English",
+   "foil": "Italian"
+  },
+  {
+   "case_id": 6804,
+   "prompt": "Count Basie, performing on the",
+   "donor": "Henry Halstead, performing on the",
+   "true": "piano",
+   "foil": "violin"
+  },
+  {
+   "case_id": 6467,
+   "prompt": "Pentium II was developed by",
+   "donor": "Windows Internet Explorer 9 was developed by",
+   "true": "Intel",
+   "foil": "Microsoft"
+  },
+  {
+   "case_id": 21243,
+   "prompt": "Taj Mahal is follower of",
+   "donor": "Saint Fabiola is follower of",
+   "true": "Islam",
+   "foil": "Christianity"
+  },
+  {
+   "case_id": 12398,
+   "prompt": "Lopburi is located in",
+   "donor": "Wisconsin Highway 101 is located in",
+   "true": "Thailand",
+   "foil": "Wisconsin"
+  }
+ ],
+ "delta_clean_maxdiff_vs_hf": 0.09375,
+ "delta_donor_maxdiff_vs_hf": 0.283203125,
+ "attn_layer_n": 192,
+ "attn_layer_maxdiff": 0.46875,
+ "attn_layer_meanabsdiff": 0.06988271077473958,
+ "attn_layer_frac_within_0.25": 0.953125,
+ "attn_layer_rescue_corr_vs_hf": 0.9962890219407075,
+ "attn_layer_mean_curve_engine": [
+  0.001,
+  0.043,
+  0.084,
+  -0.095,
+  0.125,
+  0.14,
+  0.173,
+  0.028,
+  0.152,
+  0.298,
+  0.562,
+  0.788,
+  2.041,
+  2.348,
+  0.242,
+  1.375
+ ],
+ "attn_layer_mean_curve_hf": [
+  -0.014,
+  0.041,
+  0.076,
+  -0.114,
+  0.104,
+  0.152,
+  0.172,
+  0.02,
+  0.167,
+  0.332,
+  0.552,
+  0.838,
+  2.011,
+  2.34,
+  0.234,
+  1.367
+ ],
+ "attn_layer_mean_curve_maxdiff": 0.04931641501995421,
+ "attn_layer_identity_maxdiff": 0.25,
+ "block_n": 192,
+ "block_maxdiff": 0.34375,
+ "block_meanabsdiff": 0.06756591796875,
+ "block_frac_within_0.25": 0.9583333333333334,
+ "block_rescue_corr_vs_hf": 0.9979864163101364,
+ "block_mean_curve_engine": [
+  0.001,
+  0.026,
+  0.034,
+  -0.113,
+  0.155,
+  0.061,
+  0.038,
+  -0.039,
+  0.203,
+  0.399,
+  0.794,
+  1.284,
+  3.035,
+  3.495,
+  0.211,
+  1.658
+ ],
+ "block_mean_curve_hf": [
+  0.006,
+  0.059,
+  0.046,
+  -0.109,
+  0.151,
+  0.027,
+  0.08,
+  -0.028,
+  0.236,
+  0.403,
+  0.769,
+  1.291,
+  3.011,
+  3.518,
+  0.25,
+  1.674
+ ],
+ "block_mean_curve_maxdiff": 0.04248046533515057,
+ "block_identity_maxdiff": 0.25,
+ "layer_n": 192,
+ "layer_maxdiff": 0.3828125,
+ "layer_meanabsdiff": 0.060333251953125,
+ "layer_frac_within_0.25": 0.9739583333333334,
+ "layer_rescue_corr_vs_hf": 0.9925054784756249,
+ "layer_mean_curve_engine": [
+  -0.031,
+  0.016,
+  0.074,
+  -0.049,
+  0.039,
+  -0.037,
+  0.024,
+  -0.036,
+  0.085,
+  0.029,
+  0.243,
+  0.375,
+  1.06,
+  1.325,
+  -0.065,
+  0.387
+ ],
+ "layer_mean_curve_hf": [
+  -0.003,
+  0.018,
+  0.074,
+  -0.05,
+  0.069,
+  -0.039,
+  0.025,
+  -0.007,
+  0.061,
+  0.045,
+  0.215,
+  0.352,
+  1.028,
+  1.36,
+  -0.027,
+  0.395
+ ],
+ "layer_mean_curve_maxdiff": 0.03759765004118282,
+ "layer_identity_maxdiff": 0.25,
+ "calibration_gn_ext2": {
+  "attn_layer": {
+   "maxdiff": 1.609375,
+   "meanabsdiff": 0.18733903765678406,
+   "rescue_corr": 0.9899363676660085
+  },
+  "block": {
+   "maxdiff": 1.1875,
+   "meanabsdiff": 0.17974528670310974,
+   "rescue_corr": 0.9935673564110311
+  },
+  "layer": {
+   "maxdiff": 1.12109375,
+   "meanabsdiff": 0.14991874992847443,
+   "rescue_corr": 0.9833392668586902
+  }
+ },
+ "pass_total_s": 4.078665256500244,
+ "created_utc": "2026-10-04T07:07:16Z"
+}

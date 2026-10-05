@@ -1,6 +1,6 @@
 # Extensions of the expert-aware causal-tracing reproduction (arXiv 2606.03780)
 
-Assembled 2026-09-28 17:42 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
+Assembled 2026-10-05 05:54 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
 
 ## Status
 
@@ -17,6 +17,10 @@ Assembled 2026-09-28 17:42 UTC from results/sections/ by scripts/build_extension
 | 5-F5 | Do the layer/expert selections and effect sizes change under log p(true), p(true), rank of the true token and KL to the clean distribution instead of logit(true) - logit(foil)? | `results/sections/ext5_f5_metrics.md` | included |
 | 6 | Do the paper's layer and expert selections survive when the subject is replaced by a same-relation subject whose answer is the foil (STR, the corruption recommended by Zhang & Nanda) instead of being noised (GN)? | `results/sections/ext6_str.md` | included |
 | 6b | Zhang & Nanda Section 4.1 / Figure 4 for the paper's MoE-output patch: which token positions and layers carry the rescue, is the last subject token special, and do logit difference and probability agree? (single layer and 5-layer sliding window) | `results/sections/ext6_str_grid.md` | included |
+| 7-8 | How many experts restore the answer, are greedy add-back strategies good enough, and is WinoGrande attention-driven like IOI or MoE-driven like factual recall? | `results/sections/ext7_synthesis.md` | included |
+| 7 | Filling the blank with each twin's answer and predicting the sentence-final trigger: which layers, sublayers, positions, heads and experts carry the repair? | `results/sections/ext7_wino.md` | included |
+| 7b | Does a second WinoGrande corruption site (swapping the two candidates' roles) or IOI (the attention-driven reference) change the attention / MoE balance, measured with the same protocol? | `results/sections/ext7_controls.md` | included |
+| 8 | Patching experts back jointly at the final position: ceilings, saturation curves, how many experts restore the answer, and greedy vs better strategies (CounterFact STR and WinoGrande). | `results/sections/ext8_addback.md` | included |
 
 
 ## Direction 1: Layer-then-expert versus joint layer × expert search
@@ -4352,3 +4356,1094 @@ A ratio below 1 means the five layers restore overlapping information (the joint
 Caveats. MoE-output patches only (Meng et al. also plot hidden states and attention; the executor supports `resid` and `attn_layer` at p, not run here). Token groups have different case counts; means are over the cases that have the group. The layer-summed values add single-layer effects and over-count shared information (Direction 5-F1); they rank groups, they are not joint effects. Mixtral without BOS (the paper's protocol) is not in this grid yet.
 
 Files: `scripts/ext6_str_grid.py` (grid passes), `scripts/ext6_str_grid_verify.py`, `scripts/ext6_str_grid_analyze.py`, `scripts/ext6_str_grid_text.py`, `scripts/ext6_str_grid_chain.sh`; rows `results/{qwen3_str,mixtral_bos_str}/str_grid_w{1,5}_rows.parquet` (donor level: case, position, token group, layer, window bounds, Δ, rescue, p(true), rank) and `str_grid_w*_prefill.parquet`; tables `results/tables/ext6_str_grid_*`; figures `results/figures/ext6_str_grid_*`; numbers `results/ext6_str_grid_summary.json`.
+
+
+## Direction 7-8: Phase 3 synthesis: expert add-back and attention vs MoE across tasks
+
+**Summary.** Phase 3 answers the two questions from the team's notes, both under symmetric token replacement (STR) only, on Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS.
+
+**(1) How many experts restore the answer?** Patching every MoE output at the final position restores only part of the drop on CounterFact (Qwen3 0.53, Mixtral 0.41) but most of it on WinoGrande (0.84, 0.79).
+- With all experts patched, the answer flips back in 44 % / 37 % of CounterFact cases and in 95 % / 89 % of WinoGrande cases.
+- A handful of experts carries the expert repair: 80 % of that ceiling takes k = 4–6 experts on CounterFact and 7–10 on WinoGrande with adaptive greedy, out of 384 (Qwen3) or 64 (Mixtral).
+- Greedy is effectively optimal: beam search and the exact optimum within each case's top 10 add ≤ 0.016 of the drop, below bf16 run-to-run noise.
+- A patch-free ranking by direct logit attribution is as good as the single-patch oracle. The paper's layer-first order is below every ranking that uses each expert's effect on the answer (oracle, DLA, population), though above routing weight and random.
+
+**(2) Attention or MoE?** At the final position the corruption can only enter through attention: the final token is shared and the MoE is per-token, so patching all attention outputs restores the clean state exactly. The question is therefore asked of the single-layer patches, of the all-MoE patch and of the direct paths to the logit difference. On every measure the tasks order the same way: IOI ≫ CounterFact > WinoGrande role swap > WinoGrande option swap. As shares of the positive single-layer rescue, attention carries:
+- IOI 0.92 / 0.80;
+- CounterFact 0.54 / 0.58;
+- WinoGrande role swap 0.32 / 0.39;
+- WinoGrande option swap 0.16 / 0.34.
+
+The hypothesis "WinoGrande is IOI-like (attention-driven)" is rejected at the final position. WinoGrande is the most MoE-heavy of the three tasks, with one specific late expert per model (Qwen3 L41E117, Mixtral L20E000) that is not a CounterFact expert. Attention still moves the option's identity to the final token, gradually over L19–L41 in Qwen3 and in one step at L13 in Mixtral, through heads that look coreference-like.
+
+### What was run
+
+Phase 3 of RESEARCH_PLAN.md, three sub-agents plus coordinator, ≈ 3.9 GPU-h in total (ext8 ≈ 82 min, ext7-wino ≈ 70 min, ext7-controls ≈ 83 min, coordinator scans and checks ≈ 25 min). All runs follow Zhang & Nanda's recommendations:
+- STR only, with no Gaussian noise anywhere (user decision; Gaussian noise on one option token does not hide which of two in-context candidates is meant);
+- logit difference LD(r, r′) normalised by the drop;
+- single-layer patches first;
+- both directions of every symmetric pair;
+- head detections at ≥ 2 SD;
+- several corruption sites.
+
+They also keep the criteria inherited from Direction 6: the clean margin, the donor margin, token symmetry, single-token continuations, a non-final STR site, fixed splits and the recurrence gate.
+
+Tasks:
+- **CounterFact STR**: Direction-6 donors.
+- **WinoGrande option swap**: the blank filled with each twin's answer, predicting the sentence-final single-token trigger. 776 pairs pass the margin under all three scanned protocols; 128 / 128 pairs are used plus 128 / 128 for replication.
+- **WinoGrande role swap**: the two candidates' first mentions exchanged; name pairs only.
+- **IOI**: Wang et al. templates. Corruption (i) replaces S2 by IO; corruption (ii) replaces S1 and IO by other names.
+
+New engine capability: `multi` spawns with `attn_layer` / `block` steps, and every kind in the noising direction. These were verified against transformers hooks on OLMoE (r 0.9994); `verify_olmoe.json` is unchanged. Details are in the three sections that follow:
+- 7: WinoGrande, `ext7_wino.md`;
+- 7b: role swap, IOI and the three-task table, `ext7_controls.md`;
+- 8: add-back curves, `ext8_addback.md`.
+
+### One table
+
+**Final position, validation. Columns: attention share of the positive single-layer rescue; all-MoE patch M (denoising); direct-path attention / MoE writes; experts to 80 % of the all-MoE ceiling. Rescue is a fraction of the drop.**
+
+| Task (STR site) | Model | Drop (logits) | Attention share | All-MoE M | Direct path attn / MoE | k for 80 % of ceiling (greedy / random, of K) | Answer restored by all MoE |
+|---|---|---|---|---|---|---|---|
+| IOI (i) S2 → IO | Qwen3 | 12.65 | 0.92 [0.90, 0.94] | −0.27 | 1.40 / −0.40 | – | – |
+| IOI (i) S2 → IO | Mixtral BOS | 11.28 | 0.80 [0.79, 0.81] | −0.02 | 1.17 / −0.17 | – | – |
+| CounterFact | Qwen3 | 11.67 | 0.54 [0.51, 0.57] | 0.53 [0.49, 0.57] | 0.50 / 0.51 | 5 / 320 of 384 | 44 % |
+| CounterFact | Mixtral BOS | 12.98 | 0.58 [0.55, 0.60] | 0.41 [0.37, 0.45] | 0.63 / 0.36 | 4 / 64 of 64 | 37 % |
+| WinoGrande role swap | Qwen3 | 6.94 | 0.32 [0.29, 0.35] | 0.77 | 0.19 / 0.81 | – | – |
+| WinoGrande role swap | Mixtral BOS | 6.70 | 0.39 [0.38, 0.41] | 0.70 | 0.38 / 0.62 | – | – |
+| WinoGrande option swap | Qwen3 | 8.14 | 0.16 [0.13, 0.20] | 0.84 [0.83, 0.86] | 0.05 / 0.95 | 10 / 320 of 384 | 95 % |
+| WinoGrande option swap | Mixtral BOS | 7.69 | 0.34 [0.33, 0.36] | 0.79 [0.76, 0.81] | 0.29 / 0.71 | 7 / 48 of 64 | 89 % |
+
+Values are from `results/tables/ext7_controls_three_task.md` and the ext8 comparison table. Notes:
+- The all-attention patch gives A = 1.00 in every row; it is a sanity check, not a measurement.
+- A direct-path share above 1 means the MoE writes against the answer (IOI).
+- Add-back curves were run for CounterFact and the WinoGrande option swap, as planned.
+
+### Reading
+
+1. **How many experts does it take, and is greedy good enough?** For the curve of remaining gap against the number of experts added back, the ceiling is the all-MoE patch.
+   - **The ceiling.** On CounterFact it is about half the drop: the rest of the repair needs attention, i.e. the subject's identity re-read from context. Even with all experts patched back, the answer flips back in fewer than half the cases. On WinoGrande the all-MoE patch restores 0.79–0.84 and flips 89–95 % of the answers back.
+   - **How many experts reach 80 % of the ceiling.** It takes 4–6 experts (CounterFact) and 7–10 (WinoGrande) with adaptive greedy; random orders need 48–320.
+   - **Overshoot.** Subsets can exceed the all-MoE ceiling (max r 0.61 vs 0.53 in Qwen3 CounterFact), because some clean expert outputs work against the answer. "Maximum rescue = patching all MoEs" is therefore not an upper bound for subsets.
+   - **Greedy is good enough.** Adaptive greedy beats every static ranking by +0.04 to +0.12 at k = 10. Beam search (width 4) and the exact optimum within the top 10 are within bf16 noise of greedy.
+   - **Static rankings.** Static rankings fail mainly where experts interact: Qwen3 WinoGrande needs 48 experts with the per-case static oracle but 10 with greedy.
+   - **A cheap ranking that works.** The patch-free direct-logit-attribution ranking matches the oracle, so a good expert ranking does not need one patch per expert.
+   - **The paper's layer-first order is below every effect-based ranking** (oracle, DLA, population; k for 80 %: 48 / 9 / 64 / 16 vs greedy 5 / 4 / 10 / 7), though above routing weight and random. Over k = 1..15, where greedy is also evaluated, AUC over log k greedy / oracle / DLA / layer-first is 0.39 / 0.37 / 0.37 / 0.17 (Qwen3 CounterFact), 0.35 / 0.31 / 0.29 / 0.20 (Mixtral CounterFact), 0.49 / 0.42 / 0.42 / 0.21 (Qwen3 WinoGrande) and 0.49 / 0.47 / 0.42 / 0.35 (Mixtral WinoGrande) (`results/tables/ext8_a1_partial_auc_k15.md`).
+
+2. **Attention vs MoE.**
+   - **IOI validates the method.** Attention carries the rescue, the MoE writes against the answer at the last layers, and the head patches recover IOI's known classes: an S2-reading head (Qwen3 L42H11), name-mover-like heads (Qwen3 L42H10, Mixtral L19H8) and negative movers (Qwen3 L42H14, Mixtral L22H29). With corruption (ii) the name movers come first, the corruption-site effect Zhang & Nanda report in their App. F.
+   - **WinoGrande sits at the other end.** In our formulation (predict the property word given the filled-in entity, which is what lm-eval's partial scoring compares), the answer is not a copy of a context token. It is generated from the entity and the relation stated earlier in the sentence. Attention brings the entity's identity to the final position and the MoE writes the property: 95 % (Qwen3) and 71 % (Mixtral) of the direct path. The expert localisation is cleaner than on CounterFact: Qwen3 L41E117 has Spec +0.90 and equal-norm Spec +0.45, and is re-selected on the replication set.
+   - **Role swap.** It tests which entity has which attribute (binding) instead of which entity is referred to. It moves the balance towards attention, with a Qwen3 attention peak at L38 (0.13 of the drop) and a Mixtral attention effect at the option position, but WinoGrande stays on the MoE side of CounterFact. Name pairs lean further towards attention than object pairs (direct attention share 0.26 vs 0.04 in Qwen3).
+   - **The small single-layer attention effects in Qwen3 do not mean that attention is unimportant.** The option's identity reaches the final token over 20 layers, and heads of the same KV group cancel within a layer: L38H18 +0.34 and H21 +0.29 against H16 −0.55. Single-layer patches undercount distributed attention; the direct-path split and the position grid are the views to quote.
+
+3. **Methodological findings (apply to every future patching study here).**
+   - **The joint attention/MoE game at a shared final token is degenerate.** Patching all attention outputs restores the clean state (A = 1), so a Shapley split built on it is meaningless. Use the all-MoE patch and the direct-path split (exact final norm) instead.
+   - **Noising adds nothing for symmetric pairs.** Noising in direction d equals denoising in direction 1 − d; noising adds information only for asymmetric donors (CounterFact).
+   - **bf16 batch noise.** Identical rows vary across passes by a median of 0.06–0.17 logits, so differences below about 0.01 of the drop between strategies are not resolved.
+   - **Gaussian noise fails as a corruption for two-candidate in-context choices.** On one option token it leaves Qwen3's answer largely intact (median noised margin 2.6 of 3.6). It is a further reason for STR.
+   - **A latent bug in `ext5_subject.py` was fixed:** window > 1 rows and `attn_layer` rows in the same pass turned `attn_layer` into `block`. No result was affected (production passes never mixed them). Regression checks on OLMoE are in `results/verify_ext5_subject_olmoe.json` and `results/verify_ext6_str_grid_olmoe.json`, compared with the `*_before_ext7fix.json` copies.
+
+### Caveats and open items
+
+- **Gradient rankings (attribution patching, AtP\*, EAP-IG)** need F3 (reverse layer streaming), which is not built.
+- **Mixtral without BOS** (the base reproduction's paper protocol) was not run in Phase 3 (user decision (e)). The WinoGrande case set is shared with that protocol, so it can be added on identical pairs.
+- **Head patches** are final-position only; duplicate-token and induction heads acting at S2 (IOI) are not visible.
+- **Position grids** for the role swap and IOI use 64 validation pairs.
+- **Role swap and option swap** are compared on different items.
+- **Subsets used for parts of the add-back study.** Add-back curves use the main validation set only, not the replication set. Shapley values, beam search and the exact optimum use subsets of rows (listed in section 8).
+- **The WinoGrande direction.** The formulation is necessarily "entity → property". The original WinoGrande question ("which entity has the property") cannot be posed as a single next-token prediction for 86 % of the twins, because their trigger follows the blank.
+- **Memorisation.** WinoGrande train_xl is public. Pass rates on the AfLite-filtered items match the dev twins, so there is no sign that memorised items inflate the pool.
+
+Files:
+- Sections: `results/sections/ext7_wino.md`, `ext7_controls.md`, `ext8_addback.md`, this file.
+- Numbers: `results/ext7_wino_summary.json`, `results/ext7_controls_summary.json`, `results/ext8_addback_summary.json`, `results/ext7_wino_funnel.json`.
+- Plan and decisions: RESEARCH_PLAN.md "Phase 3".
+
+
+## Direction 7: WinoGrande under symmetric token replacement
+
+**Summary.** WinoGrande twins become symmetric-token-replacement (STR) pairs once the blank is filled with each twin's own answer and the model predicts the sentence-final trigger word ("… but the bag was too" → " small" / "… but the body was too" → " large"): the two prompts differ only in the filled option, each is an ordinary WinoGrande sentence with its own answer, and Δ = logit(r) − logit(r′) is Zhang & Nanda's logit difference. On 256 pairs that Qwen3 and Mixtral both solve with a 1-logit margin in both directions (128 discovery / 128 validation pairs, each used both ways; bootstrap over pairs; a disjoint 256-pair replication set), the answer to "MoE or attention?" is the opposite of the IOI hypothesis at the final position. Single-layer attention-output patches there carry at most 0.030 (Qwen3, L42) and 0.141 (Mixtral, L13) of the drop, the attention share of the positive layer-wise rescue is 0.16 [0.13, 0.20] and 0.34 [0.33, 0.36] — against 0.54 and 0.58 on CounterFact STR under the same definition (ext7-controls' sweep) — and the MoE-output peak per unit of drop is larger than on CounterFact (Qwen3 L41 0.218 [0.200, 0.238] vs 0.177 at L44; Mixtral L20 0.172 [0.162, 0.183] vs 0.086). Patching every final-position MoE output (W4) restores 0.845 [0.827, 0.861] (Qwen3) and 0.788 [0.765, 0.810] (Mixtral) of the drop while attention still reads the corrupted option, and on the direct paths to the logit difference the MoE outputs write 0.953 [0.925, 0.982] / 0.712 [0.687, 0.735] of the drop and the attention outputs 0.047 [0.018, 0.075] / 0.288 [0.265, 0.313] (validation). The position × layer grid explains the small attention patches: the option's identity reaches the final token directly from the option position (the intermediate token carries ≤ 0.12) and gradually, the final-position residual restoring 0.1 / 0.5 / 0.9 of the drop at L19 / L30 / L41 in Qwen3, so no single attention layer is a bottleneck. The MoE side localises to **one specific expert per model** — Qwen3 **L41E117** (validation rescue +1.002 [+0.844, +1.171], Spec +0.903 [+0.744, +1.071], gate-matched equal-norm Spec +0.450 [+0.373, +0.534]) and Mixtral **L20E000** (rescue +1.106 [+1.013, +1.203], Spec +0.940 [+0.836, +1.042], equal-norm Spec +0.160 [+0.132, +0.189]), pattern A, both re-selected on the replication set — and these are not the CounterFact STR selections (Qwen3 L44E069 / L42E115, Mixtral L19E002 / L21E001 / L18E001), which are routed at the WinoGrande final position in only 3–12 of 256 directed cases and rescue nothing.
+
+### What was run
+
+Pairs (W0, `moetrace/ext7_wino.py`, `scripts/ext7_wino_build.py`, funnel `results/tables/ext7_wino_funnel.md`): WinoGrande 1.1 train_xl twins whose two sentences differ only in their last word, with a single-token trigger after both prompts, token symmetry (equal length, the option at the same positions, all other tokens identical), the option not the final token, one pair per normalised context. Case set (decision (g), `data/wino_str/case_sets.json`): the 776 pairs that pass the STR margin (Δ_A ≥ 1, Δ_B ≤ −1) under Qwen3, Mixtral BOS and Mixtral no BOS, seed-0 shuffle → **main** 128 discovery + 128 validation pairs, **replication** 128 + 128 pairs, and per model a seed-1 sample of its own margin pool (**own pool**, 128 + 128, W2 only). Every pair is run in both directions (directed case 2·pair + d: d = 0 clean A / corrupted B / r = trigger of A; d = 1 the reverse); per-pair value = mean of the two directions; CIs = 5,000 pair-bootstrap resamples; expert recurrence and Spec on directed cases (gate 128 of 256 discovery directed cases). Models: Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1 with BOS (tokenizer defaults, decision (e)); bf16. Runner: `moetrace/ext7_pairs.py` + `scripts/ext7_wino_{sweep,expert,grid,heads,joint,dla}.py` (generic STR-pair runners, also used by ext7-controls for role swaps and IOI).
+
+**WinoGrande STR pair sets (directed cases pooled; drop = Δ_clean − Δ_corrupt, pair means)**
+
+| Model | Pair set | Pairs | Mean Δ clean | Mean Δ corrupt | Drop [95% CI] | Clean top-1 = r | Corrupt top-1 = r′ | Names | assoc | top-1 both | debiased | One-token option | Median T |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | 256 | +4.16 | -4.16 | +8.31 [+7.97, +8.66] | 0.40 | 0.39 | 0.09 | 0.12 | 0.25 | 0.20 | 0.96 | 18 |
+| Qwen3-30B-A3B-Base | rep | 256 | +4.19 | -4.21 | +8.39 [+8.07, +8.74] | 0.41 | 0.41 | 0.07 | 0.11 | 0.24 | 0.18 | 0.96 | 18 |
+| Qwen3-30B-A3B-Base | own | 256 | +3.84 | -3.86 | +7.69 [+7.35, +8.04] | 0.27 | 0.27 | 0.25 | 0.07 | 0.14 | 0.15 | 0.97 | 18 |
+| Mixtral-8x7B, BOS | main | 256 | +3.89 | -3.89 | +7.78 [+7.47, +8.09] | 0.48 | 0.48 | 0.09 | 0.10 | 0.33 | 0.20 | 0.92 | 20 |
+| Mixtral-8x7B, BOS | rep | 256 | +4.09 | -4.09 | +8.17 [+7.86, +8.48] | 0.44 | 0.45 | 0.07 | 0.15 | 0.29 | 0.18 | 0.93 | 19 |
+| Mixtral-8x7B, BOS | own | 256 | +3.63 | -3.64 | +7.27 [+6.94, +7.61] | 0.37 | 0.37 | 0.14 | 0.11 | 0.23 | 0.25 | 0.89 | 20 |
+
+In 93 % of the directed cases the option is one or two tokens before the prediction position ("the bag was too" / "the bag was"; final word "too" in 48 %), and the clean prompt's top-1 is the trigger in 40% (Qwen3) and 48% (Mixtral) of the directed cases — margins are relative to the twin's trigger, not top-1 accuracy (top-1 in both directions is a sensitivity stratum).
+
+Verification (W1, `scripts/ext7_wino_verify.py` → `results/verify_ext7_wino_olmoe.json`; OLMoE, 20 margin pairs = 40 directed cases, transformers hooks): final-position patches at every layer, rescue r = 0.995 (MoE), 0.989 (attention), 0.997 (block), 0.999 (residual), mean |ΔΔ| ≤ 0.071; per-head patches r = 0.905 (small effects, SD 0.15, mean |ΔΔ| 0.063); STR-position grid (suffix executor, every position from the option to the final token) r = 0.993 / 0.992 / 0.996 / 1.000 (MoE / attention / block / residual), window 5 r = 0.998; null invariant 0.156; the two directions of a pair are exact mirrors (antisymmetry 0.0). The first run of this check found that `moetrace/ext5_subject.py` (`run_subject`) turns `attn_layer` rows into `block` rows when the same pass contains a window > 1 row; production passes never mix them (the W3 windows run in separate passes, as in Direction 6b). GPU time of all W1–W6 passes on the big models: ≈ 53 min.
+
+### W2. Final-position layer sweep: MoE, attention, block
+
+**W2: final-position single-layer patches under STR (pairs; discovery argmax, validation value with pair-bootstrap CI)**
+
+| Model | Pair set | Patched output | L* (discovery) | Discovery mean at L* | Validation rescue at L* [95% CI] | Normalised (rescue / drop) | Validation argmax | Discovery top 4 |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | MoE output | L41 | +1.75 (gap +0.38 to L43) | +1.778 [+1.594, +1.972] | 0.218 [0.200, 0.238] | L41 +1.778 | L41 +1.75, L43 +1.37, L39 +1.25, L44 +0.80 |
+| Qwen3-30B-A3B-Base | main | attention output | L38 | +0.33 (gap +0.04 to L42) | +0.076 [-0.042, +0.199] | 0.009 [-0.005, 0.025] | L42 +0.242 | L38 +0.33, L42 +0.29, L40 +0.24, L39 +0.22 |
+| Qwen3-30B-A3B-Base | main | attention + MoE (block) | L41 | +1.93 (gap +0.42 to L43) | +1.940 [+1.753, +2.132] | 0.238 [0.219, 0.258] | L41 +1.940 | L41 +1.93, L43 +1.51, L39 +1.47, L42 +0.99 |
+| Qwen3-30B-A3B-Base | replication | MoE output | L41 | +1.59 (gap +0.10 to L43) | +1.715 [+1.526, +1.911] | 0.200 [0.180, 0.219] | L41 +1.715 | L41 +1.59, L43 +1.49, L39 +1.21, L44 +0.83 |
+| Qwen3-30B-A3B-Base | replication | attention output | L42 | +0.33 (gap +0.13 to L38) | +0.293 [+0.229, +0.360] | 0.034 [0.027, 0.042] | L42 +0.293 | L42 +0.33, L38 +0.20, L41 +0.19, L39 +0.17 |
+| Qwen3-30B-A3B-Base | replication | attention + MoE (block) | L41 | +1.76 (gap +0.16 to L43) | +1.963 [+1.764, +2.177] | 0.228 [0.209, 0.248] | L41 +1.963 | L41 +1.76, L43 +1.60, L39 +1.37, L42 +0.98 |
+| Qwen3-30B-A3B-Base | own pool | MoE output | L41 | +1.26 (gap +0.01 to L43) | +1.462 [+1.241, +1.695] | 0.184 [0.161, 0.207] | L41 +1.462 | L41 +1.26, L43 +1.25, L39 +0.97, L42 +0.91 |
+| Qwen3-30B-A3B-Base | own pool | attention output | L38 | +0.37 (gap +0.01 to L41) | +0.397 [+0.248, +0.553] | 0.050 [0.031, 0.071] | L38 +0.397 | L38 +0.37, L41 +0.37, L42 +0.31, L40 +0.28 |
+| Qwen3-30B-A3B-Base | own pool | attention + MoE (block) | L41 | +1.57 (gap +0.15 to L43) | +1.610 [+1.383, +1.842] | 0.203 [0.180, 0.225] | L41 +1.610 | L41 +1.57, L43 +1.43, L42 +1.20, L39 +1.09 |
+| Qwen3-30B-A3B-Base | main, L ≤ L−5 | MoE output | L41 | +1.75 (gap +0.38 to L43) | +1.778 [+1.594, +1.972] | 0.218 [0.200, 0.238] | L41 +1.778 | L41 +1.75, L43 +1.37, L39 +1.25, L42 +0.73 |
+| Qwen3-30B-A3B-Base | main, L ≤ L−5 | attention output | L38 | +0.33 (gap +0.04 to L42) | +0.076 [-0.042, +0.199] | 0.009 [-0.005, 0.025] | L42 +0.242 | L38 +0.33, L42 +0.29, L40 +0.24, L39 +0.22 |
+| Qwen3-30B-A3B-Base | main, L ≤ L−5 | attention + MoE (block) | L41 | +1.93 (gap +0.42 to L43) | +1.940 [+1.753, +2.132] | 0.238 [0.219, 0.258] | L41 +1.940 | L41 +1.93, L43 +1.51, L39 +1.47, L42 +0.99 |
+| Mixtral-8x7B, BOS | main | MoE output | L20 | +1.25 (gap +0.04 to L21) | +1.324 [+1.222, +1.429] | 0.172 [0.162, 0.183] | L20 +1.324 | L20 +1.25, L21 +1.21, L19 +1.18, L22 +0.84 |
+| Mixtral-8x7B, BOS | main | attention output | L13 | +1.19 (gap +0.35 to L19) | +1.087 [+0.971, +1.209] | 0.141 [0.127, 0.157] | L13 +1.087 | L13 +1.20, L19 +0.84, L25 +0.57, L15 +0.56 |
+| Mixtral-8x7B, BOS | main | attention + MoE (block) | L19 | +1.93 (gap +0.42 to L20) | +1.927 [+1.801, +2.058] | 0.251 [0.238, 0.264] | L19 +1.927 | L19 +1.93, L20 +1.51, L13 +1.49, L21 +1.25 |
+| Mixtral-8x7B, BOS | replication | MoE output | L20 | +1.23 (gap +0.08 to L19) | +1.396 [+1.296, +1.502] | 0.165 [0.155, 0.175] | L20 +1.396 | L20 +1.23, L19 +1.16, L21 +1.09, L26 +0.87 |
+| Mixtral-8x7B, BOS | replication | attention output | L13 | +1.10 (gap +0.32 to L19) | +1.132 [+1.004, +1.268] | 0.134 [0.119, 0.149] | L13 +1.132 | L13 +1.10, L19 +0.78, L25 +0.58, L15 +0.48 |
+| Mixtral-8x7B, BOS | replication | attention + MoE (block) | L19 | +1.86 (gap +0.40 to L20) | +2.118 [+1.979, +2.269] | 0.250 [0.236, 0.264] | L19 +2.118 | L19 +1.86, L20 +1.46, L13 +1.39, L25 +1.21 |
+| Mixtral-8x7B, BOS | own pool | MoE output | L20 | +1.15 (gap +0.03 to L21) | +1.163 [+1.059, +1.268] | 0.157 [0.146, 0.168] | L20 +1.163 | L20 +1.15, L21 +1.11, L19 +1.07, L26 +0.74 |
+| Mixtral-8x7B, BOS | own pool | attention output | L13 | +1.01 (gap +0.24 to L19) | +0.972 [+0.837, +1.106] | 0.131 [0.114, 0.149] | L13 +0.972 | L13 +1.01, L19 +0.76, L25 +0.51, L15 +0.47 |
+| Mixtral-8x7B, BOS | own pool | attention + MoE (block) | L19 | +1.76 (gap +0.41 to L20) | +1.708 [+1.576, +1.843] | 0.231 [0.216, 0.245] | L19 +1.708 | L19 +1.76, L20 +1.36, L13 +1.21, L21 +1.15 |
+| Mixtral-8x7B, BOS | main, L ≤ L−5 | MoE output | L20 | +1.25 (gap +0.04 to L21) | +1.324 [+1.222, +1.429] | 0.172 [0.162, 0.183] | L20 +1.324 | L20 +1.25, L21 +1.21, L19 +1.18, L22 +0.84 |
+| Mixtral-8x7B, BOS | main, L ≤ L−5 | attention output | L13 | +1.19 (gap +0.35 to L19) | +1.087 [+0.971, +1.209] | 0.141 [0.127, 0.157] | L13 +1.087 | L13 +1.20, L19 +0.84, L25 +0.57, L15 +0.56 |
+| Mixtral-8x7B, BOS | main, L ≤ L−5 | attention + MoE (block) | L19 | +1.93 (gap +0.42 to L20) | +1.927 [+1.801, +2.058] | 0.251 [0.238, 0.264] | L19 +1.927 | L19 +1.93, L20 +1.51, L13 +1.49, L21 +1.25 |
+
+**W2: attention share of the positive final-position rescue (Direction-2b definition: AUC+(attn) / (AUC+(attn) + AUC+(MoE)), sums over layers of the positive part of the mean curve)**
+
+| Model | Set | Pairs | AUC+ attention | AUC+ MoE | AUC+ block | AUC+ attention / drop | AUC+ MoE / drop | Attention share [95% CI] |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 1.86 | 9.81 | 11.34 | 0.228 | 1.205 | 0.16 [0.13, 0.20] |
+| Qwen3-30B-A3B-Base | main, all 256 pairs | 256 | 2.07 | 9.79 | 11.57 | 0.249 | 1.177 | 0.17 [0.15, 0.20] |
+| Qwen3-30B-A3B-Base | replication, validation | 128 | 2.60 | 11.20 | 13.15 | 0.303 | 1.302 | 0.19 [0.17, 0.22] |
+| Qwen3-30B-A3B-Base | own pool, validation | 128 | 2.84 | 9.28 | 11.51 | 0.358 | 1.169 | 0.23 [0.20, 0.27] |
+| Qwen3-30B-A3B-Base | main val., A→B only | 128 | 1.90 | 10.53 | 11.96 | 0.233 | 1.294 | 0.15 [0.13, 0.21] |
+| Qwen3-30B-A3B-Base | main val., B→A only | 128 | 1.94 | 9.26 | 10.88 | 0.238 | 1.137 | 0.17 [0.14, 0.23] |
+| Qwen3-30B-A3B-Base | CounterFact STR, validation (ext7-controls' qwen3_str_attnsweep, donor mean) | 108 |  |  |  | 0.800 | 0.670 | 0.54 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 5.59 | 10.68 | 15.56 | 0.728 | 1.389 | 0.34 [0.33, 0.36] |
+| Mixtral-8x7B, BOS | main, all 256 pairs | 256 | 5.68 | 10.55 | 15.63 | 0.730 | 1.356 | 0.35 [0.34, 0.36] |
+| Mixtral-8x7B, BOS | replication, validation | 128 | 6.22 | 11.57 | 16.91 | 0.735 | 1.366 | 0.35 [0.34, 0.36] |
+| Mixtral-8x7B, BOS | own pool, validation | 128 | 5.78 | 10.01 | 14.83 | 0.780 | 1.352 | 0.37 [0.35, 0.38] |
+| Mixtral-8x7B, BOS | main val., A→B only | 128 | 5.78 | 10.85 | 15.78 | 0.751 | 1.411 | 0.35 [0.33, 0.36] |
+| Mixtral-8x7B, BOS | main val., B→A only | 128 | 5.43 | 10.55 | 15.35 | 0.707 | 1.373 | 0.34 [0.32, 0.36] |
+| Mixtral-8x7B, BOS | CounterFact STR, validation (ext7-controls' mixtral_bos_str_attnsweep, donor mean) | 106 |  |  |  | 0.842 | 0.615 | 0.58 |
+
+**W2: attention vs MoE at the peak layers (validation pairs) and block additivity at the largest block layers**
+
+| Model | Layer | Attention output rescue | MoE output rescue | Attention share at the layer / additivity |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41 (MoE output peak) | +0.163 [+0.092, +0.235] | +1.778 [+1.594, +1.972] | 0.08 [0.05, 0.12] |
+| Qwen3-30B-A3B-Base | L38 (attention output peak) | +0.076 [-0.042, +0.199] | +0.739 [+0.627, +0.848] | 0.09 [-0.06, 0.21] |
+| Qwen3-30B-A3B-Base | L41 (block +1.94) | +0.163 | +1.778 | block − (attn + MoE) -0.001 [-0.032, +0.030], r = 0.99 |
+| Qwen3-30B-A3B-Base | L43 (block +1.53) | +0.188 | +1.375 | block − (attn + MoE) -0.038 [-0.060, -0.015], r = 0.99 |
+| Qwen3-30B-A3B-Base | L39 (block +1.45) | +0.148 | +1.316 | block − (attn + MoE) -0.009 [-0.048, +0.030], r = 0.98 |
+| Mixtral-8x7B, BOS | L20 (MoE output peak) | +0.222 [+0.183, +0.262] | +1.324 [+1.222, +1.429] | 0.14 [0.12, 0.16] |
+| Mixtral-8x7B, BOS | L13 (attention output peak) | +1.087 [+0.971, +1.209] | +0.276 [+0.188, +0.374] | 0.80 [0.75, 0.85] |
+| Mixtral-8x7B, BOS | L19 (block +1.93) | +0.873 | +1.120 | block − (attn + MoE) -0.066 [-0.103, -0.029], r = 0.96 |
+| Mixtral-8x7B, BOS | L20 (block +1.53) | +0.222 | +1.324 | block − (attn + MoE) -0.013 [-0.034, +0.008], r = 0.99 |
+| Mixtral-8x7B, BOS | L13 (block +1.25) | +1.087 | +0.276 | block − (attn + MoE) -0.110 [-0.158, -0.062], r = 0.97 |
+
+![W2 curves](figures/ext7_wino_w2_curves.png)
+
+- **Qwen3.** The MoE output of L41 restores +1.778 [+1.594, +1.972] logits = 0.218 [0.200, 0.238] of the drop (CounterFact STR: L44, 0.177); the band L39–L44 carries the effect (discovery top: L41 +1.75, L43 +1.37, L39 +1.25, L44 +0.80). No attention layer matters on its own (largest validation value 0.030 [0.022, 0.037] of the drop at L42; the discovery argmax L38 does not replicate on validation). Block ≈ attention + MoE at every layer (largest gap -0.038).
+- **Mixtral.** MoE L20 0.172 [0.162, 0.183] (flat L19–L21 band as on CounterFact, where the same patch gives 0.085); attention has two discrete steps, L13 0.141 [0.127, 0.157] and L19 (validation 0.114), and block L19 0.251 [0.238, 0.264]. At L13 the attention output carries 0.80 of the layer's attention + MoE rescue, at L20 only 0.14.
+- **Attention share** (Direction-2b AUC+ definition) 0.16 [0.13, 0.20] / 0.34 [0.33, 0.36] on main validation, 0.19 [0.17, 0.22] / 0.35 [0.34, 0.36] on the replication set, 0.23 [0.20, 0.27] / 0.37 [0.35, 0.38] on each model's own margin pool, the same in each single direction (A→B 0.15 [0.13, 0.21] / 0.35 [0.33, 0.36]); CounterFact STR 0.54 / 0.58. WinoGrande is less attention-dominated than CounterFact at the final position in both models, Qwen3 most clearly.
+
+### W3. Position × layer grid: where the option's identity travels
+
+**W3: position × layer grid under STR (main set, 256 pairs; positions before the option are exactly zero)**
+
+| Model | Window | Patched quantity at p | Token group | Pairs | Peak layer | Peak rescue / drop [95% CI] | Sum over layers | Peak Δp (descriptive) |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 1 | attention output | first option tok. | 9 | L4 | +0.020 [-0.001, +0.042] | -0.027 | +0.0001 (L1) |
+| Qwen3-30B-A3B-Base | 1 | attention output | last option tok. | 256 | L34 | +0.013 [+0.009, +0.016] | +0.054 | +0.0013 (L3) |
+| Qwen3-30B-A3B-Base | 1 | attention output | first subseq. | 157 | L26 | +0.005 [+0.001, +0.011] | +0.033 | +0.0004 (L26) |
+| Qwen3-30B-A3B-Base | 1 | attention output | further | 18 | L38 | +0.009 [+0.003, +0.017] | -0.069 | +0.0013 (L39) |
+| Qwen3-30B-A3B-Base | 1 | attention output | final token | 256 | L42 | +0.032 [+0.027, +0.037] | +0.213 | +0.0020 (L39) |
+| Qwen3-30B-A3B-Base | 1 | MoE output | first option tok. | 9 | L0 | +0.052 [-0.071, +0.160] | +0.106 | +0.0024 (L0) |
+| Qwen3-30B-A3B-Base | 1 | MoE output | last option tok. | 256 | L0 | +0.171 [+0.141, +0.204] | +0.396 | +0.0372 (L0) |
+| Qwen3-30B-A3B-Base | 1 | MoE output | first subseq. | 157 | L39 | +0.024 [+0.019, +0.028] | +0.151 | +0.0016 (L39) |
+| Qwen3-30B-A3B-Base | 1 | MoE output | further | 18 | L38 | +0.008 [+0.004, +0.012] | -0.094 | +0.0009 (L14) |
+| Qwen3-30B-A3B-Base | 1 | MoE output | final token | 256 | L41 | +0.214 [+0.201, +0.227] | +1.050 | +0.0234 (L41) |
+| Qwen3-30B-A3B-Base | 1 | residual (hidden state) | first option tok. | 9 | L0 | +0.484 [+0.226, +0.741] | +5.893 | +0.0325 (L0) |
+| Qwen3-30B-A3B-Base | 1 | residual (hidden state) | last option tok. | 256 | L2 | +0.990 [+0.973, +1.003] | +27.333 | +0.2472 (L9) |
+| Qwen3-30B-A3B-Base | 1 | residual (hidden state) | first subseq. | 157 | L36 | +0.121 [+0.108, +0.136] | +2.355 | +0.0139 (L35) |
+| Qwen3-30B-A3B-Base | 1 | residual (hidden state) | further | 18 | L35 | +0.107 [+0.066, +0.155] | +1.721 | +0.0173 (L35) |
+| Qwen3-30B-A3B-Base | 1 | residual (hidden state) | final token | 256 | L47 | +1.000 [+1.000, +1.000] | +17.603 | +0.2443 (L47) |
+| Qwen3-30B-A3B-Base | 5 | MoE output | first option tok. | 9 | L2 | +0.398 [+0.150, +0.666] | +2.379 | +0.0354 (L2) |
+| Qwen3-30B-A3B-Base | 5 | MoE output | last option tok. | 256 | L2 | +0.973 [+0.956, +0.987] | +6.574 | +0.2398 (L2) |
+| Qwen3-30B-A3B-Base | 5 | MoE output | first subseq. | 157 | L38 | +0.066 [+0.058, +0.074] | +0.706 | +0.0049 (L37) |
+| Qwen3-30B-A3B-Base | 5 | MoE output | further | 18 | L38 | +0.038 [+0.020, +0.056] | +0.361 | +0.0036 (L39) |
+| Qwen3-30B-A3B-Base | 5 | MoE output | final token | 256 | L41 | +0.569 [+0.557, +0.580] | +5.622 | +0.1346 (L41) |
+| Mixtral-8x7B, BOS | 1 | attention output | first option tok. | 21 | L12 | +0.015 [+0.007, +0.023] | +0.080 | +0.0087 (L7) |
+| Mixtral-8x7B, BOS | 1 | attention output | middle option tok. | 3 | L0 | +0.066 [-0.006, +0.163] | +0.093 | +0.0007 (L0) |
+| Mixtral-8x7B, BOS | 1 | attention output | last option tok. | 256 | L12 | +0.052 [+0.044, +0.061] | +0.169 | +0.0067 (L12) |
+| Mixtral-8x7B, BOS | 1 | attention output | first subseq. | 157 | L13 | +0.022 [+0.018, +0.026] | +0.117 | +0.0022 (L13) |
+| Mixtral-8x7B, BOS | 1 | attention output | further | 18 | L13 | +0.035 [+0.021, +0.051] | +0.100 | +0.0083 (L13) |
+| Mixtral-8x7B, BOS | 1 | attention output | final token | 256 | L13 | +0.147 [+0.136, +0.158] | +0.736 | +0.0222 (L13) |
+| Mixtral-8x7B, BOS | 1 | MoE output | first option tok. | 21 | L0 | +0.190 [+0.065, +0.345] | +0.250 | +0.0245 (L0) |
+| Mixtral-8x7B, BOS | 1 | MoE output | middle option tok. | 3 | L0 | +0.149 [-0.025, +0.500] | +0.328 | +0.0029 (L7) |
+| Mixtral-8x7B, BOS | 1 | MoE output | last option tok. | 256 | L0 | +0.900 [+0.874, +0.924] | +1.419 | +0.2705 (L0) |
+| Mixtral-8x7B, BOS | 1 | MoE output | first subseq. | 157 | L21 | +0.027 [+0.024, +0.031] | +0.181 | +0.0025 (L21) |
+| Mixtral-8x7B, BOS | 1 | MoE output | further | 18 | L20 | +0.017 [+0.009, +0.027] | +0.104 | +0.0023 (L17) |
+| Mixtral-8x7B, BOS | 1 | MoE output | final token | 256 | L20 | +0.166 [+0.159, +0.174] | +1.101 | +0.0183 (L20) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | first option tok. | 21 | L0 | +0.292 [+0.164, +0.437] | +1.851 | +0.0339 (L0) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | middle option tok. | 3 | L1 | +0.199 [-0.025, +0.674] | +2.474 | +0.0043 (L12) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | last option tok. | 256 | L2 | +0.985 [+0.970, +0.996] | +13.068 | +0.2863 (L2) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | first subseq. | 157 | L15 | +0.120 [+0.107, +0.134] | +1.940 | +0.0198 (L13) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | further | 18 | L16 | +0.106 [+0.079, +0.133] | +1.304 | +0.0206 (L13) |
+| Mixtral-8x7B, BOS | 1 | residual (hidden state) | final token | 256 | L31 | +1.000 [+1.000, +1.000] | +16.609 | +0.2892 (L31) |
+| Mixtral-8x7B, BOS | 5 | MoE output | first option tok. | 21 | L2 | +0.212 [+0.085, +0.365] | +1.410 | +0.0258 (L2) |
+| Mixtral-8x7B, BOS | 5 | MoE output | middle option tok. | 3 | L2 | +0.212 [-0.050, +0.717] | +2.311 | +0.0081 (L10) |
+| Mixtral-8x7B, BOS | 5 | MoE output | last option tok. | 256 | L2 | +0.984 [+0.968, +0.995] | +9.965 | +0.2870 (L2) |
+| Mixtral-8x7B, BOS | 5 | MoE output | first subseq. | 157 | L18 | +0.091 [+0.082, +0.101] | +0.967 | +0.0121 (L18) |
+| Mixtral-8x7B, BOS | 5 | MoE output | further | 18 | L19 | +0.064 [+0.046, +0.082] | +0.643 | +0.0079 (L19) |
+| Mixtral-8x7B, BOS | 5 | MoE output | final token | 256 | L20 | +0.558 [+0.547, +0.568] | +5.406 | +0.1628 (L20) |
+
+![W3 grid Qwen3](figures/ext7_wino_w3_grid_wino_qwen3_str.png)
+
+![W3 grid Mixtral (BOS)](figures/ext7_wino_w3_grid_wino_mixtral_bos_str.png)
+
+- **Qwen3.** Restoring the residual at the option token restores ≥ 0.5 of the drop up to L28 and ≤ 0.1 from L39 on (the option's identity has left the option position); at the final position the residual restoration rises from 0.1 at L19 through 0.5 at L30 to 0.9 at L41. The first subsequent token peaks at 0.121 (L36), further tokens at 0.107: the information is read from the option position mostly by the final token itself, with a minor relay. MoE output at the option token: peak L0 +0.171 [+0.141, +0.204] (token identity, Zhang & Nanda fn. 1 — not read as computation); at the final token L41 +0.214 [+0.201, +0.227]; attention output at the final token at most +0.032 [+0.027, +0.037] (L42). Last-token column vs the W2 sweep: curve r 0.9996 (MoE), 0.9920 (attention).
+- **Mixtral (BOS).** Restoring the residual at the option token restores ≥ 0.5 of the drop up to L12 and ≤ 0.1 from L20 on (the option's identity has left the option position); at the final position the residual restoration rises from 0.1 at L10 through 0.5 at L13 to 0.9 at L23. The first subsequent token peaks at 0.120 (L15), further tokens at 0.106: the information is read from the option position mostly by the final token itself, with a minor relay. MoE output at the option token: peak L0 +0.900 [+0.874, +0.924] (token identity, Zhang & Nanda fn. 1 — not read as computation); at the final token L20 +0.166 [+0.159, +0.174]; attention output at the final token at most +0.147 [+0.136, +0.158] (L13). Last-token column vs the W2 sweep: curve r 1.0000 (MoE), 0.9999 (attention).
+
+Window 5 (MoE output, secondary, Z6): sliding / summed single layers at the peak = Qwen3 last STR token 4.79; Qwen3 last token 0.84; Mixtral (BOS) last STR token 0.92; Mixtral (BOS) last token 0.83.
+
+### W4. Joint decomposition of the final position (revised form)
+
+The planned two-player Shapley split is degenerate: at the final position the token is shared and the MoE is a per-token function, so patching the attention output at every layer restores the clean final residual (A = 1 by construction; confirmed by ext8-addback and ext7-controls), and φ_attn = ½[A + (1 − M)] carries nothing beyond M. Reported instead (form shared by the three Phase-3 agents): A only as a sanity check of the `multi` path; M = all final-position MoE outputs patched, in the denoising direction (corrupted run, attention still reads the corrupted context: sufficiency) and in the noising direction (clean run, MoE outputs set to their corrupted values: necessity); and the direct-path split of h_clean − h_corrupt = Σ_l dAttn_l + Σ_l dMoE_l computed with ext7-controls' shared `direct_split_pairs` (= ext8's `direct_split`): A_direct = Δ(h_corrupt + Σ dAttn) − Δ_corrupt and M_direct = Δ(h_clean − Σ dAttn) − Δ_corrupt with the exact final norm, plus the linear DLA shares. For symmetric pairs used both ways the noising effect of direction d is, in exact arithmetic, the denoising effect of direction 1 − d (same intervention on the same prompt, metric sign-flipped), so M_noise and M_denoise coincide at the pair level; numerically the per-case values differ by bf16 recomputation noise amplified by top-k routing flips (last column: max per directed case), the population ratios by ≤ 0.002.
+
+**W4 (revised form shared by ext7-wino / ext7-controls / ext8-addback): final-position joint patches and direct paths, all / drop (population ratios, pair bootstrap); direct split = moetrace/ext7_controls.direct_split_pairs**
+
+| Model | Pair set | Pairs | M: all MoE outputs, denoise (sufficiency) | M: all MoE outputs, noise (necessity) | A_direct (direct path of attention outputs) | M_direct (direct path of MoE outputs) | DLA share attention | DLA share MoE | A: all attention (sanity, = 1 by construction) | Block all layers (sanity) | max |noise(d) − denoise(1−d)| (directed, logits) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 0.845 [0.827, 0.861] | 0.843 [0.825, 0.859] | 0.047 [0.018, 0.075] | 0.953 [0.925, 0.982] | 0.04 [0.01, 0.07] | 0.96 [0.93, 0.99] | 0.992 [0.981, 1.004] | 1.000 [1.000, 1.000] | 1.88 |
+| Qwen3-30B-A3B-Base | replication, validation | 128 | 0.835 [0.817, 0.852] | 0.834 [0.816, 0.851] | 0.048 [0.022, 0.075] | 0.952 [0.925, 0.978] | 0.05 [0.02, 0.07] | 0.95 [0.93, 0.98] | 0.985 [0.975, 0.993] | 1.000 [1.000, 1.000] | 1.69 |
+| Qwen3-30B-A3B-Base | main, all 256 | 256 | 0.833 [0.820, 0.845] | 0.832 [0.820, 0.844] | 0.056 [0.037, 0.076] | 0.944 [0.924, 0.963] | 0.05 [0.03, 0.07] | 0.95 [0.93, 0.97] | 0.999 [0.992, 1.005] | 1.000 [1.000, 1.000] | 1.88 |
+| Qwen3-30B-A3B-Base | replication, all 256 | 256 | 0.838 [0.826, 0.849] | 0.837 [0.826, 0.849] | 0.039 [0.021, 0.057] | 0.961 [0.943, 0.979] | 0.04 [0.02, 0.06] | 0.96 [0.94, 0.98] | 0.990 [0.984, 0.996] | 1.000 [1.000, 1.000] | 1.69 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 0.788 [0.765, 0.810] | 0.788 [0.765, 0.810] | 0.288 [0.265, 0.313] | 0.712 [0.687, 0.735] | 0.29 [0.27, 0.31] | 0.71 [0.69, 0.73] | 1.000 [0.999, 1.002] | 1.000 [1.000, 1.000] | 0.375 |
+| Mixtral-8x7B, BOS | replication, validation | 128 | 0.765 [0.744, 0.784] | 0.765 [0.745, 0.785] | 0.308 [0.289, 0.329] | 0.692 [0.671, 0.711] | 0.31 [0.29, 0.33] | 0.69 [0.67, 0.71] | 1.000 [0.999, 1.001] | 1.000 [1.000, 1.000] | 0.5 |
+| Mixtral-8x7B, BOS | main, all 256 | 256 | 0.774 [0.756, 0.791] | 0.774 [0.757, 0.791] | 0.300 [0.282, 0.318] | 0.700 [0.682, 0.718] | 0.30 [0.28, 0.32] | 0.70 [0.68, 0.72] | 1.000 [0.999, 1.001] | 1.000 [1.000, 1.000] | 0.375 |
+| Mixtral-8x7B, BOS | replication, all 256 | 256 | 0.783 [0.769, 0.796] | 0.783 [0.769, 0.797] | 0.292 [0.278, 0.306] | 0.708 [0.694, 0.722] | 0.29 [0.28, 0.31] | 0.71 [0.69, 0.72] | 1.000 [0.999, 1.001] | 1.000 [1.000, 1.000] | 0.5 |
+
+- All MoE outputs at the final position restore 0.845 [0.827, 0.861] of the drop in Qwen3 and 0.788 [0.765, 0.810] in Mixtral (replication 0.835 [0.817, 0.852] / 0.765 [0.744, 0.784]); ext8-addback's CounterFact STR value is reported in its section (preliminary log: ≈ 0.5 in Qwen3), so WinoGrande's final-position answer is more MoE-sufficient than factual recall's.
+- Direct paths: MoE outputs 0.953 [0.925, 0.982] vs attention outputs 0.047 [0.018, 0.075] of the drop (Qwen3), 0.712 [0.687, 0.735] vs 0.288 [0.265, 0.313] (Mixtral); DLA shares attention 0.04 [0.01, 0.07] / 0.29 [0.27, 0.31]. Read with W3: attention transports the option's identity to the final position over many layers, the late MoE outputs write the answer.
+
+**W4 strata (main set, all 256 pairs)**
+
+| Model | Stratum | Value | Pairs | M denoise | M noise | A_direct | M_direct | DLA share attention |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | context-free association passes (assoc) | True | 31 | 0.85 [0.82, 0.88] | 0.85 [0.82, 0.88] | 0.08 [0.04, 0.12] | 0.92 [0.88, 0.96] | 0.07 [0.03, 0.11] |
+| Qwen3-30B-A3B-Base | context-free association passes (assoc) | False | 225 | 0.83 [0.82, 0.84] | 0.83 [0.82, 0.84] | 0.05 [0.03, 0.07] | 0.95 [0.93, 0.97] | 0.05 [0.03, 0.07] |
+| Qwen3-30B-A3B-Base | person-name options | True | 23 | 0.72 [0.66, 0.78] | 0.72 [0.66, 0.79] | 0.26 [0.20, 0.32] | 0.74 [0.68, 0.80] | 0.26 [0.20, 0.32] |
+| Qwen3-30B-A3B-Base | person-name options | False | 233 | 0.84 [0.83, 0.85] | 0.84 [0.83, 0.85] | 0.04 [0.02, 0.06] | 0.96 [0.94, 0.98] | 0.03 [0.01, 0.05] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 64 | 0.78 [0.76, 0.81] | 0.79 [0.76, 0.81] | 0.01 [-0.03, 0.06] | 0.99 [0.94, 1.03] | 0.01 [-0.04, 0.06] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 192 | 0.85 [0.84, 0.86] | 0.85 [0.84, 0.86] | 0.07 [0.05, 0.09] | 0.93 [0.91, 0.95] | 0.07 [0.05, 0.09] |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | True | 51 | 0.81 [0.78, 0.84] | 0.81 [0.78, 0.84] | 0.15 [0.11, 0.19] | 0.85 [0.81, 0.89] | 0.14 [0.10, 0.19] |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | False | 205 | 0.84 [0.83, 0.85] | 0.84 [0.82, 0.85] | 0.03 [0.01, 0.06] | 0.97 [0.94, 0.99] | 0.03 [0.01, 0.05] |
+| Qwen3-30B-A3B-Base | one-token option | True | 247 | 0.83 [0.82, 0.85] | 0.83 [0.82, 0.85] | 0.05 [0.03, 0.07] | 0.95 [0.93, 0.97] | 0.05 [0.03, 0.07] |
+| Qwen3-30B-A3B-Base | trigger word in context | False | 250 | 0.84 [0.82, 0.85] | 0.83 [0.82, 0.85] | 0.05 [0.03, 0.07] | 0.95 [0.93, 0.97] | 0.05 [0.03, 0.07] |
+| Qwen3-30B-A3B-Base | direction | A→B | 256 | 0.83 [0.82, 0.85] | 0.83 [0.82, 0.85] | 0.06 [0.04, 0.08] | 0.94 [0.92, 0.96] | 0.05 [0.03, 0.07] |
+| Qwen3-30B-A3B-Base | direction | B→A | 256 | 0.83 [0.82, 0.85] | 0.83 [0.82, 0.84] | 0.06 [0.04, 0.08] | 0.94 [0.92, 0.96] | 0.05 [0.03, 0.07] |
+| Mixtral-8x7B, BOS | context-free association passes (assoc) | True | 25 | 0.76 [0.71, 0.81] | 0.76 [0.71, 0.81] | 0.31 [0.27, 0.37] | 0.69 [0.63, 0.73] | 0.31 [0.27, 0.37] |
+| Mixtral-8x7B, BOS | context-free association passes (assoc) | False | 231 | 0.78 [0.76, 0.79] | 0.78 [0.76, 0.79] | 0.30 [0.28, 0.32] | 0.70 [0.68, 0.72] | 0.30 [0.28, 0.32] |
+| Mixtral-8x7B, BOS | person-name options | True | 23 | 0.61 [0.48, 0.72] | 0.61 [0.48, 0.72] | 0.49 [0.39, 0.60] | 0.51 [0.40, 0.61] | 0.49 [0.39, 0.60] |
+| Mixtral-8x7B, BOS | person-name options | False | 233 | 0.79 [0.77, 0.80] | 0.79 [0.77, 0.80] | 0.28 [0.27, 0.30] | 0.72 [0.70, 0.73] | 0.28 [0.27, 0.30] |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 85 | 0.76 [0.72, 0.79] | 0.76 [0.72, 0.79] | 0.31 [0.28, 0.34] | 0.69 [0.66, 0.72] | 0.31 [0.28, 0.34] |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 171 | 0.79 [0.77, 0.80] | 0.79 [0.77, 0.80] | 0.29 [0.27, 0.31] | 0.71 [0.69, 0.73] | 0.29 [0.27, 0.31] |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | True | 51 | 0.74 [0.69, 0.78] | 0.74 [0.68, 0.78] | 0.35 [0.31, 0.39] | 0.65 [0.61, 0.69] | 0.35 [0.31, 0.40] |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | False | 205 | 0.78 [0.76, 0.80] | 0.78 [0.76, 0.80] | 0.29 [0.27, 0.31] | 0.71 [0.69, 0.73] | 0.29 [0.27, 0.31] |
+| Mixtral-8x7B, BOS | one-token option | True | 235 | 0.78 [0.76, 0.79] | 0.78 [0.76, 0.79] | 0.30 [0.28, 0.31] | 0.70 [0.69, 0.72] | 0.30 [0.28, 0.31] |
+| Mixtral-8x7B, BOS | one-token option | False | 21 | 0.74 [0.66, 0.81] | 0.74 [0.65, 0.81] | 0.34 [0.27, 0.42] | 0.66 [0.58, 0.73] | 0.34 [0.28, 0.42] |
+| Mixtral-8x7B, BOS | trigger word in context | False | 250 | 0.78 [0.76, 0.79] | 0.78 [0.76, 0.79] | 0.29 [0.28, 0.31] | 0.71 [0.69, 0.72] | 0.29 [0.28, 0.31] |
+| Mixtral-8x7B, BOS | direction | A→B | 256 | 0.78 [0.76, 0.79] | 0.77 [0.75, 0.79] | 0.30 [0.28, 0.32] | 0.70 [0.68, 0.72] | 0.30 [0.28, 0.32] |
+| Mixtral-8x7B, BOS | direction | B→A | 256 | 0.77 [0.75, 0.79] | 0.78 [0.76, 0.79] | 0.30 [0.28, 0.32] | 0.70 [0.68, 0.72] | 0.30 [0.28, 0.32] |
+
+**W4 cross-check with ext7-wino's own implementation (scripts/ext7_wino_dla.py; DLA linearised at each run's own final RMS, direct = exact final norm; all / drop, main and replication families, all pairs) and the per-layer DLA peaks**
+
+| Model | Pair set | DLA attention / drop | DLA MoE / drop | DLA embedding (norm scale) / drop | Attention share of DLA | Direct: corrupt + ΣdAttn | Direct: corrupt + ΣdMoE | Direct: clean − ΣdAttn (damage) | Direct: clean − ΣdMoE (damage) | Direct Shapley φ_attn | Top attention layers (DLA / drop) | Top MoE layers (DLA / drop) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | 0.053 [0.033, 0.074] | 0.947 [0.926, 0.967] | 0.000 [-0.000, 0.000] | 0.05 [0.03, 0.07] | 0.057 [0.038, 0.078] | 0.943 [0.923, 0.963] | 0.057 [0.037, 0.077] | 0.943 [0.922, 0.962] | 0.06 [0.04, 0.08] | L42 +0.020, L43 +0.015, L38 +0.010 | L43 +0.216, L41 +0.215, L44 +0.136 |
+| Qwen3-30B-A3B-Base | rep | 0.036 [0.018, 0.055] | 0.964 [0.945, 0.982] | 0.000 [-0.000, 0.000] | 0.04 [0.02, 0.06] | 0.041 [0.022, 0.059] | 0.960 [0.942, 0.978] | 0.040 [0.022, 0.058] | 0.959 [0.941, 0.978] | 0.04 [0.02, 0.06] | L42 +0.024, L43 +0.015, L38 +0.011 | L43 +0.245, L41 +0.194, L44 +0.143 |
+| Mixtral-8x7B, BOS | main | 0.301 [0.283, 0.319] | 0.699 [0.681, 0.716] | -0.000 [-0.000, 0.000] | 0.30 [0.28, 0.32] | 0.299 [0.282, 0.318] | 0.700 [0.682, 0.717] | 0.299 [0.282, 0.318] | 0.700 [0.682, 0.717] | 0.30 [0.28, 0.32] | L25 +0.084, L31 +0.049, L29 +0.025 | L26 +0.165, L22 +0.125, L21 +0.107 |
+| Mixtral-8x7B, BOS | rep | 0.293 [0.279, 0.306] | 0.708 [0.694, 0.722] | -0.000 [-0.000, 0.000] | 0.29 [0.28, 0.31] | 0.292 [0.278, 0.306] | 0.709 [0.694, 0.723] | 0.292 [0.278, 0.306] | 0.708 [0.694, 0.722] | 0.29 [0.28, 0.31] | L25 +0.082, L31 +0.050, L29 +0.024 | L26 +0.168, L22 +0.120, L21 +0.106 |
+
+### W5. Attention heads at the W2 attention layers
+
+**W5: top six and bottom three heads by validation rescue (z over all scanned heads of the model; detection = |z| ≥ 2 on discovery AND validation, Zhang & Nanda §3)**
+
+| Model | Head | Val rescue [95% CI] | Disc. mean | z (val / disc) | ≥ 2 SD both splits | Spec vs other heads | Share of attn_layer |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38H18 | +0.342 [+0.301, +0.388] | +0.380 | +4.7 / +5.2 | yes | +0.339 [+0.298, +0.384] | 3.58 |
+| Qwen3-30B-A3B-Base | L38H21 | +0.289 [+0.241, +0.342] | +0.291 | +4.0 / +3.9 | yes | +0.284 [+0.237, +0.336] | 3.02 |
+| Qwen3-30B-A3B-Base | L38H19 | +0.164 [+0.138, +0.191] | +0.139 | +2.2 / +1.8 | no | +0.155 [+0.131, +0.181] | 1.72 |
+| Qwen3-30B-A3B-Base | L42H30 | +0.163 [+0.135, +0.195] | +0.210 | +2.2 / +2.8 | yes | +0.157 [+0.129, +0.188] | 0.65 |
+| Qwen3-30B-A3B-Base | L39H5 | +0.147 [+0.113, +0.182] | +0.202 | +1.9 / +2.7 | no | +0.141 [+0.109, +0.176] | 0.93 |
+| Qwen3-30B-A3B-Base | L38H20 | +0.146 [+0.120, +0.174] | +0.107 | +1.9 / +1.4 | no | +0.136 [+0.112, +0.162] | 1.52 |
+| Qwen3-30B-A3B-Base | L39H9 | -0.129 [-0.162, -0.096] | -0.127 | -1.9 / -1.9 | no | -0.143 [-0.177, -0.111] | -0.81 |
+| Qwen3-30B-A3B-Base | L42H26 | -0.248 [-0.304, -0.198] | -0.293 | -3.6 / -4.2 | yes | -0.267 [-0.323, -0.218] | -0.99 |
+| Qwen3-30B-A3B-Base | L38H16 | -0.547 [-0.602, -0.497] | -0.468 | -7.9 / -6.6 | yes | -0.579 [-0.633, -0.529] | -5.71 |
+| Mixtral-8x7B, BOS | L25H9 | +0.553 [+0.499, +0.608] | +0.521 | +8.3 / +7.8 | yes | +0.554 [+0.500, +0.610] | 0.95 |
+| Mixtral-8x7B, BOS | L19H13 | +0.364 [+0.319, +0.410] | +0.367 | +5.4 / +5.4 | yes | +0.352 [+0.308, +0.399] | 0.42 |
+| Mixtral-8x7B, BOS | L13H18 | +0.193 [+0.159, +0.229] | +0.236 | +2.8 / +3.4 | yes | +0.181 [+0.147, +0.216] | 0.18 |
+| Mixtral-8x7B, BOS | L13H11 | +0.191 [+0.138, +0.250] | +0.178 | +2.7 / +2.5 | yes | +0.179 [+0.125, +0.240] | 0.18 |
+| Mixtral-8x7B, BOS | L19H12 | +0.188 [+0.154, +0.229] | +0.179 | +2.7 / +2.5 | yes | +0.171 [+0.137, +0.211] | 0.22 |
+| Mixtral-8x7B, BOS | L13H4 | +0.178 [+0.150, +0.208] | +0.223 | +2.5 / +3.2 | yes | +0.165 [+0.138, +0.195] | 0.17 |
+| Mixtral-8x7B, BOS | L28H14 | -0.027 [-0.039, -0.016] | -0.035 | -0.6 / -0.8 | no | -0.030 [-0.040, -0.020] | -1.02 |
+| Mixtral-8x7B, BOS | L19H3 | -0.059 [-0.073, -0.046] | -0.061 | -1.1 / -1.2 | no | -0.084 [-0.098, -0.071] | -0.07 |
+| Mixtral-8x7B, BOS | L25H11 | -0.159 [-0.179, -0.139] | -0.157 | -2.6 / -2.7 | yes | -0.180 [-0.201, -0.160] | -0.27 |
+
+**W5: per layer, additivity of the head patches and greedy additive minimal head sets (order by discovery, validation sums)**
+
+| Model | Layer | Attention output (val) | Sum of heads | r(sum, attn) pairs | MoE output | Block | Top head (disc.) | Heads for 50 % | Heads for 80 % | Top-3 share |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38 | +0.096 [-0.023, +0.218] | +0.439 [+0.159, +0.707] | 0.47 | +0.742 [+0.642, +0.846] | +0.821 [+0.665, +0.975] | H18 | 1 | 1 | 8.31 |
+| Qwen3-30B-A3B-Base | L39 | +0.158 [+0.091, +0.230] | +0.314 [+0.067, +0.562] | 0.39 | +1.321 [+1.164, +1.484] | +1.459 [+1.296, +1.630] | H5 | 1 | 1 | 1.76 |
+| Qwen3-30B-A3B-Base | L40 | +0.190 [+0.121, +0.259] | +0.280 [+0.002, +0.554] | 0.48 | +0.504 [+0.411, +0.599] | +0.683 [+0.567, +0.799] | H15 | 2 | 2 | 1.09 |
+| Qwen3-30B-A3B-Base | L42 | +0.250 [+0.189, +0.308] | +0.361 [+0.112, +0.614] | 0.55 | +0.678 [+0.584, +0.782] | +0.904 [+0.791, +1.026] | H30 | 1 | 2 | 1.36 |
+| Qwen3-30B-A3B-Base | L45 (null) | +0.005 [-0.010, +0.022] | +0.030 [-0.178, +0.232] | 0.46 | -0.075 [-0.176, +0.028] | -0.064 [-0.164, +0.039] | H25 | 7 | 8 | -0.77 |
+| Mixtral-8x7B, BOS | L13 | +1.073 [+0.958, +1.190] | +0.572 [+0.336, +0.799] | 0.27 | +0.267 [+0.177, +0.365] | +1.247 [+1.073, +1.444] | H18 | 3 | not reached | 0.52 |
+| Mixtral-8x7B, BOS | L15 | +0.551 [+0.485, +0.621] | +0.306 [+0.068, +0.531] | 0.33 | +0.256 [+0.209, +0.307] | +0.827 [+0.747, +0.908] | H8 | 2 | not reached | 0.64 |
+| Mixtral-8x7B, BOS | L19 | +0.869 [+0.788, +0.953] | +0.719 [+0.508, +0.923] | 0.16 | +1.106 [+1.029, +1.189] | +1.920 [+1.789, +2.052] | H13 | 2 | 3 | 0.81 |
+| Mixtral-8x7B, BOS | L25 | +0.583 [+0.525, +0.641] | +0.515 [+0.318, +0.708] | 0.32 | +0.641 [+0.558, +0.730] | +1.198 [+1.093, +1.306] | H9 | 1 | 1 | 1.18 |
+| Mixtral-8x7B, BOS | L28 (null) | +0.027 [+0.013, +0.041] | +0.046 [-0.120, +0.212] | 0.42 | +0.211 [+0.128, +0.298] | +0.245 [+0.162, +0.331] | H13 | 1 | 1 | 2.09 |
+
+**W5: final-position attention mass of the top heads by position class (str = the filled option; ment_filled / ment_other = first mention of the candidate filled in the clean prompt / of the other one)**
+
+| Model | Head | Val rescue | final (clean → corrupt) | str (clean → corrupt) | ment_filled (clean → corrupt) | ment_other (clean → corrupt) | pos0 (clean → corrupt) | other (clean → corrupt) |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38H18 | +0.342 | 0.09 → 0.09 | 0.12 → 0.12 | 0.06 → 0.04 | 0.04 → 0.06 | 0.48 → 0.48 | 0.21 → 0.22 |
+| Qwen3-30B-A3B-Base | L38H21 | +0.289 | 0.06 → 0.06 | 0.07 → 0.07 | 0.05 → 0.04 | 0.04 → 0.05 | 0.47 → 0.47 | 0.31 → 0.31 |
+| Qwen3-30B-A3B-Base | L38H19 | +0.164 | 0.09 → 0.09 | 0.11 → 0.11 | 0.02 → 0.02 | 0.02 → 0.02 | 0.41 → 0.41 | 0.36 → 0.36 |
+| Qwen3-30B-A3B-Base | L42H30 | +0.163 | 0.15 → 0.15 | 0.24 → 0.24 | 0.04 → 0.02 | 0.02 → 0.04 | 0.21 → 0.21 | 0.34 → 0.34 |
+| Qwen3-30B-A3B-Base | L39H5 | +0.147 | 0.03 → 0.03 | 0.32 → 0.32 | 0.14 → 0.05 | 0.05 → 0.14 | 0.28 → 0.27 | 0.18 → 0.18 |
+| Qwen3-30B-A3B-Base | L38H20 | +0.146 | 0.06 → 0.06 | 0.16 → 0.17 | 0.04 → 0.04 | 0.04 → 0.04 | 0.29 → 0.29 | 0.41 → 0.41 |
+| Mixtral-8x7B, BOS | L25H9 | +0.553 | 0.12 → 0.12 | 0.21 → 0.21 | 0.04 → 0.01 | 0.01 → 0.04 | 0.18 → 0.18 | 0.44 → 0.44 |
+| Mixtral-8x7B, BOS | L19H13 | +0.364 | 0.03 → 0.03 | 0.51 → 0.51 | 0.12 → 0.03 | 0.03 → 0.12 | 0.10 → 0.10 | 0.21 → 0.21 |
+| Mixtral-8x7B, BOS | L13H18 | +0.193 | 0.03 → 0.03 | 0.27 → 0.27 | 0.08 → 0.04 | 0.04 → 0.08 | 0.18 → 0.18 | 0.40 → 0.40 |
+| Mixtral-8x7B, BOS | L13H11 | +0.191 | 0.03 → 0.03 | 0.34 → 0.34 | 0.06 → 0.03 | 0.03 → 0.06 | 0.31 → 0.31 | 0.24 → 0.24 |
+| Mixtral-8x7B, BOS | L19H12 | +0.188 | 0.04 → 0.04 | 0.32 → 0.32 | 0.14 → 0.03 | 0.03 → 0.14 | 0.22 → 0.23 | 0.25 → 0.25 |
+| Mixtral-8x7B, BOS | L13H4 | +0.178 | 0.02 → 0.02 | 0.60 → 0.60 | 0.06 → 0.02 | 0.02 → 0.06 | 0.07 → 0.07 | 0.22 → 0.22 |
+
+![W5 heads](figures/ext7_wino_w5_heads.png)
+
+- **Qwen3** (layers L38, L39, L40, L42, L45; null layer L45): 5 of 160 heads at |z| ≥ 2 on both splits — positive L38H18 +0.342 [+0.301, +0.388], L38H21 +0.289 [+0.241, +0.342], L42H30 +0.163 [+0.135, +0.195]; negative L42H26 -0.248, L38H16 -0.547. L38: attention output +0.096, sum of single heads +0.439 (per-pair r 0.47). L39: attention output +0.158, sum of single heads +0.314 (per-pair r 0.39). L40: attention output +0.190, sum of single heads +0.280 (per-pair r 0.48). L42: attention output +0.250, sum of single heads +0.361 (per-pair r 0.55). Single-head patches are far from additive (per-pair r 0.39–0.55), so additive minimal head sets are not interpreted. Attention of the top heads at the final position (clean → corrupted): L38H18 option 0.12 → 0.12, first mention of the clean filler 0.06 → 0.04, of the other candidate 0.04 → 0.06, position 0 0.48; L38H21 option 0.07 → 0.07, first mention of the clean filler 0.05 → 0.04, of the other candidate 0.04 → 0.05, position 0 0.47; L38H19 option 0.11 → 0.11, first mention of the clean filler 0.02 → 0.02, of the other candidate 0.02 → 0.02, position 0 0.41.
+- **Mixtral (BOS)** (layers L13, L15, L19, L25, L28; null layer L28): 7 of 160 heads at |z| ≥ 2 on both splits — positive L25H9 +0.553 [+0.499, +0.608], L19H13 +0.364 [+0.319, +0.410], L13H18 +0.193 [+0.159, +0.229], L13H11 +0.191 [+0.138, +0.250], L19H12 +0.188 [+0.154, +0.229], L13H4 +0.178 [+0.150, +0.208]; negative L25H11 -0.159. L13: attention output +1.073, sum of single heads +0.572 (per-pair r 0.27). L15: attention output +0.551, sum of single heads +0.306 (per-pair r 0.33). L19: attention output +0.869, sum of single heads +0.719 (per-pair r 0.16). L25: attention output +0.583, sum of single heads +0.515 (per-pair r 0.32). Single-head patches are far from additive (per-pair r 0.16–0.42), so additive minimal head sets are not interpreted. Attention of the top heads at the final position (clean → corrupted): L25H9 option 0.21 → 0.21, first mention of the clean filler 0.04 → 0.01, of the other candidate 0.01 → 0.04, position 0 0.18; L19H13 option 0.51 → 0.51, first mention of the clean filler 0.12 → 0.03, of the other candidate 0.03 → 0.12, position 0 0.10; L13H18 option 0.27 → 0.27, first mention of the clean filler 0.08 → 0.04, of the other candidate 0.04 → 0.08, position 0 0.18.
+
+### W6. Experts: two-stage selection, joint search, CounterFact experts
+
+**W6: paper two-stage selection on WinoGrande STR (MoE-layer argmax on discovery → recurrence-first expert; validation pairs)**
+
+| Model | Pair set | Rule | Layer | Layer rescue (val) [95% CI] | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Spec / drop | Clean top-k coalition | Pattern |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two-stage | L41 | +1.778 [+1.594, +1.972] | 0.218 [0.200, 0.238] | L41E117 | 209/256 (≥ 128), 6 cand. | +1.002 [+0.844, +1.171] | +0.903 [+0.744, +1.071] | 0.111 [0.092, 0.131] | +1.800 [+1.613, +1.998] | A |
+| Qwen3-30B-A3B-Base | main | interior (≤ L−5) | L41 | +1.778 [+1.594, +1.972] | 0.218 [0.200, 0.238] | L41E117 | 209/256 (≥ 128), 6 cand. | +1.002 [+0.844, +1.171] | +0.903 [+0.744, +1.071] | 0.111 [0.092, 0.131] | +1.800 [+1.613, +1.998] | A |
+| Qwen3-30B-A3B-Base | replication | two-stage | L41 | +1.715 [+1.526, +1.911] | 0.200 [0.180, 0.219] | L41E117 | 218/256 (≥ 128), 6 cand. | +0.809 [+0.668, +0.960] | +0.693 [+0.548, +0.844] | 0.081 [0.064, 0.097] | +1.676 [+1.488, +1.865] | A |
+| Qwen3-30B-A3B-Base | replication | interior (≤ L−5) | L41 | +1.715 [+1.526, +1.911] | 0.200 [0.180, 0.219] | L41E117 | 218/256 (≥ 128), 6 cand. | +0.809 [+0.668, +0.960] | +0.693 [+0.548, +0.844] | 0.081 [0.064, 0.097] | +1.676 [+1.488, +1.865] | A |
+| Mixtral-8x7B, BOS | main | two-stage | L20 | +1.324 [+1.222, +1.429] | 0.172 [0.162, 0.183] | L20E000 | 246/256 (≥ 128), 1 cand. | +1.106 [+1.013, +1.203] | +0.940 [+0.836, +1.042] | 0.122 [0.109, 0.135] | +1.322 [+1.222, +1.427] | A |
+| Mixtral-8x7B, BOS | main | interior (≤ L−5) | L20 | +1.324 [+1.222, +1.429] | 0.172 [0.162, 0.183] | L20E000 | 246/256 (≥ 128), 1 cand. | +1.106 [+1.013, +1.203] | +0.940 [+0.836, +1.042] | 0.122 [0.109, 0.135] | +1.322 [+1.222, +1.427] | A |
+| Mixtral-8x7B, BOS | replication | two-stage | L20 | +1.396 [+1.296, +1.502] | 0.165 [0.155, 0.175] | L20E000 | 252/256 (≥ 128), 1 cand. | +1.166 [+1.067, +1.269] | +0.974 [+0.867, +1.084] | 0.115 [0.104, 0.126] | +1.381 [+1.282, +1.487] | A |
+| Mixtral-8x7B, BOS | replication | interior (≤ L−5) | L20 | +1.396 [+1.296, +1.502] | 0.165 [0.155, 0.175] | L20E000 | 252/256 (≥ 128), 1 cand. | +1.166 [+1.067, +1.269] | +0.974 [+0.867, +1.084] | 0.115 [0.104, 0.126] | +1.381 [+1.282, +1.487] | A |
+
+**W6: equal-norm check at the selected layer (Qwen3: gate-matched control, Table 9; Mixtral: other active expert, Table 11)**
+
+| Model | Expert | Control | n (anchor-active val, directed) | Raw Spec vs control | Selected, equal norm | Control, equal norm | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | gate_matched | 223 | +1.034 [+0.866, +1.212] | +0.534 [+0.458, +0.617] | +0.084 [+0.055, +0.116] | +0.450 [+0.373, +0.534] |
+| Mixtral-8x7B, BOS | L20E000 | active_pair | 246 | +0.996 [+0.900, +1.088] | +0.313 [+0.276, +0.351] | +0.152 [+0.129, +0.177] | +0.160 [+0.132, +0.189] |
+
+**W6: joint (layer, expert) search over all layers (recurrence gate = half of the discovery directed cases)**
+
+| Model | Pair set | Rank | (layer, expert) | Disc. active (directed) | Disc. all-case | Val rescue | Spec |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | 1 | L41E117 | 209 | +0.788 | +1.002 [+0.844, +1.171] | +0.903 [+0.744, +1.071] |
+| Qwen3-30B-A3B-Base | main | 2 | L43E081 | 251 | +0.649 | +0.701 [+0.595, +0.806] | +0.607 [+0.496, +0.718] |
+| Qwen3-30B-A3B-Base | main | 3 | L39E071 | 205 | +0.448 | +0.451 [+0.363, +0.546] | +0.348 [+0.258, +0.444] |
+| Qwen3-30B-A3B-Base | main | 4 | L44E122 | 217 | +0.358 | +0.297 [+0.228, +0.374] | +0.251 [+0.178, +0.332] |
+| Qwen3-30B-A3B-Base | main | 5 | L41E053 | 244 | +0.352 | +0.265 [+0.211, +0.323] | +0.041 [-0.031, +0.115] |
+| Qwen3-30B-A3B-Base | replication | 1 | L43E081 | 256 | +0.745 | +0.715 [+0.592, +0.841] | +0.603 [+0.475, +0.736] |
+| Qwen3-30B-A3B-Base | replication | 2 | L41E117 | 218 | +0.699 | +0.809 [+0.668, +0.960] | +0.693 [+0.548, +0.844] |
+| Qwen3-30B-A3B-Base | replication | 3 | L39E071 | 192 | +0.420 | +0.446 [+0.362, +0.533] | +0.346 [+0.258, +0.439] |
+| Qwen3-30B-A3B-Base | replication | 4 | L44E122 | 224 | +0.339 | +0.333 [+0.252, +0.425] | +0.266 [+0.182, +0.362] |
+| Qwen3-30B-A3B-Base | replication | 5 | L41E053 | 252 | +0.326 | +0.310 [+0.250, +0.372] | +0.130 [+0.060, +0.203] |
+| Mixtral-8x7B, BOS | main | 1 | L20E000 | 246 | +1.053 | +1.106 [+1.013, +1.203] | +0.940 [+0.836, +1.042] |
+| Mixtral-8x7B, BOS | main | 2 | L19E006 | 248 | +1.002 | +0.966 [+0.893, +1.039] | +0.841 [+0.765, +0.919] |
+| Mixtral-8x7B, BOS | main | 3 | L21E006 | 228 | +0.738 | +0.630 [+0.553, +0.711] | +0.162 [+0.048, +0.276] |
+| Mixtral-8x7B, BOS | main | 4 | L26E002 | 235 | +0.562 | +0.583 [+0.489, +0.682] | +0.261 [+0.153, +0.377] |
+| Mixtral-8x7B, BOS | main | 5 | L18E005 | 234 | +0.441 | +0.354 [+0.277, +0.440] | +0.043 [-0.029, +0.123] |
+| Mixtral-8x7B, BOS | replication | 1 | L20E000 | 252 | +1.033 | +1.166 [+1.067, +1.269] | +0.974 [+0.867, +1.084] |
+| Mixtral-8x7B, BOS | replication | 2 | L19E006 | 256 | +0.969 | +1.078 [+0.990, +1.172] | +0.922 [+0.831, +1.018] |
+| Mixtral-8x7B, BOS | replication | 3 | L21E006 | 241 | +0.630 | +0.719 [+0.640, +0.797] | +0.284 [+0.177, +0.387] |
+| Mixtral-8x7B, BOS | replication | 4 | L26E002 | 242 | +0.597 | +0.648 [+0.546, +0.755] | +0.330 [+0.205, +0.455] |
+| Mixtral-8x7B, BOS | replication | 5 | L24E002 | 192 | +0.428 | +0.510 [+0.427, +0.600] | +0.292 [+0.213, +0.375] |
+
+**W6: the CounterFact STR experts (Direction 6) as fixed hypotheses on WinoGrande validation pairs**
+
+| Model | CounterFact expert | Disc. active | Val active | Val rescue | Spec | Rescue / drop |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L44E069 | 6/256 | 7 | +0.009 [-0.001, +0.025] | -0.085 [-0.108, -0.061] | 0.001 [-0.000, 0.003] |
+| Qwen3-30B-A3B-Base | L42E115 | 5/256 | 7 | +0.033 [+0.000, +0.079] | -0.050 [-0.089, -0.003] | 0.004 [0.000, 0.010] |
+| Mixtral-8x7B, BOS | L19E002 | 9/256 | 6 | +0.004 [-0.002, +0.015] | -0.545 [-0.610, -0.481] | 0.001 [-0.000, 0.002] |
+| Mixtral-8x7B, BOS | L21E001 | 8/256 | 12 | +0.006 [+0.001, +0.014] | -0.583 [-0.662, -0.510] | 0.001 [0.000, 0.002] |
+| Mixtral-8x7B, BOS | L18E001 | 3/256 | 3 | +0.006 [+0.000, +0.019] | -0.343 [-0.400, -0.291] | 0.001 [0.000, 0.003] |
+| Mixtral-8x7B, BOS | L19E006 | 248/256 | 256 | +0.966 [+0.893, +1.039] | +0.841 [+0.765, +0.919] | 0.126 [0.117, 0.134] |
+
+- **Qwen3 L41E117**: active in 209 of 256 discovery directed cases; carries 56% of the L41 MoE rescue; rank 1 among the case's active experts in 178 of 223 anchor-active validation cases; at equal norm with its gate-matched partner it still wins by +0.450 [+0.373, +0.534] (raw +1.034 [+0.866, +1.212]). Replication set: L41E117 again (Spec +0.693 [+0.548, +0.844]). The joint search over all 48 layers puts it first on main and second on the replication set behind L43E081 (the main set's second locus).
+- **Mixtral L20E000**: active in 246 of 256; Spec +0.940 [+0.836, +1.042]; equal norm +0.160 [+0.132, +0.189] (the other active expert as control, Table 11 analogue); replicated (L20E000, Spec +0.974 [+0.867, +1.084]); second locus L19E006, the expert that carried Mixtral's sink-state final tokens without BOS (Direction 3) and is an ordinary, positively specific content expert here.
+- The CounterFact STR selections (Qwen3 L44E069 / L42E115; Mixtral BOS L19E002 / L21E001 / L18E001) are routed at the WinoGrande final position in only 3–12 of 256 discovery directed cases and rescue ≈ 0 (table above); only L19E006 — the paper's Mixtral expert, negatively specific on CounterFact — is routed here (248 of 256) and is WinoGrande's second locus. Factual recall and WinoGrande's trigger prediction use different late experts in both models.
+
+### Strata and robustness
+
+**W2 strata (all 256 main pairs, layers fixed by the main discovery argmax; descriptive)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Block at L*_block / drop | Attention share | Peak attention / peak MoE (normalised) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | context-free association passes (assoc) | True | 31 | 10.10 | 0.218 [0.186, 0.250] | 0.013 [-0.002, 0.028] | 0.246 [0.214, 0.276] | 0.21 [0.19, 0.26] | 0.047 / 0.218 |
+| Qwen3-30B-A3B-Base | context-free association passes (assoc) | False | 225 | 8.07 | 0.211 [0.197, 0.226] | 0.026 [0.013, 0.039] | 0.231 [0.216, 0.245] | 0.17 [0.15, 0.20] | 0.032 / 0.211 |
+| Qwen3-30B-A3B-Base | person-name options | True | 23 | 7.93 | 0.109 [0.078, 0.148] | 0.132 [0.071, 0.194] | 0.149 [0.111, 0.193] | 0.30 [0.26, 0.38] | 0.132 / 0.169 |
+| Qwen3-30B-A3B-Base | person-name options | False | 233 | 8.35 | 0.222 [0.208, 0.236] | 0.014 [0.004, 0.024] | 0.241 [0.228, 0.254] | 0.16 [0.14, 0.19] | 0.030 / 0.222 |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 64 | 8.68 | 0.199 [0.177, 0.221] | 0.009 [-0.006, 0.025] | 0.213 [0.189, 0.238] | 0.17 [0.15, 0.21] | 0.036 / 0.199 |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 192 | 8.19 | 0.217 [0.200, 0.234] | 0.030 [0.015, 0.045] | 0.240 [0.224, 0.255] | 0.18 [0.15, 0.21] | 0.030 / 0.217 |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | True | 51 | 8.01 | 0.187 [0.161, 0.215] | 0.050 [0.025, 0.080] | 0.222 [0.196, 0.249] | 0.28 [0.24, 0.33] | 0.050 / 0.187 |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | False | 205 | 8.39 | 0.218 [0.203, 0.233] | 0.018 [0.006, 0.031] | 0.235 [0.220, 0.251] | 0.16 [0.14, 0.19] | 0.031 / 0.218 |
+| Qwen3-30B-A3B-Base | one-token option | True | 247 | 8.34 | 0.215 [0.201, 0.229] | 0.023 [0.012, 0.035] | 0.234 [0.220, 0.248] | 0.17 [0.15, 0.20] | 0.031 / 0.215 |
+| Qwen3-30B-A3B-Base | one-token option | False | 9 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base | trigger word in context | True | 6 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base | trigger word in context | False | 250 | 8.32 | 0.215 [0.201, 0.229] | 0.022 [0.010, 0.033] | 0.235 [0.221, 0.249] | 0.17 [0.15, 0.20] | 0.031 / 0.215 |
+| Mixtral-8x7B, BOS | context-free association passes (assoc) | True | 25 | 9.61 | 0.173 [0.149, 0.196] | 0.091 [0.068, 0.115] | 0.262 [0.241, 0.284] | 0.36 [0.34, 0.39] | 0.129 / 0.181 |
+| Mixtral-8x7B, BOS | context-free association passes (assoc) | False | 231 | 7.58 | 0.165 [0.157, 0.172] | 0.154 [0.143, 0.166] | 0.246 [0.236, 0.256] | 0.35 [0.34, 0.36] | 0.154 / 0.165 |
+| Mixtral-8x7B, BOS | person-name options | True | 23 | 6.63 | 0.124 [0.094, 0.155] | 0.146 [0.112, 0.180] | 0.255 [0.217, 0.295] | 0.43 [0.39, 0.48] | 0.146 / 0.169 |
+| Mixtral-8x7B, BOS | person-name options | False | 233 | 7.90 | 0.169 [0.161, 0.176] | 0.147 [0.135, 0.159] | 0.247 [0.238, 0.257] | 0.34 [0.33, 0.35] | 0.147 / 0.169 |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 85 | 8.88 | 0.152 [0.140, 0.164] | 0.174 [0.153, 0.195] | 0.222 [0.205, 0.238] | 0.34 [0.33, 0.36] | 0.174 / 0.153 |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 171 | 7.23 | 0.174 [0.165, 0.183] | 0.130 [0.119, 0.142] | 0.264 [0.254, 0.274] | 0.35 [0.34, 0.36] | 0.130 / 0.174 |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | True | 51 | 7.15 | 0.163 [0.145, 0.181] | 0.125 [0.097, 0.159] | 0.246 [0.224, 0.267] | 0.37 [0.34, 0.39] | 0.125 / 0.163 |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | False | 205 | 7.94 | 0.166 [0.158, 0.174] | 0.151 [0.139, 0.163] | 0.248 [0.238, 0.259] | 0.35 [0.34, 0.36] | 0.151 / 0.166 |
+| Mixtral-8x7B, BOS | one-token option | True | 235 | 7.83 | 0.167 [0.159, 0.175] | 0.146 [0.135, 0.157] | 0.248 [0.238, 0.258] | 0.35 [0.34, 0.36] | 0.146 / 0.167 |
+| Mixtral-8x7B, BOS | one-token option | False | 21 | 7.28 | 0.152 [0.123, 0.180] | 0.154 [0.104, 0.212] | 0.247 [0.222, 0.274] | 0.37 [0.33, 0.41] | 0.154 / 0.160 |
+| Mixtral-8x7B, BOS | trigger word in context | True | 6 |  |  |  |  |  |  |
+| Mixtral-8x7B, BOS | trigger word in context | False | 250 | 7.83 | 0.167 [0.160, 0.175] | 0.147 [0.136, 0.158] | 0.249 [0.239, 0.258] | 0.35 [0.34, 0.36] | 0.147 / 0.167 |
+
+**W6 strata: the main two-stage expert on all 256 main pairs by stratum (descriptive; layer and expert fixed)**
+
+| Model | Expert | Stratum | Value | Pairs | Layer rescue | Expert rescue | Spec |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | context-free association passes (assoc) | True | 31 | +2.203 [+1.754, +2.664] | +1.028 [+0.738, +1.342] | +0.883 [+0.583, +1.203] |
+| Qwen3-30B-A3B-Base | L41E117 | context-free association passes (assoc) | False | 225 | +1.706 [+1.563, +1.851] | +0.877 [+0.760, +1.002] | +0.776 [+0.657, +0.900] |
+| Qwen3-30B-A3B-Base | L41E117 | person-name options | True | 23 | +0.867 [+0.587, +1.215] | +0.046 [-0.008, +0.114] | -0.060 [-0.139, +0.016] |
+| Qwen3-30B-A3B-Base | L41E117 | person-name options | False | 233 | +1.855 [+1.712, +2.000] | +0.979 [+0.861, +1.098] | +0.873 [+0.754, +0.993] |
+| Qwen3-30B-A3B-Base | L41E117 | top-1 in both directions | True | 64 | +1.723 [+1.499, +1.967] | +0.609 [+0.400, +0.824] | +0.480 [+0.271, +0.699] |
+| Qwen3-30B-A3B-Base | L41E117 | top-1 in both directions | False | 192 | +1.780 [+1.618, +1.950] | +0.990 [+0.856, +1.126] | +0.892 [+0.756, +1.029] |
+| Qwen3-30B-A3B-Base | L41E117 | AfLite survivor (train_debiased) | True | 51 | +1.499 [+1.239, +1.798] | +0.675 [+0.483, +0.890] | +0.559 [+0.357, +0.787] |
+| Qwen3-30B-A3B-Base | L41E117 | AfLite survivor (train_debiased) | False | 205 | +1.832 [+1.672, +1.992] | +0.950 [+0.822, +1.083] | +0.846 [+0.717, +0.978] |
+| Qwen3-30B-A3B-Base | L41E117 | one-token option | True | 247 | +1.790 [+1.645, +1.940] | +0.914 [+0.798, +1.034] | +0.807 [+0.690, +0.927] |
+| Qwen3-30B-A3B-Base | L41E117 | trigger word in context | False | 250 | +1.788 [+1.647, +1.936] | +0.908 [+0.791, +1.033] | +0.800 [+0.684, +0.924] |
+| Mixtral-8x7B, BOS | L20E000 | context-free association passes (assoc) | True | 25 | +1.660 [+1.390, +1.930] | +1.391 [+1.121, +1.656] | +1.206 [+0.930, +1.473] |
+| Mixtral-8x7B, BOS | L20E000 | context-free association passes (assoc) | False | 231 | +1.248 [+1.175, +1.322] | +1.046 [+0.975, +1.115] | +0.877 [+0.801, +0.949] |
+| Mixtral-8x7B, BOS | L20E000 | person-name options | True | 23 | +0.823 [+0.584, +1.092] | +0.405 [+0.253, +0.573] | +0.190 [-0.038, +0.416] |
+| Mixtral-8x7B, BOS | L20E000 | person-name options | False | 233 | +1.334 [+1.263, +1.407] | +1.146 [+1.080, +1.214] | +0.980 [+0.912, +1.049] |
+| Mixtral-8x7B, BOS | L20E000 | top-1 in both directions | True | 85 | +1.348 [+1.226, +1.474] | +1.064 [+0.947, +1.181] | +0.847 [+0.716, +0.975] |
+| Mixtral-8x7B, BOS | L20E000 | top-1 in both directions | False | 171 | +1.259 [+1.168, +1.351] | +1.088 [+1.001, +1.176] | +0.939 [+0.852, +1.030] |
+| Mixtral-8x7B, BOS | L20E000 | AfLite survivor (train_debiased) | True | 51 | +1.165 [+0.984, +1.343] | +1.001 [+0.830, +1.178] | +0.855 [+0.675, +1.043] |
+| Mixtral-8x7B, BOS | L20E000 | AfLite survivor (train_debiased) | False | 205 | +1.319 [+1.242, +1.396] | +1.099 [+1.026, +1.174] | +0.922 [+0.845, +1.001] |
+| Mixtral-8x7B, BOS | L20E000 | one-token option | True | 235 | +1.305 [+1.230, +1.382] | +1.094 [+1.023, +1.167] | +0.924 [+0.847, +0.999] |
+| Mixtral-8x7B, BOS | L20E000 | one-token option | False | 21 | +1.107 [+0.842, +1.354] | +0.917 [+0.661, +1.170] | +0.744 [+0.461, +1.015] |
+| Mixtral-8x7B, BOS | L20E000 | trigger word in context | False | 250 | +1.307 [+1.234, +1.380] | +1.095 [+1.025, +1.167] | +0.922 [+0.848, +0.997] |
+
+Replication set, own margin pools and single directions reproduce the W2 peaks and attention shares (tables above) and the W6 selections. Person-name pairs ("Brett bought Kevin dinner … Brett felt very" → " generous" / " thankful"; 9 % of the main set) behave differently: their drop is carried less by the selected experts (W6 strata) and their attention share is 0.30 (Qwen3) and 0.43 (Mixtral); on the direct paths (W4 strata) the attention outputs write 0.26 of the drop for names vs 0.04 for objects (Qwen3), 0.49 of the drop for names vs 0.28 for objects (Mixtral) — the social items are the attention-leaning subset (W7, the role swap of the two names, is in ext7-controls).
+
+### Reading
+
+- **WinoGrande (option swap) is not IOI-like at the final position.** In both models the answer is written by the MoE outputs of
+  one late band (Qwen3 L39–L44, Mixtral L19–L21) and, within it, by one positively specific expert (pattern A: Qwen3 L41E117,
+  Mixtral L20E000, both replicated), with a larger drop-normalised MoE peak than CounterFact's. Attention is necessary (it is the
+  only route by which the option's identity reaches the final token; all-attention = 1) but it is not a localised bottleneck at
+  the final position in Qwen3, and only partly in Mixtral.
+- **The two models move the option differently.** Qwen3 transports it gradually (the final-position residual restoration rises over
+  some twenty layers, W3); its strongest single heads (L38H18, L38H21 positive, L38H16 negative; all three in the same GQA key/value group, heads 16–23)
+  cancel within the layer, so no
+  attention layer patch exceeds 0.03 of the drop. Mixtral has discrete transport steps at L13, L19 and L25 (the residual hand-off
+  crosses half of the drop at L13), carried by a few heads that attend to the filled option and shift their attention to the first
+  mention of the candidate the option names (e.g. L19H13: 0.12 vs 0.03 of its mass on that antecedent in the clean vs corrupted
+  run) — a coreference-like read of the antecedent, the closest WinoGrande analogue of an IOI mover, but sub-additive and
+  shared by several heads.
+- **Three measurements, one direction.** Single-layer patches (attention share 0.16 / 0.34 vs CounterFact 0.54 / 0.58), joint
+  patches (all MoE outputs restore about 0.8 of the drop; CounterFact Qwen3 ≈ 0.5 in ext8-addback's log, +6.2 of a ≈ 12.2 drop,
+  final value in its section) and direct paths (MoE
+  outputs write about 0.95 / 0.7 of the logit difference) all put WinoGrande further on the MoE side than factual recall; Mixtral
+  is the more attention-involved of the two models on both tasks.
+- **Experts are task-specific.** The CounterFact STR selections are idle on WinoGrande (3–12 of 256 directed cases routed) and the
+  WinoGrande experts are new ones in the same late band; they carry person-name pairs much less (Qwen3 not at all, W6 strata),
+  and those social pairs are also the attention-leaning subset (W4 strata: direct attention path 0.26 vs 0.04 of the drop in Qwen3,
+  0.49 vs 0.28 in Mixtral, names vs objects; 23 name pairs only). Expert-level
+  localisation is a property of the late read-out of a task, not of a model-wide store.
+
+### Caveats
+
+- The STR corruption swaps the filled option only (decision (a)); the role swap of the two candidates' earlier mentions (W7, Z7)
+  and IOI (W8) are run by ext7-controls with these runners. The 256 main pairs are mostly physical items (9 % names) because the
+  shared margin pool requires all three protocols to solve the pair.
+- Margins are relative to the twin's trigger; the clean top-1 is the trigger in only 40–48 % of directed cases (strata
+  `top1_both`).
+- `assoc` pairs (12 % / 10 %) are solvable from the local context alone; they are kept and reported as a stratum.
+- Per-head patches are small (bf16 noise floor ≈ 0.06 logit per row on OLMoE); detections use both splits (|z| ≥ 2 on discovery
+  and validation) next to pair-bootstrap CIs.
+- moetrace/engine.py was replaced by ext8's verified version at 07:36Z (additive; regression identical). The Qwen3 W2 sweep ran
+  before, all other passes after.
+- Mixtral without BOS (the paper's protocol) is not run (decision (e)); the case set keeps it possible on identical pairs.
+- The direct split uses ext7-controls' shared implementation (fp32 final norm on the bf16 residuals; its Δ_clean differs from the
+  engine's by ≤ 0.14 logit); ext7-wino's own implementation (`scripts/ext7_wino_dla.py`, bf16 norm as the engine) agrees to ≤ 0.002
+  of the drop (last table of W4).
+- All-attention sanity is 0.99 rather than exactly 1 in Qwen3 (the MoE of the final position is recomputed inside the wavefront
+  row in a different batch, bf16), exactly 1 in Mixtral and OLMoE.
+
+### Files
+
+- Code: `moetrace/ext7_pairs.py` (generic STR-pair runner helpers, pair-level statistics, `analysis.ModelData` adapter),
+  `scripts/ext7_wino_{sweep,expert,grid,heads,joint,dla,verify,analyze,text}.py`, chains `scripts/ext7_wino_chain{1,2,3,4}.sh` (chain 1 died at the Mixtral sweep with a CUDA OOM, chain 2 resumed with `--wf-chunk 2048`).
+- Runs: `results/wino_qwen3_str/`, `results/wino_mixtral_bos_str/` (`str_sweep_rows`, `str_sweep_routing`, `sweep_cases`,
+  `str_expert_rows` (ext6 schema; used by ext8 for add-back), `str_grid_w{1,5}_rows`, `head_rows`, `head_attn_final.npz`,
+  `head_positions`, `joint_rows`, `direct_split` (shared W4 split), `dla_rows`, `dla_cases`, `case_sets.json` (families), `run_meta.json`).
+- Verification: `results/verify_ext7_wino_olmoe.json`. Numbers: `results/ext7_wino_summary.json`. Tables `results/tables/ext7_wino_*`,
+  figures `results/figures/ext7_wino_*`.
+
+
+## Direction 7b: Role swap, IOI and the three-task comparison
+
+**Summary.** Calibration tasks for the WinoGrande STR study (agent ext7-controls): the same final-position patches, with symmetric token replacement only (no Gaussian noise) and Δ = LD(r, r′), on CounterFact (subject swap), WinoGrande (option swap and role swap) and IOI (S2 → IO and S1, IO → other names), in Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS. The question is whether WinoGrande's repair runs through attention, as in IOI, or through the MoE sublayers, as the paper reads factual recall. **WinoGrande is not IOI-like at the final position; it is the most MoE-heavy of the three tasks, and the two WinoGrande corruption sites agree.** Four views of the final-position repair put the tasks in the same order IOI < CounterFact < WinoGrande on the MoE side in both models (Qwen3 / Mixtral; within WinoGrande three of the four make the option swap the more MoE-heavy site): the attention share of the positive single-layer rescue (Direction-2b AUC+) is IOI S2 → IO 0.92 / 0.80 > CounterFact 0.54 / 0.58 > WinoGrande role swap 0.32 / 0.39 > option swap 0.16 / 0.34; the summed single-layer MoE patches are -0.25 / -0.07 of the drop in IOI (net negative, from the last two or three layers), +0.61 / +0.51 in CounterFact and +1.15 / +1.14 (role) and +1.05 / +1.14 (option) in WinoGrande; patching every MoE output at the final position at once (W4) restores -0.27 / -0.02, +0.53 / +0.41, +0.77 / +0.70 and +0.84 / +0.79 of the drop; and the summed attention writes carry a direct-path share of 1.40 / 1.17, 0.50 / 0.63, 0.19 / 0.38 and 0.05 / 0.29. IOI, measured with the same patches, is attention-driven (its single-layer attention patches add up to the whole drop), so the method does see an attention task as one; its heads behave as in GPT-2 small: with S2 → IO the largest Qwen3 head reads S2 (L42H11, 0.75 of its attention on S2), with S1, IO → other names the name movers dominate (L42H10, 0.87 on IO, whose attention moves to S1 when S2 becomes IO; four L45 heads), the corruption-site dependence of Zhang & Nanda's App. F. The attention side of WinoGrande differs by model: small in Qwen3 (Σ attention +0.16 option, +0.56 role vs CounterFact +0.79), as large as in CounterFact in Mixtral (+0.73 / +0.87 vs +0.84) but outweighed by the MoE. The role swap (exchange the candidates' first mentions, keep the filled option) shifts weight toward attention relative to the option swap (Qwen3: an attention peak at L38 that the option swap lacks; Mixtral: same attention L13 and MoE L19–L20 peaks, slightly larger attention). CounterFact under STR keeps Direction 2b's split (attention ≈ MoE; attention peaks L40 / L18 before the MoE peaks L44 / L21) with no GN inflation of the attention effect.
+
+### What was run
+
+- **CounterFact STR attention sweep (task 1).** The Direction-6 STR cases and donors (`results/qwen3_str`, `results/mixtral_bos_str`: paper discovery/validation IDs with ≥ 1 known same-relation donor, up to five donors per case, 852 / 858 donor rows) re-run with the kinds `attn_layer` (attention-sublayer output at the final position := clean; the MoE of that layer recomputes), `layer` (MoE output, repeated in the same pass) and `block` (both) at every layer, parent = donor row (`scripts/ext7_cf_attnsweep.py`; runs `results/{qwen3,mixtral_bos}_str_attnsweep`, donor-level rows). Per-case values are donor means (primary) or the first donor (sensitivity); the GN comparison uses the Direction-2b sweeps `results/{qwen3,mixtral_bos}_bos_attnsweep` restricted to the same cases and split. Statistics are those of `moetrace/ext2_attn.py` (peaks, AUC+ attention share, additivity), applied through an adapter (`ext7_controls.StrAttnRun`).
+- **W7 WinoGrande role swap.** From each model's WinoGrande margin pool (`results/wino_<proto>/scan_pairs.parquet`, margin both ways, both options capitalised names) the twins whose two names are each mentioned exactly once before the blank and not after it; the role-swapped prompt exchanges those two first mentions and keeps the filled option ("Dennis helped Adam … since Dennis was the" → " trainer"; "Adam helped Dennis … since Dennis was the" → " student"). Two STR pairs per twin, (A, swap(A)) with r = trig_a and (B, swap(B)) with r = trig_b, kept when token-symmetric (same length, the two mention spans at the same positions, identical tokens elsewhere, the same single-token trigger ids after both prompts). Qwen3: 535 name twins → 632 role pairs (213 twins fail symmetry: a sentence-initial name tokenises differently from a mid-sentence one in Qwen3's BPE) → 558 pass the margin both ways (Δ ≥ 1 on the clean prompt, ≤ −1 on the swapped one; 306 twins); Mixtral BOS: 150 → 294 → 270 (146 twins). Case sets (`data/wino_role/case_sets_<proto>.json`, contract format): random.Random(0) shuffle over twins (both role pairs of a twin stay in one split) → 128/128 discovery/validation pairs in both models (Mixtral just reaches 256), replication 128/128 for Qwen3 only. The option swap of the same model (agent ext7-wino, `results/wino_<proto>_str`, its shared 776-pair set) provides the fixed hypotheses (its discovery peak layers).
+- **W8 IOI.** The 15 BABA templates of Wang et al. (2023) and their ABBA versions, names, places and objects copied from Easy-Transformer `easy_transformer/ioi_dataset.py` (fetched 2026-10-04), restricted to words that are one leading-space token under both tokenizers (65 of 99 names, 8 places, 6 of 8 objects: " necklace" and " snack" split); 1,600 items (seed 0; `data/ioi/`). Two STR corruptions as in Zhang & Nanda: (i) S2 → IO ("… Mary gave a drink to" → " John"; the corrupted prompt is an IOI sentence whose answer is S; both directions, primary) and (ii) S1 and IO → two other random names, S2 kept (Appendix F; the corrupted prompt has no answer among IO and S, so only d = 0, and its Δ is the residual preference for IO over S, mean −1.6 to −1.7). Competence: {idata.get('pool_s2io_both_models', '?')} of 1,600 items pass (i)'s margin both ways in both models; one seed-0 split of these items (128/128 + replication 128/128) serves both corruptions and both models.
+- **Runs.** W2 final-position sweeps (`layer`, `attn_layer`, `block` at every layer) with agent ext7-wino's generic STR-pair runner (`scripts/ext7_wino_sweep.py`), W5 per-head patches on IOI (`scripts/ext7_wino_heads.py`, top-4 discovery attention layers + one null layer), W3 position × layer grids (window 1, kinds `layer` and `attn_layer`, first 64 validation pairs) at named positions only (`scripts/ext7_{role,ioi}_grid.py`: the grid executor of `scripts/ext7_wino_grid.py` restricted to the two exchanged mentions, the filled option and the final position, or to S1, IO, S2, the tokens after S2 and the final position), W4 joint decomposition (`scripts/ext7_wino_joint.py`, ext8 `multi` steps) and its direct-path complement (`python -m moetrace.ext7_controls direct`, prefill only). Final-position attention of every head on IO / S1 / S2 for the IOI items: `scripts/ext7_ioi_attn.py`.
+- **Verification.** `results/verify_ext7_controls_cf_olmoe.json`: on OLMoE, 12 CounterFact STR (case, donor) pairs × 16 layers against transformers hooks (self_attn / MoE outputs replaced at the final position on the donor run): rescue r 0.996 / 0.998 / 0.993 (attn_layer / block / layer), max |ΔΔ| 0.47 / 0.34 / 0.38, identity (clean parent) ≤ 0.25; the GN calibration of Direction 2b had r 0.990 / 0.994 / 0.983. The pair runner, the grid executor and the W4 multi steps were verified by agents ext7-wino (`results/verify_ext7_wino_olmoe.json`) and ext8-addback (`results/verify_ext8_engine_olmoe.json`); the restricted grids use the same executor with a different unit list; the direct-path split was smoke-tested on OLMoE WinoGrande pairs (fp32 Δ vs engine Δ within 0.06).
+- **GPU.** ≈ 83 min in 8 job groups (cf 9, direct 9, ioi 8, role 3, w2 15, w3 21, w4 9, w5 9 min), shared with two other agents through `scripts/gpu_queue.sh`.
+
+### Three tasks on one attention–MoE axis
+
+**Final-position sublayer attribution per task (validation; rescue / drop = mean rescue over mean drop; W4 = all layers at once)**
+
+| Model | Task (STR site) | Val. set | Mean drop | MoE peak: L, rescue/drop | Attention peak: L, rescue/drop | Block peak: L, rescue/drop | Attention share of the positive rescue (AUC+) | Σ_l attention / Σ_l MoE (signed, / drop) | W4 all-attention A / all-MoE M (denoise) | W4 φ_attn = ½[A + 1 − M] | W4 M (noising) | Direct path: A_dir / M_dir |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact STR (subject swap, ext6 donors) | 108 cases | +11.67 | L44: 0.178 | L40: 0.339 | L40: 0.406 | 0.54 [0.51, 0.57] | +0.79 / +0.61 | 1.00 [1.00, 1.00] / 0.53 [0.49, 0.57] | 0.73 [0.71, 0.76] | 0.52 [0.49, 0.56] | 0.50 [0.46, 0.54] / 0.51 [0.47, 0.55] |
+| Qwen3-30B-A3B-Base | WinoGrande option swap (ext7-wino) | 128 pairs | +8.14 | L41: 0.218 | L38: 0.009 | L41: 0.238 | 0.16 [0.13, 0.20] | +0.16 / +1.05 | 0.99 [0.98, 1.00] / 0.84 [0.83, 0.86] | 0.57 [0.56, 0.58] | 0.84 [0.83, 0.86] | 0.05 [0.02, 0.08] / 0.95 [0.92, 0.98] |
+| Qwen3-30B-A3B-Base | WinoGrande role swap (W7) | 128 pairs | +6.94 | L42: 0.175 | L38: 0.131 | L42: 0.217 | 0.32 [0.29, 0.35] | +0.56 / +1.15 | 1.00 [0.99, 1.01] / 0.77 [0.75, 0.80] | 0.61 [0.60, 0.63] | 0.78 [0.75, 0.80] | 0.19 [0.16, 0.22] / 0.81 [0.78, 0.84] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | 128 pairs | +12.65 | L41: 0.017 | L45: 0.329 | L45: 0.307 | 0.92 [0.90, 0.94] | +1.00 / -0.25 | 1.00 [1.00, 1.00] / -0.27 [-0.29, -0.25] | 1.14 [1.12, 1.15] | -0.27 [-0.29, -0.24] | 1.40 [1.38, 1.43] / -0.40 [-0.43, -0.38] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | 128 pairs (d = 0 only) | +7.87 | L41: 0.026 | L45: 0.606 | L45: 0.576 | 0.89 [0.86, 0.91] | +1.04 / -0.27 | 1.00 [1.00, 1.01] / -0.24 [-0.27, -0.20] | 1.12 [1.10, 1.14] | -0.06 [-0.09, -0.03] | 1.37 [1.33, 1.40] / -0.35 [-0.39, -0.32] |
+| Mixtral-8x7B, BOS | CounterFact STR (subject swap, ext6 donors) | 106 cases | +12.97 | L21: 0.085 | L18: 0.180 | L19: 0.267 | 0.58 [0.55, 0.60] | +0.84 / +0.51 | 1.00 [1.00, 1.00] / 0.41 [0.37, 0.45] | 0.80 [0.77, 0.82] | 0.42 [0.39, 0.46] | 0.63 [0.60, 0.66] / 0.36 [0.32, 0.39] |
+| Mixtral-8x7B, BOS | WinoGrande option swap (ext7-wino) | 128 pairs | +7.69 | L20: 0.172 | L13: 0.141 | L19: 0.251 | 0.34 [0.33, 0.36] | +0.73 / +1.14 | 1.00 [1.00, 1.00] / 0.79 [0.76, 0.81] | 0.61 [0.60, 0.62] | 0.79 [0.76, 0.81] | 0.29 [0.27, 0.31] / 0.71 [0.69, 0.73] |
+| Mixtral-8x7B, BOS | WinoGrande role swap (W7) | 128 pairs | +6.70 | L19: 0.197 | L13: 0.160 | L19: 0.278 | 0.39 [0.38, 0.41] | +0.87 / +1.14 | 1.00 [1.00, 1.00] / 0.70 [0.66, 0.73] | 0.65 [0.64, 0.67] | 0.70 [0.66, 0.73] | 0.38 [0.35, 0.41] / 0.62 [0.59, 0.65] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | 128 pairs | +11.28 | L17: 0.047 | L19: 0.204 | L19: 0.241 | 0.80 [0.79, 0.81] | +0.98 / -0.07 | 1.00 [1.00, 1.00] / -0.02 [-0.05, -0.00] | 1.01 [1.00, 1.02] | -0.03 [-0.05, -0.00] | 1.17 [1.14, 1.19] / -0.17 [-0.19, -0.14] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | 128 pairs (d = 0 only) | +7.27 | L28: 0.096 | L30: 0.210 | L30: 0.158 | 0.82 [0.81, 0.84] | +1.08 / -0.07 | 1.00 [1.00, 1.00] / -0.14 [-0.17, -0.11] | 1.07 [1.05, 1.09] | 0.00 [-0.03, 0.03] | 1.09 [1.07, 1.12] / -0.11 [-0.13, -0.08] |
+
+![Attention share of the positive final-position rescue per task (left) and drop-normalised attention / MoE peaks (right)](../figures/ext7_controls_three_task.png)
+
+Columns: MoE / attention / block peak = discovery argmax layer (CounterFact: paper discovery split, donor mean) and its validation rescue over the mean validation drop. Attention share = AUC+(attention) / (AUC+(attention) + AUC+(MoE)) of the validation mean curves (Direction 2b). W4 = all layers at once at the final position (`multi` rows; validation directed cases; denoise = clean values into the corrupted run, noise = corrupted values into the clean run). **The W4 two-player split is degenerate at the final position:** the final token is the same in both prompts and the MoE is a per-token function, so patching every attention output at the final position reproduces the source run's final residual exactly (A = 1 up to bf16, both directions; also noted by agent ext8-addback in the engine docstring). Hence φ_attn = ½[A + 1 − M] = 1 − M/2 and redundancy = M; the informative number is M, the fraction of the drop that the MoE writes at the final position restore when the attention writes stay corrupted (M < 0: the clean MoE writes push further toward the corrupted answer). The direct-path split is the non-degenerate complement: A_dir (M_dir) = change of Δ when only the summed attention (MoE) writes of all layers at the final position are swapped into the corrupted final residual, exact final RMSNorm, fp32, over the drop (prefill only; A_dir + M_dir ≈ 1 up to the norm's non-linearity). CounterFact W4 and direct-path numbers are agent ext8-addback's (`results/ext8_addback_summary.json`, validation cases); the WinoGrande option-swap W4 and direct-path numbers come from agent ext7-wino's run `results/wino_<proto>_str` (`joint_rows.parquet`, `direct_split.parquet`, computed with the same code), summarised here on its validation pairs.
+
+### CounterFact under STR: attention and MoE at the final position
+
+**Peaks of the validation rescue curves (L* on discovery; / drop = rescue over the mean validation drop)**
+
+| Model | Corruption | Component | L* (disc.) | Val. rescue at L* [95% CI] | / drop | Val. argmax | AUC+ (val.) | AUC+ / drop | Mean val. drop |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | STR (donor mean) | attention | L40 | +3.955 [+3.526, +4.406] | 0.339 | L40 | 9.30 [8.39, 10.36] | 0.797 | +11.67 |
+| Qwen3-30B-A3B-Base | STR (donor mean) | MoE | L44 | +2.077 [+1.775, +2.406] | 0.178 | L44 | 7.79 [6.96, 8.99] | 0.667 | +11.67 |
+| Qwen3-30B-A3B-Base | STR (donor mean) | block | L40 | +4.735 [+4.252, +5.241] | 0.406 | L40 | 16.49 [14.97, 18.27] | 1.413 | +11.67 |
+| Qwen3-30B-A3B-Base | STR (first donor) | attention | L40 | +3.877 [+3.409, +4.372] | 0.335 | L40 | 9.31 [8.24, 10.57] | 0.805 | +11.57 |
+| Qwen3-30B-A3B-Base | STR (first donor) | MoE | L44 | +2.061 [+1.750, +2.394] | 0.178 | L44 | 8.17 [7.11, 9.71] | 0.706 | +11.57 |
+| Qwen3-30B-A3B-Base | STR (first donor) | block | L40 | +4.663 [+4.133, +5.225] | 0.403 | L40 | 16.70 [14.89, 18.83] | 1.444 | +11.57 |
+| Qwen3-30B-A3B-Base | GN (same cases) | attention | L40 | +1.556 [+1.354, +1.764] | 0.284 | L40 | 3.79 [3.30, 4.48] | 0.693 | +5.48 |
+| Qwen3-30B-A3B-Base | GN (same cases) | MoE | L44 | +0.895 [+0.719, +1.084] | 0.163 | L44 | 3.73 [3.11, 4.68] | 0.681 | +5.48 |
+| Qwen3-30B-A3B-Base | GN (same cases) | block | L40 | +1.889 [+1.663, +2.130] | 0.345 | L40 | 7.22 [6.30, 8.36] | 1.317 | +5.48 |
+| Mixtral-8x7B, BOS | STR (donor mean) | attention | L18 | +2.329 [+2.016, +2.658] | 0.180 | L24 | 10.93 [10.05, 11.87] | 0.842 | +12.97 |
+| Mixtral-8x7B, BOS | STR (donor mean) | MoE | L21 | +1.100 [+0.918, +1.286] | 0.085 | L19 | 7.99 [6.94, 9.18] | 0.616 | +12.97 |
+| Mixtral-8x7B, BOS | STR (donor mean) | block | L19 | +3.468 [+3.076, +3.869] | 0.267 | L19 | 18.33 [16.59, 20.23] | 1.413 | +12.97 |
+| Mixtral-8x7B, BOS | STR (first donor) | attention | L18 | +2.337 [+1.993, +2.703] | 0.180 | L24 | 10.78 [9.82, 11.87] | 0.832 | +12.96 |
+| Mixtral-8x7B, BOS | STR (first donor) | MoE | L21 | +1.101 [+0.925, +1.279] | 0.085 | L21 | 7.58 [6.43, 8.94] | 0.585 | +12.96 |
+| Mixtral-8x7B, BOS | STR (first donor) | block | L19 | +3.392 [+2.985, +3.802] | 0.262 | L19 | 17.85 [16.00, 19.77] | 1.378 | +12.96 |
+| Mixtral-8x7B, BOS | GN (same cases) | attention | L18 | +0.953 [+0.779, +1.131] | 0.192 | L18 | 4.79 [4.03, 5.57] | 0.963 | +4.97 |
+| Mixtral-8x7B, BOS | GN (same cases) | MoE | L19 | +0.561 [+0.430, +0.696] | 0.113 | L19 | 3.72 [3.05, 4.52] | 0.749 | +4.97 |
+| Mixtral-8x7B, BOS | GN (same cases) | block | L19 | +1.356 [+1.140, +1.571] | 0.273 | L19 | 8.08 [6.85, 9.33] | 1.624 | +4.97 |
+
+**Attention share of the positive rescue (AUC+) and at the peak layers (ratio of validation means, paired bootstrap)**
+
+| Model | Corruption | Attention share of the positive rescue (AUC+) [95% CI] | AUC+ attention / MoE | Share at MoE peak | Share at attention peak | Share at paper layer |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | STR (donor mean) | 0.544 [0.511, 0.572] | 9.30 / 7.79 | L44: +0.025 [+0.015, +0.035] | L40: +0.833 [+0.799, +0.864] | L44: +0.025 |
+| Qwen3-30B-A3B-Base | STR (first donor) | 0.533 [0.499, 0.561] | 9.31 / 8.17 | L44: +0.016 [+0.002, +0.030] | L40: +0.843 [+0.807, +0.874] | L44: +0.016 |
+| Qwen3-30B-A3B-Base | GN (same cases) | 0.504 [0.464, 0.543] | 3.79 / 3.73 | L44: +0.018 [-0.018, +0.054] | L40: +0.792 [+0.749, +0.835] | L44: +0.018 |
+| Mixtral-8x7B, BOS | STR (donor mean) | 0.578 [0.552, 0.604] | 10.93 / 7.99 | L21: +0.144 [+0.084, +0.205] | L18: +0.831 [+0.794, +0.867] | L19: +0.653 |
+| Mixtral-8x7B, BOS | STR (first donor) | 0.587 [0.557, 0.617] | 10.78 / 7.58 | L21: +0.122 [+0.051, +0.193] | L18: +0.826 [+0.782, +0.871] | L19: +0.667 |
+| Mixtral-8x7B, BOS | GN (same cases) | 0.563 [0.527, 0.594] | 4.79 / 3.72 | L19: +0.617 [+0.574, +0.665] | L18: +0.775 [+0.719, +0.831] | L19: +0.617 |
+
+**Additivity at the peak layers: block vs attention + MoE (validation)**
+
+| Model | Corruption | Layer | Attention | MoE | Sum | Block | Gap block − sum [95% CI] | Per-case r | Block > sum |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | STR (donor mean) | L40 | +3.955 | +0.791 | +4.746 | +4.735 | -0.011 [-0.098, +0.076] | 0.99 | 47% |
+| Qwen3-30B-A3B-Base | STR (donor mean) | L44 | +0.053 | +2.077 | +2.130 | +2.119 | -0.012 [-0.032, +0.006] | 1.00 | 40% |
+| Qwen3-30B-A3B-Base | STR (first donor) | L40 | +3.877 | +0.723 | +4.600 | +4.663 | +0.064 [-0.055, +0.185] | 0.97 | 44% |
+| Qwen3-30B-A3B-Base | STR (first donor) | L44 | +0.034 | +2.061 | +2.095 | +2.083 | -0.012 [-0.038, +0.015] | 1.00 | 28% |
+| Qwen3-30B-A3B-Base | GN (same cases) | L40 | +1.556 | +0.407 | +1.963 | +1.889 | -0.074 [-0.122, -0.027] | 0.98 | 32% |
+| Qwen3-30B-A3B-Base | GN (same cases) | L44 | +0.016 | +0.895 | +0.911 | +0.928 | +0.017 [-0.010, +0.043] | 0.99 | 42% |
+| Mixtral-8x7B, BOS | STR (donor mean) | L18 | +2.329 | +0.474 | +2.803 | +2.948 | +0.145 [+0.040, +0.251] | 0.96 | 58% |
+| Mixtral-8x7B, BOS | STR (donor mean) | L19 | +2.078 | +1.105 | +3.183 | +3.468 | +0.285 [+0.109, +0.462] | 0.90 | 59% |
+| Mixtral-8x7B, BOS | STR (donor mean) | L21 | +0.184 | +1.100 | +1.285 | +1.300 | +0.015 [-0.008, +0.038] | 0.99 | 51% |
+| Mixtral-8x7B, BOS | STR (first donor) | L18 | +2.337 | +0.492 | +2.828 | +2.989 | +0.161 [+0.024, +0.297] | 0.94 | 54% |
+| Mixtral-8x7B, BOS | STR (first donor) | L19 | +2.044 | +1.019 | +3.064 | +3.392 | +0.328 [+0.130, +0.528] | 0.88 | 50% |
+| Mixtral-8x7B, BOS | STR (first donor) | L21 | +0.153 | +1.101 | +1.255 | +1.276 | +0.021 [-0.021, +0.065] | 0.98 | 43% |
+| Mixtral-8x7B, BOS | GN (same cases) | L18 | +0.953 | +0.277 | +1.231 | +1.212 | -0.018 [-0.068, +0.035] | 0.97 | 27% |
+| Mixtral-8x7B, BOS | GN (same cases) | L19 | +0.903 | +0.561 | +1.464 | +1.356 | -0.108 [-0.176, -0.042] | 0.97 | 30% |
+
+![CounterFact STR vs GN, attention / MoE / block, normalised by the mean drop](../figures/ext7_controls_cf_curves.png)
+
+- Qwen3: attention L40 +3.95 (0.339 of the drop; GN on the same cases L40 0.284), MoE L44 +2.08 (0.178; GN L44 0.163), block L40 (0.406); attention share 0.54 [0.51, 0.57] (GN 0.50); STR–GN curve r 1.00 / 0.99 / 0.99 (attention / MoE / block); the same-pass MoE rows reproduce the Direction-6 sweep at per-row r 0.97 (mean |diff| 0.11, max 2.4: bf16 batch-composition noise).
+- Mixtral BOS: attention L18 +2.33 (0.180 of the drop; GN on the same cases L18 0.192), MoE L21 +1.10 (0.085; GN L19 0.113), block L19 (0.267); attention share 0.58 [0.55, 0.60] (GN 0.56); STR–GN curve r 0.99 / 0.94 / 0.98 (attention / MoE / block); the same-pass MoE rows reproduce the Direction-6 sweep at per-row r 0.98 (mean |diff| 0.09, max 2.5: bf16 batch-composition noise).
+- Under STR the Direction-2b picture holds: attention and MoE carry comparable parts of the positive rescue, attention peaking a few layers before the MoE (Qwen3 L40 vs L44; Mixtral L18 vs L19–L21), and the block equals attention + MoE to within bf16 noise except at Mixtral's shared L18/L19 peak, which is mildly super-additive under STR (sub-additive under GN). Normalised by the drop, STR does not shrink the attention effect (Qwen3 0.34 vs GN 0.28; Mixtral 0.18 vs 0.19), whereas Mixtral's MoE peak is 25 % lower under STR (0.085 vs 0.113), the same direction as Direction 6. Mixtral's attention curve has three near-equal discrete peaks, L18 / L19 / L24 at 0.180 / 0.160 / 0.188 of the drop (GN 0.192 / 0.182 / 0.164; plus L15 0.06), so its validation argmax (L24) and discovery argmax (L18) differ by a tie, as Direction 2b's mover heads at L18 and L24 suggested.
+
+### WinoGrande role swap (W7)
+
+**Final-position peaks, role swap vs option swap (validation pairs; pair bootstrap)**
+
+| Model | Corruption | Component | L* (selected on) | Val. rescue at L* [95% CI] | / drop | Val. argmax | AUC+ | Mean drop (Δ clean / Δ corrupt) | Pairs disc/val | Attention share (AUC+) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | role swap | MoE | L42 (disc.) | +1.216 [+1.058, +1.374] | 0.175 [0.154, 0.196] | L42 | 8.88 | +6.94 (+3.50 / -3.44) | 128/128 | 0.317 [0.294, 0.350] |
+| Qwen3-30B-A3B-Base | role swap | attention | L38 (disc.) | +0.906 [+0.734, +1.094] | 0.131 [0.107, 0.155] | L38 | 4.12 | +6.94 (+3.50 / -3.44) | 128/128 | 0.317 [0.294, 0.350] |
+| Qwen3-30B-A3B-Base | role swap | block | L42 (disc.) | +1.504 [+1.332, +1.677] | 0.217 [0.195, 0.238] | L42 | 12.14 | +6.94 (+3.50 / -3.44) | 128/128 | 0.317 [0.294, 0.350] |
+| Qwen3-30B-A3B-Base | role swap (replication) | MoE | L42 (disc.) | +1.203 [+1.055, +1.353] | 0.157 [0.138, 0.176] | L42 | 9.60 | +7.68 (+3.86 / -3.82) | 128/128 | 0.304 [0.278, 0.337] |
+| Qwen3-30B-A3B-Base | role swap (replication) | attention | L38 (disc.) | +0.890 [+0.670, +1.151] | 0.116 [0.088, 0.147] | L38 | 4.20 | +7.68 (+3.86 / -3.82) | 128/128 | 0.304 [0.278, 0.337] |
+| Qwen3-30B-A3B-Base | role swap (replication) | block | L42 (disc.) | +1.468 [+1.308, +1.628] | 0.191 [0.170, 0.212] | L42 | 12.98 | +7.68 (+3.86 / -3.82) | 128/128 | 0.304 [0.278, 0.337] |
+| Qwen3-30B-A3B-Base | option swap (ext7-wino run) | MoE | L41 (disc.) | +1.778 [+1.594, +1.972] | 0.218 [0.200, 0.238] | L41 | 9.81 | +8.14 (+4.07 / -4.07) | 128/128 | 0.159 [0.132, 0.200] |
+| Qwen3-30B-A3B-Base | option swap (ext7-wino run) | attention | L38 (disc.) | +0.076 [-0.042, +0.199] | 0.009 [-0.005, 0.025] | L42 | 1.86 | +8.14 (+4.07 / -4.07) | 128/128 | 0.159 [0.132, 0.200] |
+| Qwen3-30B-A3B-Base | option swap (ext7-wino run) | block | L41 (disc.) | +1.940 [+1.753, +2.132] | 0.238 [0.219, 0.258] | L41 | 11.34 | +8.14 (+4.07 / -4.07) | 128/128 | 0.159 [0.132, 0.200] |
+| Mixtral-8x7B, BOS | role swap | MoE | L19 (disc.) | +1.322 [+1.204, +1.447] | 0.197 [0.183, 0.213] | L19 | 9.00 | +6.70 (+3.35 / -3.35) | 128/128 | 0.393 [0.377, 0.411] |
+| Mixtral-8x7B, BOS | role swap | attention | L13 (disc.) | +1.068 [+0.918, +1.226] | 0.160 [0.139, 0.181] | L13 | 5.84 | +6.70 (+3.35 / -3.35) | 128/128 | 0.393 [0.377, 0.411] |
+| Mixtral-8x7B, BOS | role swap | block | L19 (disc.) | +1.863 [+1.711, +2.026] | 0.278 [0.262, 0.295] | L19 | 14.15 | +6.70 (+3.35 / -3.35) | 128/128 | 0.393 [0.377, 0.411] |
+| Mixtral-8x7B, BOS | option swap (ext7-wino run) | MoE | L20 (disc.) | +1.324 [+1.222, +1.429] | 0.172 [0.162, 0.183] | L20 | 10.68 | +7.69 (+3.85 / -3.84) | 128/128 | 0.344 [0.331, 0.357] |
+| Mixtral-8x7B, BOS | option swap (ext7-wino run) | attention | L13 (disc.) | +1.087 [+0.971, +1.209] | 0.141 [0.127, 0.157] | L13 | 5.59 | +7.69 (+3.85 / -3.84) | 128/128 | 0.344 [0.331, 0.357] |
+| Mixtral-8x7B, BOS | option swap (ext7-wino run) | block | L19 (disc.) | +1.927 [+1.801, +2.058] | 0.251 [0.238, 0.264] | L19 | 15.56 | +7.69 (+3.85 / -3.84) | 128/128 | 0.344 [0.331, 0.357] |
+
+**Fixed hypotheses: the option swap's discovery peak layers evaluated on the role-swap validation pairs**
+
+| Model | Fixed layer (option-swap discovery peak) | Patched | Role-swap val. rescue [95% CI] | sign-flip p | / drop |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38 = option-swap attention peak | MoE | +0.532 [+0.424, +0.632] | 0.0000 | 0.077 [0.061, 0.092] |
+| Qwen3-30B-A3B-Base | L38 = option-swap attention peak | attention | +0.906 [+0.734, +1.094] | 0.0000 | 0.131 [0.107, 0.155] |
+| Qwen3-30B-A3B-Base | L38 = option-swap attention peak | block | +1.331 [+1.163, +1.508] | 0.0000 | 0.192 [0.168, 0.215] |
+| Qwen3-30B-A3B-Base | L41 = option-swap MoE / block peak | MoE | +0.785 [+0.662, +0.913] | 0.0000 | 0.113 [0.096, 0.131] |
+| Qwen3-30B-A3B-Base | L41 = option-swap MoE / block peak | attention | +0.365 [+0.289, +0.444] | 0.0000 | 0.053 [0.042, 0.064] |
+| Qwen3-30B-A3B-Base | L41 = option-swap MoE / block peak | block | +1.116 [+0.977, +1.263] | 0.0000 | 0.161 [0.141, 0.181] |
+| Mixtral-8x7B, BOS | L13 = option-swap attention peak | MoE | +0.324 [+0.271, +0.376] | 0.0000 | 0.048 [0.041, 0.056] |
+| Mixtral-8x7B, BOS | L13 = option-swap attention peak | attention | +1.068 [+0.918, +1.226] | 0.0000 | 0.160 [0.139, 0.181] |
+| Mixtral-8x7B, BOS | L13 = option-swap attention peak | block | +1.313 [+1.163, +1.470] | 0.0000 | 0.196 [0.176, 0.217] |
+| Mixtral-8x7B, BOS | L19 = option-swap block peak | MoE | +1.322 [+1.204, +1.447] | 0.0000 | 0.197 [0.183, 0.213] |
+| Mixtral-8x7B, BOS | L19 = option-swap block peak | attention | +0.684 [+0.593, +0.787] | 0.0000 | 0.102 [0.090, 0.116] |
+| Mixtral-8x7B, BOS | L19 = option-swap block peak | block | +1.863 [+1.711, +2.026] | 0.0000 | 0.278 [0.262, 0.295] |
+| Mixtral-8x7B, BOS | L20 = option-swap MoE peak | MoE | +0.924 [+0.838, +1.012] | 0.0000 | 0.138 [0.127, 0.149] |
+| Mixtral-8x7B, BOS | L20 = option-swap MoE peak | attention | +0.109 [+0.084, +0.136] | 0.0000 | 0.016 [0.013, 0.020] |
+| Mixtral-8x7B, BOS | L20 = option-swap MoE peak | block | +1.027 [+0.939, +1.117] | 0.0000 | 0.153 [0.143, 0.165] |
+
+**Position × layer grid at the exchanged mentions, the filled option and the final position (first 64 validation pairs; summed over a class's tokens, / mean drop)**
+
+| Model | Position class | Kind | Peak layer | Peak / drop | Layer sum / drop |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | mention1 | MoE | L0 | +0.089 | +0.258 |
+| Qwen3-30B-A3B-Base | mention1 | attention | L0 | +0.055 | +0.245 |
+| Qwen3-30B-A3B-Base | mention2 | MoE | L2 | +0.016 | +0.165 |
+| Qwen3-30B-A3B-Base | mention2 | attention | L8 | +0.010 | +0.114 |
+| Qwen3-30B-A3B-Base | filled | MoE | L24 | +0.051 | +0.241 |
+| Qwen3-30B-A3B-Base | filled | attention | L6 | +0.054 | +0.151 |
+| Qwen3-30B-A3B-Base | final | MoE | L42 | +0.187 | +0.937 |
+| Qwen3-30B-A3B-Base | final | attention | L38 | +0.136 | +0.490 |
+| Mixtral-8x7B, BOS | mention1 | MoE | L0 | +0.347 | +0.384 |
+| Mixtral-8x7B, BOS | mention1 | attention | L0 | +0.022 | +0.028 |
+| Mixtral-8x7B, BOS | mention2 | MoE | L0 | +0.381 | +0.470 |
+| Mixtral-8x7B, BOS | mention2 | attention | L0 | +0.017 | +0.067 |
+| Mixtral-8x7B, BOS | filled | MoE | L12 | +0.038 | +0.205 |
+| Mixtral-8x7B, BOS | filled | attention | L9 | +0.184 | +0.589 |
+| Mixtral-8x7B, BOS | final | MoE | L19 | +0.197 | +1.096 |
+| Mixtral-8x7B, BOS | final | attention | L13 | +0.160 | +0.923 |
+
+![Role swap vs option swap, normalised final-position curves](../figures/ext7_controls_role_curves.png)
+
+![Role swap grid](../figures/ext7_controls_role_grid.png)
+
+- Qwen3: role swap MoE L42 +1.22 [+1.06, +1.37] (0.175 of the drop), attention L38 +0.91 [+0.73, +1.09] (0.131 of the drop), block L42 +1.50 [+1.33, +1.68] (0.217 of the drop); attention share 0.32 [0.29, 0.35] (replication split 0.30 [0.28, 0.34], peaks L42 / L38). Option swap (same model, ext7-wino's run): MoE L41 +1.78 [+1.59, +1.97] (0.218 of the drop), attention L38 +0.08 [-0.04, +0.20] (0.009 of the drop), share 0.16 [0.13, 0.20]. At the option swap's attention-peak layer L38 the role swap's attention patch gives +0.91 [+0.73, +1.09] (0.131 of the drop). W4: A 1.00, M +0.77 [+0.75, +0.80] (noising M +0.78); direct path A_dir 0.19 / M_dir 0.81.
+- Mixtral BOS: role swap MoE L19 +1.32 [+1.20, +1.45] (0.197 of the drop), attention L13 +1.07 [+0.92, +1.23] (0.160 of the drop), block L19 +1.86 [+1.71, +2.03] (0.278 of the drop); attention share 0.39 [0.38, 0.41]. Option swap (same model, ext7-wino's run): MoE L20 +1.32 [+1.22, +1.43] (0.172 of the drop), attention L13 +1.09 [+0.97, +1.21] (0.141 of the drop), share 0.34 [0.33, 0.36]. At the option swap's attention-peak layer L13 the role swap's attention patch gives +1.07 [+0.92, +1.23] (0.160 of the drop). W4: A 1.00, M +0.70 [+0.66, +0.73] (noising M +0.70); direct path A_dir 0.38 / M_dir 0.62.
+- Grid, Qwen3-30B-A3B-Base (rescue / drop, MoE and attention at the position; layer sums MoE / attention): mention1: MoE peak L0 +0.089, attention peak L0 +0.055 (layer sums +0.26 / +0.24); mention2: MoE peak L2 +0.016, attention peak L8 +0.010 (layer sums +0.17 / +0.11); filled: MoE peak L24 +0.051, attention peak L6 +0.054 (layer sums +0.24 / +0.15); final: MoE peak L42 +0.187, attention peak L38 +0.136 (layer sums +0.94 / +0.49).
+- Grid, Mixtral-8x7B, BOS (rescue / drop, MoE and attention at the position; layer sums MoE / attention): mention1: MoE peak L0 +0.347, attention peak L0 +0.022 (layer sums +0.38 / +0.03); mention2: MoE peak L0 +0.381, attention peak L0 +0.017 (layer sums +0.47 / +0.07); filled: MoE peak L12 +0.038, attention peak L9 +0.184 (layer sums +0.20 / +0.59); final: MoE peak L19 +0.197, attention peak L13 +0.160 (layer sums +1.10 / +0.92).
+- Reading of the grid: at the exchanged mentions only the first layers matter (MoE L0–L2: the identity of the swapped name token, Z9; Mixtral's L0 MoE at a mention alone restores 0.35–0.38 of the drop). At the filled option, attention in early-middle layers carries part of the difference — Mixtral L9 restores 0.18 of the drop (layer sum 0.59), Qwen3 L6 0.05 with a MoE contribution at L24 (0.05) — i.e. the option token reads which role its name had in the first clause before the final position's attention (L13 / L38) and MoE (L19 / L42) complete the repair. The role swap's attention therefore acts at the option position and at the final position, while its final-position repair is still MoE-heavy.
+
+### IOI (W8)
+
+**Final-position peaks (validation; main = discovery/validation, rep = replication split)**
+
+| Model | Corruption | Family | Component | L* | Val. rescue at L* [95% CI] | / drop | Val. argmax | AUC+ | Mean drop (Δ clean / Δ corrupt) | Attention share (AUC+) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | main | MoE | L41 | +0.210 [+0.173, +0.249] | 0.017 [0.014, 0.020] | L40 | 1.22 | +12.65 (+6.31 / -6.34) | 0.924 [0.904, 0.937] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | main | attention | L45 | +4.159 [+3.973, +4.349] | 0.329 [0.318, 0.339] | L45 | 14.92 | +12.65 (+6.31 / -6.34) | 0.924 [0.904, 0.937] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | main | block | L45 | +3.882 [+3.688, +4.080] | 0.307 [0.296, 0.318] | L45 | 15.04 | +12.65 (+6.31 / -6.34) | 0.924 [0.904, 0.937] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | rep | MoE | L41 | +0.258 [+0.218, +0.299] | 0.021 [0.017, 0.024] | L41 | 1.15 | +12.51 (+6.26 / -6.26) | 0.927 [0.911, 0.935] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | rep | attention | L45 | +4.058 [+3.858, +4.264] | 0.324 [0.312, 0.336] | L45 | 14.61 | +12.51 (+6.26 / -6.26) | 0.927 [0.911, 0.935] |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | rep | block | L45 | +3.809 [+3.591, +4.030] | 0.304 [0.291, 0.318] | L45 | 14.77 | +12.51 (+6.26 / -6.26) | 0.927 [0.911, 0.935] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | main | MoE | L41 | +0.207 [+0.137, +0.278] | 0.026 [0.018, 0.035] | L37 | 1.05 | +7.87 (+6.28 / -1.58) | 0.894 [0.858, 0.913] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | main | attention | L45 | +4.771 [+4.550, +4.986] | 0.606 [0.585, 0.627] | L45 | 8.86 | +7.87 (+6.28 / -1.58) | 0.894 [0.858, 0.913] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | main | block | L45 | +4.535 [+4.295, +4.762] | 0.576 [0.554, 0.598] | L45 | 8.99 | +7.87 (+6.28 / -1.58) | 0.894 [0.858, 0.913] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | rep | MoE | L37 | +0.194 [+0.137, +0.253] | 0.025 [0.018, 0.032] | L41 | 1.12 | +7.90 (+6.28 / -1.62) | 0.888 [0.851, 0.908] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | rep | attention | L45 | +4.823 [+4.553, +5.103] | 0.611 [0.588, 0.633] | L45 | 8.92 | +7.90 (+6.28 / -1.62) | 0.888 [0.851, 0.908] |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | rep | block | L45 | +4.568 [+4.300, +4.847] | 0.578 [0.554, 0.603] | L45 | 9.37 | +7.90 (+6.28 / -1.62) | 0.888 [0.851, 0.908] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | main | MoE | L17 | +0.527 [+0.484, +0.571] | 0.047 [0.042, 0.051] | L17 | 2.89 | +11.28 (+5.64 / -5.64) | 0.802 [0.791, 0.812] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | main | attention | L19 | +2.300 [+2.143, +2.458] | 0.204 [0.194, 0.214] | L19 | 11.72 | +11.28 (+5.64 / -5.64) | 0.802 [0.791, 0.812] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | main | block | L19 | +2.721 [+2.542, +2.896] | 0.241 [0.231, 0.251] | L19 | 12.35 | +11.28 (+5.64 / -5.64) | 0.802 [0.791, 0.812] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | rep | MoE | L17 | +0.518 [+0.477, +0.562] | 0.047 [0.043, 0.051] | L17 | 2.75 | +11.04 (+5.52 / -5.51) | 0.806 [0.791, 0.821] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | rep | attention | L19 | +2.271 [+2.142, +2.410] | 0.206 [0.198, 0.214] | L19 | 11.41 | +11.04 (+5.52 / -5.51) | 0.806 [0.791, 0.821] |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | rep | block | L19 | +2.676 [+2.519, +2.840] | 0.242 [0.234, 0.251] | L19 | 11.77 | +11.04 (+5.52 / -5.51) | 0.806 [0.791, 0.821] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | main | MoE | L28 | +0.699 [+0.596, +0.811] | 0.096 [0.083, 0.111] | L28 | 1.76 | +7.27 (+5.70 / -1.56) | 0.824 [0.806, 0.841] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | main | attention | L30 | +1.522 [+1.318, +1.711] | 0.210 [0.184, 0.233] | L31 | 8.27 | +7.27 (+5.70 / -1.56) | 0.824 [0.806, 0.841] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | main | block | L30 | +1.148 [+0.951, +1.345] | 0.158 [0.132, 0.183] | L21 | 8.08 | +7.27 (+5.70 / -1.56) | 0.824 [0.806, 0.841] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | rep | MoE | L28 | +0.643 [+0.540, +0.752] | 0.089 [0.075, 0.103] | L28 | 1.64 | +7.26 (+5.62 / -1.64) | 0.835 [0.808, 0.854] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | rep | attention | L30 | +1.517 [+1.334, +1.698] | 0.209 [0.186, 0.231] | L31 | 8.27 | +7.26 (+5.62 / -1.64) | 0.835 [0.808, 0.854] |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | rep | block | L30 | +1.219 [+1.027, +1.408] | 0.168 [0.143, 0.192] | L30 | 8.15 | +7.26 (+5.62 / -1.64) | 0.835 [0.808, 0.854] |
+
+**Attention heads at the top attention layers (validation; z over all scanned heads, detection at |z| ≥ 2 on validation AND discovery; attention = final-position attention probability on the position, d = 0 view: clean prompt / corrupted prompt)**
+
+| Model | Corruption | Head | Val. rescue [95% CI] | z (val / disc) | Spec | Share of attn layer | Clean attention IO / S1 / S2 / final / pos0 | Corrupted attention IO / S1 |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L42H11 (2SD) | +2.249 [+2.158, +2.340] | +8.5 / +8.5 | +2.221 | 0.67 | 0.06 / 0.06 / 0.75 / 0.00 / 0.06 | 0.06 / 0.05 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L43H24 (2SD) | +1.270 [+1.203, +1.337] | +4.7 / +4.6 | +1.222 | 0.47 | 0.01 / 0.00 / 0.04 / 0.20 / 0.40 | 0.01 / 0.01 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L42H10 (2SD) | +0.869 [+0.791, +0.948] | +3.1 / +3.3 | +0.797 | 0.26 | 0.87 / 0.03 / 0.02 / 0.00 / 0.04 | 0.03 / 0.86 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L43H29 (2SD) | +0.798 [+0.756, +0.841] | +2.8 / +2.8 | +0.735 | 0.29 | 0.00 / 0.00 / 0.00 / 0.88 / 0.05 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L43H28 (2SD) | +0.631 [+0.600, +0.663] | +2.2 / +2.2 | +0.563 | 0.23 | 0.02 / 0.02 / 0.07 / 0.30 / 0.07 | 0.02 / 0.02 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L43H27 (2SD) | -0.467 [-0.500, -0.435] | -2.1 / -2.0 | -0.570 | -0.17 | 0.01 / 0.01 / 0.01 / 0.13 / 0.63 | 0.01 / 0.01 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | L42H14 (2SD) | -0.517 [-0.558, -0.478] | -2.3 / -2.3 | -0.634 | -0.15 | 0.21 / 0.03 / 0.01 / 0.00 / 0.64 | 0.03 / 0.21 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L42H10 (2SD) | +1.051 [+0.958, +1.150] | +6.6 / +7.2 | +1.040 | 0.68 | 0.87 / 0.03 / 0.02 / 0.00 / 0.04 | 0.34 / 0.37 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L45H9 (2SD) | +0.690 [+0.562, +0.821] | +4.3 / +3.7 | +0.522 | 0.14 | 0.35 / 0.06 / 0.01 / 0.00 / 0.56 | 0.21 / 0.22 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L45H29 (2SD) | +0.636 [+0.493, +0.787] | +3.9 / +3.8 | +0.465 | 0.13 | 0.27 / 0.05 / 0.01 / 0.00 / 0.65 | 0.14 / 0.15 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L45H20 (2SD) | +0.589 [+0.416, +0.775] | +3.6 / +2.8 | +0.417 | 0.12 | 0.24 / 0.05 / 0.01 / 0.00 / 0.65 | 0.19 / 0.13 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L45H22 (2SD) | +0.512 [+0.320, +0.726] | +3.1 / +3.3 | +0.337 | 0.11 | 0.20 / 0.06 / 0.01 / 0.00 / 0.69 | 0.15 / 0.16 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L43H24 (2SD) | +0.353 [+0.314, +0.391] | +2.0 / +2.1 | +0.341 | 0.43 | 0.01 / 0.00 / 0.04 / 0.20 / 0.40 | 0.01 / 0.01 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | L43H29 (2SD) | -0.370 [-0.412, -0.329] | -2.8 / -2.3 | -0.405 | -0.45 | 0.00 / 0.00 / 0.00 / 0.88 / 0.05 | 0.00 / 0.00 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L21H6 (2SD) | +1.153 [+1.100, +1.204] | +7.5 / +7.5 | +1.134 | 0.67 | 0.04 / 0.02 / 0.61 / 0.02 / 0.15 | 0.02 / 0.04 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L19H10 (2SD) | +0.716 [+0.653, +0.779] | +4.5 / +4.5 | +0.693 | 0.31 | 0.05 / 0.05 / 0.35 / 0.02 / 0.27 | 0.05 / 0.05 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L31H5 (2SD) | +0.693 [+0.639, +0.750] | +4.4 / +4.5 | +0.639 | 0.32 | 0.04 / 0.02 / 0.33 / 0.05 / 0.41 | 0.02 / 0.03 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L19H8 (2SD) | +0.535 [+0.493, +0.578] | +3.3 / +3.5 | +0.506 | 0.23 | 0.69 / 0.04 / 0.02 / 0.00 / 0.05 | 0.05 / 0.65 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L16H15 (2SD) | +0.501 [+0.455, +0.550] | +3.1 / +3.2 | +0.481 | 0.31 | 0.05 / 0.03 / 0.26 / 0.03 / 0.29 | 0.03 / 0.04 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L16H3 (2SD) | +0.343 [+0.304, +0.387] | +2.0 / +2.4 | +0.318 | 0.21 | 0.04 / 0.05 / 0.26 / 0.02 / 0.26 | 0.06 / 0.04 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | L22H29 (2SD) | -0.318 [-0.351, -0.286] | -2.4 / -2.4 | -0.327 | 10.85 | 0.31 / 0.01 / 0.05 / 0.04 / 0.39 | 0.02 / 0.32 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L30H2 (2SD) | +1.024 [+0.842, +1.207] | +8.4 / +8.0 | +1.013 | 0.67 | 0.38 / 0.11 / 0.02 / 0.00 / 0.46 | 0.21 / 0.21 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L26H6 (2SD) | +0.567 [+0.423, +0.727] | +4.6 / +4.9 | +0.563 | 0.58 | 0.39 / 0.07 / 0.02 / 0.00 / 0.50 | 0.21 / 0.18 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L31H6 (2SD) | +0.462 [+0.413, +0.512] | +3.7 / +3.5 | +0.430 | 0.29 | 0.23 / 0.08 / 0.04 / 0.03 / 0.48 | 0.15 / 0.14 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L21H6 (2SD) | +0.389 [+0.336, +0.441] | +3.1 / +3.0 | +0.377 | 0.34 | 0.04 / 0.02 / 0.61 / 0.02 / 0.15 | 0.04 / 0.04 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L31H18 (2SD) | +0.373 [+0.277, +0.471] | +2.9 / +2.5 | +0.338 | 0.23 | 0.25 / 0.13 / 0.04 / 0.01 / 0.47 | 0.19 / 0.15 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | L30H26 (2SD) | +0.304 [+0.168, +0.455] | +2.3 / +3.8 | +0.269 | 0.20 | 0.16 / 0.08 / 0.02 / 0.01 / 0.65 | 0.14 / 0.15 |
+
+**Position × layer grid (first 64 validation items; classes summed over their tokens, / mean drop)**
+
+| Model | Corruption | Position | Kind | Peak layer | Peak / drop | Layer sum / drop |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | S2 | attention | L3 | +0.256 | +0.422 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | S2 | MoE | L0 | +0.037 | +0.009 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | after_S2 | attention | L42 | +0.073 | +0.131 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | after_S2 | MoE | L15 | +0.002 | -0.006 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | final | attention | L45 | +0.330 | +0.990 |
+| Qwen3-30B-A3B-Base | IOI (i) S2 -> IO | final | MoE | L40 | +0.017 | -0.260 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | IO | attention | L3 | +0.254 | +0.739 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | IO | MoE | L2 | +0.164 | +0.451 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | S1 | attention | L28 | +0.007 | -0.250 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | S1 | MoE | L5 | +0.012 | -0.131 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | S2 | attention | L44 | +0.074 | +0.401 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | S2 | MoE | L34 | +0.032 | +0.157 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | after_S2 | attention | L42 | +0.034 | +0.276 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | after_S2 | MoE | L38 | +0.012 | +0.154 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | final | attention | L45 | +0.623 | +1.105 |
+| Qwen3-30B-A3B-Base | IOI (ii) S1, IO -> other names | final | MoE | L37 | +0.029 | -0.206 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | S2 | attention | L7 | +0.055 | +0.104 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | S2 | MoE | L0 | +0.990 | +1.125 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | after_S2 | attention | L19 | +0.087 | +0.189 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | after_S2 | MoE | L17 | +0.019 | +0.049 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | final | attention | L19 | +0.204 | +1.010 |
+| Mixtral-8x7B, BOS | IOI (i) S2 -> IO | final | MoE | L17 | +0.046 | -0.038 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | IO | attention | L25 | +0.002 | -0.046 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | IO | MoE | L0 | +0.639 | +1.404 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | S1 | attention | L5 | +0.006 | -0.015 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | S1 | MoE | L31 | +0.000 | -0.536 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | S2 | attention | L15 | +0.036 | +0.196 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | S2 | MoE | L16 | +0.039 | +0.285 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | after_S2 | attention | L19 | +0.026 | +0.133 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | after_S2 | MoE | L17 | +0.008 | +0.054 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | final | attention | L30 | +0.237 | +1.124 |
+| Mixtral-8x7B, BOS | IOI (ii) S1, IO -> other names | final | MoE | L28 | +0.097 | -0.015 |
+
+![IOI final-position curves](../figures/ext7_controls_ioi_curves.png)
+
+![IOI grid](../figures/ext7_controls_ioi_grid.png)
+
+- Qwen3-30B-A3B-Base, (i) S2 → IO: drop +12.65 (Δ clean +6.31, corrupted -6.34); attention L45 +4.16 [+3.97, +4.35] (0.329 of the drop), MoE L41 +0.21 [+0.17, +0.25] (0.017 of the drop), block L45 +3.88 [+3.69, +4.08] (0.307 of the drop); attention share 0.92 [0.90, 0.94]; at the attention peak the MoE patch of the same layer gives -1.93; replication: attention L45 (0.324), share 0.93 [0.91, 0.93]; W4 A 1.00, M -0.27 [-0.29, -0.25], noising M -0.27; direct path A_dir 1.40 / M_dir -0.40; top head L42H11 +2.25 (z +8.5, 67% of its layer's attention patch; clean attention IO 0.06 / S1 0.06 / S2 0.75, corrupted IO 0.06 / S1 0.05); ≥ 2 SD on validation and discovery: L42H11 (+2.25), L43H24 (+1.27), L42H10 (+0.87), L43H29 (+0.80), L43H28 (+0.63), L43H27 (-0.47), L42H14 (-0.52).
+- Qwen3-30B-A3B-Base, (ii) S1, IO → other names: drop +7.87 (Δ clean +6.28, corrupted -1.58); attention L45 +4.77 [+4.55, +4.99] (0.606 of the drop), MoE L41 +0.21 [+0.14, +0.28] (0.026 of the drop), block L45 +4.54 [+4.29, +4.76] (0.576 of the drop); attention share 0.89 [0.86, 0.91]; at the attention peak the MoE patch of the same layer gives -1.33; replication: attention L45 (0.611), share 0.89 [0.85, 0.91]; W4 A 1.00, M -0.24 [-0.27, -0.20], noising M -0.06; direct path A_dir 1.37 / M_dir -0.35; top head L42H10 +1.05 (z +6.6, 68% of its layer's attention patch; clean attention IO 0.87 / S1 0.03 / S2 0.02, corrupted IO 0.34 / S1 0.37); ≥ 2 SD on validation and discovery: L42H10 (+1.05), L45H9 (+0.69), L45H29 (+0.64), L45H20 (+0.59), L45H22 (+0.51), L43H24 (+0.35), L43H29 (-0.37).
+- Mixtral-8x7B, BOS, (i) S2 → IO: drop +11.28 (Δ clean +5.64, corrupted -5.64); attention L19 +2.30 [+2.14, +2.46] (0.204 of the drop), MoE L17 +0.53 [+0.48, +0.57] (0.047 of the drop), block L19 +2.72 [+2.54, +2.90] (0.241 of the drop); attention share 0.80 [0.79, 0.81]; at the attention peak the MoE patch of the same layer gives +0.28; replication: attention L19 (0.206), share 0.81 [0.79, 0.82]; W4 A 1.00, M -0.02 [-0.05, -0.00], noising M -0.03; direct path A_dir 1.17 / M_dir -0.17; top head L21H6 +1.15 (z +7.5, 67% of its layer's attention patch; clean attention IO 0.04 / S1 0.02 / S2 0.61, corrupted IO 0.02 / S1 0.04); ≥ 2 SD on validation and discovery: L21H6 (+1.15), L19H10 (+0.72), L31H5 (+0.69), L19H8 (+0.54), L16H15 (+0.50), L16H3 (+0.34), L22H29 (-0.32).
+- Mixtral-8x7B, BOS, (ii) S1, IO → other names: drop +7.27 (Δ clean +5.70, corrupted -1.56); attention L30 +1.52 [+1.32, +1.71] (0.210 of the drop), MoE L28 +0.70 [+0.60, +0.81] (0.096 of the drop), block L30 +1.15 [+0.95, +1.34] (0.158 of the drop); attention share 0.82 [0.81, 0.84]; at the attention peak the MoE patch of the same layer gives -0.56; replication: attention L30 (0.209), share 0.83 [0.81, 0.85]; W4 A 1.00, M -0.14 [-0.17, -0.11], noising M +0.00; direct path A_dir 1.09 / M_dir -0.11; top head L30H2 +1.02 (z +8.4, 67% of its layer's attention patch; clean attention IO 0.38 / S1 0.11 / S2 0.02, corrupted IO 0.21 / S1 0.21); ≥ 2 SD on validation and discovery: L30H2 (+1.02), L26H6 (+0.57), L31H6 (+0.46), L21H6 (+0.39), L31H18 (+0.37), L30H26 (+0.30).
+- Grid, Qwen3-30B-A3B-Base (i): S2: MoE peak L0 +0.037, attention peak L3 +0.256 (layer sums +0.01 / +0.42); after_S2: MoE peak L15 +0.002, attention peak L42 +0.073 (layer sums -0.01 / +0.13); final: MoE peak L40 +0.017, attention peak L45 +0.330 (layer sums -0.26 / +0.99).
+- Grid, Qwen3-30B-A3B-Base (ii): S1: MoE peak L5 +0.012, attention peak L28 +0.007 (layer sums -0.13 / -0.25); IO: MoE peak L2 +0.164, attention peak L3 +0.254 (layer sums +0.45 / +0.74); S2: MoE peak L34 +0.032, attention peak L44 +0.074 (layer sums +0.16 / +0.40); after_S2: MoE peak L38 +0.012, attention peak L42 +0.034 (layer sums +0.15 / +0.28); final: MoE peak L37 +0.029, attention peak L45 +0.623 (layer sums -0.21 / +1.10).
+- Grid, Mixtral-8x7B, BOS (i): S2: MoE peak L0 +0.990, attention peak L7 +0.055 (layer sums +1.12 / +0.10); after_S2: MoE peak L17 +0.019, attention peak L19 +0.087 (layer sums +0.05 / +0.19); final: MoE peak L17 +0.046, attention peak L19 +0.204 (layer sums -0.04 / +1.01).
+- Grid, Mixtral-8x7B, BOS (ii): S1: MoE peak L31 +0.000, attention peak L5 +0.006 (layer sums -0.54 / -0.01); IO: MoE peak L0 +0.639, attention peak L25 +0.002 (layer sums +1.40 / -0.05); S2: MoE peak L16 +0.039, attention peak L15 +0.036 (layer sums +0.28 / +0.20); after_S2: MoE peak L17 +0.008, attention peak L19 +0.026 (layer sums +0.05 / +0.13); final: MoE peak L28 +0.097, attention peak L30 +0.237 (layer sums -0.01 / +1.12).
+- Reading of the grid: at the corrupted name tokens the earliest layers carry the token identity (Z9, not interpreted as computation): Mixtral's L0 MoE output at S2 restores 0.99 of the drop under (i) and at IO 0.64 under (ii); in Qwen3 the same early effect sits in attention L3 (S2 0.26, IO 0.25). Between S2 and the final token little is patchable (≤ 0.09 of the drop at any layer). At the final position the single-layer attention patches add up to the drop (layer sums 0.99–1.12) and the MoE patches to ≤ 0.
+- Heads (W5, final-position `attn_head` patches at the top-4 discovery attention layers + one null layer; detection = |z| ≥ 2 over all scanned heads on validation and discovery): under (i) Qwen3's largest head L42H11 (+2.25, 67 % of the L42 attention patch) attends S2 (0.75) in both runs — it reads which name is duplicated, the S-inhibition signal of Wang et al.; the classic name mover L42H10 (+0.87) attends IO (0.87) and follows the IO name to S1 (0.86) when S2 becomes IO; L43H29 (+0.80) attends the final token itself; L42H14 (−0.52) is a negative name mover (IO 0.21 → S1 0.21). Mixtral repeats the pattern under (i): its largest head L21H6 (+1.15, 67 % of the L21 attention patch) attends S2 (0.61), as do L19H10, L31H5, L16H15 and L16H3 (0.26–0.35 on S2); L19H8 is the name mover (IO 0.69 → S1 0.65 after S2 → IO) and L22H29 a negative name mover (−0.32; IO 0.31 → S1 0.32). Under (ii) the name movers take over (L42H10 +1.05 = 68 % of L42; L45H9 / H29 / H20 / H22 +0.51 to +0.69, each with 0.20–0.35 of its attention on IO and the rest on position 0), and so they do in Mixtral (L30H2 +1.02 = 67 % of L30, L26H6 +0.57, L31H6, L31H18, L30H26; 0.16–0.39 of their attention on IO, the rest mostly on position 0). The S2 reader matters less under (ii) (Qwen3 L42H11 not detected; Mixtral L21H6 +0.39 vs +1.15): the S2 token is unchanged but no longer duplicates S1. This is the corruption-site dependence Zhang & Nanda show for GPT-2 small: corrupting S2 puts the heads that read S2 first, corrupting S1 and IO puts the name movers first (Qwen3 L42H10 is detected under both, the L45 movers only under (ii); Mixtral L19H8 under (i), the L26/L30/L31 movers under (ii), which is why Mixtral's attention peak moves from L19 to L30).
+
+### Reading
+
+1. **The hypothesis "WinoGrande is like IOI" fails at the final position, in both models and at both corruption sites.** On every attention–MoE view the order is IOI > CounterFact > WinoGrande. In WinoGrande the MoE patches add up to more than the drop and the MoE writes alone restore 70–84 % of it; in IOI the attention patches add up to the drop and the MoE writes restore nothing (or act against the answer). Whatever attention does for WinoGrande (at the filled option in early-middle layers, e.g. Mixtral L9 in the role swap, and at the final position, Mixtral L13, Qwen3 L38) is followed by MoE sublayers (Qwen3 L41–L42, Mixtral L19–L20) that carry the larger part of the repair — WinoGrande looks like factual recall with a heavier MoE share, not like IOI.
+2. **IOI calibrates the measurement.** The same final-position patches, statistics and models classify IOI as attention-driven (AUC+ share 0.80–0.92, single-layer MoE peaks ≤ 0.10 of the drop) and recover the GPT-2-small mechanism at the head level (S2-reading and name-mover heads, negative name movers; Qwen3 L42H14 attends IO 0.21 and has a negative effect), so the low WinoGrande attention share is a property of the task, not a blind spot. The MoE writes at the final position are net negative in IOI, from the last two or three layers (Qwen3 L45–L47, Mixtral L30–L31); a smaller negative last-layer MoE effect is present in every task (e.g. Mixtral L31 −0.15 of the drop in WinoGrande, −0.07 in CounterFact), i.e. a late MoE that counteracts the answer, as negative name movers do in Wang et al.; in IOI nothing else is on the MoE side.
+3. **The corruption site changes which components are found (Z7), not the side of the axis.** IOI (ii) (S1, IO → other names) has a smaller drop than (i) (the corrupted prompt prefers neither name) and, as in Zhang & Nanda's App. F, its top heads are name movers, whereas (i) puts the S2-reading head first in Qwen3; Mixtral's attention peak moves from L19 under (i) to L30–L31 under (ii). The WinoGrande role swap moves weight toward attention relative to the option swap (Qwen3 share 0.32 vs 0.16, direct-path attention 0.19 vs 0.05) — which suggests that binding the attribute to the right entity needs more attention than telling which entity is referred to — but stays on the MoE side of CounterFact.
+4. **The W4 Shapley split is not the right summary at the final position.** Restoring every attention output restores the whole final residual (A = 1 by construction; the MoE is a per-token function), so φ_attn = 1 − M/2 ≥ ½ for any task with M ≤ 1, and the redundancy A + M − 1 is just M. The per-layer attention share (W2), the all-MoE fraction M and the direct-path split are the informative quantities; they agree in their ordering of the tasks.
+5. **CounterFact under STR (task 1).** STR keeps Direction 2b's conclusion (attention and MoE comparable at the final position, attention first), normalises the attention peak to the same or a larger share of the drop than GN, and lowers Mixtral's MoE peak (0.085 vs 0.113); Zhang & Nanda's GN inflation does not show at this patch site.
+
+### Caveats
+
+All attributions are at the final position: attention patches there measure what the final position reads in a layer; processing at earlier positions (the option, the mentions, S2) enters only through what it writes into keys and values, and the position grids (W3, first 64 validation pairs) give the layer-level view at those positions. Head patches are final-position patches (Zhang & Nanda patch heads at all positions), so duplicate-token and induction heads, which act at S2, are not visible as heads (S-inhibition-like heads act at the final position and are: Qwen3 L42H11 reads S2). The WinoGrande option swap numbers are agent ext7-wino's run on its shared 776-pair set, while the role swap uses each model's own pool (name twins only; 213 Qwen3 twins drop out because a sentence-initial name tokenises differently from a mid-sentence one), so the two corruptions are compared on different items; the role swap has no replication split in Mixtral (270 pairs). IOI is easy for both models (≥ 99.6 % of the items pass the margin both ways), so its drops are large and its CIs narrow; it uses 65 of Wang et al.'s 99 names (single tokens under both tokenizers). CounterFact here is the Direction-6 STR set (215 / 213 paper cases, donor mean). bf16 batch-composition noise between passes is ≈ 0.1 logits per row on average (same-pass vs Direction-6 MoE rows: r 0.97–0.98, max 2.5), negligible for means over 100+ pairs.
+
+### Files
+
+Code: `moetrace/ext7_controls.py` (role-swap and IOI builders, case sets, CounterFact adapter, pair-run summaries, restricted grid runner, direct-path split, three-task table, this section: `python -m moetrace.ext7_controls section`); scripts `scripts/ext7_cf_{verify,attnsweep,analyze}.py`, `scripts/ext7_cf_chain.sh`, `scripts/ext7_role_{build,scan,casesets,grid,analyze}.py`, `scripts/ext7_ioi_{build,scan,casesets,attn,grid,analyze}.py`, chains `scripts/ext7_role_ioi_scan_chain.sh`, `scripts/ext7_ioi_attn_chain.sh`, `scripts/ext7_role_ioi_chain.sh` (W2, W5, W3), `scripts/ext7_role_ioi_grids_all.sh` (W3 in one GPU job), `scripts/ext7_role_ioi_w4_chain.sh`, `scripts/ext7_role_ioi_direct_chain.sh` (the runners themselves are agent ext7-wino's `scripts/ext7_wino_{sweep,heads,joint}.py`). Data: `data/wino_role/` (pairs, funnels, case sets incl. `_grid` subsets), `data/ioi/` (items, pairs per corruption and model, case sets, pool). Runs: `results/{qwen3,mixtral_bos}_str_attnsweep`, `results/wino_role_<proto>` (scan), `results/wino_role_<proto>_str` (W2, W4, direct split), `results/wino_role_<proto>_grid`, `results/ioi_<proto>` (scan, attn_names.npz), `results/ioi_<proto>_<s2io|s1io>` (W2, W5, W4, direct split), `results/ioi_<proto>_<corr>_grid`; verification `results/verify_ext7_controls_cf_olmoe.json`; tables `results/tables/ext7_controls_*`; figures `results/figures/ext7_controls_*`; numbers `results/ext7_controls_summary.json`.
+
+
+## Direction 8: Expert add-back curves
+
+**Summary.** Patching expert outputs back JOINTLY at the final position (exact multi-layer patches, nothing summed) shows that experts alone cannot repair CounterFact STR but largely repair WinoGrande STR. Ceiling = all MoE outputs at the final position: Qwen3 CounterFact **0.53** [0.49, 0.57], Mixtral CounterFact **0.41** [0.37, 0.45], Qwen3 WinoGrande **0.84** [0.83, 0.86], Mixtral WinoGrande **0.79** [0.76, 0.81] of the drop (deletion 0.52, 0.42, 0.84, 0.79). All attention outputs restore 1.00 by construction (the MoE is per-token and the final token is shared), so the two-player Shapley split degenerates to φ_MoE = M/2; the direct-path split of the final residual difference gives attention / MoE Qwen3 CounterFact 0.50 / 0.51, Mixtral CounterFact 0.63 / 0.36, Qwen3 WinoGrande 0.04 / 0.96, Mixtral WinoGrande 0.29 / 0.71: on WinoGrande the logit difference at the final position is written mostly by expert outputs, the opposite of the IOI-like hypothesis at this position. A handful of experts carries most of the expert repair except in Qwen3 WinoGrande: 80 % of the ceiling with k = Qwen3 CounterFact 6 (greedy 5, random 320 of 384), Mixtral CounterFact 5 (greedy 4, random 64 of 64), Qwen3 WinoGrande 48 (greedy 10, random 320 of 384), Mixtral WinoGrande 8 (greedy 7, random 48 of 64) experts (per-case oracle ordering). Subsets overshoot the ceiling (oracle maximum 0.61, 0.52, 0.85, 0.81): some clean expert outputs work against the answer. Greedy is good enough: beam search (width 4) adds ≤ 0.016 of the drop and the exact optimum over each case's top-10 experts beats greedy-within-top-10 by ≤ 0.011 (below bf16 run-to-run noise), while adaptive greedy beats the static single-expert ranking by +0.06, +0.08, +0.12, +0.04 at k = 10. The patch-free direct-logit-attribution ranking is within 0.03 of the single-patch oracle or better (AUC over log k Qwen3 CounterFact 0.51 vs 0.47, Mixtral CounterFact 0.37 vs 0.37, Qwen3 WinoGrande 0.65 vs 0.59, Mixtral WinoGrande 0.55 vs 0.58); the paper's layer-wise order is below every ranking that uses each expert's effect on the answer (oracle, DLA, population) but above routing weight and random.
+
+### What was run
+
+**Engine (step E).** `multi` accepts `attn_layer` and `block` steps (first step = the single-layer kind; later step: the live row's attention output at the final position is replaced by the source run's, h_mid = h_in_own + Attn_source, and for `block` also the MoE output, h_out = h_mid + MoE_source), every kind works in the noising direction (parent = clean row, source = corrupted row), `SpawnSpec.kl_ref` sets the KL reference row, `DiagSpec.contrib_dla` records the per-expert direct logit attribution of the prefill rows, and the later-step vectors are computed in row chunks. Verification on OLMoE against transformers hooks (`scripts/ext8_engine_verify.py`, 12 STR units: CounterFact donors and WinoGrande twins in both directions, 21 patch configurations x 2 directions): all |ΔΔ| max 1.05, mean 0.085, 92 % within 0.25, effect r = 0.9994 (the single-layer kinds on the same units are in the same envelope); all-layer `block` reproduces the source run's Δ bit for bit in both directions, in the engine and in transformers; single-step `multi` attn_layer / block equals the single-layer kinds exactly; all-layer coalition_set(all experts) = all-layer `layer` to fp32 summation order; the DLA diagnostic equals the spawn-vector computation to 1e-05 (relative). Stress: 20,000 all-layer multi rows in one OLMoE pass, 7.1 GB peak. `results/verify_olmoe.json` and `results/verify_ext5_engine_olmoe.json` are identical to the pre-merge copies in every non-timing field.
+
+**Tasks and units.** CounterFact STR (Direction 6 runs `qwen3_str`, `mixtral_bos_str`: paper IDs and split, up to five known donors per case, donor mean primary, first donor sensitivity); WinoGrande STR (ext7 runs, one row per directed case, bootstrap over pairs). Candidates = the clean run's routed (layer, expert) pairs at the final position (Qwen3 384, Mixtral 64), the set of the ext6 / ext7 single-expert rows. Every curve point is an exact joint patch (`multi`, one `coalition_set` step per layer, parent = corrupted run): later layers see the effect of earlier patches, so nothing is summed.
+
+**Normalisation.** r(k) = (Δ_k − Δ_corrupt) / (Δ_clean − Δ_corrupt) with Δ_corrupt from the same pass and the drop from pass 0; deletion: (Δ_clean − Δ_k) / drop. Population values are ratios of means over validation cases with a percentile bootstrap over cases (WinoGrande: pairs); 'per case' = case ratios. AUC = trapezoid of the population r(k) over log k (k = 1 … K) divided by log K, and over k/K. k50/80/90 = the smallest grid k with r(k) ≥ q × ceiling (or ≥ q of the drop).
+
+**Orderings.** pop = discovery all-case single-expert rescue (evaluated on validation); oracle = the row's own single-expert rescue; layerwise = layers by discovery MoE-layer rescue, experts within a layer by pop (the paper's way); rand = mean of 5 per-case permutations; weight = clean routing weight; vnorm = |δ_e|; dla = (δ_e ⊙ γ)·(W_U[r] − W_U[r′]) / rms(h_final, corrupted run), i.e. the final RMSNorm frozen at the corrupted run's scale; noise_oracle (deletion only) = the row's own noising single-expert effect. Greedy: at every step every remaining candidate of the pool (Qwen3: the row's top-32 singles, Mixtral: all 64) is evaluated jointly with the current set, 15 steps for every row (the brief's optional stop at 95 % of the row's all-MoE ceiling was not used because subsets overshoot the ceiling; Reading 3). Beam: width 4, sizes ≤ 6. Exact: all 1,023 subsets of the row's top-10 singles. Shapley: marginal gains along the full prefix sweeps of the 5 random permutations. Gradient rankings need F3 (not built): not done.
+
+| Run | Validation cases / rows | Passes | Greedy rows (pool) | Beam rows | Exact rows | Shapley rows | Prefill Δ of identical rows across passes |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, cf | 108 / 432 | 15 | 432 (32) | 108 | 108 | 54 | SD median 0.09 / 0.09, 99th pct 0.37 / 0.44 (clean / corrupted) |
+| Mixtral-8x7B (BOS), cf | 106 / 436 | 14 | 436 (64) | 64 | 106 | 106 | SD median 0.06 / 0.06, 99th pct 0.25 / 0.29 (clean / corrupted) |
+| Qwen3-30B-A3B-Base, wino | 256 / 256 | 14 | 256 (32) | 128 | 128 | 64 | SD median 0.17 / 0.17, 99th pct 0.76 / 0.73 (clean / corrupted) |
+| Mixtral-8x7B (BOS), wino | 256 / 256 | 14 | 256 (64) | 64 | 128 | 128 | SD median 0.06 / 0.06, 99th pct 0.17 / 0.18 (clean / corrupted) |
+
+### A0. Ceilings and the attention / MoE decomposition at the final position (W4 for these tasks)
+
+| run | model | task | cases | direction | all MoE (M) | all attention (A) | both | MoE <= L-5 | attention <= L-5 | phi_attn | phi_MoE | A+M-1 | per-case median M | cases M >= 0.8 | direct A / M (exact norm) | DLA share attn / MoE |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | validation | add-back | 0.531 [0.489, 0.570] | 1.000 [0.997, 1.003] | 1.000 [1.000, 1.000] | 0.433 [0.395, 0.470] | 0.976 [0.963, 0.987] | 0.735 [0.714, 0.756] | 0.265 [0.244, 0.286] | 0.530 [0.489, 0.570] | 0.542 | 0.07 | 0.500 / 0.510 | 0.496 / 0.504 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | validation | deletion | 0.525 [0.485, 0.564] | 1.000 [0.999, 1.002] | 1.000 [1.000, 1.000] | 0.448 [0.410, 0.486] | 0.974 [0.968, 0.980] | 0.738 [0.718, 0.757] | 0.262 [0.243, 0.282] | 0.525 [0.485, 0.564] | 0.513 | 0.06 |  |  |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | all | add-back | 0.527 [0.502, 0.552] | 1.000 [0.998, 1.002] | 1.000 [1.000, 1.000] | 0.444 [0.420, 0.468] | 0.979 [0.973, 0.985] | 0.736 [0.724, 0.749] | 0.264 [0.251, 0.276] | 0.528 [0.502, 0.553] | 0.536 | 0.06 | 0.505 / 0.507 | 0.499 / 0.501 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | all | deletion | 0.516 [0.491, 0.539] | 0.999 [0.998, 1.000] | 1.000 [1.000, 1.000] | 0.437 [0.412, 0.464] | 0.975 [0.970, 0.979] | 0.742 [0.730, 0.754] | 0.258 [0.246, 0.270] | 0.515 [0.490, 0.539] | 0.496 | 0.04 |  |  |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | validation | add-back | 0.409 [0.367, 0.451] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.508 [0.476, 0.539] | 0.897 [0.881, 0.912] | 0.795 [0.774, 0.817] | 0.205 [0.183, 0.226] | 0.409 [0.367, 0.451] | 0.428 | 0.01 | 0.630 / 0.358 | 0.633 / 0.367 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | validation | deletion | 0.424 [0.386, 0.462] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.500 [0.470, 0.530] | 0.892 [0.876, 0.906] | 0.788 [0.769, 0.807] | 0.212 [0.193, 0.231] | 0.424 [0.386, 0.462] | 0.401 | 0.01 |  |  |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | all | add-back | 0.422 [0.393, 0.450] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.506 [0.484, 0.527] | 0.896 [0.886, 0.907] | 0.789 [0.775, 0.804] | 0.211 [0.196, 0.225] | 0.422 [0.393, 0.450] | 0.432 | 0.00 | 0.630 / 0.359 | 0.632 / 0.368 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | all | deletion | 0.430 [0.402, 0.457] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.506 [0.484, 0.527] | 0.895 [0.884, 0.905] | 0.785 [0.772, 0.799] | 0.215 [0.201, 0.228] | 0.430 [0.402, 0.457] | 0.422 | 0.00 |  |  |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | validation | add-back | 0.843 [0.827, 0.859] | 1.001 [0.995, 1.007] | 1.000 [1.000, 1.000] | 0.808 [0.792, 0.823] | 0.958 [0.949, 0.967] | 0.579 [0.571, 0.588] | 0.421 [0.412, 0.429] | 0.844 [0.826, 0.861] | 0.838 | 0.66 | 0.045 / 0.956 | 0.041 / 0.959 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | validation | deletion | 0.843 [0.827, 0.859] | 0.995 [0.987, 1.002] | 1.000 [1.000, 1.000] | 0.808 [0.792, 0.824] | 0.951 [0.941, 0.962] | 0.576 [0.567, 0.585] | 0.424 [0.415, 0.433] | 0.838 [0.819, 0.856] | 0.848 | 0.66 |  |  |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | all | add-back | 0.833 [0.820, 0.845] | 1.001 [0.997, 1.005] | 1.000 [1.000, 1.000] | 0.797 [0.785, 0.809] | 0.958 [0.953, 0.963] | 0.584 [0.577, 0.591] | 0.416 [0.409, 0.423] | 0.834 [0.821, 0.846] | 0.838 | 0.66 | 0.054 / 0.946 | 0.051 / 0.949 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | all | deletion | 0.833 [0.820, 0.845] | 0.996 [0.991, 1.000] | 1.000 [1.000, 1.000] | 0.797 [0.784, 0.809] | 0.954 [0.948, 0.960] | 0.581 [0.575, 0.588] | 0.419 [0.412, 0.425] | 0.829 [0.816, 0.842] | 0.838 | 0.66 |  |  |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | validation | add-back | 0.787 [0.764, 0.809] | 1.000 [1.000, 1.001] | 1.000 [1.000, 1.000] | 0.811 [0.795, 0.825] | 0.963 [0.958, 0.968] | 0.606 [0.596, 0.618] | 0.394 [0.382, 0.404] | 0.788 [0.764, 0.809] | 0.805 | 0.52 | 0.289 / 0.711 | 0.289 / 0.711 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | validation | deletion | 0.788 [0.764, 0.810] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.811 [0.795, 0.825] | 0.962 [0.957, 0.967] | 0.606 [0.595, 0.618] | 0.394 [0.382, 0.405] | 0.788 [0.764, 0.810] | 0.806 | 0.52 |  |  |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | all | add-back | 0.774 [0.756, 0.790] | 1.000 [1.000, 1.001] | 1.000 [1.000, 1.000] | 0.803 [0.792, 0.814] | 0.962 [0.958, 0.965] | 0.613 [0.605, 0.622] | 0.387 [0.378, 0.395] | 0.774 [0.756, 0.790] | 0.796 | 0.49 | 0.300 / 0.700 | 0.300 / 0.700 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | all | deletion | 0.774 [0.756, 0.791] | 1.000 [1.000, 1.001] | 1.000 [1.000, 1.000] | 0.803 [0.792, 0.814] | 0.962 [0.958, 0.965] | 0.613 [0.605, 0.622] | 0.387 [0.378, 0.395] | 0.774 [0.757, 0.791] | 0.796 | 0.50 |  |  |
+
+
+A = all attention outputs, M = all MoE outputs, both = A and M at every layer (sanity: the clean final residual); φ = two-player Shapley split ½[A + (1 − M)] / ½[M + (1 − A)], redundancy A + M − 1; 'direct A / M' = Δ evaluated on h_corrupt + Σ_l dAttn_l and h_corrupt + Σ_l dMoE_l (exact final RMSNorm, fp32 offline from the recorded final-position sublayer outputs), as fractions of the same fp32 drop; 'DLA share' = the linear version with the norm frozen at the corrupted run.
+
+![A0 ceilings and direct-path split](figures/ext8_a0_split.png)
+
+![Add-back curves](figures/ext8_a1_curves.png)
+
+### A1. Static orderings (add-back)
+
+| run | model | task | donors | ordering | ceiling | r(1) | r(10) | r(all clean-active) | max r (k) | AUC log k | AUC k/K | AUC log k (of ceiling) | k50/80/90 ceiling | k50/80/90 drop | case k80 ceiling (median [IQR], reached) | case k answer restored | top-1 at k=10 / all |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | oracle | 0.531 | 0.201 | 0.466 | 0.511 | 0.607 (320) | 0.471 | 0.572 | 0.887 | 2/6/16 | 24/never/never | 5 [3, 24], 1.00 | 48 [4, never], 0.63 | 0.06 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | pop | 0.531 | 0.097 | 0.348 | 0.511 | 0.565 (320) | 0.383 | 0.524 | 0.722 | 6/24/48 | 48/never/never | 16 [7, 48], 0.98 | 192 [16, never], 0.58 | 0.04 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | layerwise | 0.531 | 0.097 | 0.236 | 0.511 | 0.549 (320) | 0.333 | 0.507 | 0.627 | 16/48/64 | 96/never/never | 32 [24, 96], 0.98 | 192 [32, never], 0.56 | 0.01 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | dla | 0.531 | 0.185 | 0.491 | 0.511 | 0.649 (192) | 0.505 | 0.620 | 0.952 | 2/6/9 | 12/never/never | 5 [3, 12], 1.00 | 16 [4, never], 0.72 | 0.08 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | vnorm | 0.531 | 0.098 | 0.253 | 0.511 | 0.515 (256) | 0.332 | 0.483 | 0.626 | 12/48/96 | 128/never/never | 48 [24, 64], 0.98 | never [32, never], 0.44 | 0.00 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | weight | 0.531 | 0.005 | 0.078 | 0.511 | 0.511 (384) | 0.208 | 0.420 | 0.391 | 48/192/256 | 320/never/never | 96 [48, 192], 0.96 | never [64, never], 0.44 | 0.00 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | rand | 0.531 | 0.001 | 0.023 | 0.511 | 0.511 (384) | 0.096 | 0.267 | 0.181 | 192/320/384 | 384/never/never | 320 [320, 384], 0.95 | never [320, never], 0.42 | 0.00 / 0.07 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | oracle | 0.535 | 0.196 | 0.454 | 0.508 | 0.607 (320) | 0.464 | 0.567 | 0.866 | 2/7/16 | 24/never/never | 7 [2, 48], 0.93 | 48 [5, never], 0.66 | 0.04 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | pop | 0.535 | 0.100 | 0.342 | 0.508 | 0.566 (320) | 0.381 | 0.523 | 0.712 | 6/24/48 | 64/never/never | 24 [7, 128], 0.87 | 256 [16, never], 0.56 | 0.03 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | layerwise | 0.535 | 0.102 | 0.232 | 0.508 | 0.548 (320) | 0.331 | 0.505 | 0.619 | 16/48/64 | 96/never/never | 48 [24, 128], 0.86 | 128 [24, never], 0.58 | 0.01 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | dla | 0.535 | 0.186 | 0.486 | 0.508 | 0.649 (192) | 0.503 | 0.619 | 0.941 | 2/7/10 | 12/never/never | 6 [3, 16], 0.94 | 24 [4, never], 0.73 | 0.07 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | vnorm | 0.535 | 0.099 | 0.244 | 0.508 | 0.510 (256) | 0.326 | 0.478 | 0.609 | 16/48/96 | 192/never/never | 48 [24, 128], 0.84 | never [24, never], 0.46 | 0.00 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | weight | 0.535 | 0.003 | 0.083 | 0.508 | 0.508 (384) | 0.207 | 0.417 | 0.387 | 48/192/256 | 384/never/never | 96 [48, 320], 0.82 | never [48, never], 0.48 | 0.00 / 0.05 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | rand | 0.535 | 0.002 | 0.023 | 0.508 | 0.508 (384) | 0.096 | 0.266 | 0.179 | 256/320/384 | 384/never/never | 320 [320, 384], 0.79 | never [256, never], 0.44 | 0.00 / 0.05 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | oracle | 0.409 | 0.132 | 0.431 | 0.403 | 0.517 (48) | 0.371 | 0.457 | 0.906 | 2/5/6 | 32/never/never | 5 [2, 9], 1.00 | 48 [7, never], 0.50 | 0.08 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | pop | 0.409 | 0.065 | 0.366 | 0.403 | 0.484 (48) | 0.307 | 0.417 | 0.749 | 4/8/12 | never/never/never | 9 [5, 16], 1.00 | never [16, never], 0.45 | 0.03 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | layerwise | 0.409 | 0.060 | 0.352 | 0.403 | 0.491 (48) | 0.292 | 0.420 | 0.713 | 5/9/12 | never/never/never | 9 [6, 16], 1.00 | never [16, never], 0.49 | 0.03 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | dla | 0.409 | 0.103 | 0.440 | 0.403 | 0.533 (48) | 0.367 | 0.470 | 0.896 | 3/6/7 | 24/never/never | 5 [3, 9], 1.00 | 24 [7, never], 0.53 | 0.09 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | vnorm | 0.409 | -0.021 | 0.081 | 0.403 | 0.403 (64) | 0.127 | 0.292 | 0.309 | 16/24/32 | never/never/never | 24 [24, 32], 0.96 | never [24, never], 0.37 | 0.01 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | weight | 0.409 | 0.032 | 0.206 | 0.403 | 0.403 (64) | 0.188 | 0.298 | 0.460 | 10/48/48 | never/never/never | 32 [12, 48], 0.99 | never [48, never], 0.37 | 0.01 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | rand | 0.409 | 0.007 | 0.079 | 0.403 | 0.403 (64) | 0.111 | 0.223 | 0.272 | 32/64/64 | never/never/never | 48 [48, 64], 0.95 | never [64, never], 0.37 | 0.00 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | oracle | 0.410 | 0.130 | 0.427 | 0.400 | 0.514 (48) | 0.367 | 0.452 | 0.894 | 2/5/6 | 48/never/never | 5 [3, 12], 0.91 | 48 [7, never], 0.54 | 0.08 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | pop | 0.410 | 0.062 | 0.361 | 0.400 | 0.482 (48) | 0.304 | 0.414 | 0.740 | 4/9/12 | never/never/never | 9 [4, 24], 0.89 | never [12, never], 0.49 | 0.05 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | layerwise | 0.410 | 0.058 | 0.343 | 0.400 | 0.489 (48) | 0.287 | 0.416 | 0.700 | 5/9/16 | never/never/never | 10 [6, 24], 0.90 | 64 [16, never], 0.50 | 0.04 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | dla | 0.410 | 0.102 | 0.440 | 0.400 | 0.528 (48) | 0.365 | 0.467 | 0.889 | 3/6/7 | 24/never/never | 6 [3, 10], 0.92 | 24 [6, never], 0.58 | 0.10 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | vnorm | 0.410 | -0.023 | 0.076 | 0.400 | 0.400 (64) | 0.122 | 0.289 | 0.298 | 16/24/32 | never/never/never | 24 [24, 48], 0.78 | never [32, never], 0.37 | 0.00 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | weight | 0.410 | 0.029 | 0.205 | 0.400 | 0.400 (64) | 0.185 | 0.295 | 0.452 | 12/48/48 | never/never/never | 24 [9, 64], 0.81 | never [48, never], 0.37 | 0.02 / 0.03 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | rand | 0.410 | 0.007 | 0.075 | 0.400 | 0.400 (64) | 0.108 | 0.220 | 0.264 | 32/64/64 | never/never/never | 64 [32, never], 0.74 | never [64, never], 0.37 | 0.00 / 0.03 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | oracle | 0.843 | 0.214 | 0.553 | 0.837 | 0.846 (320) | 0.591 | 0.779 | 0.701 | 4/48/128 | 7/192/never | 32 [12, 96], 1.00 | 7 [3, 48], 0.98 | 0.23 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | pop | 0.843 | 0.124 | 0.444 | 0.837 | 0.837 (384) | 0.531 | 0.770 | 0.630 | 9/48/96 | 16/192/never | 32 [24, 96], 1.00 | 16 [6, 48], 0.97 | 0.15 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | layerwise | 0.843 | 0.133 | 0.321 | 0.837 | 0.837 (384) | 0.462 | 0.750 | 0.548 | 24/64/128 | 32/192/never | 64 [48, 96], 1.00 | 32 [24, 64], 0.97 | 0.05 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | dla | 0.843 | 0.174 | 0.606 | 0.837 | 0.888 (256) | 0.647 | 0.854 | 0.768 | 4/16/32 | 6/48/never | 16 [10, 24], 1.00 | 7 [4, 16], 0.98 | 0.24 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | vnorm | 0.843 | 0.029 | 0.248 | 0.837 | 0.840 (320) | 0.438 | 0.768 | 0.520 | 24/64/96 | 32/128/never | 64 [48, 96], 1.00 | 32 [16, 64], 0.96 | 0.03 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | weight | 0.843 | 0.020 | 0.123 | 0.837 | 0.837 (384) | 0.320 | 0.676 | 0.379 | 64/128/192 | 96/256/never | 128 [96, 192], 1.00 | 96 [48, 128], 0.95 | 0.03 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | rand | 0.843 | 0.005 | 0.028 | 0.837 | 0.837 (384) | 0.170 | 0.481 | 0.202 | 192/320/320 | 192/384/never | 320 [256, 320], 0.99 | 256 [192, 320], 0.95 | 0.00 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | oracle | 0.843 | 0.214 | 0.553 | 0.837 | 0.846 (320) | 0.591 | 0.779 | 0.701 | 4/48/128 | 7/192/never | 32 [12, 96], 1.00 | 7 [3, 48], 0.98 | 0.23 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | pop | 0.843 | 0.124 | 0.444 | 0.837 | 0.837 (384) | 0.531 | 0.770 | 0.630 | 9/48/96 | 16/192/never | 32 [24, 96], 1.00 | 16 [6, 48], 0.97 | 0.15 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | layerwise | 0.843 | 0.133 | 0.321 | 0.837 | 0.837 (384) | 0.462 | 0.750 | 0.548 | 24/64/128 | 32/192/never | 64 [48, 96], 1.00 | 32 [24, 64], 0.97 | 0.05 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | dla | 0.843 | 0.174 | 0.606 | 0.837 | 0.888 (256) | 0.647 | 0.854 | 0.768 | 4/16/32 | 6/48/never | 16 [10, 24], 1.00 | 7 [4, 16], 0.98 | 0.24 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | vnorm | 0.843 | 0.029 | 0.248 | 0.837 | 0.840 (320) | 0.438 | 0.768 | 0.520 | 24/64/96 | 32/128/never | 64 [48, 96], 1.00 | 32 [16, 64], 0.96 | 0.03 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | weight | 0.843 | 0.020 | 0.123 | 0.837 | 0.837 (384) | 0.320 | 0.676 | 0.379 | 64/128/192 | 96/256/never | 128 [96, 192], 1.00 | 96 [48, 128], 0.95 | 0.03 / 0.34 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | rand | 0.843 | 0.005 | 0.028 | 0.837 | 0.837 (384) | 0.170 | 0.481 | 0.202 | 192/320/320 | 192/384/never | 320 [256, 320], 0.99 | 256 [192, 320], 0.95 | 0.00 / 0.34 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | oracle | 0.787 | 0.192 | 0.674 | 0.788 | 0.813 (48) | 0.580 | 0.735 | 0.737 | 3/8/16 | 5/48/never | 8 [7, 12], 1.00 | 5 [3, 8], 0.96 | 0.44 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | pop | 0.787 | 0.147 | 0.602 | 0.788 | 0.811 (48) | 0.534 | 0.717 | 0.678 | 4/12/24 | 7/32/never | 12 [9, 16], 1.00 | 7 [4, 12], 0.95 | 0.39 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | layerwise | 0.787 | 0.147 | 0.550 | 0.788 | 0.815 (48) | 0.494 | 0.704 | 0.628 | 5/16/24 | 9/32/never | 16 [12, 24], 1.00 | 9 [5, 16], 0.95 | 0.35 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | dla | 0.787 | 0.147 | 0.647 | 0.788 | 0.821 (48) | 0.553 | 0.735 | 0.702 | 4/10/16 | 6/32/never | 10 [8, 16], 1.00 | 6 [4, 10], 0.96 | 0.42 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | vnorm | 0.787 | -0.049 | 0.288 | 0.788 | 0.788 (64) | 0.268 | 0.598 | 0.340 | 16/24/32 | 16/never/never | 24 [24, 24], 1.00 | 16 [12, 24], 0.88 | 0.07 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | weight | 0.787 | 0.079 | 0.443 | 0.788 | 0.788 (64) | 0.416 | 0.624 | 0.528 | 9/24/48 | 16/never/never | 24 [24, 32], 1.00 | 16 [6, 32], 0.89 | 0.20 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | rand | 0.787 | 0.018 | 0.160 | 0.788 | 0.788 (64) | 0.229 | 0.456 | 0.291 | 32/48/64 | 48/never/never | 48 [48, 48], 1.00 | 32 [24, 48], 0.88 | 0.01 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | oracle | 0.787 | 0.192 | 0.674 | 0.788 | 0.813 (48) | 0.580 | 0.735 | 0.737 | 3/8/16 | 5/48/never | 8 [7, 12], 1.00 | 5 [3, 8], 0.96 | 0.44 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | pop | 0.787 | 0.147 | 0.602 | 0.788 | 0.811 (48) | 0.534 | 0.717 | 0.678 | 4/12/24 | 7/32/never | 12 [9, 16], 1.00 | 7 [4, 12], 0.95 | 0.39 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | layerwise | 0.787 | 0.147 | 0.550 | 0.788 | 0.815 (48) | 0.494 | 0.704 | 0.628 | 5/16/24 | 9/32/never | 16 [12, 24], 1.00 | 9 [5, 16], 0.95 | 0.35 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | dla | 0.787 | 0.147 | 0.647 | 0.788 | 0.821 (48) | 0.553 | 0.735 | 0.702 | 4/10/16 | 6/32/never | 10 [8, 16], 1.00 | 6 [4, 10], 0.96 | 0.42 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | vnorm | 0.787 | -0.049 | 0.288 | 0.788 | 0.788 (64) | 0.268 | 0.598 | 0.340 | 16/24/32 | 16/never/never | 24 [24, 24], 1.00 | 16 [12, 24], 0.88 | 0.07 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | weight | 0.787 | 0.079 | 0.443 | 0.788 | 0.788 (64) | 0.416 | 0.624 | 0.528 | 9/24/48 | 16/never/never | 24 [24, 32], 1.00 | 16 [6, 32], 0.89 | 0.20 / 0.44 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | rand | 0.787 | 0.018 | 0.160 | 0.788 | 0.788 (64) | 0.229 | 0.456 | 0.291 | 32/48/64 | 48/never/never | 48 [48, 48], 1.00 | 32 [24, 48], 0.88 | 0.01 / 0.44 |
+
+
+### A2. Adaptive strategies
+
+| run | model | task | rows | pool | greedy r(1)/r(2)/r(5)/r(10)/r(15) | oracle static r(1)/r(2)/r(5)/r(10)/r(16) | greedy k50/80/90 ceiling | ceiling | most frequent in first 5 picks (share of rows) | beam - greedy (k=2..6, of drop) | exact10 - greedy10 (k=2..10) | greedy10 optimal frac (k=2..10) | exact10 - oracle prefix (k=2..10) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | 432 | 32 | 0.200/0.302/0.443/0.523/0.548 | 0.201/0.294/0.407/0.466/0.494 | 2/5/7 | 0.531 | L42E115 0.55, L44E069 0.46, L41E001 0.18, L40E127 0.17 | +0.002/+0.004/+0.003/+0.005/+0.007 | +0.000/+0.001/+0.002/+0.003/+0.004/+0.004/+0.005/+0.003/+0.000 | 1.00/0.94/0.91/0.86/0.81/0.81/0.75/0.79/1.00 | +0.014/+0.019/+0.027/+0.033/+0.035/+0.030/+0.029/+0.015/+0.000 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | 436 | 64 | 0.132/0.225/0.393/0.509/0.561 | 0.132/0.215/0.348/0.431/0.474 | 2/4/5 | 0.409 | L21E001 0.40, L19E002 0.32, L18E001 0.28, L22E001 0.25 | +0.004/+0.002/+0.005/+0.002/-0.000 | +0.002/+0.002/+0.002/+0.004/+0.004/+0.006/+0.002/+0.002/+0.000 | 0.94/0.91/0.87/0.83/0.82/0.77/0.88/0.92/1.00 | +0.014/+0.025/+0.033/+0.035/+0.037/+0.036/+0.031/+0.021/+0.000 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | 256 | 32 | 0.213/0.346/0.551/0.677/0.721 | 0.214/0.322/0.469/0.553/0.600 | 3/10/never | 0.843 | L41E117 0.57, L43E081 0.44, L39E071 0.32, L34E119 0.21 | +0.005/+0.010/+0.016/+0.016/+0.007 | +0.002/+0.004/+0.004/+0.008/+0.011/+0.011/+0.009/+0.006/+0.000 | 0.94/0.90/0.86/0.74/0.75/0.71/0.67/0.80/1.00 | +0.028/+0.051/+0.056/+0.067/+0.070/+0.067/+0.057/+0.034/+0.000 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | 256 | 64 | 0.192/0.329/0.557/0.718/0.791 | 0.192/0.323/0.534/0.674/0.740 | 3/7/10 | 0.787 | L20E000 0.80, L19E006 0.79, L21E006 0.40, L16E007 0.33 | +0.001/+0.000/+0.002/+0.007/+0.006 | +0.001/+0.001/+0.002/+0.003/+0.003/+0.003/+0.003/+0.002/+0.000 | 0.95/0.96/0.91/0.86/0.87/0.86/0.87/0.92/1.00 | +0.009/+0.014/+0.022/+0.026/+0.030/+0.028/+0.023/+0.015/+0.000 |
+
+
+![Adaptive strategies, k ≤ 10](figures/ext8_a2_adaptive.png)
+
+Beam rows are the first donors of the first validation cases (Mixtral CounterFact 64 of 106; WinoGrande: first 128 / 64 directed cases); the beam's pool is the greedy pool (32 / 64), so it can exceed the top-10 optimum.
+
+**Shapley values** (5 permutations, full prefix sweeps, first donor)
+
+| run | model | task | rows | permutations | r(phi, single) median | top-1 agree | experts for 80% of sum phi (median [IQR]) | sum single / sum phi (median) | top-1 phi / positive mass | mean SE of phi |
+|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | 54 | 5 | 0.73 | 0.74 | 5 [3, 10] | 1.04 | 0.13 | 0.041 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | 106 | 5 | 0.82 | 0.51 | 6 [3, 10] | 1.16 | 0.14 | 0.068 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | 64 | 5 | 0.46 | 0.48 | 11 [9, 15] | 0.92 | 0.06 | 0.062 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | 128 | 5 | 0.89 | 0.48 | 9 [7, 12] | 1.39 | 0.13 | 0.054 |
+
+
+### A3. Deletion curves (noising)
+
+| run | model | task | donors | ordering | ceiling | r(1) | r(10) | r(all clean-active) | max r (k) | AUC log k | AUC k/K | AUC log k (of ceiling) | k50/80/90 ceiling | k50/80/90 drop | case k80 ceiling (median [IQR], reached) | case k answer flipped | top-1 at k=10 / all |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | noise_oracle | 0.525 | 0.177 | 0.450 | 0.479 | 0.557 (320) | 0.444 | 0.535 | 0.847 | 2/8/16 | 32/never/never | 7 [3, 32], 0.97 | 16 [4, never], 0.70 | 0.13 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | oracle | 0.525 | 0.155 | 0.385 | 0.479 | 0.554 (320) | 0.401 | 0.508 | 0.765 | 3/24/64 | 128/never/never | 16 [4, 96], 0.94 | 96 [4, never], 0.63 | 0.14 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | pop | 0.525 | 0.087 | 0.340 | 0.479 | 0.532 (320) | 0.367 | 0.498 | 0.700 | 6/24/48 | 128/never/never | 24 [8, 96], 0.95 | 96 [12, never], 0.63 | 0.17 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | layerwise | 0.525 | 0.086 | 0.211 | 0.479 | 0.517 (192) | 0.311 | 0.479 | 0.593 | 24/48/96 | 128/never/never | 48 [24, 128], 0.94 | 96 [24, never], 0.63 | 0.19 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | dla | 0.525 | 0.170 | 0.473 | 0.479 | 0.615 (192) | 0.481 | 0.588 | 0.916 | 2/7/10 | 16/never/never | 7 [4, 12], 1.00 | 10 [3, 64], 0.79 | 0.11 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | donor mean | rand | 0.525 | 0.001 | 0.017 | 0.479 | 0.479 (384) | 0.086 | 0.245 | 0.164 | 256/384/384 | never/never/never | 320 [320, 384], 0.83 | 384 [256, never], 0.55 | 0.26 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | noise_oracle | 0.529 | 0.178 | 0.454 | 0.466 | 0.561 (320) | 0.448 | 0.538 | 0.846 | 2/8/16 | 24/never/never | 7 [3, 32], 0.91 | 16 [4, never], 0.69 | 0.13 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | oracle | 0.529 | 0.147 | 0.376 | 0.466 | 0.548 (320) | 0.393 | 0.501 | 0.744 | 3/24/96 | 128/never/never | 24 [4, 96], 0.86 | 96 [6, never], 0.62 | 0.14 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | pop | 0.529 | 0.088 | 0.324 | 0.466 | 0.518 (320) | 0.357 | 0.484 | 0.674 | 7/32/96 | 192/never/never | 24 [9, 192], 0.82 | 128 [16, never], 0.58 | 0.18 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | layerwise | 0.529 | 0.088 | 0.204 | 0.466 | 0.504 (192) | 0.305 | 0.467 | 0.577 | 24/48/96 | 192/never/never | 48 [24, 192], 0.81 | 96 [24, never], 0.62 | 0.19 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | dla | 0.529 | 0.156 | 0.463 | 0.466 | 0.607 (128) | 0.472 | 0.579 | 0.892 | 3/8/12 | 16/never/never | 7 [3, 16], 0.93 | 12 [3, 192], 0.77 | 0.11 / 0.10 |
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | first donor | rand | 0.529 | 0.002 | 0.017 | 0.466 | 0.466 (384) | 0.087 | 0.243 | 0.164 | 256/384/never | never/never/never | 320 [256, never], 0.71 | 384 [256, never], 0.50 | 0.26 / 0.10 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | noise_oracle | 0.424 | 0.125 | 0.393 | 0.366 | 0.459 (48) | 0.340 | 0.411 | 0.803 | 3/6/9 | never/never/never | 6 [3, 24], 0.92 | never [8, never], 0.42 | 0.21 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | oracle | 0.424 | 0.063 | 0.310 | 0.366 | 0.432 (48) | 0.267 | 0.366 | 0.629 | 5/16/24 | never/never/never | 12 [5, 32], 0.91 | never [16, never], 0.36 | 0.27 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | pop | 0.424 | 0.058 | 0.315 | 0.366 | 0.435 (48) | 0.271 | 0.371 | 0.640 | 5/12/24 | never/never/never | 12 [4, 32], 0.92 | never [16, never], 0.37 | 0.28 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | layerwise | 0.424 | 0.046 | 0.301 | 0.366 | 0.441 (48) | 0.251 | 0.371 | 0.592 | 7/16/24 | never/never/never | 16 [6, 24], 0.92 | never [16, never], 0.40 | 0.30 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | dla | 0.424 | 0.100 | 0.405 | 0.366 | 0.484 (48) | 0.338 | 0.428 | 0.798 | 3/7/9 | never/never/never | 6 [3, 16], 0.95 | never [8, never], 0.42 | 0.21 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | donor mean | rand | 0.424 | 0.005 | 0.059 | 0.366 | 0.366 (64) | 0.092 | 0.190 | 0.216 | 48/64/never | never/never/never | 64 [48, 64], 0.76 | never [never, never], 0.24 | 0.36 / 0.18 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | noise_oracle | 0.424 | 0.125 | 0.393 | 0.358 | 0.459 (48) | 0.340 | 0.411 | 0.802 | 3/6/9 | never/never/never | 6 [3, 24], 0.84 | never [8, never], 0.40 | 0.21 / 0.17 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | oracle | 0.424 | 0.058 | 0.306 | 0.358 | 0.423 (48) | 0.260 | 0.357 | 0.612 | 5/16/24 | never/never/never | 12 [5, 48], 0.80 | never [16, never], 0.34 | 0.25 / 0.17 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | pop | 0.424 | 0.059 | 0.314 | 0.358 | 0.426 (48) | 0.269 | 0.365 | 0.635 | 5/16/24 | never/never/never | 12 [4, 32], 0.81 | never [24, never], 0.31 | 0.26 / 0.17 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | layerwise | 0.424 | 0.046 | 0.292 | 0.358 | 0.432 (48) | 0.244 | 0.362 | 0.574 | 7/16/24 | never/never/never | 12 [6, 32], 0.84 | never [16, never], 0.35 | 0.29 / 0.17 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | dla | 0.424 | 0.097 | 0.403 | 0.358 | 0.477 (48) | 0.336 | 0.423 | 0.793 | 3/7/9 | never/never/never | 7 [3, 16], 0.86 | never [10, never], 0.42 | 0.20 / 0.17 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | first donor | rand | 0.424 | 0.006 | 0.056 | 0.358 | 0.358 (64) | 0.089 | 0.185 | 0.209 | 48/64/never | never/never/never | 64 [48, never], 0.60 | never [never, never], 0.21 | 0.35 / 0.17 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | noise_oracle | 0.843 | 0.204 | 0.562 | 0.821 | 0.821 (384) | 0.581 | 0.758 | 0.693 | 4/48/192 | 7/256/never | 384 [24, 384], 0.99 | 384 [7, 384], 0.96 | 0.20 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | oracle | 0.843 | 0.147 | 0.446 | 0.821 | 0.837 (320) | 0.520 | 0.755 | 0.617 | 9/96/128 | 16/192/never | 64 [24, 128], 1.00 | 24 [5, 64], 0.97 | 0.20 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | pop | 0.843 | 0.122 | 0.443 | 0.821 | 0.821 (384) | 0.527 | 0.761 | 0.625 | 9/48/128 | 16/192/never | 32 [24, 96], 1.00 | 16 [6, 48], 0.95 | 0.21 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | layerwise | 0.843 | 0.133 | 0.318 | 0.821 | 0.821 (384) | 0.457 | 0.740 | 0.542 | 24/64/128 | 32/256/never | 64 [48, 96], 1.00 | 32 [24, 64], 0.96 | 0.31 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | dla | 0.843 | 0.178 | 0.608 | 0.821 | 0.878 (192) | 0.646 | 0.846 | 0.766 | 4/16/24 | 6/48/never | 16 [9, 24], 1.00 | 7 [4, 16], 0.98 | 0.13 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | donor mean | rand | 0.843 | 0.002 | 0.027 | 0.821 | 0.821 (384) | 0.164 | 0.467 | 0.195 | 192/320/384 | 256/384/never | 320 [256, 320], 0.99 | 256 [192, 320], 0.94 | 0.38 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | noise_oracle | 0.843 | 0.204 | 0.562 | 0.821 | 0.821 (384) | 0.581 | 0.758 | 0.693 | 4/48/192 | 7/256/never | 384 [24, 384], 0.99 | 384 [7, 384], 0.96 | 0.20 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | oracle | 0.843 | 0.147 | 0.446 | 0.821 | 0.837 (320) | 0.520 | 0.755 | 0.617 | 9/96/128 | 16/192/never | 64 [24, 128], 1.00 | 24 [5, 64], 0.97 | 0.20 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | pop | 0.843 | 0.122 | 0.443 | 0.821 | 0.821 (384) | 0.527 | 0.761 | 0.625 | 9/48/128 | 16/192/never | 32 [24, 96], 1.00 | 16 [6, 48], 0.95 | 0.21 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | layerwise | 0.843 | 0.133 | 0.318 | 0.821 | 0.821 (384) | 0.457 | 0.740 | 0.542 | 24/64/128 | 32/256/never | 64 [48, 96], 1.00 | 32 [24, 64], 0.96 | 0.31 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | dla | 0.843 | 0.178 | 0.608 | 0.821 | 0.878 (192) | 0.646 | 0.846 | 0.766 | 4/16/24 | 6/48/never | 16 [9, 24], 1.00 | 7 [4, 16], 0.98 | 0.13 / 0.02 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | first donor | rand | 0.843 | 0.002 | 0.027 | 0.821 | 0.821 (384) | 0.164 | 0.467 | 0.195 | 192/320/384 | 256/384/never | 320 [256, 320], 0.99 | 256 [192, 320], 0.94 | 0.38 / 0.02 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | noise_oracle | 0.788 | 0.187 | 0.663 | 0.767 | 0.801 (48) | 0.569 | 0.722 | 0.724 | 3/9/16 | 5/48/never | 64 [8, 64], 1.00 | 64 [5, 64], 0.93 | 0.06 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | oracle | 0.788 | 0.151 | 0.657 | 0.767 | 0.798 (48) | 0.555 | 0.717 | 0.705 | 4/9/16 | 5/never/never | 9 [7, 12], 1.00 | 6 [3, 10], 0.94 | 0.07 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | pop | 0.788 | 0.147 | 0.600 | 0.767 | 0.797 (48) | 0.529 | 0.706 | 0.671 | 5/12/24 | 7/never/never | 12 [9, 16], 1.00 | 7 [4, 12], 0.94 | 0.11 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | layerwise | 0.788 | 0.147 | 0.539 | 0.767 | 0.800 (48) | 0.486 | 0.691 | 0.616 | 5/16/24 | 9/never/never | 16 [12, 24], 1.00 | 9 [5, 16], 0.95 | 0.15 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | dla | 0.788 | 0.148 | 0.641 | 0.767 | 0.805 (48) | 0.546 | 0.722 | 0.693 | 4/10/16 | 6/48/never | 10 [8, 16], 1.00 | 6 [4, 12], 0.95 | 0.09 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | donor mean | rand | 0.788 | 0.013 | 0.159 | 0.767 | 0.767 (64) | 0.221 | 0.444 | 0.281 | 32/48/64 | 48/never/never | 48 [48, 64], 1.00 | 48 [24, 48], 0.89 | 0.46 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | noise_oracle | 0.788 | 0.187 | 0.663 | 0.767 | 0.801 (48) | 0.569 | 0.722 | 0.724 | 3/9/16 | 5/48/never | 64 [8, 64], 1.00 | 64 [5, 64], 0.93 | 0.06 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | oracle | 0.788 | 0.151 | 0.657 | 0.767 | 0.798 (48) | 0.555 | 0.717 | 0.705 | 4/9/16 | 5/never/never | 9 [7, 12], 1.00 | 6 [3, 10], 0.94 | 0.07 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | pop | 0.788 | 0.147 | 0.600 | 0.767 | 0.797 (48) | 0.529 | 0.706 | 0.671 | 5/12/24 | 7/never/never | 12 [9, 16], 1.00 | 7 [4, 12], 0.94 | 0.11 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | layerwise | 0.788 | 0.147 | 0.539 | 0.767 | 0.800 (48) | 0.486 | 0.691 | 0.616 | 5/16/24 | 9/never/never | 16 [12, 24], 1.00 | 9 [5, 16], 0.95 | 0.15 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | dla | 0.788 | 0.148 | 0.641 | 0.767 | 0.805 (48) | 0.546 | 0.722 | 0.693 | 4/10/16 | 6/48/never | 10 [8, 16], 1.00 | 6 [4, 12], 0.95 | 0.09 / 0.05 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | first donor | rand | 0.788 | 0.013 | 0.159 | 0.767 | 0.767 (64) | 0.221 | 0.444 | 0.281 | 32/48/64 | 48/never/never | 48 [48, 64], 1.00 | 48 [24, 48], 0.89 | 0.46 / 0.05 |
+
+
+![Deletion curves](figures/ext8_a3_curves.png)
+
+### CounterFact vs WinoGrande
+
+| model | task | K | mean drop | all-MoE ceiling M | direct split attn / MoE | MoE <= L-5 | AUC log k oracle / pop / rand | AUC (of ceiling) oracle / pop | k80 ceiling oracle / pop / greedy / rand | max r oracle (k) | case k restored (oracle, median; frac) | cases restored by all MoE | Shapley: experts for 80 % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact | 384 | 11.67 | 0.531 [0.489, 0.570] | 0.50 / 0.51 | 0.433 | 0.471 / 0.383 / 0.096 | 0.89 / 0.72 | 6 / 24 / 5 / 320 | 0.607 (320) | 48; 0.63 | 0.44 | 5 |
+| Mixtral-8x7B (BOS) | CounterFact | 64 | 12.98 | 0.409 [0.367, 0.451] | 0.63 / 0.36 | 0.508 | 0.371 / 0.307 / 0.111 | 0.91 / 0.75 | 5 / 8 / 4 / 64 | 0.517 (48) | 48; 0.50 | 0.37 | 6 |
+| Qwen3-30B-A3B-Base | WinoGrande | 384 | 8.18 | 0.843 [0.827, 0.859] | 0.04 / 0.96 | 0.808 | 0.591 / 0.531 / 0.170 | 0.70 / 0.63 | 48 / 48 / 10 / 320 | 0.846 (320) | 7; 0.98 | 0.95 | 11 |
+| Mixtral-8x7B (BOS) | WinoGrande | 64 | 7.69 | 0.787 [0.764, 0.809] | 0.29 / 0.71 | 0.811 | 0.580 / 0.534 / 0.229 | 0.74 / 0.68 | 8 / 12 / 7 / 48 | 0.813 (48) | 5; 0.96 | 0.89 | 9 |
+
+
+### Reading
+
+**1. The ceiling.** On CounterFact the all-MoE ceiling is about half the drop or less (Qwen3 CounterFact 0.53, 7% of cases reach 0.8, the answer flips back (Δ > 0) in 44%; Mixtral CounterFact 0.41, 1% of cases reach 0.8, the answer flips back (Δ > 0) in 37%), so full repair from experts is impossible for most facts; the remainder needs the final position's attention outputs, which bring the subject information in. On WinoGrande the ceiling is much higher (Qwen3 WinoGrande 0.84, 66% of cases ≥ 0.8, answer restored in 95%; Mixtral WinoGrande 0.79, 52% of cases ≥ 0.8, answer restored in 89%). Add-back (sufficiency) and deletion (necessity) ceilings agree within 0.02. Restricted to interior layers (≤ L−5) the ceilings are Qwen3 CounterFact 0.43, Mixtral CounterFact 0.51, Qwen3 WinoGrande 0.81, Mixtral WinoGrande 0.81: in Mixtral the last four layers' expert outputs at the final position work against the answer on CounterFact.
+
+**2. Attention vs MoE (W4).** Setting every attention output at the final position to its clean value restores the clean final residual exactly (bit for bit on OLMoE; 1.00 here), because the MoE is a per-token function and the final token is shared. So A ≡ 1, the two-player split reduces to φ_MoE = M/2 (Qwen3 CounterFact 0.27, Mixtral CounterFact 0.20, Qwen3 WinoGrande 0.42, Mixtral WinoGrande 0.39) and the redundancy A + M − 1 is M itself: the requested decomposition only measures M. The informative split is the direct path: h_clean − h_corrupt at the final position is the sum of the sublayer writes, and the logit difference evaluated on h_corrupt + Σ dAttn vs h_corrupt + Σ dMoE (exact final norm) gives attention / MoE Qwen3 CounterFact 0.50 / 0.51, Mixtral CounterFact 0.63 / 0.36, Qwen3 WinoGrande 0.04 / 0.96, Mixtral WinoGrande 0.29 / 0.71 (the linear DLA split agrees to 0.01). On CounterFact attention and experts write comparable parts of the answer (Mixtral attention-heavier); on WinoGrande the final position's attention outputs carry information whose direct effect on LD(r, r′) is small, and the experts write it. At the final position, WinoGrande is therefore not attention-driven in the IOI sense; whether attention carries the decisive information upstream (option position, mover heads) is the W3 / W5 question.
+
+**3. How many experts.** k for 80 % of the ceiling with the per-case oracle / adaptive greedy / population / layer-wise / random orderings: Qwen3 CounterFact 6 / 5 / 24 / 48 / 320 of 384; Mixtral CounterFact 5 / 4 / 8 / 9 / 64 of 64; Qwen3 WinoGrande 48 / 10 / 48 / 64 / 320 of 384; Mixtral WinoGrande 8 / 7 / 12 / 16 / 48 of 64. One expert restores Qwen3 CounterFact 0.20, Mixtral CounterFact 0.13, Qwen3 WinoGrande 0.21, Mixtral WinoGrande 0.19 of the drop, ten (oracle) 0.47, 0.43, 0.55, 0.67, fifteen (greedy) 0.55, 0.56, 0.72, 0.79. CounterFact is concentrated on a handful of the 384 / 64 clean-active experts; WinoGrande in Qwen3 needs tens of experts for 80 % of its (higher) ceiling, while Mixtral WinoGrande is nearly as concentrated as Mixtral CounterFact. The curves are not monotone and overshoot the ceiling (oracle maximum Qwen3 CounterFact 0.61 at k = 320, Mixtral CounterFact 0.52 at k = 48, Qwen3 WinoGrande 0.85 at k = 320, Mixtral WinoGrande 0.81 at k = 48; the all-clean-active endpoint returns to the ceiling): the clean outputs of low-ranked experts lower LD, so 'fraction of the ceiling' exceeds 1 for good subsets, and the brief's greedy stop at 95 % of the ceiling was replaced by 15 steps for every row (it would have truncated the curves at the ceiling). Answer restored (smallest k with donor-mean Δ_k > 0, oracle order; median, fraction of cases where some k achieves it): Qwen3 CounterFact 48, 63%, Mixtral CounterFact 48, 50%, Qwen3 WinoGrande 7, 98%, Mixtral WinoGrande 5, 96%. The true object becomes top-1 in at most 0.19, 0.15, 0.39, 0.50 of rows at any k (clean top-1 rate 0.30, 0.33, 0.38, 0.50).
+
+**4. Is greedy good enough?** Yes. Beam search (width 4, sizes ≤ 6) exceeds greedy on the same rows by at most Qwen3 CounterFact +0.007, Mixtral CounterFact +0.005, Qwen3 WinoGrande +0.016, Mixtral WinoGrande +0.007 of the drop; over each case's top-10 singles the exact optimum (all 1,023 subsets) exceeds greedy-within-top-10 by at most 0.005, 0.006, 0.011, 0.003 on average, and greedy finds the optimum in 75%, 77%, 67%, 86% or more of rows at every size. These gaps are below the run-to-run bf16 noise (Caveats). What matters is adaptivity: the static single-expert prefix loses up to 0.035, 0.037, 0.070, 0.030 to the top-10 optimum, and the full greedy (pool 32 / 64) is above the static oracle by Qwen3 CounterFact +0.06, Mixtral CounterFact +0.08, Qwen3 WinoGrande +0.12, Mixtral WinoGrande +0.04 at k = 10, because the experts interact (Shapley: Σ single / Σ φ, > 1 = redundancy, < 1 = synergy, Qwen3 CounterFact 1.04, Mixtral CounterFact 1.16, Qwen3 WinoGrande 0.92, Mixtral WinoGrande 1.39; r(φ, single) 0.73, 0.82, 0.46, 0.89; experts for 80 % of Σφ 5, 6, 11, 9). Interactions matter most on WinoGrande in Qwen3 (synergy; single-expert rescue the poorest guide, r = 0.46) and in Mixtral WinoGrande (redundancy: the singles over-count by 39 %).
+
+**5. Cheap rankings.** The direct logit attribution of δ_e (no patching; final norm frozen at the corrupted run) is better than the single-patch oracle in Qwen3 (both tasks), equal on Mixtral CounterFact and slightly worse on Mixtral WinoGrande (AUC over log k, DLA / oracle / population / layer-wise: Qwen3 CounterFact 0.51 / 0.47 / 0.38 / 0.33; Mixtral CounterFact 0.37 / 0.37 / 0.31 / 0.29; Qwen3 WinoGrande 0.65 / 0.59 / 0.53 / 0.46; Mixtral WinoGrande 0.55 / 0.58 / 0.53 / 0.49). Routing weight and |δ_e| are poor (AUC 0.21, 0.19, 0.32, 0.42 and 0.33, 0.13, 0.44, 0.27; random 0.10, 0.11, 0.17, 0.23). The paper's layer-wise order (best layer's experts first) is below every ranking that uses each expert's effect on the answer (oracle, DLA, population) because the repair is spread over a band of layers; it is above routing weight and random and comparable to |δ_e| (better in three of four runs).
+
+Restricted to k = 1..15, where adaptive greedy is also evaluated (`scripts/ext8_partial_auc.py`, `results/tables/ext8_a1_partial_auc_k15.md`; static orderings interpolated at k = 15), AUC over log k greedy / oracle / DLA / population / layer-wise / |δ_e| / weight / random: Qwen3 CounterFact 0.39 / 0.37 / 0.37 / 0.24 / 0.17 / 0.19 / 0.04 / 0.01; Mixtral CounterFact 0.35 / 0.31 / 0.29 / 0.23 / 0.20 / 0.01 / 0.11 / 0.04; Qwen3 WinoGrande 0.49 / 0.42 / 0.42 / 0.30 / 0.21 / 0.14 / 0.07 / 0.02; Mixtral WinoGrande 0.49 / 0.47 / 0.42 / 0.40 / 0.35 / 0.03 / 0.27 / 0.09.
+
+**6. Which experts.** Greedy's first five picks contain (share of rows) Qwen3 CounterFact: L42E115 55%, L44E069 46%, L41E001 18%, L40E127 17%; Mixtral CounterFact: L21E001 40%, L19E002 32%, L18E001 28%, L22E001 25%; Qwen3 WinoGrande: L41E117 57%, L43E081 44%, L39E071 32%, L34E119 21%; Mixtral WinoGrande: L20E000 80%, L19E006 79%, L21E006 40%, L16E007 33%. CounterFact recovers the Direction-1 / 6 loci (Qwen3 L42E115 and L44E069; Mixtral E001 of L18–L22 and L19E002); WinoGrande uses different experts: Qwen3 L41E117, L43E081, L39E071 just below the CounterFact band, and in Mixtral two experts in the first five picks of about 80 % of rows, L20E000 and L19E006 (the paper's Mixtral expert and the Direction-3 'sink expert'; on CounterFact with BOS it is in the first five picks of only 14 % of rows).
+
+**7. Deletion (noising).** Swapping clean-active experts to their corrupted values in the clean run mirrors add-back: k for 80 % of the deletion ceiling with the noising-oracle / add-back-oracle / DLA / random orderings Qwen3 CounterFact 8 / 24 / 7 / 384; Mixtral CounterFact 6 / 16 / 7 / 64; Qwen3 WinoGrande 48 / 96 / 16 / 320; Mixtral WinoGrande 9 / 9 / 10 / 48 (AUC over log k Qwen3 CounterFact 0.44 / 0.40 / 0.48 / 0.09; Mixtral CounterFact 0.34 / 0.27 / 0.34 / 0.09; Qwen3 WinoGrande 0.58 / 0.52 / 0.65 / 0.16; Mixtral WinoGrande 0.57 / 0.56 / 0.55 / 0.22). Necessity and sufficiency rank largely the same experts; DLA is the best or within 0.02 of the best deletion order, and the noising singles beat the add-back singles as a deletion order (equal in Mixtral WinoGrande).
+
+### Caveats
+
+- Final position only. Expert patches at the subject / option positions (F4, 6b, W3) are a different question; the direct-path split says who writes LD at the final position, not where the information is computed.
+- Candidates are the clean run's routed experts at the final position, taken from the source runs' routing; experts routed only in the corrupted (or patched) run keep their own outputs, so the all-clean-active endpoint ≈ the all-MoE ceiling (Qwen3 CounterFact 0.51 vs 0.53, Mixtral CounterFact 0.40 vs 0.41, Qwen3 WinoGrande 0.84 vs 0.84, Mixtral WinoGrande 0.79 vs 0.79). Near-tie routing differs between the source pass and the add-back passes for 0.3–1.9 % of (row, candidate) pairs (run logs); those experts are patched to their in-pass clean value (0 if not routed).
+- bf16 batch-composition noise: identical prefill rows give different Δ in different passes (expert GEMMs batch prefill and wavefront tokens; routing near-ties amplify it): per-row SD across passes, median Qwen3 CounterFact 0.09, Mixtral CounterFact 0.06, Qwen3 WinoGrande 0.17, Mixtral WinoGrande 0.06 logits (99th percentile 0.44, 0.29, 0.73, 0.18). Every curve of a row (one ordering, all k), every exact-subset table and every Shapley permutation is evaluated within one pass, and rescue uses the same pass's Δ_corrupt; greedy / beam steps span passes. Strategy differences below ~0.01 of the drop are not resolved.
+- Subsets: Shapley values from 5 permutations on first-donor rows (Qwen3 CounterFact 54, Mixtral CounterFact 106, Qwen3 WinoGrande 64, Mixtral WinoGrande 128; mean SE of φ 0.041, 0.068, 0.062, 0.054 logits); beam rows Qwen3 CounterFact 108, Mixtral CounterFact 64, Qwen3 WinoGrande 128, Mixtral WinoGrande 64; exact top-10 rows 108, 106, 128, 128. The exact optimum is over each row's top-10 singles only; the full greedy (pool 32 / 64) exceeds it from k ≈ 4 on.
+- Greedy and the oracle ordering use the row's own single-expert patches (in-sample); the population ranking (discovery → validation) is the out-of-sample comparison.
+- WinoGrande units are directed cases (one corrupted run each); CIs resample pairs. CounterFact: donor means per case; the first-donor rows are in the tables as the sensitivity run.
+- Gradient rankings (attribution patching, AtP*, EAP-IG) need F3 and were not run.
+
+### Files
+
+- Engine: `moetrace/engine.py` (ext8 additions documented in the module docstring); dev copy `moetrace/engine_ext8_dev.py`; verification `scripts/ext8_engine_verify.py` → `results/verify_ext8_engine_olmoe.json`; regression `scripts/ext8_regress_compare.py` against `results/verify_olmoe_before_ext8.json`, `results/verify_ext5_engine_olmoe_before_ext8.json`.
+- Study: `moetrace/ext8_addback.py` (task loaders, orderings, work items, greedy / beam state, curve metrics), `scripts/ext8_addback_run.py` (resumable driver), `scripts/ext8_addback_analyze.py`, `scripts/ext8_addback_text.py`, `scripts/ext8_addback_chain.sh`, `scripts/ext8_addback_chain_mixtral.sh`; smoke test `scripts/ext8_smoke_src.py`, `scripts/ext8_smoke_chain.sh` (OLMoE: `results/olmoe_addback_src` = ext6-schema STR source on the Qwen3 paper IDs, `results/olmoe_addback_smoke`). GPU time of Phase-3 ext8 jobs: ≈ 82 min (add-back passes 71, verification / regression 7, smoke 4).
+- Runs: `results/qwen3_str_addback`, `results/mixtral_bos_str_addback`, `results/wino_qwen3_str_addback`, `results/wino_mixtral_bos_str_addback` (`addback_rows_pNN.parquet` spawn rows with fam / order / dir / k / row / Δ / metrics, `addback_prefill_pNN.parquet`, `addback_dla.parquet`, `addback_direct.parquet`, `addback_state.pkl` = greedy / beam paths, `run_meta.json`).
+- Tables `results/tables/ext8_*.md|csv` (curves in `ext8_a1_curves.csv`, `ext8_a3_curves.csv`); figures `results/figures/ext8_*`; numbers `results/ext8_addback_summary.json` (W4 keys `w4_counterfact`, `w4_winogrande`).

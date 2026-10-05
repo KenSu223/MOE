@@ -1,0 +1,9 @@
+2026-10-04T07:45:23Z START ext7c-ioi-scan-mixtral_bos (waited 129s): python scripts/ext7_ioi_scan.py mixtral_bos
+07:45:34   layer   0: load-wait 6.70s compute 1.73s  wf_rows=0
+07:45:57   layer   8: load-wait 1.47s compute 1.41s  wf_rows=0
+07:46:20   layer  16: load-wait 1.48s compute 1.41s  wf_rows=0
+07:46:43   layer  24: load-wait 1.48s compute 1.41s  wf_rows=0
+07:47:03   layer  31: load-wait 1.48s compute 1.41s  wf_rows=0
+07:47:03   pass done: 4800 prefill rows (T=21), 0 spawn rows, 97.7s
+07:47:04 summary: {"n_items": 1600, "clean_correct": 1600, "margin_clean": 1599, "margin_s2io": 1597, "top1_clean_io": 1200, "top1_both_s2io": 1096, "mean_d_clean": 5.546328125, "mean_d_s2io": -5.540703125, "mean_d_s1io": -1.6764453125, "by_template_type_margin_s2io": {"ABBA": 1.0, "BABA": 0.996}}
+2026-10-04T07:47:10Z END   ext7c-ioi-scan-mixtral_bos rc=0 (107s)

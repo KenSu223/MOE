@@ -1,0 +1,5 @@
+model,task,K,mean drop,all-MoE ceiling M,direct split attn / MoE,MoE <= L-5,AUC log k oracle / pop / rand,AUC (of ceiling) oracle / pop,k80 ceiling oracle / pop / greedy / rand,max r oracle (k),"case k restored (oracle, median; frac)",cases restored by all MoE,Shapley: experts for 80 %
+Qwen3-30B-A3B-Base,CounterFact,384,11.67,"0.531 [0.489, 0.570]",0.50 / 0.51,0.433,0.471 / 0.383 / 0.096,0.89 / 0.72,6 / 24 / 5 / 320,0.607 (320),48; 0.63,0.44,5
+Mixtral-8x7B (BOS),CounterFact,64,12.98,"0.409 [0.367, 0.451]",0.63 / 0.36,0.508,0.371 / 0.307 / 0.111,0.91 / 0.75,5 / 8 / 4 / 64,0.517 (48),48; 0.50,0.37,6
+Qwen3-30B-A3B-Base,WinoGrande,384,8.18,"0.843 [0.827, 0.859]",0.04 / 0.96,0.808,0.591 / 0.531 / 0.170,0.70 / 0.63,48 / 48 / 10 / 320,0.846 (320),7; 0.98,0.95,11
+Mixtral-8x7B (BOS),WinoGrande,64,7.69,"0.787 [0.764, 0.809]",0.29 / 0.71,0.811,0.580 / 0.534 / 0.229,0.74 / 0.68,8 / 12 / 7 / 48,0.813 (48),5; 0.96,0.89,9

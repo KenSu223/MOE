@@ -1,0 +1,9 @@
+2026-10-04T08:49:56Z START ext7c-direct-role-mixtral_bos (waited 855s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation
+08:50:11   layer   0: load-wait 6.38s compute 0.81s  wf_rows=0
+08:50:33   layer   8: load-wait 2.65s compute 0.25s  wf_rows=0
+08:50:57   layer  16: load-wait 2.72s compute 0.25s  wf_rows=0
+08:51:20   layer  24: load-wait 2.64s compute 0.25s  wf_rows=0
+08:51:40   layer  31: load-wait 2.64s compute 0.25s  wf_rows=0
+08:51:40   pass done: 512 prefill rows (T=33), 0 spawn rows, 96.4s
+08:51:41 wino_role_mixtral_bos_str: 512 directed cases; A_direct 0.415, M_direct 0.585, DLA attn share 0.414; fp32 vs engine Delta clean max |diff| 0.124
+2026-10-04T08:51:47Z END   ext7c-direct-role-mixtral_bos rc=0 (111s)

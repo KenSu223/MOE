@@ -1,0 +1,34 @@
+{
+ "grid_w1": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer"
+  ],
+  "window": 1,
+  "n_cases": 128,
+  "n_units": 674,
+  "n_suffix_rows": 43136,
+  "n_passes": 4,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "positions": "mention1, mention2 (exchanged first mentions), filled (option at the blank), final",
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_role_grid.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos_grid.json --out wino_role_mixtral_bos_grid --kinds layer,attn_layer",
+  "executor": "moetrace.ext5_subject.SubjectEngine.run_subject (as scripts/ext7_wino_grid.py, verified by ext7-wino)",
+  "created_utc": "2026-10-04T10:50:22Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T10:56:00Z",
+  "pass_times_s": [
+   80.844003200531,
+   90.55212926864624,
+   82.4088122844696,
+   80.4751136302948
+  ],
+  "n_rows": 43136
+ }
+}

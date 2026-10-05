@@ -1,0 +1,15 @@
+{
+ "scan": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "n_pairs": 632,
+  "margin": 1.0,
+  "pairs": "data/wino_role/pairs_qwen3.parquet",
+  "command": "python scripts/ext7_role_scan.py qwen3",
+  "created_utc": "2026-10-04T07:21:42Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:22:50Z"
+ }
+}

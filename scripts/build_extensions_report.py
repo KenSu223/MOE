@@ -43,6 +43,19 @@ SECTIONS = [
      "Zhang & Nanda Section 4.1 / Figure 4 for the paper's MoE-output patch: which token positions and layers carry the "
      "rescue, is the last subject token special, and do logit difference and probability agree? (single layer and 5-layer "
      "sliding window)"),
+    # Phase 3 (2026-10-04): add-back curves and WinoGrande / IOI under STR (RESEARCH_PLAN.md "Phase 3").
+    ("7-8", "Phase 3 synthesis: expert add-back and attention vs MoE across tasks", "results/sections/ext7_synthesis.md",
+     "How many experts restore the answer, are greedy add-back strategies good enough, and is WinoGrande attention-driven like "
+     "IOI or MoE-driven like factual recall?"),
+    ("7", "WinoGrande under symmetric token replacement", "results/sections/ext7_wino.md",
+     "Filling the blank with each twin's answer and predicting the sentence-final trigger: which layers, sublayers, positions, "
+     "heads and experts carry the repair?"),
+    ("7b", "Role swap, IOI and the three-task comparison", "results/sections/ext7_controls.md",
+     "Does a second WinoGrande corruption site (swapping the two candidates' roles) or IOI (the attention-driven reference) "
+     "change the attention / MoE balance, measured with the same protocol?"),
+    ("8", "Expert add-back curves", "results/sections/ext8_addback.md",
+     "Patching experts back jointly at the final position: ceilings, saturation curves, how many experts restore the answer, "
+     "and greedy vs better strategies (CounterFact STR and WinoGrande)."),
 ]
 
 

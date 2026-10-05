@@ -1,0 +1,18 @@
+2026-10-04T08:44:50Z START ext7c-w4-ioi-qwen3-s1io (waited 814s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/ioi/pairs_s1io_qwen3.parquet --case-sets data/ioi/case_sets_s1io.json --out ioi_qwen3_s1io --splits discovery,validation,rep_discovery,rep_validation --agent ext7-controls
+08:44:52 qwen3 -> ioi_qwen3_s1io: 512 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+08:44:59 pass 1/1: 1024 prefill rows, 3072 multi rows
+08:45:02   layer   0: load-wait 2.78s compute 0.74s  wf_rows=3072
+08:45:08   layer   8: load-wait 0.80s compute 0.13s  wf_rows=3072
+08:45:15   layer  16: load-wait 0.73s compute 0.14s  wf_rows=3072
+08:45:23   layer  24: load-wait 0.95s compute 0.13s  wf_rows=3072
+08:45:32   layer  32: load-wait 0.84s compute 0.13s  wf_rows=3072
+08:45:40   layer  40: load-wait 0.74s compute 0.13s  wf_rows=3072
+08:45:50   layer  47: load-wait 1.24s compute 0.13s  wf_rows=3072
+08:45:50   pass done: 1024 prefill rows (T=20), 3072 spawn rows, 51.0s
+08:45:50 denoise  all_attn  all     : effect/drop +1.002 (mean effect +7.92, drop 7.91)
+08:45:50 denoise  all_block all     : effect/drop +1.000 (mean effect +7.91, drop 7.91)
+08:45:50 denoise  all_moe   all     : effect/drop -0.236 (mean effect -1.86, drop 7.91)
+08:45:50 noise    all_attn  all     : effect/drop +1.002 (mean effect +7.93, drop 7.91)
+08:45:50 noise    all_block all     : effect/drop +1.000 (mean effect +7.91, drop 7.91)
+08:45:50 noise    all_moe   all     : effect/drop -0.061 (mean effect -0.48, drop 7.91)
+2026-10-04T08:45:57Z END   ext7c-w4-ioi-qwen3-s1io rc=0 (67s)

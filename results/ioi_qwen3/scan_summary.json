@@ -1,0 +1,18 @@
+{
+ "n_items": 1600,
+ "clean_correct": 1600,
+ "margin_clean": 1597,
+ "margin_s2io": 1593,
+ "top1_clean_io": 1267,
+ "top1_both_s2io": 1150,
+ "mean_d_clean": 6.2678125,
+ "mean_d_s2io": -6.263125,
+ "mean_d_s1io": -1.649453125,
+ "by_template_type_margin_s2io": {
+  "ABBA": 0.993,
+  "BABA": 0.998
+ },
+ "pass_times_s": [
+  56.991676807403564
+ ]
+}

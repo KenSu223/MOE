@@ -1,0 +1,18 @@
+{
+ "scan": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "split": "train_xl",
+  "n_pairs": 2421,
+  "sigma_mult": 3.0,
+  "margin": 1.0,
+  "gn_drop": 0.5,
+  "max_tokens": 140000,
+  "command": "python scripts/ext7_wino_scan.py mixtral_bos",
+  "created_utc": "2026-10-04T06:16:46Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T06:20:47Z"
+ }
+}

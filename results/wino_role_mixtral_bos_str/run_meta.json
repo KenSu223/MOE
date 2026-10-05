@@ -1,0 +1,133 @@
+{
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "pairs": "data/wino_role/pairs_mixtral_bos.parquet",
+  "case_sets": "data/wino_role/case_sets_mixtral_bos.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 50000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "metrics": true,
+  "agent": "ext7-controls",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation --kinds layer,attn_layer,block --max-rows 50000 --agent ext7-controls",
+  "created_utc": "2026-10-04T08:46:03Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T08:47:44Z",
+  "pass_times_s": [
+   98.43032336235046
+  ],
+  "n_rows": 50176
+ },
+ "direct_split": {
+  "model": "mixtral",
+  "pairs": "data/wino_role/pairs_mixtral_bos.parquet",
+  "case_sets": "data/wino_role/case_sets_mixtral_bos.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 104.23964953422546,
+  "command": "python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation",
+  "completed_utc": "2026-10-04T08:51:41Z"
+ },
+ "joint": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    31
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation --agent ext7-controls",
+  "created_utc": "2026-10-04T09:07:36Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T09:08:53Z",
+  "pass_times_s": [
+   76.332204580307
+  ],
+  "n_rows": 3072
+ }
+}

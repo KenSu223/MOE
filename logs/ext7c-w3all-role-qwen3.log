@@ -1,0 +1,17 @@
+10:40:05 qwen3 -> wino_role_qwen3_grid: kinds ['layer', 'attn_layer'], 128 directed cases, 560 units, 53760 suffix rows, 4 passes; units per class {'mention1': 176, 'final': 128, 'filled': 128, 'mention2': 128}
+10:40:06 pass 1/4: 297 units (S 1..7), 594 prefill rows, 28512 suffix rows
+10:40:11   layer   0: load-wait 4.05s compute 0.72s  wf_rows=594 wf_tokens=773
+10:40:18   layer   8: load-wait 0.81s compute 0.19s  wf_rows=5346 wf_tokens=13141
+10:40:26   layer  16: load-wait 0.59s compute 0.30s  wf_rows=10098 wf_tokens=25509
+10:40:33   layer  24: load-wait 0.71s compute 0.40s  wf_rows=14850 wf_tokens=37877
+10:40:42   layer  32: load-wait 0.51s compute 0.51s  wf_rows=19602 wf_tokens=50245
+10:40:51   layer  40: load-wait 0.61s compute 0.61s  wf_rows=24354 wf_tokens=62613
+10:41:00   layer  47: load-wait 0.60s compute 0.71s  wf_rows=28512 wf_tokens=73435
+10:41:01   pass done: 594 prefill rows (T=27), 28512 suffix rows (Smax=7, 74208 tokens), 54.7s
+10:41:01 pass 1: 54.7s; 28512 rows saved
+10:41:02 pass 2/4: 138 units (S 7..15), 276 prefill rows, 13248 suffix rows
+10:41:46 pass 2: 44.4s; 41760 rows saved
+10:41:47 pass 3/4: 104 units (S 15..20), 208 prefill rows, 9984 suffix rows
+10:42:31 pass 3: 43.8s; 51744 rows saved
+10:42:31 pass 4/4: 21 units (S 20..23), 42 prefill rows, 2016 suffix rows
+10:43:20 pass 4: 47.9s; 53760 rows saved

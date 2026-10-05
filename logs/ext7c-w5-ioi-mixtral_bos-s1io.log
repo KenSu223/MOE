@@ -1,0 +1,13 @@
+2026-10-04T11:08:46Z START ext7c-w5-ioi-mixtral_bos-s1io (waited 10s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/ioi/pairs_s1io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s1io.json --out ioi_mixtral_bos_s1io --splits discovery,validation,rep_discovery,rep_validation --layers auto --families main --agent ext7-controls
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+11:08:46 mixtral -> ioi_mixtral_bos_s1io: 256 directed cases, layers [17, 21, 26, 30, 31] (null layer 17), 32 heads, 1 passes, 44800 spawn rows; mentions: pair columns mention_a_pos / mention_b_pos
+11:08:48 pass 1/1: layers [17, 21, 26, 30, 31], 512 prefill rows, 44800 spawn rows
+11:08:54   layer   0: load-wait 5.20s compute 0.71s  wf_rows=0
+11:09:12   layer   8: load-wait 2.38s compute 0.16s  wf_rows=0
+11:09:31   layer  16: load-wait 1.48s compute 0.16s  wf_rows=0
+11:09:51   layer  24: load-wait 2.01s compute 0.45s  wf_rows=17920
+11:10:06   layer  31: load-wait 1.17s compute 0.87s  wf_rows=44800
+11:10:06   pass done: 512 prefill rows (T=21), 44800 spawn rows, 78.3s
+11:10:10 pass 1: 78s; 44800 rows
+2026-10-04T11:10:17Z END   ext7c-w5-ioi-mixtral_bos-s1io rc=0 (91s)

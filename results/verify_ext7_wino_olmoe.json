@@ -1,0 +1,586 @@
+{
+ "n_pairs": 20,
+ "n_directed": 40,
+ "n_grid_cases": 8,
+ "n_head_cases": 10,
+ "head_layers": [
+  4,
+  9,
+  14
+ ],
+ "window_half": 2,
+ "pairs": [
+  {
+   "pair_id": "338431Z1FLDFKGFJFSWCS45IUKFROO",
+   "prompt_a": "George wanted to use the fireplace to heat the house and not the heater because the fireplace was",
+   "prompt_b": "George wanted to use the fireplace to heat the house and not the heater because the heater was",
+   "word_a": "cheaper",
+   "word_b": "expensive",
+   "str_pos": [
+    16
+   ]
+  },
+  {
+   "pair_id": "34HEO7RUG885C1KPP73UJ79MU1UARX",
+   "prompt_a": "James needs another pot for the flower as it grows. The flower is getting too",
+   "prompt_b": "James needs another pot for the flower as it grows. The pot is getting too",
+   "word_a": "big",
+   "word_b": "small",
+   "str_pos": [
+    12
+   ]
+  },
+  {
+   "pair_id": "34YWR3PJ2AOT8K8J64CTJJJWLDO0X8",
+   "prompt_a": "The musician's guitar would not fit in the case because the case was too",
+   "prompt_b": "The musician's guitar would not fit in the case because the guitar was too",
+   "word_a": "small",
+   "word_b": "big",
+   "str_pos": [
+    12
+   ]
+  },
+  {
+   "pair_id": "36KM3FWE3RAKZG3L4TWVXMI0V8L701",
+   "prompt_a": "The dictator gained power of the other country by using tanks rather than the planes because the tanks were",
+   "prompt_b": "The dictator gained power of the other country by using tanks rather than the planes because the planes were",
+   "word_a": "advanced",
+   "word_b": "destroyed",
+   "str_pos": [
+    17
+   ]
+  },
+  {
+   "pair_id": "39HYCOOPKOJXJ3B2KBMFVBZ9KGBMDU",
+   "prompt_a": "The new phone she purchased will not fit in her new purse, because the purse is too",
+   "prompt_b": "The new phone she purchased will not fit in her new purse, because the phone is too",
+   "word_a": "small",
+   "word_b": "large",
+   "str_pos": [
+    15
+   ]
+  },
+  {
+   "pair_id": "3CESM1J3EI1U36Q1EQKOY3R81ZPW6W",
+   "prompt_a": "Jessie doesn't enjoy wearing her ring as much as her necklace because the ring is very",
+   "prompt_b": "Jessie doesn't enjoy wearing her ring as much as her necklace because the necklace is very",
+   "word_a": "cheap",
+   "word_b": "fashionable",
+   "str_pos": [
+    15
+   ]
+  },
+  {
+   "pair_id": "3D1UCPY6GINZAB68HJIK5I0AXPX38E",
+   "prompt_a": "The fire spread quickly before people rushed over with water, but the fire was too",
+   "prompt_b": "The fire spread quickly before people rushed over with water, but the water was too",
+   "word_a": "strong",
+   "word_b": "late",
+   "str_pos": [
+    13
+   ]
+  },
+  {
+   "pair_id": "3D1UCPY6GINZAB68HJIK5I0BYMV83E",
+   "prompt_a": "To overcome behavioural bias, we need to focus more on changing the conscious actions instead of the unconscious actions because the unconscious actions are",
+   "prompt_b": "To overcome behavioural bias, we need to focus more on changing the conscious actions instead of the unconscious actions because the conscious actions are",
+   "word_a": "involuntary",
+   "word_b": "voluntary",
+   "str_pos": [
+    22
+   ]
+  },
+  {
+   "pair_id": "3FBEFUUYRMJCQIM5XJ0W8CIPX88A6C",
+   "prompt_a": "Logan evaluated the condition of Kyle to make sure they were ok, since Logan was a",
+   "prompt_b": "Logan evaluated the condition of Kyle to make sure they were ok, since Kyle was a",
+   "word_a": "doctor",
+   "word_b": "patient",
+   "str_pos": [
+    15
+   ]
+  },
+  {
+   "pair_id": "3GL25Y68458QBYFQV9ZRHGQAQ4WXM3",
+   "prompt_a": "In order to stop his negative thoughts, Jim decided to forgo the medication and see the therapist because he thought the medication would be",
+   "prompt_b": "In order to stop his negative thoughts, Jim decided to forgo the medication and see the therapist because he thought the therapist would be",
+   "word_a": "worse",
+   "word_b": "better",
+   "str_pos": [
+    23
+   ]
+  },
+  {
+   "pair_id": "3HY86PZXPYG5FK3DNKE1H1TRMKW1EF",
+   "prompt_a": "Jill poured the entire bowl of cut chicken into the hot pan on the stove until the bowl was",
+   "prompt_b": "Jill poured the entire bowl of cut chicken into the hot pan on the stove until the pan was",
+   "word_a": "empty",
+   "word_b": "full",
+   "str_pos": [
+    18
+   ]
+  },
+  {
+   "pair_id": "3IVKZBIBJ07HTET9Q41RY5DD40KSHP",
+   "prompt_a": "The piercing that I got on my lip was less painful than my tattoo because the piercing was",
+   "prompt_b": "The piercing that I got on my lip was less painful than my tattoo because the tattoo was",
+   "word_a": "quick",
+   "word_b": "slow",
+   "str_pos": [
+    16
+   ]
+  },
+  {
+   "pair_id": "3QGTX7BCHRGH8MUZ4S6QXZVZB4B5ZE",
+   "prompt_a": "Jilly tried to put on the costume but couldn't get it around her leg because the costume was too",
+   "prompt_b": "Jilly tried to put on the costume but couldn't get it around her leg because the leg was too",
+   "word_a": "small",
+   "word_b": "big",
+   "str_pos": [
+    18
+   ]
+  },
+  {
+   "pair_id": "3RWSQDNYL9KOBDXHPUDSOLILZSFFFR",
+   "prompt_a": "The player tried to put the basketball in the bag but the bag was too",
+   "prompt_b": "The player tried to put the basketball in the bag but the basketball was too",
+   "word_a": "small",
+   "word_b": "big",
+   "str_pos": [
+    12
+   ]
+  },
+  {
+   "pair_id": "3ULIZ0H1VCJKDQ9RWHXY55BMX6K516",
+   "prompt_a": "The ladder does not fit into the storage shed in the yard because the ladder is too",
+   "prompt_b": "The ladder does not fit into the storage shed in the yard because the shed is too",
+   "word_a": "tall",
+   "word_b": "short",
+   "str_pos": [
+    14
+   ]
+  },
+  {
+   "pair_id": "3VO4XFFP15K8N98KLRQACS9I8617Q5",
+   "prompt_a": "The dancer tried to show off their new move on the dance floor but the floor was too",
+   "prompt_b": "The dancer tried to show off their new move on the dance floor but the move was too",
+   "word_a": "small",
+   "word_b": "difficult",
+   "str_pos": [
+    15
+   ]
+  },
+  {
+   "pair_id": "3WYZV0QBFLRUS7BT4K9I30FGE0SBXI",
+   "prompt_a": "Jane wanted her doll back because she now hated the toy car. The car is",
+   "prompt_b": "Jane wanted her doll back because she now hated the toy car. The doll is",
+   "word_a": "ugly",
+   "word_b": "beautiful",
+   "str_pos": [
+    14
+   ]
+  },
+  {
+   "pair_id": "3XEIP58NL21VABXKWFMXEORWYU4LZC",
+   "prompt_a": "The skin that was made using a special ingredient lasted longer than the  replacement, since the skin is",
+   "prompt_b": "The skin that was made using a special ingredient lasted longer than the  replacement, since the replacement is",
+   "word_a": "real",
+   "word_b": "fake",
+   "str_pos": [
+    19
+   ]
+  },
+  {
+   "pair_id": "3ZQX1VYFTFJOW0ZU0H2CTLYMUWS8OD",
+   "prompt_a": "Ian explained that Joel was too young to have braces, because Ian was a",
+   "prompt_b": "Ian explained that Joel was too young to have braces, because Joel was a",
+   "word_a": "dentist",
+   "word_b": "toddler",
+   "str_pos": [
+    14
+   ]
+  },
+  {
+   "pair_id": "3ZTE0JGGCG6Q83P7HTIHV7U5KFAOCG",
+   "prompt_a": "She was hesitant about spending money on the dress, but was fine with buying the purse, because the purse was so",
+   "prompt_b": "She was hesitant about spending money on the dress, but was fine with buying the purse, because the dress was so",
+   "word_a": "cheap",
+   "word_b": "expensive",
+   "str_pos": [
+    21
+   ]
+  }
+ ],
+ "delta_clean_maxdiff_vs_hf": 0.25,
+ "delta_corrupt_maxdiff_vs_hf": 0.25,
+ "mean_delta_clean_hf": 3.295703125,
+ "mean_delta_corrupt_hf": -3.295703125,
+ "antisymmetry_maxdiff": 0.0,
+ "final_layer": {
+  "n": 640,
+  "maxdiff": 0.46875,
+  "meanabsdiff": 0.0709716796875,
+  "frac_within_0.25": 0.9703125,
+  "rescue_corr_vs_hf": 0.9954429707353685,
+  "hf_rescue_sd": 0.976383181778815,
+  "hf_rescue_mean": 0.52646484375,
+  "engine_rescue_mean": 0.542651355266571,
+  "mean_curve_maxdiff": 0.03085937518626447,
+  "mean_curve_engine": [
+   0.007,
+   0.009,
+   -0.006,
+   0.013,
+   0.063,
+   0.041,
+   0.141,
+   0.187,
+   0.398,
+   0.548,
+   0.779,
+   1.774,
+   1.95,
+   2.127,
+   0.672,
+   -0.019
+  ],
+  "mean_curve_hf": [
+   -0.007,
+   -0.014,
+   -0.027,
+   -0.005,
+   0.042,
+   0.016,
+   0.126,
+   0.185,
+   0.396,
+   0.519,
+   0.761,
+   1.743,
+   1.946,
+   2.104,
+   0.659,
+   -0.023
+  ]
+ },
+ "identity_layer_maxdiff": 0.21875,
+ "final_attn_layer": {
+  "n": 640,
+  "maxdiff": 0.53125,
+  "meanabsdiff": 0.0692626953125,
+  "frac_within_0.25": 0.9703125,
+  "rescue_corr_vs_hf": 0.9891670594862187,
+  "hf_rescue_sd": 0.5832019149246489,
+  "hf_rescue_mean": 0.3982421875,
+  "engine_rescue_mean": 0.40876466035842896,
+  "mean_curve_maxdiff": 0.05742187143769106,
+  "mean_curve_engine": [
+   0.009,
+   0.031,
+   -0.013,
+   -0.004,
+   0.129,
+   0.063,
+   0.749,
+   0.143,
+   0.784,
+   1.045,
+   0.43,
+   1.138,
+   0.861,
+   0.287,
+   0.398,
+   0.489
+  ],
+  "mean_curve_hf": [
+   -0.024,
+   0.007,
+   -0.011,
+   -0.005,
+   0.113,
+   0.054,
+   0.692,
+   0.127,
+   0.772,
+   1.054,
+   0.433,
+   1.128,
+   0.871,
+   0.292,
+   0.391,
+   0.478
+  ]
+ },
+ "identity_attn_layer_maxdiff": 0.21875,
+ "final_block": {
+  "n": 640,
+  "maxdiff": 0.375,
+  "meanabsdiff": 0.068310546875,
+  "frac_within_0.25": 0.9671875,
+  "rescue_corr_vs_hf": 0.9970583468666325,
+  "hf_rescue_sd": 1.227344305328496,
+  "hf_rescue_mean": 0.8677490234375,
+  "engine_rescue_mean": 0.882153332233429,
+  "mean_curve_maxdiff": 0.034374996973201455,
+  "mean_curve_engine": [
+   0.009,
+   0.034,
+   -0.005,
+   0.038,
+   0.166,
+   0.06,
+   0.789,
+   0.299,
+   1.022,
+   1.59,
+   1.148,
+   2.593,
+   2.558,
+   2.329,
+   1.027,
+   0.459
+  ],
+  "mean_curve_hf": [
+   -0.019,
+   0.002,
+   -0.007,
+   0.023,
+   0.153,
+   0.054,
+   0.755,
+   0.279,
+   1.016,
+   1.575,
+   1.136,
+   2.564,
+   2.554,
+   2.327,
+   1.011,
+   0.461
+  ]
+ },
+ "identity_block_maxdiff": 0.21875,
+ "final_resid": {
+  "n": 640,
+  "maxdiff": 0.4375,
+  "meanabsdiff": 0.069921875,
+  "frac_within_0.25": 0.959375,
+  "rescue_corr_vs_hf": 0.9994394633748438,
+  "hf_rescue_sd": 3.1786694497303056,
+  "hf_rescue_mean": 2.8602294921875,
+  "engine_rescue_mean": 2.8926024436950684,
+  "mean_curve_maxdiff": 0.061328107118605146,
+  "mean_curve_engine": [
+   0.009,
+   0.019,
+   -0.005,
+   0.028,
+   0.258,
+   0.383,
+   1.877,
+   2.074,
+   2.805,
+   3.96,
+   4.349,
+   5.187,
+   6.017,
+   6.23,
+   6.446,
+   6.644
+  ],
+  "mean_curve_hf": [
+   -0.019,
+   -0.002,
+   -0.007,
+   0.017,
+   0.252,
+   0.363,
+   1.857,
+   2.04,
+   2.776,
+   3.932,
+   4.301,
+   5.14,
+   5.957,
+   6.168,
+   6.396,
+   6.591
+  ]
+ },
+ "identity_resid_maxdiff": 0.21875,
+ "final_attn_head": {
+  "n": 480,
+  "maxdiff": 0.28125,
+  "meanabsdiff": 0.0630859375,
+  "frac_within_0.25": 0.98125,
+  "rescue_corr_vs_hf": 0.9049392623700604,
+  "hf_rescue_sd": 0.14844640872389211,
+  "hf_rescue_mean": 0.01796875,
+  "engine_rescue_mean": 0.02805989608168602
+ },
+ "engine_final_pass_s": 4.2133588790893555,
+ "grid_prefill_two_pass_maxdiff": 0.15625,
+ "grid_units": 22,
+ "grid_positions_by_category": {
+  "last STR token": 8,
+  "last token": 8,
+  "first subsequent token": 6
+ },
+ "grid_layer": {
+  "n": 352,
+  "maxdiff": 0.34375,
+  "meanabsdiff": 0.06263316761363637,
+  "frac_within_0.25": 0.9914772727272727,
+  "rescue_corr_vs_hf": 0.9929617727219804,
+  "hf_rescue_sd": 0.5500568948003034,
+  "hf_rescue_mean": 0.22105823863636365,
+  "engine_rescue_mean": 0.24906782805919647
+ },
+ "grid_layer_nonfinal": {
+  "n": 224,
+  "maxdiff": 0.28125,
+  "meanabsdiff": 0.06291852678571429,
+  "frac_within_0.25": 0.9910714285714286,
+  "rescue_corr_vs_hf": 0.9697684876414732,
+  "hf_rescue_sd": 0.25679103458501,
+  "hf_rescue_mean": 0.08147321428571429,
+  "engine_rescue_mean": 0.1043526753783226
+ },
+ "grid_attn_layer": {
+  "n": 352,
+  "maxdiff": 0.375,
+  "meanabsdiff": 0.06489701704545454,
+  "frac_within_0.25": 0.9886363636363636,
+  "rescue_corr_vs_hf": 0.9920830636423332,
+  "hf_rescue_sd": 0.5213120625373623,
+  "hf_rescue_mean": 0.21604225852272727,
+  "engine_rescue_mean": 0.24471768736839294
+ },
+ "grid_attn_layer_nonfinal": {
+  "n": 224,
+  "maxdiff": 0.375,
+  "meanabsdiff": 0.0673828125,
+  "frac_within_0.25": 0.9866071428571429,
+  "rescue_corr_vs_hf": 0.9908841751925481,
+  "hf_rescue_sd": 0.505358553195547,
+  "hf_rescue_mean": 0.14494977678571427,
+  "engine_rescue_mean": 0.1735491007566452
+ },
+ "grid_block": {
+  "n": 352,
+  "maxdiff": 0.25,
+  "meanabsdiff": 0.06116832386363636,
+  "frac_within_0.25": 0.9886363636363636,
+  "rescue_corr_vs_hf": 0.996030603892815,
+  "hf_rescue_sd": 0.7980487038576245,
+  "hf_rescue_mean": 0.4493075284090909,
+  "engine_rescue_mean": 0.48117896914482117
+ },
+ "grid_block_nonfinal": {
+  "n": 224,
+  "maxdiff": 0.25,
+  "meanabsdiff": 0.061732700892857144,
+  "frac_within_0.25": 0.9910714285714286,
+  "rescue_corr_vs_hf": 0.9937475582091092,
+  "hf_rescue_sd": 0.5937434440931029,
+  "hf_rescue_mean": 0.25279017857142855,
+  "engine_rescue_mean": 0.28173828125
+ },
+ "grid_resid": {
+  "n": 352,
+  "maxdiff": 0.34375,
+  "meanabsdiff": 0.05965909090909091,
+  "frac_within_0.25": 0.9886363636363636,
+  "rescue_corr_vs_hf": 0.9995483262682398,
+  "hf_rescue_sd": 2.5129843675707075,
+  "hf_rescue_mean": 2.108487215909091,
+  "engine_rescue_mean": 2.145951747894287
+ },
+ "grid_resid_nonfinal": {
+  "n": 224,
+  "maxdiff": 0.3125,
+  "meanabsdiff": 0.05552455357142857,
+  "frac_within_0.25": 0.9955357142857143,
+  "rescue_corr_vs_hf": 0.9995937569315759,
+  "hf_rescue_sd": 2.367047949959585,
+  "hf_rescue_mean": 1.7113560267857142,
+  "engine_rescue_mean": 1.7412109375
+ },
+ "grid_w5_layer": {
+  "n": 352,
+  "maxdiff": 0.65625,
+  "meanabsdiff": 0.08074396306818182,
+  "frac_within_0.25": 0.9375,
+  "rescue_corr_vs_hf": 0.9980280070556866,
+  "hf_rescue_sd": 1.767375184344629,
+  "hf_rescue_mean": 1.4275124289772727,
+  "engine_rescue_mean": 1.452592372894287
+ },
+ "grid_w5_p_true_maxdiff": 0.025522902607917786,
+ "grid_zero_null_maxdiff": 0.15625,
+ "grid_identity_resid_maxdiff": 0.0,
+ "engine_grid_pass_s": 5.644853591918945,
+ "calibration": {
+  "verify_ext6_str_olmoe.json": {
+   "delta_clean_maxdiff_vs_hf": 0.125,
+   "delta_donor_maxdiff_vs_hf": 0.125,
+   "layer_maxdiff": 0.3125,
+   "layer_frac_within_0.1": 0.859375,
+   "layer_frac_within_0.25": 0.984375,
+   "layer_rescue_corr_vs_hf": 0.9939256588823628,
+   "layer_mean_curve_maxdiff": 0.047770187569161265,
+   "expert_maxdiff": 0.1875,
+   "expert_frac_within_0.1": 0.9369369369369369,
+   "expert_frac_within_0.25": 1.0,
+   "expert_rescue_corr_vs_hf": 0.9917573987192182,
+   "identity_maxdiff": 0.125
+  },
+  "verify_ext6_str_grid_olmoe.json": {
+   "delta_clean_maxdiff_vs_hf": 0.125,
+   "delta_donor_maxdiff_vs_hf": 0.3125,
+   "p_true_donor_maxdiff_vs_hf": 0.0008268145611509681,
+   "w1_delta_maxdiff": 0.59375,
+   "w1_delta_frac_within_0.25": 0.9275,
+   "w1_rescue_corr_vs_hf": 0.9909118773901212,
+   "w1_p_true_maxdiff": 0.005360630340874195,
+   "w5_delta_maxdiff": 0.5,
+   "w5_delta_frac_within_0.25": 0.94125,
+   "w5_rescue_corr_vs_hf": 0.9980070845866488,
+   "w5_p_true_maxdiff": 0.03349604457616806,
+   "zero_on_donor_maxdiff": 0.125
+  },
+  "verify_ext2_attn_olmoe.json": {
+   "delta_clean_maxdiff_vs_hf": 0.1875,
+   "delta_noised_maxdiff_vs_hf": 0.548828125,
+   "attn_layer_vs_hf_maxdiff": 1.609375,
+   "attn_layer_vs_hf_frac_within_0.1": 0.4125,
+   "attn_layer_vs_hf_frac_within_0.25": 0.753125,
+   "attn_layer_rescue_corr_vs_hf": 0.9899363676660085,
+   "attn_layer_mean_curve_maxdiff_vs_hf": 0.08056640641443664,
+   "block_vs_hf_maxdiff": 1.1875,
+   "block_vs_hf_frac_within_0.1": 0.446875,
+   "block_vs_hf_frac_within_0.25": 0.74375,
+   "block_rescue_corr_vs_hf": 0.9935673564110311,
+   "block_mean_curve_maxdiff_vs_hf": 0.07205810588784511,
+   "resid_vs_hf_maxdiff": 0.953125,
+   "resid_vs_hf_frac_within_0.1": 0.59375,
+   "resid_vs_hf_frac_within_0.25": 0.83125,
+   "resid_rescue_corr_vs_hf": 0.9984821546178613,
+   "resid_mean_curve_maxdiff_vs_hf": 0.06914059817790985,
+   "layer_vs_hf_maxdiff": 1.12109375,
+   "layer_vs_hf_frac_within_0.1": 0.490625,
+   "layer_vs_hf_frac_within_0.25": 0.803125,
+   "layer_rescue_corr_vs_hf": 0.9833392668586902,
+   "layer_mean_curve_maxdiff_vs_hf": 0.09891051957383748,
+   "identity_attn_layer_maxdiff": 0.09375,
+   "identity_block_maxdiff": 0.09375,
+   "identity_resid_maxdiff": 0.09375,
+   "block_vs_block_diff_maxdiff": 0.556640625,
+   "block_vs_block_diff_frac_within_0.1": 0.903125
+  }
+ },
+ "min_rescue_corr": 0.9049392623700604,
+ "max_meanabsdiff": 0.08074396306818182,
+ "min_frac_within_0.25": 0.9375,
+ "pass": true
+}

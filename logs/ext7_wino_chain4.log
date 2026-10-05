@@ -1,0 +1,25 @@
+2026-10-04T09:17:54Z [chain4] START ext7-wino-direct-qwen3
+2026-10-04T09:42:59Z START ext7-wino-direct-qwen3 (waited 1505s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --splits discovery,validation,rep_discovery,rep_validation
+09:43:11   layer   0: load-wait 4.12s compute 0.65s  wf_rows=0
+09:43:20   layer   8: load-wait 1.09s compute 0.15s  wf_rows=0
+09:43:30   layer  16: load-wait 1.10s compute 0.15s  wf_rows=0
+09:43:40   layer  24: load-wait 1.09s compute 0.15s  wf_rows=0
+09:43:50   layer  32: load-wait 1.09s compute 0.15s  wf_rows=0
+09:43:59   layer  40: load-wait 1.09s compute 0.15s  wf_rows=0
+09:44:08   layer  47: load-wait 1.09s compute 0.15s  wf_rows=0
+09:44:08   pass done: 1024 prefill rows (T=31), 0 spawn rows, 61.9s
+09:44:10 wino_qwen3_str: 1024 directed cases; A_direct 0.048, M_direct 0.952, DLA attn share 0.045; fp32 vs engine Delta clean max |diff| 0.142
+2026-10-04T09:44:15Z END   ext7-wino-direct-qwen3 rc=0 (76s)
+2026-10-04T09:44:15Z [chain4] END ext7-wino-direct-qwen3 rc=0
+2026-10-04T09:44:15Z [chain4] START ext7-wino-direct-mixtral_bos
+2026-10-04T10:13:29Z START ext7-wino-direct-mixtral_bos (waited 1754s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --splits discovery,validation,rep_discovery,rep_validation
+10:13:42   layer   0: load-wait 6.56s compute 0.96s  wf_rows=0
+10:14:02   layer   8: load-wait 2.24s compute 0.49s  wf_rows=0
+10:14:23   layer  16: load-wait 2.24s compute 0.48s  wf_rows=0
+10:14:41   layer  24: load-wait 1.63s compute 0.48s  wf_rows=0
+10:14:58   layer  31: load-wait 2.38s compute 0.48s  wf_rows=0
+10:14:58   pass done: 1024 prefill rows (T=33), 0 spawn rows, 83.5s
+10:14:59 wino_mixtral_bos_str: 1024 directed cases; A_direct 0.296, M_direct 0.704, DLA attn share 0.296; fp32 vs engine Delta clean max |diff| 0.125
+2026-10-04T10:15:06Z END   ext7-wino-direct-mixtral_bos rc=0 (97s)
+2026-10-04T10:15:06Z [chain4] END ext7-wino-direct-mixtral_bos rc=0
+2026-10-04T10:15:06Z [chain4] DONE

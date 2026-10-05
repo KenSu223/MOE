@@ -1,0 +1,11 @@
+2026-10-04T07:21:41Z START ext7c-role-scan-qwen3 (waited 561s): python scripts/ext7_role_scan.py qwen3
+07:21:53   layer   0: load-wait 3.03s compute 0.71s  wf_rows=0
+07:22:02   layer   8: load-wait 1.07s compute 0.17s  wf_rows=0
+07:22:12   layer  16: load-wait 1.07s compute 0.17s  wf_rows=0
+07:22:22   layer  24: load-wait 1.07s compute 0.17s  wf_rows=0
+07:22:32   layer  32: load-wait 0.61s compute 0.17s  wf_rows=0
+07:22:42   layer  40: load-wait 1.07s compute 0.17s  wf_rows=0
+07:22:50   layer  47: load-wait 1.07s compute 0.17s  wf_rows=0
+07:22:50   pass done: 1264 prefill rows (T=30), 0 spawn rows, 61.1s
+07:22:50 summary: {"n_pairs": 632, "n_twins": 316, "correct_both": 625, "margin": 558, "margin_twins": 306, "margin_twins_both_roles": 252, "margin_top1_both": 66, "mean_d_a_margin": 3.689516129032258, "mean_d_b_margin": -3.770385304659498, "mean_drop_margin": 7.459901433691757, "mean_d_a_all": 3.5933544303797467, "mean_d_b_all": -3.5298655063291138}
+2026-10-04T07:22:56Z END   ext7c-role-scan-qwen3 rc=0 (75s)

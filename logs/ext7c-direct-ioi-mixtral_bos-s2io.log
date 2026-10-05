@@ -1,0 +1,9 @@
+2026-10-04T10:11:48Z START ext7c-direct-ioi-mixtral_bos-s2io (waited 1729s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/ioi/pairs_s2io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_mixtral_bos_s2io --splits discovery,validation,rep_discovery,rep_validation
+10:12:02   layer   0: load-wait 5.94s compute 0.77s  wf_rows=0
+10:12:25   layer   8: load-wait 2.26s compute 0.33s  wf_rows=0
+10:12:44   layer  16: load-wait 1.85s compute 0.31s  wf_rows=0
+10:13:04   layer  24: load-wait 2.51s compute 0.32s  wf_rows=0
+10:13:22   layer  31: load-wait 2.43s compute 0.31s  wf_rows=0
+10:13:22   pass done: 1024 prefill rows (T=21), 0 spawn rows, 86.1s
+10:13:23 ioi_mixtral_bos_s2io: 1024 directed cases; A_direct 1.176, M_direct -0.176, DLA attn share 1.177; fp32 vs engine Delta clean max |diff| 0.120
+2026-10-04T10:13:29Z END   ext7c-direct-ioi-mixtral_bos-s2io rc=0 (101s)

@@ -1,0 +1,11 @@
+2026-10-04T09:13:41Z START ext7c-direct-ioi-qwen3-s2io (waited 1314s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/ioi/pairs_s2io_qwen3.parquet --case-sets data/ioi/case_sets_s2io.json --out ioi_qwen3_s2io --splits discovery,validation,rep_discovery,rep_validation
+09:13:52   layer   0: load-wait 2.87s compute 0.74s  wf_rows=0
+09:14:01   layer   8: load-wait 1.15s compute 0.10s  wf_rows=0
+09:14:11   layer  16: load-wait 1.14s compute 0.10s  wf_rows=0
+09:14:21   layer  24: load-wait 1.14s compute 0.10s  wf_rows=0
+09:14:31   layer  32: load-wait 1.14s compute 0.10s  wf_rows=0
+09:14:42   layer  40: load-wait 1.11s compute 0.10s  wf_rows=0
+09:14:51   layer  47: load-wait 0.61s compute 0.09s  wf_rows=0
+09:14:51   pass done: 1024 prefill rows (T=20), 0 spawn rows, 62.7s
+09:14:54 ioi_qwen3_s2io: 1024 directed cases; A_direct 1.412, M_direct -0.412, DLA attn share 1.411; fp32 vs engine Delta clean max |diff| 0.125
+2026-10-04T09:14:58Z END   ext7c-direct-ioi-qwen3-s2io rc=0 (77s)

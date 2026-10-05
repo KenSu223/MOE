@@ -1,0 +1,86 @@
+2026-10-04T08:02:58Z [chain3] START ext7-wino-smoke-joint
+2026-10-04T08:21:59Z START ext7-wino-smoke-joint (waited 1141s): python scripts/ext7_wino_joint.py --model olmoe --pairs data/wino_str/pairs_train_xl_olmoe.parquet --case-sets /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/olmoe_smoke_cs.json --out /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke --families main,rep
+08:22:00 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: 24 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+08:22:02 pass 1/1: 48 prefill rows, 144 multi rows
+08:22:06   layer   0: load-wait 1.89s compute 1.06s  wf_rows=144
+08:22:18   layer   8: load-wait 1.64s compute 0.03s  wf_rows=144
+08:22:29   layer  15: load-wait 1.64s compute 0.04s  wf_rows=144
+08:22:29   pass done: 48 prefill rows (T=25), 144 spawn rows, 26.8s
+08:22:29 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.76, drop 7.76)
+08:22:29 denoise  all_block all     : effect/drop +1.000 (mean effect +7.76, drop 7.76)
+08:22:29 denoise  all_moe   all     : effect/drop +0.889 (mean effect +6.90, drop 7.76)
+08:22:29 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.76, drop 7.76)
+08:22:29 noise    all_block all     : effect/drop +1.000 (mean effect +7.76, drop 7.76)
+08:22:29 noise    all_moe   all     : effect/drop +0.889 (mean effect +6.90, drop 7.76)
+2026-10-04T08:22:32Z END   ext7-wino-smoke-joint rc=0 (33s)
+2026-10-04T08:22:32Z [chain3] END ext7-wino-smoke-joint rc=0
+all_block |effect/drop - 1| max 0.0 all_attn 0.0
+2026-10-04T08:22:32Z [chain3] START ext7-wino-joint-qwen3
+2026-10-04T08:33:24Z START ext7-wino-joint-qwen3 (waited 652s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main,rep --max-rows 30000
+08:33:25 qwen3 -> wino_qwen3_str: 1024 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+08:33:32 pass 1/1: 2048 prefill rows, 6144 multi rows
+08:33:37   layer   0: load-wait 3.41s compute 0.84s  wf_rows=6144
+08:33:42   layer   8: load-wait 0.29s compute 0.36s  wf_rows=6144
+08:33:48   layer  16: load-wait 0.75s compute 0.36s  wf_rows=6144
+08:33:57   layer  24: load-wait 0.72s compute 0.36s  wf_rows=6144
+08:34:06   layer  32: load-wait 0.81s compute 0.36s  wf_rows=6144
+08:34:16   layer  40: load-wait 0.91s compute 0.35s  wf_rows=6144
+08:34:24   layer  47: load-wait 0.83s compute 0.35s  wf_rows=6144
+08:34:24   pass done: 2048 prefill rows (T=31), 6144 spawn rows, 51.4s
+08:34:25 denoise  all_attn  all     : effect/drop +0.994 (mean effect +8.33, drop 8.38)
+08:34:25 denoise  all_block all     : effect/drop +1.000 (mean effect +8.38, drop 8.38)
+08:34:25 denoise  all_moe   all     : effect/drop +0.835 (mean effect +7.00, drop 8.38)
+08:34:25 noise    all_attn  all     : effect/drop +0.998 (mean effect +8.36, drop 8.38)
+08:34:25 noise    all_block all     : effect/drop +1.000 (mean effect +8.38, drop 8.38)
+08:34:25 noise    all_moe   all     : effect/drop +0.835 (mean effect +6.99, drop 8.38)
+2026-10-04T08:34:31Z END   ext7-wino-joint-qwen3 rc=0 (67s)
+2026-10-04T08:34:31Z [chain3] END ext7-wino-joint-qwen3 rc=0
+2026-10-04T08:34:31Z [chain3] START ext7-wino-dla-qwen3
+2026-10-04T08:47:50Z START ext7-wino-dla-qwen3 (waited 799s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main,rep --chunk 512
+08:47:52 qwen3 -> wino_qwen3_str: 1024 directed cases, families ['main', 'rep'], 2 prefill-only passes
+08:48:02   layer   0: load-wait 2.87s compute 0.68s  wf_rows=0
+08:48:11   layer   8: load-wait 1.09s compute 0.15s  wf_rows=0
+08:48:21   layer  16: load-wait 1.09s compute 0.15s  wf_rows=0
+08:48:31   layer  24: load-wait 1.12s compute 0.15s  wf_rows=0
+08:48:41   layer  32: load-wait 1.10s compute 0.15s  wf_rows=0
+08:48:53   layer  40: load-wait 1.72s compute 0.15s  wf_rows=0
+08:49:00   layer  47: load-wait 1.09s compute 0.14s  wf_rows=0
+08:49:00   pass done: 1024 prefill rows (T=31), 0 spawn rows, 61.5s
+08:49:03 pass 1/2: 62s; DLA total - drop: max |.| 0.188
+08:49:48 pass 2/2: 43s; DLA total - drop: max |.| 0.192
+08:49:49 direct effect / drop: attention +0.045, MoE +0.956, embedding +0.000
+2026-10-04T08:49:56Z END   ext7-wino-dla-qwen3 rc=0 (126s)
+2026-10-04T08:49:56Z [chain3] END ext7-wino-dla-qwen3 rc=0
+2026-10-04T08:49:56Z [chain3] START ext7-wino-joint-mixtral_bos
+2026-10-04T09:12:04Z START ext7-wino-joint-mixtral_bos (waited 1328s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main,rep --max-rows 30000
+09:12:05 mixtral -> wino_mixtral_bos_str: 1024 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+09:12:11 pass 1/1: 2048 prefill rows, 6144 multi rows
+09:12:19   layer   0: load-wait 6.33s compute 1.62s  wf_rows=6144
+09:12:37   layer   8: load-wait 1.21s compute 1.09s  wf_rows=6144
+09:12:57   layer  16: load-wait 1.29s compute 1.09s  wf_rows=6144
+09:13:17   layer  24: load-wait 1.25s compute 1.09s  wf_rows=6144
+09:13:33   layer  31: load-wait 1.47s compute 1.09s  wf_rows=6144
+09:13:33   pass done: 2048 prefill rows (T=33), 6144 spawn rows, 81.5s
+09:13:34 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+09:13:34 denoise  all_block all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+09:13:34 denoise  all_moe   all     : effect/drop +0.779 (mean effect +6.22, drop 7.99)
+09:13:34 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.98, drop 7.99)
+09:13:34 noise    all_block all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+09:13:34 noise    all_moe   all     : effect/drop +0.779 (mean effect +6.22, drop 7.99)
+2026-10-04T09:13:41Z END   ext7-wino-joint-mixtral_bos rc=0 (97s)
+2026-10-04T09:13:41Z [chain3] END ext7-wino-joint-mixtral_bos rc=0
+2026-10-04T09:13:41Z [chain3] START ext7-wino-dla-mixtral_bos
+2026-10-04T09:30:42Z START ext7-wino-dla-mixtral_bos (waited 1021s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main,rep --chunk 512
+09:30:43 mixtral -> wino_mixtral_bos_str: 1024 directed cases, families ['main', 'rep'], 2 prefill-only passes
+09:30:57   layer   0: load-wait 6.02s compute 0.91s  wf_rows=0
+09:31:17   layer   8: load-wait 1.83s compute 0.47s  wf_rows=0
+09:31:35   layer  16: load-wait 1.69s compute 0.47s  wf_rows=0
+09:31:52   layer  24: load-wait 1.36s compute 0.47s  wf_rows=0
+09:32:11   layer  31: load-wait 2.07s compute 0.47s  wf_rows=0
+09:32:11   pass done: 1024 prefill rows (T=32), 0 spawn rows, 81.4s
+09:32:13 pass 1/2: 81s; DLA total - drop: max |.| 0.193
+09:33:42 pass 2/2: 82s; DLA total - drop: max |.| 0.219
+09:33:43 direct effect / drop: attention +0.296, MoE +0.703, embedding -0.000
+2026-10-04T09:33:50Z END   ext7-wino-dla-mixtral_bos rc=0 (188s)
+2026-10-04T09:33:50Z [chain3] END ext7-wino-dla-mixtral_bos rc=0
+2026-10-04T09:33:50Z [chain3] DONE

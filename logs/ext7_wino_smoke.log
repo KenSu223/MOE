@@ -1,0 +1,69 @@
+2026-10-04T07:32:54Z START ext7-wino-smoke-olmoe2 (waited 727s): bash /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/smoke.sh
+07:32:54 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: 24 directed cases (12 pairs), families {'main': {'discovery': 8, 'validation': 8}, 'rep': {'discovery': 4, 'validation': 4}}, kinds ['layer', 'attn_layer', 'block'], 16 layers, 1 passes (1152 spawn rows), T max 25
+07:33:00 pass 1/1: layers 0..15, 48 prefill rows, 1152 spawn rows
+07:33:03   layer   0: load-wait 1.78s compute 0.60s  wf_rows=72
+07:33:16   layer   8: load-wait 1.63s compute 0.03s  wf_rows=648
+07:33:27   layer  15: load-wait 1.62s compute 0.05s  wf_rows=1152
+07:33:27   pass done: 48 prefill rows (T=25), 1152 spawn rows, 26.8s (metrics 0.0s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:133: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:33:27 family main: layer disc L12; attn_layer disc L11; block disc L12
+07:33:28 family rep: layer disc L13; attn_layer disc L12; block disc L13
+07:33:28 Δclean +3.85 Δcorrupt -3.85 drop +7.71; {"layer_discovery_argmax": 12, "layer_discovery_max": 3.309, "layer_discovery_top5": [[12, 3.309], [13, 1.918], [11, 1.355], [9, 1.195], [14, 1.043]], "layer_validation_argmax": 13, "layer_validation_max": 3.877, "layer_validation_top5": [[13, 3.877], [12, 2.442], [11, 2.308], [10, 1.206], [14, 1.023]], "attn_layer_discovery_argmax": 11, "attn_layer_discovery_max": 1.797, "attn_layer_discovery_top5": [[11, 1.797], [9, 1.77], [8, 0.973], [10, 0.789], [12, 0.668]], "attn_layer_validation_argmax": 9, "attn_layer_validation_max": 1.29, "attn_layer_validation_top5": [[9, 1.29], [8, 1.234], [12, 1.1
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+07:33:32 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: 24 directed cases, families ['main', 'rep'], layers 0..15 (16), pairs layers [12], only_scaled=False, 5914 spawn rows in 3 passes
+07:33:33 pass 1/3: layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 48 prefill rows, 2860 spawn rows
+07:33:35   layer   0: load-wait 1.37s compute 0.72s  wf_rows=296
+07:33:36   layer   8: load-wait 0.11s compute 0.08s  wf_rows=2588
+07:33:38   layer  15: load-wait 0.18s compute 0.03s  wf_rows=2860
+07:33:38   pass done: 48 prefill rows (T=25), 2860 spawn rows, 4.9s
+07:33:38   L0: 5 recurrent (>= 4/8); best E060 all-case +0.094 active 4
+07:33:38   L1: 6 recurrent (>= 4/8); best E000 all-case +0.055 active 4
+07:33:38   L2: 6 recurrent (>= 4/8); best E004 all-case +0.047 active 7
+07:33:38   L3: 7 recurrent (>= 4/8); best E028 all-case +0.117 active 8
+07:33:38   L4: 8 recurrent (>= 4/8); best E038 all-case +0.094 active 6
+07:33:38   L5: 6 recurrent (>= 4/8); best E007 all-case +0.055 active 6
+07:33:38   L6: 4 recurrent (>= 4/8); best E012 all-case +0.023 active 6
+07:33:38   L7: 11 recurrent (>= 4/8); best E038 all-case +0.113 active 6
+07:33:38   L8: 7 recurrent (>= 4/8); best E042 all-case +0.324 active 4
+07:33:38   L9: 9 recurrent (>= 4/8); best E010 all-case +0.922 active 4
+07:33:38 pass 1: 5s; /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke/str_expert_rows.parquet now 2860 rows
+07:33:38 pass 2/3: layers [10, 11, 12, 13, 14], 48 prefill rows, 2768 spawn rows
+07:33:41   L10: 9 recurrent (>= 4/8); best E026 all-case +0.078 active 6
+07:33:41   L11: 7 recurrent (>= 4/8); best E036 all-case +0.547 active 6
+07:33:41   L12: 7 recurrent (>= 4/8); best E011 all-case +2.031 active 6
+07:33:41   L13: 9 recurrent (>= 4/8); best E040 all-case +0.438 active 5
+07:33:41   L14: 6 recurrent (>= 4/8); best E008 all-case +0.281 active 4
+07:33:41 pass 2: 3s; /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke/str_expert_rows.parquet now 5628 rows
+07:33:41 pass 3/3: layers [15], 48 prefill rows, 286 spawn rows
+07:33:43   L15: 7 recurrent (>= 4/8); best E048 all-case +0.070 active 5
+07:33:43 pass 3: 3s; /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke/str_expert_rows.parquet now 5914 rows
+07:33:46 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: window 1, kinds ['layer', 'attn_layer', 'resid'], 16 directed cases, 44 units, 2112 suffix rows, 2 passes; units per category {'last STR token': 16, 'last token': 16, 'first subsequent token': 8, 'further tokens': 4}
+07:33:47 pass 1/2: 41 units (S 1..4), 82 prefill rows, 1968 suffix rows
+07:33:49   layer   0: load-wait 1.23s compute 0.46s  wf_rows=123 wf_tokens=76
+07:33:51   layer   8: load-wait 0.08s compute 0.10s  wf_rows=1107 wf_tokens=1900
+07:33:52   layer  15: load-wait 0.07s compute 0.05s  wf_rows=1968 wf_tokens=3496
+07:33:52   pass done: 82 prefill rows (T=25), 1968 suffix rows (Smax=4, 3648 tokens), 4.2s
+07:33:52 pass 1: 4.2s; 1968 rows saved
+07:33:52 pass 2/2: 3 units (S 4..5), 6 prefill rows, 144 suffix rows
+07:33:54 pass 2: 2.6s; 2112 rows saved
+07:33:55 done
+07:33:57 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: window 5, kinds ['layer'], 16 directed cases, 44 units, 704 suffix rows, 1 passes; units per category {'last STR token': 16, 'last token': 16, 'first subsequent token': 8, 'further tokens': 4}
+07:33:58 pass 1/1: 44 units (S 1..5), 88 prefill rows, 704 suffix rows
+07:34:00   layer   0: load-wait 1.23s compute 0.44s  wf_rows=132 wf_tokens=0
+07:34:01   layer   8: load-wait 0.11s compute 0.06s  wf_rows=484 wf_tokens=900
+07:34:02   layer  15: load-wait 0.10s compute 0.03s  wf_rows=704 wf_tokens=1440
+07:34:02   pass done: 88 prefill rows (T=25), 704 suffix rows (Smax=5, 1440 tokens), 4.1s
+07:34:02 pass 1: 4.1s; 704 rows saved
+07:34:02 done
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+07:34:08 olmoe -> /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/wino_olmoe_smoke: 16 directed cases, layers [8, 9, 10, 11, 14] (null layer 14), 16 heads, 1 passes, 1520 spawn rows; mentions: first occurrence of ans_a / ans_b before the blank (found 16 of 16)
+07:34:08 pass 1/1: layers [8, 9, 10, 11, 14], 32 prefill rows, 1520 spawn rows
+07:34:10   layer   0: load-wait 1.23s compute 0.39s  wf_rows=0
+07:34:11   layer   8: load-wait 0.13s compute 0.18s  wf_rows=304
+07:34:13   layer  15: load-wait 0.10s compute 0.02s  wf_rows=1520
+07:34:13   pass done: 32 prefill rows (T=25), 1520 spawn rows, 4.1s
+07:34:13 pass 1: 4s; 1520 rows
+2026-10-04T07:34:15Z END   ext7-wino-smoke-olmoe2 rc=0 (81s)

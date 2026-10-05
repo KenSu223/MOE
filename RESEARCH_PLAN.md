@@ -375,3 +375,203 @@ entries; final reports under 450 words; coordinator commits selectively and rebu
 5-F4, 5-F1, 5-F2, 5-F5). GPU ≈ 15 min (F4) + 26 min (F5/F2/F1.3 incl. verifications). Headlines are summarised in
 CLAUDE.md section 2b; open questions for the user are listed there and in the sections. Wave 2 (F3, F1.4, optional F2 on
 Qwen3-Instruct, F4 full grid) not started.
+
+---
+
+# Phase 3 — expert add-back curves and WinoGrande under STR (planned 2026-10-04; only W0 run)
+
+Source: the team's notes after Directions 6/6b were shared. (1) *Add-back*: plot the remaining gap against the number of
+experts patched back (single, pairs, triples, ...), ranked over experts rather than layers; the ceiling is "all MoE outputs
+patched"; how many experts restore the original answer; is greedy good enough, are there better strategies; AUC of the
+saturation curve. (2) *WinoGrande*: how much of the repair is attributable to MoE vs attention? Hypothesis: WinoGrande is
+like IOI (attention-driven) rather than like factual recall.
+
+## Best-practice checklist (Zhang & Nanda 2024, arXiv:2309.16042), applied to every Phase-3 experiment
+
+| # | Recommendation (where in the paper) | How Phase 3 applies it |
+|---|---|---|
+| Z1 | STR whenever possible; the corrupted prompt must be in-distribution ("identically distributed as a fresh draw of a clean prompt"), same sequence length (§2.1, §6) | CounterFact: the ext6 donors. WinoGrande: the twin, i.e. the same sentence filled with the *other* option — both prompts are crowd-written WinoGrande sentences filled with their own correct answer; rule W4 enforces token symmetry |
+| Z2 | r′ = the corrupted prompt's own answer; prompts the model actually solves (PairedFacts are "known facts"; arithmetic keeps only prompts whose top-1 is correct; App. B, C) | margin ≥ 1 logit in **both** directions (primary); top-1 in both directions as a sensitivity subset |
+| Z3 | Use each pair both ways (PairedFacts, App. B) | every pair is run A→B and B→A; per-pair mean = primary statistic, one direction = sensitivity (the ext6 "first donor" analogue) |
+| Z4 | Prefer STR; GN only "when token alignment or lack of analogous tokens makes STR unsuitable" (§6) | **STR only (user decision 2026-10-04).** WinoGrande twins are a natural STR setting, so no GN rows, no GN filter, no GN control in Phase 3 |
+| Z5 | Logit difference, normalised by LD_clean − LD_corrupt; probability can miss negative components; Stolfo's metric explodes when P_*(r) ≈ 0; KL acceptable for circuit discovery (§2.1, §4, §6, App. C) | Δ = LD primary, reported raw and drop-normalised; Δp descriptive only (F5); KL only for head discovery |
+| Z6 | Single-layer patching first; sliding windows only when single layers are weak, and read as joint effects (§5, §6) | all sweeps and grids single-layer first; window 5 only as a 6b-style secondary |
+| Z7 | Try several corruption sites when the task allows it (§6, App. F: S2 vs S1+IO find different IOI heads) | WinoGrande, two STR sites: (i) the filled option (primary), (ii) entity-role swap of the two candidates' earlier mentions (names) |
+| Z8 | Head detection = effect ≥ 2 SD from the mean over heads (§3) | reported next to our bootstrap CIs and Spec |
+| Z9 | Early-layer effects at the corrupted token largely reflect token identity (fn. 1, the MLP0 effect) | L0–L2 effects at the STR site are reported, not interpreted as computation |
+| Z10 | Noising (clean → corrupt) vs denoising is named as open (§8) | add-back = denoising (sufficiency); deletion curves = noising (necessity) |
+
+## Robustness criteria inherited from the STR protocol of Direction 6 and earlier directions
+
+| Criterion | Origin | WinoGrande form |
+|---|---|---|
+| clean margin Δ_clean ≥ 1.0 | paper filter, kept by ext6 | Δ(prompt A) ≥ +1 |
+| corrupted prompt known: logit(foil) − logit(true) ≥ 1.0 | ext6 donor margin | Δ(prompt B) ≤ −1 (together: STR drop ≥ 2, so the corruption is effective by construction) |
+| answer and foil are single leading-space continuation tokens; true ≠ foil | `data.prepare_case` | W3: sentence-final trigger is one token after both prompts, the same id after both |
+| same length, subject at the same positions, all other tokens identical, same continuation ids after the donor | `ext6_str.candidates` | W4 (+ W3) |
+| subject is not the final token | `data.prepare_case` ("subject_is_final") | W5: the option is not the final prompt token |
+| paper split, fixed seed; recurrence gate = half of discovery | paper / ext6 | seed-0 shuffle of `margin` pairs → 128/128 discovery/validation pairs; gate = half of discovery |
+| donor mean primary, first donor sensitivity | ext6 | mean of both directions primary, direction A→B sensitivity |
+| Mixtral without BOS = paper protocol, BOS as a labelled variant | base reproduction, Dir. 3 | pairs are identical under both; both protocols run |
+| sink-carrying final tokens flagged (Mixtral without BOS) | Dir. 3, open question (d) | `DiagSpec` flag per prompt |
+| last-layer read-out: interior-layer rule (≤ L−5) reported alongside | Dir. 4 | same |
+| clean top-1 rate, normalised rescue, Δp descriptive | F5 | same |
+| new intervention kinds verified against transformers hooks on OLMoE; `verify_olmoe.json` unchanged | all directions | WinoGrande OLMoE pairs exist (W0) |
+| bf16, no quantization; `gpu_queue.sh`; `run_meta.json`; PROGRESS.md | CLAUDE.md §6 | same |
+
+WinoGrande-specific rules: W1 twin integrity; W2 the trigger is the *only* difference and the *last word* of the item (user
+rule 1), so everything that determines the answer precedes the prediction position; W3 the trigger is a single token for the
+model's tokenizer (user rule 2); W6 one pair per normalised context (options replaced by placeholders), so no template can sit
+in both discovery and validation. Recorded for stratification, not filtered (filtering would remove whole mechanisms; Bowman
+& Dahl 2021): `assoc` (the context-free prompt "The bag was too" already passes the margin both ways = solvable by word
+association), `names` (social vs physical items), `trigger_in_context` (copy shortcut), `debiased` (AfLite survivor),
+option token count, top-1 status.
+
+Not used: the paper's second STRICT condition (GN drop ≥ 0.5). It described how the paper's GN-corrupted case set was
+selected (the ext6 cases inherited it only because they were the paper's case IDs); it is not an STR criterion. Measured
+once in the W0 scan and dropped: it would select pairs by the behaviour of an off-distribution corruption, and it does so
+unevenly (Qwen3 2,099 → 813 pairs with the name share rising from 0.25 to 0.37; Mixtral without BOS 1,109 → 167), because
+noise on one option token does not hide which of the two in-context candidates is meant.
+
+## W0. WinoGrande STR pairs and competence scan (DONE 2026-10-04)
+
+Construction (`moetrace/ext7_wino.py`): in 86 % of WinoGrande twins the trigger follows the blank, so a prompt cut at the
+blank is identical for both twins (accuracy exactly 50 %, drop 0). The direction is reversed instead: fill the blank with
+each twin's own answer and predict the sentence-final trigger.
+
+    prompt A: The coroner tried to put the body in the bag but the bag was too   -> " small"  (r)
+    prompt B: The coroner tried to put the body in the bag but the body was too  -> " large"  (r')
+
+Δ = logit(r) − logit(r′) = LD(r, r′); the filled option plays the CounterFact subject, the two triggers true object / foil.
+Summing the two twins' lm-eval partial-scoring margins at the trigger token gives exactly Δ(A) − Δ(B), the STR drop.
+Positions before the option are identical in A and B, so patches there are exactly zero (as the 6b prefix).
+Scripts: `scripts/ext7_wino_build.py` (W1–W6, CPU) → `data/wino_str/pairs_<split>_<proto>.parquet`;
+`scripts/ext7_wino_scan.py` (clean and context-free prompts × A / B) → `results/wino_<proto>/`. The first scans
+(2026-10-04) also carried GN rows; their `gn_*` / `strict` columns are not used.
+Raw data `data/winogrande_1.1/` (gitignored copy of the official v1.1 zip). STR-only funnel (`scripts/ext7_wino_funnel.py`
+→ `results/ext7_wino_funnel.json`, `results/tables/ext7_wino_funnel.md`):
+
+| Split | Model / protocol | Twins | W2 sentence-final single-word trigger | W3 single-token trigger | W4–W5 token-symmetric | W6 dedup | Correct both ways | **Margin ≥ 1 both ways (primary)** | of which names / objects | assoc | top-1 both | debiased | mean Δ_A / Δ_B | mean drop |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| train_xl | Qwen3-30B-A3B-Base | 20,199 | 6,737 | 5,501 | 4,532 | 4,514 | 2,783 | **2,099** | 535 / 1,564 | 183 | 313 | 495 of 1,549 | +3.89 / -3.79 | 7.68 |
+| train_xl | Mixtral-8x7B, no BOS | 20,199 | 6,737 | 4,037 | 2,430 | 2,421 | 1,489 | **1,109** | 127 / 982 | 113 | 273 | 255 of 845 | +3.72 / -3.55 | 7.27 |
+| train_xl | Mixtral-8x7B, BOS | 20,199 | 6,737 | 4,037 | 2,430 | 2,421 | 1,524 | **1,151** | 150 / 1,001 | 132 | 295 | 279 of 845 | +3.78 / -3.65 | 7.42 |
+| train_xl | OLMoE-1B-7B (verification only) | 20,199 | 6,737 | 5,115 | 3,823 | 3,809 | 1,952 | **1,325** | 218 / 1,107 | 122 | 290 | 283 of 1,341 | +3.71 / -3.48 | 7.18 |
+| dev | Qwen3-30B-A3B-Base | 284 | 90 | 79 | 68 | 68 | 35 | **27** | 3 / 24 | 5 | 2 | 0 of 0 | +3.83 / -3.00 | 6.83 |
+| dev | Mixtral-8x7B, no BOS | 284 | 90 | 59 | 42 | 42 | 20 | **11** | 0 / 11 | 1 | 3 | 0 of 0 | +2.95 / -3.43 | 6.39 |
+
+`assoc` = the context-free prompt already passes the margin both ways; `debiased` = margin pairs in train_debiased, out of
+the W1–W6 pairs in train_debiased. Pass rates on the AfLite-filtered items (train_xl debiased subset: Qwen3 32 %, Mixtral
+30 %) match the dev twins (40 % and 26 % on 68 / 42 pairs), so memorised train_xl items do not inflate the pool. Margin pairs
+shared by models: Qwen3 ∩ Mixtral no BOS 822, all three protocols 776, Mixtral no BOS ∩ BOS 1,022. Role-swap (W7)
+candidates inside the margin pool: Qwen3 316, Mixtral no BOS 125 name pairs (before the margin on the swapped prompt).
+
+## WinoGrande experiments (W1–W8), each on Qwen3, Mixtral without BOS (primary) and Mixtral with BOS (variant)
+
+Case set (decision (g)): seed-0 shuffle of the margin pairs shared by all three protocols (776) → 128 discovery + 128
+validation pairs (256 directed cases each), plus a disjoint replication set of the next 256 pairs (stability check, the
+Appendix-D analogue); per-model margin pools (Qwen3 2,099; Mixtral 1,109 / 1,151) as a sensitivity set. Unit for expert recurrence and
+Spec = directed case (the clean run differs between A→B and B→A); bootstrap CIs resample pairs.
+
+- **W1 Verification (OLMoE, minutes).** Final-position `layer` / `attn_layer` / `block` patches and the option-position
+  MoE patch (ext5_subject executor) on WinoGrande pairs against transformers hooks, as `ext6_str_verify.py` /
+  `ext6_str_grid_verify.py` do.
+- **W2 Final-position layer sweep (Z1, Z6).** Kinds `layer` (MoE), `attn_layer`, `block` at every layer. Outputs: raw and
+  drop-normalised curves, peaks, attention share of the positive rescue (Direction-2b definition). First answer to "MoE or
+  attention", per layer.
+- **W3 Position × layer grid (Z7 sites, Z6, Z9; 6b executor).** Every position from the filled option to the final token,
+  every layer, single layer first, window 5 second; kinds `layer`, `attn_layer`, `resid` at p (supported by
+  `ext5_subject`). Token groups: option tokens, tokens between option and final position, final position. Positions before
+  the option are exactly zero.
+- **W4 Joint sublayer decomposition at the final position (engine extension, see A0).** Patch all MoE outputs (all layers),
+  all attention outputs (all layers), and both (= the clean final residual, must give normalised rescue 1: sanity check).
+  With A = all-attention share and M = all-MoE share, the two-player Shapley split is φ_attn = ½[A + (1 − M)], φ_MoE = 1 − φ_attn;
+  A + M − 1 measures redundancy. Same in the noising direction (corrupt all attention / all MoE in the clean run: necessity).
+  This is the direct answer to "how much repair is attributable to MoE vs attention".
+  **Revised 2026-10-04 (found by ext8-addback / ext7-controls):** the joint game is degenerate at the final position. The
+  final token is shared and the MoE is a per-token function, so patching all final-position attention outputs restores the
+  clean residual exactly (A = 1 by construction). W4 is therefore reported as: A = 1 (engine sanity check only); M = all-MoE
+  denoising and all-MoE noising (sufficiency / necessity of the MoE computation given the context attention delivers); and
+  the direct-path split of the clean − corrupted Δ into summed attention writes and summed MoE writes at the final position
+  (exact final RMSNorm; `moetrace/ext7_controls.direct_split_pairs` = `scripts/ext8_addback_run.py` direct_split), plus the
+  single-layer attention share of W2. Attention is, by construction, the only channel through which the corruption reaches
+  the final position; the question that remains is how much of the work the MoE does with what attention delivers.
+- **W5 Attention heads (`attn_head`) at the W2 attention peaks.** Detection by Z8 (≥ 2 SD) and by Spec with CIs; attention
+  mass of the top heads on the filled option, the two candidates' first mentions and the context words, clean vs corrupt
+  (mover heads?). KL as an auxiliary metric for discovery only (Z5).
+- **W6 Experts.** Paper two-stage selection (MoE-layer argmax → recurrence-first expert, Spec, active controls, equal-norm
+  check), joint (layer, expert) search, interior-layer rule; then the add-back curves A1–A3 on WinoGrande. Pattern A/B/C as in
+  Direction 2.
+- **W7 Second corruption site (Z7).** Entity-role swap: exchange the two candidates' first mentions, keep the filled option
+  (A: "Dennis helped Adam … since Dennis was the" → " trainer"; swap: "Adam helped Dennis … since Dennis was the" →
+  " student"). Name pairs only (object swaps are often not natural), token-aligned and inside the margin pool (Qwen3 316,
+  Mixtral no BOS 125), margin ≥ 1 toward r′ on the swapped prompt; Mixtral is too small for a 128/128 split, so W7 there is a
+  fixed-hypothesis test of the W2/W4 results rather than a new selection. Repeat W2 and W4. The option swap tests "which entity is referred to";
+  the role swap tests "which entity has which attribute" (binding), the closest analogue of IOI's S1+IO corruption.
+- **W8 Calibration tasks on the same models.** IOI (Wang et al. templates, single-token names per tokenizer; STR S2→IO and
+  S1+IO→random names, as Z&N) as the attention-driven reference; CounterFact STR (ext6 runs) as the other pole. W2 + W4 on
+  both, so "WinoGrande is IOI-like" becomes a position on one attention–MoE axis measured with one protocol.
+
+## Add-back curves (A0–A4): CounterFact STR first (ext6 runs exist), then WinoGrande (W6)
+
+- **A0 Ceilings.** All MoE outputs at the final position (engine kind `multi` with `layer` steps at every layer: exists,
+  verified on OLMoE for 2–3 steps, needs an all-layer check); all attention outputs (needs `attn_layer` steps in `multi`:
+  small engine extension + OLMoE verification); both = 1. If the all-MoE ceiling is far below 1, "full repair from experts
+  alone" is impossible for many cases, and the curves are reported against both the ceiling and the drop.
+- **A1 Static orderings over (layer, expert) pairs, ignoring layers.** Exact joint patches (`multi` + `coalition_set`, one
+  step per layer) of the top-k set for k = 1…all on a log-spaced grid: (i) population ranking by discovery rescue, evaluated
+  on validation; (ii) per-case oracle ranking by the case's own single-expert rescue; (iii) layer-wise baseline (the paper's
+  way: best layer's experts first); (iv) random orders (null curve; their average marginal gains estimate Shapley values);
+  (v) patch-free proxies: routing weight, ‖δ_e‖, direct logit attribution of δ_e on W_U[r] − W_U[r′].
+- **A2 Better strategies.** Adaptive greedy (re-rank the remaining candidates given the current set; candidate pool = top 32
+  per case), beam search (width 4), exact optimum within the per-case top-10 pool (all 1,023 subsets) to measure greedy's
+  optimality gap; gradient rankings (attribution patching, AtP*, EAP-IG) once F3 exists (pilot on OLMoE with autograd).
+- **A3 Deletion curves (noising, Z10).** Start from the clean run and swap in corrupt expert outputs in the same orders.
+- **Metrics.** r(k) = (Δ_k − Δ_corrupt) / (Δ_clean − Δ_corrupt) and the gap 1 − r(k); AUC over log k; k for 50 / 80 / 90 % of
+  the ceiling; k at which the answer is restored (Δ_k > 0, natural under STR because the corrupted run prefers r′); k at
+  which r becomes top-1 (secondary).
+- **Cost.** Qwen3 384 clean-active (layer, expert) pairs per directed case, Mixtral 64. Static curves ≈ 1 pass per ordering
+  per model; adaptive greedy ≈ 15 sequential passes; exact top-10 optimum ≈ 5 passes (Qwen3, one direction).
+
+## Execution order, cost, decisions
+
+1. W1 verification (OLMoE) → W2 sweeps (3 protocols, ≈ 5 min each) — answers "MoE or attention" per layer.
+2. Engine: `attn_layer` steps in `multi` + all-layer `multi` check on OLMoE (≈ half a day) → W4 and A0 on WinoGrande and
+   CounterFact (1 pass per model each).
+3. W3 grid (≈ 10 min per protocol), W5 heads (1 pass), W6 experts (≈ 15 min per protocol).
+4. A1–A3 on CounterFact STR, then on WinoGrande (≈ 30–40 min per model incl. adaptive greedy).
+5. W7 role swap, W8 IOI (data builder + W2/W4 runs).
+Total GPU ≈ 3–4 h; agent time several days; file prefix `ext7_wino_*` (WinoGrande) and `ext8_addback_*` (add-back).
+
+Decisions (user, 2026-10-04):
+- (a) STR only: no GN filter, rows or control. Primary pair set = margin both ways.
+- (b) `assoc` pairs kept, reported as a stratum.
+- (c) top-1 in both directions = sensitivity subset only.
+- (d) W7 (role swap) and W8 (IOI) both in scope.
+- (e) **Mixtral = BOS (tokenizer default) for all Phase-3 work**; Mixtral without BOS is a variant that is NOT run now.
+  Phase-3 models: Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS; OLMoE for verification only.
+- (f) Both the add-back study (A0–A3: CounterFact STR first, then WinoGrande) and the WinoGrande study (W1–W8) must be
+  completed; order free.
+- (g) Case set = margin pairs shared by Qwen3, Mixtral BOS and Mixtral no BOS (776; keeps a later no-BOS run on identical
+  items): seed-0 shuffle → 128 / 128 discovery / validation + 128 / 128 replication (`data/wino_str/case_sets.json`, built by
+  `scripts/ext7_wino_casesets.py`); each model's own margin pool (seed-1 sample 128 / 128) as sensitivity.
+
+## Phase 3 execution plan (started 2026-10-04)
+
+Coordinator = the interactive session (relays dependencies, reviews, assembles `EXTENSIONS_REPORT.md`, writes the synthesis
+section `results/sections/ext7_synthesis.md`). Three sub-agents with disjoint files; GPU only through `scripts/gpu_queue.sh`.
+
+| Agent | Owns (files) | Work |
+|---|---|---|
+| `ext8-addback` | `moetrace/engine.py` (additive `multi` step kinds only), `moetrace/ext8_addback.py`, `scripts/ext8_*`, `results/*_addback*`, `results/verify_ext8_*`, section `ext8_addback.md` | E: `attn_layer` / `block` steps in `multi`, noising direction, all-layer check, OLMoE verification (others wait for "ENGINE READY"); A0–A3 on CounterFact STR (Qwen3, Mixtral BOS) incl. the CounterFact W4 decomposition; then A0–A3 on WinoGrande from `ext7-wino`'s all-layer expert rows |
+| `ext7-wino` | `moetrace/ext7_wino.py`, `moetrace/ext7_pairs.py` (generic STR-pair runner), `scripts/ext7_wino_*`, `results/wino_*_str*`, `results/verify_ext7_*`, section `ext7_wino.md` | W1, W2, W3, W5, W6 (all-layer expert rows in the ext6 schema for ext8), W4 after ENGINE READY; strata, replication, own-pool sensitivity |
+| `ext7-controls` | `moetrace/ext7_controls.py`, `scripts/ext7_role_*`, `scripts/ext7_ioi_*`, `scripts/ext7_cf_*`, `data/wino_role/`, `data/ioi/`, `results/wino_role_*`, `results/ioi_*`, `results/*_str_attnsweep`, section `ext7_controls.md` | W7 role-swap pairs + runs; W8 IOI dataset + W2 / W4 / heads; CounterFact STR attention / block sweep (W2 for the three-task comparison) |
+
+Contract between `ext7-wino` and `ext7-controls`: pair parquet with `pair_id`, `ids_a`, `ids_b` (JSON), `str_pos` (JSON: positions
+where A and B differ), `trig_a`, `trig_b`, a case-set JSON in the format of `data/wino_str/case_sets.json`; the `ext7_wino`
+run scripts take `--pairs`, `--case-sets`, `--out`.
+
+**Phase 3 status (2026-10-04 11:30 UTC): COMPLETE.** All three agents delivered (ext8-addback, ext7-wino, ext7-controls);
+sections `ext7_synthesis.md`, `ext7_wino.md`, `ext7_controls.md`, `ext8_addback.md` assembled into `results/EXTENSIONS_REPORT.md`
+(Directions 7-8, 7, 7b, 8). GPU ≈ 3.9 h. Deviations: W4 revised (degenerate joint game); W3 grids for role swap / IOI on 64
+validation pairs; gradient rankings not done (F3). Not committed.

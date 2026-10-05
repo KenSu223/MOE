@@ -1,0 +1,144 @@
+2026-10-04T07:43:14Z START ext8-regress-verify-olmoe (waited 377s): python scripts/verify_olmoe.py
+07:43:27 picked 50 cases; first prompt: 'Virginia State Route 33 is located in' true=Virginia foil=Milan subj_pos=[0, 1, 2, 3, 4]
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:20,  8.61it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:23,  6.99it/s]Loading weights:  15%|█▍        | 26/179 [00:03<00:22,  6.81it/s]Loading weights:  21%|██        | 37/179 [00:05<00:21,  6.72it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:19,  6.63it/s]Loading weights:  33%|███▎      | 59/179 [00:08<00:18,  6.64it/s]Loading weights:  39%|███▉      | 70/179 [00:10<00:16,  6.61it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:14,  6.61it/s]Loading weights:  51%|█████▏    | 92/179 [00:13<00:13,  6.60it/s]Loading weights:  58%|█████▊    | 103/179 [00:15<00:11,  6.59it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.59it/s]Loading weights:  69%|██████▊   | 123/179 [00:17<00:06,  8.73it/s]Loading weights:  71%|███████   | 127/179 [00:18<00:08,  6.44it/s]Loading weights:  76%|███████▌  | 136/179 [00:20<00:07,  6.05it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:05,  6.27it/s]Loading weights:  88%|████████▊ | 158/179 [00:23<00:03,  6.36it/s]Loading weights:  94%|█████████▍| 169/179 [00:25<00:01,  6.44it/s]Loading weights: 100%|██████████| 179/179 [00:25<00:00,  7.00it/s]
+07:44:03 HF forwards done for 50 cases
+07:44:06 HF layer patches done: 50
+07:44:43 HF expert patches done: 221
+07:44:45   layer   0: load-wait 1.29s compute 0.19s  wf_rows=209
+07:44:46   layer   8: load-wait 0.07s compute 0.10s  wf_rows=843
+07:44:47   layer  15: load-wait 0.11s compute 0.03s  wf_rows=1421
+07:44:47   pass done: 100 prefill rows (T=14), 1421 spawn rows, 3.9s
+07:44:48 embed_std_engine: 0.009373849257826805
+07:44:48 embed_std_hf: 0.009373849257826805
+07:44:48 engine_pass_s: 3.984602689743042
+07:44:48 delta_clean_maxdiff_vs_hf: 0.3828125
+07:44:48 delta_noised_maxdiff_vs_hf: 0.61328125
+07:44:48 delta_clean_frac_within_0.1: 0.72
+07:44:48 delta_noised_frac_within_0.1: 0.46
+07:44:48 delta_bmm_vs_fullmatmul_maxdiff: 0.0
+07:44:48 delta_bmm_vs_fullmatmul_frac_equal: 1.0
+07:44:48 top1_agreement_clean: 0.98
+07:44:48 logit_true_clean_maxdiff_vs_hf: 0.28125
+07:44:48 zero_on_noised_maxdiff: 0.40625
+07:44:48 zero_on_clean_maxdiff: 0.125
+07:44:48 layer_patch_vs_hf_n: 50
+07:44:48 layer_patch_vs_hf_maxdiff: 0.578125
+07:44:48 layer_patch_vs_hf_frac_within_0.1: 0.58
+07:44:48 layer_rescue_vs_hf_maxdiff: 0.498046875
+07:44:48 expert_patch_vs_hf_n: 221
+07:44:48 expert_patch_vs_hf_maxdiff: 1.07421875
+07:44:48 expert_patch_vs_hf_frac_within_0.1: 0.334841628959276
+07:44:48 routing_set_agreement: 38/40
+07:44:48 union_vs_layer_maxdiff: 0.0
+07:44:48 union_vs_layer_frac_equal: 1.0
+07:44:48 pass_total_s: 3.934462547302246
+07:44:48 curve: [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]
+2026-10-04T07:44:49Z END   ext8-regress-verify-olmoe rc=0 (95s)
+2026-10-04T07:47:10Z START ext8-regress-ext5-engine (waited 141s): python scripts/ext5_engine_verify.py
+07:47:24 20 cases; first: 'Virginia State Route 33 is located in' -> Virginia / Milan
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:20,  8.72it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:23,  7.04it/s]Loading weights:  15%|█▍        | 26/179 [00:03<00:22,  6.77it/s]Loading weights:  21%|██        | 37/179 [00:05<00:21,  6.68it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:19,  6.63it/s]Loading weights:  33%|███▎      | 59/179 [00:08<00:18,  6.64it/s]Loading weights:  39%|███▉      | 70/179 [00:10<00:16,  6.63it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:14,  6.59it/s]Loading weights:  51%|█████▏    | 92/179 [00:13<00:13,  6.61it/s]Loading weights:  58%|█████▊    | 103/179 [00:15<00:11,  6.60it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.57it/s]Loading weights:  70%|██████▉   | 125/179 [00:18<00:08,  6.57it/s]Loading weights:  76%|███████▌  | 136/179 [00:20<00:06,  6.59it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:04,  6.59it/s]Loading weights:  88%|████████▊ | 158/179 [00:23<00:03,  6.55it/s]Loading weights:  94%|█████████▍| 169/179 [00:25<00:01,  6.60it/s]Loading weights: 100%|██████████| 179/179 [00:25<00:00,  7.00it/s]
+07:48:05 HF: 5/20 cases done
+07:48:15 HF: 10/20 cases done
+07:48:25 HF: 15/20 cases done
+07:48:35 HF: 20/20 cases done
+07:48:35 HF reference done
+07:48:37   layer   0: load-wait 1.41s compute 0.17s  wf_rows=60
+07:48:38   layer   8: load-wait 0.10s compute 0.07s  wf_rows=800
+07:48:39   layer  15: load-wait 0.11s compute 0.03s  wf_rows=1360
+07:48:40   pass done: 40 prefill rows (T=14), 1360 spawn rows, 4.1s (metrics 0.0s)
+07:48:40   layer   0: load-wait 0.15s compute 0.07s  wf_rows=0
+07:48:42   layer   8: load-wait 0.08s compute 0.08s  wf_rows=600
+07:48:43   layer  15: load-wait 0.08s compute 0.03s  wf_rows=1100
+07:48:43   pass done: 40 prefill rows (T=14), 1100 spawn rows, 2.7s
+07:48:43 n_cases: 20
+07:48:43 head_layers: [4, 10]
+07:48:43 multi_pairs: [[4, 10], [2, 8], [6, 12]]
+07:48:43 multi_triple: [4, 8, 12]
+07:48:43 pass1_s: 4.138645172119141
+07:48:43 pass1_metrics_s: 0.024457454681396484
+07:48:43 pass1_spawn_rows: 1360
+07:48:43 delta_clean_maxdiff_vs_hf: 0.4375
+07:48:43 delta_noised_maxdiff_vs_hf: 0.533203125
+07:48:43 metrics: {"logp_true_clean_maxdiff_vs_hf": 0.3344764709472656, "logp_true_noised_maxdiff_vs_hf": 0.5425243377685547, "logp_foil_clean_maxdiff_vs_hf": 0.3266639709472656, "p_true_clean_maxdiff_vs_hf": 0.037630945444107056, "rank_true_clean_agree_frac_vs_hf": 0.6, "rank_true_clean_maxabsdiff_vs_hf": 700, "rank_true_clean_agree_frac_vs_hf_hfrank_le10": 0.9, "rank_true_clean_n_hfrank_le10": 10, "rank_true_clean_maxabsdiff_vs_hf_hfrank_le10": 2, "rank_true_clean_hf_ranks": [11, 9, 48, 14, 50, 1, 23, 3, 114, 6, 1, 11, 14, 1, 1, 1, 1, 11, 3460, 5], "kl_noised_to_clean_maxdiff_vs_hf": 0.5490169525146484, "kl_noised_to_clean_mean_engine": 4.465847015380859, "kl_noised_to_clean_mean_hf": 4.493814945220947, "kl_clean_rows_max": 0.0, "kl_min_all_rows": 0.0, "p_true_plus_p_foil_max": 0.658119797706604, "p_true_plus_p_foil_gt1_count": 0, "delta_vs_logodds_prefill_maxdiff": 9.5367431640625e-07, "delta_vs_logodds_spawn_maxdiff": 1.52587890625e-05, "delta_vs_logodds_spawn_meanabsdiff": 6.731819013339191e-08, "rank1_iff_top1_frac": 0.975, "zero_on_clean_kl_max": 0.008494533598423004, "zero_on_clean_kl_mean": 0.000699081807397306, "zero_on_noised_kl_vs_noised_prefill_maxdiff": 0.11902618408203125, "p_true_clean_mean": 0.10593590885400772, "p_true_noised_mean": 0.005297299474477768}
+07:48:43 attn_head: {"headsum_vs_fp32_linear_maxabs": 5.960464477539063e-08, "headsum_vs_fp32_linear_max_relnorm": 3.3456100823059387e-07, "headsum_vs_attn_layer_vec_maxabs": 0.000388413667678833, "headsum_vs_attn_layer_vec_mean_relnorm": 0.0019554135942598805, "headsum_rescue_vs_attn_layer_rescue": {"n": 40, "maxabs": 3.6591796875, "meanabs": 1.1663291931152344, "frac_equal": 0.0, "frac_within_0.1": 0.05}, "headsum_rescue_vs_attn_layer_rescue_corr": 0.49336613227325365, "headsum_rescue_mean": -0.113988496363163, "attn_layer_rescue_mean": 0.2985290586948395, "attn_head_vs_hf": {"n": 640, "maxabs": 1.001953125, "meanabs": 0.146657133102417, "frac_equal": 0.0546875, "frac_within_0.1": 0.5078125}, "attn_head_vs_hf_frac_within_0.25": 0.79375, "attn_head_rescue_corr_vs_hf": 0.8081397417084277, "attn_head_rescue_mean_engine": -0.007124281022697687, "attn_head_rescue_mean_hf": 0.017781829461455345, "attn_layer_vs_hf_oin_replace": {"n": 40, "maxabs": 0.770751953125, "meanabs": 0.147088623046875, "frac_equal": 0.05, "frac_within_0.1": 0.525}, "identity_attn_head_on_clean": {"n": 80, "maxabs": 0.11328125, "meanabs": 0.03232421875, "frac_equal": 0.225, "frac_within_0.1": 0.95}}
+07:48:43 multi_pass1: {"multi_layer_vs_hf": {"n": 80, "maxabs": 0.7451171875, "meanabs": 0.1189544677734375, "frac_equal": 0.0625, "frac_within_0.1": 0.575}, "multi_layer_vs_hf_frac_within_0.25": 0.9125, "multi_layer_rescue_corr_vs_hf": 0.9916829974913163, "multi_layer_rescue_mean_engine": 0.6008514165878296, "multi_layer_rescue_mean_hf": 0.637683093547821, "multi_pair_rescue_minus_max_single_mean": -0.2716837525367737, "multi_setall_vs_multi_layer_delta": {"n": 60, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi_setall_vs_multi_layer_vec_maxabs": 1.1920928955078125e-07, "multi1_layer_vs_layer_delta": {"n": 20, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_layer_vs_layer_vec_maxabs": 0.0, "multi_step_vnorm_example": [1.129809856414795]}
+07:48:43 pass2_s: 2.693197250366211
+07:48:43 pass2_spawn_rows: 1100
+07:48:43 coalition_set_pass2: {"routing_pass2_equals_pass1_pairs": "31/40", "set_clean_vs_coalition_clean_delta": {"n": 40, "maxabs": 0.5, "meanabs": 0.014453125, "frac_equal": 0.925, "frac_within_0.1": 0.975}, "set_clean_vs_coalition_clean_vec_maxabs": 0.037125587463378906, "set_clean_vs_coalition_clean_vec_frac_exact": 0.925, "set_clean_vs_coalition_clean_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_clean_vs_coalition_clean_matched_routing_vec_maxabs": 0.0, "set_union_vs_coalition_union_delta": {"n": 40, "maxabs": 0.169921875, "meanabs": 0.008349609375, "frac_equal": 0.875, "frac_within_0.1": 0.975}, "set_union_vs_coalition_union_vec_maxabs": 0.010029315948486328, "set_union_vs_coalition_union_vec_frac_exact": 0.05, "set_union_vs_coalition_union_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_union_vs_coalition_union_matched_routing_vec_maxabs": 7.450580596923828e-09, "set_union_vs_layer_delta": {"n": 40, "maxabs": 0.169921875, "meanabs": 0.008349609375, "frac_equal": 0.875, "frac_within_0.1": 0.975}, "set_union_vs_layer_vec_maxabs": 0.010029315948486328, "set_union_vs_layer_vec_frac_exact": 0.0, "set_union_vs_layer_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_union_vs_layer_matched_routing_vec_maxabs": 2.384185791015625e-07, "set_all_vs_layer_delta": {"n": 40, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_all_vs_layer_vec_maxabs": 2.384185791015625e-07, "set_all_vs_layer_vec_frac_exact": 0.0, "set_all_vs_layer_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_all_vs_layer_matched_routing_vec_maxabs": 2.384185791015625e-07, "set_single_vs_expert_delta": {"n": 320, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_single_vs_expert_vec_maxabs": 0.0, "set_single_vs_expert_vec_frac_exact": 1.0, "set_single_vs_expert_matched_routing_delta": {"n": 248, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "set_single_vs_expert_matched_routing_vec_maxabs": 0.0, "multi1_set_clean_vs_coalition_clean_delta": {"n": 40, "maxabs": 0.5, "meanabs": 0.014453125, "frac_equal": 0.925, "frac_within_0.1": 0.975}, "multi1_set_clean_vs_coalition_clean_vec_maxabs": 0.037125587463378906, "multi1_set_clean_vs_coalition_clean_vec_frac_exact": 0.925, "multi1_set_clean_vs_coalition_clean_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_set_clean_vs_coalition_clean_matched_routing_vec_maxabs": 0.0, "multi1_expert_vs_expert_delta": {"n": 40, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_expert_vs_expert_vec_maxabs": 0.0, "multi1_expert_vs_expert_vec_frac_exact": 1.0, "multi1_expert_vs_expert_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_expert_vs_expert_matched_routing_vec_maxabs": 0.0, "multi1_coalition_clean_vs_coalition_clean_delta": {"n": 40, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_coalition_clean_vs_coalition_clean_vec_maxabs": 0.0, "multi1_coalition_clean_vs_coalition_clean_vec_frac_exact": 1.0, "multi1_coalition_clean_vs_coalition_clean_matched_routing_delta": {"n": 31, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "multi1_coalition_clean_vs_coalition_clean_matched_routing_vec_maxabs": 0.0, "m_layer_all_vs_m_layer_layer_delta": {"n": 20, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "m_layer_all_vs_m_layer_layer_vec_maxabs": 3.725290298461914e-09, "m_all_layer_vs_m_layer_layer_delta": {"n": 20, "maxabs": 0.0, "meanabs": 0.0, "frac_equal": 1.0, "frac_within_0.1": 1.0}, "m_all_layer_vs_m_layer_layer_vec_maxabs": 2.384185791015625e-07, "m_layer_setclean_vs_m_layer_layer_delta": {"n": 20, "maxabs": 0.296875, "meanabs": 0.098291015625, "frac_equal": 0.0, "frac_within_0.1": 0.6}, "m_layer_coalclean_vs_m_layer_layer_delta": {"n": 20, "maxabs": 0.296875, "meanabs": 0.086572265625, "frac_equal": 0.15, "frac_within_0.1": 0.65}, "m_layer_setclean_vs_m_layer_coalclean_vec_maxabs": 0.05860710144042969, "m_layer_setclean_vs_m_layer_coalclean_delta": {"n": 20, "maxabs": 0.125, "meanabs": 0.01171875, "frac_equal": 0.85, "frac_within_0.1": 0.95}, "m_layer_setclean_vs_m_layer_coalclean_matched_n": 17, "m_layer_setclean_vs_m_layer_coalclean_matched_vec_maxabs": 0.0, "m_layer_setclean_vs_m_layer_coalclean_matched_delta_maxabs": 0.0}
+07:48:43 delta_prefill_pass1_vs_pass2_maxdiff: 1.125
+2026-10-04T07:48:46Z END   ext8-regress-ext5-engine rc=0 (96s)
+2026-10-04T07:57:20Z START ext8-engine-verify (waited 514s): python scripts/ext8_engine_verify.py --engine main --n-cf 6 --n-wino-pairs 3 --stress 20000
+07:57:34 12 units (6 CounterFact, 6 WinoGrande directed); engine module moetrace.engine
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:04, 39.40it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 72.15it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 80.51it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 81.78it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 79.77it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 79.75it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 79.98it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 81.61it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 82.43it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 81.78it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 80.55it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 79.33it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 78.72it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 77.37it/s]Loading weights:  88%|████████▊ | 158/179 [00:02<00:00, 76.52it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 74.78it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 82.28it/s]
+07:58:18 HF: 4/12 units
+07:58:28 HF: 8/12 units
+07:58:38 HF: 12/12 units
+07:58:38 HF reference done (37s)
+07:58:39   layer   0: load-wait 0.15s compute 0.08s  wf_rows=248
+07:58:40   layer   8: load-wait 0.07s compute 0.09s  wf_rows=744
+07:58:41   layer  15: load-wait 0.07s compute 0.04s  wf_rows=1080
+07:58:41   pass done: 24 prefill rows (T=23), 1080 spawn rows, 2.7s (metrics 0.0s)
+07:58:43   layer   0: load-wait 0.15s compute 0.15s  wf_rows=20000
+07:58:45   layer   8: load-wait 0.07s compute 0.24s  wf_rows=20000
+07:58:47   layer  15: load-wait 0.07s compute 0.31s  wf_rows=20000
+07:58:47   pass done: 24 prefill rows (T=23), 20000 spawn rows, 5.0s
+07:58:50 engine_module: moetrace.engine
+07:58:50 n_units: 12
+07:58:50 hf_s: 36.97289729118347
+07:58:50 pass1_s: 2.7226288318634033
+07:58:50 pass1_spawn_rows: 1080
+07:58:50 routing_agreement_engine_vs_hf_layers: 0.9427083333333334
+07:58:50 delta_clean_maxdiff_vs_hf: 0.265625
+07:58:50 delta_corrupt_maxdiff_vs_hf: 0.125
+07:58:50 mean_delta_clean: 3.6549479961395264
+07:58:50 mean_delta_corrupt: -4.625
+07:58:50 vs_hf_all: {"n": 504, "maxabs": 1.0546875, "meanabs": 0.08505394345238096, "frac_exact": 0.2400793650793651, "frac_within_0.1": 0.75, "frac_within_0.25": 0.9246031746031746}
+07:58:50 vs_hf_all_effect_corr: 0.9993624759850777
+07:58:50 invariants: {"denoise_all_block_minus_source_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_block_minus_source_delta_HF": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_setall_vs_all_layer_delta": {"n": 12, "maxabs": 0.0625, "meanabs": 0.005208333333333333, "frac_exact": 0.9166666666666666, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_setall_vs_all_layer_vec_maxabs": 0.00519561767578125, "denoise_all_block_kl_ref_base_mean": 2.8513448238372803, "denoise_all_block_delta_vs_source_exact_frac": 1.0, "noise_all_block_minus_source_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_block_minus_source_delta_HF": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_setall_vs_all_layer_delta": {"n": 12, "maxabs": 0.0625, "meanabs": 0.005208333333333333, "frac_exact": 0.9166666666666666, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_setall_vs_all_layer_vec_maxabs": 0.00519561767578125, "noise_all_block_kl_ref_base_vs_prefill_kl": {"maxabs": 0.019092321395874023, "mean_spawn": 2.500046491622925, "mean_prefill": 2.497621536254883}, "noise_all_block_delta_vs_source_exact_frac": 1.0, "multi1_vs_single_denoise:single_moe_0_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_0_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_0_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_0_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_5_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_5_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_5_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_5_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_10_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_10_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_10_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_10_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_15_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_15_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_15_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_15_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_1_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_1_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_1_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_1_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_8_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_8_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_8_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_8_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_14_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_14_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_14_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_14_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_block_6_delta_maxabs": 0.0, "multi1_vs_single_noise:single_block_6_delta_maxabs": 0.0, "identity_attn_minus_clean_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "identity_block_minus_clean_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "spawn_vectors_one_per_step_frac": 1.0}
+07:58:50 dla: {"n": 288, "diag_vs_vector_maxabs": 2.5678471748946663e-07, "diag_vs_vector_max_rel": 1.0820019790763764e-05, "corr_dla_vs_rescue": 0.8500114023818346, "mean_dla": -0.005015541412646911, "mean_rescue": 0.018473307291666668}
+07:58:50 pass1_peak_mem_GB: 2.0100574493408203
+07:58:50 stress: {"rows": 20000, "steps_per_row": 16, "pass_s": 5.420346975326538, "peak_mem_GB": 7.109830856323242, "batch_independence_delta": {"n": 200, "maxabs": 0.1875, "meanabs": 0.063828125, "frac_exact": 0.235, "frac_within_0.1": 0.785, "frac_within_0.25": 1.0}, "mean_rescue": 3.1303367614746094}
+07:58:50 vs_hf denoise:attn2: maxabs 0.125 meanabs 0.069 within0.25 1.00 effect r 0.9870118547987924 engine +0.766 hf +0.766
+07:58:50 vs_hf denoise:attn3: maxabs 0.312 meanabs 0.083 within0.25 0.92 effect r 0.9983842658654131 engine +1.326 hf +1.353
+07:58:50 vs_hf denoise:moe_attn: maxabs 0.375 meanabs 0.062 within0.25 0.92 effect r 0.9986226443624303 engine +0.708 hf +0.691
+07:58:50 vs_hf denoise:attn_moe: maxabs 0.625 meanabs 0.097 within0.25 0.92 effect r 0.9854601323607914 engine +0.352 hf +0.274
+07:58:50 vs_hf denoise:block_attn: maxabs 0.219 meanabs 0.072 within0.25 1.00 effect r 0.993338151468851 engine +0.758 hf +0.763
+07:58:50 vs_hf denoise:attn_block: maxabs 0.312 meanabs 0.090 within0.25 0.83 effect r 0.9865096804640306 engine +1.135 hf +1.096
+07:58:50 vs_hf denoise:block3: maxabs 0.375 meanabs 0.105 within0.25 0.92 effect r 0.9980272266432096 engine +3.543 hf +3.608
+07:58:50 vs_hf denoise:attn_coal: maxabs 0.500 meanabs 0.103 within0.25 0.92 effect r 0.9948450136989487 engine +1.943 hf +1.938
+07:58:50 vs_hf denoise:all_moe: maxabs 0.188 meanabs 0.065 within0.25 1.00 effect r 0.9997380620244373 engine +4.761 hf +4.799
+07:58:50 vs_hf denoise:all_attn: maxabs 0.250 meanabs 0.076 within0.25 0.92 effect r 0.9996175804362047 engine +8.280 hf +8.294
+07:58:50 vs_hf denoise:all_block: maxabs 0.266 meanabs 0.078 within0.25 0.92 effect r 0.9995507643289909 engine +8.280 hf +8.292
+07:58:50 vs_hf denoise:coal_all: maxabs 0.438 meanabs 0.075 within0.25 0.92 effect r 0.9980928683656034 engine +1.791 hf +1.779
+07:58:50 vs_hf denoise:coal_sparse: maxabs 0.250 meanabs 0.069 within0.25 0.92 effect r 0.9981478886517456 engine +0.733 hf +0.725
+07:58:50 vs_hf denoise:single_moe_0: maxabs 0.250 meanabs 0.076 within0.25 0.92 effect r 0.661817156532392 engine +0.024 hf +0.040
+07:58:50 vs_hf denoise:single_moe_5: maxabs 0.688 meanabs 0.106 within0.25 0.92 effect r 0.8466470629485077 engine +0.141 hf +0.089
+07:58:50 vs_hf denoise:single_moe_10: maxabs 0.312 meanabs 0.096 within0.25 0.92 effect r 0.9825655599410978 engine +0.441 hf +0.387
+07:58:50 vs_hf denoise:single_moe_15: maxabs 0.188 meanabs 0.067 within0.25 1.00 effect r 0.9994795780519049 engine -0.393 hf -0.382
+07:58:50 vs_hf denoise:single_attn_1: maxabs 0.125 meanabs 0.032 within0.25 1.00 effect r 0.5946772758014782 engine -0.023 hf -0.012
+07:58:50 vs_hf denoise:single_attn_8: maxabs 0.500 meanabs 0.094 within0.25 0.92 effect r 0.9953638616349374 engine +0.695 hf +0.652
+07:58:50 vs_hf denoise:single_attn_14: maxabs 0.125 meanabs 0.059 within0.25 1.00 effect r 0.9799909672272491 engine +0.234 hf +0.223
+07:58:50 vs_hf denoise:single_block_6: maxabs 0.312 meanabs 0.057 within0.25 0.92 effect r 0.996032657286878 engine +0.492 hf +0.460
+07:58:50 vs_hf noise:attn2: maxabs 0.375 meanabs 0.113 within0.25 0.92 effect r 0.9757878900228821 engine -0.618 hf -0.586
+07:58:50 vs_hf noise:attn3: maxabs 0.547 meanabs 0.141 within0.25 0.75 effect r 0.9906155881926545 engine -0.931 hf -0.902
+07:58:50 vs_hf noise:moe_attn: maxabs 0.375 meanabs 0.086 within0.25 0.92 effect r 0.9984836594454201 engine -0.634 hf -0.613
+07:58:50 vs_hf noise:attn_moe: maxabs 0.625 meanabs 0.121 within0.25 0.92 effect r 0.9866445009795213 engine -0.285 hf -0.216
+07:58:50 vs_hf noise:block_attn: maxabs 0.219 meanabs 0.081 within0.25 1.00 effect r 0.9935899652545744 engine -0.650 hf -0.658
+07:58:50 vs_hf noise:attn_block: maxabs 0.312 meanabs 0.090 within0.25 0.83 effect r 0.9938800586131101 engine -0.962 hf -0.938
+07:58:50 vs_hf noise:block3: maxabs 0.375 meanabs 0.128 within0.25 0.83 effect r 0.9987332832439898 engine -2.884 hf -2.923
+07:58:50 vs_hf noise:attn_coal: maxabs 0.188 meanabs 0.066 within0.25 1.00 effect r 0.9989341892553991 engine -1.763 hf -1.783
+07:58:50 vs_hf noise:all_moe: maxabs 0.281 meanabs 0.062 within0.25 0.92 effect r 0.9998049884616173 engine -4.523 hf -4.539
+07:58:50 vs_hf noise:all_attn: maxabs 0.125 meanabs 0.049 within0.25 1.00 effect r 0.9995830925852296 engine -8.280 hf -8.298
+07:58:50 vs_hf noise:all_block: maxabs 0.125 meanabs 0.051 within0.25 1.00 effect r 0.9995507643289909 engine -8.280 hf -8.292
+07:58:50 vs_hf noise:coal_all: maxabs 0.234 meanabs 0.094 within0.25 1.00 effect r 0.9978146946439379 engine -0.874 hf -0.858
+07:58:50 vs_hf noise:coal_sparse: maxabs 0.375 meanabs 0.104 within0.25 0.83 effect r 0.9971751813444536 engine -0.298 hf -0.272
+07:58:50 vs_hf noise:single_moe_0: maxabs 0.258 meanabs 0.100 within0.25 0.83 effect r 0.7331948930150606 engine +0.032 hf +0.026
+07:58:50 vs_hf noise:single_moe_5: maxabs 1.055 meanabs 0.191 within0.25 0.83 effect r 0.8250181745290321 engine +0.153 hf +0.137
+07:58:50 vs_hf noise:single_moe_10: maxabs 0.312 meanabs 0.090 within0.25 0.92 effect r 0.9861532721674937 engine -0.363 hf -0.339
+07:58:50 vs_hf noise:single_moe_15: maxabs 0.281 meanabs 0.091 within0.25 0.92 effect r 0.9993030885079577 engine +0.332 hf +0.324
+07:58:50 vs_hf noise:single_attn_1: maxabs 0.203 meanabs 0.046 within0.25 1.00 effect r 0.9216821202265031 engine -0.030 hf -0.029
+07:58:50 vs_hf noise:single_attn_8: maxabs 0.500 meanabs 0.096 within0.25 0.83 effect r 0.9956778096368483 engine -0.626 hf -0.600
+07:58:50 vs_hf noise:single_attn_14: maxabs 0.219 meanabs 0.081 within0.25 1.00 effect r 0.9774678575794796 engine -0.204 hf -0.191
+07:58:50 vs_hf noise:single_block_6: maxabs 0.312 meanabs 0.061 within0.25 0.92 effect r 0.9951167095171036 engine -0.376 hf -0.336
+2026-10-04T07:58:52Z END   ext8-engine-verify rc=0 (93s)
+EXT8 ENGINE CHAIN DONE

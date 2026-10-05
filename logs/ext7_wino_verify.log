@@ -1,0 +1,62 @@
+2026-10-04T07:36:26Z START ext7-wino-verify3 (waited 425s): python scripts/ext7_wino_verify.py
+07:36:28 40 directed cases from 20 OLMoE margin pairs; first: 'George wanted to use the fireplace to heat the house and not the heater because the fireplace was' -> 'cheaper' / 'George wanted to use the fireplace to heat the house and not the heater because the heater was' -> 'expensive'
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:04, 36.39it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 70.19it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 78.32it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 83.98it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 86.49it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 87.94it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 88.97it/s]Loading weights:  45%|████▌     | 81/179 [00:00<00:01, 91.21it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:00, 90.26it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 88.84it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 90.14it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 90.72it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 91.00it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 90.16it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 86.28it/s]Loading weights:  94%|█████████▍| 169/179 [00:01<00:00, 87.70it/s]Loading weights: 100%|██████████| 179/179 [00:01<00:00, 91.59it/s]
+07:38:40 HF: 8/40 directed cases
+07:39:15 HF: 16/40 directed cases
+07:39:45 HF: 24/40 directed cases
+07:40:16 HF: 32/40 directed cases
+07:40:46 HF: 40/40 directed cases
+07:40:48   layer   0: load-wait 1.23s compute 0.14s  wf_rows=320
+07:40:49   layer   8: load-wait 0.10s compute 0.06s  wf_rows=1920
+07:40:50   layer  15: load-wait 0.09s compute 0.04s  wf_rows=3520
+07:40:50   pass done: 80 prefill rows (T=26), 3520 spawn rows, 3.8s
+07:40:52   layer   0: load-wait 0.16s compute 0.05s  wf_rows=66 wf_tokens=0
+07:40:53   layer   8: load-wait 0.11s compute 0.05s  wf_rows=242 wf_tokens=420
+07:40:54   layer  15: load-wait 0.10s compute 0.03s  wf_rows=352 wf_tokens=672
+07:40:54   pass done: 44 prefill rows (T=25), 352 suffix rows (Smax=3, 672 tokens), 2.7s
+07:40:54   layer   0: load-wait 0.15s compute 0.07s  wf_rows=110 wf_tokens=42
+07:40:56   layer   8: load-wait 0.08s compute 0.09s  wf_rows=836 wf_tokens=1428
+07:40:57   layer  15: load-wait 0.07s compute 0.04s  wf_rows=1452 wf_tokens=2646
+07:40:57   pass done: 44 prefill rows (T=25), 1452 suffix rows (Smax=3, 2772 tokens), 2.6s
+07:40:57 n_pairs: 20
+07:40:57 n_directed: 40
+07:40:57 n_grid_cases: 8
+07:40:57 n_head_cases: 10
+07:40:57 head_layers: [4, 9, 14]
+07:40:57 window_half: 2
+07:40:57 delta_clean_maxdiff_vs_hf: 0.25
+07:40:57 delta_corrupt_maxdiff_vs_hf: 0.25
+07:40:57 mean_delta_clean_hf: 3.295703125
+07:40:57 mean_delta_corrupt_hf: -3.295703125
+07:40:57 antisymmetry_maxdiff: 0.0
+07:40:57 final_layer: {"n": 640, "maxdiff": 0.46875, "meanabsdiff": 0.0709716796875, "frac_within_0.25": 0.9703125, "rescue_corr_vs_hf": 0.9954429707353685, "hf_rescue_sd": 0.976383181778815, "hf_rescue_mean": 0.52646484375, "engine_rescue_mean": 0.542651355266571, "mean_curve_maxdiff": 0.03085937518626447}
+07:40:57 identity_layer_maxdiff: 0.21875
+07:40:57 final_attn_layer: {"n": 640, "maxdiff": 0.53125, "meanabsdiff": 0.0692626953125, "frac_within_0.25": 0.9703125, "rescue_corr_vs_hf": 0.9891670594862187, "hf_rescue_sd": 0.5832019149246489, "hf_rescue_mean": 0.3982421875, "engine_rescue_mean": 0.40876466035842896, "mean_curve_maxdiff": 0.05742187143769106}
+07:40:57 identity_attn_layer_maxdiff: 0.21875
+07:40:57 final_block: {"n": 640, "maxdiff": 0.375, "meanabsdiff": 0.068310546875, "frac_within_0.25": 0.9671875, "rescue_corr_vs_hf": 0.9970583468666325, "hf_rescue_sd": 1.227344305328496, "hf_rescue_mean": 0.8677490234375, "engine_rescue_mean": 0.882153332233429, "mean_curve_maxdiff": 0.034374996973201455}
+07:40:57 identity_block_maxdiff: 0.21875
+07:40:57 final_resid: {"n": 640, "maxdiff": 0.4375, "meanabsdiff": 0.069921875, "frac_within_0.25": 0.959375, "rescue_corr_vs_hf": 0.9994394633748438, "hf_rescue_sd": 3.1786694497303056, "hf_rescue_mean": 2.8602294921875, "engine_rescue_mean": 2.8926024436950684, "mean_curve_maxdiff": 0.061328107118605146}
+07:40:57 identity_resid_maxdiff: 0.21875
+07:40:57 final_attn_head: {'n': 480, 'maxdiff': 0.28125, 'meanabsdiff': 0.0630859375, 'frac_within_0.25': 0.98125, 'rescue_corr_vs_hf': 0.9049392623700604, 'hf_rescue_sd': 0.14844640872389211, 'hf_rescue_mean': 0.01796875, 'engine_rescue_mean': 0.02805989608168602}
+07:40:57 engine_final_pass_s: 3.8237550258636475
+07:40:57 grid_prefill_two_pass_maxdiff: 0.15625
+07:40:57 grid_units: 22
+07:40:57 grid_positions_by_category: {'last STR token': 8, 'last token': 8, 'first subsequent token': 6}
+07:40:57 grid_layer: {'n': 352, 'maxdiff': 0.34375, 'meanabsdiff': 0.06263316761363637, 'frac_within_0.25': 0.9914772727272727, 'rescue_corr_vs_hf': 0.9929617727219804, 'hf_rescue_sd': 0.5500568948003034, 'hf_rescue_mean': 0.22105823863636365, 'engine_rescue_mean': 0.24906782805919647}
+07:40:57 grid_layer_nonfinal: {'n': 224, 'maxdiff': 0.28125, 'meanabsdiff': 0.06291852678571429, 'frac_within_0.25': 0.9910714285714286, 'rescue_corr_vs_hf': 0.9697684876414732, 'hf_rescue_sd': 0.25679103458501, 'hf_rescue_mean': 0.08147321428571429, 'engine_rescue_mean': 0.1043526753783226}
+07:40:57 grid_attn_layer: {'n': 352, 'maxdiff': 0.375, 'meanabsdiff': 0.06489701704545454, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.9920830636423332, 'hf_rescue_sd': 0.5213120625373623, 'hf_rescue_mean': 0.21604225852272727, 'engine_rescue_mean': 0.24471768736839294}
+07:40:57 grid_attn_layer_nonfinal: {'n': 224, 'maxdiff': 0.375, 'meanabsdiff': 0.0673828125, 'frac_within_0.25': 0.9866071428571429, 'rescue_corr_vs_hf': 0.9908841751925481, 'hf_rescue_sd': 0.505358553195547, 'hf_rescue_mean': 0.14494977678571427, 'engine_rescue_mean': 0.1735491007566452}
+07:40:57 grid_block: {'n': 352, 'maxdiff': 0.25, 'meanabsdiff': 0.06116832386363636, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.996030603892815, 'hf_rescue_sd': 0.7980487038576245, 'hf_rescue_mean': 0.4493075284090909, 'engine_rescue_mean': 0.48117896914482117}
+07:40:57 grid_block_nonfinal: {'n': 224, 'maxdiff': 0.25, 'meanabsdiff': 0.061732700892857144, 'frac_within_0.25': 0.9910714285714286, 'rescue_corr_vs_hf': 0.9937475582091092, 'hf_rescue_sd': 0.5937434440931029, 'hf_rescue_mean': 0.25279017857142855, 'engine_rescue_mean': 0.28173828125}
+07:40:57 grid_resid: {'n': 352, 'maxdiff': 0.34375, 'meanabsdiff': 0.05965909090909091, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.9995483262682398, 'hf_rescue_sd': 2.5129843675707075, 'hf_rescue_mean': 2.108487215909091, 'engine_rescue_mean': 2.145951747894287}
+07:40:57 grid_resid_nonfinal: {'n': 224, 'maxdiff': 0.3125, 'meanabsdiff': 0.05552455357142857, 'frac_within_0.25': 0.9955357142857143, 'rescue_corr_vs_hf': 0.9995937569315759, 'hf_rescue_sd': 2.367047949959585, 'hf_rescue_mean': 1.7113560267857142, 'engine_rescue_mean': 1.7412109375}
+07:40:57 grid_w5_layer: {'n': 352, 'maxdiff': 0.65625, 'meanabsdiff': 0.08074396306818182, 'frac_within_0.25': 0.9375, 'rescue_corr_vs_hf': 0.9980280070556866, 'hf_rescue_sd': 1.767375184344629, 'hf_rescue_mean': 1.4275124289772727, 'engine_rescue_mean': 1.452592372894287}
+07:40:57 grid_w5_p_true_maxdiff: 0.025522902607917786
+07:40:57 grid_zero_null_maxdiff: 0.15625
+07:40:57 grid_identity_resid_maxdiff: 0.0
+07:40:57 engine_grid_pass_s: 5.25339674949646
+07:40:57 min_rescue_corr: 0.9049392623700604
+07:40:57 max_meanabsdiff: 0.08074396306818182
+07:40:57 min_frac_within_0.25: 0.9375
+07:40:57 pass: False
+2026-10-04T07:40:59Z END   ext7-wino-verify3 rc=0 (273s)

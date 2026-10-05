@@ -1,0 +1,34 @@
+{
+ "grid_w1": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer"
+  ],
+  "window": 1,
+  "n_cases": 128,
+  "n_units": 560,
+  "n_suffix_rows": 53760,
+  "n_passes": 4,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "positions": "mention1, mention2 (exchanged first mentions), filled (option at the blank), final",
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_role_grid.py --model qwen3 --pairs data/wino_role/pairs_qwen3.parquet --case-sets data/wino_role/case_sets_qwen3_grid.json --out wino_role_qwen3_grid --kinds layer,attn_layer",
+  "executor": "moetrace.ext5_subject.SubjectEngine.run_subject (as scripts/ext7_wino_grid.py, verified by ext7-wino)",
+  "created_utc": "2026-10-04T10:40:05Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T10:43:20Z",
+  "pass_times_s": [
+   54.67975330352783,
+   44.42620873451233,
+   43.81754732131958,
+   47.92553520202637
+  ],
+  "n_rows": 53760
+ }
+}

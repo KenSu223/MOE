@@ -1,0 +1,49 @@
+2026-10-04T07:19:47Z [chain1] START ext7-wino-sweep-qwen3
+2026-10-04T07:28:59Z START ext7-wino-sweep-qwen3 (waited 552s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --own-pool qwen3 --max-rows 60000
+07:29:00 qwen3 -> wino_qwen3_str: 1384 directed cases (692 pairs), families {'main': {'discovery': 256, 'validation': 256}, 'rep': {'discovery': 256, 'validation': 256}, 'own': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 4 passes (199296 spawn rows), T max 31
+07:29:03 pass 1/4: layers 0..13, 2768 prefill rows, 58128 spawn rows
+07:29:07   layer   0: load-wait 3.26s compute 0.80s  wf_rows=4152
+07:29:16   layer   8: load-wait 0.61s compute 0.66s  wf_rows=37368
+07:29:26   layer  16: load-wait 0.46s compute 0.85s  wf_rows=58128
+07:29:39   layer  24: load-wait 0.62s compute 0.85s  wf_rows=58128
+07:29:48   layer  32: load-wait 0.40s compute 0.85s  wf_rows=58128
+07:29:58   layer  40: load-wait 0.40s compute 0.85s  wf_rows=58128
+07:30:07   layer  47: load-wait 0.40s compute 0.84s  wf_rows=58128
+07:30:09   pass done: 2768 prefill rows (T=31), 58128 spawn rows, 66.2s (metrics 2.3s)
+07:30:10 pass 2/4: layers 14..27, 2768 prefill rows, 58128 spawn rows
+07:31:07 pass 3/4: layers 28..41, 2768 prefill rows, 58128 spawn rows
+07:32:00 pass 4/4: layers 42..47, 2768 prefill rows, 24912 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:133: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:32:47 family main: layer disc L41; attn_layer disc L38; block disc L41
+07:32:47 family rep: layer disc L41; attn_layer disc L42; block disc L41
+07:32:47 family own: layer disc L41; attn_layer disc L38; block disc L41
+07:32:47 Δclean +4.04 Δcorrupt -4.05 drop +8.09; {"layer_discovery_argmax": 41, "layer_discovery_max": 1.754, "layer_discovery_top5": [[41, 1.754], [43, 1.373], [39, 1.254], [44, 0.798], [42, 0.733]], "layer_validation_argmax": 41, "layer_validation_max": 1.778, "layer_validation_top5": [[41, 1.778], [43, 1.375], [39, 1.316], [38, 0.739], [42, 0.679]], "attn_layer_discovery_argmax": 38, "attn_layer_discovery_max": 0.325, "attn_layer_discovery_top5": [[38, 0.325], [42, 0.286], [40, 0.24], [39, 0.218], [41, 0.189]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.242, "attn_layer_validation_top5": [[42, 0.242], [43, 0.188], 
+2026-10-04T07:32:54Z END   ext7-wino-sweep-qwen3 rc=0 (235s)
+2026-10-04T07:32:54Z [chain1] END ext7-wino-sweep-qwen3 rc=0
+2026-10-04T07:32:54Z [chain1] START ext7-wino-sweep-mixtral_bos
+2026-10-04T07:40:59Z START ext7-wino-sweep-mixtral_bos (waited 485s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --own-pool mixtral_bos --max-rows 50000
+07:41:00 mixtral -> wino_mixtral_bos_str: 1316 directed cases (658 pairs), families {'main': {'discovery': 256, 'validation': 256}, 'rep': {'discovery': 256, 'validation': 256}, 'own': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 3 passes (126336 spawn rows), T max 35
+07:41:01 pass 1/3: layers 0..11, 2632 prefill rows, 47376 spawn rows
+07:41:12   layer   0: load-wait 7.86s compute 2.19s  wf_rows=3948
+[W1004 07:41:24.949093090 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2415919104 bytes (free: 41353216, total: 23686938624).
+07:41:35   layer   8: load-wait 1.05s compute 1.92s  wf_rows=35532
+[W1004 07:41:36.505456500 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2415919104 bytes (free: 150405120, total: 23686938624).
+[W1004 07:41:36.806366995 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2415919104 bytes (free: 2029453312, total: 23686938624).
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext7_wino_sweep.py", line 148, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext7_wino_sweep.py", line 85, in main
+    res = eng.run(pre, spawns, record_routing=(ci == 0), log=log if ci == 0 else None, metrics=metrics)
+  File "/home/ubuntu/MOE/.venv/lib/python3.14/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ubuntu/MOE/moetrace/engine.py", line 720, in run
+    ow = attn_wavefront(qw, kw, vw, k_att, v_att, wf_parent[:n_wf], pos, scale, chunk=wf_chunk,
+                        sink_valid=has_sink_t if use_sink else None)
+  File "/home/ubuntu/MOE/moetrace/engine.py", line 195, in attn_wavefront
+    scores = torch.matmul(qg, kk[:, :, None].transpose(-1, -2)) * scale  # [w, nkv, rep, 1, T(+1)+1]
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.25 GiB. GPU 0 has a total capacity of 22.06 GiB of which 1.89 GiB is free. Including non-PyTorch memory, this process has 20.15 GiB memory in use. Of the allocated memory 13.24 GiB is allocated by PyTorch, and 6.61 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+2026-10-04T07:41:43Z END   ext7-wino-sweep-mixtral_bos rc=1 (44s)
+2026-10-04T07:41:43Z [chain1] END ext7-wino-sweep-mixtral_bos rc=1

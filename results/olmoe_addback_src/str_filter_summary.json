@@ -1,0 +1,216 @@
+{
+ "n_cases": 218,
+ "n_candidates": 3189,
+ "cases_with_candidate": 189,
+ "cases_with_qualifying": 186,
+ "cases_kept": 186,
+ "kept_discovery": 97,
+ "kept_validation": 89,
+ "qualify_rate": 0.8689244277202884,
+ "donor_top1_is_foil_rate": 0.27500783944810286,
+ "donor_top1_is_foil_rate_selected": 0.26285714285714284,
+ "n_selected": 350,
+ "selected_per_case": {
+  "1": 22,
+  "2": 164
+ },
+ "delta_donor_selected_mean": -5.872256382533482,
+ "delta_donor_all_median": -4.875,
+ "delta_clean_mean_kept": 5.016856203797043,
+ "delta_clean_lt1_kept": 22,
+ "top1_clean_is_true_kept": 56,
+ "dropped_no_candidate": [
+  3799,
+  6506,
+  7805,
+  18926,
+  9859,
+  6615,
+  21412,
+  12046,
+  11630,
+  18365,
+  4988,
+  4233,
+  2900,
+  12619,
+  8298,
+  21830,
+  3703,
+  7484,
+  11111,
+  934,
+  536,
+  21618,
+  11405,
+  9544,
+  9828,
+  21036,
+  4176,
+  14427,
+  16381
+ ],
+ "dropped_no_qualifying": [
+  3774,
+  14059,
+  14584
+ ],
+ "pass_times_s": [
+  6.238762378692627,
+  2.629955291748047
+ ],
+ "rejected_tokenizer": [
+  {
+   "case_id": 4868,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 17226,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 6992,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 9128,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 16988,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 6239,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 17020,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 14910,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 15773,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 17562,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 12644,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 4730,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 13254,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 4138,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 7937,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 11450,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 17390,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 5524,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 21698,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 11885,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 15209,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 11327,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 8209,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 633,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 20189,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 12106,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 8143,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 7420,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 5091,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 7255,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 7178,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 9983,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 11552,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 19277,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 3680,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 5451,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 7037,
+   "reason": "multi_token"
+  },
+  {
+   "case_id": 21305,
+   "reason": "multi_token"
+  }
+ ]
+}

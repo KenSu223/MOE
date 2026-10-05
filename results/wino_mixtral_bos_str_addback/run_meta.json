@@ -1,0 +1,202 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "task": "wino",
+ "src_run": "wino_mixtral_bos_str",
+ "special_tokens": true,
+ "pool": 64,
+ "beam_cases": 64,
+ "shap_cases": 128,
+ "exact_cases": 128,
+ "noise_cases": 128,
+ "budget": 50000,
+ "greedy_stop": 0.0,
+ "n_cases": 512,
+ "n_rows": 512,
+ "init": {
+  "val_rows": 256,
+  "first_val_rows": 256,
+  "beam_rows": 64,
+  "shap_rows": 128,
+  "exact_rows": 128,
+  "noise_rows": 128,
+  "pool": 64,
+  "queue_groups": 5250,
+  "queue_items": 242688
+ },
+ "command": "python scripts/ext8_addback_run.py mixtral --task wino --src-run wino_mixtral_bos_str --out wino_mixtral_bos_str_addback --max-passes 5 --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --pool 64 --shap-cases 128 --exact-cases 128 --noise-cases 128 --beam-cases 64 --budget 50000",
+ "created_utc": "2026-10-04T10:15:16Z",
+ "complete": true,
+ "passes": 14,
+ "pass_notes": [
+  {
+   "val_rows": 256,
+   "first_val_rows": 256,
+   "beam_rows": 64,
+   "shap_rows": 128,
+   "exact_rows": 128,
+   "noise_rows": 128,
+   "pool": 64,
+   "queue_groups": 5250,
+   "queue_items": 242688
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 150
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 49999,
+   "adaptive": 32384,
+   "static_groups": 1345,
+   "pass_s": 81.94285559654236,
+   "peak_GB": 12.954747200012207,
+   "greedy_left": 256,
+   "beam_left": 64,
+   "queue": "1345/5762"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 49987,
+   "adaptive": 31447,
+   "static_groups": 1236,
+   "pass_s": 82.79946851730347,
+   "peak_GB": 13.124442100524902,
+   "greedy_left": 256,
+   "beam_left": 64,
+   "queue": "2581/5762"
+  },
+  {
+   "pass": 2,
+   "spawn_rows": 49987,
+   "adaptive": 30933,
+   "static_groups": 820,
+   "pass_s": 83.93486905097961,
+   "peak_GB": 13.148168087005615,
+   "greedy_left": 256,
+   "beam_left": 64,
+   "queue": "3401/5890"
+  },
+  {
+   "pass": 3,
+   "spawn_rows": 49706,
+   "adaptive": 30422,
+   "static_groups": 1084,
+   "pass_s": 80.8399589061737,
+   "peak_GB": 13.588462352752686,
+   "greedy_left": 256,
+   "beam_left": 64,
+   "queue": "4485/5890"
+  },
+  {
+   "pass": 4,
+   "spawn_rows": 49367,
+   "adaptive": 29930,
+   "static_groups": 19,
+   "pass_s": 79.0882179737091,
+   "peak_GB": 13.476062297821045,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "4504/5890"
+  },
+  {
+   "pass": 5,
+   "spawn_rows": 49630,
+   "adaptive": 14848,
+   "static_groups": 34,
+   "pass_s": 99.41643166542053,
+   "peak_GB": 13.368460655212402,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "4538/5890"
+  },
+  {
+   "pass": 6,
+   "spawn_rows": 49374,
+   "adaptive": 14592,
+   "static_groups": 34,
+   "pass_s": 85.49320960044861,
+   "peak_GB": 13.405465602874756,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "4572/5890"
+  },
+  {
+   "pass": 7,
+   "spawn_rows": 49118,
+   "adaptive": 14336,
+   "static_groups": 34,
+   "pass_s": 79.14541006088257,
+   "peak_GB": 13.302117824554443,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "4606/5890"
+  },
+  {
+   "pass": 8,
+   "spawn_rows": 49987,
+   "adaptive": 14080,
+   "static_groups": 509,
+   "pass_s": 80.43960618972778,
+   "peak_GB": 13.674819469451904,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "5115/5890"
+  },
+  {
+   "pass": 9,
+   "spawn_rows": 31929,
+   "adaptive": 13824,
+   "static_groups": 775,
+   "pass_s": 86.38304376602173,
+   "peak_GB": 12.06532907485962,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "5890/5890"
+  },
+  {
+   "pass": 10,
+   "spawn_rows": 13568,
+   "adaptive": 13568,
+   "static_groups": 0,
+   "pass_s": 80.34874725341797,
+   "peak_GB": 10.600407600402832,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "5890/5890"
+  },
+  {
+   "pass": 11,
+   "spawn_rows": 13312,
+   "adaptive": 13312,
+   "static_groups": 0,
+   "pass_s": 70.35906076431274,
+   "peak_GB": 10.575982093811035,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "5890/5890"
+  },
+  {
+   "pass": 12,
+   "spawn_rows": 13056,
+   "adaptive": 13056,
+   "static_groups": 0,
+   "pass_s": 70.59161686897278,
+   "peak_GB": 10.55256986618042,
+   "greedy_left": 256,
+   "beam_left": 0,
+   "queue": "5890/5890"
+  },
+  {
+   "pass": 13,
+   "spawn_rows": 12800,
+   "adaptive": 12800,
+   "static_groups": 0,
+   "pass_s": 74.41524958610535,
+   "peak_GB": 10.532204151153564,
+   "greedy_left": 0,
+   "beam_left": 0,
+   "queue": "5890/5890"
+  }
+ ],
+ "completed_utc": "2026-10-04T11:01:19Z"
+}

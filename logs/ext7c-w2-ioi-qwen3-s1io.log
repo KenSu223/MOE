@@ -1,0 +1,18 @@
+2026-10-04T08:31:16Z START ext7c-w2-ioi-qwen3-s1io (waited 557s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/ioi/pairs_s1io_qwen3.parquet --case-sets data/ioi/case_sets_s1io.json --out ioi_qwen3_s1io --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --agent ext7-controls
+08:31:16 qwen3 -> ioi_qwen3_s1io: 512 directed cases (512 pairs), families {'main': {'discovery': 128, 'validation': 128}, 'rep': {'discovery': 128, 'validation': 128}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 2 passes (73728 spawn rows), T max 20
+08:31:23 pass 1/2: layers 0..38, 1024 prefill rows, 59904 spawn rows
+08:31:28   layer   0: load-wait 3.67s compute 0.75s  wf_rows=1536
+08:31:37   layer   8: load-wait 1.01s compute 0.18s  wf_rows=13824
+08:31:46   layer  16: load-wait 0.92s compute 0.26s  wf_rows=26112
+08:31:56   layer  24: load-wait 0.85s compute 0.34s  wf_rows=38400
+08:32:05   layer  32: load-wait 0.41s compute 0.41s  wf_rows=50688
+08:32:15   layer  40: load-wait 0.74s compute 0.47s  wf_rows=59904
+08:32:23   layer  47: load-wait 0.44s compute 0.47s  wf_rows=59904
+08:32:26   pass done: 1024 prefill rows (T=20), 59904 spawn rows, 62.1s (metrics 2.3s)
+08:32:27 pass 2/2: layers 39..47, 1024 prefill rows, 13824 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+08:33:16 family main: layer disc L41; attn_layer disc L45; block disc L45
+08:33:16 family rep: layer disc L37; attn_layer disc L45; block disc L45
+08:33:16 Δclean +6.29 Δcorrupt -1.62 drop +7.91; {"layer_discovery_argmax": 41, "layer_discovery_max": 0.185, "layer_discovery_top5": [[41, 0.185], [37, 0.182], [38, 0.151], [39, 0.091], [43, 0.073]], "layer_validation_argmax": 37, "layer_validation_max": 0.226, "layer_validation_top5": [[37, 0.226], [41, 0.207], [38, 0.18], [40, 0.085], [39, 0.075]], "attn_layer_discovery_argmax": 45, "attn_layer_discovery_max": 4.789, "attn_layer_discovery_top5": [[45, 4.789], [42, 1.613], [43, 1.062], [40, 0.263], [35, 0.256]], "attn_layer_validation_argmax": 45, "attn_layer_validation_max": 4.771, "attn_layer_validation_top5": [[45, 4.771], [42, 1.545], 
+2026-10-04T08:33:24Z END   ext7c-w2-ioi-qwen3-s1io rc=0 (128s)

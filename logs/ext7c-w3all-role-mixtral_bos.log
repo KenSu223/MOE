@@ -1,0 +1,15 @@
+10:50:22 mixtral -> wino_role_mixtral_bos_grid: kinds ['layer', 'attn_layer'], 128 directed cases, 674 units, 43136 suffix rows, 4 passes; units per class {'filled': 182, 'mention2': 182, 'mention1': 182, 'final': 128}
+10:50:22 pass 1/4: 356 units (S 1..8), 712 prefill rows, 22784 suffix rows
+10:50:29   layer   0: load-wait 6.01s compute 0.84s  wf_rows=712 wf_tokens=1144
+10:50:49   layer   8: load-wait 1.45s compute 0.65s  wf_rows=6408 wf_tokens=19448
+10:51:06   layer  16: load-wait 1.32s compute 1.00s  wf_rows=12104 wf_tokens=37752
+10:51:24   layer  24: load-wait 0.74s compute 1.35s  wf_rows=17800 wf_tokens=56056
+10:51:43   layer  31: load-wait 1.40s compute 1.65s  wf_rows=22784 wf_tokens=72072
+10:51:43   pass done: 712 prefill rows (T=28), 22784 suffix rows (Smax=8, 73216 tokens), 80.8s
+10:51:44 pass 1: 80.8s; 22784 rows saved
+10:51:44 pass 2/4: 183 units (S 9..17), 366 prefill rows, 11712 suffix rows
+10:53:15 pass 2: 90.6s; 34496 rows saved
+10:53:16 pass 3/4: 120 units (S 17..26), 240 prefill rows, 7680 suffix rows
+10:54:39 pass 3: 82.4s; 42176 rows saved
+10:54:39 pass 4/4: 15 units (S 26..27), 30 prefill rows, 960 suffix rows
+10:56:00 pass 4: 80.5s; 43136 rows saved

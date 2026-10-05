@@ -1,0 +1,198 @@
+{
+ "model": "olmoe",
+ "repo": "allenai/OLMoE-1B-7B-0125",
+ "task": "cf",
+ "src_run": "olmoe_addback_src",
+ "special_tokens": true,
+ "pool": 32,
+ "beam_cases": 0,
+ "shap_cases": 0,
+ "exact_cases": 0,
+ "budget": 30000,
+ "n_cases": 186,
+ "n_rows": 350,
+ "init": {
+  "val_rows": 167,
+  "first_val_rows": 89,
+  "beam_rows": 89,
+  "shap_rows": 89,
+  "exact_rows": 89,
+  "pool": 32,
+  "queue_groups": 3480,
+  "queue_items": 205373
+ },
+ "command": "python scripts/ext8_addback_run.py olmoe --task cf --src-run olmoe_addback_src --out olmoe_addback_smoke --pool 32 --budget 30000 --engine main",
+ "created_utc": "2026-10-04T08:16:27Z",
+ "complete": true,
+ "completed_utc": "2026-10-04T08:17:51Z",
+ "passes": 14,
+ "pass_notes": [
+  {
+   "val_rows": 167,
+   "first_val_rows": 89,
+   "beam_rows": 89,
+   "shap_rows": 89,
+   "exact_rows": 89,
+   "pool": 32,
+   "queue_groups": 3480,
+   "queue_items": 205373
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 265
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 29987,
+   "adaptive": 16202,
+   "static_groups": 955,
+   "pass_s": 6.254042863845825,
+   "peak_GB": 6.034616470336914,
+   "greedy_left": 121,
+   "beam_left": 89,
+   "queue": "955/3814"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 29986,
+   "adaptive": 13819,
+   "static_groups": 951,
+   "pass_s": 4.766072511672974,
+   "peak_GB": 6.40785026550293,
+   "greedy_left": 102,
+   "beam_left": 89,
+   "queue": "1906/3814"
+  },
+  {
+   "pass": 2,
+   "spawn_rows": 29986,
+   "adaptive": 12837,
+   "static_groups": 410,
+   "pass_s": 4.363245487213135,
+   "peak_GB": 6.0641584396362305,
+   "greedy_left": 89,
+   "beam_left": 89,
+   "queue": "2316/3903"
+  },
+  {
+   "pass": 3,
+   "spawn_rows": 29899,
+   "adaptive": 12028,
+   "static_groups": 637,
+   "pass_s": 4.770959854125977,
+   "peak_GB": 6.587488651275635,
+   "greedy_left": 80,
+   "beam_left": 89,
+   "queue": "2953/3903"
+  },
+  {
+   "pass": 4,
+   "spawn_rows": 29777,
+   "adaptive": 11363,
+   "static_groups": 18,
+   "pass_s": 4.671758413314819,
+   "peak_GB": 6.5182881355285645,
+   "greedy_left": 72,
+   "beam_left": 0,
+   "queue": "2971/3903"
+  },
+  {
+   "pass": 5,
+   "spawn_rows": 29493,
+   "adaptive": 1872,
+   "static_groups": 27,
+   "pass_s": 4.509680509567261,
+   "peak_GB": 6.390354156494141,
+   "greedy_left": 68,
+   "beam_left": 0,
+   "queue": "2998/3903"
+  },
+  {
+   "pass": 6,
+   "spawn_rows": 29321,
+   "adaptive": 1700,
+   "static_groups": 27,
+   "pass_s": 4.4187095165252686,
+   "peak_GB": 6.3540143966674805,
+   "greedy_left": 63,
+   "beam_left": 0,
+   "queue": "3025/3903"
+  },
+  {
+   "pass": 7,
+   "spawn_rows": 29903,
+   "adaptive": 1512,
+   "static_groups": 153,
+   "pass_s": 6.088824272155762,
+   "peak_GB": 6.7168073654174805,
+   "greedy_left": 56,
+   "beam_left": 0,
+   "queue": "3178/3903"
+  },
+  {
+   "pass": 8,
+   "spawn_rows": 29990,
+   "adaptive": 1288,
+   "static_groups": 226,
+   "pass_s": 7.192787170410156,
+   "peak_GB": 6.929378509521484,
+   "greedy_left": 52,
+   "beam_left": 0,
+   "queue": "3404/3903"
+  },
+  {
+   "pass": 9,
+   "spawn_rows": 17987,
+   "adaptive": 1144,
+   "static_groups": 499,
+   "pass_s": 4.65122389793396,
+   "peak_GB": 5.760424613952637,
+   "greedy_left": 49,
+   "beam_left": 0,
+   "queue": "3903/3903"
+  },
+  {
+   "pass": 10,
+   "spawn_rows": 1029,
+   "adaptive": 1029,
+   "static_groups": 0,
+   "pass_s": 2.9121665954589844,
+   "peak_GB": 2.223886489868164,
+   "greedy_left": 47,
+   "beam_left": 0,
+   "queue": "3903/3903"
+  },
+  {
+   "pass": 11,
+   "spawn_rows": 940,
+   "adaptive": 940,
+   "static_groups": 0,
+   "pass_s": 2.6791157722473145,
+   "peak_GB": 2.2170915603637695,
+   "greedy_left": 47,
+   "beam_left": 0,
+   "queue": "3903/3903"
+  },
+  {
+   "pass": 12,
+   "spawn_rows": 893,
+   "adaptive": 893,
+   "static_groups": 0,
+   "pass_s": 2.6435866355895996,
+   "peak_GB": 2.211073398590088,
+   "greedy_left": 44,
+   "beam_left": 0,
+   "queue": "3903/3903"
+  },
+  {
+   "pass": 13,
+   "spawn_rows": 792,
+   "adaptive": 792,
+   "static_groups": 0,
+   "pass_s": 2.620478868484497,
+   "peak_GB": 2.204070568084717,
+   "greedy_left": 0,
+   "beam_left": 0,
+   "queue": "3903/3903"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "grid_w1": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer"
+  ],
+  "window": 1,
+  "n_cases": 128,
+  "n_units": 630,
+  "n_suffix_rows": 40320,
+  "n_passes": 2,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "positions": "S1 and IO (when at or after the first STR position), S2, every position after S2, final",
+  "agent": "ext7-controls",
+  "command": "python scripts/ext7_ioi_grid.py --model mixtral --pairs data/ioi/pairs_s2io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s2io_grid.json --out ioi_mixtral_bos_s2io_grid --kinds layer,attn_layer",
+  "executor": "moetrace.ext5_subject.SubjectEngine.run_subject (as scripts/ext7_wino_grid.py, verified by ext7-wino)",
+  "created_utc": "2026-10-04T10:43:35Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T10:46:53Z",
+  "pass_times_s": [
+   100.79704236984253,
+   92.21339225769043
+  ],
+  "n_rows": 40320
+ }
+}

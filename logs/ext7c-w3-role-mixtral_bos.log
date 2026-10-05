@@ -1,0 +1,3 @@
+2026-10-04T11:14:11Z START ext7c-w3-role-mixtral_bos (waited 0s): python scripts/ext7_role_grid.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos_grid.json --out wino_role_mixtral_bos_grid --kinds layer,attn_layer
+11:14:13 wino_role_mixtral_bos_grid: grid_w1 already complete (run_meta.json), nothing to do (use --force to recompute)
+2026-10-04T11:14:13Z END   ext7c-w3-role-mixtral_bos rc=0 (2s)

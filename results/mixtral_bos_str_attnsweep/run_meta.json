@@ -1,0 +1,32 @@
+{
+ "attnsweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "special_tokens": true,
+  "str_run": "mixtral_bos_str",
+  "kinds": [
+   "attn_layer",
+   "layer",
+   "block"
+  ],
+  "layer_chunks": 3,
+  "n_cases": 213,
+  "n_donor_rows": 858,
+  "case_sets": "paper discovery/validation of the STR run (cases with >= 1 selected donor)",
+  "experiment": "ext7-controls task 1: CounterFact STR attention / MoE / block sweep at the final position",
+  "command": "python scripts/ext7_cf_attnsweep.py mixtral --str-run mixtral_bos_str --out mixtral_bos_str_attnsweep --layer-chunks 3",
+  "created_utc": "2026-10-04T07:16:48Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:21:34Z",
+  "pass_times_s": [
+   98.6942150592804,
+   92.43288064002991,
+   82.0424485206604
+  ],
+  "n_rows": 85155,
+  "outputs": [
+   "str_attn_rows.parquet",
+   "str_attn_summary.json"
+  ]
+ }
+}

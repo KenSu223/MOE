@@ -1,0 +1,18 @@
+{
+ "scan": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "split": "dev",
+  "n_pairs": 68,
+  "sigma_mult": 3.0,
+  "margin": 1.0,
+  "gn_drop": 0.5,
+  "max_tokens": 140000,
+  "command": "python scripts/ext7_wino_scan.py qwen3 --split dev",
+  "created_utc": "2026-10-04T06:21:12Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T06:22:14Z"
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "n_pairs": 42,
+ "correct_both": 20,
+ "margin": 11,
+ "strict": 1,
+ "margin_and_top1_both": 3,
+ "strict_and_top1_both": 1,
+ "margin_assoc": 1,
+ "margin_not_assoc": 10,
+ "strict_not_assoc": 1,
+ "margin_names": 0,
+ "strict_names": 0,
+ "margin_one_token_option": 10,
+ "margin_debiased": 0,
+ "margin_trigger_in_context": 0,
+ "mean_d_clean_a_margin": 2.9545454545454546,
+ "mean_d_clean_b_margin": -3.4318181818181817,
+ "mean_drop_str_margin": 6.386363636363637,
+ "mean_gn_drop_margin": 0.2727272727272727,
+ "frac_gn_drop_ge_thr_both_margin": 0.09090909090909091,
+ "n_passes": 1,
+ "pass_times_s": [
+  96.52228450775146
+ ]
+}

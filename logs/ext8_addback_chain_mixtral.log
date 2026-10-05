@@ -1,0 +1,132 @@
+2026-10-04T09:33:50Z START ext8-addback-mixtral_bos_str_addback-m1 (waited 1168s): python scripts/ext8_addback_run.py mixtral --task cf --src-run mixtral_bos_str --out mixtral_bos_str_addback --max-passes 5 --pool 64 --beam-cases 64 --budget 50000
+09:34:05 task cf mixtral: 213 cases, 858 rows, L=32 k=2 K=64
+09:34:07 initialised: {'val_rows': 436, 'first_val_rows': 106, 'beam_rows': 64, 'shap_rows': 106, 'exact_rows': 106, 'noise_rows': 106, 'pool': 64, 'queue_groups': 8142, 'queue_items': 256164}
+09:34:09 pass 0: 1071 prefill rows, 52484 spawn rows (43904 adaptive, 858 static groups; queue 858/8142)
+09:34:17   layer   0: load-wait 6.04s compute 0.87s  wf_rows=10026
+09:34:37   layer   8: load-wait 1.50s compute 0.62s  wf_rows=22797
+09:34:53   layer  16: load-wait 1.00s compute 0.80s  wf_rows=34197
+09:35:13   layer  24: load-wait 1.64s compute 1.08s  wf_rows=50277
+09:35:32   layer  31: load-wait 1.82s compute 1.11s  wf_rows=52484
+09:35:32   pass done: 1071 prefill rows (T=16), 52484 spawn rows, 82.4s (metrics 0.6s)
+09:35:37 pass 0: ceilings for 858 rows (mean all-MoE rescue +5.071); DLA rows 54912 (497 candidate pairs not routed in this pass's clean run)
+09:35:38 pass 0 done in 82s, peak 10.2 GB; greedy left 436 (median step 2, median rescue/ceiling 0.55), beam left 64; queue 858/9014
+09:35:41 pass 1: 1071 prefill rows, 49997 spawn rows (42572 adaptive, 495 static groups; queue 1353/9014)
+09:35:44   layer   0: load-wait 2.08s compute 0.26s  wf_rows=3205
+09:36:06   layer   8: load-wait 1.92s compute 0.55s  wf_rows=19619
+09:36:24   layer  16: load-wait 1.60s compute 0.74s  wf_rows=31490
+09:36:42   layer  24: load-wait 1.03s compute 1.06s  wf_rows=49244
+09:36:58   layer  31: load-wait 1.18s compute 1.07s  wf_rows=49997
+09:36:59   pass done: 1071 prefill rows (T=16), 49997 spawn rows, 77.2s (metrics 0.5s)
+09:37:00 pass 1 done in 77s, peak 10.1 GB; greedy left 436 (median step 3, median rescue/ceiling 0.72), beam left 64; queue 1353/9014
+09:37:03 pass 2: 1071 prefill rows, 49989 spawn rows (41934 adaptive, 537 static groups; queue 1890/9014)
+09:37:06   layer   0: load-wait 1.98s compute 0.26s  wf_rows=3423
+09:37:28   layer   8: load-wait 2.33s compute 0.58s  wf_rows=21353
+09:37:51   layer  16: load-wait 1.81s compute 0.78s  wf_rows=33379
+09:38:10   layer  24: load-wait 0.73s compute 1.07s  wf_rows=49568
+09:38:30   layer  31: load-wait 1.57s compute 1.07s  wf_rows=49989
+09:38:30   pass done: 1071 prefill rows (T=16), 49989 spawn rows, 87.1s (metrics 0.5s)
+09:38:36 pass 2 done in 87s, peak 10.5 GB; greedy left 436 (median step 4, median rescue/ceiling 0.85), beam left 64; queue 1890/9014
+09:38:39 pass 3: 1071 prefill rows, 50000 spawn rows (41240 adaptive, 584 static groups; queue 2474/9014)
+09:38:42   layer   0: load-wait 2.03s compute 0.26s  wf_rows=4087
+09:39:05   layer   8: load-wait 2.20s compute 0.60s  wf_rows=22574
+09:39:26   layer  16: load-wait 1.96s compute 0.80s  wf_rows=34744
+09:39:47   layer  24: load-wait 1.69s compute 1.09s  wf_rows=49518
+09:40:06   layer  31: load-wait 1.69s compute 1.07s  wf_rows=50000
+09:40:07   pass done: 1071 prefill rows (T=16), 50000 spawn rows, 87.3s (metrics 0.5s)
+09:40:08 pass 3 done in 87s, peak 10.8 GB; greedy left 436 (median step 5, median rescue/ceiling 0.96), beam left 64; queue 2474/9014
+09:40:12 pass 4: 1071 prefill rows, 49989 spawn rows (40554 adaptive, 629 static groups; queue 3103/9014)
+09:40:15   layer   0: load-wait 2.01s compute 0.26s  wf_rows=4188
+09:40:37   layer   8: load-wait 2.32s compute 0.61s  wf_rows=23614
+09:40:55   layer  16: load-wait 1.42s compute 0.88s  wf_rows=36249
+09:41:15   layer  24: load-wait 1.63s compute 1.10s  wf_rows=49541
+09:41:33   layer  31: load-wait 1.30s compute 1.07s  wf_rows=49989
+09:41:33   pass done: 1071 prefill rows (T=16), 49989 spawn rows, 81.2s (metrics 0.5s)
+09:41:35 pass 4 done in 81s, peak 11.1 GB; greedy left 436 (median step 6, median rescue/ceiling 1.03), beam left 0; queue 3103/9014
+2026-10-04T09:41:43Z END   ext8-addback-mixtral_bos_str_addback-m1 rc=0 (473s)
+2026-10-04T10:05:16Z START ext8-addback-mixtral_bos_str_addback-m2 (waited 1413s): python scripts/ext8_addback_run.py mixtral --task cf --src-run mixtral_bos_str --out mixtral_bos_str_addback --max-passes 5 --pool 64 --beam-cases 64 --budget 50000
+10:05:31 task cf mixtral: 213 cases, 858 rows, L=32 k=2 K=64
+10:05:33 resuming after 10 passes (queue 7559/9120 groups)
+10:05:36 pass 10: 1071 prefill rows, 49706 spawn rows (23108 adaptive, 26 static groups; queue 7585/9120)
+10:05:44   layer   0: load-wait 7.15s compute 0.97s  wf_rows=2096
+10:06:07   layer   8: load-wait 2.31s compute 0.61s  wf_rows=24060
+10:06:31   layer  16: load-wait 2.05s compute 0.86s  wf_rows=39015
+10:06:54   layer  24: load-wait 1.78s compute 1.08s  wf_rows=49478
+10:07:14   layer  31: load-wait 1.84s compute 1.07s  wf_rows=49706
+10:07:15   pass done: 1071 prefill rows (T=16), 49706 spawn rows, 98.5s (metrics 0.5s)
+10:07:16 pass 10 done in 98s, peak 11.2 GB; greedy left 436 (median step 12, median rescue/ceiling 1.25), beam left 0; queue 7585/9120
+10:07:19 pass 11: 1071 prefill rows, 49270 spawn rows (22672 adaptive, 26 static groups; queue 7611/9120)
+10:07:22   layer   0: load-wait 2.10s compute 0.26s  wf_rows=2372
+10:07:46   layer   8: load-wait 2.36s compute 0.58s  wf_rows=22754
+10:08:09   layer  16: load-wait 1.91s compute 0.85s  wf_rows=37798
+10:08:29   layer  24: load-wait 1.20s compute 1.11s  wf_rows=49095
+10:08:46   layer  31: load-wait 1.51s compute 1.06s  wf_rows=49270
+10:08:47   pass done: 1071 prefill rows (T=16), 49270 spawn rows, 87.1s (metrics 0.5s)
+10:08:49 pass 11 done in 87s, peak 11.2 GB; greedy left 436 (median step 13, median rescue/ceiling 1.27), beam left 0; queue 7611/9120
+10:08:52 pass 12: 1071 prefill rows, 49971 spawn rows (22236 adaptive, 425 static groups; queue 8036/9120)
+10:08:55   layer   0: load-wait 1.93s compute 0.33s  wf_rows=21336
+10:09:17   layer   8: load-wait 1.48s compute 1.02s  wf_rows=41001
+10:09:37   layer  16: load-wait 1.45s compute 1.12s  wf_rows=48502
+10:09:58   layer  24: load-wait 1.27s compute 1.16s  wf_rows=49860
+10:10:13   layer  31: load-wait 1.23s compute 1.15s  wf_rows=49971
+10:10:13   pass done: 1071 prefill rows (T=16), 49971 spawn rows, 80.1s (metrics 0.5s)
+10:10:14 pass 12 done in 80s, peak 11.9 GB; greedy left 436 (median step 14, median rescue/ceiling 1.30), beam left 0; queue 8036/9120
+10:10:17 pass 13: 1071 prefill rows, 43148 spawn rows (21800 adaptive, 1084 static groups; queue 9120/9120)
+10:10:19   layer   0: load-wait 1.65s compute 0.29s  wf_rows=9186
+10:10:37   layer   8: load-wait 1.81s compute 0.69s  wf_rows=25690
+10:10:58   layer  16: load-wait 2.08s compute 0.83s  wf_rows=33114
+10:11:21   layer  24: load-wait 1.85s compute 1.01s  wf_rows=42568
+10:11:38   layer  31: load-wait 1.96s compute 1.00s  wf_rows=43148
+10:11:39   pass done: 1071 prefill rows (T=16), 43148 spawn rows, 81.1s (metrics 0.5s)
+10:11:40 pass 13 done in 81s, peak 10.8 GB; greedy left 0 (median step 15, median rescue/ceiling 1.31), beam left 0; queue 9120/9120
+10:11:40 ALL PASSES COMPLETE
+2026-10-04T10:11:48Z END   ext8-addback-mixtral_bos_str_addback-m2 rc=0 (392s)
+2026-10-04T10:25:55Z START ext8-addback-wino_mixtral_bos_str_addback-m1 (waited 847s): python scripts/ext8_addback_run.py mixtral --task wino --src-run wino_mixtral_bos_str --out wino_mixtral_bos_str_addback --max-passes 5 --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --pool 64 --shap-cases 128 --exact-cases 128 --noise-cases 128 --beam-cases 64 --budget 50000
+10:25:59 task wino mixtral: 512 cases, 512 rows, L=32 k=2 K=64
+10:25:59 resuming after 5 passes (queue 4504/5890 groups)
+10:26:02 pass 5: 1024 prefill rows, 49630 spawn rows (14848 adaptive, 34 static groups; queue 4538/5890)
+10:26:11   layer   0: load-wait 7.82s compute 0.95s  wf_rows=512
+10:26:34   layer   8: load-wait 2.33s compute 0.57s  wf_rows=6160
+10:26:58   layer  16: load-wait 1.98s compute 1.02s  wf_rows=34852
+10:27:21   layer  24: load-wait 1.50s compute 1.41s  wf_rows=49456
+10:27:41   layer  31: load-wait 1.53s compute 1.36s  wf_rows=49630
+10:27:42   pass done: 1024 prefill rows (T=32), 49630 spawn rows, 99.4s (metrics 0.5s)
+10:27:43 pass 5 done in 99s, peak 13.4 GB; greedy left 256 (median step 7, median rescue/ceiling 0.81), beam left 0; queue 4538/5890
+10:27:46 pass 6: 1024 prefill rows, 49374 spawn rows (14592 adaptive, 34 static groups; queue 4572/5890)
+10:27:49   layer   0: load-wait 2.10s compute 0.47s  wf_rows=1024
+10:28:12   layer   8: load-wait 2.50s compute 0.56s  wf_rows=5237
+10:28:35   layer  16: load-wait 1.74s compute 0.99s  wf_rows=32953
+10:28:54   layer  24: load-wait 1.08s compute 1.42s  wf_rows=49216
+10:29:11   layer  31: load-wait 0.87s compute 1.36s  wf_rows=49374
+10:29:12   pass done: 1024 prefill rows (T=32), 49374 spawn rows, 85.5s (metrics 0.5s)
+10:29:13 pass 6 done in 85s, peak 13.4 GB; greedy left 256 (median step 8, median rescue/ceiling 0.85), beam left 0; queue 4572/5890
+10:29:15 pass 7: 1024 prefill rows, 49118 spawn rows (14336 adaptive, 34 static groups; queue 4606/5890)
+10:29:18   layer   0: load-wait 2.00s compute 0.47s  wf_rows=512
+10:29:39   layer   8: load-wait 1.60s compute 0.57s  wf_rows=5822
+10:29:56   layer  16: load-wait 1.15s compute 1.03s  wf_rows=35630
+10:30:16   layer  24: load-wait 0.39s compute 1.42s  wf_rows=48976
+10:30:34   layer  31: load-wait 1.42s compute 1.35s  wf_rows=49118
+10:30:35   pass done: 1024 prefill rows (T=32), 49118 spawn rows, 79.1s (metrics 0.5s)
+10:30:36 pass 7 done in 79s, peak 13.3 GB; greedy left 256 (median step 9, median rescue/ceiling 0.88), beam left 0; queue 4606/5890
+10:30:40 pass 8: 1024 prefill rows, 49987 spawn rows (14080 adaptive, 509 static groups; queue 5115/5890)
+10:30:44   layer   0: load-wait 2.09s compute 0.55s  wf_rows=21944
+10:31:04   layer   8: load-wait 1.08s compute 1.21s  wf_rows=36784
+10:31:21   layer  16: load-wait 0.84s compute 1.40s  wf_rows=47013
+10:31:41   layer  24: load-wait 1.03s compute 1.48s  wf_rows=49846
+10:32:01   layer  31: load-wait 1.70s compute 1.47s  wf_rows=49987
+10:32:02   pass done: 1024 prefill rows (T=32), 49987 spawn rows, 80.4s (metrics 0.5s)
+10:32:02 pass 8 done in 80s, peak 13.7 GB; greedy left 256 (median step 10, median rescue/ceiling 0.91), beam left 0; queue 5115/5890
+10:32:05 pass 9: 1024 prefill rows, 31929 spawn rows (13824 adaptive, 775 static groups; queue 5890/5890)
+10:32:08   layer   0: load-wait 2.40s compute 0.49s  wf_rows=6981
+10:32:31   layer   8: load-wait 2.14s compute 0.75s  wf_rows=14620
+10:32:50   layer  16: load-wait 1.49s compute 0.95s  wf_rows=25034
+10:33:12   layer  24: load-wait 1.50s compute 1.11s  wf_rows=31465
+10:33:32   layer  31: load-wait 1.81s compute 1.08s  wf_rows=31929
+10:33:32   pass done: 1024 prefill rows (T=32), 31929 spawn rows, 86.4s (metrics 0.4s)
+10:33:33 pass 9 done in 86s, peak 12.1 GB; greedy left 256 (median step 11, median rescue/ceiling 0.93), beam left 0; queue 5890/5890
+2026-10-04T10:33:40Z END   ext8-addback-wino_mixtral_bos_str_addback-m1 rc=0 (465s)
+2026-10-04T11:08:36Z START ext8-addback-wino_mixtral_bos_str_addback-m2 (waited 2096s): python scripts/ext8_addback_run.py mixtral --task wino --src-run wino_mixtral_bos_str --out wino_mixtral_bos_str_addback --max-passes 5 --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --pool 64 --shap-cases 128 --exact-cases 128 --noise-cases 128 --beam-cases 64 --budget 50000
+11:08:43 task wino mixtral: 512 cases, 512 rows, L=32 k=2 K=64
+11:08:44 resuming after 14 passes (queue 5890/5890 groups)
+11:08:45 nothing left to run
+2026-10-04T11:08:46Z END   ext8-addback-wino_mixtral_bos_str_addback-m2 rc=0 (10s)
+MIXTRAL ADDBACK CHAIN DONE

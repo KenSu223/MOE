@@ -1,0 +1,14 @@
+2026-10-04T08:45:57Z START ext7c-w2-role-mixtral_bos (waited 753s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos.json --out wino_role_mixtral_bos_str --splits discovery,validation --kinds layer,attn_layer,block --max-rows 50000 --agent ext7-controls
+08:45:58 mixtral -> wino_role_mixtral_bos_str: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (49152 spawn rows), T max 33
+08:46:03 pass 1/1: layers 0..31, 1024 prefill rows, 49152 spawn rows
+08:46:12   layer   0: load-wait 7.04s compute 1.31s  wf_rows=1536
+08:46:34   layer   8: load-wait 2.19s compute 0.72s  wf_rows=13824
+08:46:57   layer  16: load-wait 1.98s compute 0.94s  wf_rows=26112
+08:47:21   layer  24: load-wait 1.78s compute 1.16s  wf_rows=38400
+08:47:41   layer  31: load-wait 1.56s compute 1.36s  wf_rows=49152
+08:47:42   pass done: 1024 prefill rows (T=33), 49152 spawn rows, 98.4s (metrics 0.6s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+08:47:44 family main: layer disc L19; attn_layer disc L13; block disc L19
+08:47:44 Δclean +3.24 Δcorrupt -3.24 drop +6.49; {"layer_discovery_argmax": 19, "layer_discovery_max": 1.085, "layer_discovery_top5": [[19, 1.085], [20, 0.882], [21, 0.695], [22, 0.684], [18, 0.631]], "layer_validation_argmax": 19, "layer_validation_max": 1.322, "layer_validation_top5": [[19, 1.322], [20, 0.924], [21, 0.748], [18, 0.742], [22, 0.682]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 0.826, "attn_layer_discovery_top5": [[13, 0.826], [19, 0.723], [15, 0.586], [16, 0.576], [25, 0.384]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.068, "attn_layer_validation_top5": [[13, 1.068], [19, 0.684],
+2026-10-04T08:47:50Z END   ext7c-w2-role-mixtral_bos rc=0 (113s)

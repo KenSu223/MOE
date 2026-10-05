@@ -1,0 +1,68 @@
+{
+ "filter": {
+  "model": "olmoe",
+  "repo": "allenai/OLMoE-1B-7B-0125",
+  "special_tokens": true,
+  "k": 2,
+  "margin": 1.0,
+  "seed_base": 2000,
+  "command": "python /home/ubuntu/MOE/scripts/ext6_str_filter.py olmoe --out olmoe_addback_src --k 2",
+  "created_utc": "2026-10-04T07:44:56Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:45:06Z",
+  "pass_times_s": [
+   6.238762378692627,
+   2.629955291748047
+  ]
+ },
+ "sweep": {
+  "model": "olmoe",
+  "repo": "allenai/OLMoE-1B-7B-0125",
+  "special_tokens": true,
+  "layer_chunks": 1,
+  "metrics": true,
+  "n_cases": 186,
+  "n_donor_rows": 350,
+  "command": "python scripts/ext6_str_sweep.py olmoe --out olmoe_addback_src --layer-chunks 1",
+  "created_utc": "2026-10-04T07:48:50Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:48:55Z",
+  "pass_times_s": [
+   4.2437520027160645
+  ],
+  "n_rows": 6136
+ },
+ "expert_L0-15": {
+  "model": "olmoe",
+  "repo": "allenai/OLMoE-1B-7B-0125",
+  "special_tokens": true,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  "pairs": false,
+  "layer_chunks": 1,
+  "command": "python scripts/ext6_str_expert.py olmoe --out olmoe_addback_src --layers 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 --max-spawn 60000",
+  "created_utc": "2026-10-04T07:59:01Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:59:18Z",
+  "pass_times_s": [
+   6.582288980484009,
+   2.8398678302764893
+  ]
+ }
+}

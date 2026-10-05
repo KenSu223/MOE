@@ -1,0 +1,11 @@
+Model,Layer,Attention output rescue,MoE output rescue,Attention share at the layer / additivity
+Qwen3-30B-A3B-Base,L41 (MoE output peak),"+0.163 [+0.092, +0.235]","+1.778 [+1.594, +1.972]","0.08 [0.05, 0.12]"
+Qwen3-30B-A3B-Base,L38 (attention output peak),"+0.076 [-0.042, +0.199]","+0.739 [+0.627, +0.848]","0.09 [-0.06, 0.21]"
+Qwen3-30B-A3B-Base,L41 (block +1.94),+0.163,+1.778,"block − (attn + MoE) -0.001 [-0.032, +0.030], r = 0.99"
+Qwen3-30B-A3B-Base,L43 (block +1.53),+0.188,+1.375,"block − (attn + MoE) -0.038 [-0.060, -0.015], r = 0.99"
+Qwen3-30B-A3B-Base,L39 (block +1.45),+0.148,+1.316,"block − (attn + MoE) -0.009 [-0.048, +0.030], r = 0.98"
+"Mixtral-8x7B, BOS",L20 (MoE output peak),"+0.222 [+0.183, +0.262]","+1.324 [+1.222, +1.429]","0.14 [0.12, 0.16]"
+"Mixtral-8x7B, BOS",L13 (attention output peak),"+1.087 [+0.971, +1.209]","+0.276 [+0.188, +0.374]","0.80 [0.75, 0.85]"
+"Mixtral-8x7B, BOS",L19 (block +1.93),+0.873,+1.120,"block − (attn + MoE) -0.066 [-0.103, -0.029], r = 0.96"
+"Mixtral-8x7B, BOS",L20 (block +1.53),+0.222,+1.324,"block − (attn + MoE) -0.013 [-0.034, +0.008], r = 0.99"
+"Mixtral-8x7B, BOS",L13 (block +1.25),+1.087,+0.276,"block − (attn + MoE) -0.110 [-0.158, -0.062], r = 0.97"

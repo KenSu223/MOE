@@ -1,0 +1,202 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "task": "cf",
+ "src_run": "mixtral_bos_str",
+ "special_tokens": true,
+ "pool": 64,
+ "beam_cases": 64,
+ "shap_cases": 0,
+ "exact_cases": 0,
+ "noise_cases": 0,
+ "budget": 50000,
+ "greedy_stop": 0.0,
+ "n_cases": 213,
+ "n_rows": 858,
+ "init": {
+  "val_rows": 436,
+  "first_val_rows": 106,
+  "beam_rows": 64,
+  "shap_rows": 106,
+  "exact_rows": 106,
+  "noise_rows": 106,
+  "pool": 64,
+  "queue_groups": 8142,
+  "queue_items": 256164
+ },
+ "command": "python scripts/ext8_addback_run.py mixtral --task cf --src-run mixtral_bos_str --out mixtral_bos_str_addback --max-passes 5 --pool 64 --beam-cases 64 --budget 50000",
+ "created_utc": "2026-10-04T09:34:07Z",
+ "complete": true,
+ "passes": 14,
+ "pass_notes": [
+  {
+   "val_rows": 436,
+   "first_val_rows": 106,
+   "beam_rows": 64,
+   "shap_rows": 106,
+   "exact_rows": 106,
+   "noise_rows": 106,
+   "pool": 64,
+   "queue_groups": 8142,
+   "queue_items": 256164
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 497
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 52484,
+   "adaptive": 43904,
+   "static_groups": 858,
+   "pass_s": 82.42483758926392,
+   "peak_GB": 10.18819808959961,
+   "greedy_left": 436,
+   "beam_left": 64,
+   "queue": "858/9014"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 49997,
+   "adaptive": 42572,
+   "static_groups": 495,
+   "pass_s": 77.15225887298584,
+   "peak_GB": 10.06527042388916,
+   "greedy_left": 436,
+   "beam_left": 64,
+   "queue": "1353/9014"
+  },
+  {
+   "pass": 2,
+   "spawn_rows": 49989,
+   "adaptive": 41934,
+   "static_groups": 537,
+   "pass_s": 87.07691073417664,
+   "peak_GB": 10.523889064788818,
+   "greedy_left": 436,
+   "beam_left": 64,
+   "queue": "1890/9014"
+  },
+  {
+   "pass": 3,
+   "spawn_rows": 50000,
+   "adaptive": 41240,
+   "static_groups": 584,
+   "pass_s": 87.25540065765381,
+   "peak_GB": 10.845848083496094,
+   "greedy_left": 436,
+   "beam_left": 64,
+   "queue": "2474/9014"
+  },
+  {
+   "pass": 4,
+   "spawn_rows": 49989,
+   "adaptive": 40554,
+   "static_groups": 629,
+   "pass_s": 81.1992199420929,
+   "peak_GB": 11.139968395233154,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "3103/9014"
+  },
+  {
+   "pass": 5,
+   "spawn_rows": 49993,
+   "adaptive": 25288,
+   "static_groups": 1647,
+   "pass_s": 97.99637579917908,
+   "peak_GB": 11.030335903167725,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "4750/9014"
+  },
+  {
+   "pass": 6,
+   "spawn_rows": 49998,
+   "adaptive": 24852,
+   "static_groups": 1274,
+   "pass_s": 93.3532509803772,
+   "peak_GB": 10.918558597564697,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "6024/9120"
+  },
+  {
+   "pass": 7,
+   "spawn_rows": 49715,
+   "adaptive": 24416,
+   "static_groups": 1485,
+   "pass_s": 86.73723673820496,
+   "peak_GB": 11.40273904800415,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "7509/9120"
+  },
+  {
+   "pass": 8,
+   "spawn_rows": 49555,
+   "adaptive": 23980,
+   "static_groups": 25,
+   "pass_s": 80.53309679031372,
+   "peak_GB": 10.958025455474854,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "7534/9120"
+  },
+  {
+   "pass": 9,
+   "spawn_rows": 49119,
+   "adaptive": 23544,
+   "static_groups": 25,
+   "pass_s": 73.22699189186096,
+   "peak_GB": 10.98885440826416,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "7559/9120"
+  },
+  {
+   "pass": 10,
+   "spawn_rows": 49706,
+   "adaptive": 23108,
+   "static_groups": 26,
+   "pass_s": 98.48992919921875,
+   "peak_GB": 11.215472221374512,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "7585/9120"
+  },
+  {
+   "pass": 11,
+   "spawn_rows": 49270,
+   "adaptive": 22672,
+   "static_groups": 26,
+   "pass_s": 87.0973207950592,
+   "peak_GB": 11.191200256347656,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "7611/9120"
+  },
+  {
+   "pass": 12,
+   "spawn_rows": 49971,
+   "adaptive": 22236,
+   "static_groups": 425,
+   "pass_s": 80.0501856803894,
+   "peak_GB": 11.882628440856934,
+   "greedy_left": 436,
+   "beam_left": 0,
+   "queue": "8036/9120"
+  },
+  {
+   "pass": 13,
+   "spawn_rows": 43148,
+   "adaptive": 21800,
+   "static_groups": 1084,
+   "pass_s": 81.0592269897461,
+   "peak_GB": 10.785305976867676,
+   "greedy_left": 0,
+   "beam_left": 0,
+   "queue": "9120/9120"
+  }
+ ],
+ "completed_utc": "2026-10-04T10:11:40Z"
+}

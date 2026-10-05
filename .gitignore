@@ -23,6 +23,9 @@ hf/
 offload/
 logs/gpu.lock
 
+# third-party WinoGrande 1.1 copy (official zip: storage.googleapis.com/ai2-mosaic/public/winogrande/winogrande_1.1.zip)
+data/winogrande_1.1/
+
 # large CodeFact intermediates (regenerable from scan_rows + items.jsonl)
 results/codefact_*/scan_routing.parquet
 results/codefact_*/expert_parts/

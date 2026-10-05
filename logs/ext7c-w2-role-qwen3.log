@@ -1,0 +1,19 @@
+2026-10-04T07:59:20Z START ext7c-w2-role-qwen3 (waited 571s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_role/pairs_qwen3.parquet --case-sets data/wino_role/case_sets_qwen3.json --out wino_role_qwen3_str --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --agent ext7-controls
+07:59:21 qwen3 -> wino_role_qwen3_str: 1024 directed cases (512 pairs), families {'main': {'discovery': 256, 'validation': 256}, 'rep': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 3 passes (147456 spawn rows), T max 30
+07:59:22 pass 1/3: layers 0..18, 2048 prefill rows, 58368 spawn rows
+07:59:26   layer   0: load-wait 2.95s compute 0.67s  wf_rows=3072
+07:59:34   layer   8: load-wait 0.40s compute 0.48s  wf_rows=27648
+07:59:41   layer  16: load-wait 0.60s compute 0.66s  wf_rows=52224
+07:59:51   layer  24: load-wait 0.38s compute 0.72s  wf_rows=58368
+08:00:01   layer  32: load-wait 0.52s compute 0.72s  wf_rows=58368
+08:00:10   layer  40: load-wait 0.52s compute 0.72s  wf_rows=58368
+08:00:19   layer  47: load-wait 0.52s compute 0.72s  wf_rows=58368
+08:00:21   pass done: 2048 prefill rows (T=30), 58368 spawn rows, 58.7s (metrics 2.2s)
+08:00:23 pass 2/3: layers 19..37, 2048 prefill rows, 58368 spawn rows
+08:01:11 pass 3/3: layers 38..47, 2048 prefill rows, 30720 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+08:01:54 family main: layer disc L42; attn_layer disc L38; block disc L42
+08:01:54 family rep: layer disc L42; attn_layer disc L38; block disc L42
+08:01:54 Δclean +3.72 Δcorrupt -3.69 drop +7.41; {"layer_discovery_argmax": 42, "layer_discovery_max": 1.391, "layer_discovery_top5": [[42, 1.391], [39, 1.003], [43, 0.956], [41, 0.878], [38, 0.76]], "layer_validation_argmax": 42, "layer_validation_max": 1.216, "layer_validation_top5": [[42, 1.216], [43, 0.988], [39, 0.916], [41, 0.785], [40, 0.589]], "attn_layer_discovery_argmax": 38, "attn_layer_discovery_max": 0.735, "attn_layer_discovery_top5": [[38, 0.735], [42, 0.376], [41, 0.368], [40, 0.295], [43, 0.254]], "attn_layer_validation_argmax": 38, "attn_layer_validation_max": 0.906, "attn_layer_validation_top5": [[38, 0.906], [41, 0.365], 
+2026-10-04T08:02:02Z END   ext7c-w2-role-qwen3 rc=0 (162s)

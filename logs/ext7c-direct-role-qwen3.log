@@ -1,0 +1,11 @@
+2026-10-04T08:34:31Z START ext7c-direct-role-qwen3 (waited 692s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_role/pairs_qwen3.parquet --case-sets data/wino_role/case_sets_qwen3.json --out wino_role_qwen3_str --splits discovery,validation,rep_discovery,rep_validation
+08:34:41   layer   0: load-wait 2.85s compute 0.64s  wf_rows=0
+08:34:46   layer   8: load-wait 0.61s compute 0.15s  wf_rows=0
+08:34:55   layer  16: load-wait 1.05s compute 0.14s  wf_rows=0
+08:35:04   layer  24: load-wait 1.03s compute 0.14s  wf_rows=0
+08:35:14   layer  32: load-wait 1.06s compute 0.14s  wf_rows=0
+08:35:24   layer  40: load-wait 1.00s compute 0.14s  wf_rows=0
+08:35:32   layer  47: load-wait 1.05s compute 0.14s  wf_rows=0
+08:35:32   pass done: 1024 prefill rows (T=30), 0 spawn rows, 54.5s
+08:35:36 wino_role_qwen3_str: 1024 directed cases; A_direct 0.183, M_direct 0.817, DLA attn share 0.180; fp32 vs engine Delta clean max |diff| 0.126
+2026-10-04T08:35:41Z END   ext7c-direct-role-qwen3 rc=0 (70s)

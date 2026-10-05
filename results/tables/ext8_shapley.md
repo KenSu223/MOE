@@ -1,0 +1,6 @@
+| run | model | task | rows | permutations | r(phi, single) median | top-1 agree | experts for 80% of sum phi (median [IQR]) | sum single / sum phi (median) | top-1 phi / positive mass | mean SE of phi |
+|---|---|---|---|---|---|---|---|---|---|---|
+| cf_qwen3 | Qwen3-30B-A3B-Base | cf | 54 | 5 | 0.73 | 0.74 | 5 [3, 10] | 1.04 | 0.13 | 0.041 |
+| cf_mixtral | Mixtral-8x7B (BOS) | cf | 106 | 5 | 0.82 | 0.51 | 6 [3, 10] | 1.16 | 0.14 | 0.068 |
+| wino_qwen3 | Qwen3-30B-A3B-Base | wino | 64 | 5 | 0.46 | 0.48 | 11 [9, 15] | 0.92 | 0.06 | 0.062 |
+| wino_mixtral | Mixtral-8x7B (BOS) | wino | 128 | 5 | 0.89 | 0.48 | 9 [7, 12] | 1.39 | 0.13 | 0.054 |

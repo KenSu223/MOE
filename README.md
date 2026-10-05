@@ -126,6 +126,19 @@ and probability agree; with 5-layer windows probability over-weights the last su
 super-additive, a softmax effect. GN inflates the early site (Mixtral 1.8x) but not the paper's final-position site.
 Qwen3 and Mixtral with BOS; about 40 GPU minutes.
 
+### Phase 3: add-back curves and WinoGrande / IOI under STR (2026-10-04; `results/sections/ext7_*.md`, `ext8_addback.md`)
+
+STR only; Qwen3 and Mixtral with BOS; about 3.9 GPU hours.
+- **How many experts restore the answer?** Patching every MoE output at the final position restores 0.53 / 0.41 of the
+  CounterFact drop (Qwen3 / Mixtral) and 0.84 / 0.79 of the WinoGrande drop. Adaptive greedy reaches 80 % of that
+  ceiling with 4-10 experts, out of 384 / 64. Greedy is within bf16 noise of beam search and of the exact optimum over
+  each case's top 10. A patch-free direct-logit-attribution ranking matches the single-patch oracle.
+- **WinoGrande as STR pairs.** The blank is filled with each twin's answer, and the model predicts the sentence-final
+  single-token trigger: 776 pairs pass a 1-logit margin in both directions under all three protocols.
+- **Attention or MoE?** IOI is attention-driven and validates the method: its known head classes are recovered.
+  WinoGrande is the most MoE-heavy of the three tasks, with one specific late expert per model (Qwen3 L41E117, Mixtral
+  L20E000) that is not a CounterFact expert. The IOI-like hypothesis is rejected at the final position.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),

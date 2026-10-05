@@ -1,0 +1,47 @@
+{
+ "n_items": 1600,
+ "pool_s2io_both_models": 1590,
+ "pool_clean_margin_both_models": 1596,
+ "per_model": {
+  "qwen3": {
+   "margin_clean": 1597,
+   "margin_s2io": 1593,
+   "top1_both_s2io": 1150
+  },
+  "mixtral_bos": {
+   "margin_clean": 1599,
+   "margin_s2io": 1597,
+   "top1_both_s2io": 1096
+  }
+ },
+ "sets": {
+  "discovery": 128,
+  "validation": 128,
+  "rep_discovery": 128,
+  "rep_validation": 128,
+  "unused": 1078
+ },
+ "mode": "seed-0 split 128/128 discovery/validation; replication 128/128",
+ "template_type_in_sets": {
+  "discovery": {
+   "ABBA": 67,
+   "BABA": 61
+  },
+  "validation": {
+   "BABA": 70,
+   "ABBA": 58
+  },
+  "rep_discovery": {
+   "BABA": 66,
+   "ABBA": 62
+  },
+  "rep_validation": {
+   "ABBA": 68,
+   "BABA": 60
+  },
+  "unused": {
+   "BABA": 571,
+   "ABBA": 507
+  }
+ }
+}

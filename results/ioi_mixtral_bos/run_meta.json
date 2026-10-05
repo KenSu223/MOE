@@ -1,0 +1,37 @@
+{
+ "scan": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "n_items": 1600,
+  "margin": 1.0,
+  "pairs": [
+   "data/ioi/pairs_s2io_mixtral_bos.parquet",
+   "data/ioi/pairs_s1io_mixtral_bos.parquet"
+  ],
+  "command": "python scripts/ext7_ioi_scan.py mixtral_bos",
+  "created_utc": "2026-10-04T07:45:24Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:47:04Z"
+ },
+ "attn_names": {
+  "model": "mixtral",
+  "special_tokens": true,
+  "n_items": 512,
+  "prompts": [
+   "clean",
+   "s2io",
+   "s1io"
+  ],
+  "targets": [
+   "IO",
+   "S1",
+   "S2",
+   "pos0"
+  ],
+  "command": "python scripts/ext7_ioi_attn.py mixtral_bos",
+  "seconds": 183.6253433227539,
+  "completed_utc": "2026-10-04T08:15:32Z"
+ }
+}

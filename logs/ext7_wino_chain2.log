@@ -1,0 +1,343 @@
+2026-10-04T07:42:28Z [chain2] START ext7-wino-verify4
+2026-10-04T07:45:08Z START ext7-wino-verify4 (waited 160s): python scripts/ext7_wino_verify.py
+07:45:10 40 directed cases from 20 OLMoE margin pairs; first: 'George wanted to use the fireplace to heat the house and not the heater because the fireplace was' -> 'cheaper' / 'George wanted to use the fireplace to heat the house and not the heater because the heater was' -> 'expensive'
+07:45:10 HF reference loaded from /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext7w/hf_ref_20_8_10.pkl
+07:45:12   layer   0: load-wait 1.27s compute 0.45s  wf_rows=320
+07:45:13   layer   8: load-wait 0.10s compute 0.07s  wf_rows=1920
+07:45:14   layer  15: load-wait 0.09s compute 0.04s  wf_rows=3520
+07:45:14   pass done: 80 prefill rows (T=26), 3520 spawn rows, 4.2s
+07:45:16   layer   0: load-wait 0.17s compute 0.08s  wf_rows=66 wf_tokens=0
+07:45:17   layer   8: load-wait 0.08s compute 0.10s  wf_rows=242 wf_tokens=420
+07:45:18   layer  15: load-wait 0.07s compute 0.03s  wf_rows=352 wf_tokens=672
+07:45:18   pass done: 44 prefill rows (T=25), 352 suffix rows (Smax=3, 672 tokens), 2.8s
+07:45:19   layer   0: load-wait 0.16s compute 0.10s  wf_rows=110 wf_tokens=42
+07:45:20   layer   8: load-wait 0.07s compute 0.12s  wf_rows=836 wf_tokens=1428
+07:45:21   layer  15: load-wait 0.07s compute 0.05s  wf_rows=1452 wf_tokens=2646
+07:45:21   pass done: 44 prefill rows (T=25), 1452 suffix rows (Smax=3, 2772 tokens), 2.9s
+07:45:21 n_pairs: 20
+07:45:21 n_directed: 40
+07:45:21 n_grid_cases: 8
+07:45:21 n_head_cases: 10
+07:45:21 head_layers: [4, 9, 14]
+07:45:21 window_half: 2
+07:45:21 delta_clean_maxdiff_vs_hf: 0.25
+07:45:21 delta_corrupt_maxdiff_vs_hf: 0.25
+07:45:21 mean_delta_clean_hf: 3.295703125
+07:45:21 mean_delta_corrupt_hf: -3.295703125
+07:45:21 antisymmetry_maxdiff: 0.0
+07:45:21 final_layer: {"n": 640, "maxdiff": 0.46875, "meanabsdiff": 0.0709716796875, "frac_within_0.25": 0.9703125, "rescue_corr_vs_hf": 0.9954429707353685, "hf_rescue_sd": 0.976383181778815, "hf_rescue_mean": 0.52646484375, "engine_rescue_mean": 0.542651355266571, "mean_curve_maxdiff": 0.03085937518626447}
+07:45:21 identity_layer_maxdiff: 0.21875
+07:45:21 final_attn_layer: {"n": 640, "maxdiff": 0.53125, "meanabsdiff": 0.0692626953125, "frac_within_0.25": 0.9703125, "rescue_corr_vs_hf": 0.9891670594862187, "hf_rescue_sd": 0.5832019149246489, "hf_rescue_mean": 0.3982421875, "engine_rescue_mean": 0.40876466035842896, "mean_curve_maxdiff": 0.05742187143769106}
+07:45:21 identity_attn_layer_maxdiff: 0.21875
+07:45:21 final_block: {"n": 640, "maxdiff": 0.375, "meanabsdiff": 0.068310546875, "frac_within_0.25": 0.9671875, "rescue_corr_vs_hf": 0.9970583468666325, "hf_rescue_sd": 1.227344305328496, "hf_rescue_mean": 0.8677490234375, "engine_rescue_mean": 0.882153332233429, "mean_curve_maxdiff": 0.034374996973201455}
+07:45:21 identity_block_maxdiff: 0.21875
+07:45:21 final_resid: {"n": 640, "maxdiff": 0.4375, "meanabsdiff": 0.069921875, "frac_within_0.25": 0.959375, "rescue_corr_vs_hf": 0.9994394633748438, "hf_rescue_sd": 3.1786694497303056, "hf_rescue_mean": 2.8602294921875, "engine_rescue_mean": 2.8926024436950684, "mean_curve_maxdiff": 0.061328107118605146}
+07:45:21 identity_resid_maxdiff: 0.21875
+07:45:21 final_attn_head: {'n': 480, 'maxdiff': 0.28125, 'meanabsdiff': 0.0630859375, 'frac_within_0.25': 0.98125, 'rescue_corr_vs_hf': 0.9049392623700604, 'hf_rescue_sd': 0.14844640872389211, 'hf_rescue_mean': 0.01796875, 'engine_rescue_mean': 0.02805989608168602}
+07:45:21 engine_final_pass_s: 4.2133588790893555
+07:45:21 grid_prefill_two_pass_maxdiff: 0.15625
+07:45:21 grid_units: 22
+07:45:21 grid_positions_by_category: {'last STR token': 8, 'last token': 8, 'first subsequent token': 6}
+07:45:21 grid_layer: {'n': 352, 'maxdiff': 0.34375, 'meanabsdiff': 0.06263316761363637, 'frac_within_0.25': 0.9914772727272727, 'rescue_corr_vs_hf': 0.9929617727219804, 'hf_rescue_sd': 0.5500568948003034, 'hf_rescue_mean': 0.22105823863636365, 'engine_rescue_mean': 0.24906782805919647}
+07:45:21 grid_layer_nonfinal: {'n': 224, 'maxdiff': 0.28125, 'meanabsdiff': 0.06291852678571429, 'frac_within_0.25': 0.9910714285714286, 'rescue_corr_vs_hf': 0.9697684876414732, 'hf_rescue_sd': 0.25679103458501, 'hf_rescue_mean': 0.08147321428571429, 'engine_rescue_mean': 0.1043526753783226}
+07:45:21 grid_attn_layer: {'n': 352, 'maxdiff': 0.375, 'meanabsdiff': 0.06489701704545454, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.9920830636423332, 'hf_rescue_sd': 0.5213120625373623, 'hf_rescue_mean': 0.21604225852272727, 'engine_rescue_mean': 0.24471768736839294}
+07:45:21 grid_attn_layer_nonfinal: {'n': 224, 'maxdiff': 0.375, 'meanabsdiff': 0.0673828125, 'frac_within_0.25': 0.9866071428571429, 'rescue_corr_vs_hf': 0.9908841751925481, 'hf_rescue_sd': 0.505358553195547, 'hf_rescue_mean': 0.14494977678571427, 'engine_rescue_mean': 0.1735491007566452}
+07:45:21 grid_block: {'n': 352, 'maxdiff': 0.25, 'meanabsdiff': 0.06116832386363636, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.996030603892815, 'hf_rescue_sd': 0.7980487038576245, 'hf_rescue_mean': 0.4493075284090909, 'engine_rescue_mean': 0.48117896914482117}
+07:45:21 grid_block_nonfinal: {'n': 224, 'maxdiff': 0.25, 'meanabsdiff': 0.061732700892857144, 'frac_within_0.25': 0.9910714285714286, 'rescue_corr_vs_hf': 0.9937475582091092, 'hf_rescue_sd': 0.5937434440931029, 'hf_rescue_mean': 0.25279017857142855, 'engine_rescue_mean': 0.28173828125}
+07:45:21 grid_resid: {'n': 352, 'maxdiff': 0.34375, 'meanabsdiff': 0.05965909090909091, 'frac_within_0.25': 0.9886363636363636, 'rescue_corr_vs_hf': 0.9995483262682398, 'hf_rescue_sd': 2.5129843675707075, 'hf_rescue_mean': 2.108487215909091, 'engine_rescue_mean': 2.145951747894287}
+07:45:21 grid_resid_nonfinal: {'n': 224, 'maxdiff': 0.3125, 'meanabsdiff': 0.05552455357142857, 'frac_within_0.25': 0.9955357142857143, 'rescue_corr_vs_hf': 0.9995937569315759, 'hf_rescue_sd': 2.367047949959585, 'hf_rescue_mean': 1.7113560267857142, 'engine_rescue_mean': 1.7412109375}
+07:45:21 grid_w5_layer: {'n': 352, 'maxdiff': 0.65625, 'meanabsdiff': 0.08074396306818182, 'frac_within_0.25': 0.9375, 'rescue_corr_vs_hf': 0.9980280070556866, 'hf_rescue_sd': 1.767375184344629, 'hf_rescue_mean': 1.4275124289772727, 'engine_rescue_mean': 1.452592372894287}
+07:45:21 grid_w5_p_true_maxdiff: 0.025522902607917786
+07:45:21 grid_zero_null_maxdiff: 0.15625
+07:45:21 grid_identity_resid_maxdiff: 0.0
+07:45:21 engine_grid_pass_s: 5.644853591918945
+07:45:21 min_rescue_corr: 0.9049392623700604
+07:45:21 max_meanabsdiff: 0.08074396306818182
+07:45:21 min_frac_within_0.25: 0.9375
+07:45:21 pass: True
+2026-10-04T07:45:23Z END   ext7-wino-verify4 rc=0 (15s)
+2026-10-04T07:45:23Z [chain2] END ext7-wino-verify4 rc=0
+2026-10-04T07:45:23Z [chain2] START ext7-wino-sweep-mixtral_bos
+2026-10-04T07:48:58Z START ext7-wino-sweep-mixtral_bos (waited 215s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --own-pool mixtral_bos --max-rows 40000
+07:48:59 mixtral -> wino_mixtral_bos_str: 1316 directed cases (658 pairs), families {'main': {'discovery': 256, 'validation': 256}, 'rep': {'discovery': 256, 'validation': 256}, 'own': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 4 passes (126336 spawn rows), T max 35
+07:49:00 pass 1/4: layers 0..9, 2632 prefill rows, 39480 spawn rows
+07:49:09   layer   0: load-wait 7.08s compute 1.66s  wf_rows=3948
+07:49:32   layer   8: load-wait 1.04s compute 1.92s  wf_rows=35532
+07:49:56   layer  16: load-wait 1.04s compute 2.04s  wf_rows=39480
+07:50:18   layer  24: load-wait 0.80s compute 2.04s  wf_rows=39480
+07:50:38   layer  31: load-wait 0.85s compute 2.04s  wf_rows=39480
+07:50:39   pass done: 2632 prefill rows (T=35), 39480 spawn rows, 98.4s (metrics 0.4s)
+07:50:43 pass 2/4: layers 10..19, 2632 prefill rows, 39480 spawn rows
+07:52:09 pass 3/4: layers 20..29, 2632 prefill rows, 39480 spawn rows
+07:53:34 pass 4/4: layers 30..31, 2632 prefill rows, 7896 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:55:05 family main: layer disc L20; attn_layer disc L13; block disc L19
+07:55:05 family rep: layer disc L20; attn_layer disc L13; block disc L19
+07:55:05 family own: layer disc L20; attn_layer disc L13; block disc L19
+07:55:05 Δclean +3.86 Δcorrupt -3.86 drop +7.71; {"layer_discovery_argmax": 20, "layer_discovery_max": 1.253, "layer_discovery_top5": [[20, 1.253], [21, 1.209], [19, 1.179], [22, 0.839], [26, 0.834]], "layer_validation_argmax": 20, "layer_validation_max": 1.324, "layer_validation_top5": [[20, 1.324], [21, 1.186], [19, 1.12], [26, 0.934], [24, 0.783]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 1.195, "attn_layer_discovery_top5": [[13, 1.195], [19, 0.844], [25, 0.57], [15, 0.564], [31, 0.314]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.087, "attn_layer_validation_top5": [[13, 1.087], [19, 0.873], [
+2026-10-04T07:55:12Z END   ext7-wino-sweep-mixtral_bos rc=0 (374s)
+2026-10-04T07:55:12Z [chain2] END ext7-wino-sweep-mixtral_bos rc=0
+2026-10-04T07:55:12Z [chain2] START ext7-wino-expert-qwen3
+2026-10-04T08:02:02Z START ext7-wino-expert-qwen3 (waited 410s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main,rep --layers all --pairs-layers auto --max-spawn 60000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+08:02:23 qwen3 -> wino_qwen3_str: 1024 directed cases, families ['main', 'rep'], layers 0..47 (48), pairs layers [41], only_scaled=False, 657676 spawn rows in 13 passes
+08:02:24 pass 1/13: layers [0, 1, 2, 3, 4], 2048 prefill rows, 59956 spawn rows
+08:02:28   layer   0: load-wait 3.30s compute 0.91s  wf_rows=12142
+08:02:35   layer   8: load-wait 0.10s compute 0.73s  wf_rows=59956
+08:02:42   layer  16: load-wait 0.10s compute 0.73s  wf_rows=59956
+08:02:48   layer  24: load-wait 0.11s compute 0.73s  wf_rows=59956
+08:02:55   layer  32: load-wait 0.11s compute 0.73s  wf_rows=59956
+08:03:04   layer  40: load-wait 0.70s compute 0.73s  wf_rows=59956
+08:03:12   layer  47: load-wait 0.63s compute 0.73s  wf_rows=59956
+08:03:12   pass done: 2048 prefill rows (T=31), 59956 spawn rows, 48.5s
+08:03:13   L1: 4 recurrent (>= 128/256); best E076 all-case +0.001 active 223
+08:03:13   L2: 4 recurrent (>= 128/256); best E014 all-case +0.001 active 248
+08:03:13   L3: 6 recurrent (>= 128/256); best E025 all-case -0.002 active 233
+08:03:13   L4: 7 recurrent (>= 128/256); best E000 all-case -0.005 active 200
+08:03:13 pass 1: 48s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 59956 rows
+08:03:13 pass 2/13: layers [5, 6, 7, 8], 2048 prefill rows, 49271 spawn rows
+08:04:00   L5: 5 recurrent (>= 128/256); best E022 all-case +0.001 active 195
+08:04:00   L6: 6 recurrent (>= 128/256); best E110 all-case +0.017 active 145
+08:04:00   L7: 4 recurrent (>= 128/256); best E087 all-case +0.007 active 206
+08:04:00   L8: 4 recurrent (>= 128/256); best E064 all-case +0.015 active 245
+08:04:00 pass 2: 46s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 109227 rows
+08:04:00 pass 3/13: layers [9, 10, 11, 12], 2048 prefill rows, 48745 spawn rows
+08:04:46   L9: 6 recurrent (>= 128/256); best E094 all-case +0.029 active 248
+08:04:46   L10: 6 recurrent (>= 128/256); best E107 all-case +0.023 active 191
+08:04:46   L11: 7 recurrent (>= 128/256); best E029 all-case +0.031 active 183
+08:04:46   L12: 6 recurrent (>= 128/256); best E063 all-case +0.026 active 170
+08:04:46 pass 3: 44s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 157972 rows
+08:04:46 pass 4/13: layers [13, 14, 15, 16], 2048 prefill rows, 49085 spawn rows
+08:05:31   L13: 6 recurrent (>= 128/256); best E044 all-case -0.001 active 249
+08:05:31   L14: 5 recurrent (>= 128/256); best E076 all-case +0.022 active 164
+08:05:31   L15: 8 recurrent (>= 128/256); best E071 all-case +0.001 active 129
+08:05:31   L16: 7 recurrent (>= 128/256); best E037 all-case +0.008 active 140
+08:05:31 pass 4: 41s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 207057 rows
+08:05:32 pass 5/13: layers [17, 18, 19, 20], 2048 prefill rows, 50791 spawn rows
+08:06:17   L17: 8 recurrent (>= 128/256); best E117 all-case +0.014 active 206
+08:06:17   L18: 5 recurrent (>= 128/256); best E086 all-case +0.008 active 219
+08:06:17   L19: 2 recurrent (>= 128/256); best E087 all-case -0.008 active 187
+08:06:17   L20: 5 recurrent (>= 128/256); best E008 all-case +0.001 active 176
+08:06:17 pass 5: 42s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 257848 rows
+08:06:17 pass 6/13: layers [21, 22, 23, 24], 2048 prefill rows, 51439 spawn rows
+08:07:05   L21: 5 recurrent (>= 128/256); best E094 all-case +0.011 active 248
+08:07:05   L22: 6 recurrent (>= 128/256); best E076 all-case +0.011 active 196
+08:07:05   L23: 6 recurrent (>= 128/256); best E012 all-case +0.021 active 163
+08:07:05   L24: 5 recurrent (>= 128/256); best E046 all-case +0.027 active 178
+08:07:05 pass 6: 44s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 309287 rows
+08:07:06 pass 7/13: layers [25, 26, 27, 28], 2048 prefill rows, 50278 spawn rows
+08:07:52   L25: 6 recurrent (>= 128/256); best E065 all-case +0.019 active 184
+08:07:52   L26: 5 recurrent (>= 128/256); best E110 all-case +0.032 active 220
+08:07:52   L27: 7 recurrent (>= 128/256); best E007 all-case +0.032 active 209
+08:07:52   L28: 6 recurrent (>= 128/256); best E037 all-case +0.041 active 184
+08:07:52 pass 7: 41s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 359565 rows
+08:07:53 pass 8/13: layers [29, 30, 31, 32], 2048 prefill rows, 52100 spawn rows
+08:08:35   L29: 6 recurrent (>= 128/256); best E062 all-case +0.051 active 220
+08:08:35   L30: 6 recurrent (>= 128/256); best E007 all-case +0.015 active 221
+08:08:35   L31: 5 recurrent (>= 128/256); best E124 all-case +0.274 active 147
+08:08:35   L32: 5 recurrent (>= 128/256); best E064 all-case +0.044 active 232
+08:08:35 pass 8: 39s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 411665 rows
+08:08:36 pass 9/13: layers [33, 34, 35, 36], 2048 prefill rows, 51984 spawn rows
+08:09:17   L33: 6 recurrent (>= 128/256); best E113 all-case +0.059 active 197
+08:09:17   L34: 6 recurrent (>= 128/256); best E119 all-case +0.325 active 186
+08:09:17   L35: 6 recurrent (>= 128/256); best E086 all-case +0.093 active 242
+08:09:17   L36: 6 recurrent (>= 128/256); best E074 all-case +0.167 active 190
+08:09:17 pass 9: 41s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 463649 rows
+08:09:18 pass 10/13: layers [37, 38, 39, 40], 2048 prefill rows, 50177 spawn rows
+08:10:02   L37: 7 recurrent (>= 128/256); best E065 all-case +0.077 active 176
+08:10:02   L38: 8 recurrent (>= 128/256); best E021 all-case +0.175 active 165
+08:10:02   L39: 9 recurrent (>= 128/256); best E071 all-case +0.448 active 205
+08:10:02   L40: 6 recurrent (>= 128/256); best E040 all-case +0.254 active 246
+08:10:02 pass 10: 43s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 513826 rows
+08:10:03 pass 11/13: layers [41], 2048 prefill rows, 69601 spawn rows
+08:10:46   L41: 6 recurrent (>= 128/256); best E117 all-case +0.788 active 209
+08:10:46 pass 11: 40s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 583427 rows
+08:10:47 pass 12/13: layers [42, 43, 44, 45], 2048 prefill rows, 50035 spawn rows
+08:11:30   L42: 7 recurrent (>= 128/256); best E073 all-case +0.186 active 250
+08:11:30   L43: 6 recurrent (>= 128/256); best E081 all-case +0.649 active 251
+08:11:30   L44: 8 recurrent (>= 128/256); best E122 all-case +0.358 active 217
+08:11:30   L45: 6 recurrent (>= 128/256); best E042 all-case +0.032 active 169
+08:11:30 pass 12: 41s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 633462 rows
+08:11:30 pass 13/13: layers [46, 47], 2048 prefill rows, 24214 spawn rows
+08:12:13   L46: 8 recurrent (>= 128/256); best E124 all-case +0.021 active 230
+08:12:13   L47: 7 recurrent (>= 128/256); best E071 all-case +0.006 active 211
+08:12:13 pass 13: 41s; /home/ubuntu/MOE/results/wino_qwen3_str/str_expert_rows.parquet now 657676 rows
+2026-10-04T08:12:21Z END   ext7-wino-expert-qwen3 rc=0 (619s)
+2026-10-04T08:12:21Z [chain2] END ext7-wino-expert-qwen3 rc=0
+2026-10-04T08:12:21Z [chain2] START ext7-wino-expert-mixtral_bos
+2026-10-04T08:22:41Z START ext7-wino-expert-mixtral_bos (waited 620s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main,rep --layers all --pairs-layers auto --max-spawn 40000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+08:22:53 mixtral -> wino_mixtral_bos_str: 1024 directed cases, families ['main', 'rep'], layers 0..31 (32), pairs layers [20], only_scaled=False, 173987 spawn rows in 5 passes
+08:22:53 pass 1/5: layers [0, 1, 2, 3, 4, 5, 6], 2048 prefill rows, 36947 spawn rows
+08:23:02   layer   0: load-wait 6.93s compute 1.45s  wf_rows=5296
+08:23:25   layer   8: load-wait 1.26s compute 1.62s  wf_rows=36947
+08:23:48   layer  16: load-wait 1.28s compute 1.62s  wf_rows=36947
+08:24:11   layer  24: load-wait 1.27s compute 1.62s  wf_rows=36947
+08:24:32   layer  31: load-wait 1.28s compute 1.62s  wf_rows=36947
+08:24:32   pass done: 2048 prefill rows (T=33), 36947 spawn rows, 98.3s
+08:24:32   L1: 2 recurrent (>= 128/256); best E002 all-case +0.000 active 166
+08:24:32   L2: 1 recurrent (>= 128/256); best E006 all-case +0.000 active 194
+08:24:32   L3: 2 recurrent (>= 128/256); best E005 all-case +0.001 active 140
+08:24:32   L4: 1 recurrent (>= 128/256); best E005 all-case +0.005 active 128
+08:24:32   L5: 2 recurrent (>= 128/256); best E006 all-case -0.003 active 131
+08:24:32   L6: 2 recurrent (>= 128/256); best E004 all-case +0.004 active 192
+08:24:32 pass 1: 98s; /home/ubuntu/MOE/results/wino_mixtral_bos_str/str_expert_rows.parquet now 36947 rows
+08:24:33 pass 2/5: layers [7, 8, 9, 10, 11, 12, 13], 2048 prefill rows, 37871 spawn rows
+08:26:06   L7: 2 recurrent (>= 128/256); best E006 all-case +0.005 active 241
+08:26:06   L8: 1 recurrent (>= 128/256); best E001 all-case -0.008 active 163
+08:26:06   L9: 1 recurrent (>= 128/256); best E002 all-case -0.003 active 143
+08:26:06   L10: 2 recurrent (>= 128/256); best E005 all-case +0.007 active 169
+08:26:06   L11: 2 recurrent (>= 128/256); best E000 all-case +0.034 active 131
+08:26:06   L12: 2 recurrent (>= 128/256); best E006 all-case +0.050 active 243
+08:26:06   L13: 2 recurrent (>= 128/256); best E005 all-case +0.230 active 247
+08:26:06 pass 2: 89s; /home/ubuntu/MOE/results/wino_mixtral_bos_str/str_expert_rows.parquet now 74818 rows
+08:26:06 pass 3/5: layers [14, 15, 16, 17, 18, 19, 20], 2048 prefill rows, 39414 spawn rows
+08:27:24   L14: 1 recurrent (>= 128/256); best E007 all-case +0.199 active 251
+08:27:24   L15: 1 recurrent (>= 128/256); best E002 all-case +0.213 active 246
+08:27:24   L16: 2 recurrent (>= 128/256); best E007 all-case +0.437 active 238
+08:27:24   L17: 1 recurrent (>= 128/256); best E003 all-case +0.208 active 186
+08:27:24   L18: 3 recurrent (>= 128/256); best E005 all-case +0.441 active 234
+08:27:24   L19: 2 recurrent (>= 128/256); best E006 all-case +1.002 active 248
+08:27:24   L20: 1 recurrent (>= 128/256); best E000 all-case +1.053 active 246
+08:27:24 pass 3: 75s; /home/ubuntu/MOE/results/wino_mixtral_bos_str/str_expert_rows.parquet now 114232 rows
+08:27:24 pass 4/5: layers [21, 22, 23, 24, 25, 26, 27], 2048 prefill rows, 38703 spawn rows
+08:28:35   L21: 2 recurrent (>= 128/256); best E006 all-case +0.738 active 228
+08:28:35   L22: 1 recurrent (>= 128/256); best E000 all-case +0.260 active 177
+08:28:35   L23: 2 recurrent (>= 128/256); best E005 all-case +0.233 active 213
+08:28:35   L24: 2 recurrent (>= 128/256); best E002 all-case +0.425 active 205
+08:28:35   L25: 2 recurrent (>= 128/256); best E002 all-case +0.279 active 187
+08:28:35   L26: 2 recurrent (>= 128/256); best E002 all-case +0.562 active 235
+08:28:35   L27: 1 recurrent (>= 128/256); best E005 all-case +0.139 active 199
+08:28:35 pass 4: 69s; /home/ubuntu/MOE/results/wino_mixtral_bos_str/str_expert_rows.parquet now 152935 rows
+08:28:35 pass 5/5: layers [28, 29, 30, 31], 2048 prefill rows, 21052 spawn rows
+08:29:50   L28: 2 recurrent (>= 128/256); best E001 all-case +0.098 active 178
+08:29:50   L29: 2 recurrent (>= 128/256); best E002 all-case -0.015 active 245
+08:29:50   L30: 2 recurrent (>= 128/256); best E001 all-case -0.228 active 133
+08:29:50   L31: 2 recurrent (>= 128/256); best E003 all-case -0.272 active 184
+08:29:50 pass 5: 74s; /home/ubuntu/MOE/results/wino_mixtral_bos_str/str_expert_rows.parquet now 173987 rows
+2026-10-04T08:29:58Z END   ext7-wino-expert-mixtral_bos rc=0 (437s)
+2026-10-04T08:29:58Z [chain2] END ext7-wino-expert-mixtral_bos rc=0
+wino_qwen3_str 657676 48 {'expert': 393216, 'expert_corrupt_only': 59660, 'expert_scaled': 57344, 'layer': 49152, 'coalition_clean': 49152, 'coalition_union': 49152}
+wino_mixtral_bos_str 173987 32 {'expert': 65536, 'layer': 32768, 'coalition_clean': 32768, 'coalition_union': 32768, 'expert_corrupt_only': 8099, 'expert_scaled': 2048}
+2026-10-04T08:29:59Z [chain2] START ext7-wino-grid-w1-qwen3
+2026-10-04T08:40:31Z START ext7-wino-grid-w1-qwen3 (waited 632s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+08:40:32 qwen3 -> wino_qwen3_str: window 1, kinds ['layer', 'attn_layer', 'resid'], 512 directed cases, 1430 units, 205920 suffix rows, 5 passes; units per category {'last STR token': 512, 'last token': 512, 'first subsequent token': 314, 'further tokens': 74, 'first STR token': 18}
+08:40:39 pass 1/5: 416 units (S 1..1), 832 prefill rows, 59904 suffix rows
+08:40:43   layer   0: load-wait 2.73s compute 0.75s  wf_rows=1248 wf_tokens=416
+08:40:48   layer   8: load-wait 0.59s compute 0.21s  wf_rows=11232 wf_tokens=10400
+08:40:55   layer  16: load-wait 0.57s compute 0.28s  wf_rows=21216 wf_tokens=20384
+08:41:02   layer  24: load-wait 0.57s compute 0.35s  wf_rows=31200 wf_tokens=30368
+08:41:11   layer  32: load-wait 1.11s compute 0.43s  wf_rows=41184 wf_tokens=40352
+08:41:20   layer  40: load-wait 0.32s compute 0.50s  wf_rows=51168 wf_tokens=50336
+08:41:29   layer  47: load-wait 0.65s compute 0.56s  wf_rows=59904 wf_tokens=59072
+08:41:31   pass done: 832 prefill rows (T=30), 59904 suffix rows (Smax=1, 59904 tokens), 51.2s
+08:41:31 pass 1: 51.2s; 59904 rows saved
+08:41:32 pass 2/5: 416 units (S 1..2), 832 prefill rows, 59904 suffix rows
+08:42:23 pass 2: 46.5s; 119808 rows saved
+08:42:23 pass 3/5: 416 units (S 2..3), 832 prefill rows, 59904 suffix rows
+08:43:14 pass 3: 47.6s; 179712 rows saved
+08:43:14 pass 4/5: 174 units (S 3..7), 348 prefill rows, 25056 suffix rows
+08:43:59 pass 4: 42.9s; 204768 rows saved
+08:43:59 pass 5/5: 8 units (S 8..10), 16 prefill rows, 1152 suffix rows
+08:44:42 pass 5: 41.8s; 205920 rows saved
+08:44:42 done
+2026-10-04T08:44:50Z END   ext7-wino-grid-w1-qwen3 rc=0 (259s)
+2026-10-04T08:44:50Z [chain2] END ext7-wino-grid-w1-qwen3 rc=0
+2026-10-04T08:44:50Z [chain2] START ext7-wino-grid-w1-mixtral_bos
+2026-10-04T09:01:09Z START ext7-wino-grid-w1-mixtral_bos (waited 979s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+09:01:11 mixtral -> wino_mixtral_bos_str: window 1, kinds ['layer', 'attn_layer', 'resid'], 512 directed cases, 1464 units, 140544 suffix rows, 4 passes; units per category {'last STR token': 512, 'last token': 512, 'first subsequent token': 314, 'further tokens': 78, 'first STR token': 42, 'middle STR tokens': 6}
+09:01:17 pass 1/4: 625 units (S 1..2), 1250 prefill rows, 60000 suffix rows
+09:01:27   layer   0: load-wait 8.06s compute 1.54s  wf_rows=1875 wf_tokens=738
+09:01:49   layer   8: load-wait 1.86s compute 0.94s  wf_rows=16875 wf_tokens=18450
+09:02:13   layer  16: load-wait 1.66s compute 1.27s  wf_rows=31875 wf_tokens=36162
+09:02:36   layer  24: load-wait 1.31s compute 1.62s  wf_rows=46875 wf_tokens=53874
+09:02:57   layer  31: load-wait 1.01s compute 1.93s  wf_rows=60000 wf_tokens=69372
+09:02:58   pass done: 1250 prefill rows (T=32), 60000 suffix rows (Smax=2, 70848 tokens), 100.2s
+09:02:58 pass 1: 100.2s; 60000 rows saved
+09:02:59 pass 2/4: 625 units (S 2..3), 1250 prefill rows, 60000 suffix rows
+09:04:36 pass 2: 95.5s; 120000 rows saved
+09:04:36 pass 3/4: 212 units (S 3..9), 424 prefill rows, 20352 suffix rows
+09:06:01 pass 3: 83.3s; 140352 rows saved
+09:06:01 pass 4/4: 2 units (S 10..10), 4 prefill rows, 192 suffix rows
+09:07:21 pass 4: 76.9s; 140544 rows saved
+09:07:21 done
+2026-10-04T09:07:28Z END   ext7-wino-grid-w1-mixtral_bos rc=0 (379s)
+2026-10-04T09:07:28Z [chain2] END ext7-wino-grid-w1-mixtral_bos rc=0
+2026-10-04T09:07:28Z [chain2] START ext7-wino-heads-qwen3
+2026-10-04T09:24:15Z START ext7-wino-heads-qwen3 (waited 1006s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main --layers auto --max-rows 50000
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+09:24:30 qwen3 -> wino_qwen3_str: 512 directed cases, layers [38, 39, 40, 42, 45] (null layer 45), 32 heads, 3 passes, 89600 spawn rows; mentions: first occurrence of ans_a / ans_b before the blank (found 509 of 512)
+09:24:31 pass 1/3: layers [38, 39], 1024 prefill rows, 35840 spawn rows
+09:24:35   layer   0: load-wait 3.19s compute 0.67s  wf_rows=0
+09:24:41   layer   8: load-wait 0.48s compute 0.15s  wf_rows=0
+09:24:48   layer  16: load-wait 0.47s compute 0.15s  wf_rows=0
+09:24:55   layer  24: load-wait 0.58s compute 0.15s  wf_rows=0
+09:25:03   layer  32: load-wait 0.96s compute 0.15s  wf_rows=0
+09:25:12   layer  40: load-wait 0.47s compute 0.41s  wf_rows=35840
+09:25:21   layer  47: load-wait 0.75s compute 0.41s  wf_rows=35840
+09:25:21   pass done: 1024 prefill rows (T=31), 35840 spawn rows, 50.2s
+09:25:22 pass 1: 50s; 35840 rows
+09:25:22 pass 2/3: layers [40, 42], 1024 prefill rows, 35840 spawn rows
+09:26:06 pass 2: 44s; 71680 rows
+09:26:06 pass 3/3: layers [45], 1024 prefill rows, 17920 spawn rows
+09:26:47 pass 3: 40s; 89600 rows
+2026-10-04T09:26:55Z END   ext7-wino-heads-qwen3 rc=0 (160s)
+2026-10-04T09:26:55Z [chain2] END ext7-wino-heads-qwen3 rc=0
+2026-10-04T09:26:55Z [chain2] START ext7-wino-heads-mixtral_bos
+2026-10-04T09:56:09Z START ext7-wino-heads-mixtral_bos (waited 1754s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main --layers auto --max-rows 50000
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+09:56:23 mixtral -> wino_mixtral_bos_str: 512 directed cases, layers [13, 15, 19, 25, 28] (null layer 28), 32 heads, 3 passes, 89600 spawn rows; mentions: first occurrence of ans_a / ans_b before the blank (found 509 of 512)
+09:56:24 pass 1/3: layers [13, 15], 1024 prefill rows, 35840 spawn rows
+09:56:33   layer   0: load-wait 7.53s compute 0.90s  wf_rows=0
+09:56:53   layer   8: load-wait 1.36s compute 0.52s  wf_rows=0
+09:57:12   layer  16: load-wait 0.28s compute 1.10s  wf_rows=35840
+09:57:28   layer  24: load-wait 0.75s compute 1.10s  wf_rows=35840
+09:57:46   layer  31: load-wait 0.29s compute 1.10s  wf_rows=35840
+09:57:46   pass done: 1024 prefill rows (T=32), 35840 spawn rows, 81.5s
+09:57:48 pass 1: 81s; 35840 rows
+09:57:49 pass 2/3: layers [19, 25], 1024 prefill rows, 35840 spawn rows
+09:59:10 pass 2: 81s; 71680 rows
+09:59:11 pass 3/3: layers [28], 1024 prefill rows, 17920 spawn rows
+10:00:39 pass 3: 88s; 89600 rows
+2026-10-04T10:00:47Z END   ext7-wino-heads-mixtral_bos rc=0 (278s)
+2026-10-04T10:00:47Z [chain2] END ext7-wino-heads-mixtral_bos rc=0
+2026-10-04T10:00:47Z [chain2] START ext7-wino-grid-w5-qwen3
+2026-10-04T10:22:57Z START ext7-wino-grid-w5-qwen3 (waited 1330s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets data/wino_str/case_sets.json --out wino_qwen3_str --families main --kinds layer --window 5 --max-rows 60000 --token-budget 200000
+10:22:58 qwen3 -> wino_qwen3_str: window 5, kinds ['layer'], 512 directed cases, 1430 units, 68640 suffix rows, 2 passes; units per category {'last STR token': 512, 'last token': 512, 'first subsequent token': 314, 'further tokens': 74, 'first STR token': 18}
+10:23:00 pass 1/2: 1250 units (S 1..3), 2500 prefill rows, 60000 suffix rows
+10:23:04   layer   0: load-wait 2.93s compute 1.10s  wf_rows=3750 wf_tokens=0
+10:23:13   layer   8: load-wait 0.28s compute 0.53s  wf_rows=13750 wf_tokens=22140
+10:23:23   layer  16: load-wait 1.09s compute 0.67s  wf_rows=23750 wf_tokens=39852
+10:23:33   layer  24: load-wait 0.45s compute 0.80s  wf_rows=33750 wf_tokens=57564
+10:23:44   layer  32: load-wait 0.11s compute 0.94s  wf_rows=43750 wf_tokens=75276
+10:23:54   layer  40: load-wait 0.11s compute 1.07s  wf_rows=53750 wf_tokens=92988
+10:24:03   layer  47: load-wait 0.11s compute 1.17s  wf_rows=60000 wf_tokens=106272
+10:24:05   pass done: 2500 prefill rows (T=31), 60000 suffix rows (Smax=3, 106272 tokens), 64.3s
+10:24:05 pass 1: 64.3s; 60000 rows saved
+10:24:06 pass 2/2: 180 units (S 3..10), 360 prefill rows, 8640 suffix rows
+10:24:50 pass 2: 44.5s; 68640 rows saved
+10:24:51 done
+2026-10-04T10:24:57Z END   ext7-wino-grid-w5-qwen3 rc=0 (120s)
+2026-10-04T10:24:57Z [chain2] END ext7-wino-grid-w5-qwen3 rc=0
+2026-10-04T10:24:57Z [chain2] START ext7-wino-grid-w5-mixtral_bos
+2026-10-04T11:01:27Z START ext7-wino-grid-w5-mixtral_bos (waited 2190s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_bos_str --families main --kinds layer --window 5 --max-rows 60000 --token-budget 200000
+11:01:28 mixtral -> wino_mixtral_bos_str: window 5, kinds ['layer'], 512 directed cases, 1464 units, 46848 suffix rows, 2 passes; units per category {'last STR token': 512, 'last token': 512, 'first subsequent token': 314, 'further tokens': 78, 'first STR token': 42, 'middle STR tokens': 6}
+11:01:35 pass 1/2: 1416 units (S 1..4), 2832 prefill rows, 45312 suffix rows
+11:01:42   layer   0: load-wait 5.43s compute 1.79s  wf_rows=4248 wf_tokens=0
+11:02:01   layer   8: load-wait 0.26s compute 1.81s  wf_rows=15576 wf_tokens=27640
+11:02:20   layer  16: load-wait 0.28s compute 2.24s  wf_rows=26904 wf_tokens=49752
+11:02:42   layer  24: load-wait 0.28s compute 2.66s  wf_rows=38232 wf_tokens=71864
+11:03:04   layer  31: load-wait 0.28s compute 2.97s  wf_rows=45312 wf_tokens=88448
+11:03:04   pass done: 2832 prefill rows (T=32), 45312 suffix rows (Smax=4, 88448 tokens), 89.6s
+11:03:05 pass 1: 89.6s; 45312 rows saved
+11:03:06 pass 2/2: 48 units (S 5..10), 96 prefill rows, 1536 suffix rows
+11:04:17 pass 2: 71.5s; 46848 rows saved
+11:04:18 done
+2026-10-04T11:04:25Z END   ext7-wino-grid-w5-mixtral_bos rc=0 (178s)
+2026-10-04T11:04:25Z [chain2] END ext7-wino-grid-w5-mixtral_bos rc=0
+2026-10-04T11:04:25Z [chain2] DONE

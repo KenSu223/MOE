@@ -1,0 +1,28 @@
+2026-10-04T07:16:44Z START ext7c-cf-attnsweep-mixtral_bos (waited 343s): python scripts/ext7_cf_attnsweep.py mixtral --str-run mixtral_bos_str --out mixtral_bos_str_attnsweep --layer-chunks 3
+07:16:48 chunk 1/3: layers 0..10, 1071 prefill rows, 28314 spawn rows
+07:16:58   layer   0: load-wait 8.16s compute 0.94s  wf_rows=2574
+07:17:21   layer   8: load-wait 1.85s compute 0.59s  wf_rows=23166
+07:17:44   layer  16: load-wait 2.20s compute 0.69s  wf_rows=28314
+07:18:07   layer  24: load-wait 2.32s compute 0.70s  wf_rows=28314
+07:18:27   layer  31: load-wait 2.20s compute 0.69s  wf_rows=28314
+07:18:27   pass done: 1071 prefill rows (T=16), 28314 spawn rows, 98.7s
+07:18:31 chunk 2/3: layers 11..21, 1071 prefill rows, 28314 spawn rows
+07:18:33   layer   0: load-wait 2.11s compute 0.24s  wf_rows=0
+07:18:57   layer   8: load-wait 2.65s compute 0.24s  wf_rows=0
+07:19:20   layer  16: load-wait 2.54s compute 0.47s  wf_rows=15444
+07:19:43   layer  24: load-wait 2.01s compute 0.69s  wf_rows=28314
+07:20:04   layer  31: load-wait 2.19s compute 0.70s  wf_rows=28314
+07:20:04   pass done: 1071 prefill rows (T=16), 28314 spawn rows, 92.4s
+07:20:08 chunk 3/3: layers 22..31, 1071 prefill rows, 25740 spawn rows
+07:20:10   layer   0: load-wait 2.10s compute 0.24s  wf_rows=0
+07:20:31   layer   8: load-wait 2.08s compute 0.24s  wf_rows=0
+07:20:50   layer  16: load-wait 1.96s compute 0.25s  wf_rows=0
+07:21:12   layer  24: load-wait 2.45s compute 0.34s  wf_rows=7722
+07:21:30   layer  31: load-wait 2.09s compute 0.63s  wf_rows=25740
+07:21:30   pass done: 1071 prefill rows (T=16), 25740 spawn rows, 82.0s
+/home/ubuntu/MOE/scripts/ext7_cf_attnsweep.py:103: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mdc, mvl = R.loc[dsc].mean(0), R.loc[val].mean(0)
+07:21:34 attn_layer: L*=18 disc +2.335 val@L* +2.329 val argmax L24 +2.443
+07:21:34 layer     : L*=21 disc +1.115 val@L* +1.100 val argmax L19 +1.105
+07:21:34 block     : L*=19 disc +3.587 val@L* +3.468 val argmax L19 +3.468
+2026-10-04T07:21:41Z END   ext7c-cf-attnsweep-mixtral_bos rc=0 (297s)

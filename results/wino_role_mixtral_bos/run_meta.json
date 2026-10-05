@@ -1,0 +1,15 @@
+{
+ "scan": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "n_pairs": 294,
+  "margin": 1.0,
+  "pairs": "data/wino_role/pairs_mixtral_bos.parquet",
+  "command": "python scripts/ext7_role_scan.py mixtral_bos",
+  "created_utc": "2026-10-04T07:41:44Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:43:08Z"
+ }
+}

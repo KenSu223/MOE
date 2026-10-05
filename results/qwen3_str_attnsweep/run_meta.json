@@ -1,0 +1,33 @@
+{
+ "attnsweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "special_tokens": true,
+  "str_run": "qwen3_str",
+  "kinds": [
+   "attn_layer",
+   "layer",
+   "block"
+  ],
+  "layer_chunks": 4,
+  "n_cases": 215,
+  "n_donor_rows": 852,
+  "case_sets": "paper discovery/validation of the STR run (cases with >= 1 selected donor)",
+  "experiment": "ext7-controls task 1: CounterFact STR attention / MoE / block sweep at the final position",
+  "command": "python scripts/ext7_cf_attnsweep.py qwen3 --str-run qwen3_str --out qwen3_str_attnsweep --layer-chunks 4",
+  "created_utc": "2026-10-04T07:07:30Z",
+  "complete": true,
+  "completed_utc": "2026-10-04T07:10:56Z",
+  "pass_times_s": [
+   60.86839294433594,
+   41.048829555511475,
+   47.53187298774719,
+   43.00302982330322
+  ],
+  "n_rows": 126311,
+  "outputs": [
+   "str_attn_rows.parquet",
+   "str_attn_summary.json"
+  ]
+ }
+}

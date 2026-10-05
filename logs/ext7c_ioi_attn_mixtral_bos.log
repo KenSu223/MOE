@@ -1,0 +1,20 @@
+2026-10-04T08:12:21Z START ext7c-ioi-attn-mixtral_bos (waited 901s): python scripts/ext7_ioi_attn.py mixtral_bos
+08:12:37   layer   0: load-wait 6.77s compute 0.74s  wf_rows=0
+08:12:59   layer   8: load-wait 2.69s compute 0.24s  wf_rows=0
+08:13:22   layer  16: load-wait 2.65s compute 0.26s  wf_rows=0
+08:13:45   layer  24: load-wait 2.65s compute 0.34s  wf_rows=0
+08:14:06   layer  31: load-wait 2.42s compute 0.24s  wf_rows=0
+08:14:06   pass done: 800 prefill rows (T=21), 0 spawn rows, 96.6s
+08:14:06 rows 800/1536
+08:15:32 rows 1536/1536
+08:15:32 L28H0: clean IO 0.73 S1 0.01 S2 0.00 | s2io IO 0.01 S1 0.73 | s1io IO 0.27
+08:15:32 L19H8: clean IO 0.67 S1 0.04 S2 0.02 | s2io IO 0.04 S1 0.67 | s1io IO 0.24
+08:15:32 L24H21: clean IO 0.44 S1 0.17 S2 0.10 | s2io IO 0.17 S1 0.44 | s1io IO 0.21
+08:15:32 L25H29: clean IO 0.41 S1 0.07 S2 0.04 | s2io IO 0.07 S1 0.40 | s1io IO 0.16
+08:15:32 L26H6: clean IO 0.40 S1 0.07 S2 0.02 | s2io IO 0.08 S1 0.38 | s1io IO 0.21
+08:15:32 L17H26: clean IO 0.39 S1 0.06 S2 0.05 | s2io IO 0.06 S1 0.38 | s1io IO 0.16
+08:15:32 L24H5: clean IO 0.38 S1 0.11 S2 0.07 | s2io IO 0.11 S1 0.38 | s1io IO 0.21
+08:15:32 L30H2: clean IO 0.38 S1 0.10 S2 0.02 | s2io IO 0.11 S1 0.36 | s1io IO 0.22
+08:15:32 L24H11: clean IO 0.34 S1 0.07 S2 0.01 | s2io IO 0.08 S1 0.34 | s1io IO 0.19
+08:15:32 L22H29: clean IO 0.31 S1 0.01 S2 0.04 | s2io IO 0.02 S1 0.31 | s1io IO 0.16
+2026-10-04T08:15:39Z END   ext7c-ioi-attn-mixtral_bos rc=0 (198s)

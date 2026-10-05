@@ -1,0 +1,43 @@
+2026-10-04T07:07:26Z START ext7c-cf-attnsweep-qwen3 (waited 0s): python scripts/ext7_cf_attnsweep.py qwen3 --str-run qwen3_str --out qwen3_str_attnsweep --layer-chunks 4
+07:07:31 chunk 1/4: layers 0..11, 1067 prefill rows, 30672 spawn rows
+07:07:34   layer   0: load-wait 2.92s compute 0.54s  wf_rows=2556
+07:07:43   layer   8: load-wait 1.05s compute 0.21s  wf_rows=23004
+07:07:53   layer  16: load-wait 0.99s compute 0.25s  wf_rows=30672
+07:08:03   layer  24: load-wait 1.01s compute 0.25s  wf_rows=30672
+07:08:13   layer  32: load-wait 0.99s compute 0.25s  wf_rows=30672
+07:08:23   layer  40: load-wait 0.99s compute 0.25s  wf_rows=30672
+07:08:32   layer  47: load-wait 1.04s compute 0.25s  wf_rows=30672
+07:08:32   pass done: 1067 prefill rows (T=15), 30672 spawn rows, 60.9s
+07:08:35 chunk 2/4: layers 12..23, 1067 prefill rows, 30672 spawn rows
+07:08:36   layer   0: load-wait 0.90s compute 0.08s  wf_rows=0
+07:08:44   layer   8: load-wait 0.50s compute 0.08s  wf_rows=0
+07:08:50   layer  16: load-wait 0.54s compute 0.15s  wf_rows=12780
+07:08:55   layer  24: load-wait 0.43s compute 0.25s  wf_rows=30672
+07:09:02   layer  32: load-wait 0.89s compute 0.25s  wf_rows=30672
+07:09:10   layer  40: load-wait 0.81s compute 0.25s  wf_rows=30672
+07:09:16   layer  47: load-wait 0.65s compute 0.25s  wf_rows=30672
+07:09:16   pass done: 1067 prefill rows (T=15), 30672 spawn rows, 41.0s
+07:09:19 chunk 3/4: layers 24..35, 1067 prefill rows, 30672 spawn rows
+07:09:20   layer   0: load-wait 0.57s compute 0.08s  wf_rows=0
+07:09:27   layer   8: load-wait 0.81s compute 0.08s  wf_rows=0
+07:09:34   layer  16: load-wait 0.93s compute 0.08s  wf_rows=0
+07:09:42   layer  24: load-wait 0.94s compute 0.14s  wf_rows=2556
+07:09:52   layer  32: load-wait 0.96s compute 0.21s  wf_rows=23004
+07:09:59   layer  40: load-wait 0.54s compute 0.25s  wf_rows=30672
+07:10:06   layer  47: load-wait 0.71s compute 0.25s  wf_rows=30672
+07:10:06   pass done: 1067 prefill rows (T=15), 30672 spawn rows, 47.5s
+07:10:10 chunk 4/4: layers 36..47, 1067 prefill rows, 30672 spawn rows
+07:10:11   layer   0: load-wait 0.57s compute 0.08s  wf_rows=0
+07:10:16   layer   8: load-wait 0.73s compute 0.08s  wf_rows=0
+07:10:24   layer  16: load-wait 0.86s compute 0.09s  wf_rows=0
+07:10:31   layer  24: load-wait 0.82s compute 0.08s  wf_rows=0
+07:10:38   layer  32: load-wait 1.03s compute 0.08s  wf_rows=0
+07:10:46   layer  40: load-wait 0.83s compute 0.15s  wf_rows=12780
+07:10:53   layer  47: load-wait 0.63s compute 0.26s  wf_rows=30672
+07:10:53   pass done: 1067 prefill rows (T=15), 30672 spawn rows, 43.0s
+/home/ubuntu/MOE/scripts/ext7_cf_attnsweep.py:103: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mdc, mvl = R.loc[dsc].mean(0), R.loc[val].mean(0)
+07:10:56 attn_layer: L*=40 disc +4.223 val@L* +3.955 val argmax L40 +3.955
+07:10:56 layer     : L*=44 disc +2.255 val@L* +2.077 val argmax L44 +2.077
+07:10:56 block     : L*=40 disc +5.168 val@L* +4.735 val argmax L40 +4.735
+2026-10-04T07:11:01Z END   ext7c-cf-attnsweep-qwen3 rc=0 (215s)

@@ -274,7 +274,10 @@ class SubjectEngine(Engine):
             wf_len[n_wf : n_wf + n] = lens_t[parents] - pos
             if has_window:
                 wf_clean[n_wf : n_wf + n] = torch.tensor([spawns[i].clean for i in idx], device=dev)
-                wf_winend[n_wf : n_wf + n] = torch.tensor([spawns[i].layer + spawns[i].window - 1 for i in idx], device=dev)
+                # window-1 rows get no window end (-1): otherwise a pre-MoE row (attn_layer) spawned at layer l would have
+                # its MoE output at p replaced by the clean one at l, i.e. silently become `block` (found by ext7-wino)
+                wf_winend[n_wf : n_wf + n] = torch.tensor([spawns[i].layer + spawns[i].window - 1 if spawns[i].window > 1 else -1
+                                                           for i in idx], device=dev)
             wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
             n_wf += n
 

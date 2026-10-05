@@ -1,0 +1,15 @@
+2026-10-04T09:28:49Z START ext7c-w2-ioi-mixtral_bos-s1io (waited 1005s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/ioi/pairs_s1io_mixtral_bos.parquet --case-sets data/ioi/case_sets_s1io.json --out ioi_mixtral_bos_s1io --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --max-rows 50000 --agent ext7-controls
+09:28:51 mixtral -> ioi_mixtral_bos_s1io: 512 directed cases (512 pairs), families {'main': {'discovery': 128, 'validation': 128}, 'rep': {'discovery': 128, 'validation': 128}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (49152 spawn rows), T max 21
+09:28:57 pass 1/1: layers 0..31, 1024 prefill rows, 49152 spawn rows
+09:29:04   layer   0: load-wait 6.04s compute 0.82s  wf_rows=1536
+09:29:27   layer   8: load-wait 2.35s compute 0.52s  wf_rows=13824
+09:29:50   layer  16: load-wait 2.19s compute 0.73s  wf_rows=26112
+09:30:12   layer  24: load-wait 1.55s compute 0.93s  wf_rows=38400
+09:30:33   layer  31: load-wait 2.51s compute 1.11s  wf_rows=49152
+09:30:34   pass done: 1024 prefill rows (T=21), 49152 spawn rows, 96.7s (metrics 0.5s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+09:30:35 family main: layer disc L28; attn_layer disc L30; block disc L30
+09:30:35 family rep: layer disc L28; attn_layer disc L30; block disc L30
+09:30:35 Δclean +5.56 Δcorrupt -1.65 drop +7.21; {"layer_discovery_argmax": 28, "layer_discovery_max": 0.668, "layer_discovery_top5": [[28, 0.668], [27, 0.283], [18, 0.246], [29, 0.162], [17, 0.089]], "layer_validation_argmax": 28, "layer_validation_max": 0.699, "layer_validation_top5": [[28, 0.699], [27, 0.312], [18, 0.183], [29, 0.176], [26, 0.089]], "attn_layer_discovery_argmax": 30, "attn_layer_discovery_max": 1.523, "attn_layer_discovery_top5": [[30, 1.523], [31, 1.519], [21, 0.939], [26, 0.888], [24, 0.564]], "attn_layer_validation_argmax": 31, "attn_layer_validation_max": 1.606, "attn_layer_validation_top5": [[31, 1.606], [30, 1.522],
+2026-10-04T09:30:42Z END   ext7c-w2-ioi-mixtral_bos-s1io rc=0 (113s)
