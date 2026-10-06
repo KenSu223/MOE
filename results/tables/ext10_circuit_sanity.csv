@@ -1,0 +1,6 @@
+Run,rows / cases,all heads (= 1),all attention,all MoE,all heads: max |Δ − Δ_clean|,"layer heads vs attn_layer: median / max |ΔΔ|, r",prefill SD across passes (median clean / corrupt)
+"Qwen3-30B-A3B-Base, CounterFact STR",432 / 108,0.999,1.000,"0.530 [0.488, 0.571]",1.875,"0.062 / 0.625, 0.9994",0.094 / 0.096
+"Mixtral-8x7B (BOS), CounterFact STR",436 / 106,1.000,1.000,"0.409 [0.366, 0.451]",0.688,"0.000 / 0.688, 0.9997",0.058 / 0.062
+"Qwen3-30B-A3B-Base, WinoGrande STR",256 / 256,1.006,1.005,"0.856 [0.837, 0.875]",2.625,"0.125 / 2.000, 0.9964",0.183 / 0.183
+"Mixtral-8x7B (BOS), WinoGrande STR",256 / 256,1.001,1.001,"0.788 [0.765, 0.810]",0.250,"0.000 / 0.375, 0.9992",0.062 / 0.062
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",256 / 256,0.998,0.999,"-0.269 [-0.293, -0.244]",0.500,"0.125 / 0.500, 0.9978",0.155 / 0.151

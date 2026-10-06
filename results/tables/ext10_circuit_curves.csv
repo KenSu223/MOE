@@ -1,0 +1,43 @@
+Run,Curve,r(1),r(5),r(10),r(20) [95% CI],r(128),max r (k),k50/80/90 of drop,AUC log k (1..15),AUC log k (1..20),all-MoE ceiling
+"Qwen3-30B-A3B-Base, CounterFact STR",greedy_mix,0.265,0.685,0.875,"0.974 [0.953, 0.996]",,0.974 (20),3/8/12,0.611,0.644,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",greedy_head,0.210,0.639,0.797,"0.855 [0.825, 0.884]",,0.855 (20),4/11/never,0.551,0.580,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",greedy_expert_ext8,0.200,0.443,0.523,0.548 (k=15),,0.548 (15),8/never/never,0.395,,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_mix_oracle,0.263,0.604,0.754,,0.953,0.953 (128),4/16/48,0.543,0.571,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_mix_dla,0.220,0.595,0.788,,1.106,1.106 (128),4/12/24,0.535,0.571,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_head_oracle,0.210,0.579,0.727,,0.881,0.881 (128),4/24/never,0.509,0.536,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_head_dla,0.191,0.579,0.777,,1.076,1.076 (128),4/12/24,0.509,0.545,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_expert_oracle_ext8,0.201,0.407,0.466,,0.589,0.607 (320),24/never/never,0.367,0.380,0.530
+"Qwen3-30B-A3B-Base, CounterFact STR",static_expert_dla_ext8,0.185,0.407,0.491,,0.648,0.649 (192),12/never/never,0.369,0.386,0.530
+"Mixtral-8x7B (BOS), CounterFact STR",greedy_mix,0.232,0.635,0.840,"1.004 [0.983, 1.027]",,1.004 (20),4/9/13,0.573,0.612,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",greedy_head,0.215,0.593,0.783,"0.867 [0.838, 0.896]",,0.867 (20),4/11/never,0.530,0.562,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",greedy_expert_ext8,0.132,0.393,0.509,0.561 (k=15),,0.561 (15),10/never/never,0.346,,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_mix_oracle,0.233,0.559,0.701,,0.963,0.963 (128),4/24/48,0.507,0.535,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_mix_dla,0.178,0.536,0.724,,1.089,1.089 (128),5/16/24,0.484,0.520,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_head_oracle,0.216,0.540,0.694,,0.910,0.910 (128),5/24/128,0.487,0.515,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_head_dla,0.167,0.505,0.710,,1.089,1.089 (128),5/16/24,0.461,0.499,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_expert_oracle_ext8,0.132,0.348,0.431,,,0.517 (48),32/never/never,0.307,0.324,0.409
+"Mixtral-8x7B (BOS), CounterFact STR",static_expert_dla_ext8,0.103,0.326,0.440,,,0.533 (48),24/never/never,0.289,0.310,0.409
+"Qwen3-30B-A3B-Base, WinoGrande STR",greedy_mix,0.223,0.622,0.800,"0.931 [0.905, 0.960]",,0.931 (20),4/10/17,0.554,0.588,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",greedy_head,0.145,0.413,0.518,"0.580 [0.553, 0.606]",,0.580 (20),9/never/never,0.362,0.382,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",greedy_expert_ext8,0.213,0.551,0.677,0.721 (k=15),,0.721 (15),5/never/never,0.486,,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_mix_oracle,0.226,0.533,0.647,,0.898,0.898 (128),5/48/never,0.476,0.499,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_mix_dla,0.185,0.520,0.682,,1.099,1.099 (128),5/24/32,0.465,0.498,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_head_oracle,0.146,0.331,0.404,,0.645,0.645 (128),32/never/never,0.299,0.315,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_head_dla,0.120,0.284,0.365,,0.771,0.771 (128),32/never/never,0.259,0.277,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_expert_oracle_ext8,0.214,0.469,0.553,,0.781,0.846 (320),7/192/never,0.422,0.439,0.856
+"Qwen3-30B-A3B-Base, WinoGrande STR",static_expert_dla_ext8,0.174,0.464,0.606,,0.884,0.888 (256),6/48/never,0.420,0.447,0.856
+"Mixtral-8x7B (BOS), WinoGrande STR",greedy_mix,0.204,0.608,0.801,"0.939 [0.926, 0.954]",,0.939 (20),4/10/16,0.541,0.577,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",greedy_head,0.120,0.420,0.591,"0.652 [0.630, 0.674]",,0.652 (20),7/never/never,0.369,0.395,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",greedy_expert_ext8,0.192,0.557,0.718,0.791 (k=15),,0.791 (15),4/never/never,0.493,,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_mix_oracle,0.205,0.571,0.730,,0.955,0.955 (128),4/16/32,0.506,0.538,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_mix_dla,0.152,0.502,0.695,,1.052,1.052 (128),5/16/32,0.449,0.485,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_head_oracle,0.121,0.374,0.519,,0.750,0.750 (128),10/never/never,0.334,0.358,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_head_dla,0.100,0.228,0.308,,0.774,0.774 (128),32/never/never,0.216,0.233,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_expert_oracle_ext8,0.192,0.534,0.674,,,0.813 (48),5/48/never,0.471,0.497,0.788
+"Mixtral-8x7B (BOS), WinoGrande STR",static_expert_dla_ext8,0.147,0.472,0.647,,,0.821 (48),6/32/never,0.422,0.454,0.788
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",greedy_mix,0.184,0.561,0.784,"0.943 [0.929, 0.957]",,0.943 (20),5/11/16,0.507,0.547,-0.269
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",greedy_head,0.184,0.560,0.784,"0.935 [0.921, 0.950]",,0.935 (20),5/11/16,0.507,0.546,-0.269
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",static_mix_oracle,0.184,0.482,0.659,,0.993,0.993 (128),6/16/32,0.445,0.481,-0.269
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",static_mix_dla,0.154,0.453,0.667,,1.059,1.059 (128),6/16/24,0.425,0.465,-0.269
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",static_head_oracle,0.184,0.483,0.661,,0.986,0.986 (128),6/16/32,0.446,0.482,-0.269
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",static_head_dla,0.154,0.453,0.669,,1.049,1.049 (128),6/16/24,0.426,0.465,-0.269

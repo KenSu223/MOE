@@ -1,0 +1,341 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "agent": "ext9-knockout",
+ "experiment": "ext9 expert knockout (route masks on clean prompts), Phase 4 item 1 / Direction 9",
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "full": {
+   "command": "python scripts/ext9_knockout_run.py qwen3 --phase full",
+   "created_utc": "2026-10-05T07:20:47Z",
+   "passes": [
+    {
+     "pass": "main_short_p000a",
+     "rows": 8000,
+     "T": 14,
+     "pass_s": 55.0,
+     "peak_GB": 9.58
+    },
+    {
+     "pass": "main_short_p000b",
+     "rows": 8000,
+     "T": 15,
+     "pass_s": 48.5,
+     "peak_GB": 10.06
+    },
+    {
+     "pass": "main_short_p001a",
+     "rows": 7500,
+     "T": 15,
+     "pass_s": 41.0,
+     "peak_GB": 9.55
+    },
+    {
+     "pass": "main_short_p001b",
+     "rows": 7500,
+     "T": 16,
+     "pass_s": 50.2,
+     "peak_GB": 10.03
+    },
+    {
+     "pass": "main_short_p002a",
+     "rows": 7058,
+     "T": 16,
+     "pass_s": 38.3,
+     "peak_GB": 9.55
+    },
+    {
+     "pass": "main_short_p002b",
+     "rows": 7059,
+     "T": 17,
+     "pass_s": 40.9,
+     "peak_GB": 10.0
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 13333,
+     "T": 18,
+     "pass_s": 61.1,
+     "peak_GB": 17.6
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 12631,
+     "T": 19,
+     "pass_s": 62.4,
+     "peak_GB": 17.55
+    },
+    {
+     "pass": "main_short_p005a",
+     "rows": 6000,
+     "T": 19,
+     "pass_s": 42.7,
+     "peak_GB": 9.53
+    },
+    {
+     "pass": "main_short_p005b",
+     "rows": 6000,
+     "T": 20,
+     "pass_s": 46.9,
+     "peak_GB": 9.92
+    },
+    {
+     "pass": "main_short_p006a",
+     "rows": 5714,
+     "T": 21,
+     "pass_s": 39.7,
+     "peak_GB": 9.9
+    },
+    {
+     "pass": "main_short_p006b",
+     "rows": 5714,
+     "T": 21,
+     "pass_s": 42.0,
+     "peak_GB": 9.9
+    },
+    {
+     "pass": "main_short_p007",
+     "rows": 10000,
+     "T": 24,
+     "pass_s": 63.4,
+     "peak_GB": 17.36
+    },
+    {
+     "pass": "main_short_p008a",
+     "rows": 3335,
+     "T": 26,
+     "pass_s": 43.4,
+     "peak_GB": 7.74
+    },
+    {
+     "pass": "main_short_p008b",
+     "rows": 3336,
+     "T": 35,
+     "pass_s": 40.4,
+     "peak_GB": 9.53
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 642,
+     "T": 127,
+     "pass_s": 38.7,
+     "peak_GB": 7.22
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 638,
+     "T": 127,
+     "pass_s": 36.7,
+     "peak_GB": 7.21
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T07:36:37Z",
+   "n_passes": 11,
+   "n_conditions": 10,
+   "n_rows": 112460
+  },
+  "random": {
+   "command": "python scripts/ext9_knockout_run.py qwen3 --phase random",
+   "created_utc": "2026-10-05T08:36:27Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 12000,
+     "T": 9,
+     "pass_s": 52.0,
+     "peak_GB": 11.76
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 10833,
+     "T": 15,
+     "pass_s": 47.9,
+     "peak_GB": 12.76
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 10156,
+     "T": 16,
+     "pass_s": 43.8,
+     "peak_GB": 12.71
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 9027,
+     "T": 18,
+     "pass_s": 52.4,
+     "peak_GB": 12.63
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 8125,
+     "T": 20,
+     "pass_s": 45.1,
+     "peak_GB": 12.56
+    },
+    {
+     "pass": "main_short_p005",
+     "rows": 7386,
+     "T": 22,
+     "pass_s": 44.8,
+     "peak_GB": 12.51
+    },
+    {
+     "pass": "main_short_p006",
+     "rows": 5193,
+     "T": 31,
+     "pass_s": 46.0,
+     "peak_GB": 12.26
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 1126,
+     "T": 127,
+     "pass_s": 46.2,
+     "peak_GB": 10.9
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 1114,
+     "T": 127,
+     "pass_s": 45.9,
+     "peak_GB": 10.81
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T08:42:53Z",
+   "n_passes": 9,
+   "n_conditions": 41,
+   "n_rows": 64960
+  },
+  "samelayer": {
+   "command": "python scripts/ext9_knockout_run.py qwen3 --phase samelayer",
+   "created_utc": "2026-10-05T09:43:47Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 12000,
+     "T": 8,
+     "pass_s": 62.4,
+     "peak_GB": 11.57
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 12000,
+     "T": 14,
+     "pass_s": 51.1,
+     "peak_GB": 13.17
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 11458,
+     "T": 15,
+     "pass_s": 47.3,
+     "peak_GB": 13.36
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 10110,
+     "T": 17,
+     "pass_s": 47.6,
+     "peak_GB": 13.26
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 9548,
+     "T": 18,
+     "pass_s": 51.9,
+     "peak_GB": 13.22
+    },
+    {
+     "pass": "main_short_p005",
+     "rows": 8593,
+     "T": 20,
+     "pass_s": 45.3,
+     "peak_GB": 13.15
+    },
+    {
+     "pass": "main_short_p006",
+     "rows": 7812,
+     "T": 22,
+     "pass_s": 45.3,
+     "peak_GB": 13.1
+    },
+    {
+     "pass": "main_short_p007",
+     "rows": 5535,
+     "T": 31,
+     "pass_s": 48.1,
+     "peak_GB": 12.91
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 923,
+     "T": 127,
+     "pass_s": 41.5,
+     "peak_GB": 9.35
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 923,
+     "T": 127,
+     "pass_s": 42.8,
+     "peak_GB": 9.35
+    },
+    {
+     "pass": "main_wiki_p002",
+     "rows": 906,
+     "T": 127,
+     "pass_s": 46.7,
+     "peak_GB": 9.22
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T09:51:51Z",
+   "n_passes": 11,
+   "n_conditions": 48,
+   "n_rows": 79808
+  },
+  "final": {
+   "command": "python scripts/ext9_knockout_run.py qwen3 --phase final",
+   "created_utc": "2026-10-05T10:24:55Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 9466,
+     "T": 15,
+     "pass_s": 63.6,
+     "peak_GB": 11.44
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 7473,
+     "T": 19,
+     "pass_s": 51.1,
+     "peak_GB": 11.3
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 4565,
+     "T": 31,
+     "pass_s": 48.7,
+     "peak_GB": 11.06
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 192,
+     "T": 127,
+     "pass_s": 47.8,
+     "peak_GB": 4.15
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T10:27:27Z",
+   "n_passes": 4,
+   "n_conditions": 12,
+   "n_rows": 21696
+  }
+ }
+}

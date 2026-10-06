@@ -1,0 +1,9 @@
+2026-10-05T06:52:25Z START ext9-merge-regress (waited 391s): bash scripts/ext9_merge_regress.sh
+2026-10-05T06:52:25Z merged engine_ext9_dev.py -> engine.py (0f236b890a3f7fe70bba037208e72988)
+results/verify_olmoe.json vs results/verify_olmoe_before_ext9.json: 23 non-timing leaf fields, 0 differ
+results/verify_ext5_engine_olmoe.json vs results/verify_ext5_engine_olmoe_before_ext9.json: 225 non-timing leaf fields, 0 differ
+results/verify_ext8_engine_olmoe.json vs results/verify_ext8_engine_olmoe_before_ext9.json: 498 non-timing leaf fields, 2 differ
+   ('/pass1_peak_mem_GB', ('2.0109119415283203', '2.0100574493408203'))
+   ('/stress/peak_mem_GB', ('7.110036849975586', '7.109830856323242'))
+2026-10-05T06:56:03Z REGRESSION FAILED (rc 0 0 0): engine.py reverted, official JSONs restored, failed runs in logs/ext9_failed_*.json
+2026-10-05T06:56:03Z END   ext9-merge-regress rc=1 (218s)

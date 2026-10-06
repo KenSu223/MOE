@@ -1,0 +1,67 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "protocol": "tokenizer default (BOS)",
+ "experts_of_interest": [
+  "L20E000",
+  "L19E002",
+  "L21E001",
+  "L18E001",
+  "L20E005",
+  "L22E001",
+  "L22E005",
+  "L20E006",
+  "L28E002",
+  "L23E002",
+  "L19E006",
+  "L21E006",
+  "L26E002",
+  "L18E005",
+  "L16E007",
+  "L24E002",
+  "L21E004",
+  "L25E002"
+ ],
+ "route_all_layers": [
+  16,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  28
+ ],
+ "sets": {
+  "wino_pool": 1790,
+  "wino_pool_local": 1790,
+  "ioi": 1600,
+  "wiki": 1100,
+  "cf_str": 1071,
+  "cf_scan": 1024,
+  "wino_main": 512,
+  "wino_local": 512
+ },
+ "n_prompts": 9399,
+ "n_tokens": 245441,
+ "budget": 141000,
+ "n_chunks": 3,
+ "window": 127,
+ "wiki_windows": 1100,
+ "raw_dir": "/opt/dlami/nvme/moe_ext11/mixtral_bos_writer_routing",
+ "build": {
+  "wiki_corpus_tokens": 309596
+ },
+ "command": "python scripts/ext11_writer_routing.py mixtral --out mixtral_bos_writer_routing",
+ "created_utc": "2026-10-05T06:37:21Z",
+ "complete": true,
+ "pass_times_s": [
+  99.14172267913818,
+  92.93441152572632,
+  93.97876477241516
+ ],
+ "completed_utc": "2026-10-05T06:42:15Z"
+}

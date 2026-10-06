@@ -1,0 +1,260 @@
+{
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "pairs": "data/wino_str/pairs_train_xl_mixtral_nobos.parquet",
+  "case_sets": "data/wino_str/case_sets.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   },
+   "rep": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 1024,
+  "max_rows": 40000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "metrics": true,
+  "agent": "ext12-complete",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete",
+  "created_utc": "2026-10-05T06:08:55Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T06:12:55Z",
+  "pass_times_s": [
+   91.17233610153198,
+   73.57741570472717,
+   70.26358413696289
+  ],
+  "n_rows": 100352
+ },
+ "expert": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main",
+   "rep"
+  ],
+  "n_cases": 1024,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "pairs_layers": [
+   20
+  ],
+  "only_scaled": false,
+  "corrupt_only": true,
+  "max_spawn": 40000,
+  "chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   [
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "agent": "ext12-complete",
+  "command": "python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --layers all --pairs-layers auto --max-spawn 40000 --agent ext12-complete",
+  "created_utc": "2026-10-05T06:15:18Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T06:22:06Z",
+  "pass_times_s": [
+   96.23738241195679,
+   79.80782079696655,
+   75.1341564655304,
+   72.75441527366638,
+   77.47938013076782
+  ]
+ },
+ "joint": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main",
+   "rep"
+  ],
+  "n_cases": 1024,
+  "spans": {
+   "all": [
+    0,
+    31
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "ext12-complete",
+  "command": "python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --max-rows 30000 --agent ext12-complete",
+  "created_utc": "2026-10-05T09:22:54Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T09:24:30Z",
+  "pass_times_s": [
+   93.5949923992157
+  ],
+  "n_rows": 6144
+ },
+ "direct_split": {
+  "model": "mixtral",
+  "pairs": "data/wino_str/pairs_train_xl_mixtral_nobos.parquet",
+  "case_sets": "data/wino_str/case_sets.json",
+  "splits": "discovery,validation,rep_discovery,rep_validation",
+  "n_rows": 1024,
+  "seconds": 107.79864525794983,
+  "command": "python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation",
+  "completed_utc": "2026-10-05T09:53:47Z"
+ },
+ "sink_flags": {
+  "model": "mixtral",
+  "splits": "discovery,validation,rep_discovery,rep_validation",
+  "n_prompts": 2048,
+  "sink_layer": 5,
+  "seconds": 91.46953225135803,
+  "pass_s": 84.65294671058655,
+  "agent": "ext12-complete",
+  "command": "python scripts/ext12_sink_flags.py --out wino_mixtral_nobos_str",
+  "completed_utc": "2026-10-05T10:23:33Z"
+ }
+}

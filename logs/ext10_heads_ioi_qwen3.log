@@ -1,0 +1,25 @@
+2026-10-05T07:48:01Z START ext10-heads-ioi_qwen3 (waited 2123s): python scripts/ext10_heads_run.py ioi_qwen3
+07:48:09 resuming: 0/2 chunks done
+07:48:09 ioi_qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584
+07:48:10 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+07:48:14   layer   0: load-wait 2.86s compute 0.76s  wf_rows=4224
+07:48:23   layer   8: load-wait 0.99s compute 0.28s  wf_rows=38016
+07:48:33   layer  16: load-wait 0.77s compute 0.50s  wf_rows=71808
+07:48:43   layer  24: load-wait 0.57s compute 0.69s  wf_rows=105600
+07:48:53   layer  32: load-wait 0.36s compute 0.90s  wf_rows=139392
+07:49:03   layer  40: load-wait 0.15s compute 1.11s  wf_rows=173184
+07:49:13   layer  47: load-wait 0.11s compute 1.29s  wf_rows=202752
+07:49:13   pass done: 256 prefill rows (T=20), 202752 spawn rows, 62.4s
+07:49:14 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 62.42959523200989, 'peak_GB': 17.00883913040161, 'mean_drop': 12.544921875, 'r_sum_heads_vs_attn_layer': 0.40701641540573463, 'head_dla_sum_mean': 17.44159507751465, 'candidates_not_routed_clean': 709, 'utc': '2026-10-05T07:49:14Z'}
+07:49:15 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+07:49:16   layer   0: load-wait 0.92s compute 0.09s  wf_rows=4224
+07:49:25   layer   8: load-wait 0.97s compute 0.28s  wf_rows=38016
+07:49:35   layer  16: load-wait 0.73s compute 0.49s  wf_rows=71808
+07:49:44   layer  24: load-wait 0.19s compute 0.70s  wf_rows=105600
+07:49:51   layer  32: load-wait 0.10s compute 0.91s  wf_rows=139392
+07:50:00   layer  40: load-wait 0.10s compute 1.11s  wf_rows=173184
+07:50:10   layer  47: load-wait 0.10s compute 1.30s  wf_rows=202752
+07:50:10   pass done: 256 prefill rows (T=20), 202752 spawn rows, 54.9s
+07:50:12 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 54.93063139915466, 'peak_GB': 17.008846759796143, 'mean_drop': 12.8203125, 'r_sum_heads_vs_attn_layer': 0.4050868018146933, 'head_dla_sum_mean': 18.22093963623047, 'candidates_not_routed_clean': 840, 'utc': '2026-10-05T07:50:12Z'}
+07:50:12 ALL CHUNKS COMPLETE
+2026-10-05T07:50:20Z END   ext10-heads-ioi_qwen3 rc=0 (139s)

@@ -1,0 +1,20 @@
+2026-10-05T06:12:59Z START ext10-heads-smoke (waited 227s): python scripts/ext10_heads_run.py cf_qwen3 --limit 6 --out-suffix _smoke
+06:13:05 cf_qwen3: 6 validation rows, 1 chunks (1 to do), L=48 nH=32; spawn rows per row 1584
+06:13:06 pass (chunk 0): 10 prefill rows (4 clean), 9504 spawn rows
+06:13:10   layer   0: load-wait 3.04s compute 0.76s  wf_rows=198
+06:13:18   layer   8: load-wait 1.20s compute 0.04s  wf_rows=1782
+06:13:28   layer  16: load-wait 1.01s compute 0.05s  wf_rows=3366
+06:13:38   layer  24: load-wait 1.19s compute 0.04s  wf_rows=4950
+06:13:48   layer  32: load-wait 1.19s compute 0.05s  wf_rows=6534
+06:13:58   layer  40: load-wait 1.18s compute 0.06s  wf_rows=8118
+06:14:07   layer  47: load-wait 1.17s compute 0.06s  wf_rows=9504
+06:14:07   pass done: 10 prefill rows (T=8), 9504 spawn rows, 60.7s
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext10_heads_run.py", line 199, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext10_heads_run.py", line 138, in main
+    hd["kind"] = np.where(hd.head.values >= 0, "attn_head", "attn_layer")
+                          ^^^^^^^^^^^^^^
+AttributeError: 'function' object has no attribute 'values'
+2026-10-05T06:14:13Z END   ext10-heads-smoke rc=1 (74s)

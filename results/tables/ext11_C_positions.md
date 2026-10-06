@@ -1,0 +1,11 @@
+| model | expert | WinoGrande main: final / other positions (%) | CounterFact STR: final / other positions (%) | IOI clean: final / other positions (%) | wikitext-103: final / other positions (%) | WG prompts, tokens ' was' ' too' ' is' ' very' ' were': final / earlier (%) |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | 84.4 / 6.7 | 10.3 / 2.1 | 0.0 / 0.0 | 6.3 / 7.0 | 86.3 / 80.3 (n=396) |
+| Qwen3-30B-A3B-Base | L44E069 | 2.7 / 12.1 | 87.3 / 39.8 | 10.9 / 14.2 | 46.5 / 45.4 | 0.7 / 2.0 (n=396) |
+| Qwen3-30B-A3B-Base | L42E115 | 2.0 / 22.1 | 95.9 / 29.7 | 100.0 / 34.9 | 41.5 / 40.2 | 0.9 / 1.3 (n=396) |
+| Mixtral-8x7B (BOS) | L20E000 | 96.1 / 16.7 | 32.8 / 21.9 | 0.1 / 10.1 | 22.3 / 21.9 | 99.8 / 100.0 (n=396) |
+| Mixtral-8x7B (BOS) | L19E002 | 2.9 / 17.4 | 56.3 / 31.5 | 0.0 / 21.2 | 22.9 / 24.0 | 2.9 / 15.9 (n=396) |
+| Mixtral-8x7B (BOS) | L21E001 | 3.7 / 21.2 | 65.1 / 31.6 | 94.4 / 27.9 | 24.7 / 25.4 | 1.5 / 1.5 (n=396) |
+| Mixtral-8x7B (BOS) | L18E001 | 1.2 / 19.6 | 74.1 / 15.3 | 99.8 / 19.4 | 24.5 / 26.6 | 0.4 / 2.8 (n=396) |
+
+All-token routing (route_all_layers): rate at the final position vs every other position of the same prompts (Mixtral: BOS position excluded); last column: the same tokens as the WinoGrande final words when they occur earlier.

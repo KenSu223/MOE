@@ -1,0 +1,32 @@
+| Run | Layer | attn_layer / drop | Σ heads / drop | r(Σ heads, attn_layer) rows | Top head | Top head / drop | Z8 + / − |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | L40 | +0.337 [+0.309, +0.367] | +0.308 | 0.72 | L40H13 | +0.192 | 5 / 2 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L43 | +0.212 [+0.190, +0.233] | +0.176 | 0.70 | L43H11 | +0.056 | 5 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L28 | +0.072 [+0.056, +0.089] | +0.056 | 0.51 | L28H13 | +0.033 | 4 / 2 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L38 | +0.017 [+0.013, +0.022] | +0.009 | 0.33 | L38H8 | +0.007 | 0 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L16 | +0.017 [+0.010, +0.024] | +0.002 | 0.25 | L16H13 | +0.009 | 0 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L47 | +0.014 [+0.008, +0.020] | +0.011 | 0.46 | L47H26 | +0.024 | 1 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24 | +0.189 [+0.166, +0.212] | +0.186 | 0.75 | L24H22 | +0.147 | 3 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18 | +0.178 [+0.155, +0.203] | +0.183 | 0.68 | L18H4 | +0.154 | 3 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19 | +0.160 [+0.145, +0.176] | +0.112 | 0.42 | L19H29 | +0.061 | 2 / 0 |
+| Mixtral-8x7B (BOS), CounterFact STR | L29 | +0.070 [+0.062, +0.079] | +0.073 | 0.50 | L29H2 | +0.051 | 1 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15 | +0.061 [+0.049, +0.074] | +0.044 | 0.38 | L15H1 | +0.035 | 2 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L31 | +0.052 [+0.044, +0.062] | +0.053 | 0.54 | L31H25 | +0.031 | 1 / 1 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42 | +0.029 [+0.022, +0.036] | +0.016 | 0.37 | L42H30 | +0.021 | 2 / 1 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L43 | +0.023 [+0.019, +0.027] | +0.009 | 0.16 | L43H28 | +0.011 | 0 / 0 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L40 | +0.023 [+0.015, +0.031] | +0.019 | 0.38 | L40H2 | +0.010 | 0 / 0 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L41 | +0.021 [+0.013, +0.030] | +0.021 | 0.30 | L41H27 | +0.065 | 2 / 3 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L39 | +0.016 [+0.008, +0.024] | +0.015 | 0.34 | L39H5 | +0.017 | 2 / 2 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L26 | +0.015 [+0.002, +0.028] | +0.046 | 0.40 | L26H18 | +0.008 | 0 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13 | +0.140 [+0.126, +0.155] | +0.102 | 0.34 | L13H11 | +0.026 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19 | +0.113 [+0.103, +0.123] | +0.100 | 0.35 | L19H13 | +0.047 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25 | +0.075 [+0.068, +0.082] | +0.087 | 0.44 | L25H9 | +0.073 | 2 / 1 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L15 | +0.072 [+0.063, +0.082] | +0.070 | 0.26 | L15H7 | +0.022 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L31 | +0.043 [+0.040, +0.047] | +0.058 | 0.46 | L31H22 | +0.021 | 2 / 1 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L16 | +0.036 [+0.029, +0.044] | +0.042 | 0.35 | L16H10 | +0.017 | 2 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L45 | +0.330 [+0.319, +0.340] | +0.337 | 0.52 | L45H9 | +0.040 | 7 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42 | +0.264 [+0.253, +0.276] | +0.245 | 0.40 | L42H11 | +0.178 | 3 / 1 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43 | +0.214 [+0.204, +0.224] | +0.219 | 0.38 | L43H24 | +0.100 | 5 / 3 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L39 | +0.149 [+0.140, +0.157] | +0.114 | 0.21 | L39H28 | +0.039 | 2 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L41 | +0.081 [+0.076, +0.085] | +0.090 | 0.30 | L41H20 | +0.035 | 3 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L46 | +0.045 [+0.036, +0.054] | +0.051 | 0.49 | L46H14 | +0.031 | 2 / 2 |

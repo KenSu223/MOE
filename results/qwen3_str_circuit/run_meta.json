@@ -1,0 +1,60 @@
+{
+ "key": "cf_qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "task": "cf",
+ "src_run": "qwen3_str",
+ "ext8_run": "qwen3_str_addback",
+ "special_tokens": true,
+ "n_val_rows": 432,
+ "n_val_cases": 108,
+ "rows_per_pass": 160,
+ "n_chunks": 3,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA",
+ "command": "python scripts/ext10_heads_run.py cf_qwen3",
+ "created_utc": "2026-10-05T06:27:22Z",
+ "complete": true,
+ "completed_utc": "2026-10-05T06:30:13Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 144,
+   "prefill": 182,
+   "spawn_rows": 228096,
+   "pass_s": 65.83475399017334,
+   "peak_GB": 18.736287117004395,
+   "mean_drop": 10.43359375,
+   "r_sum_heads_vs_attn_layer": 0.32822550654960564,
+   "head_dla_sum_mean": 4.641862869262695,
+   "candidates_not_routed_clean": 944,
+   "utc": "2026-10-05T06:28:31Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 147,
+   "prefill": 183,
+   "spawn_rows": 232848,
+   "pass_s": 52.76746845245361,
+   "peak_GB": 19.05862855911255,
+   "mean_drop": 12.321295738220215,
+   "r_sum_heads_vs_attn_layer": 0.42427738543970234,
+   "head_dla_sum_mean": 6.345623016357422,
+   "candidates_not_routed_clean": 580,
+   "utc": "2026-10-05T06:29:27Z"
+  },
+  {
+   "chunk": 2,
+   "rows": 141,
+   "prefill": 175,
+   "spawn_rows": 223344,
+   "pass_s": 44.45731854438782,
+   "peak_GB": 18.36982822418213,
+   "mean_drop": 11.198138236999512,
+   "r_sum_heads_vs_attn_layer": 0.3716597422317156,
+   "head_dla_sum_mean": 5.272942066192627,
+   "candidates_not_routed_clean": 791,
+   "utc": "2026-10-05T06:30:13Z"
+  }
+ ]
+}

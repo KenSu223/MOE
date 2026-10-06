@@ -1,0 +1,203 @@
+2026-10-05T06:08:52Z run ext12-4c-sweep
+2026-10-05T06:08:52Z START ext12-4c-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete
+06:08:54 mixtral -> wino_mixtral_nobos_str: 1024 directed cases (512 pairs), families {'main': {'discovery': 256, 'validation': 256}, 'rep': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 3 passes (98304 spawn rows), T max 32
+06:08:55 pass 1/3: layers 0..12, 2048 prefill rows, 39936 spawn rows
+06:09:05   layer   0: load-wait 8.43s compute 1.47s  wf_rows=3072
+06:09:28   layer   8: load-wait 1.24s compute 1.39s  wf_rows=27648
+06:09:49   layer  16: load-wait 0.43s compute 1.65s  wf_rows=39936
+06:10:06   layer  24: load-wait 0.29s compute 1.66s  wf_rows=39936
+06:10:26   layer  31: load-wait 1.13s compute 1.65s  wf_rows=39936
+06:10:27   pass done: 2048 prefill rows (T=32), 39936 spawn rows, 91.2s (metrics 0.4s)
+06:10:28 pass 2/3: layers 13..25, 2048 prefill rows, 39936 spawn rows
+06:11:43 pass 3/3: layers 26..31, 2048 prefill rows, 18432 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+06:12:55 family main: layer disc L20; attn_layer disc L13; block disc L19
+06:12:55 family rep: layer disc L20; attn_layer disc L13; block disc L19
+06:12:55 Δclean +3.87 Δcorrupt -3.87 drop +7.75; {"layer_discovery_argmax": 20, "layer_discovery_max": 1.273, "layer_discovery_top5": [[20, 1.273], [21, 1.21], [19, 1.184], [22, 0.821], [26, 0.821]], "layer_validation_argmax": 20, "layer_validation_max": 1.356, "layer_validation_top5": [[20, 1.356], [21, 1.197], [19, 1.12], [26, 0.942], [24, 0.791]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 1.181, "attn_layer_discovery_top5": [[13, 1.181], [19, 0.838], [15, 0.566], [25, 0.534], [31, 0.323]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.1, "attn_layer_validation_top5": [[13, 1.1], [19, 0.88], [15, 0
+2026-10-05T06:12:59Z END   ext12-4c-sweep rc=0 (247s)
+2026-10-05T06:12:59Z run ext12-4c-expert
+2026-10-05T06:15:06Z START ext12-4c-expert (waited 127s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --layers all --pairs-layers auto --max-spawn 40000 --agent ext12-complete
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+06:15:18 mixtral -> wino_mixtral_nobos_str: 1024 directed cases, families ['main', 'rep'], layers 0..31 (32), pairs layers [20], only_scaled=False, 173787 spawn rows in 5 passes
+06:15:18 pass 1/5: layers [0, 1, 2, 3, 4, 5, 6], 2048 prefill rows, 36851 spawn rows
+06:15:27   layer   0: load-wait 6.74s compute 1.51s  wf_rows=5256
+06:15:50   layer   8: load-wait 1.31s compute 1.58s  wf_rows=36851
+06:16:13   layer  16: load-wait 1.66s compute 1.58s  wf_rows=36851
+06:16:36   layer  24: load-wait 1.24s compute 1.58s  wf_rows=36851
+06:16:54   layer  31: load-wait 1.31s compute 1.58s  wf_rows=36851
+06:16:55   pass done: 2048 prefill rows (T=32), 36851 spawn rows, 96.2s
+06:16:55   L1: 2 recurrent (>= 128/256); best E004 all-case -0.003 active 129
+06:16:55   L2: 1 recurrent (>= 128/256); best E006 all-case -0.007 active 204
+06:16:55   L3: 2 recurrent (>= 128/256); best E001 all-case +0.005 active 223
+06:16:55   L4: 2 recurrent (>= 128/256); best E003 all-case +0.000 active 128
+06:16:55   L5: 3 recurrent (>= 128/256); best E005 all-case +0.004 active 129
+06:16:55   L6: 2 recurrent (>= 128/256); best E004 all-case -0.006 active 179
+06:16:55 pass 1: 96s; /home/ubuntu/MOE/results/wino_mixtral_nobos_str/str_expert_rows.parquet now 36851 rows
+06:16:55 pass 2/5: layers [7, 8, 9, 10, 11, 12, 13], 2048 prefill rows, 37818 spawn rows
+06:18:16   L7: 2 recurrent (>= 128/256); best E006 all-case -0.002 active 242
+06:18:16   L8: 1 recurrent (>= 128/256); best E001 all-case -0.001 active 164
+06:18:16   L9: 1 recurrent (>= 128/256); best E002 all-case -0.002 active 146
+06:18:16   L10: 2 recurrent (>= 128/256); best E005 all-case +0.005 active 169
+06:18:16   L11: 2 recurrent (>= 128/256); best E000 all-case +0.021 active 136
+06:18:16   L12: 2 recurrent (>= 128/256); best E006 all-case +0.033 active 241
+06:18:16   L13: 2 recurrent (>= 128/256); best E005 all-case +0.216 active 247
+06:18:16 pass 2: 80s; /home/ubuntu/MOE/results/wino_mixtral_nobos_str/str_expert_rows.parquet now 74669 rows
+06:18:16 pass 3/5: layers [14, 15, 16, 17, 18, 19, 20], 2048 prefill rows, 39432 spawn rows
+06:19:32   L14: 1 recurrent (>= 128/256); best E007 all-case +0.232 active 252
+06:19:32   L15: 1 recurrent (>= 128/256); best E002 all-case +0.236 active 245
+06:19:32   L16: 2 recurrent (>= 128/256); best E007 all-case +0.457 active 242
+06:19:32   L17: 2 recurrent (>= 128/256); best E003 all-case +0.208 active 182
+06:19:32   L18: 2 recurrent (>= 128/256); best E005 all-case +0.422 active 232
+06:19:32   L19: 2 recurrent (>= 128/256); best E006 all-case +1.005 active 249
+06:19:32   L20: 1 recurrent (>= 128/256); best E000 all-case +1.068 active 248
+06:19:32 pass 3: 75s; /home/ubuntu/MOE/results/wino_mixtral_nobos_str/str_expert_rows.parquet now 114101 rows
+06:19:33 pass 4/5: layers [21, 22, 23, 24, 25, 26, 27], 2048 prefill rows, 38671 spawn rows
+06:20:47   L21: 2 recurrent (>= 128/256); best E006 all-case +0.750 active 226
+06:20:47   L22: 1 recurrent (>= 128/256); best E000 all-case +0.244 active 171
+06:20:47   L23: 2 recurrent (>= 128/256); best E005 all-case +0.244 active 212
+06:20:47   L24: 2 recurrent (>= 128/256); best E002 all-case +0.417 active 192
+06:20:47   L25: 2 recurrent (>= 128/256); best E002 all-case +0.268 active 180
+06:20:47   L26: 2 recurrent (>= 128/256); best E002 all-case +0.540 active 238
+06:20:47   L27: 1 recurrent (>= 128/256); best E005 all-case +0.119 active 202
+06:20:47 pass 4: 73s; /home/ubuntu/MOE/results/wino_mixtral_nobos_str/str_expert_rows.parquet now 152772 rows
+06:20:47 pass 5/5: layers [28, 29, 30, 31], 2048 prefill rows, 21015 spawn rows
+06:22:06   L28: 2 recurrent (>= 128/256); best E001 all-case +0.087 active 179
+06:22:06   L29: 2 recurrent (>= 128/256); best E002 all-case -0.021 active 244
+06:22:06   L30: 2 recurrent (>= 128/256); best E001 all-case -0.234 active 137
+06:22:06   L31: 2 recurrent (>= 128/256); best E003 all-case -0.339 active 190
+06:22:06 pass 5: 77s; /home/ubuntu/MOE/results/wino_mixtral_nobos_str/str_expert_rows.parquet now 173787 rows
+2026-10-05T06:22:13Z END   ext12-4c-expert rc=0 (427s)
+2026-10-05T06:22:13Z run ext12-4b-sweep-qwen3
+2026-10-05T06:35:22Z START ext12-4b-sweep-qwen3 (waited 789s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --kinds layer,attn_layer,block --max-rows 60000 --agent ext12-complete
+06:35:24 qwen3 -> wino_roleitems_qwen3_str: 564 directed cases (282 pairs), families {'main': {'discovery': 138, 'validation': 146}, 'rep': {'discovery': 142, 'validation': 138}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 2 passes (81216 spawn rows), T max 30
+06:35:31 pass 1/2: layers 0..34, 1128 prefill rows, 59220 spawn rows
+06:35:35   layer   0: load-wait 3.36s compute 0.77s  wf_rows=1692
+06:35:41   layer   8: load-wait 0.63s compute 0.27s  wf_rows=15228
+06:35:47   layer  16: load-wait 0.48s compute 0.37s  wf_rows=28764
+06:35:54   layer  24: load-wait 0.53s compute 0.47s  wf_rows=42300
+06:36:02   layer  32: load-wait 0.77s compute 0.57s  wf_rows=55836
+06:36:11   layer  40: load-wait 0.49s compute 0.60s  wf_rows=59220
+06:36:20   layer  47: load-wait 0.68s compute 0.60s  wf_rows=59220
+06:36:22   pass done: 1128 prefill rows (T=30), 59220 spawn rows, 51.1s (metrics 2.3s)
+06:36:27 pass 2/2: layers 35..47, 1128 prefill rows, 21996 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+06:37:12 family main: layer disc L42; attn_layer disc L38; block disc L42
+06:37:12 family rep: layer disc L42; attn_layer disc L38; block disc L42
+06:37:12 Δclean +3.67 Δcorrupt -3.67 drop +7.35; {"layer_discovery_argmax": 42, "layer_discovery_max": 1.413, "layer_discovery_top5": [[42, 1.413], [39, 0.989], [43, 0.925], [41, 0.869], [38, 0.77]], "layer_validation_argmax": 42, "layer_validation_max": 1.28, "layer_validation_top5": [[42, 1.28], [43, 1.012], [39, 0.963], [41, 0.801], [40, 0.589]], "attn_layer_discovery_argmax": 38, "attn_layer_discovery_max": 0.767, "attn_layer_discovery_top5": [[38, 0.767], [42, 0.345], [41, 0.327], [40, 0.282], [26, 0.27]], "attn_layer_validation_argmax": 38, "attn_layer_validation_max": 0.985, "attn_layer_validation_top5": [[38, 0.985], [41, 0.37], [42,
+2026-10-05T06:37:19Z END   ext12-4b-sweep-qwen3 rc=0 (117s)
+2026-10-05T06:37:20Z run ext12-4b-joint-qwen3
+2026-10-05T06:51:20Z START ext12-4b-joint-qwen3 (waited 840s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --families main,rep --max-rows 30000 --agent ext12-complete
+06:51:21 qwen3 -> wino_roleitems_qwen3_str: 564 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+06:51:27 pass 1/1: 1128 prefill rows, 3384 multi rows
+06:51:32   layer   0: load-wait 3.32s compute 0.85s  wf_rows=3384
+06:51:38   layer   8: load-wait 0.53s compute 0.20s  wf_rows=3384
+06:51:44   layer  16: load-wait 0.78s compute 0.20s  wf_rows=3384
+06:51:52   layer  24: load-wait 0.85s compute 0.20s  wf_rows=3384
+06:52:00   layer  32: load-wait 0.90s compute 0.20s  wf_rows=3384
+06:52:10   layer  40: load-wait 1.42s compute 0.20s  wf_rows=3384
+06:52:18   layer  47: load-wait 1.03s compute 0.19s  wf_rows=3384
+06:52:18   pass done: 1128 prefill rows (T=30), 3384 spawn rows, 50.1s
+06:52:18 denoise  all_attn  all     : effect/drop +0.991 (mean effect +7.30, drop 7.37)
+06:52:18 denoise  all_block all     : effect/drop +1.000 (mean effect +7.37, drop 7.37)
+06:52:18 denoise  all_moe   all     : effect/drop +0.778 (mean effect +5.73, drop 7.37)
+06:52:18 noise    all_attn  all     : effect/drop +0.997 (mean effect +7.35, drop 7.37)
+06:52:18 noise    all_block all     : effect/drop +1.000 (mean effect +7.37, drop 7.37)
+06:52:18 noise    all_moe   all     : effect/drop +0.777 (mean effect +5.73, drop 7.37)
+2026-10-05T06:52:25Z END   ext12-4b-joint-qwen3 rc=0 (65s)
+2026-10-05T06:52:25Z run ext12-4b-direct-qwen3
+2026-10-05T07:08:14Z START ext12-4b-direct-qwen3 (waited 949s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str
+07:08:27   layer   0: load-wait 4.00s compute 0.69s  wf_rows=0
+07:08:34   layer   8: load-wait 0.74s compute 0.08s  wf_rows=0
+07:08:41   layer  16: load-wait 1.01s compute 0.09s  wf_rows=0
+07:08:49   layer  24: load-wait 0.96s compute 0.08s  wf_rows=0
+07:08:58   layer  32: load-wait 1.06s compute 0.09s  wf_rows=0
+07:09:07   layer  40: load-wait 1.06s compute 0.09s  wf_rows=0
+07:09:16   layer  47: load-wait 1.58s compute 0.08s  wf_rows=0
+07:09:16   pass done: 564 prefill rows (T=30), 0 spawn rows, 53.8s
+07:09:19 wino_roleitems_qwen3_str: 564 directed cases; A_direct 0.183, M_direct 0.817, DLA attn share 0.180; fp32 vs engine Delta clean max |diff| 0.141
+2026-10-05T07:09:23Z END   ext12-4b-direct-qwen3 rc=0 (69s)
+2026-10-05T07:09:23Z run ext12-4b-sweep-mixtral_bos
+2026-10-05T07:46:08Z START ext12-4b-sweep-mixtral_bos (waited 2205s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete
+07:46:10 mixtral -> wino_roleitems_mixtral_bos_str: 278 directed cases (139 pairs), families {'main': {'discovery': 140, 'validation': 138}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (26688 spawn rows), T max 33
+07:46:16 pass 1/1: layers 0..31, 556 prefill rows, 26688 spawn rows
+07:46:23   layer   0: load-wait 6.18s compute 0.77s  wf_rows=834
+07:46:46   layer   8: load-wait 2.51s compute 0.39s  wf_rows=7506
+07:47:09   layer  16: load-wait 2.31s compute 0.52s  wf_rows=14178
+07:47:33   layer  24: load-wait 2.28s compute 0.63s  wf_rows=20850
+07:47:53   layer  31: load-wait 2.17s compute 0.74s  wf_rows=26688
+07:47:53   pass done: 556 prefill rows (T=33), 26688 spawn rows, 97.0s (metrics 0.3s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:47:55 family main: layer disc L19; attn_layer disc L13; block disc L19
+07:47:55 Δclean +3.21 Δcorrupt -3.21 drop +6.41; {"layer_discovery_argmax": 19, "layer_discovery_max": 1.077, "layer_discovery_top5": [[19, 1.077], [20, 0.884], [21, 0.689], [22, 0.676], [18, 0.626]], "layer_validation_argmax": 19, "layer_validation_max": 1.316, "layer_validation_top5": [[19, 1.316], [20, 0.906], [21, 0.744], [18, 0.722], [22, 0.657]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 0.797, "attn_layer_discovery_top5": [[13, 0.797], [19, 0.718], [16, 0.604], [15, 0.555], [25, 0.368]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.05, "attn_layer_validation_top5": [[13, 1.05], [19, 0.678], [
+2026-10-05T07:48:01Z END   ext12-4b-sweep-mixtral_bos rc=0 (113s)
+2026-10-05T07:48:01Z run ext12-4b-joint-mixtral_bos
+2026-10-05T08:21:58Z START ext12-4b-joint-mixtral_bos (waited 2037s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --families main,rep --max-rows 30000 --agent ext12-complete
+08:22:00 mixtral -> wino_roleitems_mixtral_bos_str: 278 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+08:22:06 pass 1/1: 556 prefill rows, 1668 multi rows
+08:22:14   layer   0: load-wait 6.48s compute 0.80s  wf_rows=1668
+08:22:35   layer   8: load-wait 2.50s compute 0.30s  wf_rows=1668
+08:22:58   layer  16: load-wait 1.77s compute 0.30s  wf_rows=1668
+08:23:18   layer  24: load-wait 3.68s compute 0.31s  wf_rows=1668
+08:23:38   layer  31: load-wait 2.60s compute 0.30s  wf_rows=1668
+08:23:38   pass done: 556 prefill rows (T=33), 1668 spawn rows, 91.3s
+08:23:38 denoise  all_attn  all     : effect/drop +0.999 (mean effect +6.42, drop 6.43)
+08:23:38 denoise  all_block all     : effect/drop +1.000 (mean effect +6.43, drop 6.43)
+08:23:38 denoise  all_moe   all     : effect/drop +0.669 (mean effect +4.30, drop 6.43)
+08:23:38 noise    all_attn  all     : effect/drop +1.000 (mean effect +6.43, drop 6.43)
+08:23:38 noise    all_block all     : effect/drop +1.000 (mean effect +6.43, drop 6.43)
+08:23:38 noise    all_moe   all     : effect/drop +0.669 (mean effect +4.30, drop 6.43)
+2026-10-05T08:23:45Z END   ext12-4b-joint-mixtral_bos rc=0 (107s)
+2026-10-05T08:23:45Z run ext12-4b-direct-mixtral_bos
+2026-10-05T08:52:22Z START ext12-4b-direct-mixtral_bos (waited 1717s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str
+08:52:38   layer   0: load-wait 6.84s compute 0.73s  wf_rows=0
+08:53:00   layer   8: load-wait 2.76s compute 0.14s  wf_rows=0
+08:53:24   layer  16: load-wait 2.75s compute 0.14s  wf_rows=0
+08:53:47   layer  24: load-wait 2.76s compute 0.14s  wf_rows=0
+08:54:07   layer  31: load-wait 2.74s compute 0.14s  wf_rows=0
+08:54:07   pass done: 278 prefill rows (T=33), 0 spawn rows, 96.7s
+08:54:08 wino_roleitems_mixtral_bos_str: 278 directed cases; A_direct 0.410, M_direct 0.590, DLA attn share 0.408; fp32 vs engine Delta clean max |diff| 0.114
+2026-10-05T08:54:14Z END   ext12-4b-direct-mixtral_bos rc=0 (112s)
+2026-10-05T08:54:15Z run ext12-4c-joint
+2026-10-05T09:22:47Z START ext12-4c-joint (waited 1712s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --max-rows 30000 --agent ext12-complete
+09:22:48 mixtral -> wino_mixtral_nobos_str: 1024 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+09:22:55 pass 1/1: 2048 prefill rows, 6144 multi rows
+09:23:03   layer   0: load-wait 6.43s compute 1.52s  wf_rows=6144
+09:23:26   layer   8: load-wait 1.77s compute 1.06s  wf_rows=6144
+09:23:48   layer  16: load-wait 1.78s compute 1.06s  wf_rows=6144
+09:24:08   layer  24: load-wait 1.77s compute 1.06s  wf_rows=6144
+09:24:29   layer  31: load-wait 2.10s compute 1.05s  wf_rows=6144
+09:24:29   pass done: 2048 prefill rows (T=32), 6144 spawn rows, 93.6s
+09:24:30 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.74, drop 7.75)
+09:24:30 denoise  all_block all     : effect/drop +1.000 (mean effect +7.75, drop 7.75)
+09:24:30 denoise  all_moe   all     : effect/drop +0.782 (mean effect +6.06, drop 7.75)
+09:24:30 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.75, drop 7.75)
+09:24:30 noise    all_block all     : effect/drop +1.000 (mean effect +7.75, drop 7.75)
+09:24:30 noise    all_moe   all     : effect/drop +0.783 (mean effect +6.06, drop 7.75)
+2026-10-05T09:24:36Z END   ext12-4c-joint rc=0 (109s)
+2026-10-05T09:24:36Z run ext12-4c-direct
+2026-10-05T09:51:59Z START ext12-4c-direct (waited 1643s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation
+09:52:17   layer   0: load-wait 9.25s compute 1.40s  wf_rows=0
+09:52:39   layer   8: load-wait 2.43s compute 0.47s  wf_rows=0
+09:53:02   layer  16: load-wait 2.51s compute 0.47s  wf_rows=0
+09:53:26   layer  24: load-wait 2.59s compute 0.47s  wf_rows=0
+09:53:46   layer  31: load-wait 2.42s compute 0.47s  wf_rows=0
+09:53:46   pass done: 1024 prefill rows (T=32), 0 spawn rows, 99.3s
+09:53:47 wino_mixtral_nobos_str: 1024 directed cases; A_direct 0.296, M_direct 0.704, DLA attn share 0.296; fp32 vs engine Delta clean max |diff| 0.128
+2026-10-05T09:53:54Z END   ext12-4c-direct rc=0 (115s)
+2026-10-05T09:53:54Z run ext12-4c-sinkflags
+2026-10-05T10:21:54Z START ext12-4c-sinkflags (waited 1680s): python scripts/ext12_sink_flags.py --out wino_mixtral_nobos_str
+10:22:02 2048 prefill rows (512 pairs x 2 prompts x 2 protocols)
+10:22:10   layer   0: load-wait 5.98s compute 1.44s  wf_rows=0
+10:22:31   layer   8: load-wait 1.78s compute 0.97s  wf_rows=0
+10:22:49   layer  16: load-wait 0.94s compute 0.97s  wf_rows=0
+10:23:08   layer  24: load-wait 0.25s compute 0.97s  wf_rows=0
+10:23:27   layer  31: load-wait 1.50s compute 0.97s  wf_rows=0
+10:23:27   pass done: 2048 prefill rows (T=33), 0 spawn rows, 84.7s
+10:23:33 nobos: final position = max norm at L5 in 2/1024 prompts (any early layer 2); pos0 max 44; pos0 mass L1 0.02
+10:23:33 bos: final position = max norm at L5 in 0/1024 prompts (any early layer 0); pos0 max 1024; pos0 mass L1 0.80
+2026-10-05T10:23:39Z END   ext12-4c-sinkflags rc=0 (105s)
+2026-10-05T10:23:39Z EXT12 INPUT CHAIN DONE

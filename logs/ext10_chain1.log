@@ -1,0 +1,162 @@
+2026-10-05T06:27:17Z START ext10-heads-cf_qwen3 (waited 552s): python scripts/ext10_heads_run.py cf_qwen3
+06:27:22 cf_qwen3: 432 validation rows, 3 chunks (3 to do), L=48 nH=32; spawn rows per row 1584
+06:27:23 pass (chunk 0): 182 prefill rows (38 clean), 228096 spawn rows
+06:27:28   layer   0: load-wait 3.26s compute 0.81s  wf_rows=4752
+06:27:37   layer   8: load-wait 1.75s compute 0.27s  wf_rows=42768
+06:27:46   layer  16: load-wait 0.70s compute 0.49s  wf_rows=80784
+06:27:56   layer  24: load-wait 0.46s compute 0.70s  wf_rows=118800
+06:28:06   layer  32: load-wait 0.18s compute 0.93s  wf_rows=156816
+06:28:18   layer  40: load-wait 0.11s compute 1.15s  wf_rows=194832
+[W1005 06:28:21.358286005 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 06:28:23.926504070 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:28:25.462397847 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:28:26.026544924 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:28:28.787033308 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+06:28:29   layer  47: load-wait 0.22s compute 1.50s  wf_rows=228096
+06:28:29   pass done: 182 prefill rows (T=15), 228096 spawn rows, 65.8s
+06:28:31 chunk 0 done: {'chunk': 0, 'rows': 144, 'prefill': 182, 'spawn_rows': 228096, 'pass_s': 65.83475399017334, 'peak_GB': 18.736287117004395, 'mean_drop': 10.43359375, 'r_sum_heads_vs_attn_layer': 0.32822550654960564, 'head_dla_sum_mean': 4.641862869262695, 'candidates_not_routed_clean': 944, 'utc': '2026-10-05T06:28:31Z'}
+06:28:31 pass (chunk 1): 183 prefill rows (36 clean), 232848 spawn rows
+06:28:32   layer   0: load-wait 0.53s compute 0.07s  wf_rows=4851
+06:28:37   layer   8: load-wait 0.37s compute 0.26s  wf_rows=43659
+06:28:45   layer  16: load-wait 0.50s compute 0.47s  wf_rows=82467
+06:28:53   layer  24: load-wait 0.19s compute 0.68s  wf_rows=121275
+06:29:03   layer  32: load-wait 0.77s compute 0.89s  wf_rows=160083
+06:29:13   layer  40: load-wait 0.11s compute 1.10s  wf_rows=198891
+[W1005 06:29:14.902024553 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 06:29:16.758237931 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 06:29:18.605254059 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:29:20.567265856 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:29:21.136733488 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:29:23.858839224 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+06:29:24   layer  47: load-wait 0.11s compute 1.47s  wf_rows=232848
+06:29:24   pass done: 183 prefill rows (T=12), 232848 spawn rows, 52.8s
+06:29:27 chunk 1 done: {'chunk': 1, 'rows': 147, 'prefill': 183, 'spawn_rows': 232848, 'pass_s': 52.76746845245361, 'peak_GB': 19.05862855911255, 'mean_drop': 12.321295738220215, 'r_sum_heads_vs_attn_layer': 0.42427738543970234, 'head_dla_sum_mean': 6.345623016357422, 'candidates_not_routed_clean': 580, 'utc': '2026-10-05T06:29:27Z'}
+06:29:27 pass (chunk 2): 175 prefill rows (34 clean), 223344 spawn rows
+06:29:28   layer   0: load-wait 0.58s compute 0.08s  wf_rows=4653
+06:29:33   layer   8: load-wait 0.34s compute 0.25s  wf_rows=41877
+06:29:40   layer  16: load-wait 0.59s compute 0.45s  wf_rows=79101
+06:29:46   layer  24: load-wait 0.18s compute 0.65s  wf_rows=116325
+06:29:53   layer  32: load-wait 0.11s compute 0.85s  wf_rows=153549
+06:30:02   layer  40: load-wait 0.10s compute 1.05s  wf_rows=190773
+[W1005 06:30:07.877110255 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 06:30:09.408708678 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 06:30:10.921564459 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+06:30:11   layer  47: load-wait 0.13s compute 1.44s  wf_rows=223344
+06:30:12   pass done: 175 prefill rows (T=11), 223344 spawn rows, 44.5s
+06:30:13 chunk 2 done: {'chunk': 2, 'rows': 141, 'prefill': 175, 'spawn_rows': 223344, 'pass_s': 44.45731854438782, 'peak_GB': 18.36982822418213, 'mean_drop': 11.198138236999512, 'r_sum_heads_vs_attn_layer': 0.3716597422317156, 'head_dla_sum_mean': 5.272942066192627, 'candidates_not_routed_clean': 791, 'utc': '2026-10-05T06:30:13Z'}
+06:30:13 ALL CHUNKS COMPLETE
+2026-10-05T06:30:20Z END   ext10-heads-cf_qwen3 rc=0 (183s)
+STEP1 cf_qwen3 DONE
+2026-10-05T06:44:03Z START ext10-heads-wino_qwen3 (waited 821s): python scripts/ext10_heads_run.py wino_qwen3
+06:44:07 wino_qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584
+06:44:08 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+06:44:12   layer   0: load-wait 3.35s compute 0.63s  wf_rows=4224
+06:44:25   layer   8: load-wait 1.86s compute 0.32s  wf_rows=38016
+06:44:40   layer  16: load-wait 2.19s compute 0.57s  wf_rows=71808
+06:44:58   layer  24: load-wait 0.11s compute 0.83s  wf_rows=105600
+06:45:16   layer  32: load-wait 2.00s compute 1.07s  wf_rows=139392
+06:45:33   layer  40: load-wait 0.11s compute 1.30s  wf_rows=173184
+06:45:45   layer  47: load-wait 0.30s compute 1.52s  wf_rows=202752
+06:45:45   pass done: 256 prefill rows (T=30), 202752 spawn rows, 96.8s
+06:45:46 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 96.77783489227295, 'peak_GB': 17.093129634857178, 'mean_drop': 8.12890625, 'r_sum_heads_vs_attn_layer': 0.39720213879138205, 'head_dla_sum_mean': 0.37296247482299805, 'candidates_not_routed_clean': 895, 'utc': '2026-10-05T06:45:46Z'}
+06:45:47 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+06:45:48   layer   0: load-wait 0.71s compute 0.09s  wf_rows=4224
+06:45:56   layer   8: load-wait 0.25s compute 0.33s  wf_rows=38016
+06:46:02   layer  16: load-wait 0.10s compute 0.59s  wf_rows=71808
+06:46:09   layer  24: load-wait 0.10s compute 0.84s  wf_rows=105600
+06:46:18   layer  32: load-wait 0.11s compute 1.10s  wf_rows=139392
+06:46:29   layer  40: load-wait 0.11s compute 1.36s  wf_rows=173184
+06:46:40   layer  47: load-wait 0.11s compute 1.59s  wf_rows=202752
+06:46:40   pass done: 256 prefill rows (T=31), 202752 spawn rows, 52.8s
+06:46:41 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 52.849865198135376, 'peak_GB': 17.101466178894043, 'mean_drop': 8.1982421875, 'r_sum_heads_vs_attn_layer': 0.3917168562283653, 'head_dla_sum_mean': 0.3239610493183136, 'candidates_not_routed_clean': 909, 'utc': '2026-10-05T06:46:41Z'}
+06:46:41 ALL CHUNKS COMPLETE
+2026-10-05T06:46:48Z END   ext10-heads-wino_qwen3 rc=0 (165s)
+STEP1 wino_qwen3 DONE
+2026-10-05T06:56:03Z START ext10-heads-cf_mixtral (waited 553s): python scripts/ext10_heads_run.py cf_mixtral
+06:56:08 cf_mixtral: 436 validation rows, 4 chunks (4 to do), L=32 nH=32; spawn rows per row 1056
+06:56:08 pass (chunk 0): 138 prefill rows (27 clean), 117216 spawn rows
+06:56:17   layer   0: load-wait 7.16s compute 0.82s  wf_rows=3663
+06:56:40   layer   8: load-wait 2.75s compute 0.53s  wf_rows=32967
+06:57:03   layer  16: load-wait 1.96s compute 0.98s  wf_rows=62271
+06:57:27   layer  24: load-wait 1.51s compute 1.43s  wf_rows=91575
+06:57:47   layer  31: load-wait 1.10s compute 1.82s  wf_rows=117216
+06:57:47   pass done: 138 prefill rows (T=12), 117216 spawn rows, 98.7s
+06:57:49 chunk 0 done: {'chunk': 0, 'rows': 111, 'prefill': 138, 'spawn_rows': 117216, 'pass_s': 98.71589064598083, 'peak_GB': 14.122105598449707, 'mean_drop': 13.24099063873291, 'r_sum_heads_vs_attn_layer': 0.40818434352953503, 'head_dla_sum_mean': 7.762148857116699, 'candidates_not_routed_clean': 71, 'utc': '2026-10-05T06:57:49Z'}
+06:57:49 pass (chunk 1): 137 prefill rows (28 clean), 115104 spawn rows
+06:57:51   layer   0: load-wait 1.92s compute 0.09s  wf_rows=3597
+06:58:15   layer   8: load-wait 2.44s compute 0.53s  wf_rows=32373
+06:58:38   layer  16: load-wait 2.08s compute 0.97s  wf_rows=61149
+06:59:02   layer  24: load-wait 1.52s compute 1.42s  wf_rows=89925
+06:59:23   layer  31: load-wait 1.14s compute 1.81s  wf_rows=115104
+06:59:23   pass done: 137 prefill rows (T=13), 115104 spawn rows, 93.1s
+06:59:25 chunk 1 done: {'chunk': 1, 'rows': 109, 'prefill': 137, 'spawn_rows': 115104, 'pass_s': 93.09379887580872, 'peak_GB': 13.96825122833252, 'mean_drop': 11.229930877685547, 'r_sum_heads_vs_attn_layer': 0.45456758685207216, 'head_dla_sum_mean': 7.818965435028076, 'candidates_not_routed_clean': 59, 'utc': '2026-10-05T06:59:25Z'}
+06:59:25 pass (chunk 2): 138 prefill rows (25 clean), 119328 spawn rows
+06:59:28   layer   0: load-wait 1.92s compute 0.09s  wf_rows=3729
+06:59:51   layer   8: load-wait 2.42s compute 0.55s  wf_rows=33561
+07:00:14   layer  16: load-wait 1.93s compute 1.00s  wf_rows=63393
+07:00:38   layer  24: load-wait 1.48s compute 1.46s  wf_rows=93225
+07:00:57   layer  31: load-wait 1.08s compute 1.86s  wf_rows=119328
+07:00:57   pass done: 138 prefill rows (T=12), 119328 spawn rows, 91.8s
+07:00:59 chunk 2 done: {'chunk': 2, 'rows': 113, 'prefill': 138, 'spawn_rows': 119328, 'pass_s': 91.83726620674133, 'peak_GB': 14.292009830474854, 'mean_drop': 12.55309772491455, 'r_sum_heads_vs_attn_layer': 0.4510853319821463, 'head_dla_sum_mean': 8.078348159790039, 'candidates_not_routed_clean': 61, 'utc': '2026-10-05T07:00:59Z'}
+07:00:59 pass (chunk 3): 129 prefill rows (26 clean), 108768 spawn rows
+07:01:02   layer   0: load-wait 2.06s compute 0.08s  wf_rows=3399
+07:01:24   layer   8: load-wait 2.42s compute 0.50s  wf_rows=30591
+07:01:47   layer  16: load-wait 2.01s compute 0.91s  wf_rows=57783
+07:02:10   layer  24: load-wait 1.45s compute 1.33s  wf_rows=84975
+07:02:31   layer  31: load-wait 1.25s compute 1.69s  wf_rows=108768
+07:02:31   pass done: 129 prefill rows (T=12), 108768 spawn rows, 91.6s
+07:02:33 chunk 3 done: {'chunk': 3, 'rows': 103, 'prefill': 129, 'spawn_rows': 108768, 'pass_s': 91.62138342857361, 'peak_GB': 13.243713855743408, 'mean_drop': 12.966626167297363, 'r_sum_heads_vs_attn_layer': 0.511751303605104, 'head_dla_sum_mean': 8.314186096191406, 'candidates_not_routed_clean': 35, 'utc': '2026-10-05T07:02:33Z'}
+07:02:33 ALL CHUNKS COMPLETE
+2026-10-05T07:02:40Z END   ext10-heads-cf_mixtral rc=0 (397s)
+STEP1 cf_mixtral DONE
+2026-10-05T07:14:42Z START ext10-heads-wino_mixtral (waited 720s): python scripts/ext10_heads_run.py wino_mixtral --rows-per-pass 128
+07:14:49 resuming: 0/3 chunks done
+07:14:49 wino_mixtral: 256 validation rows, 3 chunks (3 to do), L=32 nH=32; spawn rows per row 1056
+07:14:50 pass (chunk 0): 172 prefill rows (86 clean), 90816 spawn rows
+07:14:58   layer   0: load-wait 6.75s compute 1.11s  wf_rows=2838
+07:15:21   layer   8: load-wait 2.47s compute 0.52s  wf_rows=25542
+07:15:44   layer  16: load-wait 2.01s compute 0.92s  wf_rows=48246
+07:16:08   layer  24: load-wait 1.63s compute 1.31s  wf_rows=70950
+07:16:28   layer  31: load-wait 1.31s compute 1.65s  wf_rows=90816
+07:16:28   pass done: 172 prefill rows (T=28), 90816 spawn rows, 98.0s
+07:16:30 chunk 0 done: {'chunk': 0, 'rows': 86, 'prefill': 172, 'spawn_rows': 90816, 'pass_s': 98.04268741607666, 'peak_GB': 11.793011665344238, 'mean_drop': 7.837209224700928, 'r_sum_heads_vs_attn_layer': 0.3342633545732294, 'head_dla_sum_mean': 2.3037772178649902, 'candidates_not_routed_clean': 28, 'utc': '2026-10-05T07:16:30Z'}
+07:16:30 pass (chunk 1): 172 prefill rows (86 clean), 90816 spawn rows
+07:16:32   layer   0: load-wait 1.85s compute 0.14s  wf_rows=2838
+07:16:54   layer   8: load-wait 1.74s compute 0.56s  wf_rows=25542
+07:17:14   layer  16: load-wait 1.73s compute 0.97s  wf_rows=48246
+07:17:34   layer  24: load-wait 1.03s compute 1.36s  wf_rows=70950
+07:17:53   layer  31: load-wait 1.05s compute 1.72s  wf_rows=90816
+07:17:53   pass done: 172 prefill rows (T=31), 90816 spawn rows, 83.1s
+07:17:55 chunk 1 done: {'chunk': 1, 'rows': 86, 'prefill': 172, 'spawn_rows': 90816, 'pass_s': 83.08915853500366, 'peak_GB': 11.820688247680664, 'mean_drop': 7.534883499145508, 'r_sum_heads_vs_attn_layer': 0.29607607759694743, 'head_dla_sum_mean': 2.187108278274536, 'candidates_not_routed_clean': 19, 'utc': '2026-10-05T07:17:55Z'}
+07:17:55 pass (chunk 2): 168 prefill rows (84 clean), 88704 spawn rows
+07:17:57   layer   0: load-wait 1.84s compute 0.15s  wf_rows=2772
+07:18:17   layer   8: load-wait 1.94s compute 0.53s  wf_rows=24948
+07:18:35   layer  16: load-wait 1.19s compute 0.93s  wf_rows=47124
+07:18:58   layer  24: load-wait 1.61s compute 1.32s  wf_rows=69300
+07:19:19   layer  31: load-wait 1.27s compute 1.66s  wf_rows=88704
+07:19:19   pass done: 168 prefill rows (T=32), 88704 spawn rows, 83.4s
+07:19:20 chunk 2 done: {'chunk': 2, 'rows': 84, 'prefill': 168, 'spawn_rows': 88704, 'pass_s': 83.40242648124695, 'peak_GB': 11.65522289276123, 'mean_drop': 7.708333492279053, 'r_sum_heads_vs_attn_layer': 0.30238446190256063, 'head_dla_sum_mean': 2.1889288425445557, 'candidates_not_routed_clean': 27, 'utc': '2026-10-05T07:19:20Z'}
+07:19:20 ALL CHUNKS COMPLETE
+2026-10-05T07:19:27Z END   ext10-heads-wino_mixtral rc=0 (285s)
+STEP1 wino_mixtral DONE
+07:19:30 analysing cf_qwen3
+07:19:43 analysing cf_mixtral
+07:19:46 analysing wino_qwen3
+07:19:49 analysing wino_mixtral
+07:19:52 analysing ioi_qwen3
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext10_heads_analyze.py", line 424, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext10_heads_analyze.py", line 408, in main
+    res[k], arrs[k] = analyse(k, args.suffix)
+                      ~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext10_heads_analyze.py", line 83, in analyse
+    L = int(hd.layer.max()) + 1
+            ^^^^^^^^
+  File "/home/ubuntu/MOE/.venv/lib/python3.14/site-packages/pandas/core/generic.py", line 6194, in __getattr__
+    return object.__getattribute__(self, name)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AttributeError: 'DataFrame' object has no attribute 'layer'
+ANALYSIS FAILED
+EXT10 CHAIN1 DONE

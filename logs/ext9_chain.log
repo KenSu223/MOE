@@ -1,0 +1,204 @@
+2026-10-05T07:04:52Z chain: qwen3 full
+2026-10-05T07:19:27Z START ext9-ko-qwen3-full (waited 875s): python scripts/ext9_knockout_run.py qwen3 --phase full
+07:19:37 plan written: 10 conditions, 11 passes, 112460 rows
+07:19:37 11 of 11 passes to run
+07:19:45   layer   0: load-wait 2.94s compute 1.57s  wf_rows=0
+[W1005 07:19:51.587556107 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 198639616, total: 23686938624).
+[W1005 07:19:51.710547399 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 202833920, total: 23686938624).
+07:19:51 pass main_short_p000: CUDA OOM with 16000 rows -> split 8000 + 8000
+07:20:47 pass main_short_p000a: 8000 rows, T=14, padded 112000, 55.0s, peak 9.6 GB
+07:21:41 pass main_short_p000b: 8000 rows, T=15, padded 120000, 48.5s, peak 10.1 GB
+[W1005 07:21:58.144334523 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 56033280, total: 23686938624).
+[W1005 07:21:58.262327780 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 62324736, total: 23686938624).
+07:21:59 pass main_short_p001: CUDA OOM with 15000 rows -> split 7500 + 7500
+07:22:41 pass main_short_p001a: 7500 rows, T=15, padded 112500, 41.0s, peak 9.6 GB
+07:23:33 pass main_short_p001b: 7500 rows, T=16, padded 120000, 50.2s, peak 10.0 GB
+[W1005 07:23:54.979637441 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 56033280, total: 23686938624).
+[W1005 07:23:54.096827117 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 62324736, total: 23686938624).
+07:23:55 pass main_short_p002: CUDA OOM with 14117 rows -> split 7058 + 7059
+07:24:34 pass main_short_p002a: 7058 rows, T=16, padded 112928, 38.3s, peak 9.5 GB
+07:25:17 pass main_short_p002b: 7059 rows, T=17, padded 120003, 40.9s, peak 10.0 GB
+[W1005 07:26:19.959850496 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 8103395328 bytes (free: 56033280, total: 23686938624).
+07:26:23 pass main_short_p003: 13333 rows, T=18, padded 239994, 61.1s, peak 17.6 GB
+[W1005 07:27:26.759267697 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 7677673472 bytes (free: 56033280, total: 23686938624).
+07:27:28 pass main_short_p004: 12631 rows, T=19, padded 239989, 62.4s, peak 17.5 GB
+[W1005 07:28:12.151402250 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 56033280, total: 23686938624).
+[W1005 07:28:12.269940942 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 62324736, total: 23686938624).
+07:28:13 pass main_short_p005: CUDA OOM with 12000 rows -> split 6000 + 6000
+07:28:56 pass main_short_p005a: 6000 rows, T=19, padded 114000, 42.7s, peak 9.5 GB
+07:29:45 pass main_short_p005b: 6000 rows, T=20, padded 120000, 46.9s, peak 9.9 GB
+[W1005 07:30:30.121721331 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 56033280, total: 23686938624).
+[W1005 07:30:30.288947898 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3932160000 bytes (free: 2029453312, total: 23686938624).
+07:30:31 pass main_short_p006: CUDA OOM with 11428 rows -> split 5714 + 5714
+07:31:12 pass main_short_p006a: 5714 rows, T=21, padded 119994, 39.7s, peak 9.9 GB
+07:31:56 pass main_short_p006b: 5714 rows, T=21, padded 119994, 42.0s, peak 9.9 GB
+[W1005 07:33:00.083811673 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 6077546496 bytes (free: 56033280, total: 23686938624).
+07:33:02 pass main_short_p007: 10000 rows, T=24, padded 240000, 63.4s, peak 17.4 GB
+[W1005 07:33:55.016508037 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3827302400 bytes (free: 580321280, total: 23686938624).
+[W1005 07:33:55.131049505 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3827302400 bytes (free: 588709888, total: 23686938624).
+07:33:55 pass main_short_p008: CUDA OOM with 6671 rows -> split 3335 + 3336
+07:34:40 pass main_short_p008a: 3335 rows, T=26, padded 86710, 43.4s, peak 7.7 GB
+07:35:21 pass main_short_p008b: 3336 rows, T=35, padded 116760, 40.4s, peak 9.5 GB
+07:36:00 pass main_wiki_p000: 642 rows, T=127, padded 81534, 38.7s, peak 7.2 GB
+07:36:37 pass main_wiki_p001: 638 rows, T=127, padded 81026, 36.7s, peak 7.2 GB
+07:36:37 phase full complete
+2026-10-05T07:36:46Z END   ext9-ko-qwen3-full rc=0 (1039s)
+2026-10-05T07:36:46Z chain: mixtral full
+2026-10-05T07:52:46Z START ext9-ko-mixtral-full (waited 960s): python scripts/ext9_knockout_run.py mixtral --phase full
+07:52:55 plan written: 11 conditions, 14 passes, 78430 rows
+07:52:55 14 of 14 passes to run
+07:53:05   layer   0: load-wait 6.16s compute 2.18s  wf_rows=0
+07:53:28   layer   8: load-wait 1.20s compute 1.73s  wf_rows=0
+07:53:51   layer  16: load-wait 1.05s compute 1.73s  wf_rows=0
+07:54:13   layer  24: load-wait 1.27s compute 1.73s  wf_rows=0
+07:54:33   layer  31: load-wait 1.29s compute 1.73s  wf_rows=0
+07:54:33   pass done: 8767 prefill rows (T=14), 0 spawn rows, 95.8s (metrics 0.1s)
+07:54:34 pass main_short_p000: 8767 rows, T=14, padded 122738, 96.4s, peak 12.6 GB
+07:56:08 pass main_short_p001: 8032 rows, T=16, padded 128512, 87.0s, peak 13.0 GB
+07:57:24 pass main_short_p002: 7559 rows, T=17, padded 128503, 74.4s, peak 12.9 GB
+07:58:47 pass main_short_p003: 7139 rows, T=18, padded 128502, 80.6s, peak 12.9 GB
+08:00:11 pass main_short_p004: 7080 rows, T=18, padded 127440, 81.5s, peak 12.8 GB
+08:01:39 pass main_short_p005: 6763 rows, T=19, padded 128497, 83.7s, peak 12.9 GB
+08:02:59 pass main_short_p006: 6425 rows, T=20, padded 128500, 78.3s, peak 12.9 GB
+08:04:18 pass main_short_p007: 6119 rows, T=21, padded 128499, 77.0s, peak 12.8 GB
+08:05:40 pass main_short_p008: 5841 rows, T=22, padded 128502, 75.7s, peak 12.8 GB
+08:07:06 pass main_short_p009: 5354 rows, T=24, padded 128496, 84.6s, peak 12.8 GB
+08:08:39 pass main_short_p010: 4759 rows, T=27, padded 128493, 90.4s, peak 12.8 GB
+08:10:03 pass main_short_p011: 3184 rows, T=39, padded 124176, 82.4s, peak 12.6 GB
+08:11:33 pass main_wiki_p000: 706 rows, T=128, padded 90368, 89.8s, peak 10.0 GB
+08:13:01 pass main_wiki_p001: 702 rows, T=128, padded 89856, 86.9s, peak 9.9 GB
+08:13:01 phase full complete
+2026-10-05T08:13:08Z END   ext9-ko-mixtral-full rc=0 (1222s)
+2026-10-05T08:13:08Z chain: qwen3 random
+2026-10-05T08:35:23Z START ext9-ko-qwen3-random (waited 1335s): python scripts/ext9_knockout_run.py qwen3 --phase random
+08:35:32 plan written: 41 conditions, 9 passes, 64960 rows
+08:35:32 9 of 9 passes to run
+08:35:39   layer   0: load-wait 2.88s compute 1.04s  wf_rows=0
+08:35:45   layer   8: load-wait 0.26s compute 0.50s  wf_rows=0
+08:35:53   layer  16: load-wait 0.64s compute 0.50s  wf_rows=0
+08:36:01   layer  24: load-wait 0.21s compute 0.49s  wf_rows=0
+08:36:08   layer  32: load-wait 0.26s compute 0.52s  wf_rows=0
+08:36:17   layer  40: load-wait 0.34s compute 0.50s  wf_rows=0
+08:36:26   layer  47: load-wait 0.80s compute 0.49s  wf_rows=0
+08:36:26   pass done: 12000 prefill rows (T=9), 0 spawn rows, 51.2s (metrics 0.5s)
+08:36:27 pass main_short_p000: 12000 rows, T=9, padded 108000, 52.0s, peak 11.8 GB
+08:37:18 pass main_short_p001: 10833 rows, T=15, padded 162495, 47.9s, peak 12.8 GB
+08:38:04 pass main_short_p002: 10156 rows, T=16, padded 162496, 43.8s, peak 12.7 GB
+08:38:58 pass main_short_p003: 9027 rows, T=18, padded 162486, 52.4s, peak 12.6 GB
+08:39:46 pass main_short_p004: 8125 rows, T=20, padded 162500, 45.1s, peak 12.6 GB
+08:40:32 pass main_short_p005: 7386 rows, T=22, padded 162492, 44.8s, peak 12.5 GB
+08:41:20 pass main_short_p006: 5193 rows, T=31, padded 160983, 46.0s, peak 12.3 GB
+08:42:07 pass main_wiki_p000: 1126 rows, T=127, padded 143002, 46.2s, peak 10.9 GB
+08:42:53 pass main_wiki_p001: 1114 rows, T=127, padded 141478, 45.9s, peak 10.8 GB
+08:42:53 phase random complete
+2026-10-05T08:43:01Z END   ext9-ko-qwen3-random rc=0 (458s)
+2026-10-05T08:43:01Z chain: mixtral random
+2026-10-05T09:04:14Z START ext9-ko-mixtral-random (waited 1273s): python scripts/ext9_knockout_run.py mixtral --phase random
+09:04:23 plan written: 41 conditions, 12 passes, 64960 rows
+09:04:23 12 of 12 passes to run
+09:04:35   layer   0: load-wait 7.33s compute 2.51s  wf_rows=0
+09:04:57   layer   8: load-wait 1.12s compute 1.77s  wf_rows=0
+09:05:20   layer  16: load-wait 1.08s compute 1.77s  wf_rows=0
+09:05:44   layer  24: load-wait 1.23s compute 1.77s  wf_rows=0
+09:06:04   layer  31: load-wait 0.77s compute 1.77s  wf_rows=0
+09:06:04   pass done: 12565 prefill rows (T=10), 0 spawn rows, 99.0s (metrics 0.2s)
+09:06:11 pass main_short_p000: 12565 rows, T=10, padded 125650, 99.9s, peak 13.0 GB
+09:07:45 pass main_short_p001: 8134 rows, T=16, padded 130144, 90.0s, peak 13.1 GB
+09:09:12 pass main_short_p002: 7656 rows, T=17, padded 130152, 83.1s, peak 13.0 GB
+09:10:38 pass main_short_p003: 7230 rows, T=18, padded 130140, 83.5s, peak 13.0 GB
+09:12:02 pass main_short_p004: 6660 rows, T=19, padded 126540, 81.8s, peak 12.7 GB
+09:13:25 pass main_short_p005: 6197 rows, T=21, padded 130137, 81.3s, peak 13.0 GB
+09:14:47 pass main_short_p006: 5658 rows, T=23, padded 130134, 79.9s, peak 12.9 GB
+09:16:21 pass main_short_p007: 5006 rows, T=26, padded 130156, 92.0s, peak 12.9 GB
+09:17:56 pass main_short_p008: 3614 rows, T=35, padded 126490, 93.5s, peak 12.7 GB
+09:19:31 pass main_wiki_p000: 750 rows, T=128, padded 96000, 93.8s, peak 10.5 GB
+09:21:05 pass main_wiki_p001: 750 rows, T=128, padded 96000, 93.6s, peak 10.5 GB
+09:22:40 pass main_wiki_p002: 740 rows, T=128, padded 94720, 93.8s, peak 10.4 GB
+09:22:40 phase random complete
+2026-10-05T09:22:47Z END   ext9-ko-mixtral-random rc=0 (1113s)
+2026-10-05T09:22:47Z chain: qwen3 samelayer
+2026-10-05T09:42:33Z START ext9-ko-qwen3-samelayer (waited 1186s): python scripts/ext9_knockout_run.py qwen3 --phase samelayer
+09:42:43 plan written: 48 conditions, 11 passes, 79808 rows
+09:42:43 11 of 11 passes to run
+09:42:49   layer   0: load-wait 2.87s compute 0.97s  wf_rows=0
+09:42:58   layer   8: load-wait 0.81s compute 0.44s  wf_rows=0
+09:43:08   layer  16: load-wait 0.81s compute 0.44s  wf_rows=0
+09:43:18   layer  24: load-wait 0.81s compute 0.43s  wf_rows=0
+09:43:28   layer  32: load-wait 0.81s compute 0.44s  wf_rows=0
+09:43:38   layer  40: load-wait 0.81s compute 0.44s  wf_rows=0
+09:43:46   layer  47: load-wait 0.81s compute 0.43s  wf_rows=0
+09:43:47   pass done: 12000 prefill rows (T=8), 0 spawn rows, 61.8s (metrics 0.5s)
+09:43:47 pass main_short_p000: 12000 rows, T=8, padded 96000, 62.4s, peak 11.6 GB
+09:44:40 pass main_short_p001: 12000 rows, T=14, padded 168000, 51.1s, peak 13.2 GB
+09:45:31 pass main_short_p002: 11458 rows, T=15, padded 171870, 47.3s, peak 13.4 GB
+09:46:20 pass main_short_p003: 10110 rows, T=17, padded 171870, 47.6s, peak 13.3 GB
+09:47:14 pass main_short_p004: 9548 rows, T=18, padded 171864, 51.9s, peak 13.2 GB
+09:48:01 pass main_short_p005: 8593 rows, T=20, padded 171860, 45.3s, peak 13.2 GB
+09:48:49 pass main_short_p006: 7812 rows, T=22, padded 171864, 45.3s, peak 13.1 GB
+09:49:38 pass main_short_p007: 5535 rows, T=31, padded 171585, 48.1s, peak 12.9 GB
+09:50:21 pass main_wiki_p000: 923 rows, T=127, padded 117221, 41.5s, peak 9.4 GB
+09:51:04 pass main_wiki_p001: 923 rows, T=127, padded 117221, 42.8s, peak 9.4 GB
+09:51:51 pass main_wiki_p002: 906 rows, T=127, padded 115062, 46.7s, peak 9.2 GB
+09:51:51 phase samelayer complete
+2026-10-05T09:51:59Z END   ext9-ko-qwen3-samelayer rc=0 (566s)
+2026-10-05T09:51:59Z chain: mixtral samelayer
+2026-10-05T10:10:16Z START ext9-ko-mixtral-samelayer (waited 1097s): python scripts/ext9_knockout_run.py mixtral --phase samelayer
+10:10:24 plan written: 28 conditions, 8 passes, 40832 rows
+10:10:24 8 of 8 passes to run
+10:10:34   layer   0: load-wait 5.67s compute 2.24s  wf_rows=0
+10:10:54   layer   8: load-wait 0.90s compute 1.73s  wf_rows=0
+10:11:16   layer  16: load-wait 1.15s compute 1.73s  wf_rows=0
+10:11:36   layer  24: load-wait 2.49s compute 1.73s  wf_rows=0
+10:11:53   layer  31: load-wait 0.75s compute 1.73s  wf_rows=0
+10:11:54   pass done: 10230 prefill rows (T=12), 0 spawn rows, 87.2s (metrics 0.1s)
+10:11:54 pass main_short_p000: 10230 rows, T=12, padded 122760, 87.7s, peak 12.6 GB
+10:13:17 pass main_short_p001: 7511 rows, T=17, padded 127687, 81.5s, peak 12.9 GB
+10:14:46 pass main_short_p002: 6720 rows, T=19, padded 127680, 86.6s, peak 12.8 GB
+10:16:15 pass main_short_p003: 6080 rows, T=21, padded 127680, 87.6s, peak 12.8 GB
+10:17:42 pass main_short_p004: 5320 rows, T=24, padded 127680, 85.8s, peak 12.7 GB
+10:19:04 pass main_short_p005: 3563 rows, T=35, padded 124705, 80.1s, peak 12.5 GB
+10:20:26 pass main_wiki_p000: 706 rows, T=128, padded 90368, 80.9s, peak 10.0 GB
+10:21:47 pass main_wiki_p001: 702 rows, T=128, padded 89856, 80.2s, peak 9.9 GB
+10:21:47 phase samelayer complete
+2026-10-05T10:21:54Z END   ext9-ko-mixtral-samelayer rc=0 (698s)
+2026-10-05T10:21:54Z chain: qwen3 final
+2026-10-05T10:23:39Z START ext9-ko-qwen3-final (waited 105s): python scripts/ext9_knockout_run.py qwen3 --phase final
+10:23:48 plan written: 12 conditions, 4 passes, 21696 rows
+10:23:48 4 of 4 passes to run
+10:23:54   layer   0: load-wait 2.88s compute 1.16s  wf_rows=0
+10:24:03   layer   8: load-wait 0.60s compute 0.64s  wf_rows=0
+10:24:13   layer  16: load-wait 0.73s compute 0.64s  wf_rows=0
+10:24:23   layer  24: load-wait 0.52s compute 0.64s  wf_rows=0
+10:24:33   layer  32: load-wait 0.60s compute 0.64s  wf_rows=0
+10:24:43   layer  40: load-wait 0.62s compute 0.64s  wf_rows=0
+10:24:52   layer  47: load-wait 1.13s compute 0.64s  wf_rows=0
+10:24:53   pass done: 9466 prefill rows (T=15), 0 spawn rows, 63.1s (metrics 0.4s)
+10:24:55 pass main_short_p000: 9466 rows, T=15, padded 141990, 63.6s, peak 11.4 GB
+10:25:48 pass main_short_p001: 7473 rows, T=19, padded 141987, 51.1s, peak 11.3 GB
+10:26:38 pass main_short_p002: 4565 rows, T=31, padded 141515, 48.7s, peak 11.1 GB
+10:27:27 pass main_wiki_p000: 192 rows, T=127, padded 24384, 47.8s, peak 4.2 GB
+10:27:27 phase final complete
+2026-10-05T10:27:34Z END   ext9-ko-qwen3-final rc=0 (235s)
+2026-10-05T10:27:34Z chain: mixtral final
+2026-10-05T10:27:34Z START ext9-ko-mixtral-final (waited 0s): python scripts/ext9_knockout_run.py mixtral --phase final
+10:27:43 plan written: 14 conditions, 5 passes, 25344 rows
+10:27:43 5 of 5 passes to run
+10:27:54   layer   0: load-wait 6.70s compute 2.47s  wf_rows=0
+10:28:16   layer   8: load-wait 1.01s compute 1.88s  wf_rows=0
+10:28:39   layer  16: load-wait 1.01s compute 1.88s  wf_rows=0
+10:29:02   layer  24: load-wait 1.02s compute 1.88s  wf_rows=0
+10:29:23   layer  31: load-wait 1.14s compute 1.88s  wf_rows=0
+10:29:23   pass done: 8339 prefill rows (T=16), 0 spawn rows, 98.6s (metrics 0.1s)
+10:29:23 pass main_short_p000: 8339 rows, T=16, padded 133424, 99.1s, peak 13.3 GB
+10:30:51 pass main_short_p001: 7023 rows, T=19, padded 133437, 85.7s, peak 13.3 GB
+10:32:11 pass main_short_p002: 5918 rows, T=22, padded 130196, 76.4s, peak 13.0 GB
+10:33:24 pass main_short_p003: 3808 rows, T=35, padded 133280, 72.5s, peak 13.2 GB
+10:34:37 pass main_wiki_p000: 256 rows, T=128, padded 32768, 72.5s, peak 6.9 GB
+10:34:37 phase final complete
+2026-10-05T10:34:44Z END   ext9-ko-mixtral-final rc=0 (430s)
+2026-10-05T10:34:44Z chain: GPU work done; analysis
+10:34:45 analysing qwen3
+10:35:11 analysing mixtral
+10:35:33 wrote /home/ubuntu/MOE/results/ext9_knockout_summary.json
+wrote /home/ubuntu/MOE/results/sections/ext9_knockout.md
+2026-10-05T10:35:33Z chain: done

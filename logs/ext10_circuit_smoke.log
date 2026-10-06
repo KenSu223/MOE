@@ -1,0 +1,25 @@
+2026-10-05T07:12:44Z START ext10-circuit-smoke (waited 703s): python scripts/ext10_circuit_run.py qwen3 --limit 4 --out-suffix _smoke --max-passes 2
+07:12:53 cf_qwen3: 4 rows, 3 cases, prefill offset 0
+07:12:54 wino_qwen3: 4 rows, 4 cases, prefill offset 7
+07:12:54 initialised: {'tasks': ['cf_qwen3', 'wino_qwen3'], 'rows': {'cf_qwen3': 4, 'wino_qwen3': 4}, 'budget': 75000, 'queue_groups': 48, 'queue_items': 1368, 'pool_sizes': {'cf_qwen3': {'mix': 64, 'head': 32}, 'wino_qwen3': {'mix': 64, 'head': 32}}}
+07:12:55 pass 0: 15 prefill rows, 2136 spawn rows (768 adaptive, 48 static groups; queue 48/48)
+07:13:01   layer   0: load-wait 3.78s compute 0.96s  wf_rows=162
+07:13:07   layer   8: load-wait 0.57s compute 0.08s  wf_rows=587
+07:13:14   layer  16: load-wait 0.47s compute 0.07s  wf_rows=948
+07:13:19   layer  24: load-wait 0.50s compute 0.06s  wf_rows=1194
+07:13:28   layer  32: load-wait 1.00s compute 0.09s  wf_rows=1500
+07:13:38   layer  40: load-wait 0.90s compute 0.11s  wf_rows=1880
+07:13:46   layer  47: load-wait 0.76s compute 0.11s  wf_rows=2136
+07:13:46   pass done: 15 prefill rows (T=18), 2136 spawn rows, 49.9s (metrics 0.1s)
+07:13:46 pass 0 done in 50s, peak 3.6 GB; greedy left 16; median r: {'mix': 0.35440340909090906, 'head': 0.25466200466200467}; all-heads |Δ - Δ_clean| max 0.312; queue 48/48
+07:13:46 pass 1: 15 prefill rows, 736 spawn rows (736 adaptive, 0 static groups; queue 48/48)
+07:13:48   layer   0: load-wait 1.37s compute 0.05s  wf_rows=43
+07:13:54   layer   8: load-wait 0.67s compute 0.06s  wf_rows=283
+07:14:01   layer  16: load-wait 1.00s compute 0.06s  wf_rows=419
+07:14:10   layer  24: load-wait 1.01s compute 0.07s  wf_rows=494
+07:14:18   layer  32: load-wait 1.05s compute 0.05s  wf_rows=579
+07:14:27   layer  40: load-wait 1.09s compute 0.06s  wf_rows=696
+07:14:34   layer  47: load-wait 0.90s compute 0.03s  wf_rows=736
+07:14:34   pass done: 15 prefill rows (T=18), 736 spawn rows, 47.8s (metrics 0.0s)
+07:14:34 pass 1 done in 48s, peak 3.5 GB; greedy left 16; median r: {'mix': 0.4921674637831843, 'head': 0.37230193387398625}; all-heads |Δ - Δ_clean| max nan; queue 48/48
+2026-10-05T07:14:42Z END   ext10-circuit-smoke rc=0 (118s)

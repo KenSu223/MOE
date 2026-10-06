@@ -1,0 +1,157 @@
+{
+ "sweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "pairs": "data/wino_str/pairs_train_xl_qwen3.parquet",
+  "case_sets": "results/wino_roleitems_inputs/case_sets_qwen3.json",
+  "families": {
+   "main": {
+    "discovery": 138,
+    "validation": 146
+   },
+   "rep": {
+    "discovery": 142,
+    "validation": 138
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 564,
+  "max_rows": 60000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+   ],
+   [
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "metrics": true,
+  "agent": "ext12-complete",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --kinds layer,attn_layer,block --max-rows 60000 --agent ext12-complete",
+  "created_utc": "2026-10-05T06:35:30Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T06:37:12Z",
+  "pass_times_s": [
+   51.10154104232788,
+   43.565431356430054
+  ],
+  "n_rows": 82344
+ },
+ "joint": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main",
+   "rep"
+  ],
+  "n_cases": 564,
+  "spans": {
+   "all": [
+    0,
+    47
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "ext12-complete",
+  "command": "python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --families main,rep --max-rows 30000 --agent ext12-complete",
+  "created_utc": "2026-10-05T06:51:27Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T06:52:18Z",
+  "pass_times_s": [
+   50.06613731384277
+  ],
+  "n_rows": 3384
+ },
+ "direct_split": {
+  "model": "qwen3",
+  "pairs": "data/wino_str/pairs_train_xl_qwen3.parquet",
+  "case_sets": "results/wino_roleitems_inputs/case_sets_qwen3.json",
+  "splits": null,
+  "n_rows": 564,
+  "seconds": 63.73106861114502,
+  "command": "python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str",
+  "completed_utc": "2026-10-05T07:09:19Z"
+ }
+}

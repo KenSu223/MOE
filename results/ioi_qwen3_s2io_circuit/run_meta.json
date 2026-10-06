@@ -1,0 +1,48 @@
+{
+ "key": "ioi_qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "task": "ioi",
+ "src_run": "ioi_qwen3_s2io",
+ "ext8_run": null,
+ "special_tokens": true,
+ "n_val_rows": 256,
+ "n_val_cases": 256,
+ "rows_per_pass": 160,
+ "n_chunks": 2,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA",
+ "command": "python scripts/ext10_heads_run.py ioi_qwen3 --dry-run",
+ "created_utc": "2026-10-05T07:12:35Z",
+ "complete": true,
+ "completed_utc": "2026-10-05T07:50:12Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 128,
+   "prefill": 256,
+   "spawn_rows": 202752,
+   "pass_s": 62.42959523200989,
+   "peak_GB": 17.00883913040161,
+   "mean_drop": 12.544921875,
+   "r_sum_heads_vs_attn_layer": 0.40701641540573463,
+   "head_dla_sum_mean": 17.44159507751465,
+   "candidates_not_routed_clean": 709,
+   "utc": "2026-10-05T07:49:14Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 128,
+   "prefill": 256,
+   "spawn_rows": 202752,
+   "pass_s": 54.93063139915466,
+   "peak_GB": 17.008846759796143,
+   "mean_drop": 12.8203125,
+   "r_sum_heads_vs_attn_layer": 0.4050868018146933,
+   "head_dla_sum_mean": 18.22093963623047,
+   "candidates_not_routed_clean": 840,
+   "utc": "2026-10-05T07:50:12Z"
+  }
+ ],
+ "note": "state created by a --dry-run (2 chunks of 128 rows); GPU passes ran in job ext10-heads-ioi_qwen3 (07:48-07:50Z)"
+}

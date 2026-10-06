@@ -1,0 +1,28 @@
+| Run | Head | Earlier result | Rank (of all heads) | Rescue / drop | z | Z8 both halves | DLA / drop |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H13 | F2 GN mover (L40H13) | 1 | +0.192 [+0.169, +0.216] | +28.6 | yes | +0.115 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18H4 | F2 GN mover (L18H4) | 1 | +0.154 [+0.126, +0.184] | +19.1 | yes | +0.063 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H22 | F2 GN (L24H22) | 2 | +0.147 [+0.128, +0.166] | +18.2 | yes | +0.150 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15H1 | F2 GN (L15H1) | 7 | +0.035 [+0.029, +0.040] | +4.2 | yes | +0.019 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15H3 | F2 GN (L15H3) | 11 | +0.018 [+0.014, +0.023] | +2.2 | yes | +0.013 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H29 | F2 GN (L19H29) | 3 | +0.061 [+0.052, +0.070] | +7.5 | yes | +0.042 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H30 | F2 GN (L19H30) | 9 | +0.029 [+0.025, +0.033] | +3.5 | yes | +0.020 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H31 | F2 GN (L19H31) | 28 | +0.006 [+0.004, +0.009] | +0.7 | no | +0.005 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H18 | W5 L38H18 | 3 | +0.041 [+0.036, +0.048] | +7.5 | yes | +0.022 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H21 | W5 L38H21 | 5 | +0.035 [+0.029, +0.042] | +6.3 | yes | +0.022 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H16 | W5 L38H16 (negative) | 1535 | -0.067 [-0.074, -0.060] | -12.0 | yes | -0.048 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42H30 | W5 L42H30 | 7 | +0.021 [+0.017, +0.024] | +3.7 | yes | +0.010 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42H26 | W5 L42H26 (negative) | 1533 | -0.033 [-0.038, -0.027] | -5.9 | yes | -0.016 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L39H5 | W5 L39H5 | 9 | +0.017 [+0.014, +0.022] | +3.2 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H9 | W5 L25H9 | 1 | +0.073 [+0.066, +0.079] | +15.7 | yes | +0.085 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H13 | W5 L19H13 | 3 | +0.047 [+0.042, +0.053] | +10.1 | yes | +0.001 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H18 | W5 L13H18 | 5 | +0.026 [+0.021, +0.030] | +5.4 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H11 | W5 L13H11 | 4 | +0.026 [+0.019, +0.034] | +5.5 | yes | +0.001 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H12 | W5 L19H12 | 6 | +0.025 [+0.020, +0.030] | +5.2 | yes | +0.008 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H4 | W5 L13H4 | 7 | +0.022 [+0.019, +0.026] | +4.6 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H11 | W5 L25H11 (negative) | 1023 | -0.020 [-0.022, -0.018] | -4.5 | yes | -0.023 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H11 | W5 IOI S2 reader L42H11 | 1 | +0.178 [+0.171, +0.184] | +20.0 | yes | +0.238 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H10 | W5 IOI name mover L42H10 | 4 | +0.069 [+0.064, +0.074] | +7.7 | yes | +0.214 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H24 | W5 IOI L43H24 | 2 | +0.100 [+0.095, +0.105] | +11.2 | yes | +0.090 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H29 | W5 IOI L43H29 | 5 | +0.063 [+0.060, +0.066] | +7.0 | yes | -0.089 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H14 | W5 IOI negative mover L42H14 | 1530 | -0.040 [-0.043, -0.037] | -4.7 | yes | -0.044 |

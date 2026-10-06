@@ -1,0 +1,13 @@
+10:34:08 4a/4c: analysing wino_qwen3_rep
+10:34:27 4a/4c: analysing cf_qwen3_fold
+10:34:58 4a/4c: analysing wino_mixtral_rep
+10:35:08 4a/4c: analysing cf_mixtral_fold
+10:35:21 4a/4c: analysing wino_mixtral_nobos
+10:35:31 4a/4c: bootstrapping the Phase-3 run cf_mixtral
+10:35:33 4a/4c: bootstrapping the Phase-3 run cf_qwen3
+10:35:35 4a/4c: bootstrapping the Phase-3 run wino_mixtral
+10:35:36 4a/4c: bootstrapping the Phase-3 run wino_qwen3
+10:35:44 4b qwen3: share role 0.304 vs option 0.306 (diff -0.002 [-0.015, +0.009]), twins 282
+10:35:45 4b mixtral_bos: share role 0.406 vs option 0.414 (diff -0.008 [-0.014, -0.001]), twins 139
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+10:36:09 wrote /home/ubuntu/MOE/results/ext12_complete_summary.json

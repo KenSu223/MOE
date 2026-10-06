@@ -1,0 +1,72 @@
+06:55:10 12 units (6 CounterFact, 6 WinoGrande directed); engine module moetrace.engine
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   3%|▎         | 5/179 [00:00<00:03, 46.55it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 73.17it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 80.01it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 80.29it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 81.09it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 81.79it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 82.01it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 81.76it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 81.46it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 82.50it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 83.74it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 85.14it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 85.44it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 83.78it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 83.42it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 84.48it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 86.66it/s]
+06:55:28 HF: 4/12 units
+06:55:38 HF: 8/12 units
+06:55:49 HF: 12/12 units
+06:55:49 HF reference done (34s)
+06:55:49   layer   0: load-wait 0.15s compute 0.10s  wf_rows=248
+06:55:50   layer   8: load-wait 0.07s compute 0.10s  wf_rows=744
+06:55:51   layer  15: load-wait 0.07s compute 0.04s  wf_rows=1080
+06:55:51   pass done: 24 prefill rows (T=23), 1080 spawn rows, 2.7s (metrics 0.0s)
+06:55:53   layer   0: load-wait 0.15s compute 0.15s  wf_rows=20000
+06:55:55   layer   8: load-wait 0.07s compute 0.24s  wf_rows=20000
+06:55:58   layer  15: load-wait 0.07s compute 0.31s  wf_rows=20000
+06:55:58   pass done: 24 prefill rows (T=23), 20000 spawn rows, 5.0s
+06:56:00 engine_module: moetrace.engine
+06:56:00 n_units: 12
+06:56:00 hf_s: 34.07537078857422
+06:56:00 pass1_s: 2.7426810264587402
+06:56:00 pass1_spawn_rows: 1080
+06:56:00 routing_agreement_engine_vs_hf_layers: 0.9427083333333334
+06:56:00 delta_clean_maxdiff_vs_hf: 0.265625
+06:56:00 delta_corrupt_maxdiff_vs_hf: 0.125
+06:56:00 mean_delta_clean: 3.6549479961395264
+06:56:00 mean_delta_corrupt: -4.625
+06:56:00 vs_hf_all: {"n": 504, "maxabs": 1.0546875, "meanabs": 0.08505394345238096, "frac_exact": 0.2400793650793651, "frac_within_0.1": 0.75, "frac_within_0.25": 0.9246031746031746}
+06:56:00 vs_hf_all_effect_corr: 0.9993624759850777
+06:56:00 invariants: {"denoise_all_block_minus_source_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_block_minus_source_delta_HF": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_setall_vs_all_layer_delta": {"n": 12, "maxabs": 0.0625, "meanabs": 0.005208333333333333, "frac_exact": 0.9166666666666666, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "denoise_all_setall_vs_all_layer_vec_maxabs": 0.00519561767578125, "denoise_all_block_kl_ref_base_mean": 2.8513448238372803, "denoise_all_block_delta_vs_source_exact_frac": 1.0, "noise_all_block_minus_source_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_block_minus_source_delta_HF": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_setall_vs_all_layer_delta": {"n": 12, "maxabs": 0.0625, "meanabs": 0.005208333333333333, "frac_exact": 0.9166666666666666, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "noise_all_setall_vs_all_layer_vec_maxabs": 0.00519561767578125, "noise_all_block_kl_ref_base_vs_prefill_kl": {"maxabs": 0.019092321395874023, "mean_spawn": 2.500046491622925, "mean_prefill": 2.497621536254883}, "noise_all_block_delta_vs_source_exact_frac": 1.0, "multi1_vs_single_denoise:single_moe_0_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_0_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_0_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_0_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_5_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_5_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_5_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_5_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_10_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_10_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_10_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_10_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_15_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_moe_15_vec_maxabs": 0.0, "multi1_vs_single_noise:single_moe_15_delta_maxabs": 0.0, "multi1_vs_single_noise:single_moe_15_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_1_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_1_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_1_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_1_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_8_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_8_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_8_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_8_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_14_delta_maxabs": 0.0, "multi1_vs_single_denoise:single_attn_14_vec_maxabs": 0.0, "multi1_vs_single_noise:single_attn_14_delta_maxabs": 0.0, "multi1_vs_single_noise:single_attn_14_vec_maxabs": 0.0, "multi1_vs_single_denoise:single_block_6_delta_maxabs": 0.0, "multi1_vs_single_noise:single_block_6_delta_maxabs": 0.0, "identity_attn_minus_clean_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "identity_block_minus_clean_delta": {"n": 12, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0, "frac_within_0.1": 1.0, "frac_within_0.25": 1.0}, "spawn_vectors_one_per_step_frac": 1.0}
+06:56:00 dla: {"n": 288, "diag_vs_vector_maxabs": 2.5678471748946663e-07, "diag_vs_vector_max_rel": 1.0820019790763764e-05, "corr_dla_vs_rescue": 0.8500114023818346, "mean_dla": -0.005015541412646911, "mean_rescue": 0.018473307291666668}
+06:56:00 pass1_peak_mem_GB: 2.0109119415283203
+06:56:00 stress: {"rows": 20000, "steps_per_row": 16, "pass_s": 5.488534212112427, "peak_mem_GB": 7.110036849975586, "batch_independence_delta": {"n": 200, "maxabs": 0.1875, "meanabs": 0.063828125, "frac_exact": 0.235, "frac_within_0.1": 0.785, "frac_within_0.25": 1.0}, "mean_rescue": 3.1303367614746094}
+06:56:00 vs_hf denoise:attn2: maxabs 0.125 meanabs 0.069 within0.25 1.00 effect r 0.9870118547987924 engine +0.766 hf +0.766
+06:56:00 vs_hf denoise:attn3: maxabs 0.312 meanabs 0.083 within0.25 0.92 effect r 0.9983842658654131 engine +1.326 hf +1.353
+06:56:00 vs_hf denoise:moe_attn: maxabs 0.375 meanabs 0.062 within0.25 0.92 effect r 0.9986226443624303 engine +0.708 hf +0.691
+06:56:00 vs_hf denoise:attn_moe: maxabs 0.625 meanabs 0.097 within0.25 0.92 effect r 0.9854601323607914 engine +0.352 hf +0.274
+06:56:00 vs_hf denoise:block_attn: maxabs 0.219 meanabs 0.072 within0.25 1.00 effect r 0.993338151468851 engine +0.758 hf +0.763
+06:56:00 vs_hf denoise:attn_block: maxabs 0.312 meanabs 0.090 within0.25 0.83 effect r 0.9865096804640306 engine +1.135 hf +1.096
+06:56:00 vs_hf denoise:block3: maxabs 0.375 meanabs 0.105 within0.25 0.92 effect r 0.9980272266432096 engine +3.543 hf +3.608
+06:56:00 vs_hf denoise:attn_coal: maxabs 0.500 meanabs 0.103 within0.25 0.92 effect r 0.9948450136989487 engine +1.943 hf +1.938
+06:56:00 vs_hf denoise:all_moe: maxabs 0.188 meanabs 0.065 within0.25 1.00 effect r 0.9997380620244373 engine +4.761 hf +4.799
+06:56:00 vs_hf denoise:all_attn: maxabs 0.250 meanabs 0.076 within0.25 0.92 effect r 0.9996175804362047 engine +8.280 hf +8.294
+06:56:00 vs_hf denoise:all_block: maxabs 0.266 meanabs 0.078 within0.25 0.92 effect r 0.9995507643289909 engine +8.280 hf +8.292
+06:56:00 vs_hf denoise:coal_all: maxabs 0.438 meanabs 0.075 within0.25 0.92 effect r 0.9980928683656034 engine +1.791 hf +1.779
+06:56:00 vs_hf denoise:coal_sparse: maxabs 0.250 meanabs 0.069 within0.25 0.92 effect r 0.9981478886517456 engine +0.733 hf +0.725
+06:56:00 vs_hf denoise:single_moe_0: maxabs 0.250 meanabs 0.076 within0.25 0.92 effect r 0.661817156532392 engine +0.024 hf +0.040
+06:56:00 vs_hf denoise:single_moe_5: maxabs 0.688 meanabs 0.106 within0.25 0.92 effect r 0.8466470629485077 engine +0.141 hf +0.089
+06:56:00 vs_hf denoise:single_moe_10: maxabs 0.312 meanabs 0.096 within0.25 0.92 effect r 0.9825655599410978 engine +0.441 hf +0.387
+06:56:00 vs_hf denoise:single_moe_15: maxabs 0.188 meanabs 0.067 within0.25 1.00 effect r 0.9994795780519049 engine -0.393 hf -0.382
+06:56:00 vs_hf denoise:single_attn_1: maxabs 0.125 meanabs 0.032 within0.25 1.00 effect r 0.5946772758014782 engine -0.023 hf -0.012
+06:56:00 vs_hf denoise:single_attn_8: maxabs 0.500 meanabs 0.094 within0.25 0.92 effect r 0.9953638616349374 engine +0.695 hf +0.652
+06:56:00 vs_hf denoise:single_attn_14: maxabs 0.125 meanabs 0.059 within0.25 1.00 effect r 0.9799909672272491 engine +0.234 hf +0.223
+06:56:00 vs_hf denoise:single_block_6: maxabs 0.312 meanabs 0.057 within0.25 0.92 effect r 0.996032657286878 engine +0.492 hf +0.460
+06:56:00 vs_hf noise:attn2: maxabs 0.375 meanabs 0.113 within0.25 0.92 effect r 0.9757878900228821 engine -0.618 hf -0.586
+06:56:00 vs_hf noise:attn3: maxabs 0.547 meanabs 0.141 within0.25 0.75 effect r 0.9906155881926545 engine -0.931 hf -0.902
+06:56:00 vs_hf noise:moe_attn: maxabs 0.375 meanabs 0.086 within0.25 0.92 effect r 0.9984836594454201 engine -0.634 hf -0.613
+06:56:00 vs_hf noise:attn_moe: maxabs 0.625 meanabs 0.121 within0.25 0.92 effect r 0.9866445009795213 engine -0.285 hf -0.216
+06:56:00 vs_hf noise:block_attn: maxabs 0.219 meanabs 0.081 within0.25 1.00 effect r 0.9935899652545744 engine -0.650 hf -0.658
+06:56:00 vs_hf noise:attn_block: maxabs 0.312 meanabs 0.090 within0.25 0.83 effect r 0.9938800586131101 engine -0.962 hf -0.938
+06:56:00 vs_hf noise:block3: maxabs 0.375 meanabs 0.128 within0.25 0.83 effect r 0.9987332832439898 engine -2.884 hf -2.923
+06:56:00 vs_hf noise:attn_coal: maxabs 0.188 meanabs 0.066 within0.25 1.00 effect r 0.9989341892553991 engine -1.763 hf -1.783
+06:56:00 vs_hf noise:all_moe: maxabs 0.281 meanabs 0.062 within0.25 0.92 effect r 0.9998049884616173 engine -4.523 hf -4.539
+06:56:00 vs_hf noise:all_attn: maxabs 0.125 meanabs 0.049 within0.25 1.00 effect r 0.9995830925852296 engine -8.280 hf -8.298
+06:56:00 vs_hf noise:all_block: maxabs 0.125 meanabs 0.051 within0.25 1.00 effect r 0.9995507643289909 engine -8.280 hf -8.292
+06:56:00 vs_hf noise:coal_all: maxabs 0.234 meanabs 0.094 within0.25 1.00 effect r 0.9978146946439379 engine -0.874 hf -0.858
+06:56:00 vs_hf noise:coal_sparse: maxabs 0.375 meanabs 0.104 within0.25 0.83 effect r 0.9971751813444536 engine -0.298 hf -0.272
+06:56:00 vs_hf noise:single_moe_0: maxabs 0.258 meanabs 0.100 within0.25 0.83 effect r 0.7331948930150606 engine +0.032 hf +0.026
+06:56:00 vs_hf noise:single_moe_5: maxabs 1.055 meanabs 0.191 within0.25 0.83 effect r 0.8250181745290321 engine +0.153 hf +0.137
+06:56:00 vs_hf noise:single_moe_10: maxabs 0.312 meanabs 0.090 within0.25 0.92 effect r 0.9861532721674937 engine -0.363 hf -0.339
+06:56:00 vs_hf noise:single_moe_15: maxabs 0.281 meanabs 0.091 within0.25 0.92 effect r 0.9993030885079577 engine +0.332 hf +0.324
+06:56:00 vs_hf noise:single_attn_1: maxabs 0.203 meanabs 0.046 within0.25 1.00 effect r 0.9216821202265031 engine -0.030 hf -0.029
+06:56:00 vs_hf noise:single_attn_8: maxabs 0.500 meanabs 0.096 within0.25 0.83 effect r 0.9956778096368483 engine -0.626 hf -0.600
+06:56:00 vs_hf noise:single_attn_14: maxabs 0.219 meanabs 0.081 within0.25 1.00 effect r 0.9774678575794796 engine -0.204 hf -0.191
+06:56:00 vs_hf noise:single_block_6: maxabs 0.312 meanabs 0.061 within0.25 0.92 effect r 0.9951167095171036 engine -0.376 hf -0.336

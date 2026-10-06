@@ -1,0 +1,63 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "experts_of_interest": [
+  "L41E117",
+  "L44E069",
+  "L42E115",
+  "L43E046",
+  "L43E005",
+  "L40E127",
+  "L44E006",
+  "L41E001",
+  "L44E098",
+  "L43E104",
+  "L40E030",
+  "L43E081",
+  "L39E071",
+  "L44E122",
+  "L41E053",
+  "L34E119",
+  "L31E124",
+  "L43E114",
+  "L40E040",
+  "L41E062"
+ ],
+ "layers": [
+  31,
+  34,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44
+ ],
+ "sets": {
+  "cf_donor": 852,
+  "wino": 512,
+  "wino_local": 512,
+  "ioi": 400,
+  "cf_clean": 215
+ },
+ "n_prompts": 2491,
+ "engine": "main",
+ "command": "python scripts/ext11_writer_vocab.py qwen3 --out qwen3_writer_vocab",
+ "created_utc": "2026-10-05T07:11:15Z",
+ "complete": true,
+ "n_vectors": 23709,
+ "pass_s": 59.082430601119995,
+ "peak_GB": 7.116194725036621,
+ "check_frozen_vs_contrib_dla_max_abs": 0.0,
+ "class_sizes": {
+  "wg_trigger": 1648,
+  "cf_place": 471,
+  "cf_language": 48,
+  "cf_organisation": 168,
+  "cf_occupation / field": 158,
+  "cf_other": 196,
+  "cf_any": 826,
+  "ioi_names": 65
+ },
+ "completed_utc": "2026-10-05T07:12:40Z"
+}

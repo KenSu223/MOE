@@ -1,0 +1,66 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "protocol": "tokenizer default",
+ "experts_of_interest": [
+  "L41E117",
+  "L44E069",
+  "L42E115",
+  "L43E046",
+  "L43E005",
+  "L40E127",
+  "L44E006",
+  "L41E001",
+  "L44E098",
+  "L43E104",
+  "L40E030",
+  "L43E081",
+  "L39E071",
+  "L44E122",
+  "L41E053",
+  "L34E119",
+  "L31E124",
+  "L43E114",
+  "L40E040",
+  "L41E062"
+ ],
+ "route_all_layers": [
+  31,
+  34,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44
+ ],
+ "sets": {
+  "wino_pool": 3686,
+  "wino_pool_local": 3686,
+  "ioi": 1600,
+  "wiki": 1100,
+  "cf_str": 1067,
+  "cf_scan": 1024,
+  "wino_main": 512,
+  "wino_local": 512
+ },
+ "n_prompts": 13187,
+ "n_tokens": 275016,
+ "budget": 141000,
+ "n_chunks": 3,
+ "window": 127,
+ "wiki_windows": 1100,
+ "raw_dir": "/opt/dlami/nvme/moe_ext11/qwen3_writer_routing",
+ "build": {
+  "wiki_corpus_tokens": 281027
+ },
+ "command": "python scripts/ext11_writer_routing.py qwen3 --out qwen3_writer_routing",
+ "created_utc": "2026-10-05T06:22:14Z",
+ "complete": true,
+ "pass_times_s": [
+  61.67346239089966,
+  51.73891758918762,
+  45.810296297073364
+ ],
+ "completed_utc": "2026-10-05T06:25:02Z"
+}

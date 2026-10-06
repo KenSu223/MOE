@@ -3,7 +3,7 @@
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
 Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
-Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28.
+Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05.
 
 ## 1. What this project is
 
@@ -26,6 +26,11 @@ is committed and pushed to github.com/KenSu223/MOE (branch `main`). Open items a
 `results/sections/ext7_synthesis.md`, `ext7_wino.md`, `ext7_controls.md`, `ext8_addback.md`, assembled into EXTENSIONS_REPORT.md
 as Directions 7-8 / 7 / 7b / 8): expert add-back curves (ext8) and WinoGrande / IOI under STR (ext7). STR only (no GN); Mixtral =
 BOS for Phase 3. Headlines in section 2b.**
+**Phase 4 COMPLETE (2026-10-05, committed and pushed 2026-10-06; plan in RESEARCH_PLAN.md "Phase 4"; sections `results/sections/ext9_synthesis.md`,
+`ext9_knockout.md`, `ext10_circuit.md`, `ext11_writer.md`, `ext12_complete.md`, assembled as Directions 9-12 / 9 / 10 / 11 / 12):
+expert knockout (necessity), head + expert add-back to full repair, writer vs computer experts, completeness checks (replication,
+role vs option swap on identical items, Mixtral no BOS on WinoGrande). Engine E4 (route masks, head steps in `multi`,
+contribution vectors). Headlines in section 2b.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -174,9 +179,9 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     (trigger = only and last word, single token, token symmetry, option not final, dedup) + margin ≥ 1 both ways: Qwen3 2,099,
     Mixtral BOS 1,151 pairs; case set = 776 pairs shared by Qwen3 / Mixtral BOS / no BOS → 128/128 + 128/128 replication
     (`data/wino_str/case_sets.json`). GN on the option token is ineffective in Qwen3 (binary in-context choice survives noise).
-  - *Attention vs MoE* (W2 single layers, all-MoE patch, direct-path split): IOI ≫ CounterFact > WinoGrande role swap >
-    option swap. Attention share of the positive rescue IOI 0.92 / 0.80, CounterFact 0.54 / 0.58, WinoGrande role 0.32 / 0.39,
-    option 0.16 / 0.34 (Qwen3 / Mixtral); direct-path MoE share WinoGrande 0.95 / 0.71. WinoGrande is NOT IOI-like at the final
+  - *Attention vs MoE* (W2 single layers, all-MoE patch, direct-path split): IOI ≫ CounterFact > WinoGrande (name items >
+    object items). Attention share of the positive rescue IOI 0.92 / 0.80, CounterFact 0.54 / 0.58, WinoGrande role 0.32 / 0.39,
+    option 0.16 / 0.34 (Qwen3 / Mixtral; role swap = name items only — on identical items role = option swap, Direction 12 4b); direct-path MoE share WinoGrande 0.95 / 0.71. WinoGrande is NOT IOI-like at the final
     position; one late specific expert per model (Qwen3 **L41E117** Spec +0.90, Mixtral **L20E000** Spec +0.94; pattern A,
     replicated; not the CounterFact experts); attention moves the option identity gradually (Qwen3 L19–L41, heads of one KV group
     cancel within a layer) or in one step (Mixtral L13, coreference-like heads). IOI heads recovered (S2 reader Qwen3 L42H11,
@@ -191,6 +196,33 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     (k ≤ 15 AUC incl. greedy: `results/tables/ext8_a1_partial_auc_k15.md`). Gradient rankings need F3 (not built).
   - Fixed: `ext5_subject.py` turned `attn_layer` rows into `block` when a pass also had window > 1 rows (no result affected;
     regression identical).
+- **Phase 4 (2026-10-05, ≈ 4.4 GPU-h; Qwen3 and Mixtral BOS; STR; agents ext9-knockout, ext10-circuit, ext11-writer, ext12-complete)**:
+  - *Engine E4* (ext9, additive; verified `results/verify_ext9_engine_olmoe.json`, regression identical): `PrefillSpec.route_mask`
+    ((layer, expert), ...) with `route_mask_pos` all|final and `route_mask_mode` reroute (router logit −inf before softmax) | zero;
+    `multi` steps `(l, "attn_head", heads)` and `(l, "heads_experts", (heads, experts))`; `DiagSpec.contrib_final_vectors`.
+    API: `logs/ext9_engine_api.md`.
+  - *Knockout (Direction 9)*: selected experts are necessary and task-specific but small: F (fraction of clean margin lost)
+    Qwen3 L41E117 0.033 on WinoGrande / −0.001 on CounterFact, L44E069 0.033 / 0.001, L42E115 0.024; Mixtral L20E000 0.036,
+    L18E001 0.015, L19E002 / L21E001 0.004 (barely necessary); rank 1 in their layer; dissociation contrast +0.065 / +0.041;
+    population top-10 sets 0.14–0.15 (Mixtral CounterFact top-10 0.038, contains WinoGrande / BOS-sink expert L19E006);
+    random matched sets ≈ 0; zero ≈ reroute; final-position-only knockout = 0.91–0.96 of all-position. Self-repair
+    (`scripts/ext9_synthesis_selfrepair.py`): a knockout loses only 0.30–0.47 (Qwen3, Mixtral L20E000) / 0.05–0.19 (Mixtral
+    L21E001, L19E002) of the expert's own direct write on the same prompts; the indirect expert L18E001 is not compensated.
+  - *Head + expert add-back (Direction 10)*: greedy over heads ∪ experts restores r(20) 0.97 / 1.00 (CounterFact) and 0.93 / 0.94
+    (WinoGrande) of the drop (experts alone ≤ the all-MoE ceiling 0.41–0.84); 80 % with 8–10 components; heads among the first
+    10 picks CounterFact 6.2 / 6.4, WinoGrande 3.6 / 2.8, IOI (Qwen3) 9.9; CounterFact picks mover heads first (Qwen3 L40H13,
+    Mixtral L18H4 / L24H22), WinoGrande its experts first. Head DLA ≈ oracle on CounterFact, poor on WinoGrande (early heads act
+    indirectly).
+  - *Writers (Direction 11)*: direct (DLA) share of single-expert patch effects: Qwen3 L41E117 1.04, L42E115 0.96, L44E069 1.32
+    (later layers undo 0.39 of its 1.59-logit write); Mixtral 0.54–0.87; share rises with depth (first-half experts ≤ 0.03 of
+    the drop, indirect). Routing follows the local slot (L41E117: copulas / degree adverbs, context-free "The bag was too"
+    prompts), the write needs the full context (DLA +0.54 vs +0.08); CounterFact experts route broadly ("a name follows",
+    every IOI final token) but write relation-specifically. Vocabulary: L41E117 δ_e puts the right trigger at median rank 98;
+    Mixtral L20E000 c_e at 10. Frozen-norm DLA error ≤ 1 %.
+  - *Completeness (Direction 12)*: add-back replicates on the WinoGrande replication split and a CounterFact fold swap (all
+    differences' CIs contain 0); Mixtral without BOS re-selects L20E000 (Spec +0.95) with unchanged attention/MoE balance;
+    **revised Phase-3 claim**: on identical name items role swap = option swap (attention share Qwen3 0.304 vs 0.306); the
+    Phase-3 role > option gap was names vs objects (role-swapped prompt = option-swapped prompt with names exchanged).
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -208,9 +240,14 @@ Base reproduction:
   exact noise samples are unrecoverable; only selections and CI-level agreement are comparable.
 
 Extensions:
-- Phase 3 not done (see ext7_synthesis.md caveats): gradient rankings for add-back (needs F3); Mixtral without BOS on the
-  WinoGrande pairs (decision (e); same case set); head patches at positions other than the final one; add-back on the
-  replication set; role swap vs option swap on identical items. Phase-3 results committed 2026-10-05 (≈ 300 MB).
+- Phase 3 not done (see ext7_synthesis.md caveats): gradient rankings for add-back (needs F3); head patches at positions
+  other than the final one. Done in Phase 4: Mixtral no BOS on WinoGrande, add-back replication, role vs option on identical
+  items. Phase-3 results committed 2026-10-05 (≈ 300 MB).
+- Phase 4 not done (ext9_synthesis.md caveats): path patching (split "indirect" into later attention vs MoE); Mixtral IOI circuit
+  run (≈ 25 GPU-min); a route mask that spares position 0 (BOS-sink confound for Mixtral sets with L19E006); a second WinoGrande
+  corruption site on object items; two-site add-back (subject + final position). Phase-4 results committed 2026-10-06.
+- WinoGrande original direction (property → entity) not run: twins whose only difference precedes the blank, truncated at the
+  blank, predicting the option (1,912 twins; single-token options + equal length: Qwen3 1,162, Mixtral 578 before margin).
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
   grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
@@ -305,6 +342,10 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `ext8_addback.py` (add-back orderings, greedy / beam / exact, curves). Engine (ext8, additive): `multi` steps `attn_layer` /
   `block`, every kind in the noising direction (parent = clean row, source = corrupted row), `SpawnSpec.kl_ref`,
   `DiagSpec.contrib_dla`; verified `results/verify_ext8_engine_olmoe.json`.
+- Phase 4: `ext9_knockout.py` (items, conditions, controls, planner), `ext10_circuit.py` (head singles, mixed greedy / static
+  orderings), `ext11_writer.py` (direct / indirect split, routing contexts, vocabulary projections), `ext12_complete.py` (task
+  registry for the multi-task add-back driver). Engine E4 (ext9, additive): `PrefillSpec.route_mask` / `route_mask_pos` /
+  `route_mask_mode`, `multi` steps `attn_head` / `heads_experts`, `DiagSpec.contrib_final_vectors` (`logs/ext9_engine_api.md`).
 - Direction 6: `ext6_str.py` (STR donors: `donor_index`, `candidates` = same relation, true object == case foil, same template,
   identical token positions and continuation ids; `select` (margin 1.0, K = 5, `random.Random(2000 + case_id)`);
   `model_data(run, donors='mean'|'first')` → `analysis.ModelData` with donor-aggregated rows so every `analysis.py`
@@ -345,6 +386,13 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   ids_b, str_pos, trig_a, trig_b), `ext7_wino_{verify,analyze,text}.py`; `ext7_{cf,role,ioi}_*.py` (CounterFact STR attention
   sweep, role swap, IOI), `python -m moetrace.ext7_controls direct|section`; `ext8_{engine_verify,regress_compare,addback_run,
   addback_analyze,addback_text}.py`.
+- Phase 4: `ext9_{engine_verify,merge_regress,regress_compare,knockout_run,knockout_analyze,knockout_text}.py`, `ext9_chain.sh`,
+  `ext9_synthesis_selfrepair.py`; `ext10_{heads_run,heads_analyze,circuit_run,circuit_analyze,circuit_text}.py`;
+  `ext11_writer_{partA,routing,routing_analyze,vocab,vocab_analyze,text}.py`; `ext12_{addback_run (multi-task ext8 driver),
+  roleitems_casesets,sink_flags,analyze,complete_text}.py`; `ext8_partial_auc.py` (k ≤ 15 AUC incl. greedy);
+  `ext8_plot_simple.py` (add-back figure with greedy / oracle / random only, deletion figure with oracle / random:
+  `results/figures/ext8_a{1,3}_curves_simple.png`); `ext7_wg_cf_routing_overlap.py` (final-position routing overlap
+  WinoGrande vs CounterFact → `results/tables/ext7_wg_cf_routing_overlap.md`). Team one-pager: `docs/team_brief_winogrande_str.md`.
 - Direction 6b: `ext6_str_grid.py <model> --out <str run> [--window 1|5] [--no-special-tokens]` (layer × position grid,
   units packed by suffix length), `ext6_str_grid_verify.py`, `ext6_str_grid_analyze.py` (heatmaps, peaks, last/middle
   ratio, sliding vs adding, GN comparison with the F4 `*_subject` runs), `ext6_str_grid_text.py`, `ext6_str_grid_chain.sh`.
@@ -372,10 +420,16 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `str_grid_w{1,5}_prefill.parquet` to `qwen3_str` and `mixtral_bos_str`.
 - Phase 3: `wino_<qwen3|mixtral_bos|mixtral_nobos|olmoe>` (competence scans), `wino_{qwen3,mixtral_bos}_str` (W2–W6, W4, grids,
   heads), `wino_role_*`, `ioi_*`, `{qwen3,mixtral_bos}_str_attnsweep`, `*_addback` (add-back curves).
-Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`;
+- Phase 4: `{qwen3,mixtral_bos}_knockout` (items, ko_rows_<phase>_*.parquet with condition `sig` = experts|pos|mode, controls,
+  plans), `{qwen3_str,mixtral_bos_str,wino_qwen3_str,wino_mixtral_bos_str,ioi_qwen3_s2io}_circuit` (head singles, head DLA),
+  `{qwen3,mixtral}_circuit` (mixed greedy / static rows), `{qwen3,mixtral_bos}_writer_{routing,vocab}`,
+  `wino_*_str_addback_rep`, `*_str_addback_fold_rep`, `wino_mixtral_nobos_str[_addback]`, `wino_roleitems_*`.
+Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`, `ext7_*`, `ext8_*`, `ext9_*`–`ext12_*`;
 figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
-ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary,ext6_str_grid_summary}.json`.
+ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary,ext6_str_grid_summary,ext7_wino_summary,
+ext7_controls_summary,ext8_addback_summary,ext9_knockout_summary,ext10_circuit_summary,ext11_writer_summary,
+ext12_complete_summary}.json`.
 
 Recipes:
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other

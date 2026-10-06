@@ -1,0 +1,133 @@
+{
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "pairs": "data/wino_str/pairs_train_xl_mixtral_bos.parquet",
+  "case_sets": "results/wino_roleitems_inputs/case_sets_mixtral_bos.json",
+  "families": {
+   "main": {
+    "discovery": 140,
+    "validation": 138
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 278,
+  "max_rows": 40000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "metrics": true,
+  "agent": "ext12-complete",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete",
+  "created_utc": "2026-10-05T07:46:16Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T07:47:55Z",
+  "pass_times_s": [
+   96.9624547958374
+  ],
+  "n_rows": 27244
+ },
+ "joint": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 278,
+  "spans": {
+   "all": [
+    0,
+    31
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "ext12-complete",
+  "command": "python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --families main,rep --max-rows 30000 --agent ext12-complete",
+  "created_utc": "2026-10-05T08:22:06Z",
+  "complete": true,
+  "completed_utc": "2026-10-05T08:23:38Z",
+  "pass_times_s": [
+   91.25377154350281
+  ],
+  "n_rows": 1668
+ },
+ "direct_split": {
+  "model": "mixtral",
+  "pairs": "data/wino_str/pairs_train_xl_mixtral_bos.parquet",
+  "case_sets": "results/wino_roleitems_inputs/case_sets_mixtral_bos.json",
+  "splits": null,
+  "n_rows": 278,
+  "seconds": 104.30412435531616,
+  "command": "python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str",
+  "completed_utc": "2026-10-05T08:54:08Z"
+ }
+}

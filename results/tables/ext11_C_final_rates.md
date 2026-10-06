@@ -1,0 +1,60 @@
+| model | expert | set | prompts | routed at final position (%) | DLA when routed (logits, true - foil) | DLA > 0 (%) | r(DLA, Delta) when routed | mean Delta of the set |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande main (512 prompts) | 512 | 84.4 [80.3, 88.3] | +0.54 [+0.48, +0.60] | 83 | 0.43 | +4.16 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande main (512 prompts) | 512 | 2.7 [1.0, 4.9] | +0.08 [-0.01, +0.20] | 64 | 0.21 | +4.16 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande main (512 prompts) | 512 | 2.0 [0.6, 3.7] | +0.51 [+0.10, +1.04] | 70 |  | +4.16 |
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande local prompts (main pairs) | 512 | 86.3 [82.2, 90.0] | +0.08 [+0.05, +0.11] | 56 | 0.52 | +0.55 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande local prompts (main pairs) | 512 | 3.1 [1.4, 5.5] | +0.01 [-0.00, +0.02] | 56 | 0.44 | +0.55 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande local prompts (main pairs) | 512 | 2.3 [0.8, 4.1] | -0.04 [-0.11, +0.01] | 42 | -0.23 | +0.55 |
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande margin pool (other pairs) | 3686 | 83.6 [81.8, 85.1] | +0.31 [+0.30, +0.33] | 75 | 0.33 | +3.78 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande margin pool (other pairs) | 3686 | 3.4 [2.6, 4.2] | +0.15 [+0.04, +0.29] | 58 | 0.14 | +3.78 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande margin pool (other pairs) | 3686 | 2.9 [2.3, 3.7] | +0.08 [+0.02, +0.14] | 66 | 0.17 | +3.78 |
+| Qwen3-30B-A3B-Base | L41E117 | local prompts (pool pairs) | 3686 | 73.0 [71.0, 74.9] | +0.05 [+0.04, +0.06] | 54 | 0.43 | +0.43 |
+| Qwen3-30B-A3B-Base | L44E069 | local prompts (pool pairs) | 3686 | 5.6 [4.7, 6.7] | -0.00 [-0.01, +0.01] | 46 | -0.02 | +0.43 |
+| Qwen3-30B-A3B-Base | L42E115 | local prompts (pool pairs) | 3686 | 4.0 [3.2, 4.9] | -0.00 [-0.01, +0.01] | 48 | 0.11 | +0.43 |
+| Qwen3-30B-A3B-Base | L41E117 | CounterFact STR (clean + donors), clean only | 215 | 10.7 [6.5, 14.9] | -0.00 [-0.02, +0.02] | 48 | -0.28 | +5.81 |
+| Qwen3-30B-A3B-Base | L44E069 | CounterFact STR (clean + donors), clean only | 215 | 87.9 [83.3, 92.1] | +0.81 [+0.61, +1.00] | 80 | 0.25 | +5.81 |
+| Qwen3-30B-A3B-Base | L42E115 | CounterFact STR (clean + donors), clean only | 215 | 95.3 [92.6, 98.1] | +0.44 [+0.38, +0.50] | 87 | 0.36 | +5.81 |
+| Qwen3-30B-A3B-Base | L41E117 | CounterFact scan (1,024 clean) | 1024 | 11.0 [9.1, 12.9] | -0.00 [-0.01, +0.01] | 45 | -0.08 | +5.19 |
+| Qwen3-30B-A3B-Base | L44E069 | CounterFact scan (1,024 clean) | 1024 | 89.6 [87.7, 91.4] | +0.63 [+0.56, +0.70] | 75 | 0.38 | +5.19 |
+| Qwen3-30B-A3B-Base | L42E115 | CounterFact scan (1,024 clean) | 1024 | 96.4 [95.2, 97.5] | +0.35 [+0.32, +0.38] | 81 | 0.47 | +5.19 |
+| Qwen3-30B-A3B-Base | L41E117 | IOI clean | 1600 | 0.0 [0.0, 0.0] | n/a |  |  | +6.27 |
+| Qwen3-30B-A3B-Base | L44E069 | IOI clean | 1600 | 10.9 [9.5, 12.6] | +0.00 [-0.00, +0.01] | 47 | 0.05 | +6.27 |
+| Qwen3-30B-A3B-Base | L42E115 | IOI clean | 1600 | 100.0 [100.0, 100.0] | -0.02 [-0.02, -0.01] | 43 | 0.05 | +6.27 |
+| Qwen3-30B-A3B-Base | L41E117 | wikitext-103 (final token of windows) | 1100 | 6.3 [4.9, 7.7] |  |  |  |  |
+| Qwen3-30B-A3B-Base | L44E069 | wikitext-103 (final token of windows) | 1100 | 46.5 [43.6, 49.5] |  |  |  |  |
+| Qwen3-30B-A3B-Base | L42E115 | wikitext-103 (final token of windows) | 1100 | 41.5 [38.5, 44.5] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande main (512 prompts) | 512 | 96.1 [93.8, 98.2] | +0.32 [+0.30, +0.35] | 86 | 0.32 | +3.89 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande main (512 prompts) | 512 | 2.9 [1.4, 4.7] | +0.04 [+0.01, +0.06] | 67 | 0.07 | +3.89 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande main (512 prompts) | 512 | 3.7 [1.8, 6.1] | +0.06 [+0.04, +0.09] | 63 | 0.68 | +3.89 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande main (512 prompts) | 512 | 1.2 [0.2, 2.5] | +0.04 [-0.03, +0.10] | 67 |  | +3.89 |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande local prompts (main pairs) | 512 | 95.1 [92.4, 97.5] | +0.06 [+0.03, +0.07] | 56 | 0.46 | +0.55 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande local prompts (main pairs) | 512 | 6.2 [3.7, 9.2] | +0.00 [-0.01, +0.02] | 47 | 0.69 | +0.55 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande local prompts (main pairs) | 512 | 2.1 [0.8, 3.7] | +0.00 [-0.02, +0.03] | 36 | 0.71 | +0.55 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande local prompts (main pairs) | 512 | 1.2 [0.2, 2.5] | -0.03 [-0.09, +0.00] | 33 |  | +0.55 |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande margin pool (other pairs) | 1790 | 96.6 [95.5, 97.7] | +0.31 [+0.30, +0.33] | 86 | 0.39 | +3.66 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande margin pool (other pairs) | 1790 | 4.2 [3.1, 5.4] | +0.05 [+0.03, +0.07] | 67 | 0.41 | +3.66 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande margin pool (other pairs) | 1790 | 3.8 [2.7, 5.0] | +0.13 [+0.07, +0.19] | 71 | 0.22 | +3.66 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande margin pool (other pairs) | 1790 | 1.2 [0.6, 2.0] | +0.08 [-0.00, +0.18] | 64 | 0.05 | +3.66 |
+| Mixtral-8x7B (BOS) | L20E000 | local prompts (pool pairs) | 1790 | 94.2 [92.8, 95.7] | +0.05 [+0.04, +0.06] | 56 | 0.46 | +0.58 |
+| Mixtral-8x7B (BOS) | L19E002 | local prompts (pool pairs) | 1790 | 9.1 [7.5, 10.8] | +0.00 [-0.01, +0.01] | 52 | 0.27 | +0.58 |
+| Mixtral-8x7B (BOS) | L21E001 | local prompts (pool pairs) | 1790 | 3.1 [2.1, 4.1] | -0.01 [-0.03, +0.00] | 44 | 0.08 | +0.58 |
+| Mixtral-8x7B (BOS) | L18E001 | local prompts (pool pairs) | 1790 | 1.6 [0.9, 2.5] | +0.01 [-0.02, +0.04] | 48 | 0.06 | +0.58 |
+| Mixtral-8x7B (BOS) | L20E000 | CounterFact STR (clean + donors), clean only | 213 | 31.9 [25.8, 38.5] | +0.15 [+0.11, +0.20] | 81 | 0.21 | +6.56 |
+| Mixtral-8x7B (BOS) | L19E002 | CounterFact STR (clean + donors), clean only | 213 | 61.0 [54.5, 67.6] | +0.41 [+0.34, +0.49] | 86 | 0.41 | +6.56 |
+| Mixtral-8x7B (BOS) | L21E001 | CounterFact STR (clean + donors), clean only | 213 | 67.6 [61.5, 73.7] | +0.49 [+0.42, +0.56] | 90 | 0.30 | +6.56 |
+| Mixtral-8x7B (BOS) | L18E001 | CounterFact STR (clean + donors), clean only | 213 | 77.0 [71.4, 83.1] | +0.14 [+0.11, +0.16] | 77 | 0.41 | +6.56 |
+| Mixtral-8x7B (BOS) | L20E000 | CounterFact scan (1,024 clean) | 1024 | 32.7 [29.8, 35.7] | +0.14 [+0.11, +0.17] | 76 | 0.32 | +5.80 |
+| Mixtral-8x7B (BOS) | L19E002 | CounterFact scan (1,024 clean) | 1024 | 58.4 [55.3, 61.1] | +0.34 [+0.31, +0.38] | 86 | 0.40 | +5.80 |
+| Mixtral-8x7B (BOS) | L21E001 | CounterFact scan (1,024 clean) | 1024 | 67.0 [64.1, 69.9] | +0.39 [+0.36, +0.43] | 86 | 0.37 | +5.80 |
+| Mixtral-8x7B (BOS) | L18E001 | CounterFact scan (1,024 clean) | 1024 | 77.6 [75.2, 80.2] | +0.12 [+0.11, +0.14] | 72 | 0.36 | +5.80 |
+| Mixtral-8x7B (BOS) | L20E000 | IOI clean | 1600 | 0.1 [0.0, 0.3] | n/a | 50 |  | +5.55 |
+| Mixtral-8x7B (BOS) | L19E002 | IOI clean | 1600 | 0.0 [0.0, 0.0] | n/a |  |  | +5.55 |
+| Mixtral-8x7B (BOS) | L21E001 | IOI clean | 1600 | 94.4 [93.3, 95.5] | -0.02 [-0.02, -0.02] | 41 | 0.10 | +5.55 |
+| Mixtral-8x7B (BOS) | L18E001 | IOI clean | 1600 | 99.8 [99.6, 100.0] | -0.01 [-0.01, -0.00] | 46 | 0.08 | +5.55 |
+| Mixtral-8x7B (BOS) | L20E000 | wikitext-103 (final token of windows) | 1100 | 22.3 [19.9, 24.7] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L19E002 | wikitext-103 (final token of windows) | 1100 | 22.9 [20.6, 25.5] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L21E001 | wikitext-103 (final token of windows) | 1100 | 24.7 [22.2, 27.3] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L18E001 | wikitext-103 (final token of windows) | 1100 | 24.5 [22.0, 27.1] |  |  |  |  |
+
+Final-position routing of the target experts in each prompt set (CounterFact STR: clean prompts) and the expert's own DLA there, (c_e . gamma) . (W_U[true] - W_U[foil]) / rms(h_final) with true / foil = own trigger / twin trigger (WinoGrande), true object / counterfactual object (CounterFact), IO / S (IOI). CIs: bootstrap over pairs (WinoGrande), cases or prompts.

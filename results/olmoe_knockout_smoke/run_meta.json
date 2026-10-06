@@ -1,0 +1,152 @@
+{
+ "model": "olmoe",
+ "repo": "allenai/OLMoE-1B-7B-0125",
+ "agent": "ext9-knockout",
+ "experiment": "ext9 expert knockout (route masks on clean prompts), Phase 4 item 1 / Direction 9",
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "full": {
+   "command": "python scripts/ext9_knockout_run.py olmoe --phase full --engine dev",
+   "created_utc": "2026-10-05T07:03:16Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 2005,
+     "T": 18,
+     "pass_s": 27.2,
+     "peak_GB": 2.98
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 1163,
+     "T": 30,
+     "pass_s": 4.1,
+     "peak_GB": 2.86
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 216,
+     "T": 127,
+     "pass_s": 3.6,
+     "peak_GB": 2.87
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T07:03:24Z",
+   "n_passes": 3,
+   "n_conditions": 9,
+   "n_rows": 3384
+  },
+  "random": {
+   "command": "python scripts/ext9_knockout_run.py olmoe --phase random --engine dev",
+   "created_utc": "2026-10-05T07:03:36Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 3582,
+     "T": 14,
+     "pass_s": 7.0,
+     "peak_GB": 3.74
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 2786,
+     "T": 18,
+     "pass_s": 5.2,
+     "peak_GB": 3.68
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 1612,
+     "T": 30,
+     "pass_s": 4.9,
+     "peak_GB": 3.51
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 214,
+     "T": 127,
+     "pass_s": 3.6,
+     "peak_GB": 2.87
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 206,
+     "T": 127,
+     "pass_s": 3.5,
+     "peak_GB": 2.85
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T07:03:54Z",
+   "n_passes": 5,
+   "n_conditions": 41,
+   "n_rows": 8400
+  },
+  "samelayer": {
+   "command": "python scripts/ext9_knockout_run.py olmoe --phase samelayer --engine dev",
+   "created_utc": "2026-10-05T07:04:04Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 1337,
+     "T": 17,
+     "pass_s": 4.8,
+     "peak_GB": 2.4
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 715,
+     "T": 30,
+     "pass_s": 3.1,
+     "peak_GB": 2.34
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 108,
+     "T": 127,
+     "pass_s": 3.0,
+     "peak_GB": 2.64
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T07:04:10Z",
+   "n_passes": 3,
+   "n_conditions": 12,
+   "n_rows": 2160
+  },
+  "final": {
+   "command": "python scripts/ext9_knockout_run.py olmoe --phase final --engine dev",
+   "created_utc": "2026-10-05T07:04:20Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 1461,
+     "T": 17,
+     "pass_s": 4.8,
+     "peak_GB": 2.45
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 819,
+     "T": 30,
+     "pass_s": 3.2,
+     "peak_GB": 2.39
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 24,
+     "T": 127,
+     "pass_s": 2.7,
+     "peak_GB": 2.0
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T07:04:26Z",
+   "n_passes": 3,
+   "n_conditions": 10,
+   "n_rows": 2304
+  }
+ }
+}

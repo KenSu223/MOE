@@ -1,0 +1,327 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "agent": "ext9-knockout",
+ "experiment": "ext9 expert knockout (route masks on clean prompts), Phase 4 item 1 / Direction 9",
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "full": {
+   "command": "python scripts/ext9_knockout_run.py mixtral --phase full",
+   "created_utc": "2026-10-05T07:54:34Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 8767,
+     "T": 14,
+     "pass_s": 96.4,
+     "peak_GB": 12.57
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 8032,
+     "T": 16,
+     "pass_s": 87.0,
+     "peak_GB": 12.95
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 7559,
+     "T": 17,
+     "pass_s": 74.4,
+     "peak_GB": 12.92
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 7139,
+     "T": 18,
+     "pass_s": 80.6,
+     "peak_GB": 12.9
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 7080,
+     "T": 18,
+     "pass_s": 81.5,
+     "peak_GB": 12.82
+    },
+    {
+     "pass": "main_short_p005",
+     "rows": 6763,
+     "T": 19,
+     "pass_s": 83.7,
+     "peak_GB": 12.88
+    },
+    {
+     "pass": "main_short_p006",
+     "rows": 6425,
+     "T": 20,
+     "pass_s": 78.3,
+     "peak_GB": 12.86
+    },
+    {
+     "pass": "main_short_p007",
+     "rows": 6119,
+     "T": 21,
+     "pass_s": 77.0,
+     "peak_GB": 12.85
+    },
+    {
+     "pass": "main_short_p008",
+     "rows": 5841,
+     "T": 22,
+     "pass_s": 75.7,
+     "peak_GB": 12.83
+    },
+    {
+     "pass": "main_short_p009",
+     "rows": 5354,
+     "T": 24,
+     "pass_s": 84.6,
+     "peak_GB": 12.81
+    },
+    {
+     "pass": "main_short_p010",
+     "rows": 4759,
+     "T": 27,
+     "pass_s": 90.4,
+     "peak_GB": 12.77
+    },
+    {
+     "pass": "main_short_p011",
+     "rows": 3184,
+     "T": 39,
+     "pass_s": 82.4,
+     "peak_GB": 12.58
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 706,
+     "T": 128,
+     "pass_s": 89.8,
+     "peak_GB": 9.98
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 702,
+     "T": 128,
+     "pass_s": 86.9,
+     "peak_GB": 9.95
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T08:13:01Z",
+   "n_passes": 14,
+   "n_conditions": 11,
+   "n_rows": 78430
+  },
+  "random": {
+   "command": "python scripts/ext9_knockout_run.py mixtral --phase random",
+   "created_utc": "2026-10-05T09:06:11Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 12565,
+     "T": 10,
+     "pass_s": 99.9,
+     "peak_GB": 12.98
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 8134,
+     "T": 16,
+     "pass_s": 90.0,
+     "peak_GB": 13.07
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 7656,
+     "T": 17,
+     "pass_s": 83.1,
+     "peak_GB": 13.05
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 7230,
+     "T": 18,
+     "pass_s": 83.5,
+     "peak_GB": 13.02
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 6660,
+     "T": 19,
+     "pass_s": 81.8,
+     "peak_GB": 12.73
+    },
+    {
+     "pass": "main_short_p005",
+     "rows": 6197,
+     "T": 21,
+     "pass_s": 81.3,
+     "peak_GB": 12.97
+    },
+    {
+     "pass": "main_short_p006",
+     "rows": 5658,
+     "T": 23,
+     "pass_s": 79.9,
+     "peak_GB": 12.94
+    },
+    {
+     "pass": "main_short_p007",
+     "rows": 5006,
+     "T": 26,
+     "pass_s": 92.0,
+     "peak_GB": 12.91
+    },
+    {
+     "pass": "main_short_p008",
+     "rows": 3614,
+     "T": 35,
+     "pass_s": 93.5,
+     "peak_GB": 12.66
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 750,
+     "T": 128,
+     "pass_s": 93.8,
+     "peak_GB": 10.52
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 750,
+     "T": 128,
+     "pass_s": 93.6,
+     "peak_GB": 10.52
+    },
+    {
+     "pass": "main_wiki_p002",
+     "rows": 740,
+     "T": 128,
+     "pass_s": 93.8,
+     "peak_GB": 10.4
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T09:22:40Z",
+   "n_passes": 12,
+   "n_conditions": 41,
+   "n_rows": 64960
+  },
+  "samelayer": {
+   "command": "python scripts/ext9_knockout_run.py mixtral --phase samelayer",
+   "created_utc": "2026-10-05T10:11:54Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 10230,
+     "T": 12,
+     "pass_s": 87.7,
+     "peak_GB": 12.65
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 7511,
+     "T": 17,
+     "pass_s": 81.5,
+     "peak_GB": 12.86
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 6720,
+     "T": 19,
+     "pass_s": 86.6,
+     "peak_GB": 12.82
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 6080,
+     "T": 21,
+     "pass_s": 87.6,
+     "peak_GB": 12.78
+    },
+    {
+     "pass": "main_short_p004",
+     "rows": 5320,
+     "T": 24,
+     "pass_s": 85.8,
+     "peak_GB": 12.74
+    },
+    {
+     "pass": "main_short_p005",
+     "rows": 3563,
+     "T": 35,
+     "pass_s": 80.1,
+     "peak_GB": 12.52
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 706,
+     "T": 128,
+     "pass_s": 80.9,
+     "peak_GB": 9.98
+    },
+    {
+     "pass": "main_wiki_p001",
+     "rows": 702,
+     "T": 128,
+     "pass_s": 80.2,
+     "peak_GB": 9.95
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T10:21:47Z",
+   "n_passes": 8,
+   "n_conditions": 28,
+   "n_rows": 40832
+  },
+  "final": {
+   "command": "python scripts/ext9_knockout_run.py mixtral --phase final",
+   "created_utc": "2026-10-05T10:29:23Z",
+   "passes": [
+    {
+     "pass": "main_short_p000",
+     "rows": 8339,
+     "T": 16,
+     "pass_s": 99.1,
+     "peak_GB": 13.32
+    },
+    {
+     "pass": "main_short_p001",
+     "rows": 7023,
+     "T": 19,
+     "pass_s": 85.7,
+     "peak_GB": 13.25
+    },
+    {
+     "pass": "main_short_p002",
+     "rows": 5918,
+     "T": 22,
+     "pass_s": 76.4,
+     "peak_GB": 12.96
+    },
+    {
+     "pass": "main_short_p003",
+     "rows": 3808,
+     "T": 35,
+     "pass_s": 72.5,
+     "peak_GB": 13.16
+    },
+    {
+     "pass": "main_wiki_p000",
+     "rows": 256,
+     "T": 128,
+     "pass_s": 72.5,
+     "peak_GB": 6.92
+    }
+   ],
+   "complete": true,
+   "completed_utc": "2026-10-05T10:34:37Z",
+   "n_passes": 5,
+   "n_conditions": 14,
+   "n_rows": 25344
+  }
+ }
+}

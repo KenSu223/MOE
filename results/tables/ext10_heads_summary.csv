@@ -1,0 +1,6 @@
+Run,Rows / cases,Mean drop,Heads Z8 + / − (both halves),Σ single heads / drop (all; positive pop. means),Pop. heads for 50/80/90 % (additive),Best head / best expert per row (median),Rows best head > best expert,Heads in joint top-32 (median [IQR]),"DLA vs single, heads: row r / row ρ top-32",top-1 / top-10 agree,pop. r,experts: row r,"Σ head DLA vs ext8 attention DLA (r, ratio)",Σ heads vs attn_layer (row-layer r)
+"Qwen3-30B-A3B-Base, CounterFact STR",432 / 108,11.66,15 / 5 (18),"0.31, 1.09",7/32/69,0.189 / 0.186,0.53,"14 [11, 19]",0.63 / 0.17,0.71 / 0.65,0.96,0.72,"0.999, 0.999",0.37
+"Mixtral-8x7B (BOS), CounterFact STR",436 / 106,12.98,12 / 5 (16),"0.50, 1.03",6/27/55,0.214 / 0.123,0.75,"17 [14, 20]",0.76 / 0.35,0.44 / 0.70,0.92,0.74,"0.999, 1.000",0.45
+"Qwen3-30B-A3B-Base, WinoGrande STR",256 / 256,8.16,15 / 12 (23),"0.02, 1.36",21/78/115,0.151 / 0.204,0.22,"12 [7, 18]",0.33 / -0.39,0.41 / 0.28,0.87,0.53,"0.989, 1.029",0.39
+"Mixtral-8x7B (BOS), WinoGrande STR",256 / 256,7.69,18 / 5 (19),"0.95, 1.19",22/107/183,0.112 / 0.192,0.16,"12 [10, 16]",0.41 / -0.09,0.47 / 0.39,0.79,0.81,"0.999, 0.998",0.31
+"Qwen3-30B-A3B-Base, IOI STR (S2 -> IO)",256 / 256,12.68,29 / 14 (40),"1.41, 2.29",6/14/17,0.184 / 0.015,1.00,"32 [31, 32]",0.62 / 0.31,0.58 / 0.62,0.76,1.00,"0.992, 1.003",0.41

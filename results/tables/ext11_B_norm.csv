@@ -1,0 +1,204 @@
+model,expert,vectors,n,exact-norm mean (logits),frozen-norm mean (logits),exact / frozen,r,mean |exact - frozen| (logits),sum |err| / sum |frozen|
+Qwen3-30B-A3B-Base,L41E117,"δ_e, CounterFact STR rows",95,-0.001,-0.001,1.722,0.999,0.002,0.047
+Qwen3-30B-A3B-Base,L41E117,"δ_e, WinoGrande STR rows",432,+1.101,+1.103,0.998,1.000,0.003,0.003
+Qwen3-30B-A3B-Base,L41E117,"c_e, CounterFact clean prompts",23,-0.004,-0.001,4.378,0.999,0.003,0.080
+Qwen3-30B-A3B-Base,L41E117,"c_e, WinoGrande prompts",432,+0.546,+0.552,0.990,1.000,0.005,0.009
+Qwen3-30B-A3B-Base,L41E117,"c_e, WinoGrande local prompts",442,+0.082,+0.083,0.987,1.000,0.003,0.011
+Qwen3-30B-A3B-Base,L44E069,"δ_e, CounterFact STR rows",746,+1.385,+1.384,1.001,1.000,0.026,0.018
+Qwen3-30B-A3B-Base,L44E069,"δ_e, WinoGrande STR rows",14,+0.183,+0.182,1.003,1.000,0.003,0.014
+Qwen3-30B-A3B-Base,L44E069,"c_e, CounterFact clean prompts",191,+0.767,+0.799,0.959,1.000,0.035,0.041
+Qwen3-30B-A3B-Base,L44E069,"c_e, WinoGrande prompts",14,+0.080,+0.091,0.878,1.000,0.011,0.100
+Qwen3-30B-A3B-Base,L44E069,"c_e, WinoGrande local prompts",16,+0.016,+0.016,0.988,0.998,0.006,0.069
+Qwen3-30B-A3B-Base,L44E069,"c_e, IOI prompts",45,-0.009,+0.001,-16.293,0.989,0.010,0.458
+Qwen3-30B-A3B-Base,L42E115,"δ_e, CounterFact STR rows",821,+0.855,+0.858,0.996,1.000,0.009,0.011
+Qwen3-30B-A3B-Base,L42E115,"δ_e, WinoGrande STR rows",11,+0.888,+0.885,1.004,1.000,0.004,0.005
+Qwen3-30B-A3B-Base,L42E115,"c_e, CounterFact clean prompts",208,+0.409,+0.433,0.944,0.999,0.024,0.051
+Qwen3-30B-A3B-Base,L42E115,"c_e, WinoGrande prompts",11,+0.443,+0.448,0.988,1.000,0.008,0.017
+Qwen3-30B-A3B-Base,L42E115,"c_e, WinoGrande local prompts",11,-0.027,-0.027,0.999,1.000,0.004,0.032
+Qwen3-30B-A3B-Base,L42E115,"c_e, IOI prompts",400,-0.024,-0.017,1.434,0.999,0.007,0.091
+Qwen3-30B-A3B-Base,L43E081,"δ_e, CounterFact STR rows",324,+0.009,+0.009,1.047,0.991,0.004,0.089
+Qwen3-30B-A3B-Base,L43E081,"δ_e, WinoGrande STR rows",503,+0.951,+0.952,0.999,1.000,0.007,0.007
+Qwen3-30B-A3B-Base,L43E081,"c_e, CounterFact clean prompts",79,-0.004,+0.001,-2.569,0.993,0.006,0.151
+Qwen3-30B-A3B-Base,L43E081,"c_e, WinoGrande prompts",503,+0.455,+0.474,0.959,0.999,0.020,0.038
+Qwen3-30B-A3B-Base,L43E081,"c_e, WinoGrande local prompts",484,+0.060,+0.064,0.942,1.000,0.009,0.028
+Qwen3-30B-A3B-Base,L43E081,"c_e, IOI prompts",9,+0.005,+0.007,0.698,0.998,0.002,0.114
+Qwen3-30B-A3B-Base,L39E071,"δ_e, WinoGrande STR rows",408,+0.410,+0.411,0.998,1.000,0.003,0.006
+Qwen3-30B-A3B-Base,L39E071,"c_e, WinoGrande prompts",408,+0.208,+0.210,0.993,1.000,0.003,0.011
+Qwen3-30B-A3B-Base,L39E071,"c_e, WinoGrande local prompts",189,+0.035,+0.035,0.994,1.000,0.001,0.006
+Qwen3-30B-A3B-Base,L39E071,"c_e, IOI prompts",12,-0.011,-0.012,0.955,1.000,0.001,0.025
+Qwen3-30B-A3B-Base,L44E122,"δ_e, CounterFact STR rows",24,-0.005,-0.006,0.731,0.995,0.003,0.096
+Qwen3-30B-A3B-Base,L44E122,"δ_e, WinoGrande STR rows",440,+0.645,+0.647,0.997,1.000,0.007,0.011
+Qwen3-30B-A3B-Base,L44E122,"c_e, CounterFact clean prompts",6,-0.019,-0.017,1.137,1.000,0.002,0.063
+Qwen3-30B-A3B-Base,L44E122,"c_e, WinoGrande prompts",440,+0.303,+0.325,0.934,1.000,0.022,0.052
+Qwen3-30B-A3B-Base,L44E122,"c_e, WinoGrande local prompts",429,+0.015,+0.019,0.780,0.999,0.009,0.050
+Qwen3-30B-A3B-Base,L44E122,"c_e, IOI prompts",134,-0.006,+0.002,-3.165,0.985,0.008,0.438
+Qwen3-30B-A3B-Base,L41E053,"δ_e, CounterFact STR rows",147,-0.010,-0.009,1.018,0.996,0.005,0.066
+Qwen3-30B-A3B-Base,L41E053,"δ_e, WinoGrande STR rows",490,+0.366,+0.367,0.998,1.000,0.003,0.009
+Qwen3-30B-A3B-Base,L41E053,"c_e, CounterFact clean prompts",36,-0.008,+0.026,-0.331,0.987,0.034,0.307
+Qwen3-30B-A3B-Base,L41E053,"c_e, WinoGrande prompts",490,+0.172,+0.183,0.940,1.000,0.011,0.048
+Qwen3-30B-A3B-Base,L41E053,"c_e, WinoGrande local prompts",488,-0.002,+0.000,-22.188,0.999,0.005,0.041
+Qwen3-30B-A3B-Base,L34E119,"δ_e, WinoGrande STR rows",386,+0.227,+0.227,1.000,1.000,0.002,0.007
+Qwen3-30B-A3B-Base,L34E119,"c_e, WinoGrande prompts",386,+0.111,+0.112,0.990,1.000,0.002,0.010
+Qwen3-30B-A3B-Base,L34E119,"c_e, WinoGrande local prompts",258,+0.007,+0.007,1.014,1.000,0.000,0.004
+Qwen3-30B-A3B-Base,L31E124,"δ_e, WinoGrande STR rows",298,+0.238,+0.238,1.000,1.000,0.002,0.007
+Qwen3-30B-A3B-Base,L31E124,"c_e, WinoGrande prompts",298,+0.114,+0.116,0.989,1.000,0.002,0.010
+Qwen3-30B-A3B-Base,L31E124,"c_e, WinoGrande local prompts",218,+0.000,+0.000,1.238,1.000,0.001,0.011
+Qwen3-30B-A3B-Base,L31E124,"c_e, IOI prompts",304,-0.004,-0.003,1.427,0.999,0.001,0.048
+Qwen3-30B-A3B-Base,L43E114,"δ_e, CounterFact STR rows",21,+0.026,+0.026,0.975,0.993,0.002,0.051
+Qwen3-30B-A3B-Base,L43E114,"δ_e, WinoGrande STR rows",413,+0.383,+0.385,0.997,1.000,0.008,0.018
+Qwen3-30B-A3B-Base,L43E114,"c_e, CounterFact clean prompts",5,+0.031,+0.033,0.937,1.000,0.002,0.055
+Qwen3-30B-A3B-Base,L43E114,"c_e, WinoGrande prompts",413,+0.171,+0.190,0.898,0.999,0.019,0.070
+Qwen3-30B-A3B-Base,L43E114,"c_e, WinoGrande local prompts",391,+0.020,+0.022,0.914,0.999,0.007,0.038
+Qwen3-30B-A3B-Base,L40E040,"δ_e, CounterFact STR rows",145,-0.003,-0.004,0.915,0.997,0.003,0.054
+Qwen3-30B-A3B-Base,L40E040,"δ_e, WinoGrande STR rows",493,+0.177,+0.178,0.998,1.000,0.004,0.015
+Qwen3-30B-A3B-Base,L40E040,"c_e, CounterFact clean prompts",38,-0.021,-0.005,4.328,0.989,0.016,0.248
+Qwen3-30B-A3B-Base,L40E040,"c_e, WinoGrande prompts",493,+0.080,+0.090,0.888,0.999,0.010,0.056
+Qwen3-30B-A3B-Base,L40E040,"c_e, WinoGrande local prompts",487,+0.024,+0.026,0.919,0.999,0.008,0.044
+Qwen3-30B-A3B-Base,L41E062,"δ_e, CounterFact STR rows",32,+0.041,+0.038,1.069,0.999,0.004,0.050
+Qwen3-30B-A3B-Base,L41E062,"δ_e, WinoGrande STR rows",417,+0.258,+0.259,0.998,1.000,0.004,0.014
+Qwen3-30B-A3B-Base,L41E062,"c_e, CounterFact clean prompts",8,+0.007,+0.014,0.515,0.999,0.007,0.143
+Qwen3-30B-A3B-Base,L41E062,"c_e, WinoGrande prompts",417,+0.122,+0.129,0.944,1.000,0.007,0.040
+Qwen3-30B-A3B-Base,L41E062,"c_e, WinoGrande local prompts",359,+0.033,+0.034,0.978,1.000,0.003,0.026
+Qwen3-30B-A3B-Base,L41E062,"c_e, IOI prompts",40,-0.002,-0.002,1.475,1.000,0.001,0.055
+Qwen3-30B-A3B-Base,L43E046,"δ_e, CounterFact STR rows",587,+0.438,+0.432,1.013,0.999,0.022,0.046
+Qwen3-30B-A3B-Base,L43E046,"c_e, CounterFact clean prompts",144,+0.239,+0.267,0.897,0.999,0.027,0.091
+Qwen3-30B-A3B-Base,L43E046,"c_e, IOI prompts",319,+0.012,+0.018,0.703,0.998,0.005,0.145
+Qwen3-30B-A3B-Base,L43E005,"δ_e, CounterFact STR rows",490,+0.512,+0.513,0.998,0.999,0.019,0.034
+Qwen3-30B-A3B-Base,L43E005,"c_e, CounterFact clean prompts",131,+0.343,+0.363,0.945,1.000,0.020,0.049
+Qwen3-30B-A3B-Base,L40E127,"δ_e, CounterFact STR rows",580,+0.318,+0.320,0.994,1.000,0.006,0.018
+Qwen3-30B-A3B-Base,L40E127,"δ_e, WinoGrande STR rows",10,+0.408,+0.409,0.999,1.000,0.001,0.003
+Qwen3-30B-A3B-Base,L40E127,"c_e, CounterFact clean prompts",153,+0.103,+0.118,0.877,0.999,0.015,0.082
+Qwen3-30B-A3B-Base,L40E127,"c_e, WinoGrande prompts",10,+0.201,+0.205,0.978,1.000,0.005,0.018
+Qwen3-30B-A3B-Base,L40E127,"c_e, WinoGrande local prompts",8,+0.008,+0.008,0.978,1.000,0.001,0.014
+Qwen3-30B-A3B-Base,L44E006,"δ_e, CounterFact STR rows",508,+0.596,+0.597,0.998,1.000,0.010,0.016
+Qwen3-30B-A3B-Base,L44E006,"δ_e, WinoGrande STR rows",46,+0.024,+0.022,1.094,0.998,0.007,0.060
+Qwen3-30B-A3B-Base,L44E006,"c_e, CounterFact clean prompts",121,+0.255,+0.272,0.938,1.000,0.017,0.055
+Qwen3-30B-A3B-Base,L44E006,"c_e, WinoGrande prompts",46,+0.005,+0.019,0.233,0.993,0.015,0.151
+Qwen3-30B-A3B-Base,L44E006,"c_e, WinoGrande local prompts",64,-0.007,-0.006,1.265,0.998,0.004,0.060
+Qwen3-30B-A3B-Base,L44E006,"c_e, IOI prompts",144,-0.003,+0.000,-7.240,0.987,0.004,0.341
+Qwen3-30B-A3B-Base,L41E001,"δ_e, CounterFact STR rows",711,+0.212,+0.215,0.986,0.999,0.005,0.023
+Qwen3-30B-A3B-Base,L41E001,"δ_e, WinoGrande STR rows",5,+0.044,+0.044,1.018,1.000,0.001,0.019
+Qwen3-30B-A3B-Base,L41E001,"c_e, CounterFact clean prompts",184,+0.105,+0.115,0.919,0.997,0.009,0.065
+Qwen3-30B-A3B-Base,L41E001,"c_e, WinoGrande prompts",5,+0.026,+0.026,0.989,1.000,0.001,0.017
+Qwen3-30B-A3B-Base,L41E001,"c_e, WinoGrande local prompts",6,+0.008,+0.008,0.995,1.000,0.000,0.011
+Qwen3-30B-A3B-Base,L41E001,"c_e, IOI prompts",400,-0.028,-0.031,0.895,0.999,0.005,0.042
+Qwen3-30B-A3B-Base,L44E098,"δ_e, CounterFact STR rows",101,+1.861,+1.866,0.997,1.000,0.013,0.007
+Qwen3-30B-A3B-Base,L44E098,"δ_e, WinoGrande STR rows",16,+0.156,+0.151,1.033,0.999,0.009,0.053
+Qwen3-30B-A3B-Base,L44E098,"c_e, CounterFact clean prompts",22,+0.855,+0.869,0.984,1.000,0.016,0.017
+Qwen3-30B-A3B-Base,L44E098,"c_e, WinoGrande prompts",16,+0.110,+0.126,0.871,1.000,0.016,0.082
+Qwen3-30B-A3B-Base,L44E098,"c_e, WinoGrande local prompts",17,+0.063,+0.065,0.971,0.999,0.006,0.055
+Qwen3-30B-A3B-Base,L44E098,"c_e, IOI prompts",7,+0.001,+0.007,0.073,0.998,0.007,0.308
+Qwen3-30B-A3B-Base,L43E104,"δ_e, CounterFact STR rows",617,+0.371,+0.372,0.998,1.000,0.009,0.021
+Qwen3-30B-A3B-Base,L43E104,"δ_e, WinoGrande STR rows",189,+0.028,+0.028,1.005,1.000,0.002,0.037
+Qwen3-30B-A3B-Base,L43E104,"c_e, CounterFact clean prompts",153,+0.151,+0.158,0.956,0.999,0.009,0.042
+Qwen3-30B-A3B-Base,L43E104,"c_e, WinoGrande prompts",189,+0.012,+0.014,0.799,0.999,0.003,0.072
+Qwen3-30B-A3B-Base,L43E104,"c_e, WinoGrande local prompts",233,+0.001,+0.001,0.556,1.000,0.001,0.030
+Qwen3-30B-A3B-Base,L43E104,"c_e, IOI prompts",396,-0.002,+0.003,-0.651,0.998,0.005,0.113
+Qwen3-30B-A3B-Base,L40E030,"δ_e, CounterFact STR rows",578,+0.291,+0.292,0.995,1.000,0.005,0.015
+Qwen3-30B-A3B-Base,L40E030,"δ_e, WinoGrande STR rows",6,+0.023,+0.022,1.048,1.000,0.001,0.038
+Qwen3-30B-A3B-Base,L40E030,"c_e, CounterFact clean prompts",150,+0.143,+0.152,0.940,0.999,0.009,0.048
+Qwen3-30B-A3B-Base,L40E030,"c_e, WinoGrande prompts",6,+0.010,+0.012,0.842,1.000,0.002,0.077
+Qwen3-30B-A3B-Base,L40E030,"c_e, WinoGrande local prompts",12,-0.012,-0.012,1.004,0.999,0.001,0.050
+Qwen3-30B-A3B-Base,L40E030,"c_e, IOI prompts",23,-0.005,-0.004,1.379,0.999,0.001,0.132
+Mixtral-8x7B (BOS),L20E000,"δ_e, CounterFact STR rows",279,+0.258,+0.260,0.990,0.996,0.013,0.049
+Mixtral-8x7B (BOS),L20E000,"δ_e, WinoGrande STR rows",493,+0.644,+0.648,0.994,1.000,0.005,0.008
+Mixtral-8x7B (BOS),L20E000,"c_e, CounterFact clean prompts",68,+0.125,+0.152,0.821,0.994,0.027,0.155
+Mixtral-8x7B (BOS),L20E000,"c_e, WinoGrande prompts",493,+0.296,+0.325,0.912,0.999,0.029,0.081
+Mixtral-8x7B (BOS),L20E000,"c_e, WinoGrande local prompts",487,+0.051,+0.055,0.912,0.998,0.013,0.065
+Mixtral-8x7B (BOS),L19E002,"δ_e, CounterFact STR rows",514,+0.666,+0.674,0.988,0.999,0.016,0.023
+Mixtral-8x7B (BOS),L19E002,"δ_e, WinoGrande STR rows",15,+0.063,+0.061,1.023,0.999,0.003,0.039
+Mixtral-8x7B (BOS),L19E002,"c_e, CounterFact clean prompts",130,+0.360,+0.408,0.882,0.998,0.048,0.112
+Mixtral-8x7B (BOS),L19E002,"c_e, WinoGrande prompts",15,+0.032,+0.037,0.868,0.999,0.005,0.100
+Mixtral-8x7B (BOS),L19E002,"c_e, WinoGrande local prompts",32,+0.003,+0.004,0.859,0.998,0.003,0.073
+Mixtral-8x7B (BOS),L21E001,"δ_e, CounterFact STR rows",571,+0.864,+0.871,0.992,0.999,0.016,0.019
+Mixtral-8x7B (BOS),L21E001,"δ_e, WinoGrande STR rows",19,+0.111,+0.109,1.018,0.996,0.004,0.032
+Mixtral-8x7B (BOS),L21E001,"c_e, CounterFact clean prompts",145,+0.446,+0.489,0.912,0.998,0.043,0.084
+Mixtral-8x7B (BOS),L21E001,"c_e, WinoGrande prompts",19,+0.056,+0.065,0.869,0.998,0.009,0.092
+Mixtral-8x7B (BOS),L21E001,"c_e, WinoGrande local prompts",10,+0.004,+0.005,0.887,0.997,0.005,0.063
+Mixtral-8x7B (BOS),L21E001,"c_e, IOI prompts",383,-0.033,-0.017,1.971,0.999,0.016,0.225
+Mixtral-8x7B (BOS),L18E001,"δ_e, CounterFact STR rows",642,+0.255,+0.258,0.988,0.999,0.008,0.028
+Mixtral-8x7B (BOS),L18E001,"δ_e, WinoGrande STR rows",6,+0.093,+0.092,1.010,1.000,0.002,0.019
+Mixtral-8x7B (BOS),L18E001,"c_e, CounterFact clean prompts",164,+0.098,+0.136,0.719,0.991,0.038,0.218
+Mixtral-8x7B (BOS),L18E001,"c_e, WinoGrande prompts",6,+0.038,+0.044,0.857,1.000,0.006,0.087
+Mixtral-8x7B (BOS),L18E001,"c_e, WinoGrande local prompts",6,-0.031,-0.030,1.021,1.000,0.001,0.010
+Mixtral-8x7B (BOS),L18E001,"c_e, IOI prompts",398,-0.021,-0.008,2.747,0.999,0.013,0.212
+Mixtral-8x7B (BOS),L19E006,"δ_e, CounterFact STR rows",484,+0.240,+0.241,0.999,0.999,0.007,0.029
+Mixtral-8x7B (BOS),L19E006,"δ_e, WinoGrande STR rows",503,+0.445,+0.448,0.994,1.000,0.004,0.009
+Mixtral-8x7B (BOS),L19E006,"c_e, CounterFact clean prompts",118,+0.122,+0.145,0.843,0.996,0.023,0.136
+Mixtral-8x7B (BOS),L19E006,"c_e, WinoGrande prompts",503,+0.197,+0.222,0.886,0.999,0.025,0.086
+Mixtral-8x7B (BOS),L19E006,"c_e, WinoGrande local prompts",499,+0.027,+0.032,0.861,0.998,0.012,0.066
+Mixtral-8x7B (BOS),L21E006,"δ_e, CounterFact STR rows",389,+0.242,+0.240,1.008,0.999,0.008,0.031
+Mixtral-8x7B (BOS),L21E006,"δ_e, WinoGrande STR rows",459,+0.518,+0.521,0.995,1.000,0.005,0.009
+Mixtral-8x7B (BOS),L21E006,"c_e, CounterFact clean prompts",91,+0.152,+0.171,0.888,0.998,0.019,0.097
+Mixtral-8x7B (BOS),L21E006,"c_e, WinoGrande prompts",459,+0.243,+0.261,0.931,0.999,0.018,0.061
+Mixtral-8x7B (BOS),L21E006,"c_e, WinoGrande local prompts",451,+0.042,+0.044,0.952,0.999,0.006,0.049
+Mixtral-8x7B (BOS),L21E006,"c_e, IOI prompts",10,-0.051,-0.041,1.230,0.999,0.009,0.121
+Mixtral-8x7B (BOS),L26E002,"δ_e, CounterFact STR rows",180,+0.036,+0.028,1.312,0.998,0.015,0.084
+Mixtral-8x7B (BOS),L26E002,"δ_e, WinoGrande STR rows",473,+0.895,+0.898,0.997,1.000,0.005,0.006
+Mixtral-8x7B (BOS),L26E002,"c_e, CounterFact clean prompts",40,+0.005,+0.024,0.208,0.996,0.019,0.121
+Mixtral-8x7B (BOS),L26E002,"c_e, WinoGrande prompts",473,+0.428,+0.450,0.951,1.000,0.022,0.044
+Mixtral-8x7B (BOS),L26E002,"c_e, WinoGrande local prompts",402,+0.045,+0.047,0.948,0.999,0.008,0.044
+Mixtral-8x7B (BOS),L26E002,"c_e, IOI prompts",21,-0.025,-0.019,1.297,0.999,0.006,0.102
+Mixtral-8x7B (BOS),L18E005,"δ_e, CounterFact STR rows",224,+0.003,+0.003,1.004,0.999,0.004,0.048
+Mixtral-8x7B (BOS),L18E005,"δ_e, WinoGrande STR rows",474,+0.171,+0.172,0.993,1.000,0.002,0.011
+Mixtral-8x7B (BOS),L18E005,"c_e, CounterFact clean prompts",50,-0.019,-0.003,7.227,0.992,0.017,0.229
+Mixtral-8x7B (BOS),L18E005,"c_e, WinoGrande prompts",474,+0.075,+0.086,0.870,0.999,0.011,0.109
+Mixtral-8x7B (BOS),L18E005,"c_e, WinoGrande local prompts",471,+0.012,+0.013,0.877,0.997,0.005,0.076
+Mixtral-8x7B (BOS),L16E007,"δ_e, CounterFact STR rows",680,+0.023,+0.023,0.992,0.999,0.003,0.043
+Mixtral-8x7B (BOS),L16E007,"δ_e, WinoGrande STR rows",486,+0.095,+0.096,0.994,1.000,0.002,0.020
+Mixtral-8x7B (BOS),L16E007,"c_e, CounterFact clean prompts",173,-0.004,+0.008,-0.471,0.994,0.012,0.217
+Mixtral-8x7B (BOS),L16E007,"c_e, WinoGrande prompts",486,+0.041,+0.048,0.849,0.999,0.007,0.081
+Mixtral-8x7B (BOS),L16E007,"c_e, WinoGrande local prompts",397,+0.006,+0.007,0.855,0.998,0.003,0.057
+Mixtral-8x7B (BOS),L24E002,"δ_e, CounterFact STR rows",180,+0.093,+0.090,1.038,0.999,0.008,0.036
+Mixtral-8x7B (BOS),L24E002,"δ_e, WinoGrande STR rows",425,+0.577,+0.578,0.998,1.000,0.005,0.008
+Mixtral-8x7B (BOS),L24E002,"c_e, CounterFact clean prompts",41,+0.039,+0.058,0.670,0.998,0.019,0.103
+Mixtral-8x7B (BOS),L24E002,"c_e, WinoGrande prompts",425,+0.282,+0.294,0.961,1.000,0.012,0.035
+Mixtral-8x7B (BOS),L24E002,"c_e, WinoGrande local prompts",378,+0.064,+0.066,0.973,1.000,0.004,0.024
+Mixtral-8x7B (BOS),L24E002,"c_e, IOI prompts",84,+0.004,+0.007,0.572,0.998,0.003,0.134
+Mixtral-8x7B (BOS),L22E005,"δ_e, CounterFact STR rows",490,+0.407,+0.407,1.000,0.999,0.011,0.028
+Mixtral-8x7B (BOS),L22E005,"δ_e, WinoGrande STR rows",175,+1.377,+1.377,1.001,1.000,0.004,0.003
+Mixtral-8x7B (BOS),L22E005,"c_e, CounterFact clean prompts",119,+0.186,+0.207,0.897,0.998,0.021,0.096
+Mixtral-8x7B (BOS),L22E005,"c_e, WinoGrande prompts",175,+0.696,+0.707,0.984,1.000,0.012,0.016
+Mixtral-8x7B (BOS),L22E005,"c_e, WinoGrande local prompts",131,-0.004,-0.003,1.299,0.999,0.003,0.036
+Mixtral-8x7B (BOS),L22E005,"c_e, IOI prompts",313,-0.005,+0.009,-0.479,0.998,0.014,0.247
+Mixtral-8x7B (BOS),L21E004,"δ_e, CounterFact STR rows",113,+0.162,+0.159,1.015,0.998,0.009,0.046
+Mixtral-8x7B (BOS),L21E004,"δ_e, WinoGrande STR rows",337,+0.407,+0.408,0.997,1.000,0.005,0.012
+Mixtral-8x7B (BOS),L21E004,"c_e, CounterFact clean prompts",32,+0.085,+0.103,0.828,0.996,0.018,0.133
+Mixtral-8x7B (BOS),L21E004,"c_e, WinoGrande prompts",337,+0.192,+0.205,0.934,0.999,0.014,0.061
+Mixtral-8x7B (BOS),L21E004,"c_e, WinoGrande local prompts",285,+0.053,+0.055,0.950,0.999,0.006,0.058
+Mixtral-8x7B (BOS),L25E002,"δ_e, CounterFact STR rows",59,+0.123,+0.119,1.033,0.999,0.007,0.040
+Mixtral-8x7B (BOS),L25E002,"δ_e, WinoGrande STR rows",389,+0.528,+0.529,0.998,1.000,0.005,0.009
+Mixtral-8x7B (BOS),L25E002,"c_e, CounterFact clean prompts",14,+0.078,+0.089,0.873,0.998,0.011,0.090
+Mixtral-8x7B (BOS),L25E002,"c_e, WinoGrande prompts",389,+0.258,+0.273,0.944,1.000,0.015,0.047
+Mixtral-8x7B (BOS),L25E002,"c_e, WinoGrande local prompts",340,+0.038,+0.041,0.923,0.999,0.007,0.041
+Mixtral-8x7B (BOS),L25E002,"c_e, IOI prompts",36,+0.014,+0.017,0.839,0.999,0.003,0.084
+Mixtral-8x7B (BOS),L20E005,"δ_e, CounterFact STR rows",486,+0.556,+0.557,0.998,1.000,0.011,0.019
+Mixtral-8x7B (BOS),L20E005,"δ_e, WinoGrande STR rows",100,+0.130,+0.129,1.008,1.000,0.003,0.022
+Mixtral-8x7B (BOS),L20E005,"c_e, CounterFact clean prompts",120,+0.241,+0.269,0.898,0.999,0.027,0.088
+Mixtral-8x7B (BOS),L20E005,"c_e, WinoGrande prompts",100,+0.066,+0.073,0.909,0.999,0.007,0.076
+Mixtral-8x7B (BOS),L20E005,"c_e, WinoGrande local prompts",151,-0.001,-0.000,5.869,0.997,0.002,0.067
+Mixtral-8x7B (BOS),L20E005,"c_e, IOI prompts",398,-0.033,-0.012,2.712,0.998,0.021,0.248
+Mixtral-8x7B (BOS),L22E001,"δ_e, CounterFact STR rows",614,+0.411,+0.418,0.982,0.998,0.017,0.038
+Mixtral-8x7B (BOS),L22E001,"δ_e, WinoGrande STR rows",153,+0.077,+0.075,1.024,1.000,0.003,0.034
+Mixtral-8x7B (BOS),L22E001,"c_e, CounterFact clean prompts",156,+0.144,+0.180,0.799,0.995,0.036,0.151
+Mixtral-8x7B (BOS),L22E001,"c_e, WinoGrande prompts",153,+0.041,+0.046,0.888,0.999,0.005,0.078
+Mixtral-8x7B (BOS),L22E001,"c_e, WinoGrande local prompts",91,+0.000,+0.001,0.243,0.999,0.002,0.043
+Mixtral-8x7B (BOS),L22E001,"c_e, IOI prompts",256,-0.009,-0.002,4.403,0.999,0.007,0.140
+Mixtral-8x7B (BOS),L20E006,"δ_e, CounterFact STR rows",190,+0.822,+0.829,0.992,0.999,0.021,0.025
+Mixtral-8x7B (BOS),L20E006,"δ_e, WinoGrande STR rows",10,+0.095,+0.094,1.011,1.000,0.002,0.022
+Mixtral-8x7B (BOS),L20E006,"c_e, CounterFact clean prompts",51,+0.391,+0.436,0.896,0.998,0.045,0.101
+Mixtral-8x7B (BOS),L20E006,"c_e, WinoGrande prompts",10,+0.035,+0.044,0.805,0.996,0.009,0.109
+Mixtral-8x7B (BOS),L20E006,"c_e, WinoGrande local prompts",26,+0.018,+0.018,0.987,0.999,0.004,0.048
+Mixtral-8x7B (BOS),L20E006,"c_e, IOI prompts",264,-0.022,-0.014,1.614,0.998,0.008,0.241
+Mixtral-8x7B (BOS),L28E002,"δ_e, CounterFact STR rows",547,+0.254,+0.243,1.044,0.994,0.038,0.107
+Mixtral-8x7B (BOS),L28E002,"δ_e, WinoGrande STR rows",196,+0.036,+0.026,1.373,0.995,0.014,0.093
+Mixtral-8x7B (BOS),L28E002,"c_e, CounterFact clean prompts",136,+0.081,+0.155,0.519,0.989,0.075,0.303
+Mixtral-8x7B (BOS),L28E002,"c_e, WinoGrande prompts",196,-0.006,+0.020,-0.300,0.997,0.026,0.159
+Mixtral-8x7B (BOS),L28E002,"c_e, WinoGrande local prompts",268,-0.002,+0.000,-18.157,0.991,0.013,0.126
+Mixtral-8x7B (BOS),L28E002,"c_e, IOI prompts",236,+0.304,+0.328,0.925,1.000,0.025,0.071
+Mixtral-8x7B (BOS),L23E002,"δ_e, CounterFact STR rows",427,+0.330,+0.333,0.993,0.998,0.013,0.036
+Mixtral-8x7B (BOS),L23E002,"δ_e, WinoGrande STR rows",10,+0.352,+0.351,1.002,1.000,0.002,0.005
+Mixtral-8x7B (BOS),L23E002,"c_e, CounterFact clean prompts",111,+0.163,+0.188,0.868,0.998,0.025,0.107
+Mixtral-8x7B (BOS),L23E002,"c_e, WinoGrande prompts",10,+0.162,+0.172,0.943,1.000,0.010,0.046
+Mixtral-8x7B (BOS),L23E002,"c_e, WinoGrande local prompts",13,+0.086,+0.091,0.946,1.000,0.006,0.034
+Mixtral-8x7B (BOS),L23E002,"c_e, IOI prompts",252,-0.005,+0.004,-1.219,0.998,0.010,0.205

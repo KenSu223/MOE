@@ -418,3 +418,97 @@
 2026-10-04T11:14:11Z END   ext7c-w3-ioi-mixtral_bos-s1io rc=0 (2s)
 2026-10-04T11:14:11Z START ext7c-w3-role-mixtral_bos (waited 0s): python scripts/ext7_role_grid.py --model mixtral --pairs data/wino_role/pairs_mixtral_bos.parquet --case-sets data/wino_role/case_sets_mixtral_bos_grid.json --out wino_role_mixtral_bos_grid --kinds layer,attn_layer
 2026-10-04T11:14:13Z END   ext7c-w3-role-mixtral_bos rc=0 (2s)
+2026-10-05T06:08:52Z START ext12-4c-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete
+2026-10-05T06:12:59Z END   ext12-4c-sweep rc=0 (247s)
+2026-10-05T06:12:59Z START ext10-heads-smoke (waited 227s): python scripts/ext10_heads_run.py cf_qwen3 --limit 6 --out-suffix _smoke
+2026-10-05T06:14:13Z END   ext10-heads-smoke rc=1 (74s)
+2026-10-05T06:14:13Z START ext12-smoke-olmoe-a (waited 103s): python /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/smoke/ext12_smoke.py olmoe --budget 20000 --max-passes 2
+2026-10-05T06:15:06Z END   ext12-smoke-olmoe-a rc=0 (53s)
+2026-10-05T06:15:06Z START ext12-4c-expert (waited 127s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --layers all --pairs-layers auto --max-spawn 40000 --agent ext12-complete
+2026-10-05T06:22:13Z END   ext12-4c-expert rc=0 (427s)
+2026-10-05T06:22:13Z START ext11-routing-qwen3 (waited 505s): python scripts/ext11_writer_routing.py qwen3 --out qwen3_writer_routing
+2026-10-05T06:25:09Z END   ext11-routing-qwen3 rc=0 (176s)
+2026-10-05T06:25:09Z START ext12-smoke-olmoe-b (waited 603s): python /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/smoke/ext12_smoke.py olmoe --budget 20000 --max-passes 30
+2026-10-05T06:26:50Z END   ext12-smoke-olmoe-b rc=0 (101s)
+2026-10-05T06:26:50Z START ext9-engine-verify-dev-smoke (waited 562s): python scripts/ext9_engine_verify.py --engine dev --stress 0 --n-mixed 2 --out /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/verify_ext9_smoke.json
+2026-10-05T06:27:17Z END   ext9-engine-verify-dev-smoke rc=1 (27s)
+2026-10-05T06:27:17Z START ext10-heads-cf_qwen3 (waited 552s): python scripts/ext10_heads_run.py cf_qwen3
+2026-10-05T06:30:20Z END   ext10-heads-cf_qwen3 rc=0 (183s)
+2026-10-05T06:30:20Z START ext12-addback-qwen3-1 (waited 593s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+2026-10-05T06:35:22Z END   ext12-addback-qwen3-1 rc=0 (302s)
+2026-10-05T06:35:22Z START ext12-4b-sweep-qwen3 (waited 789s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --kinds layer,attn_layer,block --max-rows 60000 --agent ext12-complete
+2026-10-05T06:37:19Z END   ext12-4b-sweep-qwen3 rc=0 (117s)
+2026-10-05T06:37:19Z START ext11-routing-mixtral (waited 730s): python scripts/ext11_writer_routing.py mixtral --out mixtral_bos_writer_routing
+2026-10-05T06:42:22Z END   ext11-routing-mixtral rc=0 (303s)
+2026-10-05T06:42:22Z START ext9-engine-verify-dev-smoke2 (waited 883s): python scripts/ext9_engine_verify.py --engine dev --stress 0 --n-mixed 2 --out /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/verify_ext9_smoke.json
+2026-10-05T06:44:03Z END   ext9-engine-verify-dev-smoke2 rc=0 (101s)
+2026-10-05T06:44:03Z START ext10-heads-wino_qwen3 (waited 821s): python scripts/ext10_heads_run.py wino_qwen3
+2026-10-05T06:46:48Z END   ext10-heads-wino_qwen3 rc=0 (165s)
+2026-10-05T06:46:48Z START ext12-addback-qwen3-2 (waited 684s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+2026-10-05T06:51:20Z END   ext12-addback-qwen3-2 rc=0 (272s)
+2026-10-05T06:51:20Z START ext12-4b-joint-qwen3 (waited 840s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str --families main,rep --max-rows 30000 --agent ext12-complete
+2026-10-05T06:52:25Z END   ext12-4b-joint-qwen3 rc=0 (65s)
+2026-10-05T06:52:25Z START ext9-merge-regress (waited 391s): bash scripts/ext9_merge_regress.sh
+2026-10-05T06:56:03Z END   ext9-merge-regress rc=1 (218s)
+2026-10-05T06:56:03Z START ext10-heads-cf_mixtral (waited 553s): python scripts/ext10_heads_run.py cf_mixtral
+2026-10-05T07:02:40Z END   ext10-heads-cf_mixtral rc=0 (397s)
+2026-10-05T07:02:40Z START ext9-ko-smoke-olmoe (waited 846s): bash /tmp/claude-1000/-home-ubuntu-MOE/488f7156-7059-40cb-9629-447467831e6b/scratchpad/ext9_smoke_olmoe.sh
+2026-10-05T07:04:30Z END   ext9-ko-smoke-olmoe rc=1 (110s)
+2026-10-05T07:04:30Z START ext12-addback-qwen3-3 (waited 790s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+2026-10-05T07:08:14Z END   ext12-addback-qwen3-3 rc=0 (224s)
+2026-10-05T07:08:14Z START ext12-4b-direct-qwen3 (waited 949s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_str/pairs_train_xl_qwen3.parquet --case-sets results/wino_roleitems_inputs/case_sets_qwen3.json --out wino_roleitems_qwen3_str
+2026-10-05T07:09:23Z END   ext12-4b-direct-qwen3 rc=0 (69s)
+2026-10-05T07:09:23Z START ext9-engine-verify (waited 654s): python scripts/ext9_engine_verify.py --engine main --stress 10000
+2026-10-05T07:11:08Z END   ext9-engine-verify rc=0 (105s)
+2026-10-05T07:11:08Z START ext11-vocab-qwen3 (waited 633s): python scripts/ext11_writer_vocab.py qwen3 --out qwen3_writer_vocab
+2026-10-05T07:12:44Z END   ext11-vocab-qwen3 rc=0 (96s)
+2026-10-05T07:12:44Z START ext10-circuit-smoke (waited 703s): python scripts/ext10_circuit_run.py qwen3 --limit 4 --out-suffix _smoke --max-passes 2
+2026-10-05T07:14:42Z END   ext10-circuit-smoke rc=0 (118s)
+2026-10-05T07:14:42Z START ext10-heads-wino_mixtral (waited 720s): python scripts/ext10_heads_run.py wino_mixtral --rows-per-pass 128
+2026-10-05T07:19:27Z END   ext10-heads-wino_mixtral rc=0 (285s)
+2026-10-05T07:19:27Z START ext9-ko-qwen3-full (waited 875s): python scripts/ext9_knockout_run.py qwen3 --phase full
+2026-10-05T07:36:46Z END   ext9-ko-qwen3-full rc=0 (1039s)
+2026-10-05T07:36:46Z START ext12-addback-mixtral-1 (waited 1710s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+2026-10-05T07:46:08Z END   ext12-addback-mixtral-1 rc=0 (562s)
+2026-10-05T07:46:08Z START ext12-4b-sweep-mixtral_bos (waited 2205s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --kinds layer,attn_layer,block --max-rows 40000 --agent ext12-complete
+2026-10-05T07:48:01Z END   ext12-4b-sweep-mixtral_bos rc=0 (113s)
+2026-10-05T07:48:01Z START ext10-heads-ioi_qwen3 (waited 2123s): python scripts/ext10_heads_run.py ioi_qwen3
+2026-10-05T07:50:20Z END   ext10-heads-ioi_qwen3 rc=0 (139s)
+2026-10-05T07:50:20Z START ext11-vocab-mixtral (waited 2256s): python scripts/ext11_writer_vocab.py mixtral --out mixtral_bos_writer_vocab
+2026-10-05T07:52:46Z END   ext11-vocab-mixtral rc=0 (146s)
+2026-10-05T07:52:46Z START ext9-ko-mixtral-full (waited 960s): python scripts/ext9_knockout_run.py mixtral --phase full
+2026-10-05T08:13:08Z END   ext9-ko-mixtral-full rc=0 (1222s)
+2026-10-05T08:13:08Z START ext12-addback-mixtral-2 (waited 1618s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+2026-10-05T08:21:58Z END   ext12-addback-mixtral-2 rc=0 (530s)
+2026-10-05T08:21:58Z START ext12-4b-joint-mixtral_bos (waited 2037s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str --families main,rep --max-rows 30000 --agent ext12-complete
+2026-10-05T08:23:45Z END   ext12-4b-joint-mixtral_bos rc=0 (107s)
+2026-10-05T08:23:45Z START ext10-circuit-qwen3-1 (waited 1103s): python scripts/ext10_circuit_run.py qwen3 --max-passes 10 --tasks cf,wino,ioi --budget 100000
+2026-10-05T08:35:23Z END   ext10-circuit-qwen3-1 rc=0 (698s)
+2026-10-05T08:35:23Z START ext9-ko-qwen3-random (waited 1335s): python scripts/ext9_knockout_run.py qwen3 --phase random
+2026-10-05T08:43:01Z END   ext9-ko-qwen3-random rc=0 (458s)
+2026-10-05T08:43:01Z START ext12-addback-mixtral-3 (waited 1261s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+2026-10-05T08:52:22Z END   ext12-addback-mixtral-3 rc=0 (561s)
+2026-10-05T08:52:22Z START ext12-4b-direct-mixtral_bos (waited 1717s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_bos.parquet --case-sets results/wino_roleitems_inputs/case_sets_mixtral_bos.json --out wino_roleitems_mixtral_bos_str
+2026-10-05T08:54:14Z END   ext12-4b-direct-mixtral_bos rc=0 (112s)
+2026-10-05T08:54:15Z START ext10-circuit-qwen3-2 (waited 1132s): python scripts/ext10_circuit_run.py qwen3 --max-passes 10 --tasks cf,wino,ioi --budget 100000
+2026-10-05T09:04:14Z END   ext10-circuit-qwen3-2 rc=0 (599s)
+2026-10-05T09:04:14Z START ext9-ko-mixtral-random (waited 1273s): python scripts/ext9_knockout_run.py mixtral --phase random
+2026-10-05T09:22:47Z END   ext9-ko-mixtral-random rc=0 (1113s)
+2026-10-05T09:22:47Z START ext12-4c-joint (waited 1712s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --families main,rep --max-rows 30000 --agent ext12-complete
+2026-10-05T09:24:36Z END   ext12-4c-joint rc=0 (109s)
+2026-10-05T09:24:36Z START ext10-circuit-mixtral-1 (waited 1222s): python scripts/ext10_circuit_run.py mixtral --max-passes 10 --tasks cf,wino
+2026-10-05T09:42:33Z END   ext10-circuit-mixtral-1 rc=0 (1077s)
+2026-10-05T09:42:33Z START ext9-ko-qwen3-samelayer (waited 1186s): python scripts/ext9_knockout_run.py qwen3 --phase samelayer
+2026-10-05T09:51:59Z END   ext9-ko-qwen3-samelayer rc=0 (566s)
+2026-10-05T09:51:59Z START ext12-4c-direct (waited 1643s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_str/pairs_train_xl_mixtral_nobos.parquet --case-sets data/wino_str/case_sets.json --out wino_mixtral_nobos_str --splits discovery,validation,rep_discovery,rep_validation
+2026-10-05T09:53:54Z END   ext12-4c-direct rc=0 (115s)
+2026-10-05T09:53:54Z START ext10-circuit-mixtral-2 (waited 681s): python scripts/ext10_circuit_run.py mixtral --max-passes 10 --tasks cf,wino
+2026-10-05T10:10:16Z END   ext10-circuit-mixtral-2 rc=0 (982s)
+2026-10-05T10:10:16Z START ext9-ko-mixtral-samelayer (waited 1097s): python scripts/ext9_knockout_run.py mixtral --phase samelayer
+2026-10-05T10:21:54Z END   ext9-ko-mixtral-samelayer rc=0 (698s)
+2026-10-05T10:21:54Z START ext12-4c-sinkflags (waited 1680s): python scripts/ext12_sink_flags.py --out wino_mixtral_nobos_str
+2026-10-05T10:23:39Z END   ext12-4c-sinkflags rc=0 (105s)
+2026-10-05T10:23:39Z START ext9-ko-qwen3-final (waited 105s): python scripts/ext9_knockout_run.py qwen3 --phase final
+2026-10-05T10:27:34Z END   ext9-ko-qwen3-final rc=0 (235s)
+2026-10-05T10:27:34Z START ext9-ko-mixtral-final (waited 0s): python scripts/ext9_knockout_run.py mixtral --phase final
+2026-10-05T10:34:44Z END   ext9-ko-mixtral-final rc=0 (430s)

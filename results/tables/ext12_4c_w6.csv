@@ -1,0 +1,5 @@
+Protocol,Family,Rule,Layer,Selected expert,Pattern,Val. rescue,Spec,Equal-norm Spec,Val. active (of 256),Joint top-3 (disc. active)
+no BOS,main,two-stage,L20,L20E000,A,"+1.123 [+1.022, +1.225]","+0.948 [+0.839, +1.056]","+0.154 [+0.130, +0.178]",246,"L20E000 (248), L19E006 (249), L21E006 (226)"
+no BOS,rep,two-stage,L20,L20E000,A,"+1.160 [+1.054, +1.276]","+0.967 [+0.855, +1.085]",n/a,246,"L20E000 (252), L19E006 (256), L21E006 (241)"
+BOS (Phase 3),main,two-stage,L20,L20E000,A,"+1.106 [+1.013, +1.203]","+0.940 [+0.836, +1.042]","+0.160 [+0.132, +0.189]",246,"L20E000 (246), L19E006 (248), L21E006 (228)"
+BOS (Phase 3),rep,two-stage,L20,L20E000,A,"+1.166 [+1.067, +1.269]","+0.974 [+0.867, +1.084]",n/a,247,"L20E000 (252), L19E006 (256), L21E006 (241)"

@@ -1,0 +1,120 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "tasks": [
+  "cf_qwen3",
+  "wino_qwen3"
+ ],
+ "budget": 75000,
+ "greedy_steps": 20,
+ "head_pool": 32,
+ "expert_pool": 32,
+ "k_grid": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  12,
+  16,
+  24,
+  32,
+  48,
+  64,
+  96,
+  128
+ ],
+ "static_orders": [
+  "mix_oracle",
+  "mix_dla",
+  "head_oracle",
+  "head_dla"
+ ],
+ "init": {
+  "tasks": [
+   "cf_qwen3",
+   "wino_qwen3"
+  ],
+  "rows": {
+   "cf_qwen3": 4,
+   "wino_qwen3": 4
+  },
+  "budget": 75000,
+  "queue_groups": 48,
+  "queue_items": 1368,
+  "pool_sizes": {
+   "cf_qwen3": {
+    "mix": 64,
+    "head": 32
+   },
+   "wino_qwen3": {
+    "mix": 64,
+    "head": 32
+   }
+  }
+ },
+ "command": "python scripts/ext10_circuit_run.py qwen3 --limit 4 --out-suffix _smoke --max-passes 2",
+ "created_utc": "2026-10-05T07:12:54Z",
+ "complete": false,
+ "passes": 2,
+ "pass_notes": [
+  {
+   "tasks": [
+    "cf_qwen3",
+    "wino_qwen3"
+   ],
+   "rows": {
+    "cf_qwen3": 4,
+    "wino_qwen3": 4
+   },
+   "budget": 75000,
+   "queue_groups": 48,
+   "queue_items": 1368,
+   "pool_sizes": {
+    "cf_qwen3": {
+     "mix": 64,
+     "head": 32
+    },
+    "wino_qwen3": {
+     "mix": 64,
+     "head": 32
+    }
+   }
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 2136,
+   "adaptive": 768,
+   "static_groups": 48,
+   "pass_s": 49.921541690826416,
+   "peak_GB": 3.5860700607299805,
+   "greedy_left": 16,
+   "queue": "48/48",
+   "all_heads_max_abs_dev": 0.3125,
+   "median_r_greedy": {
+    "mix": 0.35440340909090906,
+    "head": 0.25466200466200467
+   }
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 736,
+   "adaptive": 736,
+   "static_groups": 0,
+   "pass_s": 47.75373125076294,
+   "peak_GB": 3.5296530723571777,
+   "greedy_left": 16,
+   "queue": "48/48",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.4921674637831843,
+    "head": 0.37230193387398625
+   }
+  }
+ ]
+}

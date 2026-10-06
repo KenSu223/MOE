@@ -56,6 +56,22 @@ SECTIONS = [
     ("8", "Expert add-back curves", "results/sections/ext8_addback.md",
      "Patching experts back jointly at the final position: ceilings, saturation curves, how many experts restore the answer, "
      "and greedy vs better strategies (CounterFact STR and WinoGrande)."),
+    # Phase 4 (2026-10-05): necessity, full-repair circuits, writer experts, completeness (RESEARCH_PLAN.md "Phase 4").
+    ("9-12", "Phase 4 synthesis: necessity, full repair, writer experts, replication", "results/sections/ext9_synthesis.md",
+     "Are the localised experts necessary and task-specific, how few heads and experts restore the answer fully, do the "
+     "experts write the answer directly, and do the Phase-3 claims replicate?"),
+    ("9", "Expert knockout: necessity and task specificity", "results/sections/ext9_knockout.md",
+     "Removing an expert from the router's menu (the next-best expert takes its slot): does it hurt its own task, only its own "
+     "task, and more than same-layer experts or generic text?"),
+    ("10", "Head + expert add-back to full repair", "results/sections/ext10_circuit.md",
+     "With single attention heads as candidates next to experts, how few components restore the answer at the final position, "
+     "and how many of them are heads?"),
+    ("11", "Writer vs computer experts", "results/sections/ext11_writer.md",
+     "Do the localised experts write the answer directly into the logit or act through later layers; where else do they fire "
+     "and what do they write in vocabulary space?"),
+    ("12", "Completeness checks", "results/sections/ext12_complete.md",
+     "Do the add-back results replicate on held-out splits, is the role/option-swap difference an item effect, and does "
+     "Mixtral without BOS change the WinoGrande picture?"),
 ]
 
 

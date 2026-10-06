@@ -1,0 +1,61 @@
+{
+ "key": "wino_mixtral",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "task": "wino",
+ "src_run": "wino_mixtral_bos_str",
+ "ext8_run": "wino_mixtral_bos_str_addback",
+ "special_tokens": true,
+ "n_val_rows": 256,
+ "n_val_cases": 256,
+ "rows_per_pass": 110,
+ "n_chunks": 3,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA",
+ "command": "python scripts/ext10_heads_run.py wino_mixtral --dry-run",
+ "created_utc": "2026-10-05T06:33:50Z",
+ "complete": true,
+ "completed_utc": "2026-10-05T07:19:20Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 98.04268741607666,
+   "peak_GB": 11.793011665344238,
+   "mean_drop": 7.837209224700928,
+   "r_sum_heads_vs_attn_layer": 0.3342633545732294,
+   "head_dla_sum_mean": 2.3037772178649902,
+   "candidates_not_routed_clean": 28,
+   "utc": "2026-10-05T07:16:30Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 83.08915853500366,
+   "peak_GB": 11.820688247680664,
+   "mean_drop": 7.534883499145508,
+   "r_sum_heads_vs_attn_layer": 0.29607607759694743,
+   "head_dla_sum_mean": 2.187108278274536,
+   "candidates_not_routed_clean": 19,
+   "utc": "2026-10-05T07:17:55Z"
+  },
+  {
+   "chunk": 2,
+   "rows": 84,
+   "prefill": 168,
+   "spawn_rows": 88704,
+   "pass_s": 83.40242648124695,
+   "peak_GB": 11.65522289276123,
+   "mean_drop": 7.708333492279053,
+   "r_sum_heads_vs_attn_layer": 0.30238446190256063,
+   "head_dla_sum_mean": 2.1889288425445557,
+   "candidates_not_routed_clean": 27,
+   "utc": "2026-10-05T07:19:20Z"
+  }
+ ],
+ "note": "state (3 chunks of 84-86 rows) created by a --dry-run at 06:33Z so that the chain's --rows-per-pass 128 did not apply; GPU passes ran in job ext10-heads-wino_mixtral (07:14-07:19Z)"
+}

@@ -1,0 +1,27 @@
+| Run | k | heads ∪ experts | heads only | experts only |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | 1 | 0.27 | 0.19 | 0.19 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 5 | 0.73 | 0.52 | 0.49 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 10 | 1.04 | 0.73 | 0.68 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 20 | 1.45 | 0.96 | 0.97 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 32 | 1.77 | 1.15 | 1.22 |
+| Mixtral-8x7B (BOS), CounterFact STR | 1 | 0.23 | 0.21 | 0.12 |
+| Mixtral-8x7B (BOS), CounterFact STR | 5 | 0.72 | 0.60 | 0.41 |
+| Mixtral-8x7B (BOS), CounterFact STR | 10 | 1.05 | 0.79 | 0.61 |
+| Mixtral-8x7B (BOS), CounterFact STR | 20 | 1.44 | 1.00 | 0.81 |
+| Mixtral-8x7B (BOS), CounterFact STR | 32 | 1.73 | 1.17 | 0.89 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 1 | 0.22 | 0.15 | 0.20 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 5 | 0.74 | 0.45 | 0.66 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 10 | 1.16 | 0.69 | 0.98 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 20 | 1.77 | 1.07 | 1.50 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 32 | 2.33 | 1.47 | 1.98 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 1 | 0.20 | 0.11 | 0.19 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 5 | 0.74 | 0.36 | 0.70 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 10 | 1.16 | 0.52 | 1.05 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 20 | 1.65 | 0.72 | 1.38 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 32 | 1.96 | 0.90 | 1.52 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 1 | 0.18 | 0.18 | 0.01 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 5 | 0.59 | 0.59 | 0.04 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 10 | 0.89 | 0.88 | 0.06 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 20 | 1.27 | 1.26 | 0.08 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 32 | 1.54 | 1.53 | 0.10 |

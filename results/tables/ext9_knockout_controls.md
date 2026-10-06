@@ -1,0 +1,32 @@
+**Targets vs same-layer controls (sub scope; F, wiki: dNLL in nats/token); rank 1 = most damaging**
+
+| model | target | task of target | subset | target effect | controls mean | controls max | max control | rank | z |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | WG | wg_margin | 0.0346 | 0.0057 | 0.0093 | L41E053 | 1/17 | 7.9356 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | cf | -0.0013 | -0.0008 | 0.0017 | L41E121 | 11/17 | -0.532 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | ioi | -0.0002 | 0.0001 | 0.0075 | L41E018 | 12/17 | -0.0626 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | wiki | -0.0003 | 0.0006 | 0.0029 | L41E112 | 13/17 | -0.6775 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | wg_margin | 0.003 | 0.005 | 0.009 | L44E022 | 14/17 | -0.9075 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | cf | 0.0373 | -0.0003 | 0.0101 | L44E006 | 1/17 | 8.6623 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | ioi | 0.0004 | -0.0013 | 0.0044 | L44E006 | 10/17 | 0.1694 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | wiki | 0.0014 | 0.0049 | 0.0324 | L44E104 | 10/17 | -0.3797 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | wg_margin | 0.0071 | 0.006 | 0.0118 | L42E037 | 6/17 | 0.4174 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | cf | 0.0246 | -0.0008 | 0.002 | L42E003 | 1/17 | 19.5571 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | ioi | -0.0179 | 0.0027 | 0.0137 | L42E065 | 17/17 | -4.9538 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | wiki | 0.0039 | 0.001 | 0.0029 | L42E014 | 1/17 | 2.382 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | wg_margin | 0.0393 | 0.0008 | 0.0033 | L20E001 | 1/8 | 27.0124 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | cf | 0.0003 | 0.0006 | 0.0021 | L20E006 | 5/8 | -0.2423 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | ioi | 0.0015 | 0.0023 | 0.0152 | L20E005 | 4/8 | -0.1288 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | wiki | 0.0078 | 0.0022 | 0.0081 | L20E005 | 2/8 | 1.4982 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | wg_margin | -0.0015 | 0.0071 | 0.0429 | L19E006 | 8/8 | -0.5481 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | cf | 0.0048 | 0.0022 | 0.0128 | L19E006 | 2/8 | 0.5493 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | ioi | -0.001 | 0.001 | 0.0247 | L19E006 | 5/8 | -0.1616 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | wiki | 0.0036 | 0.0082 | 0.0234 | L19E006 | 7/8 | -0.6396 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | wg_margin | 0.0006 | 0.0028 | 0.0225 | L21E006 | 5/8 | -0.2412 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | cf | 0.0003 | -0.0005 | 0.002 | L21E007 | 3/8 | 0.4925 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | ioi | 0.0028 | 0.001 | 0.0049 | L21E000 | 2/8 | 0.7701 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | wiki | 0.0008 | 0.0044 | 0.0064 | L21E000 | 8/8 | -3.3765 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | wg_margin | 0.0021 | 0.0024 | 0.008 | L18E003 | 5/8 | -0.1064 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | cf | 0.0132 | -0.0002 | 0.0022 | L18E005 | 1/8 | 7.6784 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | ioi | -0.0149 | 0.0009 | 0.027 | L18E003 | 7/8 | -1.1387 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | wiki | -0.0021 | 0.0036 | 0.0059 | L18E003 | 8/8 | -2.7955 |

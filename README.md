@@ -139,6 +139,21 @@ STR only; Qwen3 and Mixtral with BOS; about 3.9 GPU hours.
   WinoGrande is the most MoE-heavy of the three tasks, with one specific late expert per model (Qwen3 L41E117, Mixtral
   L20E000) that is not a CounterFact expert. The IOI-like hypothesis is rejected at the final position.
 
+### Phase 4: necessity, full repair, writer experts, replication (2026-10-05; `results/sections/ext9_*.md`–`ext12_*.md`)
+
+STR only; Qwen3 and Mixtral with BOS; about 4.4 GPU hours.
+- **Knockout.** Removing a selected expert from the router's menu hurts its own task and not the other one.
+  - Each costs 2–4 % of the clean margin and ranks first in its layer; each task's top 10 together cost 14–15 %.
+  - A knockout costs much less than the expert's direct write, because the rest of the network compensates 53–95 % of it.
+- **Full repair.** With single attention heads as candidates next to experts, about ten components restore 80 % of the
+  drop and twenty restore 93–100 %. CounterFact starts with mover heads, WinoGrande with its expert, IOI uses heads only.
+- **Writers.** The late experts write the answer directly into the logit (Qwen3 direct share 0.96–1.32, Mixtral
+  0.54–0.87). Their routing follows the local slot, but the content of the write needs the full context.
+- **Replication.**
+  - The add-back results replicate on held-out splits.
+  - Mixtral without BOS re-selects its WinoGrande expert.
+  - Phase 3's apparent role-swap vs option-swap difference was an item effect (names vs objects).
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),

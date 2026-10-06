@@ -1,6 +1,6 @@
 # Extensions of the expert-aware causal-tracing reproduction (arXiv 2606.03780)
 
-Assembled 2026-10-05 05:54 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
+Assembled 2026-10-05 10:43 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
 
 ## Status
 
@@ -21,6 +21,11 @@ Assembled 2026-10-05 05:54 UTC from results/sections/ by scripts/build_extension
 | 7 | Filling the blank with each twin's answer and predicting the sentence-final trigger: which layers, sublayers, positions, heads and experts carry the repair? | `results/sections/ext7_wino.md` | included |
 | 7b | Does a second WinoGrande corruption site (swapping the two candidates' roles) or IOI (the attention-driven reference) change the attention / MoE balance, measured with the same protocol? | `results/sections/ext7_controls.md` | included |
 | 8 | Patching experts back jointly at the final position: ceilings, saturation curves, how many experts restore the answer, and greedy vs better strategies (CounterFact STR and WinoGrande). | `results/sections/ext8_addback.md` | included |
+| 9-12 | Are the localised experts necessary and task-specific, how few heads and experts restore the answer fully, do the experts write the answer directly, and do the Phase-3 claims replicate? | `results/sections/ext9_synthesis.md` | included |
+| 9 | Removing an expert from the router's menu (the next-best expert takes its slot): does it hurt its own task, only its own task, and more than same-layer experts or generic text? | `results/sections/ext9_knockout.md` | included |
+| 10 | With single attention heads as candidates next to experts, how few components restore the answer at the final position, and how many of them are heads? | `results/sections/ext10_circuit.md` | included |
+| 11 | Do the localised experts write the answer directly into the logit or act through later layers; where else do they fire and what do they write in vocabulary space? | `results/sections/ext11_writer.md` | included |
+| 12 | Do the add-back results replicate on held-out splits, is the role/option-swap difference an item effect, and does Mixtral without BOS change the WinoGrande picture? | `results/sections/ext12_complete.md` | included |
 
 
 ## Direction 1: Layer-then-expert versus joint layer × expert search
@@ -4368,7 +4373,7 @@ Files: `scripts/ext6_str_grid.py` (grid passes), `scripts/ext6_str_grid_verify.p
 - Greedy is effectively optimal: beam search and the exact optimum within each case's top 10 add ≤ 0.016 of the drop, below bf16 run-to-run noise.
 - A patch-free ranking by direct logit attribution is as good as the single-patch oracle. The paper's layer-first order is below every ranking that uses each expert's effect on the answer (oracle, DLA, population), though above routing weight and random.
 
-**(2) Attention or MoE?** At the final position the corruption can only enter through attention: the final token is shared and the MoE is per-token, so patching all attention outputs restores the clean state exactly. The question is therefore asked of the single-layer patches, of the all-MoE patch and of the direct paths to the logit difference. On every measure the tasks order the same way: IOI ≫ CounterFact > WinoGrande role swap > WinoGrande option swap. As shares of the positive single-layer rescue, attention carries:
+**(2) Attention or MoE?** At the final position the corruption can only enter through attention: the final token is shared and the MoE is per-token, so patching all attention outputs restores the clean state exactly. The question is therefore asked of the single-layer patches, of the all-MoE patch and of the direct paths to the logit difference. On every measure the tasks order the same way: IOI ≫ CounterFact > WinoGrande (name items > object items). As shares of the positive single-layer rescue, attention carries (the role swap was run on name items only; Direction 12 shows that on identical items role swap and option swap do not differ, see below):
 - IOI 0.92 / 0.80;
 - CounterFact 0.54 / 0.58;
 - WinoGrande role swap 0.32 / 0.39;
@@ -4433,7 +4438,7 @@ Values are from `results/tables/ext7_controls_three_task.md` and the ext8 compar
 2. **Attention vs MoE.**
    - **IOI validates the method.** Attention carries the rescue, the MoE writes against the answer at the last layers, and the head patches recover IOI's known classes: an S2-reading head (Qwen3 L42H11), name-mover-like heads (Qwen3 L42H10, Mixtral L19H8) and negative movers (Qwen3 L42H14, Mixtral L22H29). With corruption (ii) the name movers come first, the corruption-site effect Zhang & Nanda report in their App. F.
    - **WinoGrande sits at the other end.** In our formulation (predict the property word given the filled-in entity, which is what lm-eval's partial scoring compares), the answer is not a copy of a context token. It is generated from the entity and the relation stated earlier in the sentence. Attention brings the entity's identity to the final position and the MoE writes the property: 95 % (Qwen3) and 71 % (Mixtral) of the direct path. The expert localisation is cleaner than on CounterFact: Qwen3 L41E117 has Spec +0.90 and equal-norm Spec +0.45, and is re-selected on the replication set.
-   - **Role swap.** It tests which entity has which attribute (binding) instead of which entity is referred to. It moves the balance towards attention, with a Qwen3 attention peak at L38 (0.13 of the drop) and a Mixtral attention effect at the option position, but WinoGrande stays on the MoE side of CounterFact. Name pairs lean further towards attention than object pairs (direct attention share 0.26 vs 0.04 in Qwen3).
+   - **Role swap (revised in Phase 4).** As run in Phase 3 (name twins only) the role swap had a larger attention share than the option swap (Qwen3 0.32 vs 0.16; Qwen3 attention peak at L38, 0.13 of the drop; Mixtral attention effect at the option position). Direction 12 (4b) ran the option swap on exactly the role-swap twins: the attention share is the same (Qwen3 0.304 vs 0.306, difference −0.002 [−0.015, +0.009]; Mixtral 0.406 vs 0.414, −0.008 [−0.014, −0.001]), and so are the direct-path split and the all-MoE patch, because the role-swapped prompt is exactly the option-swapped prompt with the two names exchanged. The Phase-3 difference was an item effect: name pairs lean towards attention (direct attention share 0.26 vs 0.04 for object pairs in Qwen3), objects towards the MoE. Both stay on the MoE side of CounterFact. A genuinely different second corruption site for WinoGrande (Z7) remains open.
    - **The small single-layer attention effects in Qwen3 do not mean that attention is unimportant.** The option's identity reaches the final token over 20 layers, and heads of the same KV group cancel within a layer: L38H18 +0.34 and H21 +0.29 against H16 −0.55. Single-layer patches undercount distributed attention; the direct-path split and the position grid are the views to quote.
 
 3. **Methodological findings (apply to every future patching study here).**
@@ -4449,7 +4454,7 @@ Values are from `results/tables/ext7_controls_three_task.md` and the ext8 compar
 - **Mixtral without BOS** (the base reproduction's paper protocol) was not run in Phase 3 (user decision (e)). The WinoGrande case set is shared with that protocol, so it can be added on identical pairs.
 - **Head patches** are final-position only; duplicate-token and induction heads acting at S2 (IOI) are not visible.
 - **Position grids** for the role swap and IOI use 64 validation pairs.
-- **Role swap and option swap** are compared on different items.
+- **Role swap and option swap** were compared on different items here; Direction 12 (4b) repeats the comparison on identical items (no difference).
 - **Subsets used for parts of the add-back study.** Add-back curves use the main validation set only, not the replication set. Shapley values, beam search and the exact optimum use subsets of rows (listed in section 8).
 - **The WinoGrande direction.** The formulation is necessarily "entity → property". The original WinoGrande question ("which entity has the property") cannot be posed as a single next-token prediction for 86 % of the twins, because their trigger follows the blank.
 - **Memorisation.** WinoGrande train_xl is public. Pass rates on the AfLite-filtered items match the dev twins, so there is no sign that memorised items inflate the pool.
@@ -5199,13 +5204,13 @@ Columns: MoE / attention / block peak = discovery argmax layer (CounterFact: pap
 
 1. **The hypothesis "WinoGrande is like IOI" fails at the final position, in both models and at both corruption sites.** On every attention–MoE view the order is IOI > CounterFact > WinoGrande. In WinoGrande the MoE patches add up to more than the drop and the MoE writes alone restore 70–84 % of it; in IOI the attention patches add up to the drop and the MoE writes restore nothing (or act against the answer). Whatever attention does for WinoGrande (at the filled option in early-middle layers, e.g. Mixtral L9 in the role swap, and at the final position, Mixtral L13, Qwen3 L38) is followed by MoE sublayers (Qwen3 L41–L42, Mixtral L19–L20) that carry the larger part of the repair — WinoGrande looks like factual recall with a heavier MoE share, not like IOI.
 2. **IOI calibrates the measurement.** The same final-position patches, statistics and models classify IOI as attention-driven (AUC+ share 0.80–0.92, single-layer MoE peaks ≤ 0.10 of the drop) and recover the GPT-2-small mechanism at the head level (S2-reading and name-mover heads, negative name movers; Qwen3 L42H14 attends IO 0.21 and has a negative effect), so the low WinoGrande attention share is a property of the task, not a blind spot. The MoE writes at the final position are net negative in IOI, from the last two or three layers (Qwen3 L45–L47, Mixtral L30–L31); a smaller negative last-layer MoE effect is present in every task (e.g. Mixtral L31 −0.15 of the drop in WinoGrande, −0.07 in CounterFact), i.e. a late MoE that counteracts the answer, as negative name movers do in Wang et al.; in IOI nothing else is on the MoE side.
-3. **The corruption site changes which components are found (Z7), not the side of the axis.** IOI (ii) (S1, IO → other names) has a smaller drop than (i) (the corrupted prompt prefers neither name) and, as in Zhang & Nanda's App. F, its top heads are name movers, whereas (i) puts the S2-reading head first in Qwen3; Mixtral's attention peak moves from L19 under (i) to L30–L31 under (ii). The WinoGrande role swap moves weight toward attention relative to the option swap (Qwen3 share 0.32 vs 0.16, direct-path attention 0.19 vs 0.05) — which suggests that binding the attribute to the right entity needs more attention than telling which entity is referred to — but stays on the MoE side of CounterFact.
+3. **The corruption site changes which components are found (Z7), not the side of the axis.** IOI (ii) (S1, IO → other names) has a smaller drop than (i) (the corrupted prompt prefers neither name) and, as in Zhang & Nanda's App. F, its top heads are name movers, whereas (i) puts the S2-reading head first in Qwen3; Mixtral's attention peak moves from L19 under (i) to L30–L31 under (ii). The WinoGrande role swap has a larger attention share than the option swap as run here (Qwen3 0.32 vs 0.16, direct-path attention 0.19 vs 0.05), but the two were run on different items (role swap: name twins only). **Revised in Phase 4 (Direction 12, 4b):** on identical name items the role swap and the option swap give the same attention share (Qwen3 0.304 vs 0.306, difference −0.002 [−0.015, +0.009]; Mixtral 0.406 vs 0.414) and the same direct-path split, because the role-swapped prompt is exactly the option-swapped prompt with the two names exchanged. The difference is an item effect (names lean toward attention, objects toward the MoE), not a binding-vs-reference effect of the corruption site; both stay on the MoE side of CounterFact.
 4. **The W4 Shapley split is not the right summary at the final position.** Restoring every attention output restores the whole final residual (A = 1 by construction; the MoE is a per-token function), so φ_attn = 1 − M/2 ≥ ½ for any task with M ≤ 1, and the redundancy A + M − 1 is just M. The per-layer attention share (W2), the all-MoE fraction M and the direct-path split are the informative quantities; they agree in their ordering of the tasks.
 5. **CounterFact under STR (task 1).** STR keeps Direction 2b's conclusion (attention and MoE comparable at the final position, attention first), normalises the attention peak to the same or a larger share of the drop than GN, and lowers Mixtral's MoE peak (0.085 vs 0.113); Zhang & Nanda's GN inflation does not show at this patch site.
 
 ### Caveats
 
-All attributions are at the final position: attention patches there measure what the final position reads in a layer; processing at earlier positions (the option, the mentions, S2) enters only through what it writes into keys and values, and the position grids (W3, first 64 validation pairs) give the layer-level view at those positions. Head patches are final-position patches (Zhang & Nanda patch heads at all positions), so duplicate-token and induction heads, which act at S2, are not visible as heads (S-inhibition-like heads act at the final position and are: Qwen3 L42H11 reads S2). The WinoGrande option swap numbers are agent ext7-wino's run on its shared 776-pair set, while the role swap uses each model's own pool (name twins only; 213 Qwen3 twins drop out because a sentence-initial name tokenises differently from a mid-sentence one), so the two corruptions are compared on different items; the role swap has no replication split in Mixtral (270 pairs). IOI is easy for both models (≥ 99.6 % of the items pass the margin both ways), so its drops are large and its CIs narrow; it uses 65 of Wang et al.'s 99 names (single tokens under both tokenizers). CounterFact here is the Direction-6 STR set (215 / 213 paper cases, donor mean). bf16 batch-composition noise between passes is ≈ 0.1 logits per row on average (same-pass vs Direction-6 MoE rows: r 0.97–0.98, max 2.5), negligible for means over 100+ pairs.
+All attributions are at the final position: attention patches there measure what the final position reads in a layer; processing at earlier positions (the option, the mentions, S2) enters only through what it writes into keys and values, and the position grids (W3, first 64 validation pairs) give the layer-level view at those positions. Head patches are final-position patches (Zhang & Nanda patch heads at all positions), so duplicate-token and induction heads, which act at S2, are not visible as heads (S-inhibition-like heads act at the final position and are: Qwen3 L42H11 reads S2). The WinoGrande option swap numbers are agent ext7-wino's run on its shared 776-pair set, while the role swap uses each model's own pool (name twins only; 213 Qwen3 twins drop out because a sentence-initial name tokenises differently from a mid-sentence one), so the two corruptions are compared on different items here (Direction 12, 4b, compares them on identical items); the role swap has no replication split in Mixtral (270 pairs). IOI is easy for both models (≥ 99.6 % of the items pass the margin both ways), so its drops are large and its CIs narrow; it uses 65 of Wang et al.'s 99 names (single tokens under both tokenizers). CounterFact here is the Direction-6 STR set (215 / 213 paper cases, donor mean). bf16 batch-composition noise between passes is ≈ 0.1 logits per row on average (same-pass vs Direction-6 MoE rows: r 0.97–0.98, max 2.5), negligible for means over 100+ pairs.
 
 ### Files
 
@@ -5447,3 +5452,1432 @@ Restricted to k = 1..15, where adaptive greedy is also evaluated (`scripts/ext8_
 - Study: `moetrace/ext8_addback.py` (task loaders, orderings, work items, greedy / beam state, curve metrics), `scripts/ext8_addback_run.py` (resumable driver), `scripts/ext8_addback_analyze.py`, `scripts/ext8_addback_text.py`, `scripts/ext8_addback_chain.sh`, `scripts/ext8_addback_chain_mixtral.sh`; smoke test `scripts/ext8_smoke_src.py`, `scripts/ext8_smoke_chain.sh` (OLMoE: `results/olmoe_addback_src` = ext6-schema STR source on the Qwen3 paper IDs, `results/olmoe_addback_smoke`). GPU time of Phase-3 ext8 jobs: ≈ 82 min (add-back passes 71, verification / regression 7, smoke 4).
 - Runs: `results/qwen3_str_addback`, `results/mixtral_bos_str_addback`, `results/wino_qwen3_str_addback`, `results/wino_mixtral_bos_str_addback` (`addback_rows_pNN.parquet` spawn rows with fam / order / dir / k / row / Δ / metrics, `addback_prefill_pNN.parquet`, `addback_dla.parquet`, `addback_direct.parquet`, `addback_state.pkl` = greedy / beam paths, `run_meta.json`).
 - Tables `results/tables/ext8_*.md|csv` (curves in `ext8_a1_curves.csv`, `ext8_a3_curves.csv`); figures `results/figures/ext8_*`; numbers `results/ext8_addback_summary.json` (W4 keys `w4_counterfact`, `w4_winogrande`).
+
+
+## Direction 9-12: Phase 4 synthesis: necessity, full repair, writer experts, replication
+
+**Summary.** Phase 4 tests the Phase-3 picture from four sides, on Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, under symmetric token replacement (STR). The four questions are necessity, full repair, how the experts act, and replication.
+
+**(1) Are the localised experts necessary, and only for their own task? Yes, but each carries only a few per cent of the clean margin, because the rest of the network compensates.**
+- **Single-expert knockout costs.** Removing one expert from the router's menu at every position costs its own task:
+  - Qwen3 L41E117 (WinoGrande): 0.033 [0.028, 0.037] of the clean margin;
+  - Qwen3 L44E069 (CounterFact): 0.033;
+  - Qwen3 L42E115 (CounterFact): 0.024;
+  - Mixtral L20E000 (WinoGrande): 0.036.
+
+  Each costs the other task nothing (|F| ≤ 0.001), and each ranks first among the experts of its layer. Double-dissociation contrasts are +0.065 (Qwen3) and +0.041 (Mixtral).
+- **Joint knockout of each task's top 10 experts** costs 0.14–0.15 of the own task's margin, and 0.00 of the other task in Qwen3. Frequency-matched random sets cost ≈ 0.
+- **Mixtral's CounterFact selections L19E002 and L21E001** are sufficient in patching but barely necessary (0.004).
+- **Sufficiency is not necessity.** On the same prompts a knockout removes only 0.05–0.47 of the expert's own direct write to the logit difference. The rest of the network makes up the remaining 0.53–0.95 (self-repair).
+
+**(2) How few components restore the answer fully? About ten, once attention heads are candidates.**
+- **Experts alone** stay below the all-MoE ceiling: 0.41–0.84 of the drop.
+- **Heads plus experts.** Adaptive greedy over heads ∪ experts at the final position restores 0.97 / 1.00 (CounterFact, Qwen3 / Mixtral) and 0.93 / 0.94 (WinoGrande) of the drop with 20 components. 80 % of the drop takes 8–10 components.
+- **The tasks differ in what greedy picks first.**
+  - **CounterFact:** mover heads first (Qwen3 L40H13, Mixtral L18H4 / L24H22), the CounterFact experts later; 6 of the first 10 picks are heads.
+  - **WinoGrande:** the WinoGrande experts first (L41E117, L20E000), late heads later; 3 of 10 picks are heads.
+  - **IOI:** heads only, 10 of 10.
+
+**(3) Do the experts write the answer or compute it?**
+- **Qwen3's experts are writers.** Their direct-logit share of the patch effect is 0.96–1.32. L44E069 writes 1.59 logits and later layers undo 0.39 of them.
+- **Mixtral's are partly writers** (0.54–0.87).
+- **The direct share rises with depth.** First-half experts act almost only indirectly and contribute ≤ 0.03 of the drop. This is why the patch-free DLA ranking matches the single-patch oracle.
+- **Routing follows the local slot; the write needs the full context.** L41E117 fires at 66 % of copulas and 59 % of degree adverbs in wikitext, and at the context-free "The bag was too" prompts, but writes the right trigger only with the full sentence (DLA +0.54 vs +0.08). In vocabulary space its write is a property axis.
+- **CounterFact experts route broadly but write relation-specifically.** L44E069 fires before 72 % of capitalised words, yet writes +1.08 logits for place relations vs +0.01 for occupations.
+
+**(4) Do the Phase-3 claims replicate? The expert claims do; one attention claim does not.**
+- **Add-back replicates** on held-out splits: ceilings, k80, greedy ≈ optimal, DLA ≈ oracle and overshoot are all within CI of Phase 3.
+- **Mixtral without BOS** re-selects L20E000 and leaves the WinoGrande attention/MoE balance unchanged.
+- **Revised: the role swap.** Phase 3's "the role swap moves the balance towards attention" was an item effect. On identical name items, role swap and option swap give the same attention share (Qwen3 0.304 vs 0.306, Mixtral 0.406 vs 0.414). The role-swapped prompt is exactly the option-swapped prompt with the two names exchanged. Name items lean towards attention, object items towards the MoE.
+
+### What was run
+
+Phase 4 of RESEARCH_PLAN.md used four sub-agents plus the coordinator, ≈ 4.4 GPU-h in total:
+- ext9-knockout ≈ 105 min, including the engine work;
+- ext10-circuit ≈ 79 min;
+- ext11-writer ≈ 12 min;
+- ext12-complete ≈ 70 min.
+
+Engine E4 (ext9, additive, verified on OLMoE against transformers hooks, `results/verify_ext9_engine_olmoe.json`) added three things:
+- **Route masks on prefill rows** (`PrefillSpec.route_mask`; reroute = router logit −inf before the softmax, zero = contribution dropped; all positions or the final position only). Agreement with transformers: effect r 0.95–0.98; masked-layer routing identical in 0.94 of (row, layer).
+- **`attn_head` and `heads_experts` steps in `multi`.** One head step equals the `attn_head` kind bit for bit. Mixed head/expert sets agree with transformers at effect r 0.9992.
+- **`DiagSpec.contrib_final_vectors`**, which sum to the MoE output to 8e-8.
+
+`verify_olmoe.json`, `verify_ext5_engine_olmoe.json` and `verify_ext8_engine_olmoe.json` are identical to their pre-merge copies in every result field.
+
+The four studies:
+- **Direction 9 (knockout).** Targets = the patching selections plus each task's population top-1/3/5/10. Controls: same-layer experts and frequency-matched random sets. Evaluation, with selection items excluded:
+  - the WinoGrande margin pool and all W1–W6 pairs;
+  - the CounterFact clean scan;
+  - IOI;
+  - wikitext NLL;
+  - variants: final-position-only and zero mode.
+- **Direction 10 (circuits).** Every head at every layer as a single patch, plus a patch-free head DLA. Then exact joint patches: greedy over heads ∪ experts (20 steps), head-only greedy, and static mixed orderings, on the ext8 validation rows. IOI was run as the attention-pole reference (Qwen3 only).
+- **Direction 11 (writers).** For every clean-active expert, the patch effect was split into direct and indirect parts. Routing and DLA were measured on WinoGrande, context-free, CounterFact, IOI and wikitext prompts, plus vocabulary projections of the expert writes.
+- **Direction 12 (completeness).** Three checks:
+  - 4a: add-back on the WinoGrande replication split and on a CounterFact fold swap;
+  - 4b: the option swap on the role-swap items;
+  - 4c: Mixtral without BOS on the 776 WinoGrande pairs (W2, W6, W4, add-back, sink flags).
+
+### One table
+
+**Final position, validation; fractions of the drop unless marked.**
+
+| Task | Model | All-MoE ceiling | Heads + experts, greedy r(20) | k for 80 % of drop (heads + experts) | Heads among first 10 picks | Selected expert | Direct share of its patch effect | Knockout F own task / other task | Share of its direct write lost on knockout (zero mode) |
+|---|---|---|---|---|---|---|---|---|---|
+| CounterFact | Qwen3 | 0.53 | 0.97 [0.95, 1.00] | 8 | 6.2 | L44E069 | 1.32 [1.20, 1.43] | 0.033 / 0.001 | 0.30 [0.24, 0.36] |
+| CounterFact | Qwen3 | | | | | L42E115 | 0.96 [0.88, 1.06] | 0.024 / −0.001 | 0.38 [0.29, 0.47] |
+| CounterFact | Mixtral BOS | 0.41 | 1.00 [0.98, 1.03] | 9 | 6.4 | L21E001 | 0.87 [0.75, 1.03] | 0.004 / 0.000 | 0.05 [−0.07, 0.15] |
+| CounterFact | Mixtral BOS | | | | | L19E002 | 0.71 [0.55, 0.94] | 0.004 / −0.001 | 0.19 [0.05, 0.34] |
+| CounterFact | Mixtral BOS | | | | | L18E001 | 0.54 [0.43, 0.69] | 0.015 / 0.002 | (indirect expert; not a compensation measure) |
+| WinoGrande | Qwen3 | 0.84 | 0.93 [0.91, 0.96] | 10 | 3.6 | L41E117 | 1.04 [0.99, 1.10] | 0.033 / −0.001 | 0.47 [0.37, 0.56] |
+| WinoGrande | Mixtral BOS | 0.79 | 0.94 [0.93, 0.95] | 10 | 2.8 | L20E000 | 0.56 [0.52, 0.62] | 0.036 / −0.001 | 0.45 [0.38, 0.51] |
+| IOI (i) | Qwen3 | −0.27 | 0.94 [0.93, 0.96] | 11 | 9.9 | – | – | – | – |
+
+Sources:
+- `results/sections/ext10_circuit.md` (ceilings from ext8; ext10's in-pass recomputation gives Qwen3 WinoGrande 0.86);
+- `results/sections/ext11_writer.md` (direct share = Σ direct / Σ total over validation cases where the expert is routed);
+- `results/sections/ext9_knockout.md` (F = fraction of the clean margin lost, all-position reroute, full item set);
+- `results/tables/ext9_synthesis_selfrepair.md`.
+
+### Reading
+
+1. **Necessity, specificity and self-repair.**
+   - **The specificity claim holds as necessity, not only as patching.** The experts that the final-position STR patches localise are necessary for their own task and not for the other. Each ranks first among the experts of its layer, and joint knockouts of the population top-10 cost 14–15 % of the margin while matched random sets cost nothing. The paper's "expert-aware" localisation therefore passes a test the paper did not run.
+   - **The cost of a single expert is small** (2–4 % of the margin), much smaller than its patch effect: a knockout moves Δ by 0.04–0.25 of what the same expert restores under STR.
+   - **The gap is compensation, not a weak write.** On the same prompts, removing the expert's contribution would cost its direct write (DLA of c_e: Qwen3 L41E117 +0.32, L44E069 +0.76, Mixtral L20E000 +0.32 logits). The actual knockout cost is 0.30–0.47 of that for the Qwen3 experts and Mixtral L20E000, and 0.05–0.19 for Mixtral's CounterFact writers L21E001 / L19E002. Downstream layers make up the rest, the self-repair / "Hydra effect" described for dense transformers (McGrath et al. 2023; Rushing & Nanda 2024).
+   - **Zero mode costs as much as reroute,** so the replacement expert is not what compensates.
+   - **The one expert that acts mostly indirectly is not compensated.** Mixtral L18E001 (direct share 0.54) loses at least its whole direct write, and it is the most necessary of Mixtral's CounterFact experts: compensation acts on direct writes to the logit.
+   - **Practical consequence:** knockout and patching answer different questions, and the patch-based selections should be quoted with both.
+   - **One knockout that is not specific:** Mixtral's population top-10 for CounterFact hurts WinoGrande more than CounterFact (0.047 vs 0.038). It contains two WinoGrande experts, L22E005 and L19E006; L19E006 is the BOS-sink expert, and sets containing it also do the most generic damage (wikitext NLL).
+
+2. **Full repair is a small head + expert circuit at the final position.** The team asked how many experts restore the answer. Experts alone cannot restore it on CounterFact (ceiling 0.41–0.53). With heads as candidates, 8–10 components restore 80 % of the drop and 20 components restore 93–100 %, flipping the answer back in 94–100 % of cases.
+   - **The composition places each task on the attention–MoE axis** without the degenerate joint game of Phase 3: IOI picks only heads, CounterFact mostly heads (the known mover heads first, then the CounterFact experts), WinoGrande mostly experts (its expert first, then late heads).
+   - **Greedy beats the static orderings again** (AUC over log k 0.58–0.64 vs 0.49–0.57).
+   - **The patch-free DLA ordering over heads ∪ experts is as good as the single-patch oracle on CounterFact but not on WinoGrande.** WinoGrande's decisive early heads act indirectly (DLA ≈ 0), the head-side counterpart of the writer/computer split in reading 3.
+
+3. **Late experts are answer writers whose routing is set by the local slot.**
+   - **Direct share and depth.** The direct share of an expert's patch effect rises with depth. At and above a crossover layer (Qwen3 L41–L42, Mixtral WinoGrande L22) experts write more than their net effect, and the last 2–3 layers' experts write against the answer. This is the MoE side of what Phase 3 called the late read-out.
+   - **Routing vs content.** Routing is decided by the local token context: copula and degree-adverb slots for L41E117 and L20E000, "a name follows" for the CounterFact experts, which also fire at every IOI final token and write nothing there. The content of the write is decided by the full context: L41E117's DLA for the right trigger is +0.54 with the sentence and +0.08 without it, and L44E069 writes for place relations, not for occupations.
+   - **"Expert specificity" is therefore a property of the write given the slot, not of the routing.** A routing-frequency criterion (the paper's recurrence gate) finds these experts because the slot recurs across a task's prompts.
+
+4. **What replicates and what is revised.**
+   - **Replicates:**
+     - every add-back claim of Phase 3 on held-out splits (4a);
+     - the WinoGrande expert and the attention/MoE balance without BOS (4c; the final token carries the sink state in 2 of 1,024 WinoGrande prompts, against 63 of 256 CounterFact prompts in Direction 3);
+     - the W5 / F2 mover heads, found again by the all-layer head scan (Direction 10).
+   - **Revised:** the Phase-3 ordering "WinoGrande role swap > option swap" in attention share. On identical items the two corruptions give the same decomposition (4b), so within WinoGrande the axis is names vs objects, not binding vs reference. The text in `ext7_controls.md`, `ext7_synthesis.md` and CLAUDE.md now says so. A genuinely different second corruption site for WinoGrande (Zhang & Nanda's Z7) remains open.
+
+### Caveats and open items
+
+- **Different passes.** Knockout and writer measurements are cross-pass comparisons, with bf16 per-item SD 0.2–0.4 logits and a knockout noise floor of F ≤ 0.008. The self-repair ratios are means over 300–3,300 prompts with bootstrap CIs. DLA freezes the final norm (single-expert error ≤ 1 %).
+- **The indirect part is not decomposed.** "Indirect" cannot yet be split into later attention vs later MoE: the engine has no downstream freezing (path patching).
+- **Mixtral IOI circuit not run.** The IOI circuit run is Qwen3 only (Mixtral would need about 25 GPU-min); IOI uses expert DLA as the expert pool proxy.
+- **BOS-sink confound.** Mixtral sets containing L19E006 (the BOS-sink expert) may do generic damage through position 0. A mask that spares position 0 would need a new engine option.
+- **Still not done:**
+  - F3 (gradient attribution);
+  - two-site add-back (subject position + final position);
+  - a second WinoGrande corruption site on object items.
+
+Files:
+- Sections: `results/sections/ext9_knockout.md`, `ext10_circuit.md`, `ext11_writer.md`, `ext12_complete.md`, this file.
+- Numbers: `results/ext9_knockout_summary.json`, `ext10_circuit_summary.json`, `ext11_writer_summary.json`, `ext12_complete_summary.json`.
+- Self-repair comparison: `scripts/ext9_synthesis_selfrepair.py` → `results/tables/ext9_synthesis_selfrepair.md`.
+- Plan: RESEARCH_PLAN.md "Phase 4".
+
+
+## Direction 9: Expert knockout: necessity and task specificity
+
+**Summary.** Expert knockout on clean prompts (engine route mask at every position, reroute: the expert is removed from the router's menu and the next-best expert takes the slot) asks whether the experts that the final-position STR patches select are NECESSARY, and only for their own task (F = fraction of the clean margin lost). Necessary and task-specific (lower CI bound of the own-task F above max(0.005, 3 x |noise-floor F|), other-task effect below a quarter of it): Qwen3 L41E117, Qwen3 L42E115, Qwen3 L44E069, Mixtral (BOS) L18E001, Mixtral (BOS) L20E000; barely necessary: Mixtral (BOS) L19E002 (+0.004), Mixtral (BOS) L21E001 (+0.004). Each carries only a few per cent of the margin. Qwen3: L41E117 (WinoGrande) costs **+0.033 [+0.028, +0.037]** of the WinoGrande margin and -0.001 of CounterFact; L44E069 (CounterFact) costs **+0.033 [+0.026, +0.039]** of CounterFact and +0.001 of WinoGrande (L42E115 +0.024 for the other CounterFact selections); same-layer rank on the own task 1/17 and 1/17; double-dissociation contrast **+0.065** [+0.057, +0.073]. Mixtral (BOS): L20E000 (WinoGrande) costs **+0.036 [+0.033, +0.040]** of the WinoGrande margin and -0.001 of CounterFact; L21E001 (CounterFact) costs **+0.004 [+0.001, +0.008]** of CounterFact and +0.000 of WinoGrande (L18E001 +0.015, L19E002 +0.004 for the other CounterFact selections); same-layer rank on the own task 1/8 and 3/8; double-dissociation contrast **+0.041** [+0.036, +0.047]. Joint knockout of each task's population top-10 (ext8 ranking): Qwen3 WinoGrande top-10 +0.148 on WinoGrande (pair accuracy 0.997 -> 0.944) / -0.004 on CounterFact, CounterFact top-10 +0.144 / -0.000 (frequency-matched random 10-sets +0.001 / -0.006 on the respective own task); Mixtral (BOS) WinoGrande top-10 +0.154 on WinoGrande (pair accuracy 1.000 -> 0.978) / +0.013 on CounterFact, CounterFact top-10 +0.038 / +0.047 (frequency-matched random 10-sets +0.011 / +0.003 on the respective own task). Sufficiency is not necessity: a knockout moves Δ by only 0.04-0.25 of the logits that the same expert restores when patched under STR; dropping the slot without replacement (zero mode) costs about as much as rerouting, so it is not the replacement expert that compensates, and the damage is confined to prompts whose final position routes to the expert; a knockout at the final position only reproduces Qwen3 L41E117 0.91, Qwen3 L44E069 0.93, Mixtral (BOS) L20E000 0.96 of the all-position effect, i.e. the necessity of these experts sits at the final position, where the patches found them. Noise floor (unmasked baseline recomputed in other passes, WinoGrande / CounterFact): Qwen3 +0.008 / -0.003; Mixtral (BOS) +0.001 / +0.000.
+
+### What was run
+
+**Engine E4 (additive, `moetrace/engine.py`).** (a) `PrefillSpec.route_mask` = ((layer, expert), ...) with `route_mask_pos` all | final and `route_mask_mode` reroute | zero: reroute sets the masked experts' router logits to -inf before the softmax (top-k and renormalisation as usual; for Qwen3 and Mixtral, which renormalise the top-k, this is exactly removing the expert from the menu; OLMoE's unrenormalised weights grow by 1/(1 - p_masked)), zero keeps the routing and drops the masked contributions; recorded routing is the masked routing. (b) `multi` steps `(layer, 'attn_head', heads)` and `(layer, 'heads_experts', (heads, experts))`: v_heads = sum_h W_o[:, h](H_h_source - H_h_own) added before the MoE, the row's own MoE recomputed on the head-patched input, then the listed experts set to the source's. (c) `DiagSpec.contrib_final_vectors`: per-slot c_e at the final position. Verification on OLMoE against transformers hooks (`scripts/ext9_engine_verify.py`, 12 STR units): route masks vs a masked HF router, all / final x reroute / zero (288 rows): |ΔΔ| max 0.812, mean 0.079 (unmasked baseline 0.188 / 0.062), effect r all:reroute 0.979, all:zero 0.966, final:reroute 0.950, final:zero 0.945; masked-layer routing identical to HF in 0.941 of (row, layer); final-only masks leave every earlier position bit-identical (1.00); zero mode keeps the first masked layer's routing (1.00) and zeroes the masked slots (1.00). Head steps: one head step = the attn_head kind (max |ΔΔ| 0, vector 0); all heads of a layer vs attn_layer max |ΔΔ| 0.125; all heads at every layer vs the source Δ max 0.125; mixed head / expert / layer / attention configurations vs HF max |ΔΔ| 0.656, mean 0.079, effect r 0.9992. Contribution vectors sum to the fp32 MoE output to 8.2e-08 (relative). After the merge `verify_olmoe.json` (23 result fields), `verify_ext5_engine_olmoe.json` (225) and `verify_ext8_engine_olmoe.json` (496) are identical to their pre-merge copies in every result field (`scripts/ext9_regress_compare.py`); only verify_ext8's GPU peak-memory fields differ (< 1 MB), which also happens between two runs of the unchanged engine.
+
+**Design.** Models Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1 with BOS (tokenizer defaults), bf16. Targets = the patching selections (Qwen3 WinoGrande L41E117, CounterFact L44E069 / L42E115; Mixtral WinoGrande L20E000, CounterFact L19E002 / L21E001 / L18E001) and the top-1/3/5/10 sets of each task's ext8 population ranking (discovery means of the single-expert STR rescue). Clean prompts only, items used for selection excluded: WinoGrande own margin pool minus the 128 main discovery pairs (primary; both prompts of a pair, Δ toward each prompt's own trigger) and every W1-W6 pair minus discovery; CounterFact clean scan with Δ_clean >= 1 minus the paper discovery IDs; IOI clean prompts (logit(IO) - logit(S); primary subset baseline Δ >= 1); 128 wikitext-103 windows of 127 tokens (per-token NLL of tokens 1..126). Controls on a fixed subsample (512 WinoGrande margin pairs, 512 CounterFact cases, 256 IOI prompts, 64 windows): same-layer experts (Mixtral the 7 others; Qwen3 the 16 experts of the layer most often routed at the final position on the target task's items) and 5 random sets per population set, matched member by member on final-position routing frequency within the member's layer. Primary intervention: mask at all positions, reroute; secondary: final position only (links to the final-position patches); sensitivity: zero mode. F = fraction of the clean margin lost = (Σ Δ_base - Σ Δ_ko) / Σ Δ_base; percentile bootstrap (5,000) over WinoGrande pairs, CounterFact cases, IOI prompts, windows, with one resample matrix per item set (paired across conditions); dissociation contrast (F_WG-expert(WG) - F_WG-expert(CF)) - (F_CF-expert(WG) - F_CF-expert(CF)) with WinoGrande pairs and CounterFact cases resampled independently.
+
+| Model | WinoGrande margin pool | WinoGrande all pairs | CounterFact | IOI (Δ >= 1) | wikitext | GPU (passes) |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 1971 pairs (3942 prompts), Δ 3.81, pair acc 0.997 | 4386 pairs, pair acc 0.605 | 746, Δ 6.12, top-1 0.25 | 1597, Δ 6.29 | 128 windows, NLL 2.276 | 33 min |
+| Mixtral-8x7B-v0.1 | 1023 pairs (2046 prompts), Δ 3.68, pair acc 1.000 | 2293 pairs, pair acc 0.608 | 816, Δ 6.33, top-1 0.27 | 1599, Δ 5.55 | 128 windows, NLL 2.103 | 55 min |
+
+### 1. Targets and population sets (full scope)
+
+| model | expert | selected on | WG F | WG pair acc | CF F | CF acc | IOI F | wiki dNLL | WG all F |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | WG | +0.033 [+0.028, +0.037] | 0.997 -> 0.995 | -0.001 [-0.002, +0.001] | 1.000 -> 1.000 | -0.000 [-0.002, +0.002] | +0.0000 [-0.0018, +0.0019] | +0.027 [+0.024, +0.031] |
+| Qwen3-30B-A3B-Base | L42E115 | CF | -0.001 [-0.004, +0.002] | 0.997 -> 0.998 | +0.024 [+0.019, +0.029] | 1.000 -> 0.999 | -0.018 [-0.020, -0.016] | +0.0038 [+0.0013, +0.0063] | +0.000 [-0.002, +0.003] |
+| Qwen3-30B-A3B-Base | L44E069 | CF | +0.001 [-0.002, +0.003] | 0.997 -> 0.997 | +0.033 [+0.026, +0.039] | 1.000 -> 0.999 | +0.001 [-0.001, +0.003] | +0.0011 [-0.0008, +0.0029] | +0.003 [+0.000, +0.005] |
+| Qwen3-30B-A3B-Base | WG top-3 | WG | +0.079 [+0.072, +0.085] | 0.997 -> 0.985 | -0.002 [-0.004, -0.000] | 1.000 -> 1.000 | -0.003 [-0.004, -0.001] | +0.0020 [-0.0000, +0.0041] | +0.069 [+0.064, +0.074] |
+| Qwen3-30B-A3B-Base | WG top-5 | WG | +0.101 [+0.094, +0.108] | 0.997 -> 0.979 | -0.002 [-0.004, +0.001] | 1.000 -> 0.999 | -0.003 [-0.005, -0.001] | +0.0028 [+0.0008, +0.0049] | +0.087 [+0.081, +0.093] |
+| Qwen3-30B-A3B-Base | WG top-10 | WG | +0.148 [+0.139, +0.158] | 0.997 -> 0.944 | -0.004 [-0.006, -0.001] | 1.000 -> 0.999 | -0.005 [-0.008, -0.003] | +0.0075 [+0.0049, +0.0102] | +0.127 [+0.119, +0.135] |
+| Qwen3-30B-A3B-Base | CF top-3 | CF | +0.001 [-0.002, +0.004] | 0.997 -> 0.997 | +0.075 [+0.065, +0.085] | 1.000 -> 0.992 | -0.016 [-0.018, -0.013] | +0.0068 [+0.0034, +0.0103] | +0.002 [-0.001, +0.005] |
+| Qwen3-30B-A3B-Base | CF top-5 | CF | +0.001 [-0.003, +0.004] | 0.997 -> 0.998 | +0.093 [+0.082, +0.104] | 1.000 -> 0.991 | -0.015 [-0.018, -0.013] | +0.0112 [+0.0075, +0.0153] | +0.002 [-0.001, +0.005] |
+| Qwen3-30B-A3B-Base | CF top-10 | CF | -0.000 [-0.004, +0.003] | 0.997 -> 0.998 | +0.144 [+0.130, +0.158] | 1.000 -> 0.988 | -0.013 [-0.017, -0.010] | +0.0447 [+0.0359, +0.0545] | +0.002 [-0.002, +0.004] |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | +0.002 [+0.000, +0.003] | 1.000 -> 1.000 | +0.015 [+0.010, +0.020] | 1.000 -> 1.000 | -0.016 [-0.018, -0.013] | +0.0016 [-0.0014, +0.0048] | +0.002 [+0.001, +0.003] |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | -0.001 [-0.002, -0.000] | 1.000 -> 1.000 | +0.004 [+0.001, +0.008] | 1.000 -> 1.000 | -0.001 [-0.002, +0.000] | +0.0036 [+0.0008, +0.0069] | -0.000 [-0.001, +0.001] |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | +0.036 [+0.033, +0.040] | 1.000 -> 0.997 | -0.001 [-0.003, +0.001] | 1.000 -> 1.000 | +0.001 [-0.000, +0.002] | +0.0077 [+0.0054, +0.0101] | +0.035 [+0.031, +0.038] |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | +0.000 [-0.001, +0.001] | 1.000 -> 1.000 | +0.004 [+0.001, +0.008] | 1.000 -> 1.000 | +0.003 [+0.002, +0.005] | +0.0023 [+0.0000, +0.0048] | +0.000 [-0.001, +0.001] |
+| Mixtral-8x7B-v0.1 | WG top-3 | WG | +0.095 [+0.088, +0.102] | 1.000 -> 0.987 | +0.007 [+0.003, +0.011] | 1.000 -> 1.000 | +0.022 [+0.021, +0.024] | +0.0328 [+0.0281, +0.0376] | +0.089 [+0.083, +0.095] |
+| Mixtral-8x7B-v0.1 | WG top-5 | WG | +0.116 [+0.109, +0.124] | 1.000 -> 0.984 | +0.006 [+0.002, +0.010] | 1.000 -> 1.000 | +0.026 [+0.024, +0.027] | +0.0382 [+0.0323, +0.0444] | +0.102 [+0.096, +0.109] |
+| Mixtral-8x7B-v0.1 | WG top-10 | WG | +0.154 [+0.145, +0.164] | 1.000 -> 0.978 | +0.013 [+0.007, +0.018] | 1.000 -> 1.000 | +0.024 [+0.023, +0.026] | +0.0650 [+0.0574, +0.0727] | +0.137 [+0.130, +0.145] |
+| Mixtral-8x7B-v0.1 | CF top-3 | CF | +0.000 [-0.001, +0.002] | 1.000 -> 1.000 | +0.009 [+0.003, +0.014] | 1.000 -> 1.000 | +0.018 [+0.016, +0.021] | +0.0128 [+0.0086, +0.0176] | +0.001 [-0.001, +0.002] |
+| Mixtral-8x7B-v0.1 | CF top-5 | CF | +0.000 [-0.002, +0.002] | 1.000 -> 1.000 | +0.024 [+0.016, +0.033] | 1.000 -> 0.999 | +0.006 [+0.002, +0.009] | +0.0194 [+0.0138, +0.0256] | +0.001 [-0.001, +0.002] |
+| Mixtral-8x7B-v0.1 | CF top-10 | CF | +0.047 [+0.042, +0.052] | 1.000 -> 0.998 | +0.038 [+0.029, +0.048] | 1.000 -> 0.999 | +0.041 [+0.037, +0.045] | +0.0522 [+0.0438, +0.0609] | +0.044 [+0.040, +0.048] |
+
+
+### 2. Against same-layer controls
+
+| model | target | task of target | subset | target effect | controls mean | controls max | max control | rank | z |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | WG | wg_margin | 0.0346 | 0.0057 | 0.0093 | L41E053 | 1/17 | 7.9356 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | cf | -0.0013 | -0.0008 | 0.0017 | L41E121 | 11/17 | -0.532 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | ioi | -0.0002 | 0.0001 | 0.0075 | L41E018 | 12/17 | -0.0626 |
+| Qwen3-30B-A3B-Base | L41E117 | WG | wiki | -0.0003 | 0.0006 | 0.0029 | L41E112 | 13/17 | -0.6775 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | wg_margin | 0.003 | 0.005 | 0.009 | L44E022 | 14/17 | -0.9075 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | cf | 0.0373 | -0.0003 | 0.0101 | L44E006 | 1/17 | 8.6623 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | ioi | 0.0004 | -0.0013 | 0.0044 | L44E006 | 10/17 | 0.1694 |
+| Qwen3-30B-A3B-Base | L44E069 | CF | wiki | 0.0014 | 0.0049 | 0.0324 | L44E104 | 10/17 | -0.3797 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | wg_margin | 0.0071 | 0.006 | 0.0118 | L42E037 | 6/17 | 0.4174 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | cf | 0.0246 | -0.0008 | 0.002 | L42E003 | 1/17 | 19.5571 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | ioi | -0.0179 | 0.0027 | 0.0137 | L42E065 | 17/17 | -4.9538 |
+| Qwen3-30B-A3B-Base | L42E115 | CF | wiki | 0.0039 | 0.001 | 0.0029 | L42E014 | 1/17 | 2.382 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | wg_margin | 0.0393 | 0.0008 | 0.0033 | L20E001 | 1/8 | 27.0124 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | cf | 0.0003 | 0.0006 | 0.0021 | L20E006 | 5/8 | -0.2423 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | ioi | 0.0015 | 0.0023 | 0.0152 | L20E005 | 4/8 | -0.1288 |
+| Mixtral-8x7B-v0.1 | L20E000 | WG | wiki | 0.0078 | 0.0022 | 0.0081 | L20E005 | 2/8 | 1.4982 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | wg_margin | -0.0015 | 0.0071 | 0.0429 | L19E006 | 8/8 | -0.5481 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | cf | 0.0048 | 0.0022 | 0.0128 | L19E006 | 2/8 | 0.5493 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | ioi | -0.001 | 0.001 | 0.0247 | L19E006 | 5/8 | -0.1616 |
+| Mixtral-8x7B-v0.1 | L19E002 | CF | wiki | 0.0036 | 0.0082 | 0.0234 | L19E006 | 7/8 | -0.6396 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | wg_margin | 0.0006 | 0.0028 | 0.0225 | L21E006 | 5/8 | -0.2412 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | cf | 0.0003 | -0.0005 | 0.002 | L21E007 | 3/8 | 0.4925 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | ioi | 0.0028 | 0.001 | 0.0049 | L21E000 | 2/8 | 0.7701 |
+| Mixtral-8x7B-v0.1 | L21E001 | CF | wiki | 0.0008 | 0.0044 | 0.0064 | L21E000 | 8/8 | -3.3765 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | wg_margin | 0.0021 | 0.0024 | 0.008 | L18E003 | 5/8 | -0.1064 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | cf | 0.0132 | -0.0002 | 0.0022 | L18E005 | 1/8 | 7.6784 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | ioi | -0.0149 | 0.0009 | 0.027 | L18E003 | 7/8 | -1.1387 |
+| Mixtral-8x7B-v0.1 | L18E001 | CF | wiki | -0.0021 | 0.0036 | 0.0059 | L18E003 | 8/8 | -2.7955 |
+
+
+![Targets vs same-layer controls](figures/ext9_knockout_controls.png)
+
+### 3. Population sets against frequency-matched random sets
+
+| model | set | subset | population set | random mean | random max | rank | z | population set (full scope) |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | wg:k1 | wg_margin | 0.0346 | 0.0064 | 0.0082 | 1/6 | 28.3157 | 0.0325 |
+| Qwen3-30B-A3B-Base | wg:k1 | cf | -0.0013 | -0.0019 | -0.0019 | 1/6 | 8.4971 | -0.0005 |
+| Qwen3-30B-A3B-Base | wg:k1 | ioi | -0.0002 | -0.0004 | -0.0002 | 1/6 | 0.6505 | -0.0004 |
+| Qwen3-30B-A3B-Base | wg:k1 | wiki | -0.0003 | -0.0007 | -0.0001 | 2/6 | 1.1579 | 0.0 |
+| Qwen3-30B-A3B-Base | wg:k3 | wg_margin | 0.0816 | 0.0151 | 0.0201 | 1/6 | 19.7389 | 0.0787 |
+| Qwen3-30B-A3B-Base | wg:k3 | cf | -0.0026 | -0.0023 | -0.0015 | 5/6 | -0.5228 | -0.002 |
+| Qwen3-30B-A3B-Base | wg:k3 | ioi | -0.001 | -0.0007 | 0.0063 | 3/6 | -0.0807 | -0.0026 |
+| Qwen3-30B-A3B-Base | wg:k3 | wiki | 0.0026 | 0.001 | 0.0019 | 1/6 | 1.4381 | 0.002 |
+| Qwen3-30B-A3B-Base | wg:k5 | wg_margin | 0.1056 | 0.0111 | 0.0172 | 1/6 | 21.0538 | 0.1014 |
+| Qwen3-30B-A3B-Base | wg:k5 | cf | -0.0027 | -0.0048 | -0.0017 | 2/6 | 0.8469 | -0.0019 |
+| Qwen3-30B-A3B-Base | wg:k5 | ioi | -0.0021 | 0.0075 | 0.013 | 6/6 | -2.1347 | -0.0032 |
+| Qwen3-30B-A3B-Base | wg:k5 | wiki | 0.0035 | 0.0024 | 0.0039 | 2/6 | 0.8731 | 0.0028 |
+| Qwen3-30B-A3B-Base | wg:k10 | wg_margin | 0.1525 | 0.0013 | 0.0114 | 1/6 | 19.2485 | 0.1484 |
+| Qwen3-30B-A3B-Base | wg:k10 | cf | -0.0051 | -0.0018 | 0.0003 | 6/6 | -2.2889 | -0.0035 |
+| Qwen3-30B-A3B-Base | wg:k10 | ioi | -0.0054 | 0.0082 | 0.0161 | 6/6 | -1.8823 | -0.0055 |
+| Qwen3-30B-A3B-Base | wg:k10 | wiki | 0.0061 | 0.0062 | 0.0076 | 5/6 | -0.0514 | 0.0075 |
+| Qwen3-30B-A3B-Base | cf:k1 | wg_margin | 0.003 | 0.0076 | 0.0086 | 6/6 | -2.9807 | 0.0007 |
+| Qwen3-30B-A3B-Base | cf:k1 | cf | 0.0373 | -0.0044 | -0.0015 | 1/6 | 15.676 | 0.0325 |
+| Qwen3-30B-A3B-Base | cf:k1 | ioi | 0.0004 | 0.0023 | 0.0037 | 6/6 | -1.3112 | 0.0006 |
+| Qwen3-30B-A3B-Base | cf:k1 | wiki | 0.0014 | 0.0002 | 0.001 | 1/6 | 1.0209 | 0.0011 |
+| Qwen3-30B-A3B-Base | cf:k3 | wg_margin | 0.0033 | 0.0094 | 0.0111 | 6/6 | -2.3972 | 0.0011 |
+| Qwen3-30B-A3B-Base | cf:k3 | cf | 0.08 | -0.0041 | 0.0034 | 1/6 | 17.4013 | 0.075 |
+| Qwen3-30B-A3B-Base | cf:k3 | ioi | -0.015 | 0.0005 | 0.0051 | 6/6 | -5.0149 | -0.0158 |
+| Qwen3-30B-A3B-Base | cf:k3 | wiki | 0.0042 | 0.0029 | 0.0063 | 2/6 | 0.5587 | 0.0068 |
+| Qwen3-30B-A3B-Base | cf:k5 | wg_margin | 0.0051 | 0.0126 | 0.0146 | 6/6 | -4.3378 | 0.0005 |
+| Qwen3-30B-A3B-Base | cf:k5 | cf | 0.1001 | -0.0022 | 0.0028 | 1/6 | 25.7276 | 0.093 |
+| Qwen3-30B-A3B-Base | cf:k5 | ioi | -0.0142 | 0.0073 | 0.0202 | 6/6 | -2.4234 | -0.0155 |
+| Qwen3-30B-A3B-Base | cf:k5 | wiki | 0.0088 | 0.0065 | 0.0112 | 2/6 | 0.6793 | 0.0112 |
+| Qwen3-30B-A3B-Base | cf:k10 | wg_margin | 0.0046 | 0.0187 | 0.0373 | 6/6 | -1.2926 | -0.0004 |
+| Qwen3-30B-A3B-Base | cf:k10 | cf | 0.1497 | -0.0061 | -0.0014 | 1/6 | 40.5283 | 0.1441 |
+| Qwen3-30B-A3B-Base | cf:k10 | ioi | -0.0149 | 0.0067 | 0.034 | 6/6 | -1.1768 | -0.0134 |
+| Qwen3-30B-A3B-Base | cf:k10 | wiki | 0.0597 | 0.0164 | 0.0191 | 1/6 | 24.639 | 0.0447 |
+| Mixtral-8x7B-v0.1 | wg:k1 | wg_margin | 0.0393 | 0.0017 | 0.0033 | 1/6 | 23.8857 | 0.0364 |
+| Mixtral-8x7B-v0.1 | wg:k1 | cf | 0.0003 | 0.0004 | 0.001 | 5/6 | -0.2242 | -0.0006 |
+| Mixtral-8x7B-v0.1 | wg:k1 | ioi | 0.0015 | 0.0099 | 0.0152 | 5/6 | -1.1494 | 0.0006 |
+| Mixtral-8x7B-v0.1 | wg:k1 | wiki | 0.0078 | 0.0057 | 0.0081 | 4/6 | 0.627 | 0.0077 |
+| Mixtral-8x7B-v0.1 | wg:k3 | wg_margin | 0.0982 | 0.0035 | 0.0052 | 1/6 | 53.9666 | 0.0947 |
+| Mixtral-8x7B-v0.1 | wg:k3 | cf | 0.0081 | -0.0007 | 0.0007 | 1/6 | 10.2549 | 0.007 |
+| Mixtral-8x7B-v0.1 | wg:k3 | ioi | 0.024 | 0.0016 | 0.0071 | 1/6 | 3.3448 | 0.0225 |
+| Mixtral-8x7B-v0.1 | wg:k3 | wiki | 0.0369 | 0.0134 | 0.016 | 1/6 | 12.5915 | 0.0328 |
+| Mixtral-8x7B-v0.1 | wg:k5 | wg_margin | 0.1191 | 0.0041 | 0.0105 | 1/6 | 28.0147 | 0.1162 |
+| Mixtral-8x7B-v0.1 | wg:k5 | cf | 0.0078 | -0.0031 | -0.0003 | 1/6 | 5.6289 | 0.0062 |
+| Mixtral-8x7B-v0.1 | wg:k5 | ioi | 0.0278 | 0.009 | 0.0403 | 2/6 | 0.9752 | 0.0257 |
+| Mixtral-8x7B-v0.1 | wg:k5 | wiki | 0.0511 | 0.0281 | 0.0366 | 1/6 | 4.4117 | 0.0382 |
+| Mixtral-8x7B-v0.1 | wg:k10 | wg_margin | 0.1586 | 0.0109 | 0.0164 | 1/6 | 29.6209 | 0.1543 |
+| Mixtral-8x7B-v0.1 | wg:k10 | cf | 0.0144 | 0.0049 | 0.0125 | 1/6 | 1.6956 | 0.0126 |
+| Mixtral-8x7B-v0.1 | wg:k10 | ioi | 0.0264 | 0.0129 | 0.0506 | 2/6 | 0.4628 | 0.0244 |
+| Mixtral-8x7B-v0.1 | wg:k10 | wiki | 0.0753 | 0.0478 | 0.0551 | 1/6 | 5.0301 | 0.065 |
+| Mixtral-8x7B-v0.1 | cf:k1 | wg_margin | 0.0006 | 0.0027 | 0.0225 | 4/6 | -0.1793 | 0.0001 |
+| Mixtral-8x7B-v0.1 | cf:k1 | cf | 0.0003 | -0.0014 | -0.001 | 1/6 | 1.9912 | 0.0045 |
+| Mixtral-8x7B-v0.1 | cf:k1 | ioi | 0.0028 | 0.0018 | 0.0049 | 3/6 | 0.3435 | 0.0032 |
+| Mixtral-8x7B-v0.1 | cf:k1 | wiki | 0.0008 | 0.0045 | 0.0064 | 6/6 | -2.0844 | 0.0023 |
+| Mixtral-8x7B-v0.1 | cf:k3 | wg_margin | 0.0003 | 0.0081 | 0.024 | 4/6 | -0.5234 | 0.0003 |
+| Mixtral-8x7B-v0.1 | cf:k3 | cf | 0.0056 | -0.0015 | 0.0004 | 1/6 | 4.1616 | 0.0085 |
+| Mixtral-8x7B-v0.1 | cf:k3 | ioi | 0.0171 | -0.0151 | -0.01 | 1/6 | 7.3336 | 0.0185 |
+| Mixtral-8x7B-v0.1 | cf:k3 | wiki | 0.0161 | 0.0154 | 0.0164 | 4/6 | 0.3995 | 0.0128 |
+| Mixtral-8x7B-v0.1 | cf:k5 | wg_margin | 0.0002 | 0.0175 | 0.0372 | 5/6 | -0.9669 | 0.0001 |
+| Mixtral-8x7B-v0.1 | cf:k5 | cf | 0.0204 | 0.0015 | 0.0046 | 1/6 | 6.4397 | 0.0243 |
+| Mixtral-8x7B-v0.1 | cf:k5 | ioi | 0.0066 | -0.0055 | 0.0065 | 1/6 | 1.0889 | 0.0057 |
+| Mixtral-8x7B-v0.1 | cf:k5 | wiki | 0.0217 | 0.02 | 0.0246 | 4/6 | 0.3024 | 0.0194 |
+| Mixtral-8x7B-v0.1 | cf:k10 | wg_margin | 0.0473 | 0.0163 | 0.0497 | 2/6 | 1.5747 | 0.0471 |
+| Mixtral-8x7B-v0.1 | cf:k10 | cf | 0.0351 | 0.0033 | 0.0071 | 1/6 | 9.6352 | 0.0384 |
+| Mixtral-8x7B-v0.1 | cf:k10 | ioi | 0.0422 | -0.0091 | 0.018 | 1/6 | 3.0317 | 0.0412 |
+| Mixtral-8x7B-v0.1 | cf:k10 | wiki | 0.0582 | 0.0479 | 0.0582 | 2/6 | 1.3623 | 0.0522 |
+
+
+![Sets vs random sets](figures/ext9_knockout_sets.png)
+
+### 4. Double dissociation
+
+| model | WG expert(s) | CF expert(s) | F WGexp on WG | F WGexp on CF | F CFexp on WG | F CFexp on CF | contrast [95% CI] |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | L44E069 | 0.0325 | -0.0005 | 0.0007 | 0.0325 | +0.065 [+0.057, +0.073] |
+| Qwen3-30B-A3B-Base | L41E117 | L42E115 | 0.0325 | -0.0005 | -0.0007 | 0.0243 | +0.058 [+0.052, +0.064] |
+| Qwen3-30B-A3B-Base | pop:wg:k3 | pop:cf:k3 | 0.0787 | -0.002 | 0.0011 | 0.075 | +0.155 [+0.143, +0.167] |
+| Qwen3-30B-A3B-Base | pop:wg:k5 | pop:cf:k5 | 0.1014 | -0.0019 | 0.0005 | 0.093 | +0.196 [+0.183, +0.209] |
+| Qwen3-30B-A3B-Base | pop:wg:k10 | pop:cf:k10 | 0.1484 | -0.0035 | -0.0004 | 0.1441 | +0.296 [+0.279, +0.314] |
+| Mixtral-8x7B-v0.1 | L20E000 | L19E002 | 0.0364 | -0.0006 | -0.0012 | 0.0045 | +0.043 [+0.037, +0.048] |
+| Mixtral-8x7B-v0.1 | L20E000 | L21E001 | 0.0364 | -0.0006 | 0.0001 | 0.0045 | +0.041 [+0.036, +0.047] |
+| Mixtral-8x7B-v0.1 | L20E000 | L18E001 | 0.0364 | -0.0006 | 0.0016 | 0.0148 | +0.050 [+0.044, +0.057] |
+| Mixtral-8x7B-v0.1 | pop:wg:k3 | pop:cf:k3 | 0.0947 | 0.007 | 0.0003 | 0.0085 | +0.096 [+0.086, +0.105] |
+| Mixtral-8x7B-v0.1 | pop:wg:k5 | pop:cf:k5 | 0.1162 | 0.0062 | 0.0001 | 0.0243 | +0.134 [+0.122, +0.147] |
+| Mixtral-8x7B-v0.1 | pop:wg:k10 | pop:cf:k10 | 0.1543 | 0.0126 | 0.0471 | 0.0384 | +0.133 [+0.120, +0.146] |
+
+
+### 5. Routing: which expert takes the slot
+
+| model | expert | task | routed at final (baseline) | routed, all positions | clean one-for-one swap | top replacements (share) |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | wg | 0.8247 | 0.1089 | 0.9824 | L41E079 (0.131), L41E121 (0.1001), L41E018 (0.074) |
+| Qwen3-30B-A3B-Base | L41E117 | cf | 0.1072 | 0.0269 | 0.975 | L41E085 (0.1375), L41E106 (0.125), L41E001 (0.1125) |
+| Qwen3-30B-A3B-Base | L41E117 | ioi | 0.0 | 0.0001 | 0.0 |  |
+| Qwen3-30B-A3B-Base | L42E115 | wg | 0.0345 | 0.2342 | 0.967 | L42E002 (0.0957), L42E022 (0.0957), L42E016 (0.0858) |
+| Qwen3-30B-A3B-Base | L42E115 | cf | 0.9718 | 0.3789 | 0.9903 | L42E016 (0.091), L42E023 (0.0869), L42E071 (0.0703) |
+| Qwen3-30B-A3B-Base | L42E115 | ioi | 1.0 | 0.388 | 0.9838 | L42E031 (0.1819), L42E123 (0.1719), L42E074 (0.1169) |
+| Qwen3-30B-A3B-Base | L44E069 | wg | 0.0421 | 0.1107 | 0.981 | L44E006 (0.1274), L44E027 (0.122), L44E022 (0.0705) |
+| Qwen3-30B-A3B-Base | L44E069 | cf | 0.9062 | 0.4747 | 0.9956 | L44E022 (0.0932), L44E027 (0.074), L44E081 (0.0651) |
+| Qwen3-30B-A3B-Base | L44E069 | ioi | 0.1181 | 0.1403 | 0.9894 | L44E006 (0.3069), L44E116 (0.1217), L44E122 (0.0952) |
+| Mixtral-8x7B-v0.1 | L18E001 | wg | 0.017 | 0.1804 | 1.0 | L18E006 (0.4359), L18E005 (0.2179), L18E004 (0.1282) |
+| Mixtral-8x7B-v0.1 | L18E001 | cf | 0.7966 | 0.2124 | 1.0 | L18E006 (0.3185), L18E003 (0.3015), L18E005 (0.2708) |
+| Mixtral-8x7B-v0.1 | L18E001 | ioi | 0.9981 | 0.229 | 1.0 | L18E003 (0.6493), L18E006 (0.3456), L18E005 (0.0038) |
+| Mixtral-8x7B-v0.1 | L19E002 | wg | 0.0667 | 0.1811 | 1.0 | L19E000 (0.4542), L19E004 (0.3595), L19E005 (0.0784) |
+| Mixtral-8x7B-v0.1 | L19E002 | cf | 0.5956 | 0.2964 | 1.0 | L19E004 (0.323), L19E006 (0.1996), L19E000 (0.1934) |
+| Mixtral-8x7B-v0.1 | L19E002 | ioi | 0.0 | 0.1875 | 0.0 |  |
+| Mixtral-8x7B-v0.1 | L20E000 | wg | 0.9344 | 0.2509 | 0.9998 | L20E007 (0.3162), L20E005 (0.2474), L20E001 (0.189) |
+| Mixtral-8x7B-v0.1 | L20E000 | cf | 0.31 | 0.3117 | 1.0 | L20E004 (0.3439), L20E002 (0.2569), L20E005 (0.1502) |
+| Mixtral-8x7B-v0.1 | L20E000 | ioi | 0.0013 | 0.1467 | 1.0 | L20E006 (0.5), L20E002 (0.5) |
+| Mixtral-8x7B-v0.1 | L21E001 | wg | 0.0602 | 0.2076 | 1.0 | L21E004 (0.3188), L21E000 (0.1775), L21E003 (0.163) |
+| Mixtral-8x7B-v0.1 | L21E001 | cf | 0.674 | 0.3324 | 1.0 | L21E006 (0.2091), L21E004 (0.1818), L21E000 (0.1709) |
+| Mixtral-8x7B-v0.1 | L21E001 | ioi | 0.9456 | 0.3011 | 1.0 | L21E002 (0.534), L21E000 (0.1765), L21E006 (0.1659) |
+
+
+### 6. Final position only and zero mode
+
+| model | condition | subset | all_reroute | final_reroute | all_zero |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | wg_margin | 0.0346 | 0.0314 | 0.0341 |
+| Qwen3-30B-A3B-Base | L41E117 | cf | -0.0013 | -0.0021 | -0.0023 |
+| Qwen3-30B-A3B-Base | L41E117 | ioi | -0.0002 | 0.0008 | 0.0 |
+| Qwen3-30B-A3B-Base | L41E117 | wiki | -0.0003 | nan | 0.0015 |
+| Qwen3-30B-A3B-Base | L42E115 | wg_margin | 0.0071 | 0.0031 | 0.0002 |
+| Qwen3-30B-A3B-Base | L42E115 | cf | 0.0246 | 0.0211 | 0.0243 |
+| Qwen3-30B-A3B-Base | L42E115 | ioi | -0.0179 | -0.0159 | -0.0068 |
+| Qwen3-30B-A3B-Base | L42E115 | wiki | 0.0039 | nan | 0.0056 |
+| Qwen3-30B-A3B-Base | L44E069 | wg_margin | 0.003 | 0.0038 | 0.0005 |
+| Qwen3-30B-A3B-Base | L44E069 | cf | 0.0373 | 0.0347 | 0.0338 |
+| Qwen3-30B-A3B-Base | L44E069 | ioi | 0.0004 | 0.0001 | -0.002 |
+| Qwen3-30B-A3B-Base | L44E069 | wiki | 0.0014 | nan | 0.0025 |
+| Qwen3-30B-A3B-Base | pop:wg:k3 | wg_margin | 0.0816 | 0.0724 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k3 | cf | -0.0026 | -0.002 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k3 | ioi | -0.001 | 0.0024 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k5 | wg_margin | 0.1056 | 0.1039 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k5 | cf | -0.0027 | -0.0016 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k5 | ioi | -0.0021 | 0.0002 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k10 | wg_margin | 0.1525 | 0.136 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k10 | cf | -0.0051 | -0.0031 | nan |
+| Qwen3-30B-A3B-Base | pop:wg:k10 | ioi | -0.0054 | 0.0024 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k3 | wg_margin | 0.0033 | 0.0015 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k3 | cf | 0.08 | 0.0749 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k3 | ioi | -0.015 | -0.0154 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k5 | wg_margin | 0.0051 | 0.0072 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k5 | cf | 0.1001 | 0.0934 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k5 | ioi | -0.0142 | -0.0158 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k10 | wg_margin | 0.0046 | 0.0066 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k10 | cf | 0.1497 | 0.1437 | nan |
+| Qwen3-30B-A3B-Base | pop:cf:k10 | ioi | -0.0149 | -0.0229 | nan |
+| Mixtral-8x7B-v0.1 | L18E001 | wg_margin | 0.0021 | 0.0009 | 0.0015 |
+| Mixtral-8x7B-v0.1 | L18E001 | cf | 0.0132 | 0.0124 | 0.0182 |
+| Mixtral-8x7B-v0.1 | L18E001 | ioi | -0.0149 | -0.014 | 0.014 |
+| Mixtral-8x7B-v0.1 | L18E001 | wiki | -0.0021 | nan | -0.0012 |
+| Mixtral-8x7B-v0.1 | L19E002 | wg_margin | -0.0015 | 0.0 | 0.0004 |
+| Mixtral-8x7B-v0.1 | L19E002 | cf | 0.0048 | 0.0036 | 0.0069 |
+| Mixtral-8x7B-v0.1 | L19E002 | ioi | -0.001 | 0.0006 | -0.0028 |
+| Mixtral-8x7B-v0.1 | L19E002 | wiki | 0.0036 | nan | 0.0047 |
+| Mixtral-8x7B-v0.1 | L20E000 | wg_margin | 0.0393 | 0.0377 | 0.0377 |
+| Mixtral-8x7B-v0.1 | L20E000 | cf | 0.0003 | 0.0005 | 0.0001 |
+| Mixtral-8x7B-v0.1 | L20E000 | ioi | 0.0015 | 0.0004 | 0.0028 |
+| Mixtral-8x7B-v0.1 | L20E000 | wiki | 0.0078 | nan | 0.0079 |
+| Mixtral-8x7B-v0.1 | L21E001 | wg_margin | 0.0006 | -0.0009 | 0.0 |
+| Mixtral-8x7B-v0.1 | L21E001 | cf | 0.0003 | -0.0009 | 0.0024 |
+| Mixtral-8x7B-v0.1 | L21E001 | ioi | 0.0028 | 0.0056 | -0.0007 |
+| Mixtral-8x7B-v0.1 | L21E001 | wiki | 0.0008 | nan | 0.0013 |
+| Mixtral-8x7B-v0.1 | pop:wg:k3 | wg_margin | 0.0982 | 0.0743 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k3 | cf | 0.0081 | -0.0005 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k3 | ioi | 0.024 | 0.0008 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k5 | wg_margin | 0.1191 | 0.0941 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k5 | cf | 0.0078 | 0.0005 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k5 | ioi | 0.0278 | 0.0 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k10 | wg_margin | 0.1586 | 0.1255 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k10 | cf | 0.0144 | 0.0051 | nan |
+| Mixtral-8x7B-v0.1 | pop:wg:k10 | ioi | 0.0264 | 0.0002 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k3 | wg_margin | 0.0003 | 0.0009 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k3 | cf | 0.0056 | 0.0033 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k3 | ioi | 0.0171 | 0.0181 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k5 | wg_margin | 0.0002 | -0.0006 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k5 | cf | 0.0204 | 0.0157 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k5 | ioi | 0.0066 | 0.005 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k10 | wg_margin | 0.0473 | 0.0329 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k10 | cf | 0.0351 | 0.0192 | nan |
+| Mixtral-8x7B-v0.1 | pop:cf:k10 | ioi | 0.0422 | 0.0028 | nan |
+
+
+### Reading
+
+**1. The patch-selected experts are necessary for their own task and only for it, but each carries a few per cent of the margin.** Fraction of the clean margin lost by a single all-position knockout (full scope): Qwen3: L41E117 (WG) +0.033 [+0.028, +0.037] on its own task vs -0.001 on the other (IOI -0.000, wiki +0.000 nats; rank 1/17 among same-layer experts on its own task); L42E115 (CF) +0.024 [+0.019, +0.029] on its own task vs -0.001 on the other (IOI -0.018, wiki +0.004 nats; rank 1/17 among same-layer experts on its own task); L44E069 (CF) +0.033 [+0.026, +0.039] on its own task vs +0.001 on the other (IOI +0.001, wiki +0.001 nats; rank 1/17 among same-layer experts on its own task). Mixtral (BOS): L18E001 (CF) +0.015 [+0.010, +0.020] on its own task vs +0.002 on the other (IOI -0.016, wiki +0.002 nats; rank 1/8 among same-layer experts on its own task); L19E002 (CF) +0.004 [+0.001, +0.008] on its own task vs -0.001 on the other (IOI -0.001, wiki +0.004 nats; rank 2/8 among same-layer experts on its own task); L20E000 (WG) +0.036 [+0.033, +0.040] on its own task vs -0.001 on the other (IOI +0.001, wiki +0.008 nats; rank 1/8 among same-layer experts on its own task); L21E001 (CF) +0.004 [+0.001, +0.008] on its own task vs +0.000 on the other (IOI +0.003, wiki +0.002 nats; rank 3/8 among same-layer experts on its own task).
+
+**Strongest non-target expert in the control sets (sub scope).** Qwen3 WinoGrande: L42E037 +0.012 (wiki +0.001 nats; best target +0.035); Qwen3 CounterFact: L44E006 +0.010 (wiki +0.022 nats; best target +0.037); Mixtral (BOS) WinoGrande: L19E006 +0.043 (wiki +0.023 nats; best target +0.039); Mixtral (BOS) CounterFact: L19E006 +0.013 (wiki +0.023 nats; best target +0.013). A control can be as necessary as a target: in Mixtral L19E006 (a same-layer control of L19E002 and WinoGrande rank 2 in the ext8 population ranking) is the single most damaging WinoGrande knockout and also the most generically damaging one.
+
+**2. Sufficiency is not necessity.** Patched alone into the corrupted run at the final position (Directions 6 / 7, validation), each expert restores a sizeable part of the STR drop; removed from the clean run, it costs a fraction of a logit (knockout Δ change / patch rescue = 0.04-0.25). The reroute knockout replaces the expert one-for-one in almost every prompt (spread over several replacement experts), but dropping the slot with no replacement (zero mode) costs about the same, so the small necessity is not compensation by the replacement: the knockout removes the expert's clean contribution, whereas the patch swaps the corrupted run's contribution for the clean one and lets later layers respond (the direct / indirect split of the patch effect is Direction 11). The final-position-only knockout reproduces most of the all-position effect: the necessity sits where the patches found the experts. F columns on the sub scope (same items for the three interventions).
+
+| Model | Expert | Task | STR patch rescue, logits (fraction of drop) | knockout Δ change, logits | F all positions | F final only | F zero mode | routed at final | one-for-one swap | top replacement (share) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3 | L41E117 | WG | +1.00 (0.123) | -0.124 | +0.035 | +0.031 | +0.034 | 0.825 | 0.982 | L41E079 (0.13) |
+| Qwen3 | L42E115 | CF | +0.84 (0.072) | -0.148 | +0.025 | +0.021 | +0.024 | 0.972 | 0.990 | L42E016 (0.09) |
+| Qwen3 | L44E069 | CF | +1.07 (0.092) | -0.199 | +0.037 | +0.035 | +0.034 | 0.906 | 0.996 | L44E022 (0.09) |
+| Mixtral (BOS) | L18E001 | CF | +0.37 (0.029) | -0.093 | +0.013 | +0.012 | +0.018 | 0.797 | 1.000 | L18E006 (0.32) |
+| Mixtral (BOS) | L19E002 | CF | +0.60 (0.046) | -0.029 | +0.005 | +0.004 | +0.007 | 0.596 | 1.000 | L19E004 (0.32) |
+| Mixtral (BOS) | L20E000 | WG | +1.11 (0.144) | -0.134 | +0.039 | +0.038 | +0.038 | 0.934 | 1.000 | L20E007 (0.32) |
+| Mixtral (BOS) | L21E001 | CF | +0.64 (0.049) | -0.028 | +0.000 | -0.001 | +0.002 | 0.674 | 1.000 | L21E006 (0.21) |
+
+**3. Sets: the damage grows with k and stays on the task where the rankings do not overlap.** Qwen3 WG top-10: +0.148 [+0.139, +0.158] on its own task (pair accuracy 0.997 -> 0.944), -0.004 on the other, wiki +0.0075 [+0.0049, +0.0102]; on the sub scope +0.152 vs +0.001 (max +0.011) for 5 frequency-matched random sets; Qwen3 CF top-10: +0.144 [+0.130, +0.158] on its own task (accuracy 1.000 -> 0.988), -0.000 on the other, wiki +0.0447 [+0.0359, +0.0545]; on the sub scope +0.150 vs -0.006 (max -0.001) for 5 frequency-matched random sets; Mixtral (BOS) WG top-10: +0.154 [+0.145, +0.164] on its own task (pair accuracy 1.000 -> 0.978), +0.013 on the other, wiki +0.0650 [+0.0574, +0.0727]; on the sub scope +0.159 vs +0.011 (max +0.016) for 5 frequency-matched random sets; Mixtral (BOS) CF top-10: +0.038 [+0.029, +0.048] on its own task (accuracy 1.000 -> 0.999), +0.047 on the other, wiki +0.0522 [+0.0438, +0.0609]; on the sub scope +0.035 vs +0.003 (max +0.007) for 5 frequency-matched random sets. Experts shared by the two population top-10 lists: Qwen3: none; Mixtral (BOS): L19E006, L22E005. Mixtral's CounterFact top-10 contains two WinoGrande experts (L19E006 = WinoGrande rank 2, L22E005 = rank 8), which is why it damages WinoGrande more than CounterFact; L19E006 is also the expert that the BOS token always routes to at L19 (Direction 3), so knocking it out at all positions removes it from the attention sink as well, a likely source of the larger generic (wikitext) damage of every Mixtral set that contains it.
+
+**IOI (third task, never used for selection).** Single knockouts move the IOI margin by Qwen3 L41E117 -0.000, Qwen3 L42E115 -0.018, Qwen3 L44E069 +0.001, Mixtral (BOS) L18E001 -0.016, Mixtral (BOS) L19E002 -0.001, Mixtral (BOS) L20E000 +0.001, Mixtral (BOS) L21E001 +0.003. Negative values (margin gains) come from CounterFact experts that are routed at the IOI final position: in IOI the clean final-position MoE output works against the indirect object (Direction 7b: all-MoE patch M = -0.27 in Qwen3), so removing such an expert helps.
+
+**Where the damage is.** The loss concentrates on prompts whose FINAL position routes to the expert in the baseline: Qwen3 L41E117: F +0.038 on the 3306 own-task prompts that route it at the final position vs +0.004 on the 636 that do not; Qwen3 L42E115: F +0.025 on the 725 own-task prompts that route it at the final position vs +0.008 on the 21 that do not; Qwen3 L44E069: F +0.035 on the 676 own-task prompts that route it at the final position vs +0.000 on the 70 that do not; Mixtral (BOS) L18E001: F +0.017 on the 650 own-task prompts that route it at the final position vs +0.001 on the 166 that do not; Mixtral (BOS) L19E002: F +0.007 on the 486 own-task prompts that route it at the final position vs -0.000 on the 330 that do not; Mixtral (BOS) L20E000: F +0.038 on the 1977 own-task prompts that route it at the final position vs -0.003 on the 69 that do not; Mixtral (BOS) L21E001: F +0.005 on the 550 own-task prompts that route it at the final position vs +0.003 on the 266 that do not. Some CounterFact experts are routed at the final position of almost every IOI prompt and their removal INCREASES the IOI margin: Qwen3 L42E115 (routed at the IOI final position in 1597 prompts, F -0.018), Mixtral (BOS) L18E001 (routed at the IOI final position in 1596 prompts, F -0.016).
+
+**4. Noise floor.** The unmasked baseline recomputed in other pass compositions (condition `null`, sub scope; bf16 results depend on the batch composition at the 0.1-logit level) gives F = Qwen3 WinoGrande +0.008, CounterFact -0.003, IOI -0.001, wiki -0.002 nats; Mixtral (BOS) WinoGrande +0.001, CounterFact +0.000, IOI +0.000, wiki -0.002 nats.
+
+### Caveats
+
+- A knockout is a distribution shift the model was not trained on; the reroute variant keeps k experts per token (the model's own routing rule), the zero variant drops the slot. Generic damage is measured on wikitext, not removed.
+- Rows are not bit-reproducible across pass compositions (bf16, batch-size-dependent kernels): baseline and knockout rows sit in different passes; the `null` condition measures this floor.
+- Controls and random sets use a fixed subsample (512 WinoGrande margin pairs, 512 CounterFact cases, 256 IOI prompts, 64 windows); random sets are matched member by member within the member's layer, so with Mixtral's 8 experts per layer several of the 5 draws coincide.
+- WinoGrande evaluation excludes only the 128 main discovery pairs (the selection set of the WinoGrande experts and of the population ranking); the main validation and replication pairs are part of the margin pool. CounterFact excludes the paper discovery IDs (the STR selections used the paper split).
+- Necessity is measured on clean prompts at every position; the patches measured sufficiency at the final position under STR. The final-only knockout is the bridge between the two.
+
+### Files
+
+Code: `moetrace/engine.py` (E4, docstring 'ext9'), `moetrace/ext9_knockout.py` (items, conditions, controls, pass planner), `scripts/ext9_engine_verify.py`, `scripts/ext9_knockout_run.py`, `scripts/ext9_knockout_analyze.py`, `scripts/ext9_knockout_text.py`, `scripts/ext9_chain.sh`. Runs: `results/qwen3_knockout`, `results/mixtral_bos_knockout` (items.parquet, pop_rank.json, controls.json, plan_<phase>.json, ko_rows_*.parquet row level, ko_wiki_*.npz per-token NLL, ko_basefinal_* / ko_baseallpos_* baseline routing, run_meta.json). Numbers: `results/ext9_knockout_summary.json`; tables `results/tables/ext9_knockout_*`; figures `results/figures/ext9_knockout_*`; engine verification `results/verify_ext9_engine_olmoe.json`; API note `logs/ext9_engine_api.md`.
+
+
+## Direction 10: Head + expert add-back to full repair
+
+**Summary.** With single attention heads as candidates next to experts, a handful of components restores the corrupted answer at the final position, and the ceiling is 1 instead of the all-MoE ceiling (Qwen3 CounterFact 0.53, Mixtral CounterFact 0.41, Qwen3 WinoGrande 0.86, Mixtral WinoGrande 0.79 of the drop). Adaptive greedy over heads ∪ experts (exact joint patches, 20 steps) restores, at k = 20, Qwen3 CounterFact **0.97 [0.95, 1.00]**, Mixtral CounterFact **1.00 [0.98, 1.03]**, Qwen3 WinoGrande **0.93 [0.91, 0.96]**, Mixtral WinoGrande **0.94 [0.93, 0.95]** of the drop (k = 10: Qwen3 CounterFact 0.88, Mixtral CounterFact 0.84, Qwen3 WinoGrande 0.80, Mixtral WinoGrande 0.80); k for 50 / 80 / 90 % of the drop: Qwen3 CounterFact 3/8/12, Mixtral CounterFact 4/9/13, Qwen3 WinoGrande 4/10/17, Mixtral WinoGrande 4/10/16. Experts alone (ext8 greedy) reach Qwen3 CounterFact 0.55, Mixtral CounterFact 0.56, Qwen3 WinoGrande 0.72, Mixtral WinoGrande 0.79 at k = 15, heads alone (head-only greedy) Qwen3 CounterFact 0.85, Mixtral CounterFact 0.87, Qwen3 WinoGrande 0.58, Mixtral WinoGrande 0.65 at k = 20. The answer is restored (Δ > 0) at k = 20 in Qwen3 CounterFact 0.94, Mixtral CounterFact 0.99, Qwen3 WinoGrande 0.96, Mixtral WinoGrande 1.00 of cases; rows with r ≥ 0.9 at k = 20: Qwen3 CounterFact 0.72, Mixtral CounterFact 0.81, Qwen3 WinoGrande 0.53, Mixtral WinoGrande 0.73. Heads among the first 10 mixed-greedy picks: Qwen3 CounterFact 6.2, Mixtral CounterFact 6.4, Qwen3 WinoGrande 3.6, Mixtral WinoGrande 2.8. The patch-free DLA ordering over heads ∪ experts reaches AUC (log k, 1..20) Qwen3 CounterFact 0.57, Mixtral CounterFact 0.52, Qwen3 WinoGrande 0.50, Mixtral WinoGrande 0.49 vs the single-patch oracle Qwen3 CounterFact 0.57, Mixtral CounterFact 0.53, Qwen3 WinoGrande 0.50, Mixtral WinoGrande 0.54 and greedy Qwen3 CounterFact 0.64, Mixtral CounterFact 0.61, Qwen3 WinoGrande 0.59, Mixtral WinoGrande 0.58. IOI (S2 → IO, Qwen3; attention-pole reference): Qwen3 IOI the mixed greedy picks heads almost exclusively (9.9 of the first 10), r(10) / r(20) = 0.78 / 0.94 [0.93, 0.96], 80 % at k = 11, while all MoE outputs give -0.27. Single-head patches at every layer (Step 1): the best single head per task is Qwen3 CounterFact L40H13 (+0.19 [+0.17, +0.22]), Mixtral CounterFact L18H4 (+0.15 [+0.13, +0.18]), Qwen3 WinoGrande L46H24 (+0.10 [+0.09, +0.11]), Mixtral WinoGrande L25H9 (+0.07 [+0.07, +0.08]) of the drop; per row the best head matches or beats the best expert on CounterFact and is weaker on WinoGrande (median best head / best expert Qwen3 CounterFact 0.19 / 0.19, Mixtral CounterFact 0.21 / 0.12, Qwen3 WinoGrande 0.15 / 0.20, Mixtral WinoGrande 0.11 / 0.19); Z8 (≥ 2 SD over all heads) detects Qwen3 CounterFact 15 positive / 5 negative of 1,536, Mixtral CounterFact 12 positive / 5 negative of 1,024, Qwen3 WinoGrande 15 positive / 12 negative of 1,536, Mixtral WinoGrande 18 positive / 5 negative of 1,024 heads. The head DLA agrees with the single-head patches at the population level (r over heads Qwen3 CounterFact 0.96, Mixtral CounterFact 0.92, Qwen3 WinoGrande 0.87, Mixtral WinoGrande 0.79; top-1 head agrees in Qwen3 CounterFact 0.71, Mixtral CounterFact 0.44, Qwen3 WinoGrande 0.41, Mixtral WinoGrande 0.47 of rows).
+
+### What was run
+
+**Rows.** Exactly the ext8 validation rows: CounterFact STR (Direction 6 donors, paper IDs and split; (case, donor) rows, donor mean primary, first donor sensitivity) and WinoGrande option swap (ext7, directed cases, bootstrap over pairs), Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, bf16; plus IOI (i) S2 → IO (ext7-controls pairs, main validation family = 256 directed cases / 128 pairs) for Qwen3 as the attention-pole reference. Corruption = STR only; denoising (parent = corrupted run, source = clean run) at the final position.
+
+**Step 1 passes (one chunk of validation rows per pass; every (layer, head) + one attn_layer row per layer per row)**
+
+| Model | Task | Rows / cases | Passes | Spawn rows | Peak GB | Pass time (min) |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact STR | 432 / 108 | 3 | 684,288 | 19.1 | 2.7 |
+| Mixtral-8x7B (BOS) | CounterFact STR | 436 / 106 | 4 | 460,416 | 14.3 | 6.3 |
+| Qwen3-30B-A3B-Base | WinoGrande STR | 256 / 256 | 2 | 405,504 | 17.1 | 2.5 |
+| Mixtral-8x7B (BOS) | WinoGrande STR | 256 / 256 | 3 | 270,336 | 11.8 | 4.4 |
+| Qwen3-30B-A3B-Base | IOI STR (S2 -> IO) | 256 / 256 | 2 | 405,504 | 17.0 | 2.0 |
+
+**Step 2 passes (all tasks of a model share every pass: Qwen3 CounterFact + WinoGrande + IOI, Mixtral CounterFact + WinoGrande; ≤ 100k / 95k spawn rows per pass)**
+
+| Model | Passes | Pass time (min) | Peak GB |
+|---|---|---|---|
+| qwen3 | 19 | 15.7 | 12.5 |
+| mixtral | 19 | 28.2 | 16.1 |
+
+GPU time of all ext10 queue jobs (incl. engine load, smoke tests): 79 min.
+
+
+### Step 1. Single heads at every layer and the patch-free head DLA
+
+Every (layer, head) of the model was patched alone at the final position (attn_head: the head's pre-o_proj output set to the clean run's, the rest of the corrupted attention output kept) on every ext8 validation row, with one attn_layer row per layer in the same pass. The head DLA uses the same per-head output differences without any patch: dla_h = (W_o[:, h] ΔH_h ⊙ γ) · (W_U[r] − W_U[r′]) / rms(h_final, corrupted run). Z8 = population effect ≥ 2 SD from the mean over all heads of the model, on all validation units and separately on two disjoint halves.
+
+| Run | Rows / cases | Mean drop | Heads Z8 + / − (both halves) | Σ single heads / drop (all; positive pop. means) | Pop. heads for 50/80/90 % (additive) | Best head / best expert per row (median) | Rows best head > best expert | Heads in joint top-32 (median [IQR]) | DLA vs single, heads: row r / row ρ top-32 | top-1 / top-10 agree | pop. r | experts: row r | Σ head DLA vs ext8 attention DLA (r, ratio) | Σ heads vs attn_layer (row-layer r) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | 432 / 108 | 11.66 | 15 / 5 (18) | 0.31, 1.09 | 7/32/69 | 0.189 / 0.186 | 0.53 | 14 [11, 19] | 0.63 / 0.17 | 0.71 / 0.65 | 0.96 | 0.72 | 0.999, 0.999 | 0.37 |
+| Mixtral-8x7B (BOS), CounterFact STR | 436 / 106 | 12.98 | 12 / 5 (16) | 0.50, 1.03 | 6/27/55 | 0.214 / 0.123 | 0.75 | 17 [14, 20] | 0.76 / 0.35 | 0.44 / 0.70 | 0.92 | 0.74 | 0.999, 1.000 | 0.45 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 256 / 256 | 8.16 | 15 / 12 (23) | 0.02, 1.36 | 21/78/115 | 0.151 / 0.204 | 0.22 | 12 [7, 18] | 0.33 / -0.39 | 0.41 / 0.28 | 0.87 | 0.53 | 0.989, 1.029 | 0.39 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 256 / 256 | 7.69 | 18 / 5 (19) | 0.95, 1.19 | 22/107/183 | 0.112 / 0.192 | 0.16 | 12 [10, 16] | 0.41 / -0.09 | 0.47 / 0.39 | 0.79 | 0.81 | 0.999, 0.998 | 0.31 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 256 / 256 | 12.68 | 29 / 14 (40) | 1.41, 2.29 | 6/14/17 | 0.184 / 0.015 | 1.00 | 32 [31, 32] | 0.62 / 0.31 | 0.58 / 0.62 | 0.76 | 1.00 | 0.992, 1.003 | 0.41 |
+
+
+'Σ single heads' = the sum of all single-head population effects (all heads at all layers jointly restore 1.00: the attention outputs are the only path of the corruption to the final position); 'Pop. heads for q' = the number of heads, taken in order of their population effect, whose single effects add up to q of the drop (an additive estimate; Step 2 measures joint patches); 'Heads in joint top-32' = how many of a row's 32 best single components (heads ∪ the row's clean-active experts) are heads. IOI (S2 → IO, Qwen3 only, the attention-pole reference): no single-expert patch table exists, so its expert columns use the expert DLA of the same pass ('experts: row r' = 1 by construction).
+
+**Top and bottom heads (validation; donor mean for CounterFact)**
+
+| Run | Head | Rank | Rescue / drop [95% CI] | Rescue (logits) | z (all / halves) | Z8 both halves | DLA / drop | Share of layer attn | Row top-5 / top-1 share |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H13 | 1 | +0.192 [+0.169, +0.216] | +2.23 | +28.6 / +29.8, +27.0 | yes | +0.115 | 0.57 | 0.84 / 0.65 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H15 | 2 | +0.079 [+0.072, +0.087] | +0.93 | +11.8 / +10.6, +13.0 | yes | +0.047 | 0.24 | 0.84 / 0.09 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H14 | 3 | +0.073 [+0.065, +0.082] | +0.85 | +10.9 / +10.4, +11.2 | yes | +0.047 | 0.22 | 0.66 / 0.16 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L43H11 | 4 | +0.056 [+0.046, +0.067] | +0.65 | +8.4 / +8.9, +7.7 | yes | +0.060 | 0.27 | 0.44 / 0.01 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L43H15 | 5 | +0.045 [+0.038, +0.054] | +0.53 | +6.8 / +7.3, +6.1 | yes | +0.057 | 0.21 | 0.37 / 0.00 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L43H28 | 6 | +0.035 [+0.028, +0.042] | +0.41 | +5.2 / +5.0, +5.4 | yes | +0.030 | 0.17 | 0.33 / 0.03 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L28H13 | 7 | +0.033 [+0.025, +0.041] | +0.38 | +4.9 / +4.4, +5.3 | yes | +0.025 | 0.46 | 0.15 / 0.00 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H11 | 8 | +0.032 [+0.028, +0.037] | +0.38 | +4.8 / +4.6, +5.0 | yes | +0.025 | 0.10 | 0.17 / 0.00 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H9 | 1536 | -0.063 [-0.069, -0.056] | -0.73 | -9.4 / -8.1, -10.7 | yes | -0.062 | -0.19 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H8 | 1535 | -0.035 [-0.040, -0.032] | -0.41 | -5.3 / -5.2, -5.4 | yes | -0.030 | -0.10 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L47H29 | 1534 | -0.034 [-0.038, -0.030] | -0.39 | -5.1 / -5.0, -5.1 | yes | -0.036 | -2.37 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18H4 | 1 | +0.154 [+0.126, +0.184] | +2.00 | +19.1 / +18.6, +19.6 | yes | +0.063 | 0.87 | 0.66 / 0.39 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H22 | 2 | +0.147 [+0.128, +0.166] | +1.91 | +18.2 / +18.1, +18.3 | yes | +0.150 | 0.78 | 0.77 / 0.27 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H29 | 3 | +0.061 [+0.052, +0.070] | +0.79 | +7.5 / +7.2, +7.8 | yes | +0.042 | 0.38 | 0.55 / 0.01 |
+| Mixtral-8x7B (BOS), CounterFact STR | L29H2 | 4 | +0.051 [+0.045, +0.058] | +0.66 | +6.3 / +6.1, +6.4 | yes | +0.069 | 0.72 | 0.42 / 0.04 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H21 | 5 | +0.046 [+0.037, +0.055] | +0.60 | +5.6 / +6.8, +4.5 | yes | +0.049 | 0.24 | 0.42 / 0.06 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H23 | 6 | +0.042 [+0.033, +0.050] | +0.54 | +5.1 / +5.2, +5.1 | yes | +0.042 | 0.22 | 0.35 / 0.01 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15H1 | 7 | +0.035 [+0.029, +0.040] | +0.45 | +4.2 / +4.4, +4.0 | yes | +0.019 | 0.57 | 0.19 / 0.03 |
+| Mixtral-8x7B (BOS), CounterFact STR | L31H25 | 8 | +0.031 [+0.028, +0.035] | +0.41 | +3.8 / +3.9, +3.7 | yes | +0.037 | 0.60 | 0.18 / 0.01 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H20 | 1024 | -0.046 [-0.056, -0.038] | -0.60 | -5.8 / -6.5, -5.2 | yes | -0.048 | -0.25 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), CounterFact STR | L29H0 | 1023 | -0.024 [-0.028, -0.021] | -0.32 | -3.1 / -3.1, -3.1 | yes | -0.036 | -0.35 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18H6 | 1022 | -0.021 [-0.026, -0.017] | -0.28 | -2.7 / -2.7, -2.7 | yes | -0.021 | -0.12 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L46H24 | 1 | +0.101 [+0.088, +0.113] | +0.82 | +18.2 / +17.8, +17.3 | yes | +0.112 | -10.68 | 0.64 / 0.30 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L41H27 | 2 | +0.065 [+0.056, +0.075] | +0.53 | +11.8 / +11.8, +11.0 | yes | +0.033 | 3.05 | 0.45 / 0.21 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H18 | 3 | +0.041 [+0.036, +0.048] | +0.34 | +7.5 / +7.6, +6.8 | yes | +0.022 | 4.22 | 0.28 / 0.07 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L29H0 | 4 | +0.041 [+0.031, +0.052] | +0.34 | +7.4 / +6.3, +8.0 | yes | +0.001 | 5.41 | 0.26 / 0.10 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H21 | 5 | +0.035 [+0.029, +0.042] | +0.29 | +6.3 / +6.7, +5.5 | yes | +0.022 | 3.57 | 0.20 / 0.03 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L41H0 | 6 | +0.021 [+0.017, +0.027] | +0.18 | +3.9 / +3.5, +4.0 | yes | +0.002 | 1.00 | 0.07 / 0.02 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42H30 | 7 | +0.021 [+0.017, +0.024] | +0.17 | +3.7 / +3.1, +4.1 | yes | +0.010 | 0.71 | 0.06 / 0.00 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H19 | 8 | +0.019 [+0.015, +0.022] | +0.15 | +3.4 / +2.7, +3.9 | yes | +0.009 | 1.90 | 0.07 / 0.00 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L46H25 | 1536 | -0.105 [-0.115, -0.095] | -0.86 | -19.0 / -18.6, -18.1 | yes | -0.126 | 11.17 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H16 | 1535 | -0.067 [-0.074, -0.060] | -0.54 | -12.0 / -11.4, -11.9 | yes | -0.048 | -6.77 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L41H24 | 1534 | -0.039 [-0.043, -0.035] | -0.32 | -7.1 / -6.9, -6.8 | yes | -0.020 | -1.83 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H9 | 1 | +0.073 [+0.066, +0.079] | +0.56 | +15.7 / +16.0, +15.0 | yes | +0.085 | 0.97 | 0.78 / 0.30 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L22H20 | 2 | +0.072 [+0.063, +0.081] | +0.55 | +15.5 / +15.5, +15.2 | yes | +0.043 | 2.18 | 0.73 / 0.24 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H13 | 3 | +0.047 [+0.042, +0.053] | +0.36 | +10.1 / +9.8, +10.2 | yes | +0.001 | 0.42 | 0.57 / 0.15 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H11 | 4 | +0.026 [+0.019, +0.034] | +0.20 | +5.5 / +5.8, +5.0 | yes | +0.001 | 0.19 | 0.16 / 0.04 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H18 | 5 | +0.026 [+0.021, +0.030] | +0.20 | +5.4 / +4.7, +5.9 | yes | -0.000 | 0.18 | 0.23 / 0.05 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H12 | 6 | +0.025 [+0.020, +0.030] | +0.19 | +5.2 / +4.2, +6.1 | yes | +0.008 | 0.22 | 0.23 / 0.02 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H4 | 7 | +0.022 [+0.019, +0.026] | +0.17 | +4.6 / +4.3, +4.9 | yes | -0.000 | 0.16 | 0.14 / 0.03 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L15H7 | 8 | +0.022 [+0.015, +0.030] | +0.17 | +4.5 / +4.1, +4.9 | yes | +0.009 | 0.30 | 0.12 / 0.02 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L22H23 | 1024 | -0.035 [-0.038, -0.031] | -0.27 | -7.7 / -8.1, -7.2 | yes | -0.025 | -1.05 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H11 | 1023 | -0.020 [-0.022, -0.018] | -0.15 | -4.5 / -4.3, -4.6 | yes | -0.023 | -0.26 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L20H25 | 1022 | -0.013 [-0.016, -0.010] | -0.10 | -3.1 / -2.7, -3.3 | yes | -0.001 | -0.47 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H11 | 1 | +0.178 [+0.171, +0.184] | +2.25 | +20.0 / +20.0, +19.9 | yes | +0.238 | 0.67 | 1.00 / 0.82 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H24 | 2 | +0.100 [+0.095, +0.105] | +1.27 | +11.2 / +11.0, +11.4 | yes | +0.090 | 0.47 | 0.82 / 0.02 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L40H2 | 3 | +0.071 [+0.068, +0.075] | +0.91 | +8.0 / +7.7, +8.2 | yes | +0.002 | 116.00 | 0.39 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H10 | 4 | +0.069 [+0.064, +0.074] | +0.88 | +7.7 / +7.7, +7.7 | yes | +0.214 | 0.26 | 0.43 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H29 | 5 | +0.063 [+0.060, +0.066] | +0.80 | +7.0 / +7.1, +6.9 | yes | -0.089 | 0.29 | 0.26 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H28 | 6 | +0.050 [+0.048, +0.053] | +0.64 | +5.6 / +5.8, +5.4 | yes | +0.045 | 0.24 | 0.05 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L47H26 | 7 | +0.043 [+0.040, +0.046] | +0.54 | +4.7 / +4.7, +4.7 | yes | +0.050 | 3.26 | 0.05 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L45H9 | 8 | +0.040 [+0.036, +0.045] | +0.51 | +4.5 / +4.4, +4.5 | yes | +0.115 | 0.12 | 0.10 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L44H15 | 1536 | -0.122 [-0.129, -0.115] | -1.55 | -13.9 / -13.6, -14.1 | yes | -0.069 | 0.80 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L47H29 | 1535 | -0.088 [-0.092, -0.084] | -1.12 | -10.1 / -10.2, -10.0 | yes | -0.099 | -6.74 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L44H28 | 1534 | -0.045 [-0.048, -0.042] | -0.57 | -5.2 / -5.0, -5.4 | yes | -0.022 | 0.29 | 0.00 / 0.00 |
+
+
+**Heads found in earlier directions (F2 under GN on CounterFact, W5 under STR on WinoGrande at the W2 attention layers)**
+
+| Run | Head | Earlier result | Rank (of all heads) | Rescue / drop | z | Z8 both halves | DLA / drop |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | L40H13 | F2 GN mover (L40H13) | 1 | +0.192 [+0.169, +0.216] | +28.6 | yes | +0.115 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18H4 | F2 GN mover (L18H4) | 1 | +0.154 [+0.126, +0.184] | +19.1 | yes | +0.063 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24H22 | F2 GN (L24H22) | 2 | +0.147 [+0.128, +0.166] | +18.2 | yes | +0.150 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15H1 | F2 GN (L15H1) | 7 | +0.035 [+0.029, +0.040] | +4.2 | yes | +0.019 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15H3 | F2 GN (L15H3) | 11 | +0.018 [+0.014, +0.023] | +2.2 | yes | +0.013 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H29 | F2 GN (L19H29) | 3 | +0.061 [+0.052, +0.070] | +7.5 | yes | +0.042 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H30 | F2 GN (L19H30) | 9 | +0.029 [+0.025, +0.033] | +3.5 | yes | +0.020 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19H31 | F2 GN (L19H31) | 28 | +0.006 [+0.004, +0.009] | +0.7 | no | +0.005 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H18 | W5 L38H18 | 3 | +0.041 [+0.036, +0.048] | +7.5 | yes | +0.022 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H21 | W5 L38H21 | 5 | +0.035 [+0.029, +0.042] | +6.3 | yes | +0.022 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L38H16 | W5 L38H16 (negative) | 1535 | -0.067 [-0.074, -0.060] | -12.0 | yes | -0.048 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42H30 | W5 L42H30 | 7 | +0.021 [+0.017, +0.024] | +3.7 | yes | +0.010 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42H26 | W5 L42H26 (negative) | 1533 | -0.033 [-0.038, -0.027] | -5.9 | yes | -0.016 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L39H5 | W5 L39H5 | 9 | +0.017 [+0.014, +0.022] | +3.2 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H9 | W5 L25H9 | 1 | +0.073 [+0.066, +0.079] | +15.7 | yes | +0.085 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H13 | W5 L19H13 | 3 | +0.047 [+0.042, +0.053] | +10.1 | yes | +0.001 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H18 | W5 L13H18 | 5 | +0.026 [+0.021, +0.030] | +5.4 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H11 | W5 L13H11 | 4 | +0.026 [+0.019, +0.034] | +5.5 | yes | +0.001 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19H12 | W5 L19H12 | 6 | +0.025 [+0.020, +0.030] | +5.2 | yes | +0.008 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13H4 | W5 L13H4 | 7 | +0.022 [+0.019, +0.026] | +4.6 | yes | -0.000 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25H11 | W5 L25H11 (negative) | 1023 | -0.020 [-0.022, -0.018] | -4.5 | yes | -0.023 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H11 | W5 IOI S2 reader L42H11 | 1 | +0.178 [+0.171, +0.184] | +20.0 | yes | +0.238 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H10 | W5 IOI name mover L42H10 | 4 | +0.069 [+0.064, +0.074] | +7.7 | yes | +0.214 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H24 | W5 IOI L43H24 | 2 | +0.100 [+0.095, +0.105] | +11.2 | yes | +0.090 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43H29 | W5 IOI L43H29 | 5 | +0.063 [+0.060, +0.066] | +7.0 | yes | -0.089 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42H14 | W5 IOI negative mover L42H14 | 1530 | -0.040 [-0.043, -0.037] | -4.7 | yes | -0.044 |
+
+
+**The six layers with the largest attention-output patch: sum of single heads vs the layer patch**
+
+| Run | Layer | attn_layer / drop | Σ heads / drop | r(Σ heads, attn_layer) rows | Top head | Top head / drop | Z8 + / − |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | L40 | +0.337 [+0.309, +0.367] | +0.308 | 0.72 | L40H13 | +0.192 | 5 / 2 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L43 | +0.212 [+0.190, +0.233] | +0.176 | 0.70 | L43H11 | +0.056 | 5 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L28 | +0.072 [+0.056, +0.089] | +0.056 | 0.51 | L28H13 | +0.033 | 4 / 2 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L38 | +0.017 [+0.013, +0.022] | +0.009 | 0.33 | L38H8 | +0.007 | 0 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L16 | +0.017 [+0.010, +0.024] | +0.002 | 0.25 | L16H13 | +0.009 | 0 / 0 |
+| Qwen3-30B-A3B-Base, CounterFact STR | L47 | +0.014 [+0.008, +0.020] | +0.011 | 0.46 | L47H26 | +0.024 | 1 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L24 | +0.189 [+0.166, +0.212] | +0.186 | 0.75 | L24H22 | +0.147 | 3 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L18 | +0.178 [+0.155, +0.203] | +0.183 | 0.68 | L18H4 | +0.154 | 3 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L19 | +0.160 [+0.145, +0.176] | +0.112 | 0.42 | L19H29 | +0.061 | 2 / 0 |
+| Mixtral-8x7B (BOS), CounterFact STR | L29 | +0.070 [+0.062, +0.079] | +0.073 | 0.50 | L29H2 | +0.051 | 1 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L15 | +0.061 [+0.049, +0.074] | +0.044 | 0.38 | L15H1 | +0.035 | 2 / 1 |
+| Mixtral-8x7B (BOS), CounterFact STR | L31 | +0.052 [+0.044, +0.062] | +0.053 | 0.54 | L31H25 | +0.031 | 1 / 1 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L42 | +0.029 [+0.022, +0.036] | +0.016 | 0.37 | L42H30 | +0.021 | 2 / 1 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L43 | +0.023 [+0.019, +0.027] | +0.009 | 0.16 | L43H28 | +0.011 | 0 / 0 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L40 | +0.023 [+0.015, +0.031] | +0.019 | 0.38 | L40H2 | +0.010 | 0 / 0 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L41 | +0.021 [+0.013, +0.030] | +0.021 | 0.30 | L41H27 | +0.065 | 2 / 3 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L39 | +0.016 [+0.008, +0.024] | +0.015 | 0.34 | L39H5 | +0.017 | 2 / 2 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | L26 | +0.015 [+0.002, +0.028] | +0.046 | 0.40 | L26H18 | +0.008 | 0 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L13 | +0.140 [+0.126, +0.155] | +0.102 | 0.34 | L13H11 | +0.026 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L19 | +0.113 [+0.103, +0.123] | +0.100 | 0.35 | L19H13 | +0.047 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L25 | +0.075 [+0.068, +0.082] | +0.087 | 0.44 | L25H9 | +0.073 | 2 / 1 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L15 | +0.072 [+0.063, +0.082] | +0.070 | 0.26 | L15H7 | +0.022 | 3 / 0 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L31 | +0.043 [+0.040, +0.047] | +0.058 | 0.46 | L31H22 | +0.021 | 2 / 1 |
+| Mixtral-8x7B (BOS), WinoGrande STR | L16 | +0.036 [+0.029, +0.044] | +0.042 | 0.35 | L16H10 | +0.017 | 2 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L45 | +0.330 [+0.319, +0.340] | +0.337 | 0.52 | L45H9 | +0.040 | 7 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L42 | +0.264 [+0.253, +0.276] | +0.245 | 0.40 | L42H11 | +0.178 | 3 / 1 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L43 | +0.214 [+0.204, +0.224] | +0.219 | 0.38 | L43H24 | +0.100 | 5 / 3 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L39 | +0.149 [+0.140, +0.157] | +0.114 | 0.21 | L39H28 | +0.039 | 2 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L41 | +0.081 [+0.076, +0.085] | +0.090 | 0.30 | L41H20 | +0.035 | 3 / 0 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | L46 | +0.045 [+0.036, +0.054] | +0.051 | 0.49 | L46H14 | +0.031 | 2 / 2 |
+
+
+**Additive top-k sums of single components per row (median, fraction of the drop; NOT joint patches)**
+
+| Run | k | heads ∪ experts | heads only | experts only |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | 1 | 0.27 | 0.19 | 0.19 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 5 | 0.73 | 0.52 | 0.49 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 10 | 1.04 | 0.73 | 0.68 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 20 | 1.45 | 0.96 | 0.97 |
+| Qwen3-30B-A3B-Base, CounterFact STR | 32 | 1.77 | 1.15 | 1.22 |
+| Mixtral-8x7B (BOS), CounterFact STR | 1 | 0.23 | 0.21 | 0.12 |
+| Mixtral-8x7B (BOS), CounterFact STR | 5 | 0.72 | 0.60 | 0.41 |
+| Mixtral-8x7B (BOS), CounterFact STR | 10 | 1.05 | 0.79 | 0.61 |
+| Mixtral-8x7B (BOS), CounterFact STR | 20 | 1.44 | 1.00 | 0.81 |
+| Mixtral-8x7B (BOS), CounterFact STR | 32 | 1.73 | 1.17 | 0.89 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 1 | 0.22 | 0.15 | 0.20 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 5 | 0.74 | 0.45 | 0.66 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 10 | 1.16 | 0.69 | 0.98 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 20 | 1.77 | 1.07 | 1.50 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 32 | 2.33 | 1.47 | 1.98 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 1 | 0.20 | 0.11 | 0.19 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 5 | 0.74 | 0.36 | 0.70 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 10 | 1.16 | 0.52 | 1.05 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 20 | 1.65 | 0.72 | 1.38 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 32 | 1.96 | 0.90 | 1.52 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 1 | 0.18 | 0.18 | 0.01 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 5 | 0.59 | 0.59 | 0.04 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 10 | 0.89 | 0.88 | 0.06 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 20 | 1.27 | 1.26 | 0.08 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 32 | 1.54 | 1.53 | 0.10 |
+
+
+![Single-head rescue, layer x head](figures/ext10_heads_heatmap.png)
+
+![Head DLA vs single-head patch; layer curves](figures/ext10_heads_dla_layers.png)
+
+### Step 2. Joint add-back over heads + experts
+
+Every curve point is ONE exact joint patch (`multi` spawn, one step per layer carrying that layer's heads and experts: heads patched before the MoE, the row's own MoE recomputed on the head-patched input, the listed experts' contributions set to the clean run's), so later layers see earlier patches. Mixed greedy: pool = the row's top-32 heads by single-head rescue ∪ ext8's expert pool (Qwen3: the row's top-32 experts, Mixtral: all 64), 20 steps; head-only greedy: pool = the 32 heads; static orderings over ALL heads ∪ all clean-active experts by the row's single-patch rescue (oracle) or by DLA, and the same over heads only, on k = 1..10, 12, 16, 24, 32, 48, 64, 96, 128. ext8's expert-only greedy (15 steps, same rows) and its static expert curves are the comparison. r(k) = rescue / drop, ceiling 1 (all heads = all attention outputs = the clean final residual); the all-MoE ceiling is drawn for reference.
+
+**Sanity checks (inside the passes)**
+
+| Run | rows / cases | all heads (= 1) | all attention | all MoE | all heads: max |Δ − Δ_clean| | layer heads vs attn_layer: median / max |ΔΔ|, r | prefill SD across passes (median clean / corrupt) |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | 432 / 108 | 0.999 | 1.000 | 0.530 [0.488, 0.571] | 1.875 | 0.062 / 0.625, 0.9994 | 0.094 / 0.096 |
+| Mixtral-8x7B (BOS), CounterFact STR | 436 / 106 | 1.000 | 1.000 | 0.409 [0.366, 0.451] | 0.688 | 0.000 / 0.688, 0.9997 | 0.058 / 0.062 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | 256 / 256 | 1.006 | 1.005 | 0.856 [0.837, 0.875] | 2.625 | 0.125 / 2.000, 0.9964 | 0.183 / 0.183 |
+| Mixtral-8x7B (BOS), WinoGrande STR | 256 / 256 | 1.001 | 1.001 | 0.788 [0.765, 0.810] | 0.250 | 0.000 / 0.375, 0.9992 | 0.062 / 0.062 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | 256 / 256 | 0.998 | 0.999 | -0.269 [-0.293, -0.244] | 0.500 | 0.125 / 0.500, 0.9978 | 0.155 / 0.151 |
+
+
+**Curves (population r(k), validation; k50/80/90 = smallest k with r ≥ q of the drop; AUC over log k on the same k range for every curve; static curves interpolated in log k)**
+
+| Run | Curve | r(1) | r(5) | r(10) | r(20) [95% CI] | r(128) | max r (k) | k50/80/90 of drop | AUC log k (1..15) | AUC log k (1..20) | all-MoE ceiling |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | greedy_mix | 0.265 | 0.685 | 0.875 | 0.974 [0.953, 0.996] |  | 0.974 (20) | 3/8/12 | 0.611 | 0.644 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | greedy_head | 0.210 | 0.639 | 0.797 | 0.855 [0.825, 0.884] |  | 0.855 (20) | 4/11/never | 0.551 | 0.580 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | greedy_expert_ext8 | 0.200 | 0.443 | 0.523 | 0.548 (k=15) |  | 0.548 (15) | 8/never/never | 0.395 |  | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_mix_oracle | 0.263 | 0.604 | 0.754 |  | 0.953 | 0.953 (128) | 4/16/48 | 0.543 | 0.571 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_mix_dla | 0.220 | 0.595 | 0.788 |  | 1.106 | 1.106 (128) | 4/12/24 | 0.535 | 0.571 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_head_oracle | 0.210 | 0.579 | 0.727 |  | 0.881 | 0.881 (128) | 4/24/never | 0.509 | 0.536 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_head_dla | 0.191 | 0.579 | 0.777 |  | 1.076 | 1.076 (128) | 4/12/24 | 0.509 | 0.545 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_expert_oracle_ext8 | 0.201 | 0.407 | 0.466 |  | 0.589 | 0.607 (320) | 24/never/never | 0.367 | 0.380 | 0.530 |
+| Qwen3-30B-A3B-Base, CounterFact STR | static_expert_dla_ext8 | 0.185 | 0.407 | 0.491 |  | 0.648 | 0.649 (192) | 12/never/never | 0.369 | 0.386 | 0.530 |
+| Mixtral-8x7B (BOS), CounterFact STR | greedy_mix | 0.232 | 0.635 | 0.840 | 1.004 [0.983, 1.027] |  | 1.004 (20) | 4/9/13 | 0.573 | 0.612 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | greedy_head | 0.215 | 0.593 | 0.783 | 0.867 [0.838, 0.896] |  | 0.867 (20) | 4/11/never | 0.530 | 0.562 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | greedy_expert_ext8 | 0.132 | 0.393 | 0.509 | 0.561 (k=15) |  | 0.561 (15) | 10/never/never | 0.346 |  | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_mix_oracle | 0.233 | 0.559 | 0.701 |  | 0.963 | 0.963 (128) | 4/24/48 | 0.507 | 0.535 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_mix_dla | 0.178 | 0.536 | 0.724 |  | 1.089 | 1.089 (128) | 5/16/24 | 0.484 | 0.520 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_head_oracle | 0.216 | 0.540 | 0.694 |  | 0.910 | 0.910 (128) | 5/24/128 | 0.487 | 0.515 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_head_dla | 0.167 | 0.505 | 0.710 |  | 1.089 | 1.089 (128) | 5/16/24 | 0.461 | 0.499 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_expert_oracle_ext8 | 0.132 | 0.348 | 0.431 |  |  | 0.517 (48) | 32/never/never | 0.307 | 0.324 | 0.409 |
+| Mixtral-8x7B (BOS), CounterFact STR | static_expert_dla_ext8 | 0.103 | 0.326 | 0.440 |  |  | 0.533 (48) | 24/never/never | 0.289 | 0.310 | 0.409 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | greedy_mix | 0.223 | 0.622 | 0.800 | 0.931 [0.905, 0.960] |  | 0.931 (20) | 4/10/17 | 0.554 | 0.588 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | greedy_head | 0.145 | 0.413 | 0.518 | 0.580 [0.553, 0.606] |  | 0.580 (20) | 9/never/never | 0.362 | 0.382 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | greedy_expert_ext8 | 0.213 | 0.551 | 0.677 | 0.721 (k=15) |  | 0.721 (15) | 5/never/never | 0.486 |  | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_mix_oracle | 0.226 | 0.533 | 0.647 |  | 0.898 | 0.898 (128) | 5/48/never | 0.476 | 0.499 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_mix_dla | 0.185 | 0.520 | 0.682 |  | 1.099 | 1.099 (128) | 5/24/32 | 0.465 | 0.498 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_head_oracle | 0.146 | 0.331 | 0.404 |  | 0.645 | 0.645 (128) | 32/never/never | 0.299 | 0.315 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_head_dla | 0.120 | 0.284 | 0.365 |  | 0.771 | 0.771 (128) | 32/never/never | 0.259 | 0.277 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_expert_oracle_ext8 | 0.214 | 0.469 | 0.553 |  | 0.781 | 0.846 (320) | 7/192/never | 0.422 | 0.439 | 0.856 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | static_expert_dla_ext8 | 0.174 | 0.464 | 0.606 |  | 0.884 | 0.888 (256) | 6/48/never | 0.420 | 0.447 | 0.856 |
+| Mixtral-8x7B (BOS), WinoGrande STR | greedy_mix | 0.204 | 0.608 | 0.801 | 0.939 [0.926, 0.954] |  | 0.939 (20) | 4/10/16 | 0.541 | 0.577 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | greedy_head | 0.120 | 0.420 | 0.591 | 0.652 [0.630, 0.674] |  | 0.652 (20) | 7/never/never | 0.369 | 0.395 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | greedy_expert_ext8 | 0.192 | 0.557 | 0.718 | 0.791 (k=15) |  | 0.791 (15) | 4/never/never | 0.493 |  | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_mix_oracle | 0.205 | 0.571 | 0.730 |  | 0.955 | 0.955 (128) | 4/16/32 | 0.506 | 0.538 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_mix_dla | 0.152 | 0.502 | 0.695 |  | 1.052 | 1.052 (128) | 5/16/32 | 0.449 | 0.485 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_head_oracle | 0.121 | 0.374 | 0.519 |  | 0.750 | 0.750 (128) | 10/never/never | 0.334 | 0.358 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_head_dla | 0.100 | 0.228 | 0.308 |  | 0.774 | 0.774 (128) | 32/never/never | 0.216 | 0.233 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_expert_oracle_ext8 | 0.192 | 0.534 | 0.674 |  |  | 0.813 (48) | 5/48/never | 0.471 | 0.497 | 0.788 |
+| Mixtral-8x7B (BOS), WinoGrande STR | static_expert_dla_ext8 | 0.147 | 0.472 | 0.647 |  |  | 0.821 (48) | 6/32/never | 0.422 | 0.454 | 0.788 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | greedy_mix | 0.184 | 0.561 | 0.784 | 0.943 [0.929, 0.957] |  | 0.943 (20) | 5/11/16 | 0.507 | 0.547 | -0.269 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | greedy_head | 0.184 | 0.560 | 0.784 | 0.935 [0.921, 0.950] |  | 0.935 (20) | 5/11/16 | 0.507 | 0.546 | -0.269 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | static_mix_oracle | 0.184 | 0.482 | 0.659 |  | 0.993 | 0.993 (128) | 6/16/32 | 0.445 | 0.481 | -0.269 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | static_mix_dla | 0.154 | 0.453 | 0.667 |  | 1.059 | 1.059 (128) | 6/16/24 | 0.425 | 0.465 | -0.269 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | static_head_oracle | 0.184 | 0.483 | 0.661 |  | 0.986 | 0.986 (128) | 6/16/32 | 0.446 | 0.482 | -0.269 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | static_head_dla | 0.154 | 0.453 | 0.669 |  | 1.049 | 1.049 (128) | 6/16/24 | 0.426 | 0.465 | -0.269 |
+
+
+**Adaptive greedy: per-case thresholds, answer restored, composition, recurring components**
+
+| Run | Greedy | case k50/80/90 (median; reached) | case k answer restored (median; reached) | cases restored k=1/5/10/20 | rows r ≥ 0.9 k=5/10/20 | rows top-1 at k=20 | heads among first 1/5/10/20 | most frequent in first 5 (share of rows) |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, CounterFact STR | mix | 3/8/12; 1.00/0.93/0.78 | 3; 0.94 | 0.09/0.73/0.92/0.94 | 0.10/0.42/0.72 | 0.29 | 0.5/3.3/6.2/10.4 | L40H13 0.77, L40H15 0.74, L40H14 0.60, L43H11 0.32, L44E069 0.22 |
+| Qwen3-30B-A3B-Base, CounterFact STR | head | 4/11/never; 0.96/0.67/0.44 | 4; 0.88 | 0.05/0.69/0.81/0.87 | 0.08/0.30/0.42 | 0.23 | 1.0/5.0/10.0/20.0 | L40H15 0.90, L40H13 0.88, L40H14 0.83, L43H11 0.43, L43H15 0.33 |
+| Mixtral-8x7B (BOS), CounterFact STR | mix | 3/8/13; 1.00/0.98/0.83 | 3; 0.99 | 0.06/0.83/0.96/0.99 | 0.09/0.40/0.81 | 0.43 | 0.7/3.4/6.4/11.1 | L24H22 0.67, L18H4 0.65, L19H29 0.47, L24H21 0.38, L21E001 0.19 |
+| Mixtral-8x7B (BOS), CounterFact STR | head | 4/10/never; 0.99/0.74/0.45 | 4; 0.95 | 0.05/0.76/0.94/0.95 | 0.06/0.30/0.47 | 0.35 | 1.0/5.0/10.0/20.0 | L24H22 0.72, L18H4 0.67, L19H29 0.62, L24H21 0.44, L15H1 0.35 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | mix | 4/10/16; 1.00/0.82/0.58 | 4; 0.97 | 0.05/0.69/0.91/0.96 | 0.07/0.25/0.53 | 0.44 | 0.2/1.6/3.6/7.7 | L41E117 0.51, L46H24 0.40, L43E081 0.34, L41H27 0.29, L39E071 0.26 |
+| Qwen3-30B-A3B-Base, WinoGrande STR | head | 8/never/never; 0.70/0.22/0.12 | 10; 0.66 | 0.02/0.29/0.50/0.61 | 0.01/0.04/0.09 | 0.19 | 1.0/5.0/10.0/20.0 | L46H24 0.61, L41H27 0.46, L38H18 0.32, L29H0 0.26, L38H21 0.22 |
+| Mixtral-8x7B (BOS), WinoGrande STR | mix | 4/10/16; 1.00/0.96/0.75 | 4; 1.00 | 0.04/0.70/0.96/1.00 | 0.02/0.14/0.73 | 0.54 | 0.2/1.2/2.8/5.9 | L20E000 0.72, L19E006 0.71, L25H9 0.37, L21E006 0.30, L22H20 0.29 |
+| Mixtral-8x7B (BOS), WinoGrande STR | head | 7/never/never; 0.80/0.31/0.12 | 7; 0.71 | 0.02/0.36/0.63/0.70 | 0.02/0.05/0.11 | 0.38 | 1.0/5.0/10.0/20.0 | L25H9 0.65, L22H20 0.62, L19H13 0.57, L13H18 0.36, L13H4 0.33 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | mix | 5/11/16; 1.00/0.97/0.74 | 5; 1.00 | 0.00/0.71/1.00/1.00 | 0.00/0.08/0.70 | 0.71 | 1.0/5.0/9.9/19.0 | L42H11 1.00, L43H24 0.71, L42H10 0.57, L40H2 0.50, L46H14 0.25 |
+| Qwen3-30B-A3B-Base, IOI STR (S2 -> IO) | head | 5/11/16; 1.00/0.97/0.73 | 5; 1.00 | 0.00/0.71/1.00/1.00 | 0.00/0.08/0.68 | 0.71 | 1.0/5.0/10.0/20.0 | L42H11 1.00, L43H24 0.71, L42H10 0.58, L40H2 0.49, L46H14 0.25 |
+
+
+![Joint add-back curves over heads + experts](figures/ext10_circuit_curves.png)
+
+![Composition of the mixed greedy picks](figures/ext10_circuit_composition.png)
+
+### Reading
+
+**1. Full repair is reachable with few components.** Experts alone cannot exceed the all-MoE ceiling (Qwen3 CounterFact 0.53, Mixtral CounterFact 0.41, Qwen3 WinoGrande 0.86, Mixtral WinoGrande 0.79; ext8 greedy at k = 15: Qwen3 CounterFact 0.55, Mixtral CounterFact 0.56, Qwen3 WinoGrande 0.72, Mixtral WinoGrande 0.79). Admitting heads, adaptive greedy reaches Qwen3 CounterFact 0.88 / 0.97, Mixtral CounterFact 0.84 / 1.00, Qwen3 WinoGrande 0.80 / 0.93, Mixtral WinoGrande 0.80 / 0.94 of the drop at k = 10 / 20, i.e. 50 / 80 / 90 % of the drop with k = Qwen3 CounterFact 3/8/12, Mixtral CounterFact 4/9/13, Qwen3 WinoGrande 4/10/17, Mixtral WinoGrande 4/10/16 components (population curve; per case, median k for 80 %: Qwen3 CounterFact 8 (reached in 0.93), Mixtral CounterFact 8 (reached in 0.98), Qwen3 WinoGrande 10 (reached in 0.82), Mixtral WinoGrande 10 (reached in 0.96)). The answer itself (Δ > 0, donor mean) is restored at k = 20 in Qwen3 CounterFact 0.94, Mixtral CounterFact 0.99, Qwen3 WinoGrande 0.96, Mixtral WinoGrande 1.00 of cases (median k Qwen3 CounterFact 3, Mixtral CounterFact 3, Qwen3 WinoGrande 4, Mixtral WinoGrande 4), and r ≥ 0.9 at k = 20 holds for Qwen3 CounterFact 0.72, Mixtral CounterFact 0.81, Qwen3 WinoGrande 0.53, Mixtral WinoGrande 0.73 of rows; the true object is top-1 in Qwen3 CounterFact 0.29, Mixtral CounterFact 0.43, Qwen3 WinoGrande 0.44, Mixtral WinoGrande 0.54 of rows at k = 20 (clean top-1 rate Qwen3 CounterFact 0.28, Mixtral CounterFact 0.33, Qwen3 WinoGrande 0.39, Mixtral WinoGrande 0.50).
+
+**2. Heads and experts are complements, not substitutes.** Head-only greedy (pool 32) reaches Qwen3 CounterFact 0.85, Mixtral CounterFact 0.87, Qwen3 WinoGrande 0.58, Mixtral WinoGrande 0.65 at k = 20, the mixed greedy Qwen3 CounterFact 0.97, Mixtral CounterFact 1.00, Qwen3 WinoGrande 0.93, Mixtral WinoGrande 0.94, experts alone (ext8, k = 15) Qwen3 CounterFact 0.55, Mixtral CounterFact 0.56, Qwen3 WinoGrande 0.72, Mixtral WinoGrande 0.79 (mixed at k = 15: Qwen3 CounterFact 0.94, Mixtral CounterFact 0.95, Qwen3 WinoGrande 0.89, Mixtral WinoGrande 0.89). Among the first 5 / 10 / 20 mixed picks the mean number of heads is Qwen3 CounterFact 3.3/6.2/10.4, Mixtral CounterFact 3.4/6.4/11.1, Qwen3 WinoGrande 1.6/3.6/7.7, Mixtral WinoGrande 1.2/2.8/5.9; the first pick is a head in Qwen3 CounterFact 0.53, Mixtral CounterFact 0.75, Qwen3 WinoGrande 0.22, Mixtral WinoGrande 0.16 of rows. Median layer of the heads / experts among the first 10 picks: Qwen3 CounterFact L40 / L42, Mixtral CounterFact L19 / L21, Qwen3 WinoGrande L38 / L39, Mixtral WinoGrande L22 / L20. The order differs by task: on CounterFact the greedy mostly starts with the mover heads and adds experts later (heads are about half of the first 10-20 picks), on WinoGrande it starts with the W6 experts and adds a few late heads (roughly a third of the picks); the median marginal gain of a head / expert step (mixed greedy, steps 2-20, fraction of the drop) is Qwen3 CounterFact 0.036 / 0.017, Mixtral CounterFact 0.034 / 0.026, Qwen3 WinoGrande 0.033 / 0.032, Mixtral WinoGrande 0.026 / 0.026. Neither component class alone gets there: the head-only curve flattens below the drop (most clearly on WinoGrande, where the final-position attention writes only ~5-30 % of the logit difference directly), the expert-only curve below the all-MoE ceiling.
+
+**3. Which components recur.** Most frequent in the first five mixed-greedy picks (share of rows): Qwen3 CounterFact: L40H13 0.77, L40H15 0.74, L40H14 0.60, L43H11 0.32, L44E069 0.22, L43H15 0.22; Mixtral CounterFact: L24H22 0.67, L18H4 0.65, L19H29 0.47, L24H21 0.38, L21E001 0.19, L15H1 0.18; Qwen3 WinoGrande: L41E117 0.51, L46H24 0.40, L43E081 0.34, L41H27 0.29, L39E071 0.26, L34E119 0.14; Mixtral WinoGrande: L20E000 0.72, L19E006 0.71, L25H9 0.37, L21E006 0.30, L22H20 0.29, L16E007 0.29. The recurring components are the loci of earlier directions: the CounterFact mover heads of F2 (Qwen3 L40H13 / H14 / H15, L43H11; Mixtral L18H4, L24H22, L19H29) with the CounterFact experts (Qwen3 L44E069, Mixtral L21E001), and the WinoGrande experts of W6 / ext8 (Qwen3 L41E117, L43E081, L39E071; Mixtral L20E000, L19E006, L21E006) with the late WinoGrande heads found in Step 1 (Qwen3 L46H24, L41H27; Mixtral L25H9, L22H20).
+
+**4. Greedy vs static and patch-free orderings.** AUC of r(k) over log k (k = 1..20; static orderings interpolated) mixed greedy / head-only greedy / static oracle (heads ∪ experts) / static DLA (heads ∪ experts) / static head oracle / static head DLA: Qwen3 CounterFact 0.64 / 0.58 / 0.57 / 0.57 / 0.54 / 0.54; Mixtral CounterFact 0.61 / 0.56 / 0.53 / 0.52 / 0.52 / 0.50; Qwen3 WinoGrande 0.59 / 0.38 / 0.50 / 0.50 / 0.31 / 0.28; Mixtral WinoGrande 0.58 / 0.40 / 0.54 / 0.49 / 0.36 / 0.23. Over k = 1..15, against ext8's expert-only greedy / static expert oracle / static expert DLA: Qwen3 CounterFact mixed greedy 0.61 vs 0.39 / 0.37 / 0.37; Mixtral CounterFact mixed greedy 0.57 vs 0.35 / 0.31 / 0.29; Qwen3 WinoGrande mixed greedy 0.55 vs 0.49 / 0.42 / 0.42; Mixtral WinoGrande mixed greedy 0.54 vs 0.49 / 0.47 / 0.42. Largest k on the static grid: r(128) oracle / DLA Qwen3 CounterFact 0.95 / 1.11, Mixtral CounterFact 0.96 / 1.09, Qwen3 WinoGrande 0.90 / 1.10, Mixtral WinoGrande 0.96 / 1.05. Adaptivity is worth 0.04-0.09 of AUC over the best static ordering; the patch-free DLA ordering over heads ∪ experts is as good as the single-patch oracle on CounterFact and Qwen3 WinoGrande and slightly worse on Mixtral WinoGrande, and it overshoots the drop at large k (r(128) > 1: clean components that lower LD are left out), whereas the oracle saturates below 1. For heads alone the DLA is a poor guide on WinoGrande (the decisive heads act indirectly, Reading 7).
+
+**5. IOI (attention pole).** Qwen3 IOI mixed greedy r(10) / r(20) 0.78 / 0.94, head-only 0.93, heads among the first 10 picks 9.9, all-MoE -0.27; first-5 picks L42H11 1.00, L43H24 0.71, L42H10 0.57, L40H2 0.50. Expert orderings / pools on IOI use the expert DLA (no single-expert patch table exists for IOI).
+
+**6. Single heads.** The best single head per row is as strong as the best single expert on CounterFact and weaker on WinoGrande (median best head / best expert Qwen3 CounterFact 0.19 / 0.19, Mixtral CounterFact 0.21 / 0.12, Qwen3 WinoGrande 0.15 / 0.20, Mixtral WinoGrande 0.11 / 0.19); a row's 32 best single components contain Qwen3 CounterFact 14, Mixtral CounterFact 17, Qwen3 WinoGrande 12, Mixtral WinoGrande 12 heads (median). The top heads are those of earlier directions: CounterFact STR recovers the F2 GN heads (Qwen3 L40H13, L43H11; Mixtral L18H4, L24H22, L19H29, L15H1), WinoGrande recovers every W5 head (Qwen3 L38H18 / L38H21 positive, L38H16 negative; Mixtral L25H9, L19H13, L13H18 / H11 / H4) and adds heads in layers W5 did not scan (Qwen3 WinoGrande L46H24 +0.10, L41H27 +0.07, L29H0 +0.04, L41H0 +0.02, L46H25 -0.11, Mixtral WinoGrande L22H20 +0.07, L22H23 -0.03). Opposing heads of one KV group cancel inside a layer (Qwen3 WinoGrande L46H24 / L46H25), so the layer patch hides them.
+
+**7. The patch-free head DLA.** The head DLA ranks heads like the single-head patch at the population level (r over heads Qwen3 CounterFact 0.96, Mixtral CounterFact 0.92, Qwen3 WinoGrande 0.87, Mixtral WinoGrande 0.79, Qwen3 IOI 0.76; per row r Qwen3 CounterFact 0.63, Mixtral CounterFact 0.76, Qwen3 WinoGrande 0.33, Mixtral WinoGrande 0.41, Qwen3 IOI 0.62, top-1 agreement Qwen3 CounterFact 0.71, Mixtral CounterFact 0.44, Qwen3 WinoGrande 0.41, Mixtral WinoGrande 0.47, Qwen3 IOI 0.58, top-10 overlap Qwen3 CounterFact 0.65, Mixtral CounterFact 0.70, Qwen3 WinoGrande 0.28, Mixtral WinoGrande 0.39, Qwen3 IOI 0.62). The direct share of the top heads differs by task: CounterFact mover heads act partly through the downstream MoE (Qwen3 L40H13 single 0.19 vs DLA 0.12; Mixtral L18H4 0.15 vs 0.06), the WinoGrande heads of the early hand-off layers act almost entirely indirectly (Mixtral L19H13, L13 heads: DLA ≈ 0), late heads write directly (Mixtral L24H22, L25H9, Qwen3 L46H24: DLA ≈ single). Σ head DLA over all heads and layers equals ext8's linear attention DLA (ratio Qwen3 CounterFact 0.999, Mixtral CounterFact 1.000, Qwen3 WinoGrande 1.029, Mixtral WinoGrande 0.998, Qwen3 IOI 1.003).
+
+### Caveats
+
+- Final position only, denoising (sufficiency) only; components at the subject / option positions are not candidates. The ceiling 1 is reached by construction once all heads at all layers are patched (the corruption reaches the final position only through attention), so 'full repair' means: which small subset of final-position heads and experts suffices.
+- bf16: single-head rescues are quantised at the logit spacing (one step = 0.125 at |logit| 16-32); identical single-head patches in different passes differ by a median of one step (this run vs the W5 head rows of ext7: Qwen3 WinoGrande r 0.64, median |diff| 0.125, Mixtral WinoGrande r 0.65, median |diff| 0.000, Qwen3 IOI r 0.91, median |diff| 0.125). Sums over the 32 heads of a layer therefore carry ~0.5 logit of noise per row (row-level r(Σ heads, attn_layer) Qwen3 CounterFact 0.37, Mixtral CounterFact 0.45, Qwen3 WinoGrande 0.39, Mixtral WinoGrande 0.31, Qwen3 IOI 0.41), while population means agree with the layer patch.
+- All heads at all layers as one multi patch reproduce the clean Δ in the population (ratio Qwen3 CounterFact 0.999, Mixtral CounterFact 1.000, Qwen3 WinoGrande 1.006, Mixtral WinoGrande 1.001, Qwen3 IOI 0.998) and per row up to bf16 noise (median / max |Δ − Δ_clean| Qwen3 CounterFact 0.125 / 1.88, Mixtral CounterFact 0.000 / 0.69, Qwen3 WinoGrande 0.250 / 2.62, Mixtral WinoGrande 0.000 / 0.25, Qwen3 IOI 0.125 / 0.50; the same-pass all-attention patch (attn_layer steps) shows the same envelope: o_proj rounding at every layer plus batch-composition noise amplified by routing near-ties); all heads of one layer vs the attn_layer kind: max |ΔΔ| Qwen3 CounterFact 0.625, Mixtral CounterFact 0.688, Qwen3 WinoGrande 2.000, Mixtral WinoGrande 0.375, Qwen3 IOI 0.500. Prefill Δ of identical rows across passes: SD median Qwen3 CounterFact 0.09, Mixtral CounterFact 0.06, Qwen3 WinoGrande 0.18, Mixtral WinoGrande 0.06, Qwen3 IOI 0.16 logits. Greedy steps span passes (each step compares its candidates within one pass).
+- Greedy pools and the oracle ordering use the row's own single-component patches (in-sample, as ext8); the pools are truncated (32 heads; Qwen3 32 experts, Mixtral all 64), so components outside a row's top-32 single heads can enter only through the static orderings (which use all heads and all clean-active experts).
+- The ext8 comparison curves are ext8's own passes on the same rows (its drop reference); static ext8 curves come from results/tables/ext8_a1_curves.csv. Differences below ~0.02 of the drop are within bf16 pass-to-pass noise.
+- Engine: Step 1 used the attn_head kind (unchanged by ext9; regression identical); Step 2 uses the ext9 multi steps attn_head / heads_experts, verified on OLMoE against transformers hooks (results/verify_ext9_engine_olmoe.json: mixed head + expert sets effect r 0.998, max |ΔΔ| 0.375; all heads at all layers r 0.9996; one head step = attn_head kind bit for bit).
+- CounterFact rows are (case, donor) pairs (donor mean per case for population values); WinoGrande / IOI rows are directed cases with bootstrap over pairs. First-donor rows only (sensitivity), mixed greedy r(10) / r(20): Qwen3 CounterFact 0.86 / 0.96, Mixtral CounterFact 0.84 / 1.00.
+- IOI was run for Qwen3 only (its rows share the Qwen3 Step-2 passes at little extra cost); Mixtral IOI would have needed ~25 extra GPU minutes of separate passes and was left out of the budget.
+
+### Files
+
+- Code: `moetrace/ext10_circuit.py` (run configs, task loading via `moetrace.ext8_addback`, IOI loader, step-2 candidates / pools / greedy state), `scripts/ext10_heads_run.py` (Step 1 driver: single heads + head / expert DLA, resumable, raw dump and CPU post-processing fallback, OOM chunk splitting), `scripts/ext10_heads_analyze.py`, `scripts/ext10_circuit_run.py` (Step 2 driver, both tasks of a model in every pass), `scripts/ext10_circuit_analyze.py`, `scripts/ext10_circuit_text.py`, chains `scripts/ext10_chain1.sh`, `scripts/ext10_chain2.sh`.
+- Step 1 runs: `results/{qwen3_str,mixtral_bos_str,wino_qwen3_str,wino_mixtral_bos_str,ioi_qwen3_s2io}_circuit/` (`head_rows_pNN.parquet` single-head + attn_layer rows, `head_dla_pNN.parquet`, `expert_dla_pNN.parquet`, `head_prefill_pNN.parquet`, `heads_state.json`, `run_meta.json`).
+- Step 2 runs: `results/{qwen3,mixtral}_circuit/` (`circuit_rows_pNN.parquet` spawn rows with task / fam / order / k / set / Δ / metrics, `circuit_prefill_pNN.parquet`, `circuit_state.pkl` = greedy paths, `run_meta.json`); smoke `results/qwen3_circuit_smoke/`.
+- Tables `results/tables/ext10_heads_*`, `results/tables/ext10_circuit_*`; figures `results/figures/ext10_heads_*`, `results/figures/ext10_circuit_*`; numbers `results/ext10_circuit_summary.json` (keys step1, step2). GPU time of ext10 jobs ≈ 79 min.
+
+
+## Direction 11: Writer vs computer experts
+
+**Summary.** Splitting each single-expert STR patch at the final position into its direct path (the expert's write δ_e projected on W_U[r] − W_U[r′], final norm frozen, as ext8's DLA) and the rest (total − direct = everything later layers do with it) shows that the Qwen3 experts are **writers** and the Mixtral experts **partly writers** (half to most of their effect is direct). Direct share (Σ direct / Σ total over the validation cases where the expert is routed): Qwen3 WinoGrande L41E117 **1.04 [0.99, 1.10]**, CounterFact L42E115 **0.96 [0.88, 1.06]** and L44E069 **1.32 [1.20, 1.43]** (its write is larger than its net effect: later layers undo 0.39 of 1.59 logits); Mixtral WinoGrande L20E000 **0.56 [0.52, 0.62]**, CounterFact L19E002 0.71 [0.55, 0.94], L21E001 0.87 [0.75, 1.03], L18E001 0.54 [0.43, 0.69]. Over all clean-active experts the direct share grows with depth (middle band / late band: Qwen3 CounterFact 0.54 / 0.99; Qwen3 WinoGrande 0.60 / 1.09; Mixtral CounterFact 0.80 / 0.80; Mixtral WinoGrande 0.61 / 1.23); experts in the first half of the network contribute ≤ 0.03 of the drop (Mixtral WinoGrande 0.11), almost only indirectly, and above a crossover layer (Qwen3 CounterFact L42, Qwen3 WinoGrande L41, Mixtral WinoGrande L22) experts write more than their net effect, so downstream layers partly cancel late writes. The patch-free DLA ranks experts well because the largest total effects belong to writers: the top-10 experts by direct and by total effect overlap in 10/10 (Qwen3 CounterFact), 9/10 (Qwen3 WinoGrande), 10/10 (Mixtral CounterFact), 7/10 (Mixtral WinoGrande). Routing is set by the local context and the write by the full context: L41E117 is routed at the final position of 84 % of the WinoGrande prompts and of 86 % of their context-free local prompts ('The bag was too'), but its DLA there is +0.08 vs +0.54 logits; in wikitext it fires on 7 % of tokens but on 66 % of copulas and 59 % of degree adverbs (a predicate-complement slot detector), never at IOI's final token. Mixtral's L20E000 is routed at 96 % of WinoGrande final positions and 95 % of the local prompts (DLA +0.32 vs +0.06), and at 22 % of wikitext tokens. The CounterFact experts are broad: L44E069 / L42E115 are routed at 45 / 40 % of wikitext tokens, rising to 94 / 95 % before CounterFact place names, and L44E069 writes most for place relations (DLA when routed +1.08 logits vs +0.01 for occupations). In vocabulary space the writes are answer-shaped: L41E117's δ_e puts the correct trigger at median rank 98 of 151,936 tokens (top-10 in 30 % of rows) and its 50 most promoted tokens are WinoGrande trigger words 12× more often than the vocabulary base rate (antonym axes such as small / smaller / larger); L44E069's δ_e puts the true object at median rank 5758 and its clean output c_e promotes CounterFact object tokens 28× over base (place-name pieces). In Mixtral the clean outputs are even more answer-like: L20E000's c_e ranks the correct trigger at median 10 of 32,000 (top-10 in 51 % of prompts; δ_e 521), L21E001's c_e the true object at 7. For single experts the exact-norm direct effect is 0.996–0.999 times the frozen-norm DLA (mean |difference| 0.004–0.013 logits). Freezing the final norm is harmless at these scales: for the summed MoE writes the exact-norm and frozen-norm direct effects differ by ≤ 0.006 of the drop on the mean (median per-row |error| 0.006–0.018), and at the last layer, where total − direct is the norm error alone, total ≈ direct (slope 1.00, 0.99, 1.07, 1.02).
+
+### What was run
+
+**Part A (CPU, existing rows).** For every STR row of the four ext8 add-back tasks (CounterFact STR: Direction-6 cases and donors; WinoGrande STR: the 512 directed cases of the main family) and every clean-active (layer, expert) at the final position: total T = single-expert patch rescue (ext6 / ext7 `str_expert_rows`, parent = corrupted run, c_e := c_e(clean)), direct D = ext8's DLA of δ_e = c_e(clean) − c_e(corrupt), (δ_e ⊙ γ)·(W_U[r] − W_U[r′]) / rms(h_final, corrupted run) (`addback_dla.parquet`, pass 0), indirect I = T − D. I collects everything that happens after layer l at the final position (later attention reads the changed residual through the final token's own query, key and value; later routers and experts see a different input) plus the final-norm nonlinearity, which D ignores. At the last layer there is no later computation, so T − D there measures the frozen-norm error plus pass noise. CounterFact values are donor means per case, bootstrap over cases; WinoGrande directed cases, bootstrap over pairs; 2,000 resamples. Population (band, layer) values use all cases (no selection involved); expert values use validation cases (the experts and the ext8 population ranking were chosen on discovery). Share = Σ D / Σ T over the same units; slope = OLS of T on D (T carries the pass noise, D is nearly noise-free).
+
+**Part C (GPU, prefill only, existing DiagSpec).** `scripts/ext11_writer_routing.py`: prompt sets = WinoGrande main (the 512 clean prompts of the main family's directed cases), their context-free local prompts (`local_prompt()` of `scripts/ext7_wino_scan.py`, both answers; true = own trigger, foil = twin trigger), the remaining margin-pool pairs and their local prompts, CounterFact STR (Direction-6 clean prompts and donors), the 1,024 clean prompts of the base CounterFact filter scan, the 1,600 IOI clean prompts (true = IO, foil = S) and 1,100 consecutive wikitext-103 test windows of 127 tokens (Mixtral: BOS prepended). Recorded: final-position routing at every layer, the routed experts' own DLA at the final position (`contrib_dla`, c_e itself, norm frozen at the prompt's own scale) and the routing of every token at the layers of the targets and both tasks' population top-10 (`route_all_layers`). wikitext contexts use heuristic word lists (no POS tagger installed): copulas (was, is, were, be, became, seemed, ...), degree adverbs (too, very, so, quite, more, ...), determiners, prepositions; 'WinoGrande trigger vocabulary' = all sentence-final trigger words of the model's W1-W6 pairs; 'CF place name' = a target_true / target_new string of a CounterFact place relation beginning at the next word. Qwen3: 13,187 prompts / 275,016 tokens in 3 prefill passes (2.7 GPU min; wino_pool 3686, wino_pool_local 3686, ioi 1600, wiki 1100, cf_str 1067, cf_scan 1024, wino_main 512, wino_local 512); all-token routing at layers 31, 34, 39, 40, 41, 42, 43, 44; final-position routing at the WinoGrande main prompts agrees with the ext7 source run for 99.3 % of (prompt, expert) pairs; Mixtral (BOS): 9,399 prompts / 245,441 tokens in 3 prefill passes (4.8 GPU min; wino_pool 1790, wino_pool_local 1790, ioi 1600, wiki 1100, cf_str 1071, cf_scan 1024, wino_main 512, wino_local 512); all-token routing at layers 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28; final-position routing at the WinoGrande main prompts agrees with the ext7 source run for 99.7 % of (prompt, expert) pairs.
+
+**Part B (GPU, one prefill pass per model, ext9 engine E4c `DiagSpec.contrib_final_vectors`).** `scripts/ext11_writer_vocab.py`: prompts = CounterFact STR clean prompts and every selected donor, the 512 WinoGrande main prompts (the corrupted prompt of a directed case is its twin's clean prompt), their local prompts and the first 400 IOI clean prompts; experts = targets + both tasks' population top-10. Vectors at the final position: δ_e = c_e(clean) − c_e(corrupt) per STR row where e is clean-active (c_e(corrupt) = 0 if not routed), projected as ((δ_e ⊙ γ) W_U^T) / rms(h_final, corrupted run), i.e. ext8's DLA over the whole vocabulary; c_e(clean) projected at the prompt's own scale. Per vector: rank of r among all tokens (1 = most promoted) and of r′ from the bottom, top-20 promoted / suppressed tokens, class means (z = (class mean − vocabulary mean) / SD of the projection) and top-50 class shares for the WinoGrande trigger vocabulary (every trigger of the model's W1-W6 pairs), the first tokens of CounterFact objects per relation group (target_true and target_new strings) and the IOI names, rank of r within its own class; exact-norm direct effect Δ(norm(h_corrupt + δ_e)) − Δ(norm(h_corrupt)) through the real final RMSNorm (fp32, offline from `resid_final`) vs the frozen DLA. Analysis `scripts/ext11_writer_vocab_analyze.py`. Qwen3: 2,491 prompts in one prefill pass (1.0 GPU min, peak 7.1 GB), 23,709 vectors; same-pass check frozen projection vs the engine's contrib_dla max |diff| 0.0e+00 logits; Mixtral (BOS): 2,495 prompts in one prefill pass (1.7 GPU min, peak 9.2 GB), 25,366 vectors; same-pass check frozen projection vs the engine's contrib_dla max |diff| 0.0e+00 logits.
+
+### A1. Selected experts and each task's population top-10: total, direct, indirect
+
+| model | task | expert | role | active cases | total T (logits) | direct D (logits) | indirect I (logits) | T / drop | D / drop | direct share D/T | r(D, T) | slope T on D |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact | L44E069 | own target, pop #1 | 96/108 | +1.21 [+0.92, +1.54] | +1.59 [+1.18, +2.09] | -0.39 [-0.58, -0.21] | +0.101 [+0.078, +0.126] | +0.133 [+0.100, +0.171] | 1.32 [1.20, 1.43] | 0.95 [0.89, 0.98] | 0.65 [0.60, 0.75] |
+| Qwen3-30B-A3B-Base | CounterFact | L42E115 | own target, pop #2 | 102/108 | +0.89 [+0.72, +1.05] | +0.85 [+0.71, +1.00] | +0.03 [-0.05, +0.12] | +0.075 [+0.061, +0.089] | +0.072 [+0.060, +0.084] | 0.96 [0.88, 1.06] | 0.85 [0.78, 0.90] | 0.96 [0.80, 1.11] |
+| Qwen3-30B-A3B-Base | CounterFact | L41E117 | other-task target | 16/108 | +0.01 [-0.04, +0.05] | +0.00 [-0.01, +0.02] | +0.00 [-0.04, +0.04] | +0.001 [-0.004, +0.005] | +0.000 [-0.001, +0.002] | 0.68 [-4.76, 5.39] | 0.37 [-0.21, 0.68] | 1.02 [-0.50, 2.51] |
+| Qwen3-30B-A3B-Base | CounterFact | L43E046 | pop #3 | 72/108 | +0.36 [+0.18, +0.56] | +0.37 [+0.19, +0.58] | -0.01 [-0.20, +0.13] | +0.029 [+0.015, +0.044] | +0.030 [+0.016, +0.045] | 1.02 [0.67, 1.90] | 0.62 [-0.09, 0.96] | 0.62 [-0.08, 1.13] |
+| Qwen3-30B-A3B-Base | CounterFact | L43E005 | pop #4 | 69/108 | +0.40 [+0.20, +0.62] | +0.43 [+0.23, +0.67] | -0.04 [-0.10, +0.03] | +0.031 [+0.016, +0.048] | +0.034 [+0.019, +0.053] | 1.09 [0.94, 1.30] | 0.96 [0.87, 0.98] | 0.92 [0.75, 1.08] |
+| Qwen3-30B-A3B-Base | CounterFact | L40E127 | pop #5 | 78/108 | +0.30 [+0.20, +0.42] | +0.29 [+0.20, +0.40] | +0.01 [-0.04, +0.07] | +0.023 [+0.015, +0.033] | +0.022 [+0.015, +0.031] | 0.96 [0.80, 1.17] | 0.86 [0.69, 0.94] | 0.91 [0.63, 1.18] |
+| Qwen3-30B-A3B-Base | CounterFact | L44E006 | pop #6 | 63/108 | +0.48 [+0.27, +0.71] | +0.64 [+0.36, +0.99] | -0.16 [-0.30, -0.04] | +0.044 [+0.025, +0.065] | +0.058 [+0.033, +0.089] | 1.33 [1.10, 1.60] | 0.94 [0.89, 0.97] | 0.67 [0.58, 0.84] |
+| Qwen3-30B-A3B-Base | CounterFact | L41E001 | pop #7 | 90/108 | +0.24 [+0.19, +0.30] | +0.20 [+0.16, +0.24] | +0.05 [+0.01, +0.09] | +0.020 [+0.015, +0.024] | +0.016 [+0.013, +0.019] | 0.80 [0.67, 0.97] | 0.67 [0.55, 0.79] | 1.00 [0.70, 1.40] |
+| Qwen3-30B-A3B-Base | CounterFact | L44E098 | pop #8 | 7/108 | +0.64 [+0.10, +1.40] | +1.10 [+0.24, +2.15] | -0.47 [-0.93, -0.07] | +0.052 [+0.009, +0.126] | +0.090 [+0.021, +0.181] | 1.74 [1.16, 3.02] | 0.91 [0.86, 1.00] | 0.64 [0.32, 0.86] |
+| Qwen3-30B-A3B-Base | CounterFact | L43E104 | pop #9 | 77/108 | +0.26 [+0.15, +0.39] | +0.35 [+0.21, +0.51] | -0.09 [-0.18, -0.01] | +0.023 [+0.013, +0.035] | +0.031 [+0.018, +0.046] | 1.36 [1.05, 1.79] | 0.84 [0.65, 0.93] | 0.66 [0.43, 0.85] |
+| Qwen3-30B-A3B-Base | CounterFact | L40E030 | pop #10 | 72/108 | +0.36 [+0.20, +0.58] | +0.31 [+0.20, +0.46] | +0.05 [-0.02, +0.16] | +0.031 [+0.018, +0.048] | +0.026 [+0.017, +0.036] | 0.86 [0.71, 1.10] | 0.93 [0.87, 0.97] | 1.43 [0.94, 1.74] |
+| Mixtral-8x7B (BOS) | CounterFact | L19E002 | own target, pop #2 | 68/106 | +0.93 [+0.64, +1.32] | +0.66 [+0.54, +0.80] | +0.27 [+0.03, +0.58] | +0.063 [+0.044, +0.087] | +0.045 [+0.038, +0.052] | 0.71 [0.55, 0.94] | 0.62 [0.47, 0.84] | 1.54 [0.71, 2.78] |
+| Mixtral-8x7B (BOS) | CounterFact | L21E001 | own target, pop #1 | 69/106 | +0.99 [+0.78, +1.18] | +0.86 [+0.73, +0.98] | +0.13 [-0.03, +0.28] | +0.069 [+0.055, +0.083] | +0.060 [+0.050, +0.070] | 0.87 [0.75, 1.03] | 0.68 [0.52, 0.83] | 1.07 [0.80, 1.34] |
+| Mixtral-8x7B (BOS) | CounterFact | L18E001 | own target, pop #4 | 83/106 | +0.48 [+0.37, +0.59] | +0.26 [+0.21, +0.31] | +0.22 [+0.12, +0.32] | +0.034 [+0.026, +0.042] | +0.018 [+0.015, +0.021] | 0.54 [0.43, 0.69] | 0.45 [0.24, 0.64] | 1.07 [0.63, 1.49] |
+| Mixtral-8x7B (BOS) | CounterFact | L20E000 | other-task target | 27/106 | +0.35 [+0.21, +0.54] | +0.27 [+0.19, +0.37] | +0.08 [-0.02, +0.21] | +0.028 [+0.016, +0.043] | +0.021 [+0.015, +0.028] | 0.77 [0.58, 1.10] | 0.74 [0.55, 0.91] | 1.35 [0.56, 2.12] |
+| Mixtral-8x7B (BOS) | CounterFact | L20E005 | pop #3 | 58/106 | +0.58 [+0.44, +0.73] | +0.51 [+0.38, +0.66] | +0.07 [+0.01, +0.13] | +0.046 [+0.035, +0.059] | +0.040 [+0.030, +0.052] | 0.88 [0.78, 0.98] | 0.91 [0.80, 0.96] | 0.97 [0.87, 1.10] |
+| Mixtral-8x7B (BOS) | CounterFact | L22E001 | pop #5 | 77/106 | +0.55 [+0.40, +0.72] | +0.50 [+0.40, +0.61] | +0.05 [-0.05, +0.16] | +0.040 [+0.029, +0.051] | +0.037 [+0.030, +0.043] | 0.91 [0.77, 1.12] | 0.75 [0.62, 0.86] | 1.08 [0.73, 1.44] |
+| Mixtral-8x7B (BOS) | CounterFact | L22E005 | pop #6 | 65/106 | +0.41 [+0.27, +0.57] | +0.39 [+0.29, +0.50] | +0.03 [-0.05, +0.11] | +0.033 [+0.021, +0.045] | +0.031 [+0.022, +0.040] | 0.94 [0.79, 1.16] | 0.87 [0.73, 0.93] | 1.27 [0.80, 1.57] |
+| Mixtral-8x7B (BOS) | CounterFact | L20E006 | pop #7 | 25/106 | +0.79 [+0.48, +1.11] | +0.72 [+0.44, +1.00] | +0.07 [-0.10, +0.23] | +0.051 [+0.032, +0.069] | +0.046 [+0.030, +0.062] | 0.91 [0.74, 1.14] | 0.86 [0.78, 0.95] | 0.95 [0.65, 1.28] |
+| Mixtral-8x7B (BOS) | CounterFact | L28E002 | pop #8 | 62/106 | +0.36 [+0.23, +0.51] | +0.27 [+0.15, +0.41] | +0.09 [-0.00, +0.18] | +0.026 [+0.017, +0.037] | +0.020 [+0.011, +0.029] | 0.75 [0.54, 1.01] | 0.76 [0.59, 0.94] | 0.82 [0.50, 1.17] |
+| Mixtral-8x7B (BOS) | CounterFact | L23E002 | pop #9 | 58/106 | +0.38 [+0.28, +0.50] | +0.31 [+0.24, +0.39] | +0.07 [+0.00, +0.14] | +0.028 [+0.020, +0.037] | +0.023 [+0.017, +0.029] | 0.82 [0.69, 0.99] | 0.81 [0.63, 0.91] | 1.23 [0.78, 1.51] |
+| Mixtral-8x7B (BOS) | CounterFact | L19E006 | pop #10 | 59/106 | +0.29 [+0.21, +0.39] | +0.22 [+0.17, +0.27] | +0.07 [+0.02, +0.14] | +0.025 [+0.018, +0.034] | +0.019 [+0.014, +0.024] | 0.75 [0.62, 0.90] | 0.80 [0.66, 0.90] | 1.44 [1.06, 1.77] |
+| Qwen3-30B-A3B-Base | WinoGrande | L41E117 | own target, pop #1 | 223/256 | +1.15 [+0.99, +1.32] | +1.20 [+1.02, +1.37] | -0.05 [-0.11, +0.02] | +0.140 [+0.122, +0.160] | +0.146 [+0.125, +0.167] | 1.04 [0.99, 1.10] | 0.87 [0.83, 0.90] | 0.88 [0.80, 0.99] |
+| Qwen3-30B-A3B-Base | WinoGrande | L44E069 | other-task target | 7/256 | +0.34 [-0.04, +0.62] | +0.39 [+0.11, +0.62] | -0.05 [-0.22, +0.17] | +0.053 [-0.006, +0.126] | +0.061 [+0.015, +0.108] | 1.15 [-2.66, 2.52] | 0.68 [-0.76, 0.99] | 0.85 [-0.73, 2.90] |
+| Qwen3-30B-A3B-Base | WinoGrande | L42E115 | other-task target | 7/256 | +1.21 [+0.47, +1.88] | +1.40 [+0.37, +2.49] | -0.19 [-0.62, +0.15] | +0.192 [+0.089, +0.237] | +0.221 [+0.075, +0.314] | 1.15 [0.82, 1.35] | 0.64 [-0.13, 0.98] | 0.57 [-0.32, 1.10] |
+| Qwen3-30B-A3B-Base | WinoGrande | L43E081 | pop #2 | 253/256 | +0.71 [+0.60, +0.81] | +1.01 [+0.85, +1.16] | -0.30 [-0.37, -0.23] | +0.086 [+0.074, +0.099] | +0.123 [+0.104, +0.142] | 1.42 [1.33, 1.51] | 0.83 [0.75, 0.88] | 0.63 [0.57, 0.70] |
+| Qwen3-30B-A3B-Base | WinoGrande | L39E071 | pop #3 | 205/256 | +0.56 [+0.47, +0.67] | +0.41 [+0.33, +0.48] | +0.16 [+0.10, +0.21] | +0.069 [+0.058, +0.081] | +0.050 [+0.041, +0.059] | 0.72 [0.66, 0.80] | 0.72 [0.60, 0.82] | 1.12 [0.99, 1.25] |
+| Qwen3-30B-A3B-Base | WinoGrande | L44E122 | pop #4 | 223/256 | +0.34 [+0.26, +0.43] | +0.56 [+0.40, +0.73] | -0.22 [-0.32, -0.13] | +0.041 [+0.032, +0.051] | +0.067 [+0.049, +0.088] | 1.64 [1.44, 1.83] | 0.86 [0.80, 0.91] | 0.45 [0.41, 0.51] |
+| Qwen3-30B-A3B-Base | WinoGrande | L41E053 | pop #5 | 246/256 | +0.28 [+0.22, +0.33] | +0.33 [+0.24, +0.42] | -0.05 [-0.10, -0.01] | +0.034 [+0.027, +0.040] | +0.040 [+0.030, +0.051] | 1.18 [1.02, 1.35] | 0.79 [0.73, 0.84] | 0.56 [0.49, 0.67] |
+| Qwen3-30B-A3B-Base | WinoGrande | L34E119 | pop #6 | 196/256 | +0.49 [+0.36, +0.63] | +0.26 [+0.20, +0.32] | +0.24 [+0.13, +0.35] | +0.059 [+0.044, +0.075] | +0.031 [+0.025, +0.037] | 0.52 [0.43, 0.64] | 0.50 [0.40, 0.64] | 1.62 [1.24, 1.98] |
+| Qwen3-30B-A3B-Base | WinoGrande | L31E124 | pop #7 | 150/256 | +0.34 [+0.16, +0.55] | +0.18 [+0.10, +0.26] | +0.17 [+0.05, +0.31] | +0.042 [+0.021, +0.066] | +0.022 [+0.013, +0.032] | 0.51 [0.39, 0.76] | 0.67 [0.57, 0.75] | 2.03 [1.46, 2.60] |
+| Qwen3-30B-A3B-Base | WinoGrande | L43E114 | pop #8 | 208/256 | +0.31 [+0.23, +0.38] | +0.37 [+0.28, +0.47] | -0.06 [-0.11, -0.02] | +0.037 [+0.028, +0.046] | +0.045 [+0.035, +0.056] | 1.20 [1.06, 1.37] | 0.80 [0.64, 0.88] | 0.74 [0.62, 0.89] |
+| Qwen3-30B-A3B-Base | WinoGrande | L40E040 | pop #9 | 247/256 | +0.18 [+0.13, +0.25] | +0.15 [+0.10, +0.20] | +0.04 [-0.00, +0.07] | +0.023 [+0.015, +0.030] | +0.018 [+0.013, +0.024] | 0.81 [0.67, 1.00] | 0.72 [0.59, 0.81] | 1.08 [0.87, 1.29] |
+| Qwen3-30B-A3B-Base | WinoGrande | L41E062 | pop #10 | 210/256 | +0.25 [+0.19, +0.30] | +0.25 [+0.19, +0.31] | -0.00 [-0.05, +0.04] | +0.030 [+0.024, +0.037] | +0.030 [+0.024, +0.038] | 1.01 [0.84, 1.23] | 0.55 [0.36, 0.72] | 0.58 [0.32, 0.85] |
+| Mixtral-8x7B (BOS) | WinoGrande | L20E000 | own target, pop #1 | 246/256 | +1.15 [+1.06, +1.25] | +0.65 [+0.58, +0.72] | +0.50 [+0.43, +0.57] | +0.150 [+0.140, +0.160] | +0.084 [+0.077, +0.092] | 0.56 [0.52, 0.62] | 0.55 [0.45, 0.64] | 0.84 [0.67, 1.03] |
+| Mixtral-8x7B (BOS) | WinoGrande | L19E002 | other-task target | 6/256 | +0.19 [-0.10, +0.47] | +0.09 [-0.00, +0.18] | +0.10 [-0.11, +0.29] | +0.016 [-0.008, +0.043] | +0.007 [-0.000, +0.017] | 0.45 [-0.67, nan] | 0.92 [-0.76, 0.98] | 2.82 [-17.14, 3.25] |
+| Mixtral-8x7B (BOS) | WinoGrande | L21E001 | other-task target | 12/256 | +0.14 [+0.05, +0.23] | +0.11 [+0.07, +0.14] | +0.03 [-0.02, +0.11] | +0.019 [+0.008, +0.029] | +0.015 [+0.010, +0.022] | 0.79 [0.53, 1.39] | 0.55 [0.30, 0.84] | 1.81 [0.56, 3.01] |
+| Mixtral-8x7B (BOS) | WinoGrande | L18E001 | other-task target | 3/256 | +0.54 [+0.12, +0.75] | +0.15 [-0.06, +0.25] | +0.39 [+0.19, +0.50] | +0.118 [+0.039, +0.142] | +0.032 [-0.020, +0.048] | 0.27 [-0.51, 0.34] | 0.94 [-1.00, 0.94] | 1.95 [-31.70, 1.95] |
+| Mixtral-8x7B (BOS) | WinoGrande | L19E006 | pop #2 | 256/256 | +0.97 [+0.89, +1.04] | +0.42 [+0.37, +0.46] | +0.55 [+0.48, +0.61] | +0.126 [+0.117, +0.134] | +0.054 [+0.049, +0.059] | 0.43 [0.39, 0.47] | 0.43 [0.28, 0.56] | 0.83 [0.57, 1.09] |
+| Mixtral-8x7B (BOS) | WinoGrande | L21E006 | pop #3 | 231/256 | +0.70 [+0.62, +0.77] | +0.47 [+0.42, +0.53] | +0.22 [+0.18, +0.27] | +0.090 [+0.082, +0.099] | +0.061 [+0.055, +0.068] | 0.68 [0.63, 0.73] | 0.71 [0.60, 0.79] | 1.11 [0.93, 1.31] |
+| Mixtral-8x7B (BOS) | WinoGrande | L26E002 | pop #4 | 237/256 | +0.63 [+0.54, +0.73] | +0.92 [+0.77, +1.08] | -0.29 [-0.35, -0.23] | +0.082 [+0.072, +0.093] | +0.120 [+0.103, +0.138] | 1.46 [1.40, 1.53] | 0.92 [0.89, 0.94] | 0.63 [0.59, 0.66] |
+| Mixtral-8x7B (BOS) | WinoGrande | L18E005 | pop #5 | 240/256 | +0.38 [+0.30, +0.46] | +0.15 [+0.11, +0.18] | +0.23 [+0.18, +0.29] | +0.049 [+0.039, +0.059] | +0.019 [+0.015, +0.023] | 0.39 [0.35, 0.43] | 0.85 [0.79, 0.89] | 2.23 [1.97, 2.49] |
+| Mixtral-8x7B (BOS) | WinoGrande | L16E007 | pop #6 | 248/256 | +0.46 [+0.40, +0.52] | +0.09 [+0.07, +0.11] | +0.37 [+0.31, +0.42] | +0.060 [+0.051, +0.069] | +0.012 [+0.010, +0.015] | 0.20 [0.17, 0.24] | 0.45 [0.31, 0.55] | 1.67 [1.22, 2.07] |
+| Mixtral-8x7B (BOS) | WinoGrande | L24E002 | pop #7 | 220/256 | +0.64 [+0.55, +0.74] | +0.65 [+0.56, +0.74] | -0.01 [-0.05, +0.03] | +0.084 [+0.072, +0.095] | +0.086 [+0.073, +0.097] | 1.02 [0.96, 1.09] | 0.85 [0.81, 0.88] | 0.96 [0.81, 1.08] |
+| Mixtral-8x7B (BOS) | WinoGrande | L22E005 | pop #8 | 94/256 | +0.74 [+0.50, +0.97] | +1.11 [+0.71, +1.51] | -0.37 [-0.55, -0.19] | +0.083 [+0.058, +0.105] | +0.125 [+0.083, +0.163] | 1.51 [1.35, 1.63] | 0.88 [0.85, 0.90] | 0.58 [0.53, 0.64] |
+| Mixtral-8x7B (BOS) | WinoGrande | L21E004 | pop #9 | 179/256 | +0.60 [+0.50, +0.70] | +0.45 [+0.39, +0.51] | +0.15 [+0.10, +0.21] | +0.077 [+0.066, +0.088] | +0.058 [+0.050, +0.065] | 0.75 [0.70, 0.81] | 0.82 [0.76, 0.88] | 1.37 [1.19, 1.54] |
+| Mixtral-8x7B (BOS) | WinoGrande | L25E002 | pop #10 | 201/256 | +0.42 [+0.35, +0.49] | +0.55 [+0.47, +0.64] | -0.13 [-0.17, -0.09] | +0.056 [+0.047, +0.065] | +0.073 [+0.063, +0.085] | 1.32 [1.22, 1.43] | 0.78 [0.65, 0.88] | 0.73 [0.57, 0.89] |
+
+Validation cases where the expert is clean-active at the final position (CounterFact: donor mean per case; WinoGrande: directed cases, bootstrap over pairs). T = single-expert STR patch rescue (source run), D = DLA of delta_e with the final norm frozen at the corrupted run (ext8), I = T - D. Fractions = ratio of means over the active cases. pop #k = rank in the task's ext8 population ranking (discovery all-case single rescue).
+
+![Total vs direct per (case, expert)](figures/ext11_A_scatter.png)
+
+### A2. By depth
+
+| model | task | band | layers | pairs | sum T / drop | sum D / drop | sum I / drop | share D/T | r(D, T) | slope T on D | mean T - D (logits) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact | all | 0-47 | 82560 | +0.566 [+0.482, +0.656] | +0.459 [+0.434, +0.484] | +0.107 [+0.032, +0.186] | 0.81 [0.71, 0.93] | 0.81 [0.78, 0.84] | 0.80 [0.76, 0.84] | +0.003 |
+| Qwen3-30B-A3B-Base | CounterFact | early | 0-23 | 41280 | +0.023 [-0.028, +0.074] | +0.001 [-0.002, +0.004] | +0.022 [-0.029, +0.073] | 0.04 [-0.53, 0.53] | 0.10 [0.05, 0.15] | 0.62 [0.30, 1.04] | +0.001 |
+| Qwen3-30B-A3B-Base | CounterFact | middle | 24-39 | 27520 | +0.134 [+0.096, +0.173] | +0.073 [+0.066, +0.080] | +0.061 [+0.025, +0.099] | 0.54 [0.43, 0.75] | 0.40 [0.35, 0.44] | 0.99 [0.88, 1.10] | +0.006 |
+| Qwen3-30B-A3B-Base | CounterFact | late | 40-43 | 6880 | +0.294 [+0.271, +0.316] | +0.291 [+0.275, +0.308] | +0.003 [-0.015, +0.019] | 0.99 [0.94, 1.05] | 0.87 [0.82, 0.90] | 0.88 [0.81, 0.94] | +0.001 |
+| Qwen3-30B-A3B-Base | CounterFact | last4 | 44-47 | 6880 | +0.115 [+0.090, +0.140] | +0.094 [+0.074, +0.113] | +0.021 [+0.005, +0.039] | 0.82 [0.70, 0.95] | 0.94 [0.93, 0.95] | 0.76 [0.72, 0.81] | +0.008 |
+| Qwen3-30B-A3B-Base | CounterFact | last | 47-47 | 1720 | -0.011 [-0.024, +0.004] | -0.046 [-0.054, -0.037] | +0.035 [+0.025, +0.046] | 4.30 [-22.19, 37.06] | 0.89 [0.86, 0.92] | 1.00 [0.97, 1.02] | +0.053 |
+| Mixtral-8x7B (BOS) | CounterFact | all | 0-31 | 13632 | +0.478 [+0.429, +0.531] | +0.322 [+0.299, +0.345] | +0.156 [+0.111, +0.203] | 0.67 [0.61, 0.75] | 0.80 [0.78, 0.82] | 1.02 [0.97, 1.07] | +0.031 |
+| Mixtral-8x7B (BOS) | CounterFact | early | 0-15 | 6816 | +0.028 [+0.007, +0.050] | +0.009 [+0.007, +0.011] | +0.020 [-0.002, +0.041] | 0.30 [0.17, 1.08] | 0.12 [0.08, 0.16] | 0.61 [0.39, 0.82] | +0.008 |
+| Mixtral-8x7B (BOS) | CounterFact | middle | 16-23 | 3408 | +0.381 [+0.351, +0.414] | +0.307 [+0.292, +0.322] | +0.075 [+0.048, +0.101] | 0.80 [0.75, 0.86] | 0.77 [0.73, 0.80] | 1.12 [1.03, 1.23] | +0.060 |
+| Mixtral-8x7B (BOS) | CounterFact | late | 24-27 | 1704 | +0.111 [+0.093, +0.128] | +0.089 [+0.073, +0.104] | +0.022 [+0.013, +0.031] | 0.80 [0.73, 0.88] | 0.84 [0.80, 0.86] | 0.99 [0.91, 1.08] | +0.035 |
+| Mixtral-8x7B (BOS) | CounterFact | last4 | 28-31 | 1704 | -0.043 [-0.067, -0.017] | -0.082 [-0.107, -0.058] | +0.040 [+0.028, +0.052] | 1.93 [1.49, 3.66] | 0.86 [0.83, 0.89] | 0.93 [0.88, 0.98] | +0.063 |
+| Mixtral-8x7B (BOS) | CounterFact | last | 31-31 | 426 | -0.055 [-0.068, -0.041] | -0.055 [-0.066, -0.044] | +0.000 [-0.007, +0.007] | 1.01 [0.89, 1.16] | 0.82 [0.76, 0.87] | 1.07 [0.97, 1.16] | +0.002 |
+| Qwen3-30B-A3B-Base | WinoGrande | all | 0-47 | 196608 | +1.030 [+0.820, +1.228] | +0.926 [+0.903, +0.947] | +0.105 [-0.104, +0.302] | 0.90 [0.75, 1.13] | 0.46 [0.43, 0.48] | 0.78 [0.76, 0.80] | +0.002 |
+| Qwen3-30B-A3B-Base | WinoGrande | early | 0-23 | 98304 | -0.029 [-0.179, +0.119] | +0.027 [+0.022, +0.033] | -0.056 [-0.204, +0.093] | -0.95 [-4.08, 5.71] | 0.02 [0.00, 0.03] | 0.23 [0.07, 0.41] | -0.002 |
+| Qwen3-30B-A3B-Base | WinoGrande | middle | 24-39 | 65536 | +0.547 [+0.445, +0.645] | +0.330 [+0.314, +0.347] | +0.217 [+0.120, +0.313] | 0.60 [0.51, 0.73] | 0.35 [0.33, 0.38] | 1.08 [1.02, 1.13] | +0.014 |
+| Qwen3-30B-A3B-Base | WinoGrande | late | 40-43 | 16384 | +0.522 [+0.500, +0.544] | +0.568 [+0.546, +0.589] | -0.046 [-0.068, -0.022] | 1.09 [1.04, 1.13] | 0.83 [0.81, 0.84] | 0.75 [0.72, 0.78] | -0.012 |
+| Qwen3-30B-A3B-Base | WinoGrande | last4 | 44-47 | 16384 | -0.010 [-0.038, +0.018] | +0.000 [-0.024, +0.023] | -0.010 [-0.028, +0.007] | -0.05 [-8.40, 9.23] | 0.85 [0.83, 0.86] | 0.70 [0.67, 0.73] | -0.003 |
+| Qwen3-30B-A3B-Base | WinoGrande | last | 47-47 | 4096 | -0.061 [-0.078, -0.044] | -0.067 [-0.083, -0.051] | +0.006 [+0.001, +0.011] | 1.10 [1.02, 1.21] | 0.94 [0.92, 0.95] | 0.99 [0.97, 1.00] | +0.006 |
+| Mixtral-8x7B (BOS) | WinoGrande | all | 0-31 | 32768 | +1.056 [+1.012, +1.100] | +0.663 [+0.644, +0.681] | +0.393 [+0.355, +0.432] | 0.63 [0.60, 0.65] | 0.79 [0.78, 0.79] | 0.82 [0.79, 0.84] | +0.048 |
+| Mixtral-8x7B (BOS) | WinoGrande | early | 0-15 | 16384 | +0.111 [+0.086, +0.136] | +0.034 [+0.028, +0.040] | +0.077 [+0.054, +0.101] | 0.30 [0.24, 0.39] | 0.45 [0.39, 0.49] | 1.99 [1.82, 2.13] | +0.019 |
+| Mixtral-8x7B (BOS) | WinoGrande | middle | 16-23 | 8192 | +0.831 [+0.807, +0.855] | +0.507 [+0.484, +0.530] | +0.324 [+0.299, +0.348] | 0.61 [0.59, 0.64] | 0.69 [0.67, 0.71] | 0.84 [0.79, 0.91] | +0.158 |
+| Mixtral-8x7B (BOS) | WinoGrande | late | 24-27 | 4096 | +0.334 [+0.319, +0.349] | +0.412 [+0.389, +0.435] | -0.078 [-0.091, -0.064] | 1.23 [1.19, 1.27] | 0.85 [0.84, 0.86] | 0.64 [0.62, 0.67] | -0.076 |
+| Mixtral-8x7B (BOS) | WinoGrande | last4 | 28-31 | 4096 | -0.220 [-0.247, -0.190] | -0.290 [-0.326, -0.253] | +0.070 [+0.057, +0.083] | 1.32 [1.27, 1.37] | 0.91 [0.90, 0.92] | 0.77 [0.75, 0.80] | +0.068 |
+| Mixtral-8x7B (BOS) | WinoGrande | last | 31-31 | 1024 | -0.138 [-0.152, -0.124] | -0.140 [-0.154, -0.126] | +0.002 [-0.001, +0.004] | 1.01 [1.00, 1.03] | 0.95 [0.94, 0.97] | 1.02 [1.00, 1.03] | +0.006 |
+
+All cases (discovery + validation; no selection is involved). Sums over every clean-active expert of the band per case, mean over cases / mean drop. r and slope over (case, expert) pairs. 'last' = the last layer only, where T - D is the frozen-norm error plus pass noise (no downstream computation).
+
+![Per-layer sums of total and direct effects](figures/ext11_A_layers.png)
+
+![Direct share by layer](figures/ext11_A_share_by_layer.png)
+
+### A3. Sets, frozen-norm error, pass noise
+
+| model | task | own targets | own: T / drop | own: share | pop top-10: T / drop | pop top-10: D / drop | pop top-10: share | all-MoE direct exact / frozen | frozen-norm err, median |err| / drop (MoE sum) | single-patch pass noise SD (logits) | r(D, T) / r(D, mean of 2 passes) / r(T, T') |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact | L44E069, L42E115 | +0.164 [+0.137, +0.194] | 1.16 [1.08, 1.26] | +0.307 [+0.270, +0.343] | +0.345 [+0.306, +0.387] | 1.13 [1.05, 1.21] | 0.515 / 0.514 | 0.011 | 0.153 (n=1080) | 0.853 / 0.859 / 0.972 |
+| Mixtral-8x7B (BOS) | CounterFact | L19E002, L21E001, L18E001 | +0.124 [+0.101, +0.149] | 0.74 [0.64, 0.86] | +0.258 [+0.226, +0.292] | +0.207 [+0.190, +0.225] | 0.80 [0.73, 0.88] | 0.352 / 0.358 | 0.009 | 0.120 (n=1060) | 0.657 / 0.668 / 0.963 |
+| Qwen3-30B-A3B-Base | WinoGrande | L41E117 | +0.122 [+0.104, +0.142] | 1.04 [0.99, 1.10] | +0.480 [+0.433, +0.524] | +0.502 [+0.453, +0.550] | 1.05 [1.00, 1.10] | 0.946 / 0.952 | 0.018 | 0.305 (n=1280) | 0.423 / 0.507 / 0.830 |
+| Mixtral-8x7B (BOS) | WinoGrande | L20E000 | +0.144 [+0.133, +0.155] | 0.56 [0.52, 0.61] | +0.735 [+0.694, +0.776] | +0.555 [+0.517, +0.594] | 0.75 [0.72, 0.79] | 0.700 / 0.703 | 0.006 | 0.082 (n=1280) | 0.576 / 0.581 / 0.974 |
+
+Validation. Sets: per case sum over the listed experts that are clean-active. Frozen-norm error of the summed MoE writes (ext8 addback_direct: exact final RMSNorm vs frozen at the corrupted run, fp32, same path). Pass noise: ext8 in-pass singles (exact family, k = 1, top-10 of each first-donor row) vs the source run's single patches.
+
+**Population rankings by total vs by direct effect** (validation, all-case means; experts routed in ≥ 5 % of the cases)
+
+| model | task | experts | Spearman ρ | top-10 overlap | top-5 by T | top-5 by D | rank under D of the T top-3 |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | CounterFact | 1379 | 0.35 | 10/10 | L44E069, L42E115, L44E006, L43E005, L40E030 | L44E069, L42E115, L44E006, L43E005, L43E104 | L44E069 1, L42E115 2, L44E006 3 |
+| Qwen3-30B-A3B-Base | WinoGrande | 1051 | 0.39 | 9/10 | L41E117, L43E081, L39E071, L34E119, L44E122 | L41E117, L43E081, L44E122, L39E071, L41E053 | L41E117 1, L43E081 2, L39E071 4 |
+| Mixtral-8x7B (BOS) | CounterFact | 218 | 0.82 | 10/10 | L21E001, L19E002, L22E001, L18E001, L20E005 | L21E001, L19E002, L22E001, L20E005, L22E005 | L21E001 1, L19E002 2, L22E001 3 |
+| Mixtral-8x7B (BOS) | WinoGrande | 149 | 0.87 | 7/10 | L20E000, L19E006, L21E006, L26E002, L24E002 | L26E002, L20E000, L24E002, L25E002, L21E006 | L20E000 2, L19E006 6, L21E006 5 |
+
+### C1. Final-position routing and DLA of the target experts by prompt set
+
+| model | expert | set | prompts | routed at final position (%) | DLA when routed (logits, true - foil) | DLA > 0 (%) | r(DLA, Delta) when routed | mean Delta of the set |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande main (512 prompts) | 512 | 84.4 [80.3, 88.3] | +0.54 [+0.48, +0.60] | 83 | 0.43 | +4.16 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande main (512 prompts) | 512 | 2.7 [1.0, 4.9] | +0.08 [-0.01, +0.20] | 64 | 0.21 | +4.16 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande main (512 prompts) | 512 | 2.0 [0.6, 3.7] | +0.51 [+0.10, +1.04] | 70 |  | +4.16 |
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande local prompts (main pairs) | 512 | 86.3 [82.2, 90.0] | +0.08 [+0.05, +0.11] | 56 | 0.52 | +0.55 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande local prompts (main pairs) | 512 | 3.1 [1.4, 5.5] | +0.01 [-0.00, +0.02] | 56 | 0.44 | +0.55 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande local prompts (main pairs) | 512 | 2.3 [0.8, 4.1] | -0.04 [-0.11, +0.01] | 42 | -0.23 | +0.55 |
+| Qwen3-30B-A3B-Base | L41E117 | WinoGrande margin pool (other pairs) | 3686 | 83.6 [81.8, 85.1] | +0.31 [+0.30, +0.33] | 75 | 0.33 | +3.78 |
+| Qwen3-30B-A3B-Base | L44E069 | WinoGrande margin pool (other pairs) | 3686 | 3.4 [2.6, 4.2] | +0.15 [+0.04, +0.29] | 58 | 0.14 | +3.78 |
+| Qwen3-30B-A3B-Base | L42E115 | WinoGrande margin pool (other pairs) | 3686 | 2.9 [2.3, 3.7] | +0.08 [+0.02, +0.14] | 66 | 0.17 | +3.78 |
+| Qwen3-30B-A3B-Base | L41E117 | local prompts (pool pairs) | 3686 | 73.0 [71.0, 74.9] | +0.05 [+0.04, +0.06] | 54 | 0.43 | +0.43 |
+| Qwen3-30B-A3B-Base | L44E069 | local prompts (pool pairs) | 3686 | 5.6 [4.7, 6.7] | -0.00 [-0.01, +0.01] | 46 | -0.02 | +0.43 |
+| Qwen3-30B-A3B-Base | L42E115 | local prompts (pool pairs) | 3686 | 4.0 [3.2, 4.9] | -0.00 [-0.01, +0.01] | 48 | 0.11 | +0.43 |
+| Qwen3-30B-A3B-Base | L41E117 | CounterFact STR (clean + donors), clean only | 215 | 10.7 [6.5, 14.9] | -0.00 [-0.02, +0.02] | 48 | -0.28 | +5.81 |
+| Qwen3-30B-A3B-Base | L44E069 | CounterFact STR (clean + donors), clean only | 215 | 87.9 [83.3, 92.1] | +0.81 [+0.61, +1.00] | 80 | 0.25 | +5.81 |
+| Qwen3-30B-A3B-Base | L42E115 | CounterFact STR (clean + donors), clean only | 215 | 95.3 [92.6, 98.1] | +0.44 [+0.38, +0.50] | 87 | 0.36 | +5.81 |
+| Qwen3-30B-A3B-Base | L41E117 | CounterFact scan (1,024 clean) | 1024 | 11.0 [9.1, 12.9] | -0.00 [-0.01, +0.01] | 45 | -0.08 | +5.19 |
+| Qwen3-30B-A3B-Base | L44E069 | CounterFact scan (1,024 clean) | 1024 | 89.6 [87.7, 91.4] | +0.63 [+0.56, +0.70] | 75 | 0.38 | +5.19 |
+| Qwen3-30B-A3B-Base | L42E115 | CounterFact scan (1,024 clean) | 1024 | 96.4 [95.2, 97.5] | +0.35 [+0.32, +0.38] | 81 | 0.47 | +5.19 |
+| Qwen3-30B-A3B-Base | L41E117 | IOI clean | 1600 | 0.0 [0.0, 0.0] | n/a |  |  | +6.27 |
+| Qwen3-30B-A3B-Base | L44E069 | IOI clean | 1600 | 10.9 [9.5, 12.6] | +0.00 [-0.00, +0.01] | 47 | 0.05 | +6.27 |
+| Qwen3-30B-A3B-Base | L42E115 | IOI clean | 1600 | 100.0 [100.0, 100.0] | -0.02 [-0.02, -0.01] | 43 | 0.05 | +6.27 |
+| Qwen3-30B-A3B-Base | L41E117 | wikitext-103 (final token of windows) | 1100 | 6.3 [4.9, 7.7] |  |  |  |  |
+| Qwen3-30B-A3B-Base | L44E069 | wikitext-103 (final token of windows) | 1100 | 46.5 [43.6, 49.5] |  |  |  |  |
+| Qwen3-30B-A3B-Base | L42E115 | wikitext-103 (final token of windows) | 1100 | 41.5 [38.5, 44.5] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande main (512 prompts) | 512 | 96.1 [93.8, 98.2] | +0.32 [+0.30, +0.35] | 86 | 0.32 | +3.89 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande main (512 prompts) | 512 | 2.9 [1.4, 4.7] | +0.04 [+0.01, +0.06] | 67 | 0.07 | +3.89 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande main (512 prompts) | 512 | 3.7 [1.8, 6.1] | +0.06 [+0.04, +0.09] | 63 | 0.68 | +3.89 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande main (512 prompts) | 512 | 1.2 [0.2, 2.5] | +0.04 [-0.03, +0.10] | 67 |  | +3.89 |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande local prompts (main pairs) | 512 | 95.1 [92.4, 97.5] | +0.06 [+0.03, +0.07] | 56 | 0.46 | +0.55 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande local prompts (main pairs) | 512 | 6.2 [3.7, 9.2] | +0.00 [-0.01, +0.02] | 47 | 0.69 | +0.55 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande local prompts (main pairs) | 512 | 2.1 [0.8, 3.7] | +0.00 [-0.02, +0.03] | 36 | 0.71 | +0.55 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande local prompts (main pairs) | 512 | 1.2 [0.2, 2.5] | -0.03 [-0.09, +0.00] | 33 |  | +0.55 |
+| Mixtral-8x7B (BOS) | L20E000 | WinoGrande margin pool (other pairs) | 1790 | 96.6 [95.5, 97.7] | +0.31 [+0.30, +0.33] | 86 | 0.39 | +3.66 |
+| Mixtral-8x7B (BOS) | L19E002 | WinoGrande margin pool (other pairs) | 1790 | 4.2 [3.1, 5.4] | +0.05 [+0.03, +0.07] | 67 | 0.41 | +3.66 |
+| Mixtral-8x7B (BOS) | L21E001 | WinoGrande margin pool (other pairs) | 1790 | 3.8 [2.7, 5.0] | +0.13 [+0.07, +0.19] | 71 | 0.22 | +3.66 |
+| Mixtral-8x7B (BOS) | L18E001 | WinoGrande margin pool (other pairs) | 1790 | 1.2 [0.6, 2.0] | +0.08 [-0.00, +0.18] | 64 | 0.05 | +3.66 |
+| Mixtral-8x7B (BOS) | L20E000 | local prompts (pool pairs) | 1790 | 94.2 [92.8, 95.7] | +0.05 [+0.04, +0.06] | 56 | 0.46 | +0.58 |
+| Mixtral-8x7B (BOS) | L19E002 | local prompts (pool pairs) | 1790 | 9.1 [7.5, 10.8] | +0.00 [-0.01, +0.01] | 52 | 0.27 | +0.58 |
+| Mixtral-8x7B (BOS) | L21E001 | local prompts (pool pairs) | 1790 | 3.1 [2.1, 4.1] | -0.01 [-0.03, +0.00] | 44 | 0.08 | +0.58 |
+| Mixtral-8x7B (BOS) | L18E001 | local prompts (pool pairs) | 1790 | 1.6 [0.9, 2.5] | +0.01 [-0.02, +0.04] | 48 | 0.06 | +0.58 |
+| Mixtral-8x7B (BOS) | L20E000 | CounterFact STR (clean + donors), clean only | 213 | 31.9 [25.8, 38.5] | +0.15 [+0.11, +0.20] | 81 | 0.21 | +6.56 |
+| Mixtral-8x7B (BOS) | L19E002 | CounterFact STR (clean + donors), clean only | 213 | 61.0 [54.5, 67.6] | +0.41 [+0.34, +0.49] | 86 | 0.41 | +6.56 |
+| Mixtral-8x7B (BOS) | L21E001 | CounterFact STR (clean + donors), clean only | 213 | 67.6 [61.5, 73.7] | +0.49 [+0.42, +0.56] | 90 | 0.30 | +6.56 |
+| Mixtral-8x7B (BOS) | L18E001 | CounterFact STR (clean + donors), clean only | 213 | 77.0 [71.4, 83.1] | +0.14 [+0.11, +0.16] | 77 | 0.41 | +6.56 |
+| Mixtral-8x7B (BOS) | L20E000 | CounterFact scan (1,024 clean) | 1024 | 32.7 [29.8, 35.7] | +0.14 [+0.11, +0.17] | 76 | 0.32 | +5.80 |
+| Mixtral-8x7B (BOS) | L19E002 | CounterFact scan (1,024 clean) | 1024 | 58.4 [55.3, 61.1] | +0.34 [+0.31, +0.38] | 86 | 0.40 | +5.80 |
+| Mixtral-8x7B (BOS) | L21E001 | CounterFact scan (1,024 clean) | 1024 | 67.0 [64.1, 69.9] | +0.39 [+0.36, +0.43] | 86 | 0.37 | +5.80 |
+| Mixtral-8x7B (BOS) | L18E001 | CounterFact scan (1,024 clean) | 1024 | 77.6 [75.2, 80.2] | +0.12 [+0.11, +0.14] | 72 | 0.36 | +5.80 |
+| Mixtral-8x7B (BOS) | L20E000 | IOI clean | 1600 | 0.1 [0.0, 0.3] | n/a | 50 |  | +5.55 |
+| Mixtral-8x7B (BOS) | L19E002 | IOI clean | 1600 | 0.0 [0.0, 0.0] | n/a |  |  | +5.55 |
+| Mixtral-8x7B (BOS) | L21E001 | IOI clean | 1600 | 94.4 [93.3, 95.5] | -0.02 [-0.02, -0.02] | 41 | 0.10 | +5.55 |
+| Mixtral-8x7B (BOS) | L18E001 | IOI clean | 1600 | 99.8 [99.6, 100.0] | -0.01 [-0.01, -0.00] | 46 | 0.08 | +5.55 |
+| Mixtral-8x7B (BOS) | L20E000 | wikitext-103 (final token of windows) | 1100 | 22.3 [19.9, 24.7] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L19E002 | wikitext-103 (final token of windows) | 1100 | 22.9 [20.6, 25.5] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L21E001 | wikitext-103 (final token of windows) | 1100 | 24.7 [22.2, 27.3] |  |  |  |  |
+| Mixtral-8x7B (BOS) | L18E001 | wikitext-103 (final token of windows) | 1100 | 24.5 [22.0, 27.1] |  |  |  |  |
+
+Final-position routing of the target experts in each prompt set (CounterFact STR: clean prompts) and the expert's own DLA there, (c_e . gamma) . (W_U[true] - W_U[foil]) / rms(h_final) with true / foil = own trigger / twin trigger (WinoGrande), true object / counterfactual object (CounterFact), IO / S (IOI). CIs: bootstrap over pairs (WinoGrande), cases or prompts.
+
+### C2. WinoGrande: by the word before the trigger, full vs local prompt
+
+| model | expert | final word | prompts | routed, full prompt (%) | routed, local prompt (%) |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | was | 1270 | 76.4 [73.5, 79.4] | 68.1 [64.9, 71.3] |
+| Qwen3-30B-A3B-Base | L41E117 | too | 1154 | 99.9 [99.7, 100.0] | 100.0 [100.0, 100.0] |
+| Qwen3-30B-A3B-Base | L41E117 | is | 396 | 94.9 [91.9, 97.2] | 65.2 [59.3, 70.7] |
+| Qwen3-30B-A3B-Base | L41E117 | very | 214 | 99.5 [98.6, 100.0] | 98.1 [95.3, 100.0] |
+| Qwen3-30B-A3B-Base | L41E117 | were | 160 | 97.5 [95.0, 100.0] | 85.6 [78.8, 91.9] |
+| Qwen3-30B-A3B-Base | L41E117 | a | 72 | 38.9 [26.4, 51.4] | 11.1 [2.8, 22.2] |
+| Qwen3-30B-A3B-Base | L41E117 | more | 68 | 97.1 [92.6, 100.0] | 94.1 [85.3, 100.0] |
+| Qwen3-30B-A3B-Base | L41E117 | the | 60 | 38.3 [23.3, 53.4] | 3.3 [0.0, 10.0] |
+| Qwen3-30B-A3B-Base | L41E117 | so | 58 | 100.0 [100.0, 100.0] | 100.0 [100.0, 100.0] |
+| Qwen3-30B-A3B-Base | L41E117 | are | 54 | 100.0 [100.0, 100.0] | 92.6 [83.3, 100.0] |
+| Qwen3-30B-A3B-Base | L41E117 | be | 42 | 95.2 [88.1, 100.0] | 73.8 [54.7, 92.9] |
+| Mixtral-8x7B (BOS) | L20E000 | too | 858 | 99.9 [99.7, 100.0] | 99.8 [99.4, 100.0] |
+| Mixtral-8x7B (BOS) | L20E000 | was | 678 | 100.0 [100.0, 100.0] | 99.9 [99.4, 100.0] |
+| Mixtral-8x7B (BOS) | L20E000 | is | 234 | 100.0 [100.0, 100.0] | 98.7 [97.0, 100.0] |
+| Mixtral-8x7B (BOS) | L20E000 | very | 88 | 100.0 [100.0, 100.0] | 94.3 [86.4, 100.0] |
+| Mixtral-8x7B (BOS) | L20E000 | were | 74 | 100.0 [100.0, 100.0] | 100.0 [100.0, 100.0] |
+
+WinoGrande prompts (main + margin pool) by the word before the trigger; local = the context-free prompt from the blank on.
+
+**Paired main prompts: the same directed case as a full and as a local prompt**
+
+| model | expert | routed full / local / both (%) | routed in local given routed in full (%) | DLA full / local when both (logits) | r(DLA full, DLA local) |
+|---|---|---|---|---|---|
+| Qwen3 | L41E117 | 84.4 / 86.3 / 76.6 | 90.7 | +0.58 / +0.09 | 0.50 |
+| Qwen3 | L43E081 | 98.2 / 94.1 / 93.9 | 95.6 | +0.49 / +0.07 | 0.49 |
+| Qwen3 | L39E071 | 80.5 / 37.7 / 36.7 | 45.6 | +0.25 / +0.03 | 0.23 |
+| Mixtral (BOS) | L20E000 | 96.1 / 95.1 / 94.3 | 98.2 | +0.33 / +0.06 | 0.30 |
+| Mixtral (BOS) | L19E006 | 98.2 / 97.7 / 97.7 | 99.4 | +0.22 / +0.03 | 0.43 |
+| Mixtral (BOS) | L21E006 | 89.5 / 88.1 / 86.9 | 97.2 | +0.26 / +0.04 | 0.31 |
+
+Local prompts carry little of the answer: Qwen3 mean Δ full +4.16, local +0.55 (local Δ > 0 in 53 %); Mixtral mean Δ full +3.89, local +0.55 (local Δ > 0 in 61 %).
+
+### C3. CounterFact: by relation group
+
+| model | expert | relation group | prompts | routed at final position (%) | DLA when routed (logits) |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | place | 459 | 3.9 [2.4, 5.7] | -0.00 [-0.02, +0.01] |
+| Qwen3-30B-A3B-Base | L41E117 | language | 178 | 27.0 [20.8, 33.2] | +0.00 [-0.01, +0.02] |
+| Qwen3-30B-A3B-Base | L41E117 | organisation | 152 | 0.0 [0.0, 0.0] | n/a |
+| Qwen3-30B-A3B-Base | L41E117 | occupation / field | 200 | 23.5 [17.5, 29.5] | -0.00 [-0.02, +0.01] |
+| Qwen3-30B-A3B-Base | L41E117 | other | 35 | 0.0 [0.0, 0.0] | n/a |
+| Qwen3-30B-A3B-Base | L41E117 | STR clean / donor prompts | 215 | 10.7 [6.5, 14.9] / 10.2 [6.2, 14.7] |  |
+| Qwen3-30B-A3B-Base | L44E069 | place | 459 | 99.6 [98.9, 100.0] | +1.08 [+0.96, +1.21] |
+| Qwen3-30B-A3B-Base | L44E069 | language | 178 | 77.5 [71.3, 83.1] | +0.38 [+0.27, +0.51] |
+| Qwen3-30B-A3B-Base | L44E069 | organisation | 152 | 98.0 [95.4, 100.0] | +0.12 [+0.09, +0.16] |
+| Qwen3-30B-A3B-Base | L44E069 | occupation / field | 200 | 73.5 [67.0, 79.5] | +0.01 [-0.01, +0.02] |
+| Qwen3-30B-A3B-Base | L44E069 | other | 35 | 77.1 [62.9, 88.6] | +0.57 [+0.21, +0.93] |
+| Qwen3-30B-A3B-Base | L44E069 | STR clean / donor prompts | 215 | 87.9 [83.3, 92.1] / 87.1 [83.2, 91.0] |  |
+| Qwen3-30B-A3B-Base | L42E115 | place | 459 | 99.8 [99.3, 100.0] | +0.41 [+0.37, +0.45] |
+| Qwen3-30B-A3B-Base | L42E115 | language | 178 | 92.7 [88.8, 96.1] | +0.51 [+0.42, +0.60] |
+| Qwen3-30B-A3B-Base | L42E115 | organisation | 152 | 99.3 [98.0, 100.0] | +0.33 [+0.27, +0.40] |
+| Qwen3-30B-A3B-Base | L42E115 | occupation / field | 200 | 89.0 [84.5, 93.0] | +0.07 [+0.05, +0.09] |
+| Qwen3-30B-A3B-Base | L42E115 | other | 35 | 100.0 [100.0, 100.0] | +0.33 [+0.19, +0.48] |
+| Qwen3-30B-A3B-Base | L42E115 | STR clean / donor prompts | 215 | 95.3 [92.6, 98.1] / 96.0 [94.3, 97.6] |  |
+| Mixtral-8x7B (BOS) | L20E000 | place | 497 | 33.4 [29.6, 37.6] | +0.17 [+0.14, +0.22] |
+| Mixtral-8x7B (BOS) | L20E000 | language | 225 | 48.4 [42.2, 55.1] | +0.11 [+0.07, +0.15] |
+| Mixtral-8x7B (BOS) | L20E000 | organisation | 105 | 2.9 [0.0, 5.7] | +0.03 [-0.08, +0.15] |
+| Mixtral-8x7B (BOS) | L20E000 | occupation / field | 168 | 32.1 [25.6, 39.3] | +0.11 [+0.07, +0.15] |
+| Mixtral-8x7B (BOS) | L20E000 | other | 29 | 10.3 [0.0, 20.7] | -0.12 [-0.24, +0.04] |
+| Mixtral-8x7B (BOS) | L20E000 | STR clean / donor prompts | 213 | 31.9 [25.8, 38.5] / 33.0 [27.4, 39.2] |  |
+| Mixtral-8x7B (BOS) | L19E002 | place | 497 | 82.7 [79.5, 85.9] | +0.40 [+0.36, +0.44] |
+| Mixtral-8x7B (BOS) | L19E002 | language | 225 | 11.6 [7.6, 16.0] | +0.05 [-0.01, +0.11] |
+| Mixtral-8x7B (BOS) | L19E002 | organisation | 105 | 75.2 [66.7, 82.9] | +0.28 [+0.22, +0.34] |
+| Mixtral-8x7B (BOS) | L19E002 | occupation / field | 168 | 44.6 [36.9, 52.4] | +0.24 [+0.17, +0.30] |
+| Mixtral-8x7B (BOS) | L19E002 | other | 29 | 24.1 [10.3, 38.0] | +0.10 [-0.04, +0.25] |
+| Mixtral-8x7B (BOS) | L19E002 | STR clean / donor prompts | 213 | 61.0 [54.5, 67.6] / 55.1 [49.0, 61.5] |  |
+| Mixtral-8x7B (BOS) | L21E001 | place | 497 | 80.9 [77.3, 84.3] | +0.38 [+0.33, +0.43] |
+| Mixtral-8x7B (BOS) | L21E001 | language | 225 | 16.9 [12.0, 21.3] | +0.39 [+0.31, +0.48] |
+| Mixtral-8x7B (BOS) | L21E001 | organisation | 105 | 78.1 [69.5, 84.8] | +0.50 [+0.40, +0.59] |
+| Mixtral-8x7B (BOS) | L21E001 | occupation / field | 168 | 88.7 [83.9, 92.9] | +0.41 [+0.33, +0.48] |
+| Mixtral-8x7B (BOS) | L21E001 | other | 29 | 51.7 [34.5, 69.0] | +0.14 [+0.05, +0.25] |
+| Mixtral-8x7B (BOS) | L21E001 | STR clean / donor prompts | 213 | 67.6 [61.5, 73.7] / 64.5 [58.8, 70.7] |  |
+| Mixtral-8x7B (BOS) | L18E001 | place | 497 | 98.4 [97.2, 99.4] | +0.15 [+0.13, +0.17] |
+| Mixtral-8x7B (BOS) | L18E001 | language | 225 | 51.1 [44.9, 57.3] | +0.11 [+0.08, +0.14] |
+| Mixtral-8x7B (BOS) | L18E001 | organisation | 105 | 100.0 [100.0, 100.0] | +0.08 [+0.05, +0.12] |
+| Mixtral-8x7B (BOS) | L18E001 | occupation / field | 168 | 35.1 [28.0, 42.3] | +0.02 [+0.01, +0.04] |
+| Mixtral-8x7B (BOS) | L18E001 | other | 29 | 93.1 [82.8, 100.0] | +0.05 [+0.00, +0.10] |
+| Mixtral-8x7B (BOS) | L18E001 | STR clean / donor prompts | 213 | 77.0 [71.4, 83.1] / 73.4 [67.0, 79.5] |  |
+
+CounterFact base-scan prompts by relation group (place = P17, P19, P20, P27, P30, P36, P131, P159, P190, P276, P495, P740, P937).
+
+### C4. All-token routing inside the task prompts
+
+| model | expert | WinoGrande main: final / other positions (%) | CounterFact STR: final / other positions (%) | IOI clean: final / other positions (%) | wikitext-103: final / other positions (%) | WG prompts, tokens ' was' ' too' ' is' ' very' ' were': final / earlier (%) |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | 84.4 / 6.7 | 10.3 / 2.1 | 0.0 / 0.0 | 6.3 / 7.0 | 86.3 / 80.3 (n=396) |
+| Qwen3-30B-A3B-Base | L44E069 | 2.7 / 12.1 | 87.3 / 39.8 | 10.9 / 14.2 | 46.5 / 45.4 | 0.7 / 2.0 (n=396) |
+| Qwen3-30B-A3B-Base | L42E115 | 2.0 / 22.1 | 95.9 / 29.7 | 100.0 / 34.9 | 41.5 / 40.2 | 0.9 / 1.3 (n=396) |
+| Mixtral-8x7B (BOS) | L20E000 | 96.1 / 16.7 | 32.8 / 21.9 | 0.1 / 10.1 | 22.3 / 21.9 | 99.8 / 100.0 (n=396) |
+| Mixtral-8x7B (BOS) | L19E002 | 2.9 / 17.4 | 56.3 / 31.5 | 0.0 / 21.2 | 22.9 / 24.0 | 2.9 / 15.9 (n=396) |
+| Mixtral-8x7B (BOS) | L21E001 | 3.7 / 21.2 | 65.1 / 31.6 | 94.4 / 27.9 | 24.7 / 25.4 | 1.5 / 1.5 (n=396) |
+| Mixtral-8x7B (BOS) | L18E001 | 1.2 / 19.6 | 74.1 / 15.3 | 99.8 / 19.4 | 24.5 / 26.6 | 0.4 / 2.8 (n=396) |
+
+All-token routing (route_all_layers): rate at the final position vs every other position of the same prompts (Mixtral: BOS position excluded); last column: the same tokens as the WinoGrande final words when they occur earlier.
+
+### C5. wikitext-103 contexts
+
+| model | expert | base rate (%) | current = ' too' | current = degree adverb | current = copula (was / is / were / ...) | copula or degree, next word in WG trigger vocabulary | next word in WG trigger vocabulary | next word = CF place name | next word capitalised, not a CF object | current = ' in', next = CF place | current = ' in', next = other |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | 7.01 | 87.5 (12.5x, n=24) | 59.3 (8.5x, n=580) | 66.0 (9.4x, n=3029) | 77.1 (11.0x, n=800) | 15.1 (2.2x, n=11696) | 0.4 (0.1x, n=824) | 0.5 (0.1x, n=17893) | 0.0 (0.0x, n=116) | 5.0 (0.7x, n=2466) |
+| Qwen3-30B-A3B-Base | L44E069 | 45.38 | 4.2 (0.1x, n=24) | 26.9 (0.6x, n=580) | 21.2 (0.5x, n=3029) | 13.1 (0.3x, n=800) | 50.9 (1.1x, n=11696) | 93.7 (2.1x, n=824) | 71.7 (1.6x, n=17893) | 100.0 (2.2x, n=116) | 82.6 (1.8x, n=2466) |
+| Qwen3-30B-A3B-Base | L42E115 | 40.20 | 4.2 (0.1x, n=24) | 19.8 (0.5x, n=580) | 13.4 (0.3x, n=3029) | 7.2 (0.2x, n=800) | 42.1 (1.0x, n=11696) | 95.4 (2.4x, n=824) | 82.3 (2.0x, n=17893) | 100.0 (2.5x, n=116) | 84.0 (2.1x, n=2466) |
+| Mixtral-8x7B (BOS) | L20E000 | 21.93 | 91.3 (4.2x, n=23) | 65.1 (3.0x, n=558) | 94.4 (4.3x, n=2850) | 93.0 (4.2x, n=561) | 26.4 (1.2x, n=8440) | 39.9 (1.8x, n=771) | 26.9 (1.2x, n=16511) | 45.5 (2.1x, n=110) | 35.7 (1.6x, n=2408) |
+| Mixtral-8x7B (BOS) | L19E002 | 24.01 | 17.4 (0.7x, n=23) | 5.6 (0.2x, n=558) | 13.4 (0.6x, n=2850) | 8.2 (0.3x, n=561) | 20.5 (0.9x, n=8440) | 46.3 (1.9x, n=771) | 22.5 (0.9x, n=16511) | 52.7 (2.2x, n=110) | 16.4 (0.7x, n=2408) |
+| Mixtral-8x7B (BOS) | L21E001 | 25.38 | 4.3 (0.2x, n=23) | 18.6 (0.7x, n=558) | 7.9 (0.3x, n=2850) | 6.1 (0.2x, n=561) | 24.9 (1.0x, n=8440) | 66.8 (2.6x, n=771) | 38.4 (1.5x, n=16511) | 82.7 (3.3x, n=110) | 44.9 (1.8x, n=2408) |
+| Mixtral-8x7B (BOS) | L18E001 | 26.57 | 4.3 (0.2x, n=23) | 9.9 (0.4x, n=558) | 5.7 (0.2x, n=2850) | 3.7 (0.1x, n=561) | 18.6 (0.7x, n=8440) | 61.6 (2.3x, n=771) | 50.1 (1.9x, n=16511) | 94.5 (3.6x, n=110) | 73.9 (2.8x, n=2408) |
+
+wikitext-103 test windows (127 content tokens, consecutive): routing rate of the expert at the current token, in % (lift over the expert's base rate, n). Word classes are heuristic word lists; 'WG trigger vocabulary' = all sentence-final trigger words of the model's W1-W6 pairs; CF names = target_true / target_new strings of CounterFact relations.
+
+| model | expert | highest-rate current tokens (rate, n) | most frequent current tokens among its routings (share) | highest-rate next words (rate, n) |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | ' may' 84% (38); ' are' 82% (213); ' considered' 77% (43); ' became' 74% (94); ' is' 74% (400); ' be' 72% (251); ' were' 70% (540); ' more' 68% (151) | ' was' 7.4%; ' the' 6.0%; ' a' 5.0%; ' were' 3.9%; ' to' 3.7%; ' and' 3.1% | important 79% (24); better 75% (20); too 74% (23); highly 71% (21); unable 70% (20); able 68% (28); significant 67% (24); seen 66% (29) |
+| Qwen3-30B-A3B-Base | L44E069 | ' east' 100% (68); ' across' 100% (32); 'rd' 100% (32); ' Austrian' 100% (36); ' Battalion' 100% (49); ' South' 100% (51); ' NK' 100% (31); ' National' 100% (50) | ' the' 9.2%; '.' 4.4%; ',' 4.3%; ' of' 3.5%; ' in' 2.9%; ' ' 2.2% | york 100% (29); ny 100% (20); australia 100% (22); nk 100% (31); battleships 100% (28); mogadishu 100% (22); player 100% (21); pitcher 100% (55) |
+| Qwen3-30B-A3B-Base | L42E115 | ' North' 100% (152); ' across' 100% (32); ' Austrian' 100% (36); ' against' 99% (110); ' Korean' 99% (83); ' American' 99% (72); ' As' 98% (53); ' South' 98% (51) | ' the' 10.1%; '.' 6.8%; ',' 6.2%; ' of' 4.4%; ' in' 3.4%; ' and' 3.0% | amphibians 100% (30); hms 100% (30); ny 100% (20); hed 100% (22); billboard 100% (20); episode 100% (29); philippines 100% (37); korean 100% (83) |
+| Mixtral-8x7B (BOS) | L20E000 | ' St' 100% (40); ' en' 100% (33); ' became' 100% (91); ' Ar' 99% (74); ' been' 99% (139); ' un' 98% (64); ' be' 98% (224); ' Gu' 98% (48) | '.' 7.1%; ',' 4.7%; ' the' 4.5%; ' was' 3.3%; ' and' 2.8%; ' in' 2.5% | unable 100% (20); mph 100% (79); fu 98% (42); fu's 97% (29); able 93% (27); china 87% (39); too 86% (22); seen 86% (29) |
+| Mixtral-8x7B (BOS) | L19E002 | ' As' 100% (52); ' wooden' 100% (32); ' Royal' 100% (31); ' Po' 100% (36); ' development' 100% (41); ' armor' 98% (51); ' Ar' 97% (74); ' Philippines' 97% (37) | ',' 5.2%; ' ' 3.0%; '0' 2.0%; ' of' 1.9%; ' the' 1.6%; '.' 1.5% | fu 88% (42); fu's 86% (29); status 79% (24); yongsan 77% (31); cyclones 75% (28); island 74% (34); video 71% (24); baseball 70% (20) |
+| Mixtral-8x7B (BOS) | L21E001 | ' against' 96% (92); ' did' 94% (51); 'nd' 91% (86); 'rd' 90% (30); ' H' 90% (139); 'akt' 89% (53); ' New' 88% (52); ' peak' 88% (43) | ',' 5.9%; ' of' 5.2%; '.' 3.6%; ' the' 3.4%; ' in' 2.9%; ' a' 2.7% | battleships 100% (28); dodger 100% (23); amphibians 96% (27); helicopters 96% (22); york 93% (29); warships 92% (26); column 92% (25); soldiers 92% (24) |
+| Mixtral-8x7B (BOS) | L18E001 | ' Independ' 100% (34); ' However' 100% (46); ' since' 100% (58); ' due' 100% (46); ' On' 99% (151); ' at' 98% (563); '".' 98% (97); ' $' 98% (48) | ' ' 9.7%; '.' 8.6%; ' of' 5.5%; ' in' 4.2%; ' and' 3.4%; ',' 3.3% | july 98% (50); december 92% (39); august 91% (65); november 90% (63); yongsan 90% (31); least 87% (30); october 86% (64); june 86% (42) |
+
+wikitext-103: current tokens with the highest routing rate (≥ 30 occurrences), the most frequent current tokens among the expert's routings, and next words with the highest rate (≥ 20 occurrences).
+
+### B1. Vocabulary projections: where r and r′ land
+
+| model | expert | vectors | n | median rank of r (of V) | r in top-10 / top-100 (%) | median rank of r' from the bottom | median rank of r in its class (class size) | class z (own class) | most promoted tokens (share of vectors with it in the top-10) | most suppressed tokens |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, CounterFact STR rows | 95 | 71207 | 0 / 0 | 81704 | 51 (158) | cf_any: -0.03 | ' rich' 17%; '富' 13%; 'rich' 12%; ' varied' 12%; ' Rich' 11%; ' simple' 9% | ' clos' 11%; ' closer' 9%; ' easier' 8%; 'easy' 8%; ' cheapest' 7% |
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, WinoGrande STR rows | 432 | 98 | 30 / 50 | 98 | 12 (1648) | wg_trigger: +0.01 | ' small' 24%; 'small' 22%; ' smaller' 21%; '小' 20%; ' SMALL' 19%; ' Larger' 17% | ' small' 24%; 'small' 22%; ' smaller' 21%; '小' 20%; ' SMALL' 19% |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, CounterFact clean prompts | 23 | 60917 | 0 / 0 | 93610 | 39 (158) | cf_any: -0.01 | ' diverse' 39%; ' varied' 35%; ' leg' 26%; ' rich' 26%; ' divers' 26%; ' diversity' 22% | '更高的' 17%; ' stronger' 17%; 'мор' 17%; 'Easy' 13%; ' cheapest' 13% |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, WinoGrande prompts | 432 | 131 | 31 / 48 | 66798 | 11 (1648) | wg_trigger: -0.00 | ' small' 25%; '小' 22%; 'small' 21%; ' SMALL' 20%; ' smaller' 19%; '个小' 18% | '的大' 14%; '更大' 14%; ' Large' 13%; '做大' 13%; ' Larger' 13% |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, WinoGrande local prompts | 442 | 4826 | 16 / 25 | 139200 | 110 (1648) | wg_trigger: +0.12 | ' small' 28%; ' SMALL' 19%; 'small' 19%; ' smaller' 16%; '小' 14%; ' dear' 14% | ' cleaner' 17%; ' sufficiently' 17%; ' достат' 17%; '足够' 12%; '-clean' 12% |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, CounterFact STR rows | 746 | 5758 | 15 / 29 | 11977 | 18 (168) | cf_any: -0.02 | ' New' 6%; ' Prov' 4%; ' Tur' 3%; ' Ant' 3%; '(New' 3%; ' Finnish' 3% | ' New' 3%; ' Paris' 3%; ' France' 3%; ' North' 3%; ' French' 3% |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, WinoGrande STR rows | 14 | 80082 | 7 / 7 | 78230 | 934 (1648) | wg_trigger: +0.00 | ' Los' 21%; ' North' 21%; ' NORTH' 21%; 'Los' 14%; ' LA' 14%; 'North' 14% | ' North' 21%; ' NORTH' 21%; ' Los' 21%; 'North' 14%; 'Los' 14% |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, CounterFact clean prompts | 191 | 921 | 22 / 38 | 118393 | 10 (471) | cf_any: +0.30 | ' New' 6%; ' Tur' 4%; ' Prov' 4%; ' Norm' 4%; ' Southern' 3%; ' Japan' 3% | ' Spain' 3%; ' Italian' 3%; '西班牙' 3%; '葡萄牙' 3%; ' london' 3% |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, WinoGrande prompts | 14 | 71370 | 0 / 14 | 99641 | 763 (1648) | wg_trigger: +0.03 | ' US' 21%; ' Cleveland' 21%; ' Rochester' 21%; ' Los' 14%; ' Fresno' 14%; ' USPS' 14% | ' Vietnam' 21%; ' live' 14%; 'live' 14%; 'ui' 14%; ' Kut' 7% |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, WinoGrande local prompts | 16 | 39190 | 0 / 0 | 109820 | 390 (1648) | wg_trigger: -0.02 | ' London' 19%; ' Los' 19%; ' Sydney' 12%; ' Capitals' 12%; ' Cowboys' 12%; ' Nuggets' 12% | '北' 19%; '闻' 12%; 'zend' 12%; 'jie' 12%; '阶梯' 12% |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, IOI prompts | 45 | 34498 | 0 / 0 | 123014 |  | ioi_names: +0.77 | ' area' 22%; ' Central' 18%; ' Clintons' 18%; ' Area' 18%; ' high' 16%; ' UW' 13% | ' subsequ' 38%; '各省' 27%; ' Mad' 24%; 'adin' 11%; ' cav' 11% |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, CounterFact STR rows | 821 | 1287 | 20 / 34 | 3412 | 7 (168) | cf_any: +0.03 | ' France' 5%; ' Swedish' 5%; ' Paris' 5%; ' Italian' 5%; '意大利' 4%; ' French' 4% | '俄罗斯' 6%; ' Russia' 5%; '俄' 5%; ' Russian' 5%; ' Russians' 5% |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, WinoGrande STR rows | 11 | 1180 | 27 / 36 | 1180 | 11 (1648) | wg_trigger: +0.04 | '...' 18%; ' Spanish' 18%; 'Spanish' 18%; '’S' 9%; "'S" 9%; " '}" 9% | '...' 18%; ' Americans' 18%; ' Spanish' 18%; 'Spanish' 18%; ' ...' 9% |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, CounterFact clean prompts | 208 | 105 | 34 / 50 | 112411 | 3 (168) | cf_any: -0.09 | ' Catalan' 8%; ' French' 7%; ' Old' 5%; ' Hindi' 5%; ' Standard' 5%; ' Modern' 5% | 'Spain' 8%; 'Britain' 7%; '-China' 6%; 'China' 6%; 'Chinese' 6% |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, WinoGrande prompts | 11 | 577 | 36 / 36 | 120316 | 6 (1648) | wg_trigger: -0.04 | ' Wide' 18%; ' Mandarin' 18%; ' Portug' 18%; ' Span' 18%; ' Spanish' 18%; '.Span' 18% | '...' 55%; '....' 55%; '.....' 45%; '…' 36%; ' ...' 36% |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, WinoGrande local prompts | 11 | 20543 | 0 / 0 | 132431 | 366 (1648) | wg_trigger: +0.08 | 'Various' 18%; ' Various' 18%; 'pper' 18%; ' Span' 18%; ' Jama' 18%; ' Kling' 18% | 'Europe' 27%; 'Muslim' 18%; '琥' 18%; '\tside' 18%; '迪' 18% |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, IOI prompts | 400 | 59554 | 0 / 0 | 106870 |  | ioi_names: +0.26 | ' Lump' 42%; ' Bun' 16%; ' Len' 13%; ' Lob' 12%; ' Blur' 12%; ' Smarty' 12% | ' Państwo' 35%; 'enc' 28%; ' Câm' 23%; 'bsub' 22%; 'atak' 14% |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, CounterFact STR rows | 324 | 67850 | 0 / 0 | 72011 | 42 (158) | cf_any: +0.01 | ' rather' 18%; 'rather' 17%; ' Rather' 13%; ' plutôt' 12%; '而不是' 11%; '而非' 11% | ' rather' 11%; 'rather' 10%; 'too' 10%; ' well' 10%; ' too' 9% |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, WinoGrande STR rows | 503 | 3458 | 17 / 30 | 3458 | 84 (1648) | wg_trigger: -0.00 | ' small' 12%; ' much' 12%; '小' 11%; 'much' 11%; ' heavy' 10%; ' too' 9% | ' small' 12%; ' much' 12%; '小' 11%; 'much' 11%; ' heavy' 10% |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, CounterFact clean prompts | 79 | 51059 | 0 / 0 | 95233 | 42 (158) | cf_any: +0.24 | ' rather' 41%; 'rather' 37%; ' interesting' 27%; ' Rather' 27%; ' fascinating' 25%; ' plutôt' 23% | 'way' 15%; 'Way' 11%; 'WAY' 11%; 'more' 11%; '太' 10% |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, WinoGrande prompts | 503 | 30 | 42 / 54 | 151030 | 13 (1648) | wg_trigger: +0.54 | ' large' 34%; ' big' 34%; ' tall' 23%; ' heavy' 23%; ' small' 23%; ' deep' 19% | '非常好的' 21%; 'much' 18%; ' Too' 17%; ' Much' 15%; ' TOO' 15% |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, WinoGrande local prompts | 484 | 114 | 17 / 49 | 151784 | 34 (1648) | wg_trigger: +0.95 | ' heavy' 49%; 'heavy' 34%; ' hot' 32%; ' Heavy' 32%; ' big' 29%; ' large' 26% | '片刻' 16%; '一定的' 14%; 'GES' 11%; '槛' 9%; '很多' 8% |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, IOI prompts | 9 | 18223 | 0 / 0 | 132503 |  | ioi_names: +0.76 | ' even' 33%; ' Even' 33%; ' Too' 33%; ' too' 33%; 'too' 33%; ' extra' 22% | ' good' 67%; ' much' 56%; ' considerably' 44%; ' substantially' 44%; 'much' 44% |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, CounterFact STR rows | 279 | 1712 | 11 / 23 | 6325 | 12 (153) | cf_any: +0.01 | ' /******/' 25%; ' unknown' 8%; ' uncertain' 6%; ' kennis' 5%; 'unknown' 5%; 'UNKNOWN' 4% | ' /******/' 21%; 'pshire' 4%; ' gepubliceerd' 4%; ' echo' 3%; ' oppon' 3% |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, WinoGrande STR rows | 493 | 521 | 24 / 37 | 566 | 26 (764) | wg_trigger: -0.00 | ' /******/' 12%; ' small' 11%; ' smaller' 10%; ' empty' 8%; ' empt' 8%; 'Empty' 7% | ' /******/' 12%; ' small' 11%; ' smaller' 10%; ' empty' 8%; ' empt' 8% |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, CounterFact clean prompts | 68 | 628 | 12 / 32 | 21624 | 8 (406) | cf_any: -0.02 | ' /******/' 41%; 'WEBPACK' 13%; '丶' 13%; 'ityEngine' 13%; ' Станов' 12%; ' worth' 12% | ' gepubliceerd' 10%; ' oppon' 10%; 'borough' 7%; 'pshire' 6%; ' /******/' 6% |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, WinoGrande prompts | 493 | 10 | 51 / 79 | 31726 | 4 (764) | wg_trigger: +0.35 | ' large' 25%; ' small' 18%; ' crowded' 18%; ' tall' 18%; ' big' 15%; 'large' 14% | ' /******/' 30%; 'pread' 16%; ' oppon' 15%; 'impse' 12%; ' biologie' 11% |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, WinoGrande local prompts | 487 | 497 | 12 / 31 | 31001 | 53 (764) | wg_trigger: +0.42 | ' tempt' 21%; ' large' 20%; ' heavy' 18%; ' invented' 16%; ' originally' 15%; ' appealing' 13% | ' /******/' 41%; ' biologie' 32%; 'ntil' 23%; 'ursor' 19%; ' oppon' 19% |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, CounterFact STR rows | 514 | 252 | 32 / 43 | 1087 | 5 (406) | cf_any: -0.00 | ' /******/' 20%; 'vscale' 7%; ' /***/' 6%; ' Станов' 5%; 'qpoint' 4%; '\ufeff' 4% | ' /******/' 18%; ' kennis' 5%; ' gepubliceerd' 4%; ' #!' 3%; 'úblic' 3% |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, WinoGrande STR rows | 15 | 1710 | 0 / 20 | 19836 | 40 (764) | wg_trigger: -0.01 | ' /******/' 20%; 'onden' 20%; 'Ő' 13%; ' listade' 13%; ' Станов' 13%; 'eph' 13% | ' /******/' 27%; ' oppon' 20%; ' janu' 13%; 'Geplaatst' 13%; 'ipage' 13% |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, CounterFact clean prompts | 130 | 59 | 42 / 52 | 22848 | 2 (406) | cf_any: -0.13 | ' /******/' 49%; ' /***/' 19%; 'vscale' 17%; 'tcx' 14%; 'Geplaatst' 13%; 'Pyx' 13% | ' #!' 7%; 'sin' 5%; 'sis' 5%; 'ihood' 5%; ' gepubliceerd' 5% |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, WinoGrande prompts | 15 | 831 | 7 / 20 | 29335 | 29 (764) | wg_trigger: +0.03 | ' Станов' 27%; ' /******/' 20%; 'onden' 20%; 'Ő' 13%; ' listade' 13%; 'eph' 13% | ' /******/' 33%; ' oppon' 27%; 'ntil' 27%; 'decess' 20%; ' janu' 13% |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, WinoGrande local prompts | 32 | 12308 | 3 / 3 | 19398 | 268 (764) | wg_trigger: -0.06 | 'CodeAttribute' 50%; ' Станов' 50%; ' **_' 50%; ' /******/' 47%; 'multicol' 41%; '?;' 41% | ' ratio' 31%; ' sheer' 31%; ' oppon' 28%; ' patches' 28%; ' /******/' 25% |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, CounterFact STR rows | 571 | 72 | 39 / 53 | 670 | 3 (406) | cf_any: -0.02 | ' /******/' 16%; ' French' 6%; ' jazz' 6%; ' Jazz' 5%; ' sa' 4%; ' trump' 4% | ' /******/' 15%; ' oppon' 5%; ' gepubliceerd' 5%; ' kennis' 4%; ' noten' 3% |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, WinoGrande STR rows | 19 | 133 | 16 / 47 | 2769 | 7 (764) | wg_trigger: +0.09 | ' ones' 11%; ' sign' 11%; ' kennis' 11%; ' read' 5%; 'read' 5%; ' reading' 5% | 'decess' 11%; ' agre' 11%; 'criptor' 11%; ' oppon' 11%; ' kennis' 11% |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, CounterFact clean prompts | 145 | 7 | 52 / 73 | 21478 | 1 (406) | cf_any: -0.02 | ' /******/' 13%; '❶' 10%; ' listade' 8%; ' jazz' 6%; ' Jazz' 6%; ' French' 6% | ' oppon' 17%; ' /******/' 14%; ' gepubliceerd' 9%; 'peon' 6%; ' strugg' 6% |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, WinoGrande prompts | 19 | 45 | 26 / 58 | 30914 | 4 (764) | wg_trigger: +0.27 | ' drivers' 11%; ' typ' 11%; ' typing' 11%; ' ones' 11%; ' winning' 11%; ' rich' 11% | ' oppon' 53%; ' /******/' 32%; ' thous' 26%; ' toget' 16%; 'printStackTrace' 16% |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, WinoGrande local prompts | 10 | 1305 | 0 / 40 | 31420 | 58 (764) | wg_trigger: +0.32 | ' good' 40%; ' friends' 40%; ' friend' 40%; 'good' 40%; ' bab' 30%; ' hosts' 20% | ' oppon' 100%; ' /******/' 70%; ' thous' 50%; ' invånare' 40%; ' laug' 40% |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, IOI prompts | 383 | 21190 | 0 / 1 | 13064 |  | ioi_names: -0.09 | ' /******/' 27%; 'fem' 16%; ' everyone' 16%; ' dogs' 16%; ' everybody' 15%; ' dog' 15% | ' gepubliceerd' 47%; 'peon' 28%; 'ntil' 26%; ' Initialized' 25%; 'uminate' 21% |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, CounterFact STR rows | 642 | 3303 | 9 / 20 | 4080 | 22 (406) | cf_any: +0.01 | ' /******/' 25%; ' /***/' 5%; '\ufeff' 5%; ' acknow' 5%; ' ==>' 4%; ' oppon' 4% | ' /******/' 22%; '\ufeff' 6%; ' /***/' 5%; '❶' 4%; ' noten' 4% |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, WinoGrande STR rows | 6 | 8249 | 0 / 0 | 3742 | 210 (764) | wg_trigger: -0.06 | ' /******/' 50%; ' writing' 17%; ' write' 17%; ' Writing' 17%; ' Writ' 17%; ' writ' 17% | ' overflow' 17%; ' fa' 17%; 'Ї' 17%; ' Palmar' 17%; 'eral' 17% |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, CounterFact clean prompts | 164 | 544 | 16 / 31 | 25050 | 6 (406) | cf_any: -0.12 | ' /******/' 47%; 'tcx' 33%; 'IMPORTED' 24%; 'rdev' 24%; ' /***/' 21%; '－' 16% | 'istrzost' 12%; 'bros' 10%; 'ihood' 10%; ' gepubliceerd' 9%; 'iginal' 7% |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, WinoGrande prompts | 6 | 4006 | 0 / 0 | 22066 | 90 (764) | wg_trigger: -0.23 | '%%%%' 67%; ' /******/' 67%; ' /***/' 50%; 'igos' 33%; '－' 33%; '\ufeff' 33% | ' native' 33%; ' conc' 33%; ' workshops' 33%; '<0x0A>' 33%; 'riterion' 17% |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, WinoGrande local prompts | 6 | 8455 | 0 / 0 | 30692 | 144 (764) | wg_trigger: -0.22 | 'tcx' 67%; 'AtA' 67%; '\x08' 50%; 'ylv' 33%; '格' 33%; 'INCLUDING' 33% | 'urm' 33%; '╔' 33%; ' stern' 33%; 'area' 33%; ' pra' 33% |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, IOI prompts | 398 | 22564 | 0 / 0 | 10580 |  | ioi_names: -0.41 | ' /******/' 90%; 'tcx' 73%; 'fortunate' 48%; ' someone' 42%; ' oppon' 35%; 'čen' 31% | '💰' 43%; ' Initialized' 24%; 'zens' 20%; ' ass' 17%; 'rass' 13% |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, CounterFact STR rows | 484 | 1607 | 14 / 27 | 4890 | 8 (153) | cf_any: -0.03 | ' /******/' 28%; ' /***/' 6%; '\ufeff' 6%; '－' 5%; ' kennis' 5%; ' Dutch' 5% | ' /******/' 15%; ' gepubliceerd' 5%; ' Dutch' 5%; ' kennis' 5%; ' /***/' 5% |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, WinoGrande STR rows | 503 | 1364 | 14 / 26 | 1384 | 50 (764) | wg_trigger: -0.00 | ' /******/' 17%; ' too' 7%; ' crowded' 7%; ' wider' 7%; ' empty' 6%; ' faster' 5% | ' /******/' 17%; ' too' 7%; ' crowded' 7%; ' wider' 7%; ' empty' 6% |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, CounterFact clean prompts | 118 | 338 | 19 / 39 | 24488 | 4 (153) | cf_any: -0.15 | ' /******/' 74%; '\ufeff' 32%; '－' 29%; 'ityEngine' 25%; 'vscale' 25%; ' /***/' 24% | ' kennis' 5%; ' sophistic' 5%; ' Kenya' 4%; ' arrang' 4%; ' plug' 4% |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, WinoGrande prompts | 503 | 52 | 29 / 59 | 31284 | 9 (764) | wg_trigger: +0.14 | ' /******/' 28%; 'WEBPACK' 26%; ' Станов' 26%; ' small' 23%; ' listade' 20%; ' too' 19% | ' acknow' 16%; ' biologie' 14%; 'ipage' 13%; ' franç' 11%; ' availability' 10% |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, WinoGrande local prompts | 499 | 1239 | 12 / 28 | 30784 | 59 (764) | wg_trigger: +0.14 | ' Станов' 44%; ' /******/' 39%; '\ufeff' 36%; ' listade' 35%; ' too' 31%; 'too' 25% | ' differently' 18%; ' citiz' 16%; 'ntil' 15%; ' decisions' 14%; ' attempts' 13% |
+
+Vocabulary projection of the expert's write at the final position, ((v ⊙ γ) @ W_U^T) / rms(h_final) with the norm frozen at the corrupted run (δ_e = c_e(clean) − c_e(corrupt)) or at the prompt's own run (c_e). Ranks over the full vocabulary (1 = most promoted; r' from the bottom: 1 = most suppressed); class = WinoGrande trigger vocabulary (WinoGrande rows) or the CounterFact objects of the case's relation group (CounterFact rows). Section: targets and each model's second WinoGrande expert; all experts of interest in `results/tables/ext11_B_ranks.md`.
+
+### B2. Token classes
+
+| model | expert | vectors | n | z wg_trigger | z cf_place | z cf_language | z cf_organisation | z cf_occupation / field | z ioi_names | top-50 share wg_trigger (base) | top-50 share cf_any (base) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, CounterFact STR rows | 95 | +0.08 | -0.07 | -0.04 | -0.00 | +0.06 | +0.10 | 9.9 (1.08) | 0.9 (0.54) |
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, WinoGrande STR rows | 432 | +0.01 | +0.00 | +0.02 | +0.01 | +0.00 | -0.01 | 13.2 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, CounterFact clean prompts | 23 | +0.09 | -0.05 | -0.11 | +0.05 | +0.09 | +0.07 | 10.3 (1.08) | 0.7 (0.54) |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, WinoGrande prompts | 432 | -0.00 | +0.12 | +0.18 | +0.16 | -0.12 | -0.15 | 12.9 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, WinoGrande local prompts | 442 | +0.12 | +0.03 | +0.20 | +0.03 | -0.02 | -0.19 | 15.9 (1.08) | 0.2 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, CounterFact STR rows | 746 | -0.00 | -0.04 | +0.01 | +0.00 | -0.01 | -0.01 | 1.3 (1.08) | 9.6 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, WinoGrande STR rows | 14 | +0.00 | +0.34 | +0.01 | +0.22 | -0.00 | +0.00 | 3.7 (1.08) | 21.1 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, CounterFact clean prompts | 191 | +0.03 | +0.48 | -0.34 | +0.28 | +0.08 | -0.07 | 1.7 (1.08) | 15.1 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, WinoGrande prompts | 14 | +0.03 | +0.47 | -0.59 | +0.37 | +0.19 | -0.34 | 3.3 (1.08) | 22.6 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, WinoGrande local prompts | 16 | -0.02 | +1.81 | +0.52 | +1.09 | +0.15 | +0.10 | 2.2 (1.08) | 37.0 (0.54) |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, IOI prompts | 45 | -0.03 | +0.81 | -0.01 | +0.71 | +0.24 | +0.77 | 2.0 (1.08) | 10.0 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, CounterFact STR rows | 821 | -0.01 | +0.07 | -0.07 | +0.03 | -0.02 | -0.02 | 1.5 (1.08) | 8.9 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, WinoGrande STR rows | 11 | +0.04 | +0.12 | -0.12 | +0.15 | -0.04 | +0.16 | 3.3 (1.08) | 6.2 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, CounterFact clean prompts | 208 | +0.07 | -0.14 | -0.05 | -0.15 | -0.01 | +0.01 | 2.2 (1.08) | 9.9 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, WinoGrande prompts | 11 | -0.04 | -0.11 | -0.27 | -0.06 | -0.12 | +0.12 | 3.3 (1.08) | 4.4 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, WinoGrande local prompts | 11 | +0.08 | +0.13 | +0.17 | +0.08 | +0.16 | +0.03 | 2.4 (1.08) | 6.9 (0.54) |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, IOI prompts | 400 | -0.15 | -0.04 | +0.24 | +0.16 | +0.12 | +0.26 | 0.7 (1.08) | 1.8 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, CounterFact STR rows | 324 | +0.10 | +0.01 | -0.02 | -0.01 | +0.05 | +0.12 | 10.4 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, WinoGrande STR rows | 503 | -0.00 | +0.00 | +0.00 | +0.00 | -0.00 | +0.00 | 14.7 (1.08) | 0.3 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, CounterFact clean prompts | 79 | +0.54 | +0.19 | +0.27 | +0.21 | +0.34 | +0.46 | 16.7 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, WinoGrande prompts | 503 | +0.54 | -0.05 | +0.16 | +0.02 | +0.10 | +0.29 | 29.3 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, WinoGrande local prompts | 484 | +0.95 | +0.02 | +0.09 | +0.02 | +0.14 | +0.30 | 36.5 (1.08) | 0.1 (0.54) |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, IOI prompts | 9 | -0.41 | +0.34 | +0.66 | +0.29 | +0.34 | +0.76 | 2.7 (1.08) | 0.0 (0.54) |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, CounterFact STR rows | 279 | +0.02 | +0.01 | +0.05 | +0.03 | -0.02 | +0.01 | 4.3 (2.39) | 4.3 (2.18) |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, WinoGrande STR rows | 493 | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 11.0 (2.39) | 1.2 (2.18) |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, CounterFact clean prompts | 68 | +0.09 | -0.03 | -0.02 | -0.01 | +0.03 | -0.00 | 5.5 (2.39) | 4.2 (2.18) |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, WinoGrande prompts | 493 | +0.35 | +0.03 | +0.06 | +0.07 | -0.06 | +0.04 | 23.9 (2.39) | 0.8 (2.18) |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, WinoGrande local prompts | 487 | +0.42 | -0.10 | +0.16 | -0.00 | -0.01 | +0.12 | 21.6 (2.39) | 0.7 (2.18) |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, CounterFact STR rows | 514 | -0.02 | -0.02 | -0.04 | +0.02 | +0.01 | +0.02 | 1.9 (2.39) | 4.9 (2.18) |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, WinoGrande STR rows | 15 | -0.01 | +0.03 | +0.04 | -0.00 | -0.07 | +0.12 | 6.4 (2.39) | 1.6 (2.18) |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, CounterFact clean prompts | 130 | -0.16 | -0.13 | -0.27 | -0.08 | -0.16 | -0.16 | 1.4 (2.39) | 3.6 (2.18) |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, WinoGrande prompts | 15 | +0.03 | +0.09 | +0.01 | +0.07 | -0.10 | +0.18 | 7.2 (2.39) | 0.9 (2.18) |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, WinoGrande local prompts | 32 | -0.06 | -0.21 | -0.35 | -0.29 | -0.23 | -0.18 | 3.4 (2.39) | 0.4 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, CounterFact STR rows | 571 | -0.03 | -0.02 | -0.05 | -0.02 | +0.00 | -0.04 | 2.4 (2.39) | 6.8 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, WinoGrande STR rows | 19 | +0.09 | +0.02 | +0.05 | -0.02 | +0.06 | +0.01 | 5.9 (2.39) | 4.0 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, CounterFact clean prompts | 145 | -0.02 | -0.04 | -0.06 | -0.03 | +0.07 | -0.09 | 3.0 (2.39) | 7.6 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, WinoGrande prompts | 19 | +0.27 | +0.12 | +0.42 | +0.01 | +0.23 | +0.06 | 8.5 (2.39) | 5.4 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, WinoGrande local prompts | 10 | +0.32 | +0.07 | +0.22 | +0.12 | +0.51 | -0.12 | 13.2 (2.39) | 2.2 (2.18) |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, IOI prompts | 383 | +0.24 | +0.27 | +0.03 | +0.21 | +0.22 | -0.09 | 5.4 (2.39) | 2.8 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, CounterFact STR rows | 642 | -0.01 | +0.01 | +0.03 | +0.01 | +0.01 | -0.01 | 2.1 (2.39) | 3.8 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, WinoGrande STR rows | 6 | -0.06 | -0.02 | -0.07 | -0.07 | -0.14 | -0.02 | 2.3 (2.39) | 0.7 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, CounterFact clean prompts | 164 | -0.13 | -0.07 | -0.34 | -0.05 | -0.15 | -0.16 | 1.4 (2.39) | 2.7 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, WinoGrande prompts | 6 | -0.23 | -0.21 | -0.21 | -0.28 | -0.25 | -0.23 | 1.7 (2.39) | 0.3 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, WinoGrande local prompts | 6 | -0.22 | -0.14 | -0.02 | -0.24 | -0.21 | -0.08 | 0.7 (2.39) | 0.0 (2.18) |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, IOI prompts | 398 | -0.03 | +0.04 | +0.11 | -0.09 | -0.06 | -0.41 | 1.0 (2.39) | 0.3 (2.18) |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, CounterFact STR rows | 484 | -0.04 | -0.03 | +0.06 | -0.04 | -0.03 | -0.07 | 2.8 (2.39) | 4.2 (2.18) |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, WinoGrande STR rows | 503 | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 9.3 (2.39) | 1.5 (2.18) |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, CounterFact clean prompts | 118 | -0.18 | -0.20 | +0.24 | -0.22 | -0.14 | -0.25 | 2.7 (2.39) | 4.4 (2.18) |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, WinoGrande prompts | 503 | +0.14 | +0.06 | +0.03 | +0.03 | -0.23 | +0.26 | 17.1 (2.39) | 0.7 (2.18) |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, WinoGrande local prompts | 499 | +0.14 | -0.06 | +0.10 | -0.06 | -0.24 | +0.11 | 10.9 (2.39) | 0.2 (2.18) |
+
+Mean projection over the class tokens minus the vocabulary mean, in SD units of the vector's projection (z), and the share of the 50 most promoted tokens that belong to the class (base = class size / vocabulary size). Section: targets and each model's second WinoGrande expert; all experts of interest in `results/tables/ext11_B_classes.md`.
+
+### B3. Exact final norm vs frozen norm for single experts
+
+| model | expert | vectors | n | exact-norm mean (logits) | frozen-norm mean (logits) | exact / frozen | r | mean |exact - frozen| (logits) | sum |err| / sum |frozen| |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, CounterFact STR rows | 95 | -0.001 | -0.001 | 1.722 | 0.999 | 0.002 | 0.047 |
+| Qwen3-30B-A3B-Base | L41E117 | δ_e, WinoGrande STR rows | 432 | +1.101 | +1.103 | 0.998 | 1.000 | 0.003 | 0.003 |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, CounterFact clean prompts | 23 | -0.004 | -0.001 | 4.378 | 0.999 | 0.003 | 0.080 |
+| Qwen3-30B-A3B-Base | L41E117 | c_e, WinoGrande prompts | 432 | +0.546 | +0.552 | 0.990 | 1.000 | 0.005 | 0.009 |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, CounterFact STR rows | 746 | +1.385 | +1.384 | 1.001 | 1.000 | 0.026 | 0.018 |
+| Qwen3-30B-A3B-Base | L44E069 | δ_e, WinoGrande STR rows | 14 | +0.183 | +0.182 | 1.003 | 1.000 | 0.003 | 0.014 |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, CounterFact clean prompts | 191 | +0.767 | +0.799 | 0.959 | 1.000 | 0.035 | 0.041 |
+| Qwen3-30B-A3B-Base | L44E069 | c_e, WinoGrande prompts | 14 | +0.080 | +0.091 | 0.878 | 1.000 | 0.011 | 0.100 |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, CounterFact STR rows | 821 | +0.855 | +0.858 | 0.996 | 1.000 | 0.009 | 0.011 |
+| Qwen3-30B-A3B-Base | L42E115 | δ_e, WinoGrande STR rows | 11 | +0.888 | +0.885 | 1.004 | 1.000 | 0.004 | 0.005 |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, CounterFact clean prompts | 208 | +0.409 | +0.433 | 0.944 | 0.999 | 0.024 | 0.051 |
+| Qwen3-30B-A3B-Base | L42E115 | c_e, WinoGrande prompts | 11 | +0.443 | +0.448 | 0.988 | 1.000 | 0.008 | 0.017 |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, CounterFact STR rows | 324 | +0.009 | +0.009 | 1.047 | 0.991 | 0.004 | 0.089 |
+| Qwen3-30B-A3B-Base | L43E081 | δ_e, WinoGrande STR rows | 503 | +0.951 | +0.952 | 0.999 | 1.000 | 0.007 | 0.007 |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, CounterFact clean prompts | 79 | -0.004 | +0.001 | -2.569 | 0.993 | 0.006 | 0.151 |
+| Qwen3-30B-A3B-Base | L43E081 | c_e, WinoGrande prompts | 503 | +0.455 | +0.474 | 0.959 | 0.999 | 0.020 | 0.038 |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, CounterFact STR rows | 279 | +0.258 | +0.260 | 0.990 | 0.996 | 0.013 | 0.049 |
+| Mixtral-8x7B (BOS) | L20E000 | δ_e, WinoGrande STR rows | 493 | +0.644 | +0.648 | 0.994 | 1.000 | 0.005 | 0.008 |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, CounterFact clean prompts | 68 | +0.125 | +0.152 | 0.821 | 0.994 | 0.027 | 0.155 |
+| Mixtral-8x7B (BOS) | L20E000 | c_e, WinoGrande prompts | 493 | +0.296 | +0.325 | 0.912 | 0.999 | 0.029 | 0.081 |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, CounterFact STR rows | 514 | +0.666 | +0.674 | 0.988 | 0.999 | 0.016 | 0.023 |
+| Mixtral-8x7B (BOS) | L19E002 | δ_e, WinoGrande STR rows | 15 | +0.063 | +0.061 | 1.023 | 0.999 | 0.003 | 0.039 |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, CounterFact clean prompts | 130 | +0.360 | +0.408 | 0.882 | 0.998 | 0.048 | 0.112 |
+| Mixtral-8x7B (BOS) | L19E002 | c_e, WinoGrande prompts | 15 | +0.032 | +0.037 | 0.868 | 0.999 | 0.005 | 0.100 |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, CounterFact STR rows | 571 | +0.864 | +0.871 | 0.992 | 0.999 | 0.016 | 0.019 |
+| Mixtral-8x7B (BOS) | L21E001 | δ_e, WinoGrande STR rows | 19 | +0.111 | +0.109 | 1.018 | 0.996 | 0.004 | 0.032 |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, CounterFact clean prompts | 145 | +0.446 | +0.489 | 0.912 | 0.998 | 0.043 | 0.084 |
+| Mixtral-8x7B (BOS) | L21E001 | c_e, WinoGrande prompts | 19 | +0.056 | +0.065 | 0.869 | 0.998 | 0.009 | 0.092 |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, CounterFact STR rows | 642 | +0.255 | +0.258 | 0.988 | 0.999 | 0.008 | 0.028 |
+| Mixtral-8x7B (BOS) | L18E001 | δ_e, WinoGrande STR rows | 6 | +0.093 | +0.092 | 1.010 | 1.000 | 0.002 | 0.019 |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, CounterFact clean prompts | 164 | +0.098 | +0.136 | 0.719 | 0.991 | 0.038 | 0.218 |
+| Mixtral-8x7B (BOS) | L18E001 | c_e, WinoGrande prompts | 6 | +0.038 | +0.044 | 0.857 | 1.000 | 0.006 | 0.087 |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, CounterFact STR rows | 484 | +0.240 | +0.241 | 0.999 | 0.999 | 0.007 | 0.029 |
+| Mixtral-8x7B (BOS) | L19E006 | δ_e, WinoGrande STR rows | 503 | +0.445 | +0.448 | 0.994 | 1.000 | 0.004 | 0.009 |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, CounterFact clean prompts | 118 | +0.122 | +0.145 | 0.843 | 0.996 | 0.023 | 0.136 |
+| Mixtral-8x7B (BOS) | L19E006 | c_e, WinoGrande prompts | 503 | +0.197 | +0.222 | 0.886 | 0.999 | 0.025 | 0.086 |
+
+Exact final RMSNorm vs frozen norm for the single expert's direct effect: δ_e: Δ(norm(h_corrupt + δ_e)) − Δ(norm(h_corrupt)) vs δ_e·u / rms(h_corrupt); c_e: Δ(norm(h_clean)) − Δ(norm(h_clean − c_e)) vs c_e·u / rms(h_clean) (fp32, same path). Section: targets and each model's second WinoGrande expert; all experts of interest in `results/tables/ext11_B_norm.md`.
+
+**Pooled over every δ_e vector of the experts of interest**
+
+| model | task (δ_e rows) | vectors | Σ exact / Σ frozen | r | mean abs error (logits) | 95th pct abs error | Σ |err| / Σ |frozen| |
+|---|---|---|---|---|---|---|---|
+| Qwen3 | CounterFact | 6531 | 0.999 | 0.9997 | 0.0114 | 0.0461 | 0.020 |
+| Qwen3 | WinoGrande | 4583 | 0.998 | 0.9999 | 0.0043 | 0.0154 | 0.009 |
+| Mixtral (BOS) | CounterFact | 7069 | 0.996 | 0.9989 | 0.0132 | 0.0485 | 0.034 |
+| Mixtral (BOS) | WinoGrande | 4723 | 0.998 | 0.9999 | 0.0045 | 0.0151 | 0.009 |
+
+### Reading
+
+**1. Qwen3: the localised experts are writers.** L41E117 writes its whole effect on WinoGrande directly (T +1.15 [+0.99, +1.32], D +1.20 [+1.02, +1.37] logits, r(D, T) across cases 0.87); so does L42E115 on CounterFact (share 0.96). L44E069 writes 1.59 logits but the patch only gains 1.21: the three layers after it remove about a quarter of its write (indirect effect negative). The same holds for every Qwen3 expert at or above the crossover layer (L43E081 1.42, L44E122 1.64, L44E006 1.33 ...), while experts a few layers below (L39E071 0.72, L34E119 0.52, L31E124 0.51 on WinoGrande) are partly computers whose effect later layers amplify.
+
+**2. Mixtral: partly writers.** L20E000 writes 0.65 of its 1.15 logits (share 0.56 [0.52, 0.62]); L19E006, the second WinoGrande expert, 0.43; L16E007 0.20 (a computer). The CounterFact experts are closer to writers (L21E001 0.87, L19E002 0.71, L18E001 0.54). The late WinoGrande experts (L24E002 1.02, L26E002 1.46, L22E005, L25E002 > 1) write more than they gain. In Mixtral the band L16-L21, where the WinoGrande patches peak (ext7 W2: L20), does about half of its work through layers 22-31.
+
+**3. Depth profile.** In every task the direct share rises with depth: experts in the first half of the network have total effects near zero and almost no direct effect (they act, if at all, through later layers); in the band just below the peak the share is 0.4-0.8 (later layers amplify); at and above a crossover layer the share is ≥ 1 (later layers partly cancel the write, the downstream self-repair known from dense models, McGrath et al. 2023); Mixtral CounterFact has no crossover (share 0.8-0.9 from L19 to L28). The experts of the last two or three layers (Qwen3 L46-L47, Mixtral L29-L31) push against the answer directly (negative D and T; at the very last layer T = D). Summed over all experts the share is Qwen3 CounterFact 0.81, Qwen3 WinoGrande 0.90, Mixtral CounterFact 0.67, Mixtral WinoGrande 0.63.
+
+**4. Why the DLA ordering works (ext8).** Ranking by D recovers the top experts by T (top-10 overlap 10/10, 9/10, 10/10, 7/10), because the strongest experts sit at or above the crossover where D ≥ T. In Mixtral WinoGrande, D promotes the late over-writers (L26E002 first) and demotes the half-writers of L19-L21 (L19E006 rank 6 under D), which is where ext8 found DLA slightly below the oracle (AUC 0.55 vs 0.58). A good DLA ranking is therefore evidence that the top experts write, not that every expert does.
+
+**5. The WinoGrande experts are slot detectors that write context.** Qwen3 L41E117 is routed at the final position of 84 % of the main WinoGrande prompts (100 % after 'too', 100 % after 'very', 76 % after 'was'), at the same tokens earlier in the same sentences (80 %), and at 86 % of the context-free local prompts; in wikitext at 66 % of copulas, 59 % of degree adverbs and 77 % of copula / degree tokens followed by a WinoGrande trigger word (base 7 %); its most selective next words in wikitext are predicative adjectives and participles (important, better, too, highly, unable, able, significant). It never fires at the IOI final token (0 %) and rarely at CounterFact's (11 %). Mixtral's L20E000 is the same kind of expert, less selective: 96 % of WinoGrande final positions, 95 % of local prompts, 94 % of wikitext copulas (base 22 %), and also 33 % of CounterFact final positions. The routing decision is therefore local (the token and its syntactic slot), but what the expert writes is not: its DLA toward the right trigger is +0.58 logits in the full prompt and +0.09 in the local prompt of the same case (Mixtral +0.33 / +0.06), where the model itself barely knows the answer (local Δ +0.55 vs +4.16). The expert reads the option-dependent information from its input residual and turns it into the trigger logit.
+
+**6. The CounterFact experts are broad name-slot experts.** Qwen3 L44E069 / L42E115 are routed at 45 % / 40 % of all wikitext tokens, at 94 % / 95 % before a CounterFact place name and 72 % / 82 % before other capitalised words, and at 21 % / 13 % of copulas: yes, L44E069 fires before place names, but as part of a general 'a name follows' slot, not place-specifically. L42E115 is routed at 100 % of IOI final tokens (' to') and writes nothing there (DLA -0.02). What they write is relation-specific: L44E069's DLA when routed is +1.08 logits on place relations, +0.38 on languages, +0.12 on organisations and +0.01 on occupations (L42E115 +0.41 / +0.51 / +0.33 / +0.07). In Mixtral, L18E001 and L21E001 are preposition-slot experts (wikitext ' in' + place 95 % / 83 %; L18E001's most selective next words are months; IOI final ' to' 100 % / 94 % with DLA ≈ 0), L19E002 is a pre-entity expert that does not fire on IOI (0 %).
+
+**7. What the writes say (vocabulary projections).** Projected on the whole vocabulary (151,936 tokens), the δ_e of the Qwen3 writers put the answer high: L41E117 median rank 98 (r in the top 100 in 50 % of rows, rank 12 of 1648 within the trigger vocabulary; r′ at median rank 98 from the bottom, the mirror image because the two directions of a pair carry δ_e of opposite sign), L42E115 1,287, L43E081 3,458, L44E069 5,758 (top 0.06 % to 3.8 %; within the CounterFact objects of the case's relation group L44E069 ranks r 18 of 168). The clean outputs c_e alone are already answer-like: L41E117's c_e in the WinoGrande prompts ranks the correct trigger at median 131 (most promoted ' small', '小', 'small', ' SMALL', ' smaller'), L43E081's at 30 with trigger words making up 29 % of its top 50 (base 1.1 %), L42E115's c_e on CounterFact at 105 (languages and nationalities: ' Catalan', ' French', ' Old', ' Hindi', ' Standard'), L44E069's at 921 (' New', ' Tur', ' Prov', ' Norm', ' Southern'). In the context-free local prompts L41E117's c_e still promotes the same adjective family (' small', ' SMALL', 'small', ' smaller') but ranks the specific trigger only at median 4826: the expert writes a property axis (size, weight, temperature, ...) whose direction is set by the context it receives, which is why its DLA toward r vs r′ collapses without the context (C2). The class means (z) are small because the trigger vocabulary (1,648 words) and the object classes are broad; the top-50 shares carry the class signal.
+
+In Mixtral (vocabulary 32,000) the clean outputs of the targets rank the answer near the top: L20E000's c_e in the WinoGrande prompts at median 10 (top-10 in 51 %, top-100 in 79 %; most promoted ' large', ' small', ' crowded', ' tall', ' big'; δ_e 521), in the local prompts only at 497 (the same pattern as Qwen3); the CounterFact experts' c_e at 7 (L21E001), 59 (L19E002) and 544 (L18E001; δ_e 72, 252, 3,303), i.e. L18E001, the most indirect of the three in Part A, also writes the least answer-like vector. Many Mixtral vectors also promote a handful of answer-unrelated tokens (' /******/', byte-order mark, code fragments), a shared direction that is irrelevant to the logit difference (which reads only r and r′) and hence to DLA.
+
+### Caveats
+
+- T and D come from different passes (T: the ext6 / ext7 single-expert rows; D: ext8 pass 0). The pass-to-pass SD of a single-expert rescue is Qwen3 CounterFact 0.15, Qwen3 WinoGrande 0.30, Mixtral CounterFact 0.12, Mixtral WinoGrande 0.08 logits (ext8 in-pass singles of each first-donor row's top-10 vs the source rows; test-retest r 0.97, 0.83, 0.96, 0.97). Pairs with |T| below these values are noise; the bands' r over all pairs is dominated by them, the shares are not.
+- D freezes the final RMSNorm at the corrupted run's scale. For the summed MoE writes the exact-norm direct effect is known (ext8 `addback_direct.parquet`) and differs by ≤ 0.006 of the drop on the mean; for single experts the last-layer check (T − D with no downstream computation) gives +0.053, +0.006, +0.002, +0.006 logits per expert on average and the exact computation of Part B (B3) Qwen3 Σ exact / Σ frozen 0.999 / 0.998; Mixtral Σ exact / Σ frozen 0.996 / 0.998.
+- 'Indirect' includes interactions with every later layer at the final position only (the K/V of earlier positions are the corrupted run's); it does not separate later attention from later MoE layers (that needs path patching with downstream components frozen, not available in the engine).
+- Direct share is a ratio of sums; for experts whose total is near zero (early layers, CounterFact experts on WinoGrande and vice versa, n active < 20) it is undefined or has very wide CIs.
+- Final position only, STR only, Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS.
+- Part B uses the ext9 engine's `DiagSpec.contrib_final_vectors` (E4c). Its OLMoE verification (`results/verify_ext9_engine_olmoe.json`): Σ slots vs the fp32 MoE output max |diff| 6.0e-08, vector norms vs `route_cnorm` 7.2e-07, per-expert vectors vs transformers hooks median relative norm difference 0.022 (max 0.13, n = 383; bf16 level). In-run checks: the frozen projection of c_e equals the engine's `contrib_dla` exactly, and the δ_e DLA reproduces ext8's DLA from a different pass (r Qwen3 0.999 CounterFact / 0.992 WinoGrande; Mixtral 0.999 CounterFact / 1.000 WinoGrande).
+- Token classes are first tokens of words (CounterFact objects, triggers, names); a projection that promotes a different piece of the same word, another casing or a translation (' small', 'small', '小') counts only for the exact class token. Top-promoted tokens list the share of vectors with the token in their top 10.
+
+### Files
+
+- Code: `moetrace/ext11_writer.py` (loaders, cluster-bootstrap statistics, token classes), `scripts/ext11_writer_partA.py` (Part A), `scripts/ext11_writer_routing.py` + `scripts/ext11_chain_routing.sh` (Part C GPU passes), `scripts/ext11_writer_routing_analyze.py` (Part C analysis), `scripts/ext11_writer_vocab.py` + `scripts/ext11_chain_vocab.sh` (Part B GPU passes), `scripts/ext11_writer_vocab_analyze.py` (Part B analysis), `scripts/ext11_writer_text.py` (this section).
+- Runs: `results/{qwen3,mixtral_bos}_writer_routing` (prompts_input, final_routing, token_events, run_meta), `results/{qwen3,mixtral_bos}_writer_vocab` (prompts, vec_rows = one row per projected vector, vec_top = top-20 promoted / suppressed ids, run_meta); raw arrays in `/opt/dlami/nvme/moe_ext11/` (routing chunks, vectors.pt; ephemeral).
+- Numbers: `results/ext11_writer_summary.json` (keys A, C, B); tables `results/tables/ext11_*.md|csv`; figures `results/figures/ext11_*`.
+- GPU time (gpu_queue jobs): Part C 8.0 min (Qwen3 176 s, Mixtral 303 s), Part B 4.0 min (Qwen3 96 s, Mixtral 146 s); Part A is CPU only.
+
+
+## Direction 12: Completeness checks
+
+**Summary.** Three completeness checks of the Phase-3 claims (Direction 12; no engine change; ≈ 70 GPU-min). The expert-level claims replicate; the Phase-3 reading that the WinoGrande role swap is more attention-driven than the option swap does not survive identical items.
+
+- **4a, add-back replication.** On cases Phase 3 did not use (WinoGrande replication split; CounterFact with the paper folds swapped) the all-MoE ceilings are 0.833 / 0.524 / 0.765 / 0.435 of the drop (Qwen3 WinoGrande / Qwen3 CounterFact / Mixtral WinoGrande / Mixtral CounterFact; Phase 3 0.843 / 0.531 / 0.787 / 0.409; differences -0.010 [-0.034, +0.014], -0.007 [-0.058, +0.045], -0.023 [-0.053, +0.007], +0.026 [-0.032, +0.081], all CIs contain 0). 80 % of the ceiling still takes 12 / 5 / 7 / 4 experts with adaptive greedy (Phase 3 10 / 5 / 7 / 4) against 320 / 320 / 48 / 64 in random order; greedy beats the best static ordering at k = 10 by +0.07 / +0.03 / +0.04 / +0.07; the patch-free DLA ranking is within 0.03 of the single-patch oracle or above it (AUC difference +0.05 / +0.03 / -0.02 / +0.00); oracle subsets again overshoot the CounterFact ceiling; greedy's first picks are the Phase-3 experts. The paper's layer-first order stays below the population ranking except in Mixtral CounterFact (tied).
+- **4b, role swap vs option swap on identical items.** On the same WinoGrande twins the two corruption sites give the same final-position decomposition: attention share role vs option Qwen3 0.304 vs 0.306 (paired difference -0.002 [-0.015, +0.009], 282 twins; direct-path attention 0.181 vs 0.183); Mixtral BOS 0.406 vs 0.414 (paired difference -0.008 [-0.014, -0.001], 139 twins; direct-path attention 0.411 vs 0.410). The role-swapped prompt of every item is the option-swapped prompt with the two names exchanged (verified on all items), so for name pairs W7 is the option swap up to a renaming that both models nearly ignore. The Phase-3 gap (Qwen3 0.32 vs 0.16, Mixtral 0.39 vs 0.34) compared name items with mostly object items: name items lean towards attention under either corruption.
+- **4c, Mixtral without BOS on WinoGrande.** Without BOS the two-stage selection picks L20 and **L20E000** again (validation rescue +1.123 [+1.022, +1.225], Spec +0.948 [+0.839, +1.056], equal-norm Spec +0.154 [+0.130, +0.178]; pattern A; re-selected on the replication split), and the attention/MoE balance does not move: attention share 0.349 vs 0.344 with BOS (paired difference +0.005 [-0.002, +0.013]), all-MoE M 0.795 vs 0.788 (+0.007 [+0.001, +0.013]), direct-path attention 0.288 vs 0.288 (-0.001 [-0.007, +0.006]). Only 2 of 1024 WinoGrande prompts carry the sink state at their final token without BOS (0 with BOS; CounterFact in Direction 3: 63 of 256); add-back ceiling 0.795 vs 0.787 (paired +0.008 [+0.002, +0.014]), greedy k80 7 [7, 8] vs 7 [7, 8].
+
+
+### 4a. Add-back replication: WinoGrande replication split and CounterFact fold swap
+
+**What was run.** The Phase-3 add-back protocol (ext8, `moetrace/ext8_addback.py`, unchanged) on case sets that played no role in Phase 3's add-back curves. WinoGrande: the disjoint replication split of the 776-pair case set (population ranking and layer-wise baseline from rep_discovery, curves on the 128 rep_validation pairs = 256 directed cases; all-layer single-expert rows from the ext7 runs, which already covered the replication split). CounterFact has no replication set: the two paper folds were exchanged (ranking from the paper's validation cases, curves on its discovery cases: Qwen3 107, Mixtral 107 cases, every known donor, donor mean). Per run: A0 ceilings (all MoE / all attention / both, interior layers; add-back and deletion directions), the static orderings oracle / pop / layer-wise / DLA / |δ_e| / routing weight / random (5 permutations) on ext8's k grid with the all-clean-active endpoint, and adaptive greedy with ext8's pools (Qwen3 the row's top-32 singles, Mixtral all 64) for 15 steps. Not run (brief): beam, exact top-10, Shapley, deletion curves. The runs of one model shared every engine pass (`scripts/ext12_addback_run.py`, a multi-task driver over the ext8 functions: each task keeps its own prefill rows, state and files in the ext8 format and is analysed with ext8's own `analyse`). CIs: 5,000-resample unit bootstrap (CounterFact cases, WinoGrande pairs); differences to Phase 3 are between independent samples (difference of independent resamples).
+
+**4a / 4c add-back: Phase-3 run vs replication split / fold swap / no BOS (fraction of the drop; unit bootstrap 95% CI)**
+
+| Model | Task | Run | Eval. cases | All-MoE ceiling M | Answer restored by all MoE | k80 of ceiling oracle / greedy / random | AUC log k oracle / DLA / pop / layer-wise | AUC k ≤ 15 greedy / oracle / DLA | greedy − oracle r(10) | DLA − oracle AUC | oracle overshoot (max r − M) | case k answer restored (oracle; median; frac. of cases) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | WinoGrande | Phase 3 (main) | 256 | 0.843 [0.827, 0.859] | 0.95 [0.92, 0.97] | 48 [32, 48] / 10 [9, 12] / 320 [320, 320] | 0.591 [0.574, 0.607] / 0.647 [0.631, 0.664] / 0.531 [0.507, 0.554] / 0.462 [0.446, 0.479] | 0.486 [0.467, 0.506] / 0.422 [0.405, 0.439] / 0.420 [0.404, 0.436] | +0.124 [+0.107, +0.143] | +0.057 [+0.047, +0.067] | +0.003 [-0.006, +0.013] | 7; 0.98 |
+| Qwen3-30B-A3B-Base | WinoGrande | WinoGrande (replication split) | 256 | 0.833 [0.815, 0.850] | 0.95 [0.93, 0.98] | 48 [32, 48] / 12 [10, 14] / 320 [320, 320] | 0.581 [0.565, 0.597] / 0.629 [0.611, 0.646] / 0.507 [0.486, 0.527] / 0.438 [0.421, 0.455] | 0.464 [0.446, 0.481] / 0.410 [0.395, 0.426] / 0.406 [0.389, 0.423] | +0.104 [+0.090, +0.117] | +0.048 [+0.040, +0.056] | -0.004 [-0.015, +0.007] | 7; 0.97 |
+| Qwen3-30B-A3B-Base | CounterFact | Phase 3 (main) | 108 | 0.531 [0.489, 0.570] | 0.44 [0.34, 0.53] | 6 [5, 8] / 5 [4, 6] / 320 [320, 384] | 0.471 [0.445, 0.496] / 0.505 [0.480, 0.530] / 0.383 [0.359, 0.407] / 0.333 [0.312, 0.354] | 0.395 [0.371, 0.419] / 0.367 [0.343, 0.391] / 0.369 [0.346, 0.392] | +0.057 [+0.050, +0.064] | +0.034 [+0.028, +0.041] | +0.076 [+0.058, +0.096] | 48; 0.63 |
+| Qwen3-30B-A3B-Base | CounterFact | CounterFact (fold swap) | 107 | 0.524 [0.494, 0.555] | 0.44 [0.35, 0.53] | 7 [5, 10] / 5 [4, 6] / 320 [320, 384] | 0.458 [0.433, 0.484] / 0.492 [0.466, 0.518] / 0.374 [0.349, 0.400] / 0.328 [0.304, 0.351] | 0.380 [0.355, 0.405] / 0.352 [0.328, 0.378] / 0.354 [0.329, 0.380] | +0.056 [+0.050, +0.063] | +0.033 [+0.027, +0.039] | +0.063 [+0.045, +0.086] | 96; 0.63 |
+| Mixtral-8x7B (BOS) | WinoGrande | Phase 3 (main) | 256 | 0.787 [0.764, 0.809] | 0.89 [0.85, 0.93] | 8 [8, 9] / 7 [7, 8] / 48 [48, 48] | 0.580 [0.566, 0.594] / 0.553 [0.541, 0.565] / 0.534 [0.520, 0.547] / 0.494 [0.482, 0.506] | 0.493 [0.480, 0.507] / 0.471 [0.458, 0.484] / 0.422 [0.410, 0.434] | +0.044 [+0.039, +0.049] | -0.027 [-0.032, -0.023] | +0.026 [+0.015, +0.037] | 5; 0.96 |
+| Mixtral-8x7B (BOS) | WinoGrande | WinoGrande (replication split) | 256 | 0.765 [0.744, 0.784] | 0.91 [0.88, 0.94] | 8 [8, 9] / 7 [7, 8] / 48 [48, 48] | 0.566 [0.553, 0.579] / 0.543 [0.531, 0.554] / 0.523 [0.509, 0.536] / 0.486 [0.475, 0.497] | 0.480 [0.467, 0.493] / 0.460 [0.448, 0.472] / 0.416 [0.406, 0.427] | +0.040 [+0.036, +0.045] | -0.023 [-0.027, -0.019] | +0.032 [+0.022, +0.043] | 5; 0.94 |
+| Mixtral-8x7B (BOS) | CounterFact | Phase 3 (main) | 106 | 0.409 [0.367, 0.451] | 0.37 [0.27, 0.46] | 5 [4, 6] / 4 [4, 5] / 64 [48, 64] | 0.371 [0.349, 0.394] / 0.367 [0.345, 0.389] / 0.307 [0.284, 0.330] / 0.292 [0.271, 0.312] | 0.346 [0.325, 0.367] / 0.307 [0.286, 0.329] / 0.289 [0.269, 0.310] | +0.078 [+0.069, +0.087] | -0.004 [-0.010, +0.002] | +0.108 [+0.080, +0.136] | 48; 0.50 |
+| Mixtral-8x7B (BOS) | CounterFact | CounterFact (fold swap) | 107 | 0.435 [0.397, 0.470] | 0.38 [0.29, 0.48] | 5 [4, 6] / 4 [4, 5] / 64 [48, 64] | 0.379 [0.357, 0.402] / 0.381 [0.359, 0.403] / 0.305 [0.284, 0.326] / 0.301 [0.281, 0.322] | 0.359 [0.338, 0.381] / 0.317 [0.296, 0.337] / 0.303 [0.282, 0.324] | +0.089 [+0.081, +0.097] | +0.001 [-0.003, +0.006] | +0.089 [+0.066, +0.115] | 24; 0.65 |
+| Mixtral-8x7B (no BOS) | WinoGrande | WinoGrande (no BOS) | 256 | 0.795 [0.773, 0.815] | 0.91 [0.87, 0.95] | 8 [8, 9] / 7 [7, 8] / 48 [48, 48] | 0.585 [0.572, 0.599] / 0.559 [0.546, 0.571] / 0.541 [0.527, 0.555] / 0.500 [0.488, 0.512] | 0.497 [0.484, 0.510] / 0.476 [0.463, 0.489] / 0.426 [0.414, 0.439] | +0.041 [+0.037, +0.046] | -0.027 [-0.032, -0.022] | +0.027 [+0.017, +0.038] | 5; 0.95 |
+
+**4a / 4c: differences new run − Phase-3 run (95% bootstrap CI; k80 differences only where both are finite)**
+
+| Model | Comparison (new − Phase 3) | Bootstrap | Δ ceiling | Δ restored | Δ AUC oracle | Δ AUC k≤15 greedy | Δ AUC DLA | Δ (greedy − oracle r(10)) | Δ (DLA − oracle AUC) | Δ overshoot | Δ k80 oracle | Δ k80 greedy |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | WinoGrande (replication split) | independent samples | -0.010 [-0.034, +0.014] | +0.00 [-0.03, +0.04] | -0.010 [-0.033, +0.013] | -0.022 [-0.048, +0.003] | -0.018 [-0.043, +0.005] | -0.020 [-0.043, +0.001] | -0.009 [-0.022, +0.004] | -0.007 [-0.022, +0.008] | +0 [-16, +16] | +2 [-1, +4] |
+| Qwen3-30B-A3B-Base | CounterFact (fold swap) | independent samples | -0.007 [-0.058, +0.045] | +0.00 [-0.13, +0.13] | -0.013 [-0.050, +0.023] | -0.015 [-0.051, +0.020] | -0.013 [-0.050, +0.023] | -0.000 [-0.010, +0.009] | -0.001 [-0.010, +0.008] | -0.013 [-0.040, +0.016] | +1 [-2, +4] | +0 [-1, +2] |
+| Mixtral-8x7B (BOS) | WinoGrande (replication split) | independent samples | -0.023 [-0.053, +0.007] | +0.02 [-0.04, +0.07] | -0.014 [-0.032, +0.005] | -0.013 [-0.031, +0.005] | -0.010 [-0.026, +0.007] | -0.003 [-0.010, +0.004] | +0.004 [-0.002, +0.010] | +0.006 [-0.009, +0.021] | +0 [-1, +1] | +0 [-1, +1] |
+| Mixtral-8x7B (BOS) | CounterFact (fold swap) | independent samples | +0.026 [-0.032, +0.081] | +0.02 [-0.12, +0.15] | +0.009 [-0.023, +0.040] | +0.014 [-0.016, +0.043] | +0.014 [-0.018, +0.046] | +0.011 [-0.001, +0.023] | +0.005 [-0.002, +0.013] | -0.018 [-0.055, +0.020] | +0 [-1, +2] | +0 [-1, +1] |
+| Mixtral-8x7B (no BOS) | WinoGrande (no BOS) | paired (identical pairs) | +0.008 [+0.002, +0.014] | +0.02 [-0.01, +0.04] | +0.005 [+0.001, +0.010] | +0.004 [-0.001, +0.009] | +0.006 [+0.001, +0.010] | -0.002 [-0.008, +0.003] | +0.000 [-0.003, +0.004] | +0.001 [-0.005, +0.007] | +0 [-1, +1] | +0 [+0, +1] |
+
+![Add-back curves, new runs (solid) vs Phase 3 (dashed)](../figures/ext12_4a_curves.png)
+
+**Reading.**
+
+- **Qwen3 WinoGrande** (WinoGrande (replication split)): ceiling 0.833 [0.815, 0.850] vs 0.843 [0.827, 0.859] in Phase 3 (difference -0.010 [-0.034, +0.014]); answer restored by all MoE 0.95 [0.93, 0.98] vs 0.95; k80 of the ceiling oracle / greedy / random 48 [32, 48] / 12 [10, 14] / 320 [320, 320] (Phase 3 48 [32, 48] / 10 [9, 12] / 320 [320, 320]); AUC over log k oracle 0.581 [0.565, 0.597] (Phase 3 0.591), DLA 0.629 [0.611, 0.646] (0.647); k ≤ 15 greedy 0.464 [0.446, 0.481] (0.486); greedy − static oracle at k = 10 +0.104 [+0.090, +0.117] (+0.124); DLA − oracle AUC +0.048 [+0.040, +0.056] (+0.057); overshoot of the oracle curve over the ceiling -0.004 [-0.015, +0.007] (+0.003).
+- **Qwen3 CounterFact** (CounterFact (fold swap)): ceiling 0.524 [0.494, 0.555] vs 0.531 [0.489, 0.570] in Phase 3 (difference -0.007 [-0.058, +0.045]); answer restored by all MoE 0.44 [0.35, 0.53] vs 0.44; k80 of the ceiling oracle / greedy / random 7 [5, 10] / 5 [4, 6] / 320 [320, 384] (Phase 3 6 [5, 8] / 5 [4, 6] / 320 [320, 384]); AUC over log k oracle 0.458 [0.433, 0.484] (Phase 3 0.471), DLA 0.492 [0.466, 0.518] (0.505); k ≤ 15 greedy 0.380 [0.355, 0.405] (0.395); greedy − static oracle at k = 10 +0.056 [+0.050, +0.063] (+0.057); DLA − oracle AUC +0.033 [+0.027, +0.039] (+0.034); overshoot of the oracle curve over the ceiling +0.063 [+0.045, +0.086] (+0.076).
+- **Mixtral WinoGrande** (WinoGrande (replication split)): ceiling 0.765 [0.744, 0.784] vs 0.787 [0.764, 0.809] in Phase 3 (difference -0.023 [-0.053, +0.007]); answer restored by all MoE 0.91 [0.88, 0.94] vs 0.89; k80 of the ceiling oracle / greedy / random 8 [8, 9] / 7 [7, 8] / 48 [48, 48] (Phase 3 8 [8, 9] / 7 [7, 8] / 48 [48, 48]); AUC over log k oracle 0.566 [0.553, 0.579] (Phase 3 0.580), DLA 0.543 [0.531, 0.554] (0.553); k ≤ 15 greedy 0.480 [0.467, 0.493] (0.493); greedy − static oracle at k = 10 +0.040 [+0.036, +0.045] (+0.044); DLA − oracle AUC -0.023 [-0.027, -0.019] (-0.027); overshoot of the oracle curve over the ceiling +0.032 [+0.022, +0.043] (+0.026).
+- **Mixtral CounterFact** (CounterFact (fold swap)): ceiling 0.435 [0.397, 0.470] vs 0.409 [0.367, 0.451] in Phase 3 (difference +0.026 [-0.032, +0.081]); answer restored by all MoE 0.38 [0.29, 0.48] vs 0.37; k80 of the ceiling oracle / greedy / random 5 [4, 6] / 4 [4, 5] / 64 [48, 64] (Phase 3 5 [4, 6] / 4 [4, 5] / 64 [48, 64]); AUC over log k oracle 0.379 [0.357, 0.402] (Phase 3 0.371), DLA 0.381 [0.359, 0.403] (0.367); k ≤ 15 greedy 0.359 [0.338, 0.381] (0.346); greedy − static oracle at k = 10 +0.089 [+0.081, +0.097] (+0.078); DLA − oracle AUC +0.001 [-0.003, +0.006] (-0.004); overshoot of the oracle curve over the ceiling +0.089 [+0.066, +0.115] (+0.108).
+
+The Phase-3 add-back conclusions hold on independent cases. (1) The all-MoE ceiling is a property of the task, not of the particular 128 pairs or ~107 facts: replication / fold-swap ceilings differ from Phase 3 by at most 0.03 (every CI of the difference contains 0), and CounterFact stays far below WinoGrande (≈ 0.4–0.5 vs ≈ 0.75–0.85 of the drop; all MoE outputs restore the answer in ≈ 40 % of facts vs ≈ 90–95 % of WinoGrande cases). (2) A handful of experts still carries the expert repair: k80 of the ceiling with greedy is 4–7 experts except Qwen3 WinoGrande (12 vs 10 in Phase 3), the per-case static oracle needs 5–8 except Qwen3 WinoGrande (48 in both), and random orders still need most of the clean-active experts. (3) Adaptivity matters most where Phase 3 found expert interactions (Qwen3 WinoGrande: greedy − static oracle at k = 10 +0.10 vs +0.12) and still adds +0.04–0.09 elsewhere. (4) The patch-free DLA ranking stays above the single-patch oracle in Qwen3 (+0.03 to +0.05 AUC), equal to it in Mixtral CounterFact and 0.02 below it in Mixtral WinoGrande, exactly the Phase-3 pattern. (5) With the population ranking taken from the other fold, the pop and layer-wise curves are out-of-sample in both directions and keep their Phase-3 positions (oracle ≈ DLA > pop ≥ layer-wise > |δ_e|, weight > random); only in Mixtral CounterFact are pop and layer-wise tied on the fold swap, as they nearly were in Phase 3 (0.307 vs 0.292). (6) Oracle subsets overshoot the CounterFact ceiling again by +0.06 / +0.09 of the drop. (7) Greedy picks the same experts: share of rows with the expert among greedy's first five picks, new run (Phase 3): Qwen3 WinoGrande L41E117 0.50 (0.57), L43E081 0.46 (0.44), L39E071 0.32 (0.32); Qwen3 CounterFact L42E115 0.58 (0.55), L44E069 0.46 (0.46), L43E046 0.20 (–); Mixtral WinoGrande L19E006 0.83 (0.79), L20E000 0.80 (0.80), L21E006 0.41 (0.40); Mixtral CounterFact L21E001 0.45 (0.40), L19E002 0.35 (0.32), L18E001 0.28 (0.28); Mixtral no BOS WinoGrande L20E000 0.78 (0.80), L19E006 0.78 (0.79), L21E006 0.40 (0.40).
+
+### 4b. Role swap vs option swap on identical items
+
+**What was run.** Every W7 role-swap pair was built inside its model's option-swap margin pool, so each role-swap item (a WinoGrande twin) also has an option-swap pair (A, B) (`scripts/ext12_roleitems_casesets.py` → `results/wino_roleitems_inputs/`; check: the option pair passes the margin both ways, and the role pair's clean prompt and (r, r′) equal those of one option-swap direction). Items: Qwen3 282 twins (all four role splits: 1024 role and 564 option directed cases), Mixtral BOS 139 twins (512 / 278). On exactly these items the option swap was re-run with the Phase-3 runners: W2 final-position sweep (`layer`, `attn_layer`, `block` at every layer), W4 joint patch (all-MoE M, both directions) and the direct-path split (exact final norm); the role-swap side is the Phase-3 run (`results/wino_role_*_str`). Comparison unit = twin: the role-swap value of a twin pools its one or two role pairs (both directions), the option-swap value its option pair (both directions); the attention share is the Direction-2b AUC+ share of the twin-weighted mean single-layer curves; ratios (A_dir, M) are ratios of twin means; 5,000-resample twin bootstrap with the SAME resamples for both corruptions (paired). Sensitivity: the clean-prompt-matched variant (role direction d = 0 against the option-swap direction with the same clean prompt and the same r, r′; only the corruption differs) and the validation split alone (the Phase-3 comparison set).
+
+**4b: role swap vs option swap on identical WinoGrande items (twin-level, twin bootstrap 95% CI; attention share = AUC+(attention) / (AUC+(attention) + AUC+(MoE)) of the twin-weighted final-position single-layer curves)**
+
+| Model | Items | Twins | Directed cases role / option | Drop role / option | Attention share role | Attention share option | Δ share (role − option) | Direct-path attention A_dir role / option | Δ A_dir | All-MoE M role / option | Δ M |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | all role items (4 splits) | 282 | 1024 / 564 | 7.28 [7.01, 7.54] / 7.35 [7.07, 7.63] | 0.304 [0.287, 0.323] | 0.306 [0.286, 0.330] | -0.002 [-0.015, +0.009] | 0.181 [0.161, 0.202] / 0.183 [0.162, 0.205] | -0.001 [-0.007, +0.004] | 0.776 [0.758, 0.792] / 0.778 [0.761, 0.794] | -0.002 [-0.006, +0.001] |
+| Qwen3-30B-A3B-Base | validation split | 73 | 256 / 146 | 6.76 [6.27, 7.25] / 6.97 [6.45, 7.51] | 0.321 [0.294, 0.360] | 0.320 [0.289, 0.364] | +0.000 [-0.022, +0.022] | 0.187 [0.147, 0.231] / 0.184 [0.146, 0.223] | +0.004 [-0.010, +0.018] | 0.774 [0.742, 0.804] / 0.780 [0.749, 0.810] | -0.006 [-0.016, +0.004] |
+| Qwen3-30B-A3B-Base | all, clean-prompt matched (role d = 0) | 282 | 512 / 512 | 7.29 [7.02, 7.56] / 7.35 [7.07, 7.63] | 0.303 [0.285, 0.324] | 0.312 [0.291, 0.337] | -0.009 [-0.025, +0.005] | 0.180 [0.159, 0.201] / 0.183 [0.162, 0.205] | -0.003 [-0.008, +0.003] | 0.775 [0.757, 0.791] / 0.778 [0.760, 0.794] | -0.003 [-0.008, +0.002] |
+| Mixtral-8x7B, BOS | all role items (2 splits) | 139 | 512 / 278 | 6.38 [6.06, 6.71] / 6.41 [6.08, 6.75] | 0.406 [0.389, 0.424] | 0.414 [0.396, 0.431] | -0.008 [-0.014, -0.001] | 0.411 [0.379, 0.445] / 0.410 [0.377, 0.443] | +0.001 [-0.002, +0.005] | 0.668 [0.631, 0.702] / 0.669 [0.631, 0.703] | -0.001 [-0.005, +0.003] |
+| Mixtral-8x7B, BOS | validation split | 69 | 256 / 138 | 6.55 [6.08, 7.04] / 6.61 [6.12, 7.10] | 0.391 [0.369, 0.414] | 0.399 [0.377, 0.422] | -0.008 [-0.018, +0.003] | 0.374 [0.336, 0.417] / 0.375 [0.337, 0.418] | -0.001 [-0.006, +0.004] | 0.703 [0.654, 0.744] / 0.701 [0.652, 0.742] | +0.001 [-0.004, +0.008] |
+| Mixtral-8x7B, BOS | all, clean-prompt matched (role d = 0) | 139 | 256 / 256 | 6.38 [6.06, 6.70] / 6.41 [6.08, 6.75] | 0.404 [0.385, 0.422] | 0.412 [0.393, 0.431] | -0.008 [-0.016, -0.000] | 0.410 [0.378, 0.444] / 0.409 [0.377, 0.443] | +0.001 [-0.003, +0.005] | 0.667 [0.630, 0.700] / 0.668 [0.630, 0.702] | -0.001 [-0.005, +0.004] |
+
+**4b: final-position single-layer curves on identical items (all role items; descriptive peaks of the twin-weighted means)**
+
+| Model | Attention peak role / option (L, / drop) | MoE peak role / option | Block peak role / option | AUC+ attention / drop role / option | Δ | AUC+ MoE / drop role / option | Δ | Share, pair-weighted (Phase-3 definition) role / option |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38 0.115 / L38 0.120 | L42 0.177 / L42 0.176 | L42 0.214 / L42 0.212 | 0.542 [0.500, 0.592] / 0.545 [0.497, 0.617] | -0.003 [-0.059, +0.041] | 1.244 [1.172, 1.323] / 1.238 [1.167, 1.332] | +0.006 [-0.065, +0.065] | 0.303 / 0.306 |
+| Mixtral-8x7B, BOS | L13 0.145 / L13 0.144 | L19 0.186 / L19 0.186 | L19 0.274 / L19 0.274 | 0.886 [0.835, 0.939] / 0.904 [0.853, 0.955] | -0.018 [-0.054, +0.018] | 1.297 [1.224, 1.368] / 1.280 [1.213, 1.349] | +0.017 [-0.016, +0.047] | 0.408 / 0.414 |
+
+![Role swap vs option swap on identical items](../figures/ext12_4b_role_vs_option.png)
+
+**Reading.**
+
+- **Qwen3**: attention share role 0.304 [0.287, 0.323] vs option 0.306 [0.286, 0.330] on the same 282 twins, paired difference -0.002 [-0.015, +0.009] (validation split only +0.000 [-0.022, +0.022]; clean-prompt matched -0.009 [-0.025, +0.005]). Phase 3 compared the role-swap validation pairs with the option swap's own 776-pair validation set (option share 0.159). Direct-path attention share A_dir role 0.181 [0.161, 0.202] vs option 0.183 [0.162, 0.205], difference -0.001 [-0.007, +0.004]; all-MoE M role 0.776 [0.758, 0.792] vs option 0.778 [0.761, 0.794], difference -0.002 [-0.006, +0.001]. Attention AUC+ / drop -0.003 [-0.059, +0.041], MoE AUC+ / drop +0.006 [-0.065, +0.065] (role − option).
+- **Mixtral BOS**: attention share role 0.406 [0.389, 0.424] vs option 0.414 [0.396, 0.431] on the same 139 twins, paired difference -0.008 [-0.014, -0.001] (validation split only -0.008 [-0.018, +0.003]; clean-prompt matched -0.008 [-0.016, -0.000]). Phase 3 compared the role-swap validation pairs with the option swap's own 776-pair validation set (option share 0.344). Direct-path attention share A_dir role 0.411 [0.379, 0.445] vs option 0.410 [0.377, 0.443], difference +0.001 [-0.002, +0.005]; all-MoE M role 0.668 [0.631, 0.702] vs option 0.669 [0.631, 0.703], difference -0.001 [-0.005, +0.003]. Attention AUC+ / drop -0.018 [-0.054, +0.018], MoE AUC+ / drop +0.017 [-0.016, +0.047] (role − option).
+
+The role-swap pairs were built only from name items (two person names, each mentioned once before the blank). For such an item the role swap (exchange the two first mentions, keep the filled name) and the option swap (fill the blank with the other name) produce the same corrupted sentence up to exchanging the two names (verified on every item: 512/512 Qwen3, 256/256 Mixtral clean-prompt-matched cases), and both keep the clean prompt and (r, r′). The models are close to equivariant under that renaming: per case (clean-prompt matched), the single-layer rescue curves of the two corruptions correlate at r = 0.76 (MoE) / 0.61 (attention) in Qwen3 and 0.96 / 0.90 in Mixtral, the drops at r = 0.89 / 0.97, and the population curves coincide (largest share difference 0.008). The Phase-3 reading "the role swap moves the balance towards attention" is therefore withdrawn: what moved the balance was the item type. Name items are the attention-leaning stratum under either corruption (in the 776-pair option-swap set its 23 name pairs already had attention share 0.30 in Qwen3 and 0.43 in Mixtral, against 0.16 / 0.34 overall), object items are not. A role swap that is not a renaming of the option swap would need object items with two swappable mentions, which W7 excluded; Zhang & Nanda's corruption-site question (Z7) is therefore not yet answered for WinoGrande.
+
+### 4c. Mixtral without BOS on WinoGrande (the base reproduction's paper protocol)
+
+**What was run.** The same 776-pair case set (main 128/128 and replication 128/128 pairs, both directions) with the pairs tokenised without `<s>` (`data/wino_str/pairs_train_xl_mixtral_nobos.parquet`; identical text and token positions, no BOS), run dir `results/wino_mixtral_nobos_str`: W2 final-position sweep, W6 all-layer expert pass with equal-norm rows at the MoE argmax layer and the paper's two-stage selection (recurrence gate 128 of 256 discovery directed cases), joint search, fixed hypotheses; W4 all-MoE / all-attention / all-block joint patches and the direct-path split; add-back (static orderings + greedy, main validation, `results/wino_mixtral_nobos_str_addback`); sink-carrying final-token flags (Direction 3: the final position holds the maximal residual norm at layer 5) from one prefill pass over both prompts of every pair under both protocols (`scripts/ext12_sink_flags.py`). All comparisons with the BOS run (Phase 3, `results/wino_mixtral_bos_str`, `results/wino_mixtral_bos_str_addback`) are on identical pairs, so CIs of differences come from a paired pair bootstrap.
+
+**4c W2: final-position single-layer patches, Mixtral without vs with BOS on the identical 776-pair case set (main 128/128 pairs; pair bootstrap 95% CI)**
+
+| Run | MoE peak (disc. L, val. / drop) | Attention peak | Block peak | Attention share (main val.) | Share (rep val.) | Mean drop (main) |
+|---|---|---|---|---|---|---|
+| Mixtral-8x7B, no BOS (ext12) | L20: 0.179 [0.169, 0.190] | L13: 0.145 [0.130, 0.161] | L19: 0.253 [0.240, 0.267] | 0.349 [0.337, 0.362] | 0.346 | +7.64 |
+| Mixtral-8x7B, BOS (Phase 3) | L20: 0.172 [0.162, 0.183] | L13: 0.141 [0.127, 0.157] | L19: 0.251 [0.238, 0.264] | 0.344 [0.331, 0.357] | 0.350 | +7.78 |
+
+**4c: Mixtral no BOS vs BOS on identical pairs (paired pair bootstrap, 95% CI)**
+
+| Pairs | Quantity | no BOS | BOS | no BOS − BOS (paired) |
+|---|---|---|---|---|
+| main validation | attention share | 0.349 [0.337, 0.362] | 0.344 [0.331, 0.357] | +0.005 [-0.002, +0.013] |
+| main validation | AUC+ attention / drop | 0.767 [0.729, 0.808] | 0.728 [0.692, 0.765] | +0.039 [+0.002, +0.074] |
+| main validation | AUC+ MoE / drop | 1.432 [1.378, 1.488] | 1.389 [1.346, 1.439] | +0.042 [+0.003, +0.075] |
+| main validation | direct-path attention A_dir | 0.288 [0.266, 0.311] | 0.288 [0.265, 0.313] | -0.001 [-0.007, +0.006] |
+| main validation | direct-path MoE M_dir | 0.712 [0.689, 0.734] | 0.712 [0.687, 0.735] | +0.001 [-0.006, +0.007] |
+| main validation | all-MoE M (denoise) | 0.795 [0.773, 0.815] | 0.788 [0.765, 0.810] | +0.007 [+0.001, +0.013] |
+| main validation | mean drop (logits) | 7.562 [7.136, 7.988] | 7.685 [7.251, 8.138] | -0.123 [-0.273, +0.023] |
+| main all | attention share | 0.356 [0.347, 0.366] | 0.350 [0.340, 0.360] | +0.006 [+0.001, +0.012] |
+| main all | AUC+ attention / drop | 0.767 [0.739, 0.797] | 0.730 [0.705, 0.759] | +0.037 [+0.011, +0.062] |
+| main all | AUC+ MoE / drop | 1.386 [1.346, 1.428] | 1.356 [1.321, 1.393] | +0.030 [+0.004, +0.057] |
+| main all | direct-path attention A_dir | 0.300 [0.283, 0.318] | 0.300 [0.282, 0.318] | +0.001 [-0.004, +0.006] |
+| main all | direct-path MoE M_dir | 0.700 [0.682, 0.717] | 0.700 [0.682, 0.718] | -0.001 [-0.006, +0.004] |
+| main all | all-MoE M (denoise) | 0.778 [0.761, 0.794] | 0.774 [0.756, 0.791] | +0.004 [-0.001, +0.009] |
+| main all | mean drop (logits) | 7.643 [7.347, 7.936] | 7.782 [7.466, 8.087] | -0.138 [-0.256, -0.021] |
+
+**4c W6: two-stage expert selection, Mixtral without vs with BOS (recurrence gate 128 of 256 discovery directed cases; pair bootstrap 95% CI; the interior-layer rule (≤ L−5) selects the same layer in every row and is not repeated)**
+
+| Protocol | Family | Rule | Layer | Selected expert | Pattern | Val. rescue | Spec | Equal-norm Spec | Val. active (of 256) | Joint top-3 (disc. active) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| no BOS | main | two-stage | L20 | L20E000 | A | +1.123 [+1.022, +1.225] | +0.948 [+0.839, +1.056] | +0.154 [+0.130, +0.178] | 246 | L20E000 (248), L19E006 (249), L21E006 (226) |
+| no BOS | rep | two-stage | L20 | L20E000 | A | +1.160 [+1.054, +1.276] | +0.967 [+0.855, +1.085] | n/a | 246 | L20E000 (252), L19E006 (256), L21E006 (241) |
+| BOS (Phase 3) | main | two-stage | L20 | L20E000 | A | +1.106 [+1.013, +1.203] | +0.940 [+0.836, +1.042] | +0.160 [+0.132, +0.189] | 246 | L20E000 (246), L19E006 (248), L21E006 (228) |
+| BOS (Phase 3) | rep | two-stage | L20 | L20E000 | A | +1.166 [+1.067, +1.269] | +0.974 [+0.867, +1.084] | n/a | 247 | L20E000 (252), L19E006 (256), L21E006 (241) |
+
+**4c: fixed experts evaluated without BOS (WinoGrande BOS selection L20E000, the Direction-3 sink expert L19E006, CounterFact experts; main validation; Spec of an expert that is rarely clean-active is negative by construction, its rescue being 0 where it is not routed)**
+
+| Expert (fixed hypothesis) | Disc. active (of 256) | Val. active | Val. rescue | Spec |
+|---|---|---|---|---|
+| L20E000 | 248 | 246 | +1.123 [+1.022, +1.225] | +0.948 [+0.839, +1.056] |
+| L19E006 | 249 | 256 | +0.981 [+0.907, +1.058] | +0.862 [+0.785, +0.939] |
+| L21E006 | 226 | 232 | +0.633 [+0.555, +0.715] | +0.171 [+0.061, +0.285] |
+| L19E002 | 9 | 6 | +0.004 [-0.002, +0.014] | -0.535 [-0.598, -0.473] |
+| L18E001 | 3 | 3 | +0.006 [+0.000, +0.019] | -0.363 [-0.421, -0.308] |
+| L21E001 | 9 | 11 | +0.006 [+0.002, +0.012] | -0.573 [-0.650, -0.499] |
+
+**4c: sink-carrying final tokens (Direction-3 flag) on the WinoGrande prompts (main + rep pairs, both prompts)**
+
+| Protocol | Prompts | Final position = max norm at L5 | … at any early layer | Position 0 = max norm at L5 | Mass on position 0 at L1 |
+|---|---|---|---|---|---|
+| nobos | 1024 | 2 (0.002) | 2 | 44 | 0.02 |
+| bos | 1024 | 0 (0.000) | 0 | 1024 | 0.80 |
+
+![Mixtral without vs with BOS, final-position curves](../figures/ext12_4c_w2_nobos_vs_bos.png)
+
+**Reading.**
+
+Without BOS the WinoGrande final-position picture is unchanged: the same layers (MoE L20, attention L13, block L19), the same selected expert with the same specificity and equal-norm specificity, re-selected on the replication split, the same joint top-3 (L20E000, L19E006, L21E006), and attention / MoE shares within 0.01. All-MoE patch M 0.795 [0.773, 0.815] vs 0.788 [0.765, 0.810] with BOS (paired difference +0.007 [+0.001, +0.013]). Direct-path attention share 0.288 [0.266, 0.311] vs 0.288 [0.265, 0.313] (paired difference -0.001 [-0.007, +0.006]). Add-back without BOS: ceiling 0.795 [0.773, 0.815] vs 0.787 [0.764, 0.809] (paired +0.008 [+0.002, +0.014]), k80 oracle / greedy / random 8 [8, 9] / 7 [7, 8] / 48 [48, 48] (BOS 8 [8, 9] / 7 [7, 8] / 48 [48, 48]), AUC over log k oracle 0.585 vs 0.580, DLA − oracle -0.027 vs -0.027, greedy − static oracle at k = 10 +0.041 vs +0.044: the curves are the BOS curves within ≈ 0.01. Sink flags: without BOS the final position carries the maximal residual norm at layer 5 in only 2 of 1024 WinoGrande prompts (one pair whose sentence ends in '▁to'), with BOS in 0, against 63 of 256 CounterFact prompts in Direction 3. Without BOS the massive-norm state sits on an early token instead (position 0 in 44 prompts; most often positions 3, 5, 4, 2; median relative position 0.24), and the final position's attention mass on position 0 at layer 1 is 0.02 (BOS 0.80). The flagged prompts are routed to {E006, E007} at L19, the `<s>` routing of Direction 3. Final-position routing agrees between the protocols (identical top-2 set) in 0.96 of the prompts at L19 and 0.87 at L20 (mean over layers 0.90). Excluding the flagged pair changes nothing (L20E000 Spec +0.919 [+0.842, +0.995] on the 255 remaining main pairs).  This is what Direction 3's mechanism predicts: the BOS effect on CounterFact came from short cloze prompts whose final preposition became the attention sink, whereas WinoGrande prompts are full sentences (median 19 tokens without BOS) with delimiters and function words long before the final position. L19E006, the Direction-3 'sink expert', is routed at the WinoGrande final position in 256 of 256 validation directed cases without BOS and is positively specific (Spec +0.862 [+0.785, +0.939]), as with BOS: on WinoGrande it is an ordinary content expert (among greedy's first five picks in 78% of rows, as often as L20E000), not a sink artefact. The CounterFact experts (L19E002, L21E001, L18E001) stay idle on WinoGrande without BOS as with BOS. Answer to the brief: L20E000 survives without BOS, and the attention/MoE balance does not change.
+
+### Caveats
+
+- 4a: the replication split and the fold swap are new evaluation cases but the same models, tasks and protocol; beam / exact / Shapley / deletion were not repeated (brief). Greedy and the oracle ordering use each row's own single-expert patches (in-sample), as in Phase 3. The fold swap evaluates on the paper's discovery fold, on which the Direction-6 single-expert rows were selected (layer and expert selection, not the add-back orderings); no add-back quantity was tuned on it.
+- 4a / 4c passes were shared between tasks of one model (multi-task driver); bf16 batch composition therefore differs from Phase 3 (run-to-run noise of identical rows ≈ 0.06–0.17 logits median; differences below ≈ 0.01 of the drop are not resolved).
+- Engine: `moetrace/engine.py` was replaced by the ext9 engine at 06:58Z (E4 additions; regression identical in every result field). The 4c sweep / expert passes, the Qwen3 4b sweep / joint and the first two Qwen3 add-back jobs ran on the ext8 engine, all later jobs on the ext9 engine; no kind used here changed.
+- 4b compares twin-weighted curves (a twin with two role pairs counts once); the Phase-3 pair-weighted shares on the same items are in the peaks table and agree to ≤ 0.01. Role swaps are name items only; the conclusion is about name items.
+- 4c: the sink flag is Direction 3's (final position = max residual norm at layer 5); the BOS comparison is on identical pairs, but the BOS add-back run is Phase 3's (different pass composition).
+
+### Files
+
+- Code: `moetrace/ext12_complete.py` (task registry, CounterFact fold-swap loader, ext12 work queue), `scripts/ext12_addback_run.py` (multi-task add-back driver over the ext8 functions), `scripts/ext12_roleitems_casesets.py` (4b case sets and links), `scripts/ext12_sink_flags.py` (4c sink flags), `scripts/ext12_analyze.py`, `scripts/ext12_complete_text.py`, chains `scripts/ext12_chain_inputs.sh`, `scripts/ext12_chain_addback.sh` (logs `logs/ext12_chain_*.log`).
+- Runs: `results/wino_qwen3_str_addback_rep`, `results/wino_mixtral_bos_str_addback_rep`, `results/qwen3_str_addback_fold_rep`, `results/mixtral_bos_str_addback_fold_rep`, `results/wino_mixtral_nobos_str_addback` (ext8 file format), `results/wino_mixtral_nobos_str` (W2 / W6 / W4 / direct split / `sink_flags.parquet`, `sink_diag.json`), `results/wino_roleitems_{qwen3,mixtral_bos}_str` (option swap on the role items), `results/wino_roleitems_inputs/` (case sets, link tables).
+- Numbers `results/ext12_complete_summary.json`; tables `results/tables/ext12_*`; figures `results/figures/ext12_*`.
+- GPU: ≈ 70 min in ext12 jobs (4a/4c add-back 41, 4b 10, 4c inputs 17, smoke 3).

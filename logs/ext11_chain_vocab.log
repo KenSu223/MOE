@@ -1,0 +1,27 @@
+2026-10-05T07:11:08Z START ext11-vocab-qwen3 (waited 633s): python scripts/ext11_writer_vocab.py qwen3 --out qwen3_writer_vocab
+07:11:16 qwen3: 2491 prefill rows, T <= 31, layers [31, 34, 39, 40, 41, 42, 43, 44]
+07:11:20   layer   0: load-wait 3.00s compute 0.89s  wf_rows=0
+07:11:27   layer   8: load-wait 0.77s compute 0.36s  wf_rows=0
+07:11:37   layer  16: load-wait 0.85s compute 0.36s  wf_rows=0
+07:11:46   layer  24: load-wait 0.85s compute 0.36s  wf_rows=0
+07:11:56   layer  32: load-wait 0.65s compute 0.37s  wf_rows=0
+07:12:05   layer  40: load-wait 0.67s compute 0.56s  wf_rows=0
+07:12:15   layer  47: load-wait 0.98s compute 0.36s  wf_rows=0
+07:12:15   pass done: 2491 prefill rows (T=31), 0 spawn rows, 59.1s
+07:12:20 pass done in 59s, peak 7.1 GB; vectors saved
+07:12:20 23709 vectors (11114 delta, 12595 clean)
+07:12:40 done {"n_vectors": 23709, "check_frozen_vs_contrib_dla_max_abs": 0.0}
+2026-10-05T07:12:44Z END   ext11-vocab-qwen3 rc=0 (96s)
+2026-10-05T07:50:20Z START ext11-vocab-mixtral (waited 2256s): python scripts/ext11_writer_vocab.py mixtral --out mixtral_bos_writer_vocab
+07:50:36 mixtral: 2495 prefill rows, T <= 32, layers [16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28]
+07:50:47   layer   0: load-wait 8.81s compute 1.63s  wf_rows=0
+07:51:10   layer   8: load-wait 1.76s compute 1.13s  wf_rows=0
+07:51:33   layer  16: load-wait 1.76s compute 1.21s  wf_rows=0
+07:51:56   layer  24: load-wait 1.67s compute 1.23s  wf_rows=0
+07:52:16   layer  31: load-wait 1.81s compute 1.13s  wf_rows=0
+07:52:16   pass done: 2495 prefill rows (T=32), 0 spawn rows, 99.7s
+07:52:18 pass done in 100s, peak 9.2 GB; vectors saved
+07:52:19 25366 vectors (11792 delta, 13574 clean)
+07:52:39 done {"n_vectors": 25366, "check_frozen_vs_contrib_dla_max_abs": 0.0}
+2026-10-05T07:52:46Z END   ext11-vocab-mixtral rc=0 (146s)
+2026-10-05T07:52:46Z ext11 vocab chain finished

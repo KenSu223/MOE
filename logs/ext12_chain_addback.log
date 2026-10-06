@@ -1,0 +1,430 @@
+2026-10-05T06:30:20Z START ext12-addback-qwen3-1 (waited 593s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+06:30:27 wino_qwen3_rep: initialised {'eval_rows': 256, 'pool': 32, 'queue_groups': 3073, 'queue_items': 59136}
+06:30:36 cf_qwen3_fold: initialised {'eval_rows': 420, 'pool': 32, 'queue_groups': 5053, 'queue_items': 97140}
+06:30:36 wino_qwen3_rep: 512 cases, 512 rows, K=384; passes done 0, queue 0/3073, greedy left 256
+06:30:36 cf_qwen3_fold: 215 cases, 852 rows, K=384; passes done 0, queue 0/5053, greedy left 420
+06:30:40 pass 0: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44995 spawn rows (adaptive [8192, 13440], static groups [744, 1083])
+06:30:45   layer   0: load-wait 3.79s compute 0.93s  wf_rows=17411
+06:30:52   layer   8: load-wait 0.42s compute 0.52s  wf_rows=24678
+06:31:00   layer  16: load-wait 0.42s compute 0.69s  wf_rows=28923
+06:31:07   layer  24: load-wait 0.48s compute 0.60s  wf_rows=31977
+06:31:17   layer  32: load-wait 0.55s compute 0.61s  wf_rows=35713
+06:31:26   layer  40: load-wait 0.45s compute 0.65s  wf_rows=39797
+06:31:35   layer  47: load-wait 0.11s compute 0.67s  wf_rows=44995
+06:31:37   pass done: 2091 prefill rows (T=30), 44995 spawn rows, 56.2s (metrics 1.7s)
+06:31:40 wino_qwen3_rep first pass: ceilings for 512 rows (mean all-MoE rescue +7.056); DLA rows 196608 (3388 candidate pairs not routed in this pass's clean run)
+06:31:41 wino_qwen3_rep pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.40); queue 744/3329
+06:31:46 cf_qwen3_fold first pass: ceilings for 852 rows (mean all-MoE rescue +6.198); DLA rows 327168 (4989 candidate pairs not routed in this pass's clean run)
+06:31:46 cf_qwen3_fold pass 0 done: greedy left 420 (median step 2, median rescue/ceiling 0.55); queue 1083/5473
+06:31:46 group pass 0 done in 56s, peak 10.4 GB
+06:31:49 pass 1: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44997 spawn rows (adaptive [7680, 12600], static groups [589, 588])
+06:32:37 wino_qwen3_rep pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.49); queue 1333/3329
+06:32:38 cf_qwen3_fold pass 1 done: greedy left 420 (median step 3, median rescue/ceiling 0.70); queue 1671/5473
+06:32:38 group pass 1 done in 47s, peak 10.7 GB
+06:32:41 pass 2: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44993 spawn rows (adaptive [7424, 12180], static groups [605, 604])
+06:33:30 wino_qwen3_rep pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.56); queue 1938/3329
+06:33:30 cf_qwen3_fold pass 2 done: greedy left 420 (median step 4, median rescue/ceiling 0.80); queue 2275/5473
+06:33:30 group pass 2 done in 48s, peak 10.8 GB
+06:33:33 pass 3: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44989 spawn rows (adaptive [7168, 11760], static groups [621, 620])
+06:34:22 wino_qwen3_rep pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.62); queue 2559/3329
+06:34:22 cf_qwen3_fold pass 3 done: greedy left 420 (median step 5, median rescue/ceiling 0.86); queue 2895/5473
+06:34:22 group pass 3 done in 47s, peak 10.9 GB
+06:34:25 pass 4: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44989 spawn rows (adaptive [6912, 11340], static groups [631, 631])
+06:35:13 wino_qwen3_rep pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.67); queue 3190/3329
+06:35:13 cf_qwen3_fold pass 4 done: greedy left 420 (median step 6, median rescue/ceiling 0.90); queue 3526/5473
+06:35:13 group pass 4 done in 46s, peak 10.9 GB
+2026-10-05T06:35:22Z END   ext12-addback-qwen3-1 rc=0 (302s)
+2026-10-05T06:46:48Z START ext12-addback-qwen3-2 (waited 684s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+06:47:08 wino_qwen3_rep: 512 cases, 512 rows, K=384; passes done 5, queue 3190/3329, greedy left 256
+06:47:08 cf_qwen3_fold: 215 cases, 852 rows, K=384; passes done 5, queue 3526/5473, greedy left 420
+06:47:12 pass 0: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 44981 spawn rows (adaptive [6656, 10920], static groups [139, 1166])
+06:47:17   layer   0: load-wait 3.12s compute 0.94s  wf_rows=9121
+06:47:23   layer   8: load-wait 0.72s compute 0.51s  wf_rows=22308
+06:47:30   layer  16: load-wait 0.15s compute 0.55s  wf_rows=28016
+06:47:37   layer  24: load-wait 0.42s compute 0.57s  wf_rows=31344
+06:47:43   layer  32: load-wait 0.15s compute 0.63s  wf_rows=36869
+06:47:52   layer  40: load-wait 0.54s compute 0.69s  wf_rows=40830
+06:48:01   layer  47: load-wait 0.53s compute 0.76s  wf_rows=44981
+06:48:03   pass done: 2091 prefill rows (T=30), 44981 spawn rows, 49.9s (metrics 1.7s)
+06:48:03 wino_qwen3_rep pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.70); queue 3329/3329
+06:48:04 cf_qwen3_fold pass 5 done: greedy left 420 (median step 7, median rescue/ceiling 0.94); queue 4692/5473
+06:48:04 group pass 0 done in 50s, peak 11.0 GB
+06:48:07 pass 1: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 33700 spawn rows (adaptive [6400, 10500], static groups [0, 781])
+06:48:55 wino_qwen3_rep pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.74); queue 3329/3329
+06:48:56 cf_qwen3_fold pass 6 done: greedy left 420 (median step 8, median rescue/ceiling 0.97); queue 5473/5473
+06:48:56 group pass 1 done in 47s, peak 10.3 GB
+06:48:57 pass 2: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 16224 spawn rows (adaptive [6144, 10080], static groups [0, 0])
+06:49:39 wino_qwen3_rep pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.77); queue 3329/3329
+06:49:39 cf_qwen3_fold pass 7 done: greedy left 420 (median step 9, median rescue/ceiling 1.00); queue 5473/5473
+06:49:39 group pass 2 done in 40s, peak 8.9 GB
+06:49:41 pass 3: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 15548 spawn rows (adaptive [5888, 9660], static groups [0, 0])
+06:50:27 wino_qwen3_rep pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.79); queue 3329/3329
+06:50:28 cf_qwen3_fold pass 8 done: greedy left 420 (median step 10, median rescue/ceiling 1.00); queue 5473/5473
+06:50:28 group pass 3 done in 45s, peak 8.9 GB
+06:50:29 pass 4: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 14872 spawn rows (adaptive [5632, 9240], static groups [0, 0])
+06:51:13 wino_qwen3_rep pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.80); queue 3329/3329
+06:51:14 cf_qwen3_fold pass 9 done: greedy left 420 (median step 11, median rescue/ceiling 1.02); queue 5473/5473
+06:51:14 group pass 4 done in 43s, peak 8.8 GB
+2026-10-05T06:51:20Z END   ext12-addback-qwen3-2 rc=0 (272s)
+2026-10-05T07:04:30Z START ext12-addback-qwen3-3 (waited 790s): python scripts/ext12_addback_run.py qwen3 --budget 45000 --max-passes 5
+07:04:43 wino_qwen3_rep: 512 cases, 512 rows, K=384; passes done 10, queue 3329/3329, greedy left 256
+07:04:43 cf_qwen3_fold: 215 cases, 852 rows, K=384; passes done 10, queue 5473/5473, greedy left 420
+07:04:45 pass 0: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 14196 spawn rows (adaptive [5376, 8820], static groups [0, 0])
+07:04:49   layer   0: load-wait 2.90s compute 0.70s  wf_rows=1574
+07:04:58   layer   8: load-wait 0.89s compute 0.35s  wf_rows=7855
+07:05:08   layer  16: load-wait 0.87s compute 0.38s  wf_rows=10881
+07:05:18   layer  24: load-wait 1.03s compute 0.39s  wf_rows=12566
+07:05:28   layer  32: load-wait 0.83s compute 0.41s  wf_rows=13986
+07:05:37   layer  40: load-wait 0.82s compute 0.43s  wf_rows=14196
+07:05:47   layer  47: load-wait 1.03s compute 0.41s  wf_rows=14196
+07:05:47   pass done: 2091 prefill rows (T=30), 14196 spawn rows, 62.0s (metrics 0.6s)
+07:05:48 wino_qwen3_rep pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.82); queue 3329/3329
+07:05:48 cf_qwen3_fold pass 10 done: greedy left 420 (median step 12, median rescue/ceiling 1.04); queue 5473/5473
+07:05:48 group pass 0 done in 62s, peak 8.8 GB
+07:05:50 pass 1: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 13520 spawn rows (adaptive [5120, 8400], static groups [0, 0])
+07:06:30 wino_qwen3_rep pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 0.83); queue 3329/3329
+07:06:31 cf_qwen3_fold pass 11 done: greedy left 420 (median step 13, median rescue/ceiling 1.05); queue 5473/5473
+07:06:31 group pass 1 done in 40s, peak 8.7 GB
+07:06:32 pass 2: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 12844 spawn rows (adaptive [4864, 7980], static groups [0, 0])
+07:07:14 wino_qwen3_rep pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 0.83); queue 3329/3329
+07:07:15 cf_qwen3_fold pass 12 done: greedy left 420 (median step 14, median rescue/ceiling 1.04); queue 5473/5473
+07:07:15 group pass 2 done in 41s, peak 8.7 GB
+07:07:16 pass 3: tasks ['wino_qwen3_rep', 'cf_qwen3_fold'], 2091 prefill rows, 12168 spawn rows (adaptive [4608, 7560], static groups [0, 0])
+07:08:06 wino_qwen3_rep pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.84); queue 3329/3329
+07:08:06 wino_qwen3_rep: ALL PASSES COMPLETE
+07:08:06 cf_qwen3_fold pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.05); queue 5473/5473
+07:08:06 cf_qwen3_fold: ALL PASSES COMPLETE
+07:08:06 group pass 3 done in 49s, peak 8.6 GB
+07:08:06 nothing left to run
+2026-10-05T07:08:14Z END   ext12-addback-qwen3-3 rc=0 (224s)
+2026-10-05T07:08:15Z group qwen3 complete
+2026-10-05T07:36:46Z START ext12-addback-mixtral-1 (waited 1710s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+07:36:54 wino_mixtral_rep: initialised {'eval_rows': 256, 'pool': 64, 'queue_groups': 3073, 'queue_items': 43776}
+07:37:02 cf_mixtral_fold: initialised {'eval_rows': 422, 'pool': 64, 'queue_groups': 5079, 'queue_items': 72302}
+07:37:04 wino_mixtral_nobos: initialised {'eval_rows': 256, 'pool': 64, 'queue_groups': 3073, 'queue_items': 43776}
+07:37:04 wino_mixtral_rep: 512 cases, 512 rows, K=64; passes done 0, queue 0/3073, greedy left 256
+07:37:04 cf_mixtral_fold: 213 cases, 858 rows, K=64; passes done 0, queue 0/5079, greedy left 422
+07:37:04 wino_mixtral_nobos: 512 cases, 512 rows, K=64; passes done 0, queue 0/3073, greedy left 256
+07:37:08 pass 0: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 78596 spawn rows (adaptive [16384, 27008, 16384], static groups [512, 858, 512])
+07:37:19   layer   0: load-wait 7.59s compute 2.60s  wf_rows=20750
+07:37:42   layer   8: load-wait 0.77s compute 2.14s  wf_rows=36368
+07:38:05   layer  16: load-wait 0.49s compute 2.44s  wf_rows=53186
+[W1005 07:38:12.638527289 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:15.750148378 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:18.133572410 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:19.813955208 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:22.547474688 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:22.214852322 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:38:25.089361874 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:26.757140546 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:38:29.633189165 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:29.358394157 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+07:38:32   layer  24: load-wait 0.25s compute 3.37s  wf_rows=76650
+[W1005 07:38:32.262120547 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:33.503318821 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:36.696336260 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:36.324461917 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:38:39.309636507 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:40.558267782 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:38:43.767782315 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:38:43.040067539 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:46.000081911 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:47.516999008 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:47.206549333 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:50.005306350 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:51.704162799 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:38:54.606873994 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+07:38:57   layer  31: load-wait 0.25s compute 3.06s  wf_rows=78596
+07:38:58   pass done: 3119 prefill rows (T=33), 78596 spawn rows, 108.4s (metrics 0.9s)
+07:38:59 wino_mixtral_rep first pass: ceilings for 512 rows (mean all-MoE rescue +6.402); DLA rows 32768 (60 candidate pairs not routed in this pass's clean run)
+07:39:00 wino_mixtral_rep pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.42); queue 512/3329
+07:39:02 cf_mixtral_fold first pass: ceilings for 858 rows (mean all-MoE rescue +5.058); DLA rows 54912 (369 candidate pairs not routed in this pass's clean run)
+07:39:02 cf_mixtral_fold pass 0 done: greedy left 422 (median step 2, median rescue/ceiling 0.56); queue 858/5501
+07:39:03 wino_mixtral_nobos first pass: ceilings for 512 rows (mean all-MoE rescue +5.948); DLA rows 32768 (38 candidate pairs not routed in this pass's clean run)
+07:39:04 wino_mixtral_nobos pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.42); queue 512/3329
+07:39:04 group pass 0 done in 108s, peak 19.4 GB
+07:39:09 pass 1: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59993 spawn rows (adaptive [15872, 26164, 15872], static groups [47, 46, 46])
+[W1005 07:40:17.226791224 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:40:21.381470995 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:40:24.409366450 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:40:27.439240374 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:40:30.446636554 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:40:35.224403834 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:40:38.219581343 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+07:40:45 wino_mixtral_rep pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.55); queue 559/3329
+07:40:46 cf_mixtral_fold pass 1 done: greedy left 422 (median step 3, median rescue/ceiling 0.70); queue 904/5501
+07:40:47 wino_mixtral_nobos pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.55); queue 558/3329
+07:40:47 group pass 1 done in 95s, peak 17.9 GB
+07:40:51 pass 2: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59989 spawn rows (adaptive [15616, 25742, 15616], static groups [67, 67, 67])
+[W1005 07:41:54.111713049 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:41:57.128793114 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:42:00.132905224 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:42:03.125135605 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:42:06.304079276 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:42:10.395406435 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:42:13.069116874 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:42:19.403657651 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:42:22.424613939 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+07:42:29 wino_mixtral_rep pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.64); queue 626/3329
+07:42:29 cf_mixtral_fold pass 2 done: greedy left 422 (median step 4, median rescue/ceiling 0.83); queue 971/5501
+07:42:30 wino_mixtral_nobos pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.63); queue 625/3329
+07:42:30 group pass 2 done in 96s, peak 18.3 GB
+07:42:35 pass 3: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 60000 spawn rows (adaptive [15360, 25320, 15360], static groups [88, 88, 88])
+[W1005 07:43:35.676733359 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:43:38.712542246 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:43:39.495099479 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:43:41.314627323 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:43:45.443400178 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:43:48.459149682 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:43:51.516637668 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:43:54.513647482 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:44:00.035970991 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:44:03.571869255 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:44:06.566977398 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+07:44:15 wino_mixtral_rep pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.71); queue 714/3329
+07:44:15 cf_mixtral_fold pass 3 done: greedy left 422 (median step 5, median rescue/ceiling 0.94); queue 1059/5501
+07:44:16 wino_mixtral_nobos pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.72); queue 713/3329
+07:44:16 group pass 3 done in 96s, peak 18.5 GB
+07:44:21 pass 4: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59996 spawn rows (adaptive [15104, 24898, 15104], static groups [109, 109, 108])
+[W1005 07:45:21.588439922 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:45:24.688429662 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:45:27.717498212 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:45:30.763606111 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:45:36.809356313 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:45:39.864481307 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:45:42.926330931 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:45:45.951177081 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 07:45:48.974405388 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 07:45:49.811327841 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 07:45:54.146269618 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+07:45:59 wino_mixtral_rep pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.77); queue 823/3329
+07:45:59 cf_mixtral_fold pass 4 done: greedy left 422 (median step 6, median rescue/ceiling 1.01); queue 1168/5501
+07:46:00 wino_mixtral_nobos pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.76); queue 821/3329
+07:46:00 group pass 4 done in 96s, peak 18.7 GB
+2026-10-05T07:46:08Z END   ext12-addback-mixtral-1 rc=0 (562s)
+2026-10-05T08:13:08Z START ext12-addback-mixtral-2 (waited 1618s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+08:13:26 wino_mixtral_rep: 512 cases, 512 rows, K=64; passes done 5, queue 823/3329, greedy left 256
+08:13:26 cf_mixtral_fold: 213 cases, 858 rows, K=64; passes done 5, queue 1168/5501, greedy left 422
+08:13:26 wino_mixtral_nobos: 512 cases, 512 rows, K=64; passes done 5, queue 821/3329, greedy left 256
+08:13:29 pass 0: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59992 spawn rows (adaptive [14848, 24476, 14848], static groups [130, 129, 129])
+08:13:39   layer   0: load-wait 6.34s compute 2.01s  wf_rows=3617
+08:14:01   layer   8: load-wait 1.06s compute 1.87s  wf_rows=23846
+08:14:23   layer  16: load-wait 0.25s compute 2.30s  wf_rows=47750
+[W1005 08:14:31.252725551 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:14:35.510871426 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:14:35.313034932 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:14:38.879796474 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 08:14:41.865701429 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:14:41.195216705 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1005 08:14:44.174619408 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+08:14:47   layer  24: load-wait 0.28s compute 2.80s  wf_rows=59732
+[W1005 08:14:47.256738033 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:14:51.115174455 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:14:55.442739029 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:14:55.790319862 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:14:58.715259944 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:15:02.449387233 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:15:07.812714642 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+08:15:10   layer  31: load-wait 0.26s compute 2.76s  wf_rows=59992
+08:15:10   pass done: 3119 prefill rows (T=33), 59992 spawn rows, 100.1s (metrics 0.7s)
+08:15:12 wino_mixtral_rep pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.81); queue 953/3329
+08:15:13 cf_mixtral_fold pass 5 done: greedy left 422 (median step 7, median rescue/ceiling 1.07); queue 1297/5501
+08:15:14 wino_mixtral_nobos pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.80); queue 950/3329
+08:15:14 group pass 0 done in 100s, peak 18.8 GB
+08:15:19 pass 1: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59988 spawn rows (adaptive [14592, 24054, 14592], static groups [150, 150, 150])
+[W1005 08:16:12.445526279 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:15.606478674 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:16:19.838189503 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:20.198000271 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:29.712644475 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:16:32.827499653 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:16:35.949866908 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:38.036875557 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:41.354432033 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:44.373156643 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:16:48.401113264 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:16:52 wino_mixtral_rep pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.85); queue 1103/3329
+08:16:52 cf_mixtral_fold pass 6 done: greedy left 422 (median step 8, median rescue/ceiling 1.12); queue 1447/5501
+08:16:53 wino_mixtral_nobos pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.84); queue 1100/3329
+08:16:53 group pass 1 done in 92s, peak 18.8 GB
+08:16:57 pass 2: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59999 spawn rows (adaptive [14336, 23632, 14336], static groups [171, 171, 171])
+[W1005 08:17:46.473395691 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:17:48.156811551 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:17:49.906779050 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:17:53.424094388 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:17:55.920620521 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:17:58.189737265 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:18:02.427708639 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:18:05.541081963 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:18:08.945288629 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:18:11.047414312 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:18:12.850316085 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:18:15.413965390 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:18:18.042759981 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:18:24.665376487 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:18:28 wino_mixtral_rep pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.88); queue 1274/3329
+08:18:28 cf_mixtral_fold pass 7 done: greedy left 422 (median step 9, median rescue/ceiling 1.17); queue 1618/5501
+08:18:29 wino_mixtral_nobos pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.88); queue 1271/3329
+08:18:29 group pass 2 done in 90s, peak 18.9 GB
+08:18:33 pass 3: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59995 spawn rows (adaptive [14080, 23210, 14080], static groups [192, 192, 191])
+[W1005 08:19:16.489591509 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:24.281565404 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:19:28.471575431 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:28.274772269 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:31.752820107 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:19:32.351663216 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:19:33.785463263 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:36.690931576 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:19:39.741101144 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:42.890651173 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:45.142801917 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:49.431421519 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:19:49.245953823 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:19:55.171800833 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+08:20:08 wino_mixtral_rep pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.91); queue 1466/3329
+08:20:09 cf_mixtral_fold pass 8 done: greedy left 422 (median step 10, median rescue/ceiling 1.20); queue 1810/5501
+08:20:09 wino_mixtral_nobos pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.90); queue 1462/3329
+08:20:09 group pass 3 done in 94s, peak 18.9 GB
+08:20:13 pass 4: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59991 spawn rows (adaptive [13824, 22788, 13824], static groups [213, 212, 212])
+[W1005 08:21:07.904066122 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:10.005351105 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:11.799169797 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:21:14.639807775 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:21:17.771796925 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:18.578181047 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:20.029307755 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:21:23.115839166 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:21:24.635116158 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:21:26.346585688 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:21:30.433383158 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:21:33.524269704 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:36.563582902 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:21:39.607725365 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:21:42.644766619 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:21:45.678560414 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:21:49 wino_mixtral_rep pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.93); queue 1679/3329
+08:21:50 cf_mixtral_fold pass 9 done: greedy left 422 (median step 11, median rescue/ceiling 1.23); queue 2022/5501
+08:21:50 wino_mixtral_nobos pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.93); queue 1674/3329
+08:21:50 group pass 4 done in 95s, peak 18.9 GB
+2026-10-05T08:21:58Z END   ext12-addback-mixtral-2 rc=0 (530s)
+2026-10-05T08:43:01Z START ext12-addback-mixtral-3 (waited 1261s): python scripts/ext12_addback_run.py mixtral --budget 60000 --max-passes 5
+08:43:19 wino_mixtral_rep: 512 cases, 512 rows, K=64; passes done 10, queue 1679/3329, greedy left 256
+08:43:19 cf_mixtral_fold: 213 cases, 858 rows, K=64; passes done 10, queue 2022/5501, greedy left 422
+08:43:19 wino_mixtral_nobos: 512 cases, 512 rows, K=64; passes done 10, queue 1674/3329, greedy left 256
+08:43:23 pass 0: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59987 spawn rows (adaptive [13568, 22366, 13568], static groups [233, 233, 233])
+08:43:34   layer   0: load-wait 7.86s compute 2.41s  wf_rows=5484
+08:43:57   layer   8: load-wait 0.95s compute 2.02s  wf_rows=30652
+08:44:21   layer  16: load-wait 0.47s compute 2.51s  wf_rows=53924
+[W1005 08:44:27.025358724 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:30.142147489 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:31.925266720 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:44:34.592648559 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:37.768632389 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:40.938133137 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:40.279158859 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:41.024599061 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:44.670150639 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:44:47   layer  24: load-wait 0.25s compute 2.83s  wf_rows=59441
+[W1005 08:44:47.736422994 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:48.573613628 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:44:56.931000458 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:44:59.988725058 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:45:02.041819644 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:45:05.215810907 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+08:45:08   layer  31: load-wait 0.38s compute 2.76s  wf_rows=59987
+08:45:09   pass done: 3119 prefill rows (T=33), 59987 spawn rows, 104.7s (metrics 0.7s)
+08:45:09 wino_mixtral_rep pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.95); queue 1912/3329
+08:45:10 cf_mixtral_fold pass 10 done: greedy left 422 (median step 12, median rescue/ceiling 1.24); queue 2255/5501
+08:45:11 wino_mixtral_nobos pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.94); queue 1907/3329
+08:45:11 group pass 0 done in 105s, peak 18.9 GB
+08:45:16 pass 1: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59998 spawn rows (adaptive [13312, 21944, 13312], static groups [254, 254, 254])
+[W1005 08:46:11.682882557 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:14.362259710 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:18.693920843 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:20.311897686 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:24.493623323 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:24.959111251 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:25.477407452 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:46:27.912618781 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:28.703488483 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:30.169202558 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:33.235324652 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:36.333189121 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:40.453325556 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:40.909792809 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:44.386988225 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:46:46.093753884 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:46:49.331453620 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:46:53.415751999 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:46:57 wino_mixtral_rep pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 0.97); queue 2166/3329
+08:46:57 cf_mixtral_fold pass 11 done: greedy left 422 (median step 13, median rescue/ceiling 1.27); queue 2509/5501
+08:46:58 wino_mixtral_nobos pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 0.96); queue 2161/3329
+08:46:58 group pass 1 done in 99s, peak 18.9 GB
+08:47:03 pass 2: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59994 spawn rows (adaptive [13056, 21522, 13056], static groups [275, 275, 274])
+[W1005 08:47:55.290473520 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:47:58.310216004 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:48:01.378720168 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:48:05.531621423 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:08.710717981 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:09.511772416 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:48:11.125947738 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:14.267921822 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:15.779443154 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:18.554454863 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:21.671589963 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:24.800729089 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:25.621606768 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:27.134909939 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:30.199251123 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:31.023211544 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:48:34.649206654 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:38.396612915 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:48:40.354581753 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+08:48:45 wino_mixtral_rep pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 0.98); queue 2441/3329
+08:48:45 cf_mixtral_fold pass 12 done: greedy left 422 (median step 14, median rescue/ceiling 1.28); queue 2784/5501
+08:48:46 wino_mixtral_nobos pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 0.98); queue 2435/3329
+08:48:46 group pass 2 done in 99s, peak 18.9 GB
+08:48:51 pass 3: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 59990 spawn rows (adaptive [12800, 21100, 12800], static groups [296, 295, 295])
+[W1005 08:49:48.113208720 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:49:51.225117822 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:49:54.367098006 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:49:55.846567703 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:49:55.070170390 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:49:58.804194330 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:49:59.622040261 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:01.099382187 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:02.887268425 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:04.346673752 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:08.429262207 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:50:08.913170700 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:11.668284397 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:50:14.780330670 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:17.068506582 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:50:20.243039250 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:24.428321041 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:50:24.231492997 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:50:31 wino_mixtral_rep pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.00); queue 2737/3329
+08:50:32 cf_mixtral_fold pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.30); queue 3079/5501
+08:50:32 wino_mixtral_nobos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.98); queue 2730/3329
+08:50:32 group pass 3 done in 98s, peak 18.9 GB
+08:50:37 pass 4: tasks ['wino_mixtral_rep', 'cf_mixtral_fold', 'wino_mixtral_nobos'], 3119 prefill rows, 55084 spawn rows (adaptive [0, 0, 0], static groups [592, 2422, 599])
+[W1005 08:51:41.436598849 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+[W1005 08:51:44.929048745 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:51:47.462760954 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:51:52.149247184 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:51:55.210334757 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:51:58.202726876 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:52:02.423862649 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:52:05.401089010 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1005 08:52:08.380294222 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1005 08:52:11.920876043 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+08:52:14 wino_mixtral_rep pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 1.00); queue 3329/3329
+08:52:14 wino_mixtral_rep: ALL PASSES COMPLETE
+08:52:14 cf_mixtral_fold pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 1.30); queue 5501/5501
+08:52:14 cf_mixtral_fold: ALL PASSES COMPLETE
+08:52:14 wino_mixtral_nobos pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 0.98); queue 3329/3329
+08:52:14 wino_mixtral_nobos: ALL PASSES COMPLETE
+08:52:14 group pass 4 done in 96s, peak 17.8 GB
+2026-10-05T08:52:22Z END   ext12-addback-mixtral-3 rc=0 (561s)
+2026-10-05T08:52:24Z group mixtral complete
+2026-10-05T08:52:24Z EXT12 ADDBACK CHAIN DONE

@@ -1,0 +1,36 @@
+{
+ "qwen3": {
+  "discovery": {
+   "role_pairs": 128,
+   "twins": 69,
+   "twins_with_both_roles": 59
+  },
+  "validation": {
+   "role_pairs": 128,
+   "twins": 73,
+   "twins_with_both_roles": 55
+  },
+  "rep_discovery": {
+   "role_pairs": 128,
+   "twins": 71,
+   "twins_with_both_roles": 57
+  },
+  "rep_validation": {
+   "role_pairs": 128,
+   "twins": 69,
+   "twins_with_both_roles": 59
+  }
+ },
+ "mixtral_bos": {
+  "discovery": {
+   "role_pairs": 128,
+   "twins": 70,
+   "twins_with_both_roles": 58
+  },
+  "validation": {
+   "role_pairs": 128,
+   "twins": 69,
+   "twins_with_both_roles": 59
+  }
+ }
+}

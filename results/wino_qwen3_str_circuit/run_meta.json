@@ -1,0 +1,47 @@
+{
+ "key": "wino_qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "task": "wino",
+ "src_run": "wino_qwen3_str",
+ "ext8_run": "wino_qwen3_str_addback",
+ "special_tokens": true,
+ "n_val_rows": 256,
+ "n_val_cases": 256,
+ "rows_per_pass": 160,
+ "n_chunks": 2,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA",
+ "command": "python scripts/ext10_heads_run.py wino_qwen3",
+ "created_utc": "2026-10-05T06:44:07Z",
+ "complete": true,
+ "completed_utc": "2026-10-05T06:46:41Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 128,
+   "prefill": 256,
+   "spawn_rows": 202752,
+   "pass_s": 96.77783489227295,
+   "peak_GB": 17.093129634857178,
+   "mean_drop": 8.12890625,
+   "r_sum_heads_vs_attn_layer": 0.39720213879138205,
+   "head_dla_sum_mean": 0.37296247482299805,
+   "candidates_not_routed_clean": 895,
+   "utc": "2026-10-05T06:45:46Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 128,
+   "prefill": 256,
+   "spawn_rows": 202752,
+   "pass_s": 52.849865198135376,
+   "peak_GB": 17.101466178894043,
+   "mean_drop": 8.1982421875,
+   "r_sum_heads_vs_attn_layer": 0.3917168562283653,
+   "head_dla_sum_mean": 0.3239610493183136,
+   "candidates_not_routed_clean": 909,
+   "utc": "2026-10-05T06:46:41Z"
+  }
+ ]
+}

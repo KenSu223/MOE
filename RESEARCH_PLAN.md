@@ -575,3 +575,97 @@ run scripts take `--pairs`, `--case-sets`, `--out`.
 sections `ext7_synthesis.md`, `ext7_wino.md`, `ext7_controls.md`, `ext8_addback.md` assembled into `results/EXTENSIONS_REPORT.md`
 (Directions 7-8, 7, 7b, 8). GPU ≈ 3.9 h. Deviations: W4 revised (degenerate joint game); W3 grids for role swap / IOI on 64
 validation pairs; gradient rankings not done (F3). Not committed.
+
+# Phase 4 (started 2026-10-05): necessity, full-repair circuits, writer experts, completeness
+
+User decision 2026-10-05: commit and push Phase 3 (done, 81377e4), then execute items 1-4 of the coordinator's
+recommendation, in this order of priority. Not in scope now: item 5 (two-site add-back, F3), large random-subset sampling,
+exhaustive top-12/14 subsets (the top-10 optimum already beats greedy by ≤ 0.011, at the bf16 noise floor).
+Models: Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS (Phase-3 default); Mixtral without BOS only in item 4c. STR only for
+every patching experiment. Zhang & Nanda checklist Z1-Z10 and the robustness criteria above still apply; knockout is the
+necessity side (Z10) and uses clean prompts only, so it needs no corruption.
+
+## Engine E4 (owner: ext9-knockout; additive, behind new fields; verified on OLMoE vs transformers hooks)
+
+- **E4a route mask** (`PrefillSpec.route_mask` = ((layer, expert), ...), `route_mask_pos` = "all" | "final",
+  `route_mask_mode` = "reroute" | "zero"). reroute (primary, MoE-native): the masked experts' router probabilities are set
+  to 0 after the softmax, top-k is taken over the remaining experts and the model's own renormalisation rule applies, so the
+  token still uses k experts. zero (sensitivity): routing unchanged, the masked experts' contributions c_e set to 0.
+- **E4b `attn_head` steps in `multi`** (first and later steps; a step may carry heads AND experts at the same layer: heads
+  patched before the MoE, the row's own MoE recomputed on the head-patched input, then the listed experts' contributions set
+  to the source's). Checks: one head step = `attn_head` kind; all heads of a layer = `attn_layer` step (to o_proj bf16
+  rounding); all heads at all layers = the clean Δ; random mixed sets vs hooks.
+- **E4c `DiagSpec.contrib_final_vectors`** (layers): per-slot expert contribution vectors at the final position of the
+  prefill rows (for vocabulary projections).
+- Regression: `verify_olmoe.json`, `verify_ext5_engine_olmoe.json`, `verify_ext8_engine_olmoe.json` identical in every
+  non-timing field to `*_before_ext9.json` copies. Marker: PROGRESS line "ENGINE READY (ext9)".
+
+## Item 1 / Direction 9: expert knockout, necessity and task specificity (ext9-knockout)
+
+Question: are the experts the patches find necessary for the behaviour, and only for their own task? Targets: Qwen3
+WinoGrande L41E117, CounterFact L44E069 and L42E115; Mixtral WinoGrande L20E000, CounterFact L19E002, L21E001, L18E001.
+Plus jointly the top-1/3/5/10 experts of each task's ext8 population ranking (discovery means).
+Controls: same-layer experts (Mixtral all 7 others; Qwen3 the 16 most often routed at the final position on the evaluation
+items, excluding targets) and, for the sets, 5 random equal-size sets matched on final-position routing frequency.
+Evaluation (clean prompts; items used to select an expert are excluded): WinoGrande own margin pool (Qwen3 2,099, Mixtral BOS
+1,151 pairs, minus the 128 main discovery pairs; both prompts of a pair), plus all W1-W6 pairs (4,514 / 2,421) for
+baseline, targets and sets; CounterFact clean scan (`results/{qwen3,mixtral}/filter_scan.parquet`, Δ_clean ≥ 1: 867 / 941,
+minus paper discovery IDs); IOI clean prompts (`data/ioi`, third task); wikitext-103 windows (per-token NLL, generic damage).
+Metrics: fraction of the clean margin lost (mean Δ change / mean baseline Δ), accuracy (Δ > 0; WinoGrande pair accuracy),
+p(true) and rank descriptive; effect vs the control distribution (rank, z); double-dissociation contrast
+(WG expert on WG − on CF) − (CF expert on WG − on CF) with pair/item bootstrap CIs. Mask at all positions (primary), final
+position only (secondary, links to the final-position patches); reroute primary, zero for the targets.
+
+## Item 2 / Direction 10: head + expert add-back to full repair at the final position (ext10-circuit)
+
+Experts alone cap at the all-MoE ceiling (CounterFact 0.53 / 0.41); all attention outputs restore 1.0, so "how few
+components restore the answer" has a real ceiling once heads are candidates. Tasks: CounterFact STR and WinoGrande option
+swap (the ext8 validation rows), IOI (i) as the attention-pole reference if the budget allows.
+Step 1 (existing kinds): single-head patches (`attn_head`) at the final position for every head of every layer, plus a
+patch-free head DLA (per-head outputs projected with the final norm frozen). Step 2 (after E4b): adaptive greedy, 20 steps,
+over pool = top-32 heads ∪ the ext8 expert pool (Qwen3 top-32, Mixtral all 64), and head-only greedy (pool 32); static mixed
+orderings (single-patch oracle, DLA). Metrics: r(k) as a fraction of the drop (ceiling 1), k for 50 / 80 / 90 %, case-level
+answer restored (Δ > 0) and r ≥ 0.9 at k = 20, composition (# heads vs # experts among the first k picks), recurring
+components (known mover heads: Qwen3 L40H13, WG W5 heads, IOI heads).
+
+## Item 3 / Direction 11: writer vs computer experts (ext11-writer)
+
+DLA ≈ oracle suggests the top experts write the answer directly. A (CPU, existing ext8 rows): per (case, expert) total =
+single-expert patch, direct = DLA, indirect = total − direct; by layer, task, model, for the selected experts and the
+population top-10. B (after E4c): vocabulary projection of δ_e and of c_e_clean (final norm frozen): ranks of r and r′,
+top promoted / suppressed tokens, token classes (WinoGrande trigger vocabulary, CounterFact object vocabulary per relation,
+other). C (routing diagnostics, existing DiagSpec): where else the target experts fire at the final position:
+WinoGrande prompts, the context-free "local" prompts ("The bag was too"), CounterFact, IOI, wikitext tokens (contexts and
+next tokens at which they are routed), and their DLA there.
+
+## Item 4 / Direction 12: completeness checks (ext12-complete)
+
+- 4a Add-back replication: WinoGrande rep_validation (population ranking from rep_discovery) and a CounterFact fold swap
+  (ranking from validation, curves on discovery), static orderings + greedy, Qwen3 and Mixtral BOS.
+- 4b Role swap vs option swap on identical items: the option-swap W2 sweep, all-MoE M and direct split on the role-swap
+  items (all lie inside the option-swap margin pool); paired comparison of the attention share.
+- 4c Mixtral without BOS on WinoGrande, same 776-pair case set: W2, W6 two-stage selection + Spec, W4 all-MoE + direct
+  split, add-back static + greedy, sink-carrying flags (Direction 3).
+
+## Phase 4 execution plan
+
+| Agent | Owns | Work |
+|---|---|---|
+| `ext9-knockout` | `moetrace/engine.py` (E4 only, additive), `moetrace/ext9_knockout.py`, `scripts/ext9_*`, `results/*_knockout*`, `results/verify_ext9_*`, section `ext9_knockout.md` | E4a-c + verification first (reports, coordinator relays ENGINE READY), then item 1 |
+| `ext10-circuit` | `moetrace/ext10_circuit.py`, `scripts/ext10_*`, `results/*_circuit*`, section `ext10_circuit.md` | step 1 now, step 2 after E4b |
+| `ext11-writer` | `moetrace/ext11_writer.py`, `scripts/ext11_*`, `results/*_writer*`, section `ext11_writer.md` | A and C now, B after E4c |
+| `ext12-complete` | `scripts/ext12_*`, `moetrace/ext12_*.py`, additive backward-compatible flags in `scripts/ext7_*` / `scripts/ext8_*`, `results/*_rep*`, `results/wino_mixtral_nobos_str*`, `results/wino_roleitems_*`, section `ext12_complete.md` | 4a, 4b, 4c (no engine change) |
+
+`moetrace/ext8_addback.py`, `moetrace/ext7_pairs.py`, `moetrace/ext7_wino.py`, `moetrace/ext7_controls.py` are read-only for
+everyone (bug fixes through the coordinator). Coordinator: this plan, CLAUDE.md, README, `scripts/build_extensions_report.py`,
+synthesis section `ext9_synthesis.md` (Directions 9-12). GPU only through `scripts/gpu_queue.sh`; budget ≈ 5 GPU h.
+
+**Phase 4 status (2026-10-05): COMPLETE.** All four agents delivered; sections `ext9_synthesis.md` (coordinator),
+`ext9_knockout.md`, `ext10_circuit.md`, `ext11_writer.md`, `ext12_complete.md` assembled into `results/EXTENSIONS_REPORT.md`
+(Directions 9-12, 9, 10, 11, 12). GPU ≈ 4.4 h. Deviations: reroute implemented as router logit −inf before the softmax (identical
+to "probability 0 after the softmax" for Qwen3 / Mixtral, documented for OLMoE); final-only and zero-mode knockouts on the fixed
+subsample; IOI circuit run for Qwen3 only; Qwen3 same-layer controls = the 16 experts most often routed at the final position on
+the target task's items. Revision of a Phase-3 claim (4b): on identical items role swap = option swap; the Phase-3 gap was names
+vs objects (texts in ext7_controls.md / ext7_synthesis.md / CLAUDE.md corrected). Coordinator addition: knockout vs direct write
+on the same prompts (`scripts/ext9_synthesis_selfrepair.py`): 53–95 % of a writer expert's direct write is compensated.
+Committed and pushed 2026-10-06.
