@@ -3,7 +3,7 @@
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
 Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
-Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05.
+Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05; Phase 5 2026-10-12.
 
 ## 1. What this project is
 
@@ -470,7 +470,7 @@ figures likewise; sections in `results/sections/`; analysed numbers in `results/
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
 ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary,ext6_str_grid_summary,ext7_wino_summary,
 ext7_controls_summary,ext8_addback_summary,ext9_knockout_summary,ext10_circuit_summary,ext11_writer_summary,
-ext12_complete_summary}.json`.
+ext12_complete_summary,ext13base_summary,ext13ab_summary,ext13ci_summary,ext13ko_summary,ext13syn_summary,ext13atp_summary}.json`.
 
 Recipes:
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other
@@ -504,7 +504,7 @@ Recipes:
 
 ## 7. Unattended / headless workflow (see PLAYBOOK.md)
 
-Two patterns were used and both are documented in PLAYBOOK.md:
+Three patterns were used and are documented in PLAYBOOK.md:
 - *Headless agent* (2026-09-03): an interactive session wrote `HANDOFF.md`, the **user** started
   `scripts/run_agent.sh` in tmux (the permission classifier blocks an agent from launching another Claude process),
   the agent executed until `results/DONE`; the supervisor now parses usage-limit reset times and sleeps until then.
@@ -512,6 +512,14 @@ Two patterns were used and both are documented in PLAYBOOK.md:
   direction with a brief (goal, owned files, deliverable section, PROGRESS entries, final-report format), serialised
   the GPU with `gpu_queue.sh`, reviewed sections and committed. Sub-agents die at the account usage limit; GPU chains
   run detached and finish anyway; on reset, resume the agent with "resume from disk, do not redo GPU work".
+- *Coordinator + sub-agents with detached chains and a handshake* (Phase 5, 2026-10-11/12; PLAYBOOK.md section 7): a data agent
+  writes a condition registry (`data/wino_ref/p5_conditions.json`) and exact PROGRESS lines (`[p5-data] BASE READY <cond>/<proto>`);
+  downstream agents' detached chains wait on those lines, run their GPU stages through `gpu_queue.sh` and refresh analyses / sections
+  automatically, so no agent has to stay alive. The coordinator keeps `scripts/chain_watch.py` armed under the Monitor tool (failed
+  jobs, tracebacks, chain exits, GPU idle with chains alive, long jobs, stage completions) and re-arms it every 30 min. Lessons:
+  a usage limit kills every sub-agent at once (chains survive; resume each agent from disk); an analysis crash inside a chain can
+  silently block downstream stages (watch analysis logs, not only GPU return codes); long-prompt conditions OOM at the default row
+  budgets (rerun with smaller budgets via `.done_<stage>` markers).
 - On any resume: read `logs/PROGRESS.md` (tail), `logs/gpu_queue.log`, `logs/chain*.log`, `logs/agent_status.txt`
   if present, then the run dirs' `run_meta.json`, to find the first unexecuted step.
 
@@ -521,7 +529,9 @@ Two patterns were used and both are documented in PLAYBOOK.md:
 - `PLAN.md` feasibility analysis (why layer streaming), full implementation checklist, assumptions.
 - `RESEARCH_PLAN.md` the four extension directions, experiments, agent assignment, user decisions.
 - `HANDOFF.md` the operational brief the headless agent executed for the base reproduction.
-- `PLAYBOOK.md` the unattended-run process, timelines, problems and fixes (both patterns).
+- `PLAYBOOK.md` the unattended-run process, timelines, problems and fixes (all three patterns).
+- `docs/team_brief_winogrande_str.md` (Phase 3/4) and `docs/team_brief_phase5.md` (Phase 5) team one-pagers; the published Phase-5
+  page's HTML source is `docs/pages/team_brief_phase5/index.html` (figures from `results/figures/`; artifact JQ9nWn4wno8CuJ8Gte3qZw).
 - `results/REPORT.md` base deliverable: sections 1–8 plus 6b (Mixtral without BOS).
 - `results/EXTENSIONS_REPORT.md` extension deliverable, assembled from `results/sections/ext*.md`.
 - `docs/ext3_literature_review.md` attention sinks, BOS, MoE routing, tokenisation conventions (30 references).

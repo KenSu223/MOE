@@ -26,3 +26,4 @@ Read this file, logs/PROGRESS.md ([p5-circuit] lines), logs/ext13ci_chain_<proto
 `setsid nohup .venv/bin/python scripts/ext13ci_chain.py <proto> >> logs/ext13ci_chain_<proto>.log 2>&1 &`; it re-derives
 everything from disk (heads_state.json, circuit_state.pkl, run_meta complete flags, results/p5_<proto>_ci/chain_state.json)
 and never redoes finished passes. Skip a condition: add its name to results/p5_<proto>_ci/skip.txt.
+- 2026-10-12T16:30Z [coordinator] Phase 5 COMPLETE: all chains finished 05:40Z, results committed and pushed (bed8247). Nothing left to run for this agent.

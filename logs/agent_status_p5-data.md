@@ -16,3 +16,4 @@ Updated: 2026-10-11T13:58Z
 - grep "rc=[1-9]" logs/ext13_p5_chain.log -> a failed stage stops that cond/proto only; fix, then
   `nohup bash scripts/ext13_p5_chain_base.sh <cond> > logs/ext13_p5_chain_base.out 2>&1 &` (skips stages with .done_<stage> markers).
 - never redo GPU work: markers results/p5_<cond>_<proto>/.done_<stage>, run_meta.json "complete".
+- 2026-10-12T16:30Z [coordinator] Phase 5 COMPLETE: all chains finished 05:40Z, results committed and pushed (bed8247). Nothing left to run for this agent.

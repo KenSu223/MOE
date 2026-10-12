@@ -20,3 +20,4 @@
 - Read this file, tail logs/ext13ab_chain.log; never redo GPU work (addback_state.pkl resumes, run_meta complete=true).
 - If a chain died: `setsid nohup bash scripts/ext13ab_chain.sh <qwen3|mixtral> > /dev/null 2>&1 &`.
 - Manual refresh: `(flock -x 8; python -W ignore scripts/ext13ab_analyze.py && python -W ignore scripts/ext13ab_plot.py) 8>logs/ext13ab_analyze.lock`.
+- 2026-10-12T16:30Z [coordinator] Phase 5 COMPLETE: all chains finished 05:40Z, results committed and pushed (bed8247). Nothing left to run for this agent.

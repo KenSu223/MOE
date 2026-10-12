@@ -1,0 +1,324 @@
+<title>WinoGrande Phase 5 Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, same system as the Phase 3/4 WinoGrande STR brief; figure plates on white in both themes. */
+:root {
+  --bg: #f4f6f8; --surface: #ffffff; --fg: #19202b; --muted: #586273; --line: #d7dce3;
+  --accent: #1d5c86; --accent-soft: #e2ecf4; --swap: #c2410c; --plate: #ffffff;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #10141a; --surface: #171d25; --fg: #e4e8ee; --muted: #9aa5b4; --line: #2a333f;
+    --accent: #84b6dc; --accent-soft: #1b2a37; --swap: #fb923c; --plate: #ffffff; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #10141a; --surface: #171d25; --fg: #e4e8ee; --muted: #9aa5b4; --line: #2a333f;
+  --accent: #84b6dc; --accent-soft: #1b2a37; --swap: #fb923c; --plate: #ffffff; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  padding-inline: 20px; padding-block: 0 56px; }
+main { max-width: 1000px; margin-inline: auto; display: grid; gap: 8px; }
+.col { max-width: 70ch; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 700; }
+h2 { font-size: 1.3rem; font-weight: 700; }
+h3 { font-size: 1.02rem; font-weight: 600; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+header { padding-block: 40px 20px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+section { padding-block: 28px 12px; display: grid; gap: 14px; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+.ex { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.8; white-space: pre; }
+.ex b { color: var(--swap); font-weight: 500; }
+.ex .lab { color: var(--muted); }
+.plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px; }
+.plates figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.plates figcaption { font-family: var(--font-display); font-size: 0.86rem; font-weight: 600; color: var(--muted); }
+.plate { background: var(--plate); border: 1px solid var(--line); border-radius: 6px; padding: 10px; }
+.plate button { all: unset; cursor: zoom-in; display: block; width: 100%; }
+.plate img { display: block; width: 100%; height: auto; max-width: 100%; }
+.legend { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 0; max-width: 840px; }
+.legend dt { font-family: var(--font-mono); font-size: 0.82rem; white-space: nowrap; padding-top: 3px; }
+.legend dd { margin: 0; min-width: 0; }
+.sw { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 2px; margin-right: 6px; vertical-align: -0.08em; }
+.line { display: inline-block; width: 1.4em; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: 0.25em; }
+.dash { display: inline-block; width: 1.4em; border-top: 2px dashed #52514e; margin-right: 6px; vertical-align: 0.3em; }
+.key { background: var(--accent-soft); border-radius: 6px; padding: 12px 16px; max-width: 840px; display: grid; gap: 6px; }
+.key strong { color: var(--accent); }
+.glance { display: grid; gap: 10px; max-width: 880px; }
+.glance div { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr); gap: 4px 16px; padding-block: 8px; border-bottom: 1px solid var(--line); }
+.glance div:last-child { border-bottom: 0; }
+.glance .q { font-family: var(--font-display); font-weight: 600; font-size: 0.92rem; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); max-width: 100%; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; color: var(--muted); background: var(--accent-soft); white-space: nowrap; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+td.n { font-family: var(--font-mono); font-size: 0.84rem; }
+td code { white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.note { font-size: 0.9rem; color: var(--muted); max-width: 840px; }
+#lightbox { position: fixed; inset: 0; background: rgba(8, 11, 15, 0.88); z-index: 10; overflow: auto; padding: 24px; cursor: zoom-out; }
+#lightbox img { display: block; max-width: none; margin: auto; background: #ffffff; }
+#lightbox .close { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 16px; font-family: var(--font-mono);
+  font-size: 0.85rem; color: #ffffff; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 640px) {
+  body { font-size: 16px; padding-inline: 16px; }
+  .legend { grid-template-columns: 1fr; gap: 2px; } .legend dd { margin-bottom: 8px; }
+  .glance div { grid-template-columns: 1fr; }
+}
+</style>
+
+<main>
+<header>
+  <span class="eyebrow">Expert-aware causal tracing in MoE LMs · Qwen3-30B-A3B and Mixtral-8x7B · bf16 · Phase 5</span>
+  <h1>WinoGrande Phase 5 Brief</h1>
+  <p class="col">Follow-up to the team meeting on the <a href="https://claude.ai/artifact/StxpgMYYkMPMGk5MvEntq2">WinoGrande STR brief</a>. The main point raised there was that our WinoGrande setup asks the question backwards. So we asked it the original way, added the controls that were suggested, and reran the full analysis on every condition: layer patching, add-back curves, heads plus experts, and knockout.</p>
+</header>
+
+<section>
+  <h2>Answers at a glance</h2>
+  <div class="glance">
+    <div><span class="q">Is the option swap the same as the original task?</span><span>No. Asking for the entity instead of the adjective flips the picture. On the same twins, attention's share of the repair goes from 0.19 to 0.71 (Qwen3) and from 0.35 to 0.52 (Mixtral). In this direction attention writes the answer, as in IOI.</span></div>
+    <div><span class="q">Is it about the answer being in context?</span><span>Hardly. Listing both adjectives in the prompt, so the answer can be copied, moves attention's share by only +0.07 / +0.04.</span></div>
+    <div><span class="q">Association, verbs, memorisation?</span><span>Small effects:
+      <ul>
+        <li>Association balance changes the share by at most 0.11.</li>
+        <li>A neutral verb changes nothing measurable.</li>
+        <li>An unrelated verb removes the effect, so the models read the verb.</li>
+        <li>The original names do no better than new names, so there is no sign of memorisation.</li>
+      </ul></span></div>
+    <div><span class="q">Is there a gradient of attention across tasks?</span><span>Two blocks rather than a smooth gradient. Every "which attribute" task is MoE-heavy and every "which entity" task is attention-heavy. CounterFact sits between them and IOI above both.</span></div>
+    <div><span class="q">Why do the add-back curves look different?</span><span>Experts in the last four layers push against the answer. When attention writes the answer, an experts-only add-back overshoots the all-MoE line. When the experts write it, the curve just rises to the line. We tested this directly.</span></div>
+    <div><span class="q">Attribution patching instead of activation patching?</span><span>On OLMoE it matches exact patching for experts (r 0.96–0.97) but underestimates early heads. For final-position work, exact patching is cheap enough.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>1 · Setup: the same twins, asked two ways</h2>
+  <p class="col">A WinoGrande twin pair differs in one trigger word, and that flips the answer. Phase 3/4 filled the blank and asked for the trigger: <em>entity → attribute</em>. The original task gives the trigger and asks which entity the blank refers to: <em>attribute → entity</em>. In both, the corrupted prompt is the twin, and we patch at the last token.</p>
+<div class="ex"><span class="lab">Phase 3/4, entity → attribute (swap the filled noun, read the adjective)</span>
+A: The janitor tried to clean the mirror with the spray but the <b>mirror</b> was too  → " dirty"
+B: The janitor tried to clean the mirror with the spray but the <b>spray</b>  was too  → " weak"
+
+<span class="lab">Phase 5, attribute → entity (swap the trigger, read the noun)</span>
+A: Fill in the blank: The janitor tried to clean the mirror with the spray but the _ was too <b>dirty</b>.
+   Answer: the  → " mirror"
+B: Fill in the blank: The janitor tried to clean the mirror with the spray but the _ was too <b>weak</b>.
+   Answer: the  → " spray"</div>
+  <ul class="col">
+    <li><strong>Same information as WinoGrande.</strong> Every prompt contains the whole sentence; only the answer is withheld.</li>
+    <li><strong>Filters:</strong>
+      <ul>
+        <li>single-token answers;</li>
+        <li>twins of equal token length that differ in at most 3 tokens;</li>
+        <li>the model gets both twins right by at least 1 logit.</li>
+      </ul></li>
+    <li><strong>Association balance.</strong>
+      <ul>
+        <li>A probe shows the model each trigger word and the two candidates, without the sentence. Example: <code>Word: dirty. Which fits better, the mirror or the spray?</code>, plus a second probe in the fill-in-the-blank format.</li>
+        <li>The main sets keep only pairs where neither trigger points to an answer on its own: |probe| &lt; 1 logit for both.</li>
+      </ul></li>
+  </ul>
+  <h3>Conditions (validation pairs, Qwen3 · Mixtral)</h3>
+  <p class="note">The figures label conditions by these short names.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Name in figures</th><th>What it is</th><th>Example</th><th class="n">Pairs</th></tr></thead>
+      <tbody>
+        <tr><td><code>dir_opt</code> · <code>dir_f1</code></td><td>The same Phase-3 twins, asked both ways</td><td>the janitor pair above</td><td class="n">90 · 94</td></tr>
+        <tr><td><code>f1</code></td><td>Attribute → entity, fill-in-the-blank, large pool</td><td>as above</td><td class="n">128 · 101</td></tr>
+        <tr><td><code>f2e</code></td><td>Attribute → entity, natural sentence, no instruction</td><td>"… because music sounded <b>synthetic</b> coming from the" → " keyboard"</td><td class="n">32 · 18</td></tr>
+        <tr><td><code>vt_e2a_orig</code> · <code>_neu</code></td><td>Name templates, entity → attribute, original / neutral verb</td><td>"Sarah <b>gave</b> Laura a hand … because Sarah was feeling" → " helpful" (neutral: "supported")</td><td class="n">128 · 128</td></tr>
+        <tr><td><code>vt_a2e_orig</code></td><td>Same templates, attribute → entity</td><td>"Fill in the blank: Sarah gave Laura a hand … because _ was feeling helpful." → " Sarah"</td><td class="n">37 · –</td></tr>
+        <tr><td><code>cp_nat</code> · <code>cp_vt_*</code></td><td>Copy control: the two attributes listed up front, both orders</td><td>"Options: helpful, overwhelmed." + the entity → attribute prompt</td><td class="n">140 · 204</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The name templates are 55 hand-checked WinoGrande "X verb Y" items filled with 48 name pairs. The neutral and unrelated verb edits were written by hand for each template.</p>
+</section>
+
+<section>
+  <h2>2 · Asking for the entity moves the repair from experts to attention</h2>
+  <div class="plates">
+    <figure><figcaption>Same twins, entity → attribute (Phase 3 question)</figcaption>
+      <div class="plate"><button type="button" data-zoom="figures/ext13ab_dir_opt_split.png" aria-label="Enlarge the bar chart for the entity to attribute question"><img src="figures/ext13ab_dir_opt_split.png" alt="Bars for the option swap: all-MoE add-back about 0.8, direct MoE share high, direct attention share low" loading="lazy"></button></div></figure>
+    <figure><figcaption>Same twins, attribute → entity (original question)</figcaption>
+      <div class="plate"><button type="button" data-zoom="figures/ext13ab_dir_f1_split.png" aria-label="Enlarge the bar chart for the attribute to entity question"><img src="figures/ext13ab_dir_f1_split.png" alt="Bars for the original direction: all-MoE add-back 0.10 in Qwen3 and 0.41 in Mixtral, direct attention share 1.08 and 0.86" loading="lazy"></button></div></figure>
+  </div>
+  <p class="col">The bars mean the same as in the earlier brief. Each is a fraction of the drop at the last token, on the validation set.</p>
+  <dl class="legend">
+    <dt><span class="sw" style="background:#2e7bd6"></span>M add-back</dt><dd>Put back the clean output of every MoE layer at once.</dd>
+    <dt><span class="sw" style="background:#eb6834"></span>M deletion</dt><dd>The reverse: corrupt every MoE output in the clean run.</dd>
+    <dt><span class="sw" style="background:#1aae78"></span>MoE ≤ L−5</dt><dd>M add-back without the last four layers.</dd>
+    <dt><span class="sw" style="background:#eda100"></span>direct MoE share</dt><dd>Part of the answer written directly by MoE layers.</dd>
+    <dt><span class="sw" style="background:#e87ba4"></span>direct attention share</dt><dd>Part written directly by attention layers.</dd>
+  </dl>
+  <div class="key"><strong>Takeaway.</strong>
+    <ul>
+      <li><strong>Same sentences, different question, different mechanism.</strong> The experts alone undo 0.81 / 0.75 of the damage when we ask for the adjective, but only 0.10 / 0.41 when we ask for the entity. In that direction attention writes the answer directly (1.08 / 0.86), as in IOI.</li>
+      <li><strong>The instruction wrapper is not the cause.</strong> The natural-sentence version without "Fill in the blank" gives the same picture: attention share 0.69 / 0.65.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>3 · Controls: copy, verbs, names, association</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Change (same items, paired)</th><th class="n">Attention share Qwen3</th><th class="n">Mixtral</th></tr></thead>
+      <tbody>
+        <tr><td>Ask for the entity instead of the attribute</td><td class="n">+0.52 [0.46, 0.56]</td><td class="n">+0.18 [0.15, 0.20]</td></tr>
+        <tr><td>Make the attribute copyable ("Options: …"), natural twins</td><td class="n">+0.07 [0.01, 0.11]</td><td class="n">+0.04 [0.02, 0.05]</td></tr>
+        <tr><td>Make the attribute copyable, name templates</td><td class="n">−0.06 to +0.04</td><td class="n">+0.01</td></tr>
+        <tr><td>Neutral verb instead of the original (bought → got)</td><td class="n">+0.01 [−0.04, +0.05]</td><td class="n">+0.01 [−0.01, +0.03]</td></tr>
+        <tr><td>Association strata within a condition</td><td class="n">≤ 0.11</td><td class="n">≤ 0.11</td></tr>
+        <tr><td>Name items vs object items within a condition</td><td class="n">+0.08 to +0.16</td><td class="n">+0.08 to +0.16</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="col">
+    <li><strong>Unrelated verb</strong> ("talked with" instead of "gave a hand"): the effect disappears. The mean drop falls from about 5 logits to 0.2 / 0.0, so the models use the verb.</li>
+    <li><strong>Memorisation.</strong> The templates with their original WinoGrande names pass the competence filter no more often than with new names (0.31 vs 0.38 Qwen3, 0.31 vs 0.29 Mixtral).</li>
+    <li><strong>Copy prefix design.</strong> Our first prefix, "Of Sarah and Laura, one was helpful and the other was overwhelmed", let the model match names to adjectives by position. Mixtral passed 43 % of items in one order and 0 % in the other, even with an unrelated verb. We replaced it with a neutral list before running any patching.</li>
+  </ul>
+  <div class="key"><strong>Takeaway.</strong> The direction of the question matters far more than whether the answer is in context, how strong the noun–adjective association is, or which verb is used.</div>
+</section>
+
+<section>
+  <h2>4 · The task ladder</h2>
+  <div class="plate"><button type="button" data-zoom="figures/ext13syn_ladder.png" aria-label="Enlarge the task ladder"><img src="figures/ext13syn_ladder.png" alt="Four panels ranking all tasks by attention share, direct attention, all-MoE add-back and heads among the first ten picks; entity-to-attribute tasks at the bottom, attribute-to-entity tasks and IOI at the top" loading="lazy"></button></div>
+  <p class="col">Every task on one axis, both models, validation pairs with 95 % CIs. Tasks are ordered by attention's share of the repair. The other panels show the direct attention share, the all-MoE add-back, and how many of the first 10 picks are attention heads when heads and experts are added back together.</p>
+  <div class="key"><strong>Takeaway.</strong>
+    <ul>
+      <li><strong>Two blocks, not a gradient.</strong>
+        <ul>
+          <li>"Which attribute" tasks, with or without a copyable answer: 0.16–0.31 (Qwen3), 0.34–0.42 (Mixtral).</li>
+          <li>CounterFact: 0.54 / 0.58.</li>
+          <li>"Which entity" tasks: 0.69–0.79 / 0.52–0.65.</li>
+          <li>IOI: 0.92 / 0.80.</li>
+        </ul>
+        The two models order the tasks alike (Spearman 0.90).</li>
+      <li><strong>The attention-heavy subset we were asked to find</strong> is attribute → entity on name items. There, 9 of the first 10 picks are heads (Qwen3).</li>
+    </ul>
+  </div>
+  <p class="note">Caveat: "which entity" vs "which attribute" also changes the answer type (a word from the context vs a new word) and the prompt length (27–32 vs 17–19 tokens). The instruction wrapper is ruled out by the natural-sentence condition.</p>
+</section>
+
+<section>
+  <h2>5 · Which experts</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Knock out the Phase-3 WinoGrande expert (fraction of the clean margin lost)</th><th class="n">Qwen3 L41E117</th><th class="n">Mixtral L20E000</th></tr></thead>
+      <tbody>
+        <tr><td>Entity → attribute, Phase-3 twins</td><td class="n">0.025</td><td class="n">0.025</td></tr>
+        <tr><td>Entity → attribute + "Options:" list (copyable)</td><td class="n">0.027</td><td class="n">0.045</td></tr>
+        <tr><td>Attribute → entity, same twins</td><td class="n">0.001</td><td class="n">0.002</td></tr>
+        <tr><td>Name templates, entity → attribute</td><td class="n">0.001</td><td class="n">0.012, n.s.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="col">
+    <li><strong>The WinoGrande expert is needed only for entity → attribute on object items</strong>, even when the answer is copyable. For name items Mixtral uses L19E006 instead (0.017–0.042).</li>
+    <li><strong>Qwen3 has its own attribute → entity expert, L37E032.</strong> It is selected in the fill-in-the-blank pool and again on the name templates, and knocking it out costs 0.042 of the margin. Yet it writes almost nothing to the answer directly (direct share 0.01). It computes something that heads L40H2 and L42H10 then use to move the entity to the answer. This fits the "find, think, then bring the answer" picture from the meeting.</li>
+    <li><strong>Each condition's own top-10 experts cost 0.02–0.29</strong> of the margin when knocked out together; matched random sets cost ≤ 0.04.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6 · Why the add-back curves look different</h2>
+  <div class="plates">
+    <figure><figcaption>Entity → attribute: rises to the line</figcaption>
+      <div class="plate"><button type="button" data-zoom="figures/ext13ab_dir_opt_addback.png" aria-label="Enlarge add-back curves for the entity to attribute question"><img src="figures/ext13ab_dir_opt_addback.png" alt="Add-back curves rising to the all-MoE line without overshoot" loading="lazy"></button></div></figure>
+    <figure><figcaption>Attribute → entity, same twins: overshoots, then falls</figcaption>
+      <div class="plate"><button type="button" data-zoom="figures/ext13ab_dir_f1_addback.png" aria-label="Enlarge add-back curves for the attribute to entity question"><img src="figures/ext13ab_dir_f1_addback.png" alt="Add-back curves that overshoot the all-MoE line and fall at the end" loading="lazy"></button></div></figure>
+  </div>
+  <dl class="legend">
+    <dt><span class="line" style="background:#eb6834"></span>greedy</dt><dd>At each step, add the expert that helps most given the ones already added (15 steps).</dd>
+    <dt><span class="line" style="background:#2a78d6"></span>oracle</dt><dd>Add each case's experts in order of how much each helps on its own.</dd>
+    <dt><span class="line" style="background:#8a8984"></span>random</dt><dd>Random order, average of 5.</dd>
+    <dt><span class="dash"></span>dashed line</dt><dd>Every MoE output put back at once.</dd>
+  </dl>
+  <div class="plate"><button type="button" data-zoom="figures/ext13syn_curves_overshoot.png" aria-label="Enlarge the overshoot scatter plots"><img src="figures/ext13syn_curves_overshoot.png" alt="Scatter plots: the overshoot over the all-MoE line tracks the late-MoE term with r 0.98, the late negative experts and the direct attention share" loading="lazy"></button></div>
+  <p class="col">Each point is one condition and model. The y-axis is how far the best expert subset rises above the all-MoE line. Left panel: the x-axis is how much more we restore when the last four layers are left out (r = 0.98).</p>
+  <div class="key"><strong>What happens.</strong>
+    <ul>
+      <li><strong>The late experts push back.</strong> Every task has experts in the last four layers that write against the answer. They push harder the more evidence for the answer is already in the residual stream.</li>
+      <li><strong>An experts-only add-back restores only half of that evidence.</strong> It brings back what the experts wrote, but not what attention wrote.</li>
+      <li><strong>When attention writes the answer</strong> (the entity question, CounterFact), the all-MoE line includes the late experts' push-back against evidence that is missing from the patched run. Leaving those experts out therefore beats the line.</li>
+      <li><strong>When the experts write the answer</strong> (the attribute question), nothing is missing, so there is nothing to gain.</li>
+    </ul>
+  </div>
+  <div class="table-wrap" style="max-width: 640px">
+    <table>
+      <thead><tr><th>Direct test, Qwen3 (fraction of the drop)</th><th class="n">Attribute question</th><th class="n">Entity question</th></tr></thead>
+      <tbody>
+        <tr><td>All MoE outputs put back</td><td class="n">0.81</td><td class="n">0.10</td></tr>
+        <tr><td>All except the experts that hurt</td><td class="n">0.80</td><td class="n">0.47</td></tr>
+        <tr><td>Best oracle subset</td><td class="n">0.82</td><td class="n">0.47</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>7 · Attribution patching (pilot on OLMoE)</h2>
+  <div class="table-wrap" style="max-width: 720px">
+    <table>
+      <thead><tr><th>Component</th><th class="n">Gradient estimate vs exact patching (r)</th><th class="n">Noise ceiling</th></tr></thead>
+      <tbody>
+        <tr><td>Single experts</td><td class="n">0.96 · 0.97</td><td class="n">0.97 · 0.96</td></tr>
+        <tr><td>MoE layers</td><td class="n">0.96 · 0.99</td><td class="n">1.00 · 0.99</td></tr>
+        <tr><td>Attention heads</td><td class="n">0.83 · 0.95</td><td class="n">0.92 · 0.94</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">WinoGrande · IOI, 64 + 64 pairs each. The noise ceiling compares two exact-patching implementations.</p>
+  <ul class="col">
+    <li><strong>Experts and MoE layers:</strong> the gradient estimate is as good as the measurement noise allows. Used as an add-back ordering, it equals the oracle.</li>
+    <li><strong>Early heads are underestimated.</strong> The strongest WinoGrande head ranks only 6th.</li>
+    <li><strong>Routing changes.</strong> About a third of single-expert patches change which experts later layers pick, which a gradient cannot see.</li>
+    <li><strong>Our call:</strong> no need to build a gradient engine for the 30B models. Exact patching at the last token costs about 5 GPU minutes per 256 prompts. It would pay off only for all-position or edge-level attribution.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>8 · Not done, and caveats</h2>
+  <ul class="col">
+    <li><strong>Not run:</strong> the A/B letter format, synonym averaging, a model-size series, and anything for MIB. These remain for discussion. The same-family Qwen3-235B does not fit on our disk; the dense Qwen3 family (0.6B–32B) is a possible scale series.</li>
+    <li><strong>Base models rarely solve some formats.</strong> They mostly fail the entity question on the name templates (3.7 % / 0.1 % pass) and a restated format ("The one who … was", 9 %). Those are reported as behaviour only.</li>
+    <li><strong>Small samples:</strong> the natural-sentence condition (32 / 18 pairs) and the entity question on templates (5 validation templates). Template results use template-clustered CIs. Mixtral has few name items in the entity direction.</li>
+    <li><strong>The curve-shape test</strong> was run on Qwen3 only. The cross-condition correlations rest on about 20 points.</li>
+  </ul>
+  <p class="note">Full results: <code>results/sections/ext13_synthesis.md</code> and Directions 13–13h of <code>results/EXTENSIONS_REPORT.md</code> in the repository.</p>
+</section>
+</main>
+
+<div id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Enlarged figure">
+  <button type="button" class="close" id="lb-close">Close (Esc)</button>
+  <img id="lb-img" alt="">
+</div>
+<script>
+(function () {
+  var box = document.getElementById('lightbox'), img = document.getElementById('lb-img'), last = null;
+  function close() { box.hidden = true; img.removeAttribute('src'); if (last) last.focus(); }
+  document.querySelectorAll('[data-zoom]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var i = b.querySelector('img'); img.src = b.getAttribute('data-zoom'); img.alt = i ? i.alt : '';
+      box.hidden = false; last = b; document.getElementById('lb-close').focus();
+    });
+  });
+  box.addEventListener('click', close);
+  document.getElementById('lb-close').addEventListener('click', function (e) { e.stopPropagation(); close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+})();
+</script>
