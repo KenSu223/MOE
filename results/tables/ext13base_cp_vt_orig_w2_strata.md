@@ -1,0 +1,28 @@
+**cp_vt_orig W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 256 | 5.90 | 0.138 [0.126, 0.149] | 0.086 [0.077, 0.095] | 0.29 [0.27, 0.31] |
+| Qwen3-30B-A3B-Base | person-name options | False | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 191 | 5.76 | 0.136 [0.121, 0.150] | 0.090 [0.081, 0.100] | 0.29 [0.26, 0.31] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 65 | 6.31 | 0.143 [0.122, 0.164] | 0.074 [0.056, 0.093] | 0.31 [0.27, 0.35] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 256 | 5.90 | 0.138 [0.126, 0.149] | 0.086 [0.077, 0.095] | 0.29 [0.27, 0.31] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 22 | 6.98 | 0.137 [0.098, 0.174] | 0.069 [0.045, 0.096] | 0.33 [0.28, 0.39] |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 234 | 5.80 | 0.138 [0.125, 0.150] | 0.087 [0.078, 0.097] | 0.29 [0.27, 0.31] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 43 | 5.97 | 0.146 [0.122, 0.170] | 0.076 [0.052, 0.103] | 0.29 [0.26, 0.34] |
+| Qwen3-30B-A3B-Base | probe reverse | False | 213 | 5.88 | 0.136 [0.122, 0.149] | 0.087 [0.078, 0.096] | 0.29 [0.27, 0.32] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 31 | 5.03 | 0.128 [0.105, 0.153] | 0.115 [0.086, 0.141] | 0.45 [0.41, 0.49] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 225 | 6.02 | 0.139 [0.126, 0.151] | 0.082 [0.073, 0.091] | 0.27 [0.25, 0.30] |
+| Mixtral-8x7B, BOS | person-name options | True | 256 | 5.46 | 0.173 [0.165, 0.181] | 0.172 [0.160, 0.185] | 0.42 [0.41, 0.43] |
+| Mixtral-8x7B, BOS | person-name options | False | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | True | 218 | 5.55 | 0.175 [0.166, 0.183] | 0.172 [0.159, 0.187] | 0.42 [0.40, 0.43] |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | False | 38 | 4.98 | 0.164 [0.145, 0.184] | 0.173 [0.146, 0.206] | 0.45 [0.42, 0.48] |
+| Mixtral-8x7B, BOS | probe-associative | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-associative | False | 256 | 5.46 | 0.173 [0.165, 0.181] | 0.172 [0.160, 0.185] | 0.42 [0.41, 0.43] |
+| Mixtral-8x7B, BOS | probe one-sided | True | 24 | 5.03 | 0.173 [0.149, 0.196] | 0.189 [0.148, 0.236] | 0.45 [0.41, 0.50] |
+| Mixtral-8x7B, BOS | probe one-sided | False | 232 | 5.51 | 0.173 [0.165, 0.182] | 0.171 [0.158, 0.185] | 0.42 [0.41, 0.43] |
+| Mixtral-8x7B, BOS | probe reverse | True | 14 | 4.91 | 0.149 [0.121, 0.182] | 0.145 [0.123, 0.165] | 0.45 [0.41, 0.49] |
+| Mixtral-8x7B, BOS | probe reverse | False | 242 | 5.49 | 0.175 [0.166, 0.183] | 0.174 [0.161, 0.187] | 0.42 [0.41, 0.43] |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 163 | 5.55 | 0.173 [0.163, 0.182] | 0.188 [0.171, 0.206] | 0.43 [0.41, 0.44] |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 93 | 5.31 | 0.175 [0.159, 0.189] | 0.143 [0.130, 0.157] | 0.41 [0.39, 0.44] |

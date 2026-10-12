@@ -1,0 +1,85 @@
+{
+"phase": "cross",
+"cond": "cp_vt_neu",
+"proto": "mixtral_bos",
+"targets": {
+"selected": "L19E006",
+"wg": "L20E000",
+"cf": [
+"L19E002",
+"L21E001",
+"L18E001"
+],
+"main": [
+"L19E006",
+"L20E000"
+],
+"all": [
+"L19E006",
+"L20E000",
+"L19E002",
+"L21E001",
+"L18E001"
+]
+},
+"conditions": [
+{
+"cid": "cross:L20E001",
+"mask": [
+[
+20,
+1
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "f1"
+},
+"sig": "L20E001|all|reroute"
+},
+{
+"cid": "cross:L19E004",
+"mask": [
+[
+19,
+4
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "f2e"
+},
+"sig": "L19E004|all|reroute"
+},
+{
+"cid": "cross:L21E006",
+"mask": [
+[
+21,
+6
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "cp_nat"
+},
+"sig": "L21E006|all|reroute"
+}
+],
+"passes": []
+}

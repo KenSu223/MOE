@@ -1,0 +1,59 @@
+{
+ "cond": "cp_vt_neu",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "agent": "p5-expert",
+ "experiment": "ext13ko expert knockout (route masks on clean prompts), Phase 5 / Direction 9 per condition",
+ "source": {
+  "pairs": "data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json",
+  "run": "p5_cp_vt_neu_mixtral_bos"
+ },
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "main": {
+   "created_utc": "2026-10-11T19:04:58Z",
+   "passes": [
+    {
+     "pass": "full_p000",
+     "rows": 2560,
+     "T": 30,
+     "pass_s": 88.1,
+     "peak_GB": 8.94
+    },
+    {
+     "pass": "ctl_p000",
+     "rows": 5002,
+     "T": 27,
+     "pass_s": 91.5,
+     "peak_GB": 13.34
+    },
+    {
+     "pass": "ctl_p001",
+     "rows": 4470,
+     "T": 30,
+     "pass_s": 94.0,
+     "peak_GB": 13.23
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py mixtral_bos --conds cp_vt_neu --with-wr --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-11T19:08:08Z",
+   "n_passes": 3,
+   "n_conditions": 50,
+   "n_rows": 12032
+  },
+  "cross": {
+   "created_utc": "2026-10-12T05:14:48Z",
+   "passes": [],
+   "command": "python scripts/ext13ko_run.py mixtral_bos --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,f2e --phase cross --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-12T05:14:48Z",
+   "n_passes": 0,
+   "n_conditions": 3,
+   "n_rows": 0
+  }
+ }
+}

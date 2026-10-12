@@ -669,3 +669,555 @@ the target task's items. Revision of a Phase-3 claim (4b): on identical items ro
 vs objects (texts in ext7_controls.md / ext7_synthesis.md / CLAUDE.md corrected). Coordinator addition: knockout vs direct write
 on the same prompts (`scripts/ext9_synthesis_selfrepair.py`): 53–95 % of a writer expert's direct write is compensated.
 Committed and pushed 2026-10-06.
+
+# Phase 5 (DRAFT 2026-10-11, from the team meeting on the Phase 3/4 results; design decisions pending)
+
+Meeting feedback, in short. The WinoGrande option swap (fill the blank, predict the sentence-final attribute) tests
+entity → attribute: knowledge recall, where the entity's identity flows from the noun position to the final token and
+is converted into an attribute. The original WinoGrande task is attribute → one of the two entities: reference
+resolution. The team asked for the following.
+- (a) Reformulate WinoGrande so that it tests reference resolution, e.g. as a two-option question.
+- (b) Balance the noun–attribute association.
+- (c) Control the role-swap (name) items with neutral and unrelated verbs (memorization) and with synonyms.
+- (d) Build a data-centric task ladder that raises the reliance on attention step by step, and a subset that needs
+  attention to be solved.
+- (e) Explain why the add-back curves of CounterFact and WinoGrande differ.
+- (f) Move from activation patching to attribution patching.
+- (g) Discuss scale and MIB.
+
+## P5-1 WinoGrande in the original direction: attribute → entity (core)
+
+STR = the twin's trigger swap (dirty ↔ weak); the readout is the entity:
+
+    Δ = logit(entity_r) − logit(entity_r′) at the final token
+
+Both directions of every pair are used. Candidate formats (to be decided with the user):
+
+| Format | Prompt (clean; the corrupted prompt swaps the trigger) | Pairs (single-token entities, token-aligned, before margin) |
+|---|---|---|
+| F1 cloze (recommended primary) | `Fill in the blank: The janitor tried to clean the mirror with the spray but the _ was too dirty.\nAnswer: the` → " mirror" | Qwen3 10,875 / Mixtral 5,213 |
+| F2 natural truncation | twins whose trigger precedes the blank, cut at the blank: `The cake was sweeter than the pie because there was more sugar used in the` → " cake" | 1,162 / 578 |
+| F3 letter MC (A/B) | `…\nWho or what is _?\nA. the mirror\nB. the spray\nAnswer:` → " A"; both option orders | all twins (options need not be single tokens) |
+| F4 pronoun + question | `…but it was too dirty. What was too dirty? The` → " mirror" | needs per-item rewriting, and pronoun gender leaks for names |
+
+Recommendation:
+- **F1 as primary.** It is the WinoGrande task itself, with no rewriting. The answer is a context entity, as in IOI.
+- **F3 as secondary.** It is the team's A/B format and links to MIB's MCQA task, but it adds a letter-binding step.
+- **F2 as a naturalness check.** It is the only format with no instruction wrapper.
+
+Filters:
+- margin ≥ 1 both ways;
+- W6 dedup;
+- dev twins and the AfLite (train_debiased) subset as a memorization check.
+
+Association balance:
+- Per pair, a context-free association score: Δ on `Fill in the blank: Between the mirror and the spray, the _ was too dirty.`
+- Main set = the balanced pairs. All association strata are reported, since association strength is the continuous
+  variable of P5-2.
+
+Analyses (the existing generic pair runners):
+- W2 sweep and W4 (all-MoE + direct split);
+- W3 grid at the trigger, the blank, the two candidate mentions and the final token;
+- W5 heads (do heads attend to the correct candidate's mention?);
+- W6 experts;
+- head + expert add-back (Direction-10 machinery).
+
+Prediction: much more attention than the option swap, towards IOI.
+
+## P5-2 Task ladder: a data-centric attention gradient
+
+Ladder: L1 CounterFact → L2 WinoGrande entity → attribute, objects → L3 the same with names → L4 names with a
+neutral verb → L5 WinoGrande attribute → entity, objects → L6 attribute → entity, names (and neutral verb) → L7 IOI.
+
+On every level, the same measurements:
+- attention share;
+- all-MoE M and the direct split;
+- heads vs experts among the first greedy add-back picks.
+
+Within levels, the attention share is regressed on the per-pair association score.
+
+"Attention-required subset" = attribute → entity, names, neutral verb, association ≈ 0 (chance-level context-free
+Δ). Open question from the meeting: does linguistic theory support such a gradient? Short literature check
+(Winograd-schema analyses, reference resolution vs world knowledge).
+
+## P5-3 Name-item controls (role-swap follow-ups)
+
+- **Neutral verb:** replace the content verb (bought → got).
+- **Unrelated verb (memorization):** e.g. bought → insulted, from WordNet, checked by hand. If the answer stays
+  generous / thankful, the item is memorized or relies on a shortcut.
+- **Synonym averaging:** for the attribute (as input in P5-1, as output in the entity → attribute direction).
+- **Pool:** name items in the margin pools (Qwen3 535, Mixtral 150); single-token checks as before.
+
+## P5-4 Why the add-back curves differ (mostly CPU, existing rows)
+
+CounterFact overshoots the all-MoE ceiling and falls at the end; WinoGrande barely does. Analyses:
+- the mass and layer location of negative single-expert effects;
+- (curve maximum − ceiling) against the summed negative experts;
+- the interior-layer ceilings (≤ L−5);
+- the late-layer negative MoE in W2;
+- the writer / computer shares (Direction 11);
+- Shapley redundancy;
+- one cheap GPU check: all experts except the negative ones.
+
+## P5-5 Attribution patching (F3)
+
+- **Pilot:** OLMoE with autograd (fits on the GPU). AtP, AtP* and EAP-IG against the activation-patching rankings
+  of the STR pairs.
+- **Then:** if the agreement is good, reverse layer streaming in the engine for Qwen3 / Mixtral (several days of
+  engine work).
+
+## P5-6 Scale (discussion)
+
+- **Constraints:** no quantization. The same-family larger model (Qwen3-235B-A22B, about 470 GB in bf16) does not
+  fit on the NVMe (49 GB free); it needs a larger disk or instance.
+- **Possible now:** a confounded three-point series OLMoE-1B-7B (1.3B active) / Qwen3-30B-A3B (3B active) /
+  Mixtral-8x7B (13B active). Running the ladder on OLMoE is cheap.
+- **Confound noted by the team:** expert size grows with the model.
+
+## P5-7 MIB (discussion)
+
+MIB (Mueller et al., ICML 2025, arXiv:2504.13151): circuit localization and causal-variable localization tracks,
+four tasks (including MCQA), dense models. Our possible contributions:
+- MoE models with expert-level components;
+- STR pairs;
+- the WinoGrande reference-resolution task in an MCQA-style format (F3);
+- head + expert add-back curves as a circuit-localization measure.
+
+## Order and cost (estimates)
+
+1. P5-1 data build and competence scans (≈ 20 GPU-min), then its analyses (≈ 1–1.5 GPU-h).
+2. P5-3 controls (≈ 0.5 GPU-h).
+3. P5-2 ladder (mostly re-use, plus ≈ 1 GPU-h).
+4. P5-4 at any time (CPU).
+5. P5-5 pilot.
+
+P5-6 and P5-7 are for discussion.
+
+## Phase 5 decisions (user, 2026-10-11)
+
+- **Format.** F2 natural truncation is the PRIMARY attribute → entity format. F1 fill-in-the-blank runs as the
+  comparison experiment, because F2's items share one sentence structure (the trigger precedes the blank) and F1
+  covers the other question types. F3 (letter MC) and F4 (pronoun + question) are not run.
+  **Superseded the same day (see "Phase 5 revision" below):** the cut at the blank drops the words after it, so F2 is
+  replaced by F2R (restate, primary) and F2E (blank at the sentence end, comparison).
+- **Association.** A balanced main set plus all association strata. The context-free association score is the
+  ladder's continuous variable.
+- **Additional experiment.** Only the name-item verb swaps (P5-3): a neutral verb (bought → got) and an unrelated verb
+  (bought → insulted, memorization check). Synonym averaging is not run.
+- **Models.** Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, as in Phases 3–4.
+
+Candidate pool before the margin filter (single-token entities, the twins token-aligned with ≤ 3 differing tokens):
+
+| Format | Qwen3 pairs (of which names) | Mixtral BOS pairs (of which names) |
+|---|---|---|
+| F2 | 1,114 (734) | 555 (338) |
+| F1 | 10,875 (5,985) | 5,213 (2,324) |
+
+F2 is mostly name items, the opposite of the Phase-3 option swap (91 % objects), so names vs objects is a mandatory
+stratum.
+
+Risk: after the margin, dedup and balance filters, F2 Mixtral may have fewer than 256 pairs (128 / 128). Decide after
+the competence scan: smaller splits, or a looser balance threshold.
+
+Open details, with the coordinator's proposal:
+- **Association probe:** the trigger word and the two candidates in a neutral frame that works for any part of speech,
+  e.g. `Word: dirty. Which fits better, the mirror or the spray? Answer: the`, both candidate orders averaged.
+- **Balanced:** context-free association drop ≤ 25 % of the full STR drop. This is the same quantity as the Phase-3
+  local baseline, where objects reached 15–17 % and names 1 %.
+- **Verb swaps:** the verb between the two names (`X <verb> Y …`), found by rule. Replacements must keep the token count
+  so the pairs stay token-aligned. Every swapped item is reviewed by hand (a few hundred items). The swaps run on name
+  items in both directions (ladder levels L3/L4 and L6).
+
+F2 trigger types (1,538 equal-word-length twins whose only difference precedes the blank):
+- 23 % swap a connective (because ↔ although / but): a discourse relation → entity, not attribute → entity;
+- 20 % differ in the last word before the blank, i.e. the final prompt token, so the STR site and the readout
+  position coincide (excluded by the W5 rule);
+- the rest are comparatives (more / less, better / worse, easier / harder, bigger / smaller), adjectives, verbs
+  (hated / loved) and prepositions (to / from).
+
+Proposal:
+- F2 main set = content-word swaps that are not at the final token;
+- connective swaps as a separate stratum, or dropped.
+
+Rough estimate after this rule and the margin: Qwen3 ≈ 350–400, Mixtral ≈ 180–200 pairs, before the balance filter.
+Mixtral F2 is therefore likely below 128 / 128.
+
+Association threshold, revised after a literature check (user request, 2026-10-11). The 25 % ratio was an ad-hoc
+proposal. Related work defines association / artifacts per item with a binary partial-input decision, never a ratio:
+- Trichelair et al. 2019 (EMNLP), Winograd "associative" vs "non-associative": one candidate is strongly linked to the
+  pronoun clause and the other is not; three annotators had to agree (κ 0.79). Levesque's "Google-proof" design goal.
+- Gururangan et al. 2018 / Poliak et al. 2018: "hard" examples = those a hypothesis-only (partial-input) model gets
+  wrong.
+- Poerner, Waltinger & Schütze 2020 (LAMA-UHN): facts guessable from the entity name are removed.
+- Elazar et al. 2021 (EMNLP): partial-input baselines for Winograd and paired (twin) scoring.
+- Gardner et al. 2021: a per-feature z-test (α = 0.01, Bonferroni), at the dataset level rather than per item.
+
+Proposed rule, consistent with these works and with our own competence margin:
+- **Associative pair:** the context-free probe gets BOTH twins right with a margin ≥ 1 logit. This is our Phase-3
+  `assoc` flag and Elazar-style paired scoring.
+- **Main (balanced) set:** the non-associative pairs.
+- **Strict "hard" subset (sensitivity):** the probe gets neither twin right (Gururangan-style).
+- **The continuous ratio** (probe drop / full drop) is kept only as the ladder's covariate, not as a threshold.
+
+Phase 5 build (2026-10-11): `moetrace/ext13_wino_ref.py`, `scripts/ext13_build.py` → `data/wino_ref/pairs_{F2,F1}_train_xl_<proto>.parquet`.
+
+| | F2 main (names) | F2 connective | F1 main (names) | F1 connective |
+|---|---|---|---|---|
+| Qwen3 | 797 (459) | 43 | 10,236 (5,472) | 446 |
+| Mixtral BOS | 405 (213) | 21 | 4,883 (2,081) | 187 |
+
+Notes:
+- Most connective swaps sat right before the blank and were removed by R5.
+- Verb-swap pool: `scripts/ext13_verbs.py suggest` finds only ≈ 128 loosely interpersonal name items (26 attribute →
+  entity, 102 entity → attribute), and many of them are comparatives rather than "X verb Y".
+- Same-token-count rule: not needed for STR alignment, because both twins get the same replacement. To be kept as a
+  flag only, pending the user.
+
+## Phase 5 revision (2026-10-11): information completeness, F2R / F2E, execution order
+
+**Correction (raised by the user).** F2 cut the sentence at the blank and dropped everything after it. In 69 % of the
+Qwen3 F2 main pairs (551 / 797; names 94 %, objects 35 %) the words after the blank decide the answer:
+`Natalie was more tired than Betty because _ had been running on the treadmill all day.` cut to `… than Betty because`
+leaves both names possible. With the blank at the sentence end, names and objects pass the margin equally (Qwen3 0.44 /
+0.51, Mixtral 0.50 / 0.50); with words after it, 0.05 / 0.31. The earlier reading "the models ignore the trigger on
+name items" is withdrawn (truncation artefact).
+
+**Rule for every Phase-5 prompt:** the model sees the same information as in the WinoGrande sentence; only the answer
+is withheld.
+
+**User decisions (2026-10-11):** F2's primary format = F2R (restate); F2E (natural truncation, blank at the sentence end)
+runs alongside as the comparison within F2; F1 stays the comparison format; execution starts with F1.
+
+| Format | Prompt | Built (Qwen3 / Mixtral BOS) |
+|---|---|---|
+| F2R restate (primary F2) | `Natalie was more tired than Betty because one of them had been running on the treadmill all day. The one who had been running on the treadmill all day was` → " Natalie" | kept 646 / 291, main 405 / 181 (names 371 / 160), connective 241 / 110 |
+| F2E (F2, blank at the end) | `The cake was sweeter than the pie because there was more sugar used in the` → " cake" | main 246 / 141 (names 27 / 12); scanned with F2 |
+| F1 (comparison) | `Fill in the blank: <sentence>\nAnswer: the` → " mirror" | main 10,236 / 4,883 |
+
+F2R rules (R7, `moetrace/ext13_wino_ref.restate_prompts`): F2 geometry (twins differ before the blank, identical from
+it on); the blank is the subject of the following verb (optional adverbs skipped); not inside a prepositional phrase
+(`the speakers on the _ were bigger`: the predicate is about the PP's head noun); not plural (`one of them were`); not
+possessive; predicate ≥ 2 words; a determiner before the blank is dropped (`the _` → `one of them`); copula `is` for
+present-tense predicates, else `was`; objects end in `was the`. Checked by hand on samples of names and objects. F2R and
+F2E are complementary: F2R is mostly names (objects usually have the blank at the sentence end), F2E mostly objects.
+
+**Completeness audit of every Phase-5 item:**
+
+| Item | Prompt the model sees | Complete? |
+|---|---|---|
+| P5-1 F1 | `Fill in the blank: ` + the whole sentence + `Answer:` | yes (10,682 / 10,682 prompts contain the full sentence) |
+| P5-1 F2R | whole sentence (blank → `one of them`) + restated predicate | yes, by construction |
+| P5-1 F2E | the sentence up to the blank, nothing after it | yes (only punctuation after the blank) |
+| P5-1 F2 (cut) | sentence up to the blank | **no; void** (files kept for the record) |
+| Association probe | trigger word + both candidates, no sentence | deliberately partial (partial-input baseline, not a task) |
+| P5-2 L1 CounterFact | fact prompt | yes |
+| P5-2 L2 / L3 WinoGrande entity → attribute (Phase 3) | sentence with the blank filled, up to the final trigger | yes (prompt + trigger = sentence, 4,514 / 4,514) |
+| P5-2 L4 / P5-3 verb swaps entity → attribute (55 seeds) | Phase-3 builder | yes |
+| P5-2 L5 / L6 attribute → entity | F2R / F2E / F1 | yes |
+| P5-3 verb swaps attribute → entity (13 seeds) | was F2 cut (all 13 affected) → rebuilt as F2R | yes after the rebuild; old files in `data/wino_ref/void_F2cut/`, old scan renamed `VOID_F2cut_*` |
+| P5-2 L7 IOI | IOI prompt | yes |
+| P5-4 | existing Phase-3 / 4 rows | yes |
+| P5-5 pilot | pairs of the formats above | yes |
+
+Verb-swap seeds under F2R: 138 attribute → entity seeds pass the token rules (27 under the cut), but the new ones are
+almost all connective swaps (`because` ↔ `but`: "X asked Y … because / but _ could not remember"), i.e. the connective
+stratum; the 68 curated seeds (55 + 13) all stay eligible, edits unchanged.
+
+**Execution order** (GPU through `gpu_queue.sh`; each step's sample sizes reported before splits are fixed):
+1. **F1** (started 2026-10-11): full-pool scan (Qwen3 balanced 1,397 pairs, names 520) → per-model case sets
+   (`scripts/ext13_casesets.py`: 128 / 128 + replication 128 / 128 where the pool allows) → P5-1 analyses with the
+   Phase-3 runners: W2 sweep, W4 joint + DLA + direct split, W6 experts, W5 heads (mention positions from
+   `scripts/ext13_positions.py`), W3 grid; then head + expert add-back (Direction-10 machinery; task registry entry).
+   Qwen3 first, Mixtral BOS second.
+2. **F2R + F2E**: F2R scan (+ verb attribute → entity rescan, F2R) → sample sizes → split decision (user) → the
+   analyses of step 1.
+3. **P5-3 verb swaps**: entity → attribute scan done (7,920 pairs per model); seed-grouped case sets (discovery and
+   validation never share a template) → W2 / W4 / DLA for orig / neutral / unrelated; attribute → entity after step 2.
+4. **P5-2 ladder**: levels from steps 1–3 + the Phase-3 runs (CounterFact, WinoGrande objects / names, IOI); attention
+   share regressed on the association score.
+5. **P5-4** (CPU, any time while the GPU is busy).
+6. **P5-5** attribution-patching pilot (OLMoE).
+
+
+## Phase 5 review (2026-10-11, second session): coverage of the meeting notes, setup issues, P5-8
+
+Numbers marked *prelim.* are quick coordinator calculations on the finished F1 runs (validation directed cases; attention
+share = AUC+ of the W2 curves; direct attention = all-attention direct path / drop), not the section's final analysis.
+Recomputing Phase 3 with the same code gives 0.16 / 0.34 and 0.05 / 0.29, as reported.
+
+### Coverage of the meeting notes
+
+| Meeting point | Plan item | Status / gap |
+|---|---|---|
+| Option swap ≠ original task; test reference resolution | P5-1 (F1, F2R, F2E) | covered; F1 GPU runs done for both models. *Prelim.* attention share F1 0.76 / 0.54 vs option swap 0.16 / 0.34; direct attention 1.13 / 0.93 vs 0.05 / 0.29 (IOI 1.40 / 1.17) |
+| Two-option (A/B) question | F3 | not run (user decision). F1 / F2R read the entity itself (Δ is a two-way choice). The MIB-MCQA link is lost |
+| Adjective equally associated with both nouns | association probe, binary rule | covered for P5-1. Not yet applied to the Phase-3 option-swap items (ladder L2): re-analyse them by their `assoc` flag (CPU) |
+| Better WinoGrande filter, proper nouns | names / objects strata | covered, but the strata are unbalanced (issue 2) |
+| Role swap as MC: "The person that felt generous is ___" | verb swaps attr2ent (F2R) | not viable at the margin rule (issue 1); fix 1b (F1 on the verb templates) |
+| Average across synonyms | — | not run (user decision) |
+| Neutral verb (bought → got) | P5-3 ent2attr | scanned: margin 715 / 542 pairs (28 / 23 seeds), mean drop 4.25 / 3.91 vs orig 4.97 / 4.71 |
+| Unrelated verb (memorization) | P5-3 ent2attr unrelated | done: drop 0.22 / 0.00, so the models read the verb. Tested on new IOI names only (issue 6) |
+| Data-centric ladder | P5-2 | planned. Levels change several factors at once (issue 4), hence P5-8 |
+| Linguistic theory | P5-2 literature check | planned. Candidates: implicit causality of interpersonal verbs, coherence-driven coreference (both bear on bought → got), FFN as key-value memory vs attention as mover |
+| Subset that needs attention | P5-2 definition | partly; P5-8 makes it operational |
+| "Less looking, more thinking"; attention vs dense roles | P5-1 W3 grid, W5 heads | the decision site must be read out, not only the final token (issue 5) |
+| Combined MoE + attention add-back | Direction 10 (Phase 4) | done for CounterFact / WinoGrande / IOI. To extend to F1 and P5-8 |
+| Scale; capability vs share; expert-size confound | P5-6 (discussion) | add a within-model capability proxy (issue 9) |
+| MIB contributions | P5-7 (discussion) | — |
+| Why the add-back curves differ | P5-4 | planned. Add F1 / P5-8 curves as further shapes. Hypothesis from Phase 4: later layers cancel CounterFact writers (L44E069 direct share 1.32) |
+| Activation → attribution patching | P5-5 | planned. MoE routing caveat (issue 8); frame AtP first as an add-back ordering |
+
+### Setup issues (ranked)
+
+**1. F2R (the primary format) and the attribute → entity verb swaps fail the margin rule.**
+
+| Scan | Qwen3 | Mixtral BOS |
+|---|---|---|
+| F2R balanced pairs (names) | 38 (33) | 16 (14) |
+| Verb attr2ent (F2R) margin pairs, orig | 16 (6 seeds) | 8 (4 seeds) |
+| F2E balanced pairs (names) | 120 (12) | 71 (6) |
+| F1 balanced pairs (names) | 1,397 (520) | 443 (27) |
+
+Proposal (user decision):
+- (a) F1 becomes the primary attribute → entity format. F2E is the no-wrapper naturalness check: Mixtral 71 pairs gives 35 / 36 with no replication. F2R is reported as descriptive only.
+- (b) Build the attribute → entity verb direction in the F1 format on the 55 ent2attr seeds (blank = the entity, STR = the trigger), e.g. `Fill in the blank: Stephen carried Thomas up four flights of stairs … _ was tired.\nAnswer:` → " Stephen". All 660 test fills (orig + neutral, 6 name pairs per seed) pass the F1 builder under both tokenizers (checked 2026-10-11). This gives both directions on identical semi-synthetic items.
+
+**2. The names / objects composition differs between models and tasks.**
+- F1 validation names: Qwen3 50 / 128, Mixtral 6 / 128 (Mixtral balanced names 27 / 443).
+- The Phase-3 option swap is 91 % objects.
+- Cross-model and cross-task comparisons must therefore be stratified, with objects as the common stratum.
+- *Prelim.* F1 attention share: Qwen3 objects 0.72, names 0.81; Mixtral objects 0.53.
+
+**3. Items differ across models and across directions.**
+- Each model has its own F1 case sets; only 184 balanced pairs are shared.
+- A direction comparison on identical items is possible: re-format the 776 Phase-3 pairs as F1 (twins that end in the trigger). F1 margin: 181 / 189 of the 776.
+- *Prelim.* on the overlap of the existing runs (68 / 188 pairs):
+  - attention share F1 vs option swap: 0.70 vs 0.21 (Qwen3), 0.51 vs 0.34 (Mixtral);
+  - direct attention: 1.12 vs 0.06, 0.83 vs 0.30.
+- Action: run F1 on the Phase-3 776 set (W2 / W4 / direct; ≈ 15 GPU-min per model) for a paired comparison, as Direction 12 4b did for role vs option.
+
+**4. The ladder levels confound factors.** Between L2 and L5–L7, the following change together:
+- direction (attribute recall vs reference resolution);
+- answer in context (copy) vs generated;
+- the F1 instruction wrapper;
+- item type and prompt length.
+
+IOI, F1 and F2R all copy an in-context entity, so the final-token attention share may mostly index "the answer is in context". P5-8 separates the first two factors.
+
+**5. Decision site vs final token.** In attribute → entity the final position copies the entity, so the final-token share cannot tell "look, then think" from "think, then copy".
+- The W3 grid (already run for F1, layer level) is the primary readout of where the decision is made.
+- Add expert-level patches at the trigger / blank positions for F1 (an F4-style site analysis, expert pass with rec_pos at the trigger).
+
+**6. The memorization test covers new names only.** The unrelated-verb fills use IOI names; the concern is the original WinoGrande items, which are likely in the pretraining data.
+- Add the 55 seeds with their original names × {orig, neutral, unrelated} (CPU build, a few GPU-min).
+- Report F1 by the `debiased` (AfLite) flag.
+
+**7. Statistics.**
+- Verb-template pairs are clustered: 48 name pairs per seed; seeds with margin 33 / 32 (orig) and 28 / 23 (neutral). Bootstrap over seeds and keep the seed-grouped splits; the effective n is about 30.
+- The two directed cases of a pair are dependent everywhere, so bootstrap over pairs.
+
+**8. Attribution patching on MoE.**
+- AtP linearises around the corrupted run. A patched expert output can switch top-k routing downstream, which the gradient does not see.
+- Compare AtP with activation patching separately for experts whose patch changes downstream routing (recorded in the expert passes).
+- Choose the pilot task by OLMoE competence (CounterFact STR, WinoGrande scan `results/wino_olmoe`).
+
+**9. Scale.**
+- Within-model capability proxy (CPU, existing rows): attention share against the clean margin and item difficulty.
+- A same-family MoE series needs a larger disk (Qwen3-235B ≈ 470 GB).
+- The dense Qwen3 family (0.6B–32B, same data; attention vs MLP) would need dense support in the engine.
+
+**10. Probe scope.** The association probe uses the trigger word only. Partial-input baselines in the literature (Trichelair et al.) use the clause around the pronoun. Optional second probe: the clause containing the trigger plus the candidates. Low priority.
+
+## P5-8 Copy vs generate control: the answer in context, direction held fixed (added 2026-10-11 at the user's request)
+
+**Question.** Does the final-token attention share measure the reasoning direction (reference resolution) or only whether the answer token is available in context?
+
+**Design.** Entity → attribute pairs as in Phase 3 (STR = the entity at the blank, readout = the trigger). A prefix names both candidate attributes, so the decision is the same as in the option swap but the answer can be copied:
+
+    Of Stephen and Thomas, one was tired and the other was grateful. Stephen carried Thomas up four flights of stairs in
+    the beachside condominium. Stephen was  -> " tired"     (B: "... Thomas was" -> " grateful")
+
+- **Prefix rule.** `Of {X} and {Y}, one {frame} {t1} and the other {frame} {t2}.`, where {frame} is the template's text between the blank and the trigger.
+  - Objects use `Of the mirror and the spray, one was too dirty and the other was too weak.`, with the determiner as in the sentence.
+  - The prefix is identical in both twins, so the STR site, token alignment and readout are unchanged.
+- **Counterbalancing.** Both attribute orders (t1, t2) are built as separate pairs and averaged.
+- **Checked 2026-10-11** on the 55 ent2attr seeds × 4 name pairs × 2 orders: 440 / 440 pass the Phase-3 builder under both tokenizers, and the answer token occurs in the prefix in 440 / 440.
+
+**Cells.** All three cells use the same items, in two sources: the semi-synthetic verb templates (names; orig and neutral verbs) and the natural Phase-3 pairs (776, names + objects).
+
+| Cell | Direction | Answer | Format | Exists? |
+|---|---|---|---|---|
+| C1 | entity → attribute | generated | Phase 3 | yes (Phase-3 runs; verb ent2attr scan) |
+| C2 | entity → attribute | copyable | Phase 3 + prefix | new (P5-8) |
+| C3 | attribute → entity | copyable (entity mention) | F1 | Phase-3 pairs: issue 3; templates: issue 1b |
+
+- **Contrasts.**
+  - C2 − C1 = copy availability, with direction and format fixed.
+  - C3 − C2 = direction, with copy fixed. The F1 wrapper still differs.
+  - Optional wrapper check: C1 / C2 in the F1 wrapper (blank on the trigger, entity filled in).
+- **Margin.** The margin rule applies per cell. The main comparison uses the items that pass in every cell (paired); seed-grouped splits for the templates.
+
+**Measurements.** Per cell:
+- W2 attention share; W4 all-MoE M and the direct split; W6 experts.
+  - Does Phase 3's L41E117 / L20E000 stay selected in C2?
+- W5 heads: attention to the in-context attribute token (copy heads) vs to the names.
+- Knockout of L41E117 / L20E000 in C2 (E4 route mask): is the expert still necessary when the answer can be copied?
+- Optional: head + expert add-back in C2 (Direction 10) and an add-back curve shape for P5-4.
+
+**Readings.**
+- C2 ≈ C3: the final-token share mostly indexes answer availability.
+- C2 ≈ C1: the attribute is still computed by the MoE even when it is copyable, so the F1 jump is due to direction.
+- In between: both factors contribute.
+- The "attention-required subset" of P5-2 = C2 / C3 items with the neutral verb and association ≈ 0.
+
+**Cost.** CPU build; scans ≈ 10 GPU-min per model; W2 / W4 / direct / W6 ≈ 25 GPU-min per model and source; W5 ≈ 5; knockout ≈ 10. Total ≈ 1.5–2 GPU-h for both models and both sources.
+
+### Revised execution order (proposal; items 1b, 3, 6 and P5-8 await the user)
+
+1. F1 section (CPU): stratified names / objects, W3 grid as the decision-site readout, W5, W6.
+2. Paired direction runs: F1 on the Phase-3 776 set; F1 on the verb templates (orig / neutral). Scans, then W2 / W4 / direct (≈ 1 GPU-h).
+3. P5-8 (≈ 1.5–2 GPU-h).
+4. Verb-swap ent2attr tracing: W2 / W4 / DLA, orig vs neutral, seed-clustered CIs; original-name memorization check.
+5. F2E (small); F2R descriptive.
+6. P5-2 ladder assembly (CPU) and literature check.
+7. P5-4 (CPU, any time); head + expert add-back on F1 / C2.
+8. P5-5 pilot.
+
+## Phase 5 task list and output standard (user decision 2026-10-11 ~05:50: every task gets the full Phase 3/4 output set)
+
+**Full output set per task and model.**
+1. Layer curves: single-layer attention / MoE patches.
+2. Attention vs MoE bars: all-MoE add-back, deletion, MoE ≤ L−5, direct split.
+3. Position × layer grid.
+4. Per-layer DLA.
+5. Heads.
+6. Expert selection: two-stage, Spec, equal norm.
+7. Expert add-back / deletion curves: greedy / oracle / random.
+8. Expert knockout: selected expert, population top-10 set, matched random sets. Use the top-10 set if there is no specific expert.
+9. Head + expert add-back.
+10. Writer analysis: direct share, vocabulary projection.
+11. Replication, where the pool allows.
+
+Estimate ≈ 16–20 GPU-h.
+
+**Tasks.** Plain names; the formats are as defined above.
+
+| # | Task | Items |
+|---|---|---|
+| 1 | Attribute → entity, fill-in-the-blank format | Large per-model pool |
+| 2 | Direction on identical items | The 776 Phase-3 pairs in both directions; fill-in-the-blank margin 181 / 189 |
+| 3 | Attribute → entity, natural sentence | Blank at the sentence end |
+| 4 | Name-item verb control, entity → attribute | Templates, orig / neutral; the unrelated verb is behavioural only |
+| 5 | Name-item verb control, attribute → entity | Fill-in-the-blank format on the 55 ent2attr templates; replaces the restated version (16 / 8 pairs) |
+| 6 | Copy vs generate | P5-8; templates orig / neutral, plus the natural Phase-3 pairs |
+| 7 | Original-name memorization check | Behavioural only |
+
+Analyses:
+- why the add-back curves differ;
+- the task ladder;
+- an attribution-patching pilot on OLMoE.
+
+The restated format is reported as behaviour only.
+
+**Information completeness, re-checked 2026-10-11 ~05:50.**
+- Natural sentence (blank at the end): the only text after the blank is "." (514 / 514 Qwen3, 288 / 288 Mixtral prompts), and the prompt equals the sentence up to the blank in every case.
+- Fill-in-the-blank: the full sentence is in the prompt (10,682 / 10,682 and 5,070 / 5,070).
+- Templates and copy variant: prompt + trigger = the full sentence (Phase-3 builder); the copy variant only adds a prefix.
+
+**Association probe check (before switching the main set to "both trigger words neutral", |probe| < 1).**
+- On the same 2,739 scanned object pairs, the probe `Word: X. Which fits better, ...` has SD 0.94 in Qwen3 but only 0.43 in Mixtral.
+- The two models' probe values correlate at r = 0.18 / 0.23.
+- Fraction of probe values with |probe| ≥ 1 on the margin pairs: Qwen3 0.30, Mixtral 0.02.
+
+So Mixtral's "96 % neutral" mostly means that the probe does not respond in Mixtral. Proposal:
+- Before rebuilding the case sets, add a second probe in the task's own fill-in-the-blank format with the sentence context removed, e.g. `Fill in the blank: Between the mirror and the spray, the _ goes with "dirty".\nAnswer: the`. This is a prefill-only scan, ≈ 5 GPU-min per model.
+- Keep the neutral rule only if the probe responds in both models.
+- Report the "reverse" pairs (the trigger alone points to the wrong candidate and the model still answers right) as a separate stratum: context overrides association there, which makes them candidates for the attention-required subset.
+
+## Phase 5 execution plan (2026-10-11 ~06:10; user: this session executes everything, full output set, sequential queue)
+
+The other Phase-5 session's two open questions are settled by the user ("this session executes"; the coordinator's
+recommendations apply):
+- (1) the main set is "both trigger words neutral", after the probe check below;
+- (2) the restated format is behaviour only, and the natural sentence uses all usable pairs split in half.
+
+**Probe rule.**
+- v1 is the existing probe `Word: X. Which fits better, A or B?`. v2 is new, in the task's own format with the sentence removed:
+  - objects: `Fill in the blank: Between the mirror and the spray, the _ goes with "dirty".\nAnswer: the`;
+  - names: `Fill in the blank: Between Brett and Kevin, _ goes with "generous".\nAnswer:`.
+  - Both candidate orders are averaged.
+- A probe "responds" in a model if ≥ 10 % of the margin pairs' trigger probes reach |probe| ≥ 1.
+- Neutral pair: |probe| < 1 for both triggers under every probe that responds in that model.
+- Strata reported for every condition:
+  - associative: both triggers point to their own answers by ≥ 1;
+  - one-sided: one trigger does;
+  - reverse: a trigger points to the other candidate by ≥ 1;
+  - neutral.
+
+**Conditions** (× qwen3 and mixtral_bos; Mixtral with BOS as in Phases 3–4). Run dirs: `results/p5_<cond>_<proto>/`.
+
+| cond | Task | Pairs | Prompt format | Items | Split |
+|---|---|---|---|---|---|
+| `f1` | 1 | all WinoGrande twins | fill-in-the-blank, entity readout | margin & content swap & neutral | 128 / 128 + replication where the pool allows |
+| `dir_f1` | 2 | the 776 Phase-3 twins | fill-in-the-blank | fill-in-the-blank margin (no association filter, strata only) | half / half |
+| `dir_opt` | 2 | the same pairs as `dir_f1` | Phase-3 (fill the blank, predict the trigger) | same pair set | same split |
+| `f2e` | 3 | twins differing before the blank, blank at the sentence end | natural truncation | margin & content & neutral | half / half |
+| `vt_e2a_orig`, `vt_e2a_neu` | 4 | verb templates × 48 IOI name pairs | Phase-3 | margin per condition | seed split S, ≤ 128 pairs per split, round-robin over seeds |
+| `vt_a2e_orig`, `vt_a2e_neu` | 5 | the 55 ent2attr templates | fill-in-the-blank (new build) | margin | seed split S |
+| `cp_vt_orig`, `cp_vt_neu` | 6 | templates + copy prefix, both attribute orders | Phase-3 + prefix | margin | seed split S |
+| `cp_nat` | 6 | 776 Phase-3 twins + copy prefix, both orders | Phase-3 + prefix | margin (strata: Phase-3 local `assoc`, names) | Phase-3 split restricted to passing pairs (+ replication) |
+| `mem` | 7 | 55 templates with their ORIGINAL names × orig / neutral / unrelated | Phase-3 | none | behaviour only (scan) |
+
+- Seed split S: the 55 ent2attr seeds shuffled with `random.Random(0)`, 27 discovery / 28 validation; the same S for tasks 4, 5 and 6 (templates).
+- The restated format: behaviour table only.
+- The pre-neutral fill-in-the-blank runs (`results/wino_ref_F1_*`) are kept as a record.
+
+**Output set per condition and model** (Phase 3 / 4 format): the 11 items of "Phase 5 task list and output standard".
+- Knockout targets: the condition's own selected expert, Phase 3's WinoGrande experts (Qwen3 L41E117, Mixtral L20E000) on every condition, the condition's population top-10 set, and frequency-matched random sets.
+
+**Agents** (coordinator + sub-agents as in Phases 3–4; GPU only via `scripts/gpu_queue.sh`):
+
+| Agent | Owns | Stages |
+|---|---|---|
+| `p5-data` | `moetrace/ext13_wino_ref.py`, `moetrace/ext13_templates.py`, new `moetrace/ext13_*.py` (not the prefixes below), `scripts/ext13_*` (not the prefixes below), `data/wino_ref/`, `results/wino_ref_*`, `results/p5_<cond>_<proto>/`, tables / figures `ext13base_*`, section `ext13_base.md` | v2 probe, builds, scans, case sets, `data/wino_ref/p5_conditions.json`; base runners and analysis (layer curves, all-MoE / direct, DLA, experts, heads, grid) for every condition; restated and `mem` behaviour tables |
+| `p5-addback` | `moetrace/ext13ab*.py`, `scripts/ext13ab_*`, `results/p5_*_ab/`, `ext13ab_*` tables / figures, section `ext13_addback.md` | ceilings (add-back, deletion, ≤ L−5), static orderings, adaptive greedy, deletion curves, simplified figures |
+| `p5-circuit` | `moetrace/ext13ci*.py`, `scripts/ext13ci_*`, `results/p5_*_ci*/`, `ext13ci_*`, section `ext13_circuit.md` | single heads + head DLA, mixed head + expert greedy |
+| `p5-expert` | `moetrace/ext13ko*.py`, `moetrace/ext13wr*.py`, `scripts/ext13ko_*`, `scripts/ext13wr_*`, `results/p5_*_ko*/`, `results/p5_*_wr*/`, `ext13ko_*` / `ext13wr_*`, sections `ext13_knockout.md`, `ext13_writer.md` | knockout; writer direct share + vocabulary projection |
+
+- Read-only for every agent: `moetrace/engine.py` and all ext7–ext12 modules and scripts. Reuse them by import or wrapper. Additive, backward-compatible flags only with the coordinator's approval and a regression check.
+- Coordinator: this plan, CLAUDE.md, README, `scripts/build_extensions_report.py`, synthesis section `ext13_synthesis.md`, the ladder figure, the add-back curve analysis and the attribution-patching pilot (later agents).
+
+**Handshake.**
+- `p5-data` writes `data/wino_ref/p5_conditions.json`: per cond / proto the pair file, case-set file, run dir, families, split sizes, a status (`cases`, `base`), `selected_expert` and `pop_top10`.
+- It appends the exact PROGRESS lines `[p5-data] CASES READY <cond>/<proto>` and `[p5-data] BASE READY <cond>/<proto>`.
+- Downstream chains wait on those lines, detached, and never arm Monitors on the queue log.
+
+**GPU order** (the user asked for sequential execution of all tasks): probes and scans, then the base runners in task order: `f1` → `dir_f1`, `dir_opt` → `cp_nat`, `cp_vt_orig`, `cp_vt_neu` → `vt_e2a_*`, `vt_a2e_*` → `f2e` → `mem`. Downstream stages queue per condition as soon as its base is ready.
+- Jobs are kept ≤ ≈ 25 min so the queue interleaves.
+- Estimate ≈ 25–30 GPU-h: base ≈ 10, add-back ≈ 6, circuit ≈ 7, knockout + writer ≈ 4.
+
+**Team page (user request 2026-10-12 ~05:25Z; added to the wrap-up).** After the synthesis, publish a team-facing results page in the style of the Phase-3/4 team brief (`docs/team_brief_winogrande_str.md`, artifact "WinoGrande STR brief"). It is a new page; the earlier brief stays unchanged and is linked from it.
+- Structure: each meeting question → what we ran (one concrete prompt pair) → one figure → a one-to-three-line takeaway.
+- Content:
+  - the original direction (attribute → entity);
+  - association balance;
+  - the verb controls and memorisation;
+  - copy vs generate;
+  - the task ladder;
+  - head + expert add-back;
+  - knockout;
+  - why the add-back curves differ;
+  - attribution patching;
+  - open points (scale, MIB).
+- English, plain wording.
+- Also saved as `docs/team_brief_phase5.md`.
+
+**Phase 5 status (2026-10-12 ~06:20Z): COMPLETE (not committed).** All 19 runnable condition × model runs have the full output set. Synthesis: `results/sections/ext13_synthesis.md`. Sections 13a–13h are assembled into EXTENSIONS_REPORT.md as Directions 13–13h. GPU ≈ 25 h (263 queued jobs).
+- Deviations:
+  - copy prefix changed to `Options: t1, t2.` (the "Of X and Y" prefix allowed positional mapping);
+  - task 5 (attribute → entity on the templates) is Qwen3-orig only (margin failure elsewhere);
+  - coordinator fix of a copy-attention indexing bug;
+  - two Mixtral OOM reruns with smaller row budgets.
+- Team page in progress.
+
+Phase 5 committed and pushed 2026-10-12 (results, code, sections, team brief `docs/team_brief_phase5.md`; ≈ 1.4 GB).

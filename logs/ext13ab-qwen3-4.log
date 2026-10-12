@@ -1,0 +1,116 @@
+2026-10-11T16:06:12Z START ext13ab-qwen3-4 (waited 216s): python scripts/ext13ab_run.py qwen3 --tasks cp_vt_orig_qwen3,cp_nat_qwen3,cp_nat_qwen3_rep --max-passes 25 --budget 45000 --max-tasks 3
+16:06:20 cp_vt_orig_qwen3: initialised {'eval_rows': 256, 'noise_rows': 128, 'pool': 32, 'queue_groups': 4482, 'queue_items': 135424}
+16:06:23 cp_nat_qwen3: initialised {'eval_rows': 280, 'noise_rows': 128, 'pool': 32, 'queue_groups': 4902, 'queue_items': 143632}
+16:06:26 cp_nat_qwen3_rep: initialised {'eval_rows': 316, 'noise_rows': 128, 'pool': 32, 'queue_groups': 5510, 'queue_items': 155724}
+16:06:27 cp_vt_orig_qwen3: 512 cases, 512 rows (256 validation), K=384; passes done 0, queue 0/4482, greedy left 256
+16:06:27 cp_nat_qwen3: 572 cases, 572 rows (280 validation), K=384; passes done 0, queue 0/4902, greedy left 280
+16:06:27 cp_nat_qwen3_rep: 640 cases, 640 rows (316 validation), K=384; passes done 0, queue 0/5510, greedy left 316
+16:06:30 pass 0: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 3448 prefill rows (T max 35), 44987 spawn rows (adaptive [8960, 10112, 8192], static groups [580, 648, 519])
+16:06:37   layer   0: load-wait 4.57s compute 1.23s  wf_rows=18315
+16:06:44   layer   8: load-wait 0.23s compute 0.79s  wf_rows=23790
+16:06:54   layer  16: load-wait 0.33s compute 0.83s  wf_rows=28841
+16:07:03   layer  24: load-wait 0.31s compute 0.92s  wf_rows=33352
+16:07:12   layer  32: load-wait 0.15s compute 0.91s  wf_rows=38626
+16:07:23   layer  40: load-wait 0.23s compute 0.94s  wf_rows=43028
+16:07:31   layer  47: load-wait 0.29s compute 0.94s  wf_rows=44987
+16:07:33   pass done: 3448 prefill rows (T=35), 44987 spawn rows, 62.0s (metrics 1.8s)
+16:07:37 cp_nat_qwen3 first pass: ceilings for 572 rows (mean all-MoE rescue +4.852); DLA rows 219648 (4013 candidate pairs not routed in this pass's clean run)
+16:07:37 cp_nat_qwen3 pass 0 done: greedy left 280 (median step 2, median rescue/ceiling 0.35); queue 580/5462
+16:07:41 cp_nat_qwen3_rep first pass: ceilings for 640 rows (mean all-MoE rescue +4.737); DLA rows 245760 (4502 candidate pairs not routed in this pass's clean run)
+16:07:42 cp_nat_qwen3_rep pass 0 done: greedy left 316 (median step 2, median rescue/ceiling 0.38); queue 648/6142
+16:07:45 cp_vt_orig_qwen3 first pass: ceilings for 512 rows (mean all-MoE rescue +4.091); DLA rows 196608 (3155 candidate pairs not routed in this pass's clean run)
+16:07:45 cp_vt_orig_qwen3 pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.44); queue 519/4994
+16:07:45 group pass 0 done in 62s, peak 12.9 GB
+16:07:48 pass 1: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44985 spawn rows (adaptive [8400, 9480, 7680], static groups [309, 308, 308])
+16:08:47 cp_nat_qwen3 pass 1 done: greedy left 280 (median step 3, median rescue/ceiling 0.45); queue 889/5462
+16:08:48 cp_nat_qwen3_rep pass 1 done: greedy left 316 (median step 3, median rescue/ceiling 0.47); queue 956/6142
+16:08:48 cp_vt_orig_qwen3 pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.57); queue 827/4994
+16:08:48 group pass 1 done in 58s, peak 10.8 GB
+16:08:52 pass 2: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44994 spawn rows (adaptive [8120, 9164, 7424], static groups [322, 322, 322])
+16:09:51 cp_nat_qwen3 pass 2 done: greedy left 280 (median step 4, median rescue/ceiling 0.52); queue 1211/5462
+16:09:51 cp_nat_qwen3_rep pass 2 done: greedy left 316 (median step 4, median rescue/ceiling 0.55); queue 1278/6142
+16:09:52 cp_vt_orig_qwen3 pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.65); queue 1149/4994
+16:09:52 group pass 2 done in 57s, peak 11.0 GB
+16:09:55 pass 3: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44982 spawn rows (adaptive [7840, 8848, 7168], static groups [336, 335, 335])
+16:10:51 cp_nat_qwen3 pass 3 done: greedy left 280 (median step 5, median rescue/ceiling 0.57); queue 1547/5462
+16:10:51 cp_nat_qwen3_rep pass 3 done: greedy left 316 (median step 5, median rescue/ceiling 0.62); queue 1613/6142
+16:10:52 cp_vt_orig_qwen3 pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.74); queue 1484/4994
+16:10:52 group pass 3 done in 54s, peak 11.1 GB
+16:10:55 pass 4: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44991 spawn rows (adaptive [7560, 8532, 6912], static groups [349, 349, 349])
+16:11:50 cp_nat_qwen3 pass 4 done: greedy left 280 (median step 6, median rescue/ceiling 0.63); queue 1896/5462
+16:11:50 cp_nat_qwen3_rep pass 4 done: greedy left 316 (median step 6, median rescue/ceiling 0.67); queue 1962/6142
+16:11:51 cp_vt_orig_qwen3 pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.80); queue 1833/4994
+16:11:51 group pass 4 done in 53s, peak 11.1 GB
+16:11:54 pass 5: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 45000 spawn rows (adaptive [7280, 8216, 6656], static groups [363, 363, 362])
+16:12:47 cp_nat_qwen3 pass 5 done: greedy left 280 (median step 7, median rescue/ceiling 0.64); queue 2259/5462
+16:12:48 cp_nat_qwen3_rep pass 5 done: greedy left 316 (median step 7, median rescue/ceiling 0.69); queue 2325/6142
+16:12:48 cp_vt_orig_qwen3 pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.85); queue 2195/4994
+16:12:48 group pass 5 done in 52s, peak 11.2 GB
+16:12:52 pass 6: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44988 spawn rows (adaptive [7000, 7900, 6400], static groups [376, 376, 376])
+16:13:45 cp_nat_qwen3 pass 6 done: greedy left 280 (median step 8, median rescue/ceiling 0.68); queue 2635/5462
+16:13:46 cp_nat_qwen3_rep pass 6 done: greedy left 316 (median step 8, median rescue/ceiling 0.73); queue 2701/6142
+16:13:46 cp_vt_orig_qwen3 pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.87); queue 2571/4994
+16:13:46 group pass 6 done in 51s, peak 11.2 GB
+16:13:50 pass 7: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44997 spawn rows (adaptive [6720, 7584, 6144], static groups [390, 390, 389])
+16:14:43 cp_nat_qwen3 pass 7 done: greedy left 280 (median step 9, median rescue/ceiling 0.70); queue 3025/5462
+16:14:44 cp_nat_qwen3_rep pass 7 done: greedy left 316 (median step 9, median rescue/ceiling 0.75); queue 3091/6142
+16:14:44 cp_vt_orig_qwen3 pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.90); queue 2960/4994
+16:14:44 group pass 7 done in 51s, peak 11.3 GB
+16:14:48 pass 8: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44987 spawn rows (adaptive [6440, 7268, 5888], static groups [162, 161, 155])
+16:15:40 cp_nat_qwen3 pass 8 done: greedy left 280 (median step 10, median rescue/ceiling 0.72); queue 3187/5462
+16:15:41 cp_nat_qwen3_rep pass 8 done: greedy left 316 (median step 10, median rescue/ceiling 0.75); queue 3252/6142
+16:15:41 cp_vt_orig_qwen3 pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.92); queue 3115/4994
+16:15:41 group pass 8 done in 51s, peak 10.7 GB
+16:15:45 pass 9: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44982 spawn rows (adaptive [6160, 6952, 5632], static groups [67, 67, 61])
+16:16:36 cp_nat_qwen3 pass 9 done: greedy left 280 (median step 11, median rescue/ceiling 0.72); queue 3254/5462
+16:16:37 cp_nat_qwen3_rep pass 9 done: greedy left 316 (median step 11, median rescue/ceiling 0.78); queue 3319/6142
+16:16:37 cp_vt_orig_qwen3 pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.93); queue 3176/4994
+16:16:37 group pass 9 done in 50s, peak 10.5 GB
+16:16:41 pass 10: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44990 spawn rows (adaptive [5880, 6636, 5376], static groups [142, 147, 147])
+16:17:33 cp_nat_qwen3 pass 10 done: greedy left 280 (median step 12, median rescue/ceiling 0.74); queue 3396/5462
+16:17:33 cp_nat_qwen3_rep pass 10 done: greedy left 316 (median step 12, median rescue/ceiling 0.78); queue 3466/6142
+16:17:39 cp_vt_orig_qwen3: noise_oracle groups added for 128 rows
+16:17:39 cp_vt_orig_qwen3 pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.94); queue 3323/5122
+16:17:39 group pass 10 done in 50s, peak 10.7 GB
+16:17:41 pass 11: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44982 spawn rows (adaptive [5600, 6320, 5120], static groups [65, 71, 71])
+16:18:33 cp_nat_qwen3 pass 11 done: greedy left 280 (median step 13, median rescue/ceiling 0.74); queue 3461/5462
+16:18:34 cp_nat_qwen3_rep pass 11 done: greedy left 316 (median step 13, median rescue/ceiling 0.79); queue 3537/6142
+16:18:34 cp_vt_orig_qwen3 pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 0.97); queue 3394/5122
+16:18:34 group pass 11 done in 50s, peak 10.4 GB
+16:18:38 pass 12: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44994 spawn rows (adaptive [5320, 6004, 4864], static groups [221, 221, 221])
+16:19:29 cp_nat_qwen3: noise_oracle groups added for 128 rows
+16:19:29 cp_nat_qwen3 pass 12 done: greedy left 280 (median step 14, median rescue/ceiling 0.75); queue 3682/5590
+16:19:29 cp_nat_qwen3_rep pass 12 done: greedy left 316 (median step 14, median rescue/ceiling 0.79); queue 3758/6142
+16:19:30 cp_vt_orig_qwen3 pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 0.97); queue 3615/5122
+16:19:30 group pass 12 done in 49s, peak 10.7 GB
+16:19:33 pass 13: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44999 spawn rows (adaptive [5040, 5688, 4608], static groups [113, 105, 112])
+16:20:25 cp_nat_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.76); queue 3795/5590
+16:20:26 cp_nat_qwen3_rep pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.79); queue 3863/6142
+16:20:26 cp_vt_orig_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.97); queue 3727/5122
+16:20:26 group pass 13 done in 51s, peak 10.5 GB
+16:20:30 pass 14: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44985 spawn rows (adaptive [0, 0, 0], static groups [328, 328, 328])
+16:21:22 cp_nat_qwen3 pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 0.76); queue 4123/5590
+16:21:25 cp_nat_qwen3_rep: noise_oracle groups added for 128 rows
+16:21:25 cp_nat_qwen3_rep pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 0.79); queue 4191/6270
+16:21:25 cp_vt_orig_qwen3 pass 14 done: greedy left 0 (median step 15, median rescue/ceiling 0.97); queue 4055/5122
+16:21:25 group pass 14 done in 51s, peak 10.3 GB
+16:21:29 pass 15: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44982 spawn rows (adaptive [0, 0, 0], static groups [714, 714, 714])
+16:22:22 cp_nat_qwen3 pass 15 done: greedy left 0 (median step 15, median rescue/ceiling 0.76); queue 4837/5590
+16:22:22 cp_nat_qwen3_rep pass 15 done: greedy left 0 (median step 15, median rescue/ceiling 0.79); queue 4905/6270
+16:22:23 cp_vt_orig_qwen3 pass 15 done: greedy left 0 (median step 15, median rescue/ceiling 0.97); queue 4769/5122
+16:22:23 group pass 15 done in 51s, peak 11.4 GB
+16:22:27 pass 16: tasks ['cp_nat_qwen3', 'cp_nat_qwen3_rep', 'cp_vt_orig_qwen3'], 1704 prefill rows (T max 35), 44982 spawn rows (adaptive [0, 0, 0], static groups [753, 1036, 353])
+16:23:19 cp_nat_qwen3 pass 16 done: greedy left 0 (median step 15, median rescue/ceiling 0.76); queue 5590/5590
+16:23:19 cp_nat_qwen3: ALL PASSES COMPLETE
+16:23:19 cp_nat_qwen3_rep pass 16 done: greedy left 0 (median step 15, median rescue/ceiling 0.79); queue 5941/6270
+16:23:19 cp_vt_orig_qwen3 pass 16 done: greedy left 0 (median step 15, median rescue/ceiling 0.97); queue 5122/5122
+16:23:19 cp_vt_orig_qwen3: ALL PASSES COMPLETE
+16:23:19 group pass 16 done in 50s, peak 11.8 GB
+16:23:19 pass 17: tasks ['cp_nat_qwen3_rep'], 632 prefill rows (T max 35), 6909 spawn rows (adaptive [0], static groups [329])
+[W1011 16:23:49.715323690 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1298137088 bytes (free: 1259798528, total: 23686938624).
+[W1011 16:24:01.794668338 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1866465280 bytes (free: 863436800, total: 23686938624).
+16:24:08 cp_nat_qwen3_rep pass 17 done: greedy left 0 (median step 15, median rescue/ceiling 0.79); queue 6270/6270
+16:24:08 cp_nat_qwen3_rep: ALL PASSES COMPLETE
+16:24:08 group pass 17 done in 48s, peak 6.6 GB
+16:24:08 nothing left to run
+2026-10-11T16:24:15Z END   ext13ab-qwen3-4 rc=0 (1083s)

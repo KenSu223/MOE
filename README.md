@@ -154,6 +154,20 @@ STR only; Qwen3 and Mixtral with BOS; about 4.4 GPU hours.
   - Mixtral without BOS re-selects its WinoGrande expert.
   - Phase 3's apparent role-swap vs option-swap difference was an item effect (names vs objects).
 
+### Phase 5: WinoGrande in its original direction (2026-10-12; `results/sections/ext13_*.md`)
+
+The team asked whether the WinoGrande result depended on how the question was posed. Phase 5 asks it in WinoGrande's own
+direction (attribute → entity: "… the _ was too dirty. Answer: the" → " mirror") and adds controls. About 25 GPU hours.
+- **The direction of the question decides the split.** On identical twins, attention's share of the rescue rises from 0.19 to
+  0.71 (Qwen3) and from 0.35 to 0.52 (Mixtral), and attention writes the answer directly. Making the answer copyable or
+  changing the verb moves it by at most 0.07. Tasks fall into two blocks (entity → attribute vs attribute → entity), with
+  CounterFact between them and IOI above.
+- **Qwen3 has an attribute → entity expert (L37E032)** that is necessary but writes nothing directly: it computes, and
+  attention heads move the entity to the answer.
+- **The add-back curve shapes are explained.** Late experts push against the answer in proportion to the evidence in the
+  residual; when attention writes the answer, an experts-only add-back overshoots the all-MoE ceiling.
+- **Attribution patching** (OLMoE pilot) matches exact patching for experts, not for early heads.
+
 ## Layout
 
 - `moetrace/` engine (`engine.py`, `weights.py`, `arch.py`), data and protocol (`data.py`, `noise.py`, `protocol.py`),

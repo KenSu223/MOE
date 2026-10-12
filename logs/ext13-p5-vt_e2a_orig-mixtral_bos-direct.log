@@ -1,0 +1,9 @@
+2026-10-11T23:02:33Z START ext13-p5-vt_e2a_orig-mixtral_bos-direct (waited 0s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --splits discovery,validation
+23:02:47   layer   0: load-wait 6.07s compute 0.64s  wf_rows=0
+23:03:05   layer   8: load-wait 1.83s compute 0.17s  wf_rows=0
+23:03:24   layer  16: load-wait 2.34s compute 0.17s  wf_rows=0
+23:03:45   layer  24: load-wait 2.65s compute 0.17s  wf_rows=0
+23:04:05   layer  31: load-wait 2.68s compute 0.17s  wf_rows=0
+23:04:05   pass done: 512 prefill rows (T=23), 0 spawn rows, 84.1s
+23:04:06 p5_vt_e2a_orig_mixtral_bos: 512 directed cases; A_direct 0.353, M_direct 0.647, DLA attn share 0.352; fp32 vs engine Delta clean max |diff| 0.138
+2026-10-11T23:04:12Z END   ext13-p5-vt_e2a_orig-mixtral_bos-direct rc=0 (99s)

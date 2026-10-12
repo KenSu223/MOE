@@ -1,0 +1,90 @@
+{
+ "cond": "vt_e2a_orig",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "src_run": "p5_vt_e2a_orig_mixtral_bos",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json",
+ "family": "main",
+ "cluster": "seed",
+ "special_tokens": true,
+ "n_val_rows": 256,
+ "n_val_units": 18,
+ "prompt_tokens_median": 18.0,
+ "single_expert_coverage": {
+  "rows": 512,
+  "rows_full": 512,
+  "entries": 32768,
+  "entries_needed": 32768
+ },
+ "attn_classes": [
+  "str",
+  "mention_clean",
+  "mention_corr",
+  "pos0",
+  "final"
+ ],
+ "rows_per_pass": 110,
+ "n_chunks": 3,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA + attention mass",
+ "agent": "p5-circuit",
+ "command": "python scripts/ext13ci_heads_run.py vt_e2a_orig mixtral_bos --max-passes 4",
+ "created_utc": "2026-10-11T23:21:17Z",
+ "complete": true,
+ "completed_utc": "2026-10-11T23:26:11Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 96.44269251823425,
+   "peak_GB": 11.737886905670166,
+   "mean_drop": 6.529069900512695,
+   "r_sum_heads_vs_attn_layer": 0.33858517285705975,
+   "head_dla_sum_mean": 2.5566904544830322,
+   "candidates_not_routed_clean": 19,
+   "attn_row_sum_minmax": [
+    0.9996242523193359,
+    1.0003738403320312
+   ],
+   "utc": "2026-10-11T23:22:56Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 92.53597640991211,
+   "peak_GB": 11.737975597381592,
+   "mean_drop": 6.546511650085449,
+   "r_sum_heads_vs_attn_layer": 0.35864452166019356,
+   "head_dla_sum_mean": 2.4690284729003906,
+   "candidates_not_routed_clean": 20,
+   "attn_row_sum_minmax": [
+    0.9996387958526611,
+    1.0004091262817383
+   ],
+   "utc": "2026-10-11T23:24:31Z"
+  },
+  {
+   "chunk": 2,
+   "rows": 84,
+   "prefill": 168,
+   "spawn_rows": 88704,
+   "pass_s": 92.1557457447052,
+   "peak_GB": 11.56553840637207,
+   "mean_drop": 6.4464287757873535,
+   "r_sum_heads_vs_attn_layer": 0.32265096090998435,
+   "head_dla_sum_mean": 2.517171859741211,
+   "candidates_not_routed_clean": 29,
+   "attn_row_sum_minmax": [
+    0.9996248483657837,
+    1.000354528427124
+   ],
+   "utc": "2026-10-11T23:26:11Z"
+  }
+ ]
+}

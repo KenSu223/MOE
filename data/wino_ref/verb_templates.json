@@ -1,0 +1,1182 @@
+{
+ "note": "P5-3 verb swaps (curated 2026-10-11). neutral = more general verb, roles and original answer kept; unrelated = role-symmetric / off-topic verb phrase, original answer no longer follows (expected Delta ~ 0). Edits are (old, new) substring replacements on both slot templates; per-twin variants for comparatives list both twins' strings (an edit absent from a twin is skipped).",
+ "seeds": {
+  "3V8JSVE8Y04HZFDNJ7XANMSAI09EYU": {
+   "dir": "ent2attr",
+   "verb": "carried",
+   "frame": "role",
+   "neutral": [
+    [
+     "carried {Y} up",
+     "moved {Y} up"
+    ]
+   ],
+   "unrelated": [
+    [
+     "carried {Y} up",
+     "walked with {Y} up"
+    ]
+   ]
+  },
+  "3DWGDA5POHI1BKO628FB935LA9HV1S": {
+   "dir": "ent2attr",
+   "verb": "redecorated",
+   "frame": "role",
+   "neutral": [
+    [
+     "redecorated",
+     "changed"
+    ]
+   ],
+   "unrelated": [
+    [
+     "redecorated",
+     "looked at"
+    ]
+   ]
+  },
+  "37OPIVELUU1DTI7F94F0D5J7IV6HAD": {
+   "dir": "ent2attr",
+   "verb": "baked",
+   "frame": "role",
+   "neutral": [
+    [
+     "baked {Y} some",
+     "made {Y} some"
+    ]
+   ],
+   "unrelated": [
+    [
+     "baked {Y} some",
+     "shared with {Y} some"
+    ]
+   ]
+  },
+  "3WJGKMRWVI7KAHZB7MS1SFUXLSMDCT": {
+   "dir": "ent2attr",
+   "verb": "paid",
+   "frame": "role",
+   "neutral": [
+    [
+     "paid {Y} for",
+     "gave {Y} money for"
+    ]
+   ],
+   "unrelated": [
+    [
+     "paid {Y} for",
+     "met {Y} near"
+    ]
+   ]
+  },
+  "3BA7SXOG1JOCZOS38B7GVIFIA038RV": {
+   "dir": "ent2attr",
+   "verb": "prescribed",
+   "frame": "role",
+   "neutral": [
+    [
+     "prescribed {Y} the",
+     "gave {Y} the"
+    ]
+   ],
+   "unrelated": [
+    [
+     "prescribed {Y} the",
+     "talked with {Y} about the"
+    ]
+   ]
+  },
+  "36818Z1KV3BYZA0GUJQY9BIXU5W3AP": {
+   "dir": "ent2attr",
+   "verb": "helped",
+   "frame": "role",
+   "neutral": [
+    [
+     "helped {Y} study",
+     "got {Y} to study"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} helped {Y} study",
+     "{X} studied with {Y}"
+    ]
+   ]
+  },
+  "34HEO7RUG6SQICLI59RUR9LD544AR3": {
+   "dir": "ent2attr",
+   "verb": "told",
+   "frame": "role",
+   "neutral": [
+    [
+     "told {Y} to keep",
+     "got {Y} to keep"
+    ]
+   ],
+   "unrelated": [
+    [
+     "told {Y} to keep practicing her instrument every day",
+     "practiced her instrument with {Y} every day"
+    ]
+   ]
+  },
+  "39N6W9XWRDL0P4A754BYVRPD12OGY6": {
+   "dir": "ent2attr",
+   "verb": "taught",
+   "frame": "role",
+   "neutral": [
+    [
+     "taught {Y} how to make",
+     "showed {Y} how to make"
+    ]
+   ],
+   "unrelated": [
+    [
+     "taught {Y} how to make",
+     "worked with {Y} on how to make"
+    ]
+   ]
+  },
+  "3QHITW7OYO7Q6B6ISU2UMJB89KMQA6": {
+   "dir": "ent2attr",
+   "verb": "taught",
+   "frame": "role",
+   "neutral": [
+    [
+     "taught {Y} how to slice",
+     "showed {Y} how to slice"
+    ]
+   ],
+   "unrelated": [
+    [
+     "taught {Y} how to slice",
+     "worked with {Y} on how to slice"
+    ]
+   ]
+  },
+  "3G3AJKPCXLQKDOHNA39XM2SAGIH4YK": {
+   "dir": "ent2attr",
+   "verb": "helped",
+   "frame": "role",
+   "neutral": [
+    [
+     "helped {Y} with",
+     "supported {Y} with"
+    ]
+   ],
+   "unrelated": [
+    [
+     "helped {Y} with",
+     "sat next to {Y} during"
+    ]
+   ]
+  },
+  "3XBYQ44Z6P20541DA3SH9DJMGT0TW7": {
+   "dir": "ent2attr",
+   "verb": "needed",
+   "frame": "role",
+   "neutral": [
+    [
+     "needed help from",
+     "got help from"
+    ]
+   ],
+   "unrelated": [
+    [
+     "needed help from {Y} to move",
+     "argued with {Y} about moving"
+    ]
+   ]
+  },
+  "3HXCEECSQO7FAA4JFUBN8WTR537YZ0": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to open",
+     "had {Y} open"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} to open the lid",
+     "talked with {Y} about the lid"
+    ]
+   ]
+  },
+  "3X2YVV51PWIEQ9OBSIK7V5O0IJ51WZ": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} for a ride to",
+     "got a ride from {Y} to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} for a ride to",
+     "ran into {Y} at"
+    ]
+   ]
+  },
+  "3IV1AEQ4DRBV109Q06Y7TRTR50UJ82": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} for glue",
+     "got glue from {Y}"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} for glue",
+     "sat with {Y}"
+    ]
+   ]
+  },
+  "3UEDKCTP9X416V9WSKID84LHXXO7KT": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to purchase",
+     "had {Y} purchase"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} to purchase them a bus ticket",
+     "talked with {Y} about a bus ticket"
+    ]
+   ]
+  },
+  "3LCXHSGDLT45942703TLD2G0CMZSEK": {
+   "dir": "ent2attr",
+   "verb": "gave",
+   "frame": "role",
+   "neutral": [
+    [
+     "gave {Y} some basic directions",
+     "told {Y} some basic directions"
+    ]
+   ],
+   "unrelated": [
+    [
+     "gave {Y} some basic directions for how to get around town",
+     "walked around town with {Y}"
+    ]
+   ]
+  },
+  "3W31J70BAUA7IC4SJ1QOOQDVYISCKO": {
+   "dir": "ent2attr",
+   "verb": "gave",
+   "frame": "role",
+   "neutral": [
+    [
+     "gave {Y} his large box",
+     "left {Y} his large box"
+    ]
+   ],
+   "unrelated": [
+    [
+     "gave {Y} his large box of Cuban cigars",
+     "talked with {Y} about Cuban cigars"
+    ]
+   ]
+  },
+  "3VCK0Q0PO5C921V8K0DKTJ4QQ0B0NB": {
+   "dir": "ent2attr",
+   "verb": "brought",
+   "frame": "role",
+   "neutral": [
+    [
+     "brought {Y} to",
+     "took {Y} to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "brought {Y} to",
+     "went with {Y} to"
+    ]
+   ]
+  },
+  "3QREJ3J433VLRRZRCG7NZBFA4PNKLI": {
+   "dir": "ent2attr",
+   "verb": "poked",
+   "frame": "role",
+   "neutral": [
+    [
+     "poked",
+     "touched"
+    ]
+   ],
+   "unrelated": [
+    [
+     "poked {Y}'s eye by accident with a finger",
+     "bowed to {Y}"
+    ]
+   ]
+  },
+  "3XDJY5RK5SJ3WFXI02C8JHMXFF0U47": {
+   "dir": "ent2attr",
+   "verb": "punched",
+   "frame": "role",
+   "neutral": [
+    [
+     "punched",
+     "hit"
+    ]
+   ],
+   "unrelated": [
+    [
+     "punched {Y} right in the Adam's apple",
+     "had dinner with {Y}"
+    ]
+   ]
+  },
+  "3RKHNXPHGWUOAHMLLUZOQYBTHGWKUS": {
+   "dir": "ent2attr",
+   "verb": "slammed",
+   "frame": "role",
+   "neutral": [
+    [
+     "slammed",
+     "pushed"
+    ]
+   ],
+   "unrelated": [
+    [
+     "when {X} slammed {Y} into it",
+     "when {X} and {Y} looked at it"
+    ]
+   ]
+  },
+  "388CL5C1RL19JQXQQTGQEHNQ0KNLHE": {
+   "dir": "ent2attr",
+   "verb": "picked",
+   "frame": "role",
+   "neutral": [
+    [
+     "picked up and slammed {Y} through",
+     "pushed {Y} through"
+    ]
+   ],
+   "unrelated": [
+    [
+     "picked up and slammed {Y} through",
+     "sat with {Y} at"
+    ]
+   ]
+  },
+  "3U18MJKL1UKTWTQOWG64OK6R4BKCN5": {
+   "dir": "ent2attr",
+   "verb": "threw",
+   "frame": "role",
+   "neutral": [
+    [
+     "threw {Y} high into the air",
+     "lifted {Y} high into the air"
+    ]
+   ],
+   "unrelated": [
+    [
+     "threw {Y} high into the air",
+     "played catch with {Y}"
+    ]
+   ]
+  },
+  "3M67TQBQQJ2Z81O3VQ38SM9SPL69A4": {
+   "dir": "ent2attr",
+   "verb": "sat",
+   "frame": "role",
+   "neutral": [
+    [
+     "sat on {Y}'s lap",
+     "was on {Y}'s lap"
+    ]
+   ],
+   "unrelated": [
+    [
+     "sat on {Y}'s lap",
+     "sat next to {Y}"
+    ]
+   ]
+  },
+  "3V7ICJJAZCU3U5NJK97D6PIHJXRB4N": {
+   "dir": "ent2attr",
+   "verb": "loved",
+   "frame": "role",
+   "neutral": [
+    [
+     "loved so much watching",
+     "liked watching"
+    ]
+   ],
+   "unrelated": [
+    [
+     "loved so much watching {Y} grow up to be an adult",
+     "grew up with {Y}"
+    ]
+   ]
+  },
+  "3IQ9O0AYW8DXYYGF5K020KYNW0ETIS": {
+   "dir": "ent2attr",
+   "verb": "offered",
+   "frame": "role",
+   "neutral": [
+    [
+     "offered {Y} some pills",
+     "gave {Y} some pills"
+    ]
+   ],
+   "unrelated": [
+    [
+     "offered {Y} some pills",
+     "talked to {Y}"
+    ]
+   ]
+  },
+  "3IKMEYR0LY9UKUCQM81ICD4ANIAK23": {
+   "dir": "ent2attr",
+   "verb": "wanted",
+   "frame": "role",
+   "neutral": [
+    [
+     "wanted to hold",
+     "held"
+    ]
+   ],
+   "unrelated": [
+    [
+     "wanted to hold {Y}'s hands",
+     "shook {Y}'s hands"
+    ]
+   ]
+  },
+  "3RWSQDNYL9KOBDXHPUDSOLILZXKFF6": {
+   "dir": "ent2attr",
+   "verb": "wanted",
+   "frame": "role",
+   "neutral": [
+    [
+     "wanted to pass {Y} the ball",
+     "passed {Y} the ball"
+    ]
+   ],
+   "unrelated": [
+    [
+     "wanted to pass {Y} the ball",
+     "played against {Y}"
+    ]
+   ]
+  },
+  "3DZKABX2ZI364YZXY7SVY104QEWCVW": {
+   "dir": "ent2attr",
+   "verb": "recommended",
+   "frame": "role",
+   "neutral": [
+    [
+     "recommended the medication to",
+     "mentioned the medication to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} recommended the medication to {Y}",
+     "{X} and {Y} talked about the medication"
+    ]
+   ]
+  },
+  "3CVDZS288JE9BCO5VFT5B9Q3LRAFMN": {
+   "dir": "ent2attr",
+   "verb": "recommended",
+   "frame": "role",
+   "neutral": [
+    [
+     "recommended {Y}",
+     "told {Y}"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} recommended {Y} the best things to see",
+     "{X} and {Y} saw the best things"
+    ]
+   ]
+  },
+  "32W3UF2EZOJ7ALGIEBR8PB0RDUDC4Y": {
+   "dir": "ent2attr",
+   "verb": "showed",
+   "frame": "role",
+   "neutral": [
+    [
+     "showed {Y} a trick",
+     "gave {Y} a trick"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} showed {Y} a trick in",
+     "{X} and {Y} read about"
+    ]
+   ]
+  },
+  "3KVQ0UJWPXJYK2QN97AJ6XD856EW5K": {
+   "dir": "ent2attr",
+   "verb": "showed",
+   "frame": "role",
+   "neutral": [
+    [
+     "showed {Y} how",
+     "told {Y} how"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} showed {Y} how to replace",
+     "{X} and {Y} talked about replacing"
+    ]
+   ]
+  },
+  "3L84EBDQ370A7LH9RGVMKB2VA4WKKI": {
+   "dir": "ent2attr",
+   "verb": "taunted",
+   "frame": "role",
+   "neutral": [
+    [
+     "taunted",
+     "bothered"
+    ]
+   ],
+   "unrelated": [
+    [
+     "taunted {Y}",
+     "played {Y}"
+    ]
+   ]
+  },
+  "37Y5RYYI0RJT9TSVF6VDTPPGIU4SX2": {
+   "dir": "ent2attr",
+   "verb": "served",
+   "frame": "role",
+   "neutral": [
+    [
+     "served",
+     "gave"
+    ]
+   ],
+   "unrelated": [
+    [
+     "served {Y} a lot of meat",
+     "ate a lot of meat with {Y}"
+    ]
+   ]
+  },
+  "3JAOYN9IHL0YFP1VL4BOM34ROXW33P": {
+   "dir": "ent2attr",
+   "verb": "gave",
+   "frame": "role",
+   "neutral": [
+    [
+     "gave {Y} a job",
+     "got {Y} a job"
+    ]
+   ],
+   "unrelated": [
+    [
+     "gave {Y} a job",
+     "met {Y}"
+    ]
+   ]
+  },
+  "32XN26MTX1XY8QRUSL958PO9EFPL04": {
+   "dir": "ent2attr",
+   "verb": "gave",
+   "frame": "role",
+   "neutral": [
+    [
+     "gave {Y} a hand",
+     "supported {Y}"
+    ]
+   ],
+   "unrelated": [
+    [
+     "gave {Y} a hand",
+     "talked with {Y}"
+    ]
+   ]
+  },
+  "30OITAWPBQ1ZOZXAHY10HA8NCF8H9M": {
+   "dir": "ent2attr",
+   "verb": "booked",
+   "frame": "role",
+   "neutral": [
+    [
+     "booked for",
+     "got for"
+    ]
+   ],
+   "unrelated": [
+    [
+     "booked for {Y}",
+     "talked about with {Y}"
+    ]
+   ]
+  },
+  "37MQ8Z1JQEUAAA206PQ9TNVCRLP2YJ": {
+   "dir": "ent2attr",
+   "verb": "bought",
+   "frame": "role",
+   "neutral": [
+    [
+     "bought",
+     "got"
+    ]
+   ],
+   "unrelated": [
+    [
+     "bought some catnip for",
+     "saw some catnip near"
+    ]
+   ]
+  },
+  "3RWB1RTQDJLRNBCOVJ3RQNF39FYP8X": {
+   "dir": "ent2attr",
+   "verb": "bragged",
+   "frame": "role",
+   "neutral": [
+    [
+     "bragged to",
+     "talked to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} bragged to {Y} about",
+     "{X} and {Y} read about"
+    ]
+   ]
+  },
+  "30P8I9JKOIJL5DQIJX5NKVUUYXO5VV": {
+   "dir": "ent2attr",
+   "verb": "confided",
+   "frame": "role",
+   "neutral": [
+    [
+     "confided in",
+     "told"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} confided in {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3OZ4VAIBEXDTCC538Z9HL5DZGY7VJV": {
+   "dir": "ent2attr",
+   "verb": "confided",
+   "frame": "role",
+   "neutral": [
+    [
+     "confided in",
+     "told"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} confided in {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3IJ95K7NDXA6D56TY22NEBR6230GN7": {
+   "dir": "ent2attr",
+   "verb": "told",
+   "frame": "role",
+   "neutral": [
+    [
+     "told {Y} that",
+     "said to {Y} that"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} told {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3D1UCPY6GG7KGM71XL6KDKC293W38Y": {
+   "dir": "ent2attr",
+   "verb": "told",
+   "frame": "role",
+   "neutral": [
+    [
+     "told {Y} that",
+     "said to {Y} that"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} told {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3XAOZ9UYRZPUCNTIWB91BII55PRQ1R": {
+   "dir": "ent2attr",
+   "verb": "told",
+   "frame": "role",
+   "neutral": [
+    [
+     "told {Y} that",
+     "said to {Y} that"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} told {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3HYV4299H0UNQKNYM5NGWBGZ0S8E8M": {
+   "dir": "ent2attr",
+   "verb": "told",
+   "frame": "role",
+   "neutral": [
+    [
+     "told {Y} that",
+     "said to {Y} that"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} told {Y} that",
+     "{X} and {Y} heard that"
+    ]
+   ]
+  },
+  "3M0556243SI0Z5AYNIW5WQRU1OCFNJ": {
+   "dir": "ent2attr",
+   "verb": "hired",
+   "frame": "role",
+   "neutral": [
+    [
+     "hired {Y} to work for",
+     "took on {Y} to work for"
+    ]
+   ],
+   "unrelated": [
+    [
+     "hired {Y} to work for",
+     "met {Y} at"
+    ]
+   ]
+  },
+  "3JUDR1D0D6P118BEFF9FG1SAXVOQ2R": {
+   "dir": "ent2attr",
+   "verb": "discovered",
+   "frame": "role",
+   "neutral": [
+    [
+     "discovered",
+     "saw"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} discovered {Y} drinking",
+     "{X} and {Y} were drinking"
+    ]
+   ]
+  },
+  "3PUV2Q8SV4210C75TMW6HVOF31QDBE": {
+   "dir": "ent2attr",
+   "verb": "drove",
+   "frame": "role",
+   "neutral": [
+    [
+     "drove {Y} to",
+     "took {Y} to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "drove {Y} to",
+     "met {Y} at"
+    ]
+   ]
+  },
+  "3XQ4XW3ODBQS8DPYRHAK3ZVK5L3S2R": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to put",
+     "had {Y} put"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} to put the dishes into the dishwasher",
+     "talked with {Y} about the dishwasher"
+    ]
+   ]
+  },
+  "35NNO802AVUK9WCOOQ2QZN4MHGYNIC": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to help",
+     "had {Y} help"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} to help with some work",
+     "talked with {Y} about some work"
+    ]
+   ]
+  },
+  "3HXK2V1N4MTPI8G7WHG3ELCGFYJ2GZ": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to help",
+     "had {Y} help"
+    ]
+   ],
+   "unrelated": [
+    [
+     "asked {Y} to help milk the cows",
+     "talked with {Y} about the cows"
+    ]
+   ]
+  },
+  "3YOAVL4CA0FKIERS6PBG091CMCAZ4V": {
+   "dir": "ent2attr",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} if they knew",
+     "checked with {Y} if they knew"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} asked {Y} if they knew how to start",
+     "{X} and {Y} talked about how to start"
+    ]
+   ]
+  },
+  "3QHITW7OYO7Q6B6ISU2UMJB8400AQV": {
+   "dir": "ent2attr",
+   "verb": "wrote",
+   "frame": "role",
+   "neutral": [
+    [
+     "wrote a lot about",
+     "said a lot about"
+    ]
+   ],
+   "unrelated": [
+    [
+     "wrote a lot about {Y}",
+     "had lunch with {Y}"
+    ]
+   ]
+  },
+  "3BAWBGQGYLX0SH417QKKIF8QKHJ7VZ": {
+   "dir": "ent2attr",
+   "verb": "helped",
+   "frame": "role",
+   "neutral": [
+    [
+     "helped {Y} file",
+     "assisted {Y} in filing"
+    ]
+   ],
+   "unrelated": [
+    [
+     "helped {Y} file for bankruptcy",
+     "talked with {Y} about bankruptcy"
+    ]
+   ]
+  },
+  "371Q3BEXDH73KZT3WQ7YYCHIV8CSZL": {
+   "dir": "ent2attr",
+   "verb": "helped",
+   "frame": "role",
+   "neutral": [
+    [
+     "helped {Y} get out",
+     "got {Y} out"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} helped {Y} get out of bed",
+     "{X} and {Y} got out of bed"
+    ]
+   ]
+  },
+  "3NOEP8XAU40H2CDW3RFJ6MWW0MWXPY": {
+   "dir": "attr2ent",
+   "verb": "asked",
+   "frame": "role",
+   "neutral": [
+    [
+     "asked {Y} to accept",
+     "got {Y} to accept"
+    ]
+   ],
+   "unrelated": [
+    [
+     "{X} asked {Y} to accept their job",
+     "{X} and {Y} talked about their job"
+    ]
+   ]
+  },
+  "34XASH8KLQK680ESPKDAV5GYTO1MP4": {
+   "dir": "attr2ent",
+   "verb": "gave",
+   "frame": "role",
+   "neutral": [
+    [
+     "gave the sermon to",
+     "read the sermon to"
+    ]
+   ],
+   "unrelated": [
+    [
+     "gave the sermon to",
+     "sat next to"
+    ]
+   ]
+  },
+  "3ZXNP4Z39TZCQ1REDKUEN4YWMXT7LW": {
+   "dir": "attr2ent",
+   "verb": "ate",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "ate less candy",
+     "had less candy"
+    ],
+    [
+     "ate more candy",
+     "had more candy"
+    ]
+   ],
+   "unrelated": [
+    [
+     "ate less candy",
+     "wrote less poetry"
+    ],
+    [
+     "ate more candy",
+     "wrote more poetry"
+    ]
+   ]
+  },
+  "3SZYX62S5IEYOCOTLXE76F2Z0H6573": {
+   "dir": "attr2ent",
+   "verb": "owned",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "owned",
+     "had"
+    ]
+   ],
+   "unrelated": [
+    [
+     "owned",
+     "ate"
+    ]
+   ]
+  },
+  "3OPLMF3EU5LMZXKU9TZ3R3WET4ALN5": {
+   "dir": "attr2ent",
+   "verb": "missed",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "missed work",
+     "skipped work"
+    ]
+   ],
+   "unrelated": [
+    [
+     "missed work",
+     "texted"
+    ]
+   ]
+  },
+  "3VI0PC2ZA0YEB1028PE49KFEJ5QOXM": {
+   "dir": "attr2ent",
+   "verb": "lost",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "lost weight",
+     "got fit"
+    ]
+   ],
+   "unrelated": [
+    [
+     "lost weight",
+     "read"
+    ]
+   ]
+  },
+  "3MQKOF1EE428I44N8B42W7P98POWDJ": {
+   "dir": "attr2ent",
+   "verb": "looked",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "looked",
+     "felt"
+    ]
+   ],
+   "unrelated": [
+    [
+     "looked",
+     "sang"
+    ]
+   ]
+  },
+  "344M16OZKID8TRA2S7CZE86UK79ENB": {
+   "dir": "attr2ent",
+   "verb": "smelled",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "smelled",
+     "seemed"
+    ]
+   ],
+   "unrelated": [
+    [
+     "smelled",
+     "drove"
+    ]
+   ]
+  },
+  "3WYZV0QBFLRUS7BT4K9I30FFCGSXBW": {
+   "dir": "attr2ent",
+   "verb": "made",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "made more money",
+     "had more money"
+    ],
+    [
+     "made less money",
+     "had less money"
+    ]
+   ],
+   "unrelated": [
+    [
+     "made more money",
+     "told more jokes"
+    ],
+    [
+     "made less money",
+     "told fewer jokes"
+    ]
+   ]
+  },
+  "3JTPR5MTZSA7P2W6KTRGIMJDIZ5K5C": {
+   "dir": "attr2ent",
+   "verb": "ate",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "ate",
+     "snacked"
+    ]
+   ],
+   "unrelated": [
+    [
+     "ate",
+     "laughed"
+    ]
+   ]
+  },
+  "3W1K7D6QSDVJX2B852X30LVQKWSBZ5": {
+   "dir": "attr2ent",
+   "verb": "finished",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "finished their meal",
+     "was done"
+    ]
+   ],
+   "unrelated": [
+    [
+     "finished their meal",
+     "woke up"
+    ]
+   ]
+  },
+  "3B286OTISGVOED1CH2ULHGNVLQYJAP": {
+   "dir": "attr2ent",
+   "verb": "aged",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "aged",
+     "looked"
+    ]
+   ],
+   "unrelated": [
+    [
+     "aged",
+     "spelled"
+    ]
+   ]
+  },
+  "36JW4WBR08YNJYNU4IDSJ4I6305HFX": {
+   "dir": "attr2ent",
+   "verb": "wanted",
+   "frame": "comparative",
+   "neutral": [
+    [
+     "wanted",
+     "had"
+    ]
+   ],
+   "unrelated": [
+    [
+     "wanted fewer pets",
+     "drew fewer pets"
+    ],
+    [
+     "wanted more pets",
+     "drew more pets"
+    ]
+   ]
+  }
+ },
+ "review": "Manual review 2026-10-11 of one filled example per seed x variant (data/wino_ref/verbswap_review.tsv); 5 edits revised (grammar, residual link to the reason, word order, neutral changing the implication)."
+}

@@ -1,0 +1,24 @@
+2026-10-11T02:24:17Z START ext13-scan-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos
+02:24:22 F2: 426 pairs, 2556 rows, 1 passes
+02:24:32   layer   0: load-wait 7.04s compute 2.10s  wf_rows=0
+02:24:54   layer   8: load-wait 1.63s compute 1.26s  wf_rows=0
+02:25:17   layer  16: load-wait 1.63s compute 1.26s  wf_rows=0
+02:25:40   layer  24: load-wait 1.54s compute 1.26s  wf_rows=0
+02:26:00   layer  31: load-wait 1.63s compute 1.26s  wf_rows=0
+02:26:01   pass done: 2556 prefill rows (T=35), 0 spawn rows, 98.1s
+02:26:01   pass 1/1 done (98s)
+02:26:01 F2 {"pairs": 426, "main": 405, "correct_both": 161, "margin": 102, "margin_main": 99, "margin_main_names": 19, "margin_main_objects": 80, "margin_connective": 3, "margin_main_associative": 0, "margin_main_half": 4, "margin_main_hard": 95, "balanced": 99, "balanced_names": 19, "balanced_objects": 80, "hard": 95, "margin_main_top1_both": 62, "mean_drop_margin_main": 7.061868686868687, "probe_drop_over_drop_margin_main": 0.00911854103343465, "n_passes": 1}
+02:26:01 F1: 3187 pairs, 19122 rows, 4 passes
+02:26:05   layer   0: load-wait 2.10s compute 1.97s  wf_rows=0
+[W1011 02:26:12.046394797 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2294284288 bytes (free: 509018112, total: 23686938624).
+02:26:29   layer   8: load-wait 0.93s compute 1.96s  wf_rows=0
+02:26:51   layer  16: load-wait 0.79s compute 1.96s  wf_rows=0
+02:27:13   layer  24: load-wait 1.02s compute 1.96s  wf_rows=0
+02:27:33   layer  31: load-wait 0.92s compute 1.96s  wf_rows=0
+02:27:33   pass done: 7777 prefill rows (T=18), 0 spawn rows, 91.5s
+02:27:33   pass 1/4 done (92s)
+02:29:00   pass 2/4 done (86s)
+02:30:22   pass 3/4 done (83s)
+02:31:42   pass 4/4 done (80s)
+02:31:42 F1 {"pairs": 3187, "main": 3000, "correct_both": 888, "margin": 279, "margin_main": 276, "margin_main_names": 21, "margin_main_objects": 255, "margin_connective": 3, "margin_main_associative": 0, "margin_main_half": 8, "margin_main_hard": 268, "balanced": 276, "balanced_names": 21, "balanced_objects": 255, "hard": 268, "margin_main_top1_both": 148, "mean_drop_margin_main": 4.353260869565218, "probe_drop_over_drop_margin_main": 0.019350811485642945, "n_passes": 4}
+2026-10-11T02:31:50Z END   ext13-scan-mixtral_bos rc=0 (453s)

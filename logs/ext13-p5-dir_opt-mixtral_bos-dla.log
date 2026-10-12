@@ -1,0 +1,11 @@
+2026-10-11T12:07:59Z START ext13-p5-dir_opt-mixtral_bos-dla (waited 1671s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --chunk 512
+12:08:00 mixtral -> p5_dir_opt_mixtral_bos: 376 directed cases, families ['main'], 1 prefill-only passes
+12:08:15   layer   0: load-wait 7.25s compute 1.19s  wf_rows=0
+12:08:37   layer   8: load-wait 2.52s compute 0.35s  wf_rows=0
+12:09:01   layer  16: load-wait 2.54s compute 0.35s  wf_rows=0
+12:09:24   layer  24: load-wait 2.55s compute 0.35s  wf_rows=0
+12:09:44   layer  31: load-wait 2.54s compute 0.35s  wf_rows=0
+12:09:44   pass done: 752 prefill rows (T=32), 0 spawn rows, 97.2s
+12:09:45 pass 1/1: 97s; DLA total - drop: max |.| 0.196
+12:09:46 direct effect / drop: attention +0.308, MoE +0.691, embedding +0.000
+2026-10-11T12:09:53Z END   ext13-p5-dir_opt-mixtral_bos-dla rc=0 (114s)

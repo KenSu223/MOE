@@ -1,0 +1,52 @@
+{
+ "cond": "cp_vt_neu",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "agent": "p5-expert",
+ "experiment": "ext13wr writer pass (contrib_dla, contrib_final_vectors, resid_final), Phase 5 / Direction 11",
+ "source": {
+  "pairs": "data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json",
+  "run": "p5_cp_vt_neu_mixtral_bos"
+ },
+ "experts_of_interest": [
+  "L19E006",
+  "L20E000",
+  "L19E002",
+  "L21E001",
+  "L18E001",
+  "L21E003",
+  "L20E005",
+  "L14E007",
+  "L23E000",
+  "L19E004",
+  "L13E001",
+  "L23E007",
+  "L18E006"
+ ],
+ "layers": [
+  13,
+  14,
+  18,
+  19,
+  20,
+  21,
+  23
+ ],
+ "n_prompts": 512,
+ "created_utc": "2026-10-11T19:08:09Z",
+ "complete": true,
+ "dtype": "bf16",
+ "n_vectors": 6592,
+ "pass_s": 91.38226675987244,
+ "peak_GB": 6.40720272064209,
+ "class_sizes": {
+  "attr_own": 32,
+  "ent_own": 45,
+  "wg_trigger": 764,
+  "names": 65,
+  "cf_any": 697
+ },
+ "completed_utc": "2026-10-11T19:09:54Z"
+}

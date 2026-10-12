@@ -1,6 +1,6 @@
 # Extensions of the expert-aware causal-tracing reproduction (arXiv 2606.03780)
 
-Assembled 2026-10-05 10:43 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
+Assembled 2026-10-12 05:44 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
 
 ## Status
 
@@ -26,6 +26,15 @@ Assembled 2026-10-05 10:43 UTC from results/sections/ by scripts/build_extension
 | 10 | With single attention heads as candidates next to experts, how few components restore the answer at the final position, and how many of them are heads? | `results/sections/ext10_circuit.md` | included |
 | 11 | Do the localised experts write the answer directly into the logit or act through later layers; where else do they fire and what do they write in vocabulary space? | `results/sections/ext11_writer.md` | included |
 | 12 | Do the add-back results replicate on held-out splits, is the role/option-swap difference an item effect, and does Mixtral without BOS change the WinoGrande picture? | `results/sections/ext12_complete.md` | included |
+| 13 | Does the attention / MoE split follow the direction of the question (attribute → entity vs entity → attribute), the copyability of the answer, the verb or the association; why do the add-back curves differ; is attribution patching enough? | `results/sections/ext13_synthesis.md` | included |
+| 13a | Attribute → entity pairs, probe-neutral main sets, verb templates and copy prefixes; layer curves, all-MoE / direct split, grid, heads and experts per condition. | `results/sections/ext13_base.md` | included |
+| 13b | Greedy / oracle / random add-back and deletion per condition; ceilings and overshoot. | `results/sections/ext13_addback.md` | included |
+| 13c | How many heads vs experts restore the answer in each condition? | `results/sections/ext13_circuit.md` | included |
+| 13d | Are the conditions' own experts and Phase 3's WinoGrande experts necessary, including when the answer is copyable? | `results/sections/ext13_knockout.md` | included |
+| 13e | Do the selected experts write the answer or compute it? | `results/sections/ext13_writer.md` | included |
+| 13f | All tasks on one attention–MoE axis, with paired contrasts on identical items. | `results/sections/ext13_ladder.md` | included |
+| 13g | Overshoot of the all-MoE ceiling explained by late experts reacting to attention-written evidence. | `results/sections/ext13_curves.md` | included |
+| 13h | Do gradient-based estimates (AtP, AtP*, EAP-IG) reproduce activation patching for experts, heads and layers? | `results/sections/ext13_atp.md` | included |
 
 
 ## Direction 1: Layer-then-expert versus joint layer × expert search
@@ -6881,3 +6890,5056 @@ Without BOS the WinoGrande final-position picture is unchanged: the same layers 
 - Runs: `results/wino_qwen3_str_addback_rep`, `results/wino_mixtral_bos_str_addback_rep`, `results/qwen3_str_addback_fold_rep`, `results/mixtral_bos_str_addback_fold_rep`, `results/wino_mixtral_nobos_str_addback` (ext8 file format), `results/wino_mixtral_nobos_str` (W2 / W6 / W4 / direct split / `sink_flags.parquet`, `sink_diag.json`), `results/wino_roleitems_{qwen3,mixtral_bos}_str` (option swap on the role items), `results/wino_roleitems_inputs/` (case sets, link tables).
 - Numbers `results/ext12_complete_summary.json`; tables `results/tables/ext12_*`; figures `results/figures/ext12_*`.
 - GPU: ≈ 70 min in ext12 jobs (4a/4c add-back 41, 4b 10, 4c inputs 17, smoke 3).
+
+
+## Direction 13: Phase 5 synthesis: WinoGrande in its original direction, copy vs generate, the task ladder
+
+**Summary.** Phase 5 answers the team meeting's critique of the Phase-3/4 WinoGrande experiments.
+- **Setup.** Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, bf16, STR activation patching at the final token, every condition with the full Phase-3/4 output set.
+- **The direction of the question decides the attention / MoE split, not the copyability of the answer.** The option swap of Phase 3 ("the mirror was too" → " dirty") asks entity → attribute. The original WinoGrande question asks attribute → entity ("Fill in the blank: … the _ was too dirty. Answer: the" → " mirror"). On identical twins, switching to the original direction:
+  - raises the attention share of the rescue from 0.19 to 0.71 (Qwen3) and from 0.35 to 0.52 (Mixtral);
+  - makes attention write the answer directly (direct attention share 1.08 / 0.86 against 0.05 / 0.31);
+  - leaves all MoE outputs together able to restore only 0.11 / 0.41 of the drop (0.81 / 0.75 in the option swap).
+- **Copyability and the verb matter little.** Putting the two attributes in the prompt, so that the answer could be copied, moves the attention share by only +0.07 / +0.04. A neutral verb moves it by nothing measurable.
+- **The tasks fall into two blocks, not a smooth gradient.** Every entity → attribute level sits at 0.16–0.31 / 0.34–0.42, CounterFact at 0.54 / 0.58, every attribute → entity level at 0.69–0.79 / 0.52–0.65, and IOI at 0.92 / 0.80.
+- **Attribute → entity has its own expert in Qwen3, L37E032.** It is necessary (knockout 0.042 of the clean margin) but writes almost nothing to the logits (direct share 0.01): it computes, and later attention heads (L40H2, L42H10) move the entity to the answer position.
+- **The add-back curve shapes are explained.** Experts in the last four layers write against the answer in proportion to the evidence already in the residual. An expert-only add-back restores the MoE-written evidence but not the attention-written evidence. So curves overshoot the all-MoE ceiling exactly when attention writes much of the answer: across 23 conditions, overshoot vs late-MoE term r = 0.98.
+- **Attribution patching (OLMoE pilot)** matches exact patching for experts and MoE layers, but underestimates early heads.
+
+**Questions.** The meeting asked for the following (RESEARCH_PLAN.md "Phase 5"):
+- (a) WinoGrande in its original reference-resolution direction;
+- (b) a balanced noun–attribute association;
+- (c) neutral / unrelated verb controls for the name items, and memorisation;
+- (d) a data-centric ladder and a subset that needs attention;
+- (e) why the add-back curves differ;
+- (f) attribution patching;
+- (g) scale and MIB, for discussion.
+
+Execution followed "Phase 5 execution plan". Agents:
+- p5-data: data, probes, base analyses; section `ext13_base.md`;
+- p5-addback: add-back curves; `ext13_addback.md`;
+- p5-circuit: heads + experts; `ext13_circuit.md`;
+- p5-expert: knockout and writers; `ext13_knockout.md`, `ext13_writer.md`;
+- p5-synth: ladder and curve shapes; `ext13_ladder.md`, `ext13_curves.md`;
+- p5-atp: attribution patching; `ext13_atp.md`.
+
+GPU ≈ 25 h in 263 queued jobs (incl. the scans and the pre-neutral fill-in-the-blank runs).
+
+### Data and conditions
+
+**Attribute → entity pairs.** The STR corruption is the twin's own trigger (dirty ↔ weak). The readout is Δ = logit(entity_r) − logit(entity_r′) at the final token. Every prompt carries the whole WinoGrande sentence; only the answer is withheld. An earlier truncation at the blank dropped deciding words and was voided.
+
+**Filters.** On top of the Phase-3 pair rules (twin integrity, single-token entities, token alignment ≤ 3 differing tokens, STR site ≠ final token, dedup, connective swaps as their own stratum), each pair must pass:
+- **Margin:** ≥ 1 logit in both directions.
+- **Association balance.** Pre-registered, literature-based rule:
+  - Two probes give each trigger alone plus both candidates, with no sentence. v1: `Word: dirty. Which fits better, the mirror or the spray?`. v2: `Fill in the blank: Between the mirror and the spray, the _ goes with "dirty".`.
+  - A probe "responds" in a model if ≥ 10 % of the margin pairs reach |probe| ≥ 1. Qwen3: v1 23.0 %, v2 22.7 %. Mixtral: v1 2.0 %, v2 37.3 %, so Mixtral uses v2 only.
+  - The main set keeps the pairs where both triggers are neutral (|probe| < 1) under every responding probe. Margin pairs by stratum, associative / one-sided / reverse / neutral: Qwen3 86 / 299 / 394 / 790, Mixtral 12 / 111 / 135 / 235.
+
+**Conditions.** Discovery / validation pairs (Qwen3 | Mixtral).
+
+| Task | Condition | Example (clean prompt → answer) | Pairs |
+|---|---|---|---|
+| 1 Original direction, fill-in-the-blank | `f1` | `Fill in the blank: The janitor tried to clean the mirror with the spray but the _ was too dirty.\nAnswer: the` → " mirror" | 128/128 + rep. \| 101/101 |
+| 2 Direction on identical twins | `dir_f1` vs `dir_opt` | the same twins as `f1` prompts and as Phase-3 option swaps | 90/90 \| 94/94 |
+| 3 Natural sentence, blank at the end | `f2e` | `I liked music from the piano but not the keyboard because music sounded synthetic coming from the` → " keyboard" | 32/32 \| 18/18 |
+| 4 Verb control, entity → attribute | `vt_e2a_orig`, `vt_e2a_neu` | `Sarah gave Laura a hand … because Sarah was feeling` → " helpful" (neutral: "supported Laura") | 128/128 each (55 hand-checked templates × 48 IOI name pairs) |
+| 5 Verb control, attribute → entity | `vt_a2e_orig` | `Fill in the blank: Sarah gave Laura a hand … because _ was feeling helpful.\nAnswer:` → " Sarah" | Qwen3 60/37 only (5 validation templates) |
+| 6 Copy vs generate | `cp_nat`, `cp_vt_orig`, `cp_vt_neu` | `Options: helpful, overwhelmed.\n` + the task-4 / Phase-3 prompt; both attribute orders; an item counts only if both orders pass | cp_nat 146/140 + rep \| 216/204 + rep; cp_vt 128/128 |
+| 7 Memorisation | `mem` | the 55 templates with their original WinoGrande names × orig / neutral / unrelated verb | behaviour only |
+
+### (a) Original direction: attention writes the answer
+
+**Direction on identical twins** (dir_f1 − dir_opt, validation, 95 % cluster-bootstrap CIs):
+
+| Quantity | Qwen3 | Mixtral |
+|---|---|---|
+| Attention share | +0.52 [0.46, 0.56] | +0.18 [0.15, 0.20] |
+| Direct attention share | +1.03 [0.94, 1.13] | +0.55 [0.46, 0.64] |
+| All-MoE M | −0.70 [−0.77, −0.64] | −0.35 [−0.40, −0.29] |
+| Heads among the first 10 head + expert greedy picks | +4.6 [4.2, 4.9] | +3.3 [2.8, 3.7] |
+
+**The original-direction conditions agree.**
+- f1: attention share 0.76 / 0.56, direct attention 1.20 / 1.01, all-MoE 0.24 / 0.23.
+- f2e, which has no instruction wrapper: 0.69 / 0.65, heads among the first 10 picks 7.4 / 6.8.
+- vt_a2e_orig: 0.79.
+
+So the "Fill in the blank" wrapper does not cause the shift. The same heads carry it in every attribute → entity condition: Qwen3 L40H2 and L42H10, Mixtral L18H10 / L20H21 / L21H11.
+
+**Experts.**
+- Qwen3 selects **L37E032** in f1 and in vt_a2e_orig:
+  - f1: Spec +0.47 [0.39, 0.56], pattern A, re-selected on replication;
+  - knockout F 0.042 [0.029, 0.055] (f1) and 0.034 (vt_a2e_orig).
+- It is a computer, not a writer: its direct share of the patch effect is 0.01, and its write does not promote the entity (vocabulary rank of the answer ≈ 74,000).
+- Mixtral has no specific attribute → entity expert in f1 (pattern B).
+- The Phase-3 WinoGrande experts do nothing in the original direction: L41E117 F ≤ 0.004 on f1 / dir_f1 / f2e; L20E000 ≤ 0.005.
+
+### (b) Association balance
+
+- The neutral rule removes the pairs whose trigger alone points to an answer. Inside each level, the association strata move the attention share by at most 0.11, in opposite directions for the two task directions.
+- In the Phase-3 option swap the pairs solvable from the local clause alone ("the mirror was too" → dirty) have the same attention share as the rest (0.21 vs 0.17 Qwen3, 0.36 vs 0.35 Mixtral). The MoE dominance there was not an association artefact.
+- Names raise the share by 0.08–0.16 in every level.
+- Mixtral has few name items that pass the attribute → entity margin (f1: 12 of 101 validation pairs).
+
+### (c) Verbs and memorisation
+
+- **Neutral verb** (bought → got and similar, hand-curated per template): drop 4.25 / 3.91 vs 4.97 / 4.71 logits. Attention share +0.01, CI includes 0.
+- **Unrelated, role-symmetric verb** (e.g. "talked with"): the effect disappears (drop 0.22 / 0.00). The models read the verb.
+- **Original names do no better than new IOI names.** Margin rate 0.31 vs 0.38 (Qwen3), 0.31 vs 0.29 (Mixtral). The unrelated verb removes the effect with either name set, so the name items are not solved by recall of the WinoGrande sentence.
+- **The attribute → entity question on the same templates mostly fails** the margin: 3.7 % / 1.9 % (Qwen3 orig / neutral), 0.1 % / 0.2 % (Mixtral), against 39 % / 33 % entity → attribute.
+- **The restated format** ("The one who … was") passes 9 %, with a first-mentioned-name bias (0.64 / 0.58). It is reported as behaviour only.
+
+### (d) Ladder and the copy control
+
+**Two blocks** (attention share Qwen3 / Mixtral; `ext13_ladder.md`):
+- every entity → attribute level, with or without the answer in the prompt: 0.16–0.31 / 0.34–0.42;
+- CounterFact: 0.54 / 0.58;
+- every attribute → entity level: 0.69–0.79 / 0.52–0.65;
+- IOI: 0.92 / 0.80.
+
+The two models order the 12 shared levels alike (Spearman 0.90).
+
+**Copy prefix (P5-8).**
+- On the natural Phase-3 twins the `Options:` prefix moves the attention share by +0.07 [0.01, 0.11] / +0.04 [0.02, 0.05] against the option swap. Heads among the first 10 picks: 4.3 / 2.9 against 3.6 / 2.6. On the templates it moves the share by ≈ 0.
+- The WinoGrande expert stays necessary when the answer is copyable on natural items: Qwen3 L41E117 F 0.027, Mixtral L20E000 0.045.
+- On the name templates the WinoGrande expert is unused with or without the prefix. Mixtral uses L19E006 there (0.035–0.042).
+- Design note: a first prefix ("Of Sarah and Laura, one … and the other …") let the models map names to attributes by position; Mixtral passed 0.43 vs 0.00 by attribute order even with an unrelated verb. It was replaced before any patching ran. The `Options:` prefix passes both orders alike (0.73 / 0.74, 0.90 / 0.89).
+
+**What needs attention.** The direction of the question, not the availability of the answer.
+- The attention-heavy subset is attribute → entity on name items: Qwen3 f1 names share 0.78, vt_a2e_orig 0.79, 9 of the first 10 picks are heads.
+- In linguistic terms, the original task is reference resolution (pick the referent the attribute licenses).
+- The option swap is attribute recall about an already identified entity, much like factual recall, and is done by the MoE.
+- The ladder confounds answer type (context entity vs generated attribute), prompt length (17–19 vs 27–32 tokens) and item mix. The instruction wrapper is ruled out by f2e.
+
+### (e) Why the add-back curves differ
+
+`ext13_curves.md`.
+- **Overshoot is the late-MoE term.** The oracle curve's overshoot over the all-MoE ceiling equals, condition by condition, M(≤ L−5) − M: r = 0.98 [0.93, 1.00] across 23 conditions; per case r 0.88–1.00 inside overshooting conditions.
+- **Negative experts are everywhere.** Every task has experts with negative single-expert effects, concentrated in the last four layers and writing against the answer directly. The option swap has them too (Mixtral 0.24 of the drop) but overshoots only +0.03.
+- **What decides the shape is what they react to.** The late MoE writes against the answer in proportion to the evidence already in the residual (per logit of attention DLA −0.40; per logit of earlier-MoE DLA −0.51). An expert-only add-back restores MoE-written evidence but not attention-written evidence. When attention writes much of the answer (attribute → entity, CounterFact), the ceiling M contains the late experts' reaction to evidence the patched run lacks, so subsets that skip them overshoot: f1 +0.28 / +0.40, option swap +0.00.
+- **GPU check (Qwen3 f1).** All experts except the negative ones restore 0.49, against M 0.24 and the best oracle subset 0.51. The whole gain comes from the last-four-layer negatives.
+
+### (f) Attribution patching
+
+OLMoE-1B-7B, WinoGrande option swap and IOI, 64 + 64 pairs each; `ext13_atp.md`.
+
+| Component | AtP vs engine patching, r (WinoGrande / IOI) | Noise ceiling |
+|---|---|---|
+| Experts | 0.96 / 0.97 | 0.97 / 0.96 |
+| MoE layers | 0.96 / 0.99 | 1.00 / 0.99 |
+| Heads | 0.83 / 0.95 | 0.92 / 0.94 |
+
+- Early components are underestimated (slope 0.01–0.32 in L0–3).
+- 32–34 % of single-expert patches switch downstream top-k slots. Freezing the downstream routing removes about half of AtP's squared error.
+- As an add-back ordering, AtP equals the oracle (AUC 0.669 vs 0.670).
+- Recommendation: no reverse layer streaming for final-position work; exact patching costs about 5 GPU-min per 256 rows. Worth building only for all-position or edge-level attribution.
+
+### (g) Not run
+
+- Scale: the same-family Qwen3-235B does not fit on disk. The dense Qwen3 family is an option.
+- MIB: discussion only.
+- The letter A/B format and synonym averaging were not run, by user decision.
+
+### Caveats
+
+- Small or template-clustered samples:
+  - f2e (32 / 18 pairs);
+  - vt_a2e_orig (5 validation templates);
+  - template conditions (8–18 templates per split; CIs are seed-clustered).
+- Mixtral attribute → entity has few name items.
+- Cross-condition correlations rest on about 20 points.
+- The curve-shape GPU check covers Qwen3 only.
+- The ladder's two blocks also differ in answer type and prompt length.
+- Expert selections on templates are often pattern B and below the knockout necessity criterion.
+
+### Files
+
+- Sections: `results/sections/ext13_{base,addback,circuit,knockout,writer,ladder,curves,atp}.md`.
+- Summaries: `results/ext13{base,ab,ci,ko,syn,atp}_summary.json`.
+- Condition registry: `data/wino_ref/p5_conditions.json`.
+- Run dirs: `results/p5_<cond>_<proto>[_ab|_ci]`, `results/p5_<proto>_{ko,wr}*`, `results/p5_atp_*`.
+- Pre-neutral fill-in-the-blank runs, kept as a record: `results/wino_ref_F1_*`.
+
+
+## Direction 13a: Phase 5 data, association probes and base analyses
+
+**Summary.** Phase 5's data and base analyses (agent p5-data). Every list below is generated from the per-run summaries and refreshes after each condition, so pending conditions appear when their base analysis finishes.
+
+Headlines per condition (validation pairs; generated from `results/ext13base_summary.json`):
+
+- `f1` (attribute → entity, fill-in-the-blank (task 1)): Qwen3 share 0.76, A_direct 1.20, expert L37E032 (A); Mixtral BOS share 0.56, A_direct 1.01, expert L20E001 (B).
+- `dir_f1` (direction on identical items: fill-in-the-blank (task 2)): Qwen3 share 0.71, A_direct 1.08, expert L44E116 (A); Mixtral BOS share 0.52, A_direct 0.86, expert L20E001 (A).
+- `dir_opt` (direction on identical items: Phase-3 option swap (task 2)): Qwen3 share 0.19, A_direct 0.05, expert L41E117 (A); Mixtral BOS share 0.35, A_direct 0.31, expert L20E000 (A).
+- `cp_nat` (copy prefix on the natural Phase-3 twins (task 6)): Qwen3 share 0.21, A_direct -0.01, expert L41E117 (A); Mixtral BOS share 0.37, A_direct 0.38, expert L21E006 (B).
+- `cp_vt_orig` (copy prefix on the verb templates, original verb (task 6)): Qwen3 share 0.31, A_direct 0.11, expert L39E001 (A); Mixtral BOS share 0.39, A_direct 0.47, expert L19E006 (A).
+- `cp_vt_neu` (copy prefix on the verb templates, neutral verb (task 6)): Qwen3 share 0.26, A_direct 0.09, expert L42E123 (B); Mixtral BOS share 0.38, A_direct 0.43, expert L19E006 (B).
+- `vt_e2a_orig` (verb templates, entity → attribute, original verb (task 4)): Qwen3 share 0.28, A_direct 0.13, expert L39E121 (A); Mixtral BOS share 0.41, A_direct 0.38, expert L19E006 (A).
+- `vt_e2a_neu` (verb templates, entity → attribute, neutral verb (task 4)): Qwen3 share 0.22, A_direct 0.13, expert L42E123 (A); Mixtral BOS share 0.42, A_direct 0.42, expert L19E006 (A).
+- `vt_a2e_orig` (verb templates, attribute → entity fill-in-the-blank, original verb (task 5)): Qwen3 share 0.79, A_direct 1.47, expert L37E032 (A).
+- `f2e` (attribute → entity, natural sentence cut at a final blank (task 3)): Qwen3 share 0.69, A_direct 0.99, expert L43E036 (A); Mixtral BOS share 0.65, A_direct 1.35, expert L19E004 (A).
+
+Contrasts (validation means; the CIs are in the summary table; only `dir_f1` / `dir_opt` share their pairs):
+
+- Direction on identical pairs, attribute → entity vs entity → attribute (`dir_f1` vs `dir_opt`): Qwen3 share 0.71 vs 0.19, A_direct 1.08 vs 0.05, all-MoE M 0.11 vs 0.81; Mixtral BOS share 0.52 vs 0.35, A_direct 0.86 vs 0.31, all-MoE M 0.41 vs 0.75.
+- Copy vs generate on natural twins (different item filters) (`cp_nat` vs `dir_opt`): Qwen3 share 0.21 vs 0.19, A_direct -0.01 vs 0.05, all-MoE M 0.79 vs 0.81; Mixtral BOS share 0.37 vs 0.35, A_direct 0.38 vs 0.31, all-MoE M 0.73 vs 0.75.
+- Copy vs generate on templates, original verb (`cp_vt_orig` vs `vt_e2a_orig`): Qwen3 share 0.31 vs 0.28, A_direct 0.11 vs 0.13, all-MoE M 0.69 vs 0.82; Mixtral BOS share 0.39 vs 0.41, A_direct 0.47 vs 0.38, all-MoE M 0.54 vs 0.68.
+- Copy vs generate on templates, neutral verb (`cp_vt_neu` vs `vt_e2a_neu`): Qwen3 share 0.26 vs 0.22, A_direct 0.09 vs 0.13, all-MoE M 0.74 vs 0.82; Mixtral BOS share 0.38 vs 0.42, A_direct 0.43 vs 0.42, all-MoE M 0.46 vs 0.62.
+- Original vs neutral verb, entity → attribute (`vt_e2a_orig` vs `vt_e2a_neu`): Qwen3 share 0.28 vs 0.22, A_direct 0.13 vs 0.13, all-MoE M 0.82 vs 0.82; Mixtral BOS share 0.41 vs 0.42, A_direct 0.38 vs 0.42, all-MoE M 0.68 vs 0.62.
+- Direction on the templates (Qwen3 only) (`vt_a2e_orig` vs `vt_e2a_orig`): Qwen3 share 0.79 vs 0.28, A_direct 1.47 vs 0.13, all-MoE M 0.21 vs 0.82.
+- Natural sentence vs fill-in-the-blank, attribute → entity (`f2e` vs `f1`): Qwen3 share 0.69 vs 0.76, A_direct 0.99 vs 1.20, all-MoE M 0.21 vs 0.24; Mixtral BOS share 0.65 vs 0.56, A_direct 1.35 vs 1.01, all-MoE M -0.06 vs 0.23.
+
+Data findings (behaviour section):
+
+1. **Probe.** The pre-registered association rule uses both probes in Qwen3 but only v2 in Mixtral, whose v1 does not respond. Half of the margin pairs are neutral.
+2. **Copy prefix.** The first copy prefix, `Of X and Y, one … t1 and the other … t2`, is answered by position ('respectively', X ↔ t1). Mixtral solves 43 % of the unrelated-verb template items in the congruent order and 0 % in the other. That prefix is void for tracing; the copy conditions use `Options: t1, t2.`, whose orders pass about equally (natural twins 0.73 / 0.74 Qwen3, 0.90 / 0.89 Mixtral).
+3. **Task 5.** Fill-in-the-blank on the verb templates fails the margin (Qwen3 3.7 % / 1.9 %, Mixtral 0.1 % / 0.2 % vs 39 % / 33 % for the same items entity → attribute), so task 5 is traced for Qwen3 orig only (5 validation seeds).
+4. **Memorisation.** Original WinoGrande names give no advantage over new names.
+5. **Restated format.** It passes the margin on 9 % of the pairs.
+
+Status: base analysis complete for 19 condition × model runs (f1/qwen3, f1/mixtral_bos, dir_f1/qwen3, dir_f1/mixtral_bos, dir_opt/qwen3, dir_opt/mixtral_bos, cp_nat/qwen3, cp_nat/mixtral_bos, cp_vt_orig/qwen3, cp_vt_orig/mixtral_bos, cp_vt_neu/qwen3, cp_vt_neu/mixtral_bos, vt_e2a_orig/qwen3, vt_e2a_orig/mixtral_bos, vt_e2a_neu/qwen3, vt_e2a_neu/mixtral_bos, vt_a2e_orig/qwen3, f2e/qwen3, f2e/mixtral_bos); pending: none; behaviour only: vt_a2e_orig/mixtral_bos, vt_a2e_neu/qwen3, vt_a2e_neu/mixtral_bos.
+
+### What was run
+
+Phase 5 (RESEARCH_PLAN.md "Phase 5 execution plan") asks whether the final-token attention share measured on WinoGrande in Phase 3 indexes the reasoning direction (entity → attribute vs attribute → entity, i.e. reference resolution), the availability of the answer in the context (copy vs generate), or the semi-synthetic verb templates' content. This section holds the data build and the Phase-3 base analyses of every condition; add-back, head + expert circuits, knockout and writers are in the sections of p5-addback, p5-circuit and p5-expert. Conditions (STR = the twin's own difference, both directions of every pair, Δ = logit(r) − logit(r′) at the final token):
+
+- `f1` (task 1) — attribute → entity in the fill-in-the-blank format on all WinoGrande train_xl twins: `Fill in the blank: <sentence with _>\nAnswer: the` → " mirror"; STR = the trigger; pool = margin (Δ_A ≥ 1, Δ_B ≤ −1) & content swap & probe-neutral; Qwen3 128 / 128 + replication 128 / 128; Mixtral's neutral pool (203 pairs) is split half / half, 101 / 101, without replication.
+- `dir_f1` / `dir_opt` (task 2) — direction on identical items: the 776 Phase-3 twins whose fill-in-the-blank pair passes the margin in the model, in the fill-in-the-blank format (attribute → entity) and in the Phase-3 option-swap format (fill the blank, predict the trigger: entity → attribute); same pairs, same seed-0 half / half split; no association filter (strata only).
+- `f2e` (task 3) — attribute → entity in the natural sentence: twins that differ before the blank and have no word after it, cut at the blank; margin & content & neutral; half / half.
+- `vt_e2a_{orig,neu}` (task 4) — the 55 curated entity → attribute verb templates × 48 IOI name pairs (Phase-3 format), original / neutral verb; `vt_a2e_{orig,neu}` (task 5) — the same items (identical name pairs, rng `ext13-verbs-<seed>`) in the fill-in-the-blank format (blank = entity, STR = trigger); seed split S = the 55 seeds (sorted ids) shuffled with random.Random(0), 27 discovery / 28 validation seeds, ≤ 128 margin pairs per split drawn round-robin over the split's seeds (within a seed by name-pair index, then attribute order).
+- `cp_vt_{orig,neu}`, `cp_nat` (task 6, P5-8 copy vs generate) — the Phase-3 entity → attribute prompt preceded by `Options: {t1}, {t2}.` and a newline, which names both candidate attributes and pairs nothing with the names (coordinator decision 2026-10-11). Both attribute orders are separate pairs; an order preference is identical in both twins and cancels in the STR drop. Built with the Phase-3 builder on the prefixed twin. Checks: each prefix attribute is ONE token with the continuation's id (leading-space form after `:` / `,`), and token alignment holds. All 55 template seeds (orig / neutral / unrelated × 48 name pairs × 2 orders) and all 776 natural twins pass under both tokenizers. An item enters a case set only if BOTH orders pass the margin. Templates use the seed split S; cp_nat uses the twin's Phase-3 split (discovery / validation / replication). The first prefix, `Of X and Y, one {frame} t1 and the other {frame} t2.`, is void for tracing and kept as a behaviour result (`data/wino_ref/void_cp_respectively/`, table `ext13base_cp_respectively`).
+- `mem` (task 7, behaviour only) — the 55 seeds with their ORIGINAL WinoGrande names × orig / neutral / unrelated verb (Phase-3 builder).
+- Restated format (F2R): behaviour only.
+
+pair_idx: natural twins = index of the HIT id in the sorted train_xl twins (as Phase 3); cp_nat = 2 · Phase-3 pair_idx + order − 1; templates = 1000 · seed rank + 2 · name-pair index + order − 1 (the same template item has the same pair_idx in vt_e2a, vt_a2e and cp order 1). Files: `data/wino_ref/pairs_p5_<cond>_<proto>.parquet` (pair contract of `moetrace/ext7_pairs.py` + strata `names`, `stratum_assoc`, `stratum_neutral`, `stratum_local_assoc`, `seed`, `variant`, `order`; token positions `mention_a_pos` / `mention_b_pos` (+ `blank_pos`; copy prompts `attr_a_pos` / `attr_b_pos` (prefix attributes), `prefix_len_tokens`)), `data/wino_ref/case_sets_p5_<cond>_<proto>.json`, registry `data/wino_ref/p5_conditions.json`. Base runners (the Phase-3 generic STR-pair runners, unchanged, through `scripts/gpu_queue.sh`; `scripts/ext13_p5_chain_base.sh`, job list `scripts/ext13_p5_jobs.py`): W2 sweep (MoE / attention / block at every layer), W4 joint (all-MoE, denoise and noise), DLA and the direct-path split, W6 experts (all layers, equal-norm pairs at L*), W5 heads (top-4 attention layers + a null layer), W3 grid (MoE / attention / residual, window 1, main family). Analysis `scripts/ext13_p5_analyze.py` (the functions of `scripts/ext7_wino_analyze.py` per run, as ext12 part 4c) plus a cluster bootstrap of the headline numbers with the condition's independent unit (seed for templates, Phase-3 twin for cp_nat, pair otherwise; 5,000 resamples, seed 0), the grid by site, and the copy-prefix attention of the top heads.
+
+**Phase-5 conditions: split sizes and strata (data/wino_ref/case_sets_p5_<cond>_<proto>.json)**
+
+| Condition | Model | Split | Pairs | Names | Objects | Associative | One-sided | Reverse | Neutral | No probe | Local assoc | Seeds | Flag |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| f1 | Qwen3-30B-A3B-Base | discovery | 128 | 62 | 66 | 0 | 0 | 0 | 128 | 0 |  |  |  |
+| f1 | Qwen3-30B-A3B-Base | validation | 128 | 70 | 58 | 0 | 0 | 0 | 128 | 0 |  |  |  |
+| f1 | Qwen3-30B-A3B-Base | rep_discovery | 128 | 67 | 61 | 0 | 0 | 0 | 128 | 0 |  |  |  |
+| f1 | Qwen3-30B-A3B-Base | rep_validation | 128 | 60 | 68 | 0 | 0 | 0 | 128 | 0 |  |  |  |
+| f1 | Mixtral-8x7B, BOS | discovery | 101 | 11 | 90 | 0 | 0 | 0 | 101 | 0 |  |  |  |
+| f1 | Mixtral-8x7B, BOS | validation | 101 | 12 | 89 | 0 | 0 | 0 | 101 | 0 |  |  |  |
+| dir_f1 | Qwen3-30B-A3B-Base | discovery | 90 | 8 | 82 | 6 | 26 | 19 | 39 | 0 | 21 |  |  |
+| dir_f1 | Qwen3-30B-A3B-Base | validation | 90 | 6 | 84 | 4 | 16 | 20 | 50 | 0 | 7 |  |  |
+| dir_f1 | Mixtral-8x7B, BOS | discovery | 94 | 0 | 94 | 5 | 21 | 27 | 41 | 0 | 19 |  |  |
+| dir_f1 | Mixtral-8x7B, BOS | validation | 94 | 1 | 93 | 2 | 20 | 27 | 45 | 0 | 20 |  |  |
+| dir_opt | Qwen3-30B-A3B-Base | discovery | 90 | 8 | 82 | 6 | 26 | 19 | 39 | 0 | 21 |  |  |
+| dir_opt | Qwen3-30B-A3B-Base | validation | 90 | 6 | 84 | 4 | 16 | 20 | 50 | 0 | 7 |  |  |
+| dir_opt | Mixtral-8x7B, BOS | discovery | 94 | 0 | 94 | 5 | 21 | 27 | 41 | 0 | 19 |  |  |
+| dir_opt | Mixtral-8x7B, BOS | validation | 94 | 1 | 93 | 2 | 20 | 27 | 45 | 0 | 20 |  |  |
+| cp_nat | Qwen3-30B-A3B-Base | discovery | 146 | 12 | 134 | 14 | 26 | 34 | 64 | 8 | 22 |  |  |
+| cp_nat | Qwen3-30B-A3B-Base | validation | 140 | 10 | 130 | 8 | 14 | 56 | 60 | 2 | 12 |  |  |
+| cp_nat | Qwen3-30B-A3B-Base | rep_discovery | 162 | 2 | 160 | 2 | 32 | 48 | 70 | 10 | 20 |  |  |
+| cp_nat | Qwen3-30B-A3B-Base | rep_validation | 158 | 14 | 144 | 4 | 26 | 60 | 64 | 4 | 24 |  |  |
+| cp_nat | Mixtral-8x7B, BOS | discovery | 216 | 20 | 196 | 0 | 48 | 54 | 94 | 20 | 22 |  |  |
+| cp_nat | Mixtral-8x7B, BOS | validation | 204 | 16 | 188 | 6 | 36 | 70 | 78 | 14 | 22 |  |  |
+| cp_nat | Mixtral-8x7B, BOS | rep_discovery | 214 | 10 | 204 | 0 | 32 | 50 | 112 | 20 | 30 |  |  |
+| cp_nat | Mixtral-8x7B, BOS | rep_validation | 222 | 20 | 202 | 4 | 34 | 68 | 106 | 10 | 38 |  |  |
+| cp_vt_orig | Qwen3-30B-A3B-Base | discovery | 128 | 128 | 0 | 0 | 14 | 24 | 90 | 0 |  | 14 |  |
+| cp_vt_orig | Qwen3-30B-A3B-Base | validation | 128 | 128 | 0 | 0 | 8 | 19 | 101 | 0 |  | 13 |  |
+| cp_vt_orig | Mixtral-8x7B, BOS | discovery | 128 | 128 | 0 | 0 | 16 | 10 | 102 | 0 |  | 9 |  |
+| cp_vt_orig | Mixtral-8x7B, BOS | validation | 128 | 128 | 0 | 0 | 8 | 4 | 116 | 0 |  | 10 |  |
+| cp_vt_neu | Qwen3-30B-A3B-Base | discovery | 128 | 128 | 0 | 0 | 14 | 20 | 94 | 0 |  | 12 |  |
+| cp_vt_neu | Qwen3-30B-A3B-Base | validation | 128 | 128 | 0 | 0 | 8 | 28 | 92 | 0 |  | 8 |  |
+| cp_vt_neu | Mixtral-8x7B, BOS | discovery | 128 | 128 | 0 | 0 | 2 | 6 | 120 | 0 |  | 8 |  |
+| cp_vt_neu | Mixtral-8x7B, BOS | validation | 128 | 128 | 0 | 0 | 8 | 6 | 114 | 0 |  | 8 |  |
+| vt_e2a_orig | Qwen3-30B-A3B-Base | discovery | 128 | 128 | 0 | 0 | 7 | 19 | 102 | 0 |  | 16 |  |
+| vt_e2a_orig | Qwen3-30B-A3B-Base | validation | 128 | 128 | 0 | 0 | 7 | 12 | 109 | 0 |  | 17 |  |
+| vt_e2a_orig | Mixtral-8x7B, BOS | discovery | 128 | 128 | 0 | 0 | 8 | 6 | 114 | 0 |  | 14 |  |
+| vt_e2a_orig | Mixtral-8x7B, BOS | validation | 128 | 128 | 0 | 0 | 4 | 7 | 117 | 0 |  | 18 |  |
+| vt_e2a_neu | Qwen3-30B-A3B-Base | discovery | 128 | 128 | 0 | 0 | 9 | 22 | 97 | 0 |  | 16 |  |
+| vt_e2a_neu | Qwen3-30B-A3B-Base | validation | 128 | 128 | 0 | 0 | 10 | 18 | 100 | 0 |  | 12 |  |
+| vt_e2a_neu | Mixtral-8x7B, BOS | discovery | 128 | 128 | 0 | 0 | 7 | 4 | 117 | 0 |  | 11 |  |
+| vt_e2a_neu | Mixtral-8x7B, BOS | validation | 128 | 128 | 0 | 0 | 9 | 8 | 111 | 0 |  | 12 |  |
+| vt_a2e_orig | Qwen3-30B-A3B-Base | discovery | 60 | 60 | 0 | 0 | 4 | 5 | 51 | 0 |  | 8 |  |
+| vt_a2e_orig | Qwen3-30B-A3B-Base | validation | 37 | 37 | 0 | 0 | 4 | 7 | 26 | 0 |  | 5 |  |
+| vt_a2e_orig | Mixtral-8x7B, BOS | discovery | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |  | 0 | behaviour only |
+| vt_a2e_orig | Mixtral-8x7B, BOS | validation | 2 | 2 | 0 | 0 | 0 | 0 | 2 | 0 |  | 1 | behaviour only |
+| vt_a2e_neu | Qwen3-30B-A3B-Base | discovery | 45 | 45 | 0 | 0 | 0 | 7 | 38 | 0 |  | 5 | behaviour only |
+| vt_a2e_neu | Qwen3-30B-A3B-Base | validation | 5 | 5 | 0 | 0 | 1 | 2 | 2 | 0 |  | 3 | behaviour only |
+| vt_a2e_neu | Mixtral-8x7B, BOS | discovery | 2 | 2 | 0 | 0 | 0 | 0 | 2 | 0 |  | 1 | behaviour only |
+| vt_a2e_neu | Mixtral-8x7B, BOS | validation | 2 | 2 | 0 | 0 | 0 | 0 | 2 | 0 |  | 2 | behaviour only |
+| f2e | Qwen3-30B-A3B-Base | discovery | 32 | 3 | 29 | 0 | 0 | 0 | 32 | 0 |  |  |  |
+| f2e | Qwen3-30B-A3B-Base | validation | 32 | 6 | 26 | 0 | 0 | 0 | 32 | 0 |  |  |  |
+| f2e | Mixtral-8x7B, BOS | discovery | 18 | 3 | 15 | 0 | 0 | 0 | 18 | 0 |  |  |  |
+| f2e | Mixtral-8x7B, BOS | validation | 18 | 2 | 16 | 0 | 0 | 0 | 18 | 0 |  |  |  |
+
+
+### Association probe (pre-registered rule)
+
+Both probes respond in Qwen3: 23.0 % (v1) and 22.7 % (v2) of the trigger probes of its 1,569 margin pairs reach |probe| ≥ 1, against 7–9 % on the random-name templates, where nothing but name-specific bias can drive the probe. R = {v1, v2}, so a Qwen3 pair is neutral only if both triggers stay below 1 under both probes. In Mixtral v1 does not respond (2.0 %, SD 0.41: the flat v1 behaviour noted in the review is confirmed) while v2 does (37.3 %, SD 1.22; templates 5.6 %), so R = {v2}; neither model needed the 'none responds' fallback. The probes agree only moderately (r = 0.51 Qwen3, 0.28 Mixtral) and objects respond far more than names (Qwen3 29 % vs 13 %, Mixtral v2 40 % vs 11 %). Strata of the margin pairs (associative / one-sided / reverse / neutral): Qwen3 86 / 299 / 394 / 790, Mixtral 12 / 111 / 135 / 235. Neutral is the largest stratum in both models (50 % / 48 %) and covers most name pairs (Qwen3 407 of 597, Mixtral 39 of 46). 'Reverse' is the second largest: a trigger alone points to the other candidate by ≥ 1 under some responding probe. It overlaps with own-answer pointing under the other probe in 245 (Qwen3) and 98 (Mixtral) pairs, so reverse / one-sided / associative are noisy partial-input labels and serve as descriptive strata only. The neutral rule shapes the main sets of `f1` and `f2e`; for the other conditions the strata are recorded per pair (`stratum_assoc`) and reported, not filtered.
+
+**Association probes v1 / v2 on the margin pairs of the valid attribute → entity formats (trigger probes of both twins; pre-registered rule: a probe responds if ≥ 10 % reach |probe| ≥ 1)**
+
+| Model | Probe | Margin pairs (unique twins) | Share |probe| ≥ 1 | Names | Objects | F1 / F2E / F2R | SD | Responds (≥ 0.10) | Templates (random names): share |probe| ≥ 1 |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | v1 | 1569 | 0.230 | 0.131 | 0.291 | 0.235 / 0.218 / 0.174 | 0.98 | yes | 0.072 |
+| Qwen3-30B-A3B-Base | v2 | 1569 | 0.227 | 0.136 | 0.283 | 0.232 / 0.248 / 0.140 | 0.94 | yes | 0.093 |
+| Mixtral-8x7B, BOS | v1 | 493 | 0.020 | 0.011 | 0.021 | 0.019 / 0.034 / 0.000 | 0.41 | no | 0.008 |
+| Mixtral-8x7B, BOS | v2 | 493 | 0.373 | 0.109 | 0.400 | 0.386 / 0.349 / 0.075 | 1.22 | yes | 0.056 |
+
+
+**Probe outcome and association strata of the margin pairs (F1 / F2E / F2R pooled, unique twins)**
+
+| Model | r(v1, v2) | Responding | R (used) | Margin pairs: assoc. / one-sided / reverse / neutral / no probe | Names | Objects | Conflicts (reverse & own) |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 0.51 | v1, v2 | v1, v2 | 86 / 299 / 394 / 790 / 0 | 0 / 57 / 133 / 407 | 86 / 242 / 261 / 383 | 245 |
+| Mixtral-8x7B, BOS | 0.28 | v2 | v2 | 12 / 111 / 135 / 235 / 0 | 1 / 3 / 3 / 39 | 11 / 108 / 132 / 196 | 98 |
+
+
+### Summary across conditions and models
+
+The table lists the validation pairs of every condition and model, with cluster-bootstrap CIs (unit = seed for templates, Phase-3 twin for cp_nat, pair otherwise). Attention share = AUC+(attention) / (AUC+(attention) + AUC+(MoE)) over the single-layer final-position curves (Direction-2b definition). A_direct / M_direct = direct path of all final-position attention / MoE outputs, with the exact final norm. All-MoE M = all final-position MoE outputs patched (denoising). Peaks are normalised (rescue / mean drop) at the validation argmax. The selected expert is the paper's two-stage, recurrence-first selection at the discovery MoE argmax: pattern A = one positive specific expert, B = layer effect without a specific expert. Stratified rows follow the table.
+
+| Condition | Direction / format | Model | Val. pairs (units) | Attention share (AUC+) | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (val) | Attention peak (val) | Selected expert: Spec [95% CI], pattern | Top heads (val rescue) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| f1 | attr2ent, fill-in-the-blank (entity readout) | Qwen3 | 128 (128 pairs) | 0.76 [0.73, 0.77] | 1.20 [1.14, 1.26] | -0.20 [-0.26, -0.14] | 0.24 [0.18, 0.30] | L37 0.137 | L39 0.292 | **L37E032** +0.47 [+0.39, +0.56], A; rep L37E032 | L42H10 +0.97, L39H29 +0.55, L43H24 +0.51 |
+| f1 | attr2ent, fill-in-the-blank (entity readout) | Mixtral BOS | 101 (101 pairs) | 0.56 [0.53, 0.59] | 1.01 [0.91, 1.12] | -0.01 [-0.12, 0.09] | 0.23 [0.13, 0.32] | L20 0.128 | L16 0.287 | **L20E001** -0.01 [-0.08, +0.06], B | L21H11 +0.31, L19H12 +0.28, L16H1 +0.27 |
+| dir_f1 | attr2ent, fill-in-the-blank (entity readout) | Qwen3 | 90 (90 pairs) | 0.71 [0.68, 0.73] | 1.08 [1.00, 1.17] | -0.08 [-0.17, 0.00] | 0.11 [0.05, 0.17] | L43 0.086 | L43 0.213 | **L44E116** +0.17 [+0.11, +0.24], A | L42H10 +0.53, L42H31 +0.48, L39H29 +0.45 |
+| dir_f1 | attr2ent, fill-in-the-blank (entity readout) | Mixtral BOS | 94 (94 pairs) | 0.52 [0.50, 0.54] | 0.86 [0.77, 0.95] | 0.14 [0.05, 0.23] | 0.41 [0.35, 0.46] | L20 0.151 | L16 0.278 | **L20E001** +0.11 [+0.02, +0.20], A | L21H11 +0.49, L19H12 +0.42, L15H8 +0.37 |
+| dir_opt | ent2attr, Phase-3 option swap (fill the blank, predict the trigger) | Qwen3 | 90 (90 pairs) | 0.19 [0.16, 0.24] | 0.05 [0.02, 0.08] | 0.95 [0.92, 0.98] | 0.81 [0.79, 0.83] | L41 0.185 | L42 0.038 | **L41E117** +0.46 [+0.29, +0.66], A | L38H18 +0.46, L38H21 +0.31, L42H30 +0.21 |
+| dir_opt | ent2attr, Phase-3 option swap (fill the blank, predict the trigger) | Mixtral BOS | 94 (94 pairs) | 0.35 [0.33, 0.36] | 0.31 [0.29, 0.33] | 0.69 [0.67, 0.71] | 0.75 [0.73, 0.78] | L20 0.146 | L13 0.124 | **L20E000** +0.90 [+0.79, +1.02], A | L25H9 +0.63, L19H13 +0.42, L13H4 +0.21 |
+| cp_nat | ent2attr, Phase-3 + copy prefix on the 776 Phase-3 twins | Qwen3 | 140 (70 Phase-3 twins) | 0.21 [0.20, 0.24] | -0.01 [-0.07, 0.04] | 1.01 [0.96, 1.07] | 0.79 [0.76, 0.81] | L43 0.163 | L41 0.059 | **L41E117** +0.42 [+0.35, +0.49], A; rep L43E081 | L41H27 +0.58, L42H30 +0.14, L41H0 +0.13 |
+| cp_nat | ent2attr, Phase-3 + copy prefix on the 776 Phase-3 twins | Mixtral BOS | 204 (102 Phase-3 twins) | 0.37 [0.36, 0.39] | 0.38 [0.34, 0.41] | 0.62 [0.59, 0.66] | 0.73 [0.70, 0.76] | L20 0.167 | L13 0.153 | **L21E006** +0.07 [-0.02, +0.15], B; rep L20E000 | L25H9 +0.53, L19H13 +0.36, L13H18 +0.24 |
+| cp_vt_orig | ent2attr, Phase-3 + copy prefix on verb templates | Qwen3 | 128 (13 seeds) | 0.31 [0.26, 0.38] | 0.11 [-0.01, 0.28] | 0.89 [0.72, 1.01] | 0.69 [0.57, 0.79] | L42 0.130 | L41 0.081 | **L39E001** +0.12 [+0.07, +0.17], A | L41H0 +0.43, L42H30 +0.41, L41H5 +0.27 |
+| cp_vt_orig | ent2attr, Phase-3 + copy prefix on verb templates | Mixtral BOS | 128 (10 seeds) | 0.39 [0.33, 0.47] | 0.47 [0.39, 0.60] | 0.53 [0.40, 0.61] | 0.54 [0.38, 0.68] | L19 0.194 | L19 0.146 | **L19E006** +0.51 [+0.39, +0.62], A | L13H18 +0.41, L19H13 +0.23, L19H1 +0.19 |
+| cp_vt_neu | ent2attr, Phase-3 + copy prefix on verb templates (neutral verb) | Qwen3 | 128 (8 seeds) | 0.26 [0.23, 0.38] | 0.09 [-0.10, 0.27] | 0.91 [0.73, 1.10] | 0.74 [0.62, 0.83] | L43 0.180 | L42 0.098 | **L42E123** -0.00 [-0.04, +0.03], B | L41H0 +0.57, L42H30 +0.35, L42H27 +0.23 |
+| cp_vt_neu | ent2attr, Phase-3 + copy prefix on verb templates (neutral verb) | Mixtral BOS | 128 (8 seeds) | 0.38 [0.33, 0.42] | 0.43 [0.37, 0.52] | 0.57 [0.48, 0.63] | 0.46 [0.37, 0.63] | L21 0.171 | L13 0.132 | **L19E006** +0.05 [-0.03, +0.13], B | L13H18 +0.37, L19H13 +0.35, L19H12 +0.15 |
+| vt_e2a_orig | ent2attr, Phase-3 option swap on verb templates | Qwen3 | 128 (17 seeds) | 0.28 [0.20, 0.36] | 0.13 [0.08, 0.17] | 0.87 [0.83, 0.92] | 0.82 [0.79, 0.86] | L43 0.168 | L42 0.049 | **L39E121** +0.24 [+0.14, +0.36], A | L42H30 +0.32, L38H3 +0.30, L41H27 +0.29 |
+| vt_e2a_orig | ent2attr, Phase-3 option swap on verb templates | Mixtral BOS | 128 (18 seeds) | 0.41 [0.36, 0.46] | 0.38 [0.31, 0.47] | 0.62 [0.53, 0.69] | 0.68 [0.58, 0.76] | L19 0.184 | L19 0.152 | **L19E006** +0.62 [+0.50, +0.74], A | L13H18 +0.44, L19H13 +0.37, L19H12 +0.30 |
+| vt_e2a_neu | ent2attr, Phase-3 option swap on verb templates (neutral verb) | Qwen3 | 128 (12 seeds) | 0.22 [0.17, 0.30] | 0.13 [0.05, 0.19] | 0.87 [0.81, 0.95] | 0.82 [0.77, 0.87] | L43 0.170 | L42 0.061 | **L42E123** +0.23 [+0.16, +0.30], A | L38H3 +0.35, L42H30 +0.29, L41H0 +0.22 |
+| vt_e2a_neu | ent2attr, Phase-3 option swap on verb templates (neutral verb) | Mixtral BOS | 128 (12 seeds) | 0.42 [0.37, 0.48] | 0.42 [0.32, 0.55] | 0.58 [0.45, 0.68] | 0.62 [0.48, 0.75] | L19 0.174 | L19 0.144 | **L19E006** +0.29 [+0.19, +0.39], A | L13H18 +0.40, L19H13 +0.35, L19H12 +0.21 |
+| vt_a2e_orig | attr2ent, fill-in-the-blank on verb templates | Qwen3 | 37 (5 seeds) | 0.79 [0.64, 0.80] | 1.47 [1.34, 1.55] | -0.47 [-0.55, -0.34] | 0.21 [0.19, 0.53] | L37 0.080 | L39 0.374 | **L37E032** +0.17 [+0.13, +0.21], A | L42H10 +1.13, L43H24 +0.54, L39H27 +0.51 |
+| vt_a2e_orig | attr2ent, fill-in-the-blank on verb templates | Mixtral BOS | behaviour only |  |  |  |  |  |  |  |  |
+| vt_a2e_neu | attr2ent, fill-in-the-blank on verb templates (neutral verb) | Qwen3 | behaviour only |  |  |  |  |  |  |  |  |
+| vt_a2e_neu | attr2ent, fill-in-the-blank on verb templates (neutral verb) | Mixtral BOS | behaviour only |  |  |  |  |  |  |  |  |
+| f2e | attr2ent, natural truncation, blank at the sentence end | Qwen3 | 32 (32 pairs) | 0.69 [0.60, 0.75] | 0.99 [0.87, 1.12] | 0.01 [-0.12, 0.13] | 0.21 [0.05, 0.35] | L37 0.072 | L42 0.209 | **L43E036** +0.15 [+0.07, +0.25], A | L42H10 +0.98, L43H28 +0.58, L42H12 +0.48 |
+| f2e | attr2ent, natural truncation, blank at the sentence end | Mixtral BOS | 18 (18 pairs) | 0.65 [0.59, 0.70] | 1.35 [1.16, 1.55] | -0.35 [-0.55, -0.16] | -0.06 [-0.34, 0.19] | L19 0.084 | L19 0.247 | **L19E004** +0.35 [+0.16, +0.55], A | L20H21 +0.80, L18H10 +0.70, L16H0 +0.68 |
+
+
+| Condition | Model | Stratum | Pairs (main, all) | Attention share | A_direct / drop | M_direct / drop | All-MoE M / drop |
+|---|---|---|---|---|---|---|---|
+| f1 | Qwen3 | names | 132 | 0.79 [0.77, 0.81] | 1.32 [1.28, 1.36] | -0.32 [-0.36, -0.28] | 0.34 [0.29, 0.40] |
+| f1 | Qwen3 | objects | 124 | 0.73 [0.71, 0.75] | 1.11 [1.05, 1.17] | -0.11 [-0.17, -0.05] | 0.11 [0.06, 0.16] |
+| f1 | Qwen3 | probe-neutral | 256 | 0.76 [0.75, 0.78] | 1.20 [1.16, 1.24] | -0.20 [-0.24, -0.16] | 0.21 [0.17, 0.26] |
+| f1 | Mixtral BOS | names | 23 | 0.67 [0.63, 0.72] | 1.44 [1.26, 1.62] | -0.44 [-0.62, -0.26] | -0.11 [-0.40, 0.19] |
+| f1 | Mixtral BOS | objects | 179 | 0.54 [0.52, 0.55] | 0.94 [0.87, 1.01] | 0.06 [-0.01, 0.13] | 0.29 [0.23, 0.35] |
+| f1 | Mixtral BOS | probe-neutral | 202 | 0.55 [0.53, 0.57] | 0.99 [0.92, 1.06] | 0.01 [-0.06, 0.08] | 0.26 [0.19, 0.32] |
+| dir_f1 | Qwen3 | objects | 166 | 0.68 [0.66, 0.70] | 1.03 [0.96, 1.09] | -0.03 [-0.09, 0.04] | 0.12 [0.08, 0.16] |
+| dir_f1 | Qwen3 | probe-neutral | 89 | 0.74 [0.71, 0.75] | 1.20 [1.14, 1.27] | -0.20 [-0.27, -0.14] | 0.06 [0.00, 0.11] |
+| dir_f1 | Qwen3 | not neutral | 91 | 0.65 [0.62, 0.68] | 0.91 [0.83, 0.99] | 0.09 [0.01, 0.17] | 0.20 [0.14, 0.26] |
+| dir_f1 | Mixtral BOS | objects | 187 | 0.51 [0.49, 0.52] | 0.83 [0.77, 0.90] | 0.17 [0.10, 0.23] | 0.41 [0.37, 0.44] |
+| dir_f1 | Mixtral BOS | probe-neutral | 86 | 0.51 [0.49, 0.53] | 0.92 [0.83, 1.01] | 0.08 [-0.01, 0.17] | 0.39 [0.33, 0.44] |
+| dir_f1 | Mixtral BOS | not neutral | 102 | 0.51 [0.49, 0.53] | 0.77 [0.69, 0.85] | 0.23 [0.15, 0.31] | 0.41 [0.36, 0.46] |
+| dir_opt | Qwen3 | objects | 166 | 0.18 [0.16, 0.21] | 0.04 [0.02, 0.07] | 0.96 [0.93, 0.98] | 0.81 [0.80, 0.83] |
+| dir_opt | Qwen3 | probe-neutral | 89 | 0.14 [0.12, 0.18] | 0.00 [-0.04, 0.04] | 1.00 [0.96, 1.04] | 0.80 [0.78, 0.82] |
+| dir_opt | Qwen3 | not neutral | 91 | 0.23 [0.20, 0.27] | 0.11 [0.08, 0.14] | 0.89 [0.86, 0.92] | 0.82 [0.80, 0.83] |
+| dir_opt | Mixtral BOS | objects | 187 | 0.34 [0.33, 0.35] | 0.31 [0.29, 0.32] | 0.69 [0.68, 0.71] | 0.76 [0.74, 0.77] |
+| dir_opt | Mixtral BOS | probe-neutral | 86 | 0.33 [0.32, 0.34] | 0.28 [0.26, 0.30] | 0.72 [0.70, 0.74] | 0.78 [0.76, 0.80] |
+| dir_opt | Mixtral BOS | not neutral | 102 | 0.35 [0.34, 0.37] | 0.33 [0.31, 0.35] | 0.67 [0.65, 0.69] | 0.74 [0.71, 0.76] |
+| cp_nat | Qwen3 | names | 22 | 0.35 [0.30, 0.41] | 0.31 [0.19, 0.43] | 0.69 [0.57, 0.81] | 0.63 [0.53, 0.72] |
+| cp_nat | Qwen3 | objects | 264 | 0.19 [0.18, 0.22] | -0.03 [-0.07, 0.01] | 1.03 [0.99, 1.07] | 0.79 [0.77, 0.80] |
+| cp_nat | Qwen3 | probe-neutral | 124 | 0.19 [0.17, 0.24] | -0.06 [-0.14, 0.01] | 1.06 [0.99, 1.14] | 0.76 [0.72, 0.78] |
+| cp_nat | Qwen3 | not neutral | 162 | 0.22 [0.21, 0.25] | 0.04 [-0.01, 0.08] | 0.96 [0.92, 1.01] | 0.78 [0.76, 0.81] |
+| cp_nat | Mixtral BOS | names | 36 | 0.51 [0.45, 0.57] | 0.70 [0.58, 0.82] | 0.30 [0.18, 0.42] | 0.45 [0.30, 0.59] |
+| cp_nat | Mixtral BOS | objects | 384 | 0.37 [0.36, 0.38] | 0.37 [0.34, 0.39] | 0.63 [0.61, 0.66] | 0.74 [0.72, 0.75] |
+| cp_nat | Mixtral BOS | probe-neutral | 172 | 0.38 [0.36, 0.40] | 0.40 [0.36, 0.46] | 0.60 [0.54, 0.64] | 0.72 [0.67, 0.76] |
+| cp_nat | Mixtral BOS | not neutral | 248 | 0.39 [0.37, 0.40] | 0.39 [0.36, 0.42] | 0.61 [0.58, 0.64] | 0.71 [0.68, 0.73] |
+| cp_vt_orig | Qwen3 | names | 256 | 0.29 [0.25, 0.35] | 0.10 [-0.00, 0.23] | 0.90 [0.77, 1.00] | 0.69 [0.59, 0.77] |
+| cp_vt_orig | Qwen3 | probe-neutral | 191 | 0.29 [0.24, 0.35] | 0.09 [-0.01, 0.21] | 0.91 [0.79, 1.01] | 0.71 [0.62, 0.78] |
+| cp_vt_orig | Qwen3 | not neutral | 65 | 0.31 [0.24, 0.37] | 0.13 [-0.02, 0.32] | 0.87 [0.68, 1.02] | 0.65 [0.46, 0.78] |
+| cp_vt_orig | Mixtral BOS | names | 256 | 0.42 [0.38, 0.47] | 0.53 [0.43, 0.65] | 0.47 [0.35, 0.57] | 0.52 [0.41, 0.62] |
+| cp_vt_orig | Mixtral BOS | probe-neutral | 218 | 0.42 [0.37, 0.47] | 0.52 [0.43, 0.63] | 0.48 [0.37, 0.57] | 0.53 [0.42, 0.63] |
+| cp_vt_orig | Mixtral BOS | not neutral | 38 | 0.45 [0.40, 0.51] | 0.63 [0.44, 0.79] | 0.37 [0.21, 0.56] | 0.46 [0.32, 0.60] |
+| cp_vt_neu | Qwen3 | names | 256 | 0.28 [0.24, 0.36] | 0.11 [-0.03, 0.28] | 0.89 [0.72, 1.03] | 0.68 [0.56, 0.77] |
+| cp_vt_neu | Qwen3 | probe-neutral | 186 | 0.27 [0.23, 0.35] | 0.10 [-0.04, 0.25] | 0.90 [0.75, 1.04] | 0.68 [0.59, 0.76] |
+| cp_vt_neu | Qwen3 | not neutral | 70 | 0.32 [0.24, 0.40] | 0.15 [-0.03, 0.39] | 0.85 [0.61, 1.03] | 0.66 [0.46, 0.80] |
+| cp_vt_neu | Mixtral BOS | names | 256 | 0.41 [0.37, 0.44] | 0.46 [0.38, 0.57] | 0.54 [0.43, 0.62] | 0.52 [0.39, 0.63] |
+| cp_vt_neu | Mixtral BOS | probe-neutral | 234 | 0.41 [0.37, 0.44] | 0.46 [0.38, 0.56] | 0.54 [0.44, 0.62] | 0.52 [0.40, 0.64] |
+| cp_vt_neu | Mixtral BOS | not neutral | 22 | 0.42 [0.37, 0.49] | 0.52 [0.38, 0.70] | 0.48 [0.30, 0.62] | 0.43 [0.28, 0.59] |
+| vt_e2a_orig | Qwen3 | names | 256 | 0.27 [0.22, 0.33] | 0.11 [0.08, 0.14] | 0.89 [0.86, 0.92] | 0.82 [0.78, 0.85] |
+| vt_e2a_orig | Qwen3 | probe-neutral | 211 | 0.27 [0.22, 0.33] | 0.11 [0.08, 0.14] | 0.89 [0.86, 0.92] | 0.82 [0.79, 0.85] |
+| vt_e2a_orig | Qwen3 | not neutral | 45 | 0.30 [0.22, 0.38] | 0.10 [0.05, 0.14] | 0.90 [0.86, 0.95] | 0.81 [0.75, 0.87] |
+| vt_e2a_orig | Mixtral BOS | names | 256 | 0.39 [0.36, 0.43] | 0.35 [0.30, 0.41] | 0.65 [0.59, 0.70] | 0.71 [0.65, 0.77] |
+| vt_e2a_orig | Mixtral BOS | probe-neutral | 231 | 0.39 [0.36, 0.42] | 0.35 [0.31, 0.40] | 0.65 [0.60, 0.69] | 0.72 [0.66, 0.77] |
+| vt_e2a_orig | Mixtral BOS | not neutral | 25 | 0.38 [0.31, 0.46] | 0.39 [0.27, 0.54] | 0.61 [0.46, 0.73] | 0.66 [0.48, 0.80] |
+| vt_e2a_neu | Qwen3 | names | 256 | 0.25 [0.20, 0.31] | 0.12 [0.07, 0.16] | 0.88 [0.84, 0.93] | 0.81 [0.77, 0.85] |
+| vt_e2a_neu | Qwen3 | probe-neutral | 197 | 0.24 [0.20, 0.30] | 0.11 [0.07, 0.15] | 0.89 [0.85, 0.93] | 0.82 [0.78, 0.85] |
+| vt_e2a_neu | Qwen3 | not neutral | 59 | 0.27 [0.19, 0.36] | 0.13 [0.06, 0.18] | 0.87 [0.82, 0.94] | 0.80 [0.75, 0.86] |
+| vt_e2a_neu | Mixtral BOS | names | 256 | 0.40 [0.36, 0.45] | 0.39 [0.33, 0.47] | 0.61 [0.53, 0.67] | 0.67 [0.57, 0.75] |
+| vt_e2a_neu | Mixtral BOS | probe-neutral | 228 | 0.40 [0.36, 0.45] | 0.38 [0.32, 0.44] | 0.62 [0.56, 0.68] | 0.69 [0.61, 0.76] |
+| vt_e2a_neu | Mixtral BOS | not neutral | 28 | 0.41 [0.36, 0.47] | 0.48 [0.34, 0.64] | 0.52 [0.36, 0.66] | 0.55 [0.37, 0.73] |
+| vt_a2e_orig | Qwen3 | names | 97 | 0.76 [0.73, 0.80] | 1.51 [1.42, 1.59] | -0.51 [-0.59, -0.42] | 0.20 [0.16, 0.27] |
+| vt_a2e_orig | Qwen3 | probe-neutral | 77 | 0.76 [0.72, 0.80] | 1.52 [1.45, 1.59] | -0.52 [-0.59, -0.45] | 0.19 [0.16, 0.26] |
+| vt_a2e_orig | Qwen3 | not neutral | 20 | 0.78 [0.75, 0.80] | 1.45 [1.32, 1.57] | -0.45 [-0.57, -0.32] | 0.21 [0.14, 0.34] |
+| f2e | Qwen3 | objects | 55 | 0.67 [0.60, 0.72] | 0.93 [0.85, 1.02] | 0.07 [-0.02, 0.15] | 0.08 [-0.01, 0.17] |
+| f2e | Qwen3 | probe-neutral | 64 | 0.68 [0.62, 0.72] | 0.99 [0.91, 1.08] | 0.01 [-0.08, 0.09] | 0.15 [0.05, 0.24] |
+| f2e | Mixtral BOS | objects | 31 | 0.67 [0.63, 0.70] | 1.30 [1.19, 1.43] | -0.30 [-0.43, -0.19] | -0.17 [-0.30, -0.07] |
+| f2e | Mixtral BOS | probe-neutral | 36 | 0.67 [0.64, 0.70] | 1.32 [1.22, 1.43] | -0.32 [-0.43, -0.22] | -0.07 [-0.22, 0.07] |
+
+
+#### f1: attribute → entity, fill-in-the-blank (task 1)
+
+- Qwen3 (128 validation pairs, 128 pairs; drop 4.67): attention share 0.76 [0.73, 0.77], A_direct 1.20 [1.14, 1.26], M_direct -0.20 [-0.26, -0.14], all-MoE M 0.24 [0.18, 0.30]; peaks MoE L37 0.137, attention L39 0.292 of the drop; expert L37E032 (Spec +0.47 [+0.39, +0.56], pattern A; replication re-selects L37E032); Phase-3 WinoGrande expert L41E117: rescue +0.00, Spec -0.02 (discovery-active 1); top heads L42H10 +0.97, L39H29 +0.55, L43H24 +0.51; share names 0.79 (132 pairs) vs objects 0.73 (124); grid: MoE at the STR site peaks L0 0.15, attention at the final position L39 0.30.
+- Mixtral BOS (101 validation pairs, 101 pairs; drop 4.32): attention share 0.56 [0.53, 0.59], A_direct 1.01 [0.91, 1.12], M_direct -0.01 [-0.12, 0.09], all-MoE M 0.23 [0.13, 0.32]; peaks MoE L20 0.128, attention L16 0.287 of the drop; expert L20E001 (Spec -0.01 [-0.08, +0.06], pattern B); Phase-3 WinoGrande expert L20E000: rescue +0.03, Spec -0.23 (discovery-active 48); top heads L21H11 +0.31, L19H12 +0.28, L16H1 +0.27; share names 0.67 (23 pairs) vs objects 0.54 (179); grid: MoE at the STR site peaks L0 0.48, attention at the final position L16 0.28.
+
+Qwen3 and Mixtral differ in pool size and composition. Qwen3 has 1,451 margin & content pairs, 50 % neutral (names 70 / 128 validation pairs); Mixtral has 443, of which 203 are neutral (names 12 / 101). The replication family exists for Qwen3 only, and it reproduces every headline: share 0.78, A_direct 1.20, L37E032 re-selected with Spec +0.45. The grid by site (`ext13base_f1_w3_sites`) puts the decision read-out at the final position. Single attention layers there carry up to 0.29 (Qwen3 L39) and 0.29 (Mixtral L16) of the drop; the MoE output at the trigger site peaks at layer 0 (Qwen3 0.15, Mixtral 0.49 of the drop), like the early subject-site effect of Phase 2 / Direction 6b.
+
+Tables: `results/tables/ext13base_f1_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_f1_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**f1: headline numbers with cluster-bootstrap 95% CIs (unit = pair; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 128 | 0.76 [0.73, 0.77] | 1.782 [1.699, 1.902] | 0.576 [0.523, 0.670] | 1.197 [1.137, 1.260] | -0.197 [-0.260, -0.137] | 0.243 [0.184, 0.301] | L37 0.137 | L39 0.292 |
+| Qwen3-30B-A3B-Base | main, all | 256 | 256 | 0.76 [0.75, 0.78] | 1.742 [1.677, 1.831] | 0.541 [0.501, 0.603] | 1.202 [1.163, 1.244] | -0.202 [-0.244, -0.163] | 0.215 [0.174, 0.256] | L37 0.119 | L39 0.298 |
+| Qwen3-30B-A3B-Base | replication, validation | 128 | 128 | 0.78 [0.75, 0.80] | 1.753 [1.652, 1.878] | 0.502 [0.446, 0.586] | 1.201 [1.139, 1.265] | -0.201 [-0.265, -0.139] | 0.171 [0.108, 0.231] | L37 0.128 | L39 0.280 |
+| Qwen3-30B-A3B-Base | names (main, all) | 132 | 132 | 0.79 [0.77, 0.81] | 2.161 [2.082, 2.289] | 0.568 [0.507, 0.684] | 1.317 [1.281, 1.357] | -0.317 [-0.357, -0.281] | 0.345 [0.294, 0.396] | L37 0.181 | L39 0.400 |
+| Qwen3-30B-A3B-Base | objects (main, all) | 124 | 124 | 0.73 [0.71, 0.75] | 1.428 [1.362, 1.515] | 0.532 [0.484, 0.605] | 1.108 [1.050, 1.172] | -0.108 [-0.172, -0.050] | 0.109 [0.056, 0.161] | L44 0.091 | L43 0.231 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 256 | 256 | 0.76 [0.75, 0.78] | 1.742 [1.677, 1.831] | 0.541 [0.501, 0.603] | 1.202 [1.163, 1.244] | -0.202 [-0.244, -0.163] | 0.215 [0.174, 0.256] | L37 0.119 | L39 0.298 |
+| Mixtral-8x7B, BOS | main, validation | 101 | 101 | 0.56 [0.53, 0.59] | 1.346 [1.259, 1.447] | 1.056 [0.956, 1.171] | 1.010 [0.906, 1.115] | -0.010 [-0.115, 0.094] | 0.227 [0.134, 0.318] | L20 0.128 | L16 0.287 |
+| Mixtral-8x7B, BOS | main, all | 202 | 202 | 0.55 [0.53, 0.57] | 1.320 [1.260, 1.388] | 1.087 [1.014, 1.171] | 0.988 [0.917, 1.057] | 0.012 [-0.057, 0.083] | 0.255 [0.190, 0.319] | L20 0.133 | L16 0.278 |
+| Mixtral-8x7B, BOS | names (main, all) | 23 | 23 | 0.67 [0.63, 0.72] | 1.627 [1.438, 1.842] | 0.789 [0.580, 1.047] | 1.442 [1.258, 1.618] | -0.442 [-0.618, -0.258] | -0.108 [-0.396, 0.190] | L17 0.129 | L19 0.350 |
+| Mixtral-8x7B, BOS | objects (main, all) | 179 | 179 | 0.54 [0.52, 0.55] | 1.289 [1.227, 1.358] | 1.120 [1.045, 1.208] | 0.941 [0.871, 1.013] | 0.059 [-0.013, 0.129] | 0.293 [0.233, 0.351] | L20 0.141 | L16 0.274 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 202 | 202 | 0.55 [0.53, 0.57] | 1.320 [1.260, 1.388] | 1.087 [1.014, 1.171] | 0.988 [0.917, 1.057] | 0.012 [-0.057, 0.083] | 0.255 [0.190, 0.319] | L20 0.133 | L16 0.278 |
+
+
+**f1 W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L37 | +0.633 [+0.542, +0.731] | 0.137 [0.117, 0.159] | L37E032 | 248 (≥ 128) | +0.495 [+0.415, +0.582] | +0.470 [+0.389, +0.556] | +0.646 [+0.554, +0.746] | A | +0.172 [+0.141, +0.205] |
+| Qwen3-30B-A3B-Base | main | interior | L37 | +0.633 [+0.542, +0.731] | 0.137 [0.117, 0.159] | L37E032 | 248 (≥ 128) | +0.495 [+0.415, +0.582] | +0.470 [+0.389, +0.556] | +0.646 [+0.554, +0.746] | A | +0.172 [+0.141, +0.205] |
+| Qwen3-30B-A3B-Base | rep | two_stage | L37 | +0.602 [+0.511, +0.700] | 0.128 [0.110, 0.148] | L37E032 | 248 (≥ 128) | +0.468 [+0.387, +0.555] | +0.452 [+0.373, +0.537] | +0.606 [+0.514, +0.703] | A |  |
+| Qwen3-30B-A3B-Base | rep | interior | L37 | +0.602 [+0.511, +0.700] | 0.128 [0.110, 0.148] | L37E032 | 248 (≥ 128) | +0.468 [+0.387, +0.555] | +0.452 [+0.373, +0.537] | +0.606 [+0.514, +0.703] | A |  |
+| Mixtral-8x7B, BOS | main | two_stage | L20 | +0.554 [+0.473, +0.638] | 0.128 [0.111, 0.144] | L20E001 | 140 (≥ 101) | +0.227 [+0.177, +0.278] | -0.011 [-0.078, +0.058] | +0.534 [+0.457, +0.616] | B | +0.003 [-0.027, +0.034] |
+| Mixtral-8x7B, BOS | main | interior | L20 | +0.554 [+0.473, +0.638] | 0.128 [0.111, 0.144] | L20E001 | 140 (≥ 101) | +0.227 [+0.177, +0.278] | -0.011 [-0.078, +0.058] | +0.534 [+0.457, +0.616] | B | +0.003 [-0.027, +0.034] |
+
+
+#### dir_f1: direction on identical items: fill-in-the-blank (task 2)
+
+- Qwen3 (90 validation pairs, 90 pairs; drop 5.20): attention share 0.71 [0.68, 0.73], A_direct 1.08 [1.00, 1.17], M_direct -0.08 [-0.17, 0.00], all-MoE M 0.11 [0.05, 0.17]; peaks MoE L43 0.086, attention L43 0.213 of the drop; expert L44E116 (Spec +0.17 [+0.11, +0.24], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.00, Spec -0.03 (discovery-active 1); top heads L42H10 +0.53, L42H31 +0.48, L39H29 +0.45; grid: MoE at the STR site peaks L2 0.21, attention at the final position L43 0.21.
+- Mixtral BOS (94 validation pairs, 94 pairs; drop 4.62): attention share 0.52 [0.50, 0.54], A_direct 0.86 [0.77, 0.95], M_direct 0.14 [0.05, 0.23], all-MoE M 0.41 [0.35, 0.46]; peaks MoE L20 0.151, attention L16 0.278 of the drop; expert L20E001 (Spec +0.11 [+0.02, +0.20], pattern A); Phase-3 WinoGrande expert L20E000: rescue +0.01, Spec -0.36 (discovery-active 21); top heads L21H11 +0.49, L19H12 +0.42, L15H8 +0.37; grid: MoE at the STR site peaks L0 0.53, attention at the final position L16 0.26.
+
+Tables: `results/tables/ext13base_dir_f1_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_dir_f1_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**dir_f1: headline numbers with cluster-bootstrap 95% CIs (unit = pair; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 90 | 90 | 0.71 [0.68, 0.73] | 1.418 [1.307, 1.561] | 0.578 [0.520, 0.698] | 1.082 [0.998, 1.166] | -0.082 [-0.166, 0.002] | 0.110 [0.046, 0.173] | L43 0.086 | L43 0.213 |
+| Qwen3-30B-A3B-Base | main, all | 180 | 180 | 0.70 [0.67, 0.71] | 1.440 [1.358, 1.537] | 0.627 [0.570, 0.721] | 1.051 [0.992, 1.107] | -0.051 [-0.107, 0.008] | 0.128 [0.086, 0.170] | L44 0.089 | L43 0.213 |
+| Qwen3-30B-A3B-Base | objects (main, all) | 166 | 166 | 0.68 [0.66, 0.70] | 1.401 [1.318, 1.500] | 0.653 [0.591, 0.753] | 1.026 [0.965, 1.086] | -0.026 [-0.086, 0.035] | 0.120 [0.077, 0.162] | L43 0.094 | L43 0.206 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 89 | 89 | 0.74 [0.71, 0.75] | 1.561 [1.469, 1.678] | 0.557 [0.507, 0.667] | 1.204 [1.136, 1.270] | -0.204 [-0.270, -0.136] | 0.055 [0.002, 0.106] | L44 0.088 | L43 0.240 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 91 | 91 | 0.65 [0.62, 0.68] | 1.338 [1.219, 1.485] | 0.712 [0.612, 0.852] | 0.906 [0.827, 0.989] | 0.094 [0.011, 0.173] | 0.198 [0.138, 0.256] | L44 0.090 | L43 0.188 |
+| Mixtral-8x7B, BOS | main, validation | 94 | 94 | 0.52 [0.50, 0.54] | 1.281 [1.198, 1.378] | 1.165 [1.091, 1.249] | 0.857 [0.775, 0.945] | 0.143 [0.055, 0.225] | 0.409 [0.355, 0.458] | L20 0.151 | L16 0.278 |
+| Mixtral-8x7B, BOS | main, all | 188 | 188 | 0.51 [0.49, 0.53] | 1.221 [1.165, 1.287] | 1.174 [1.120, 1.237] | 0.834 [0.772, 0.895] | 0.166 [0.105, 0.228] | 0.402 [0.363, 0.438] | L20 0.156 | L16 0.268 |
+| Mixtral-8x7B, BOS | objects (main, all) | 187 | 187 | 0.51 [0.49, 0.52] | 1.219 [1.161, 1.283] | 1.178 [1.126, 1.240] | 0.830 [0.767, 0.896] | 0.170 [0.104, 0.233] | 0.405 [0.368, 0.443] | L20 0.157 | L16 0.267 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 86 | 86 | 0.51 [0.49, 0.53] | 1.283 [1.203, 1.369] | 1.223 [1.138, 1.321] | 0.919 [0.830, 1.006] | 0.081 [-0.006, 0.170] | 0.388 [0.335, 0.440] | L20 0.164 | L16 0.279 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 102 | 102 | 0.51 [0.49, 0.53] | 1.178 [1.095, 1.269] | 1.142 [1.072, 1.223] | 0.768 [0.686, 0.853] | 0.232 [0.147, 0.314] | 0.412 [0.357, 0.465] | L20 0.150 | L16 0.260 |
+
+
+**dir_f1 W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L44 | +0.444 [+0.356, +0.538] | 0.085 [0.070, 0.100] | L44E116 | 144 (≥ 90) | +0.212 [+0.154, +0.274] | +0.172 [+0.108, +0.238] | +0.447 [+0.364, +0.537] | A | +0.118 [+0.081, +0.155] |
+| Qwen3-30B-A3B-Base | main | interior | L43 | +0.452 [+0.357, +0.554] | 0.086 [0.071, 0.103] | L43E114 | 128 (≥ 90) | +0.039 [+0.015, +0.063] | -0.024 [-0.055, +0.008] | +0.447 [+0.356, +0.550] | B |  |
+| Mixtral-8x7B, BOS | main | two_stage | L20 | +0.704 [+0.616, +0.794] | 0.151 [0.134, 0.168] | L20E001 | 172 (≥ 94) | +0.392 [+0.319, +0.465] | +0.109 [+0.019, +0.202] | +0.705 [+0.618, +0.792] | A | -0.017 [-0.056, +0.017] |
+| Mixtral-8x7B, BOS | main | interior | L20 | +0.704 [+0.616, +0.794] | 0.151 [0.134, 0.168] | L20E001 | 172 (≥ 94) | +0.392 [+0.319, +0.465] | +0.109 [+0.019, +0.202] | +0.705 [+0.618, +0.792] | A | -0.017 [-0.056, +0.017] |
+
+
+#### dir_opt: direction on identical items: Phase-3 option swap (task 2)
+
+- Qwen3 (90 validation pairs, 90 pairs; drop 8.96): attention share 0.19 [0.16, 0.24], A_direct 0.05 [0.02, 0.08], M_direct 0.95 [0.92, 0.98], all-MoE M 0.81 [0.79, 0.83]; peaks MoE L41 0.185, attention L42 0.038 of the drop; expert L41E117 (Spec +0.46 [+0.29, +0.66], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.58, Spec +0.46 (discovery-active 136); top heads L38H18 +0.46, L38H21 +0.31, L42H30 +0.21; grid: MoE at the STR site peaks L0 0.18, attention at the final position L42 0.04.
+- Mixtral BOS (94 validation pairs, 94 pairs; drop 9.80): attention share 0.35 [0.33, 0.36], A_direct 0.31 [0.29, 0.33], M_direct 0.69 [0.67, 0.71], all-MoE M 0.75 [0.73, 0.78]; peaks MoE L20 0.146, attention L13 0.124 of the drop; expert L20E000 (Spec +0.90 [+0.79, +1.02], pattern A); Phase-3 WinoGrande expert L20E000: rescue +1.13, Spec +0.90 (discovery-active 187); top heads L25H9 +0.63, L19H13 +0.42, L13H4 +0.21; grid: MoE at the STR site peaks L0 0.95, attention at the final position L13 0.13.
+
+Tables: `results/tables/ext13base_dir_opt_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_dir_opt_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**dir_opt: headline numbers with cluster-bootstrap 95% CIs (unit = pair; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 90 | 90 | 0.19 [0.16, 0.24] | 0.278 [0.209, 0.399] | 1.172 [1.068, 1.320] | 0.048 [0.016, 0.080] | 0.952 [0.920, 0.984] | 0.811 [0.794, 0.829] | L41 0.185 | L42 0.038 |
+| Qwen3-30B-A3B-Base | main, all | 180 | 180 | 0.18 [0.16, 0.22] | 0.259 [0.218, 0.334] | 1.144 [1.063, 1.258] | 0.058 [0.033, 0.083] | 0.942 [0.917, 0.967] | 0.808 [0.794, 0.821] | L41 0.181 | L42 0.039 |
+| Qwen3-30B-A3B-Base | objects (main, all) | 166 | 166 | 0.18 [0.16, 0.21] | 0.255 [0.209, 0.333] | 1.164 [1.075, 1.276] | 0.044 [0.019, 0.070] | 0.956 [0.930, 0.981] | 0.814 [0.801, 0.827] | L41 0.185 | L42 0.038 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 89 | 89 | 0.14 [0.12, 0.18] | 0.192 [0.155, 0.264] | 1.138 [1.059, 1.271] | 0.003 [-0.036, 0.043] | 0.997 [0.957, 1.036] | 0.799 [0.781, 0.816] | L41 0.180 | L42 0.042 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 91 | 91 | 0.23 [0.20, 0.27] | 0.356 [0.287, 0.475] | 1.172 [1.038, 1.348] | 0.109 [0.080, 0.139] | 0.891 [0.861, 0.920] | 0.815 [0.796, 0.834] | L41 0.182 | L38 0.049 |
+| Mixtral-8x7B, BOS | main, validation | 94 | 94 | 0.35 [0.33, 0.36] | 0.678 [0.640, 0.721] | 1.273 [1.215, 1.334] | 0.307 [0.286, 0.329] | 0.693 [0.671, 0.714] | 0.754 [0.731, 0.777] | L20 0.146 | L13 0.124 |
+| Mixtral-8x7B, BOS | main, all | 188 | 188 | 0.34 [0.33, 0.35] | 0.681 [0.653, 0.710] | 1.307 [1.266, 1.349] | 0.307 [0.292, 0.323] | 0.693 [0.677, 0.708] | 0.757 [0.741, 0.772] | L20 0.153 | L13 0.133 |
+| Mixtral-8x7B, BOS | objects (main, all) | 187 | 187 | 0.34 [0.33, 0.35] | 0.680 [0.653, 0.709] | 1.307 [1.265, 1.351] | 0.307 [0.291, 0.323] | 0.693 [0.677, 0.709] | 0.758 [0.741, 0.773] | L20 0.153 | L13 0.133 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 86 | 86 | 0.33 [0.32, 0.34] | 0.679 [0.642, 0.719] | 1.383 [1.330, 1.433] | 0.277 [0.257, 0.298] | 0.723 [0.702, 0.743] | 0.781 [0.760, 0.802] | L20 0.159 | L13 0.139 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 102 | 102 | 0.35 [0.34, 0.37] | 0.683 [0.645, 0.724] | 1.246 [1.187, 1.306] | 0.332 [0.310, 0.354] | 0.668 [0.646, 0.690] | 0.737 [0.715, 0.759] | L20 0.149 | L13 0.127 |
+
+
+**dir_opt W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L41 | +1.611 [+1.390, +1.847] | 0.185 [0.165, 0.206] | L41E117 | 136 (≥ 90) | +0.584 [+0.414, +0.779] | +0.465 [+0.290, +0.662] | +1.623 [+1.403, +1.858] | A | +0.251 [+0.167, +0.340] |
+| Qwen3-30B-A3B-Base | main | interior | L41 | +1.611 [+1.390, +1.847] | 0.185 [0.165, 0.206] | L41E117 | 136 (≥ 90) | +0.584 [+0.414, +0.779] | +0.465 [+0.290, +0.662] | +1.623 [+1.403, +1.858] | A | +0.251 [+0.167, +0.340] |
+| Mixtral-8x7B, BOS | main | two_stage | L20 | +1.409 [+1.305, +1.515] | 0.146 [0.135, 0.157] | L20E000 | 187 (≥ 94) | +1.130 [+1.030, +1.231] | +0.903 [+0.793, +1.018] | +1.394 [+1.291, +1.500] | A | +0.186 [+0.149, +0.226] |
+| Mixtral-8x7B, BOS | main | interior | L20 | +1.409 [+1.305, +1.515] | 0.146 [0.135, 0.157] | L20E000 | 187 (≥ 94) | +1.130 [+1.030, +1.231] | +0.903 [+0.793, +1.018] | +1.394 [+1.291, +1.500] | A | +0.186 [+0.149, +0.226] |
+
+
+#### cp_nat: copy prefix on the natural Phase-3 twins (task 6)
+
+- Qwen3 (140 validation pairs, 70 Phase-3 twins; drop 6.28): attention share 0.21 [0.20, 0.24], A_direct -0.01 [-0.07, 0.04], M_direct 1.01 [0.96, 1.07], all-MoE M 0.79 [0.76, 0.81]; peaks MoE L43 0.163, attention L41 0.059 of the drop; expert L41E117 (Spec +0.42 [+0.35, +0.49], pattern A; replication selects L43E081); Phase-3 WinoGrande expert L41E117: rescue +0.48, Spec +0.42 (discovery-active 255); top heads L41H27 +0.58, L42H30 +0.14, L41H0 +0.13; share names 0.35 (22 pairs) vs objects 0.19 (264); grid: MoE at the STR site peaks L0 0.18, attention at the final position L41 0.06; copy attention of the top head L41H27: in-context answer 0.00 vs other attribute 0.00 (clean), 0.00 vs 0.00 (corrupted).
+- Mixtral BOS (204 validation pairs, 102 Phase-3 twins; drop 7.13): attention share 0.37 [0.36, 0.39], A_direct 0.38 [0.34, 0.41], M_direct 0.62 [0.59, 0.66], all-MoE M 0.73 [0.70, 0.76]; peaks MoE L20 0.167, attention L13 0.153 of the drop; expert L21E006 (Spec +0.07 [-0.02, +0.15], pattern B; replication selects L20E000); Phase-3 WinoGrande expert L20E000: rescue +1.00, Spec +0.84 (discovery-active 422); top heads L25H9 +0.53, L19H13 +0.36, L13H18 +0.24; share names 0.51 (36 pairs) vs objects 0.37 (384); grid: MoE at the STR site peaks L0 0.87, attention at the final position L13 0.16; copy attention of the top head L25H9: in-context answer 0.01 vs other attribute 0.01 (clean), 0.01 vs 0.01 (corrupted).
+
+Tables: `results/tables/ext13base_cp_nat_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`, `ext13base_cp_nat_w5_copy.md`; figures `results/figures/ext13base_cp_nat_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**cp_nat: headline numbers with cluster-bootstrap 95% CIs (unit = Phase-3 twin; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 140 | 70 | 0.21 [0.20, 0.24] | 0.326 [0.292, 0.403] | 1.207 [1.099, 1.352] | -0.013 [-0.068, 0.040] | 1.013 [0.960, 1.068] | 0.787 [0.762, 0.811] | L43 0.163 | L41 0.059 |
+| Qwen3-30B-A3B-Base | main, all | 286 | 143 | 0.20 [0.19, 0.23] | 0.290 [0.262, 0.354] | 1.156 [1.072, 1.260] | -0.002 [-0.045, 0.038] | 1.002 [0.962, 1.045] | 0.773 [0.753, 0.791] | L43 0.156 | L41 0.057 |
+| Qwen3-30B-A3B-Base | replication, validation | 158 | 79 | 0.23 [0.21, 0.27] | 0.336 [0.285, 0.430] | 1.120 [0.982, 1.285] | -0.018 [-0.076, 0.039] | 1.018 [0.961, 1.076] | 0.757 [0.729, 0.785] | L41 0.142 | L43 0.055 |
+| Qwen3-30B-A3B-Base | names (main, all) | 22 | 11 | 0.35 [0.30, 0.41] | 0.604 [0.503, 0.820] | 1.130 [0.911, 1.515] | 0.310 [0.194, 0.426] | 0.690 [0.574, 0.806] | 0.628 [0.529, 0.718] | L42 0.155 | L38 0.077 |
+| Qwen3-30B-A3B-Base | objects (main, all) | 264 | 132 | 0.19 [0.18, 0.22] | 0.278 [0.249, 0.339] | 1.164 [1.076, 1.271] | -0.032 [-0.073, 0.007] | 1.032 [0.993, 1.073] | 0.787 [0.770, 0.803] | L41 0.160 | L41 0.056 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 124 | 62 | 0.19 [0.17, 0.24] | 0.285 [0.243, 0.382] | 1.183 [1.057, 1.357] | -0.061 [-0.140, 0.014] | 1.061 [0.986, 1.140] | 0.757 [0.725, 0.783] | L43 0.165 | L43 0.056 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 162 | 81 | 0.22 [0.21, 0.25] | 0.331 [0.292, 0.405] | 1.144 [1.047, 1.266] | 0.036 [-0.011, 0.081] | 0.964 [0.919, 1.011] | 0.783 [0.757, 0.807] | L41 0.157 | L41 0.061 |
+| Mixtral-8x7B, BOS | main, validation | 204 | 102 | 0.37 [0.36, 0.39] | 0.811 [0.772, 0.855] | 1.355 [1.308, 1.404] | 0.378 [0.344, 0.414] | 0.622 [0.586, 0.656] | 0.731 [0.700, 0.759] | L20 0.167 | L13 0.153 |
+| Mixtral-8x7B, BOS | main, all | 420 | 210 | 0.38 [0.37, 0.39] | 0.810 [0.782, 0.841] | 1.313 [1.271, 1.354] | 0.396 [0.369, 0.424] | 0.604 [0.576, 0.631] | 0.711 [0.684, 0.733] | L20 0.158 | L13 0.158 |
+| Mixtral-8x7B, BOS | replication, validation | 222 | 111 | 0.38 [0.37, 0.40] | 0.817 [0.782, 0.856] | 1.325 [1.277, 1.379] | 0.406 [0.376, 0.436] | 0.594 [0.564, 0.624] | 0.707 [0.682, 0.731] | L20 0.157 | L13 0.145 |
+| Mixtral-8x7B, BOS | names (main, all) | 36 | 18 | 0.51 [0.45, 0.57] | 1.087 [0.990, 1.203] | 1.056 [0.850, 1.287] | 0.703 [0.584, 0.818] | 0.297 [0.182, 0.416] | 0.452 [0.301, 0.589] | L19 0.134 | L19 0.148 |
+| Mixtral-8x7B, BOS | objects (main, all) | 384 | 192 | 0.37 [0.36, 0.38] | 0.784 [0.758, 0.812] | 1.337 [1.300, 1.376] | 0.366 [0.343, 0.391] | 0.634 [0.609, 0.657] | 0.735 [0.717, 0.753] | L21 0.164 | L13 0.159 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 172 | 86 | 0.38 [0.36, 0.40] | 0.808 [0.762, 0.859] | 1.342 [1.275, 1.406] | 0.405 [0.359, 0.455] | 0.595 [0.545, 0.641] | 0.718 [0.672, 0.756] | L20 0.159 | L13 0.163 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 248 | 124 | 0.39 [0.37, 0.40] | 0.811 [0.776, 0.850] | 1.293 [1.241, 1.348] | 0.389 [0.357, 0.423] | 0.611 [0.577, 0.643] | 0.706 [0.676, 0.734] | L20 0.158 | L13 0.154 |
+
+
+**cp_nat W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L41 | +0.957 [+0.871, +1.043] | 0.160 [0.147, 0.173] | L41E117 | 255 (≥ 146) | +0.484 [+0.418, +0.553] | +0.418 [+0.351, +0.486] | +0.953 [+0.865, +1.042] | A | +0.189 [+0.159, +0.219] |
+| Qwen3-30B-A3B-Base | main | interior | L41 | +0.957 [+0.871, +1.043] | 0.160 [0.147, 0.173] | L41E117 | 255 (≥ 146) | +0.484 [+0.418, +0.553] | +0.418 [+0.351, +0.486] | +0.953 [+0.865, +1.042] | A | +0.189 [+0.159, +0.219] |
+| Qwen3-30B-A3B-Base | rep | two_stage | L43 | +0.828 [+0.737, +0.920] | 0.140 [0.126, 0.154] | L43E081 | 324 (≥ 162) | +0.477 [+0.409, +0.548] | +0.420 [+0.346, +0.497] | +0.828 [+0.740, +0.917] | A |  |
+| Qwen3-30B-A3B-Base | rep | interior | L43 | +0.828 [+0.737, +0.920] | 0.140 [0.126, 0.154] | L43E081 | 324 (≥ 162) | +0.477 [+0.409, +0.548] | +0.420 [+0.346, +0.497] | +0.828 [+0.740, +0.917] | A |  |
+| Mixtral-8x7B, BOS | main | two_stage | L21 | +1.148 [+1.075, +1.223] | 0.160 [0.151, 0.170] | L21E006 | 396 (≥ 216) | +0.566 [+0.515, +0.617] | +0.067 [-0.016, +0.150] | +1.143 [+1.070, +1.218] | B | +0.077 [+0.054, +0.100] |
+| Mixtral-8x7B, BOS | main | interior | L21 | +1.148 [+1.075, +1.223] | 0.160 [0.151, 0.170] | L21E006 | 396 (≥ 216) | +0.566 [+0.515, +0.617] | +0.067 [-0.016, +0.150] | +1.143 [+1.070, +1.218] | B | +0.077 [+0.054, +0.100] |
+| Mixtral-8x7B, BOS | rep | two_stage | L20 | +1.207 [+1.140, +1.271] | 0.157 [0.149, 0.165] | L20E000 | 422 (≥ 214) | +0.997 [+0.932, +1.061] | +0.835 [+0.769, +0.901] | +1.194 [+1.129, +1.256] | A |  |
+| Mixtral-8x7B, BOS | rep | interior | L20 | +1.207 [+1.140, +1.271] | 0.157 [0.149, 0.165] | L20E000 | 422 (≥ 214) | +0.997 [+0.932, +1.061] | +0.835 [+0.769, +0.901] | +1.194 [+1.129, +1.256] | A |  |
+
+
+#### cp_vt_orig: copy prefix on the verb templates, original verb (task 6)
+
+- Qwen3 (128 validation pairs, 13 seeds; drop 5.90): attention share 0.31 [0.26, 0.38], A_direct 0.11 [-0.01, 0.28], M_direct 0.89 [0.72, 1.01], all-MoE M 0.69 [0.57, 0.79]; peaks MoE L42 0.130, attention L41 0.081 of the drop; expert L39E001 (Spec +0.12 [+0.07, +0.17], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.01, Spec -0.08 (discovery-active 138); top heads L41H0 +0.43, L42H30 +0.41, L41H5 +0.27; grid: MoE at the STR site peaks L37 0.06, attention at the final position L41 0.09; copy attention of the top head L41H0: in-context answer 0.00 vs other attribute 0.00 (clean), 0.00 vs 0.00 (corrupted).
+- Mixtral BOS (128 validation pairs, 10 seeds; drop 5.46): attention share 0.39 [0.33, 0.47], A_direct 0.47 [0.39, 0.60], M_direct 0.53 [0.40, 0.61], all-MoE M 0.54 [0.38, 0.68]; peaks MoE L19 0.194, attention L19 0.146 of the drop; expert L19E006 (Spec +0.51 [+0.39, +0.62], pattern A); Phase-3 WinoGrande expert L20E000: rescue +0.47, Spec +0.21 (discovery-active 179); top heads L13H18 +0.41, L19H13 +0.23, L19H1 +0.19; grid: MoE at the STR site peaks L0 0.98, attention at the final position L19 0.17; copy attention of the top head L13H18: in-context answer 0.01 vs other attribute 0.00 (clean), 0.00 vs 0.01 (corrupted).
+
+Tables: `results/tables/ext13base_cp_vt_orig_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`, `ext13base_cp_vt_orig_w5_copy.md`; figures `results/figures/ext13base_cp_vt_orig_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**cp_vt_orig: headline numbers with cluster-bootstrap 95% CIs (unit = seed; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 13 | 0.31 [0.26, 0.38] | 0.562 [0.422, 0.824] | 1.277 [1.074, 1.611] | 0.115 [-0.011, 0.282] | 0.885 [0.718, 1.011] | 0.693 [0.572, 0.789] | L42 0.130 | L41 0.081 |
+| Qwen3-30B-A3B-Base | main, all | 256 | 27 | 0.29 [0.25, 0.35] | 0.539 [0.437, 0.698] | 1.311 [1.155, 1.555] | 0.103 [-0.005, 0.229] | 0.897 [0.771, 1.005] | 0.690 [0.586, 0.775] | L42 0.144 | L41 0.086 |
+| Qwen3-30B-A3B-Base | names (main, all) | 256 | 27 | 0.29 [0.25, 0.35] | 0.539 [0.437, 0.698] | 1.311 [1.155, 1.555] | 0.103 [-0.005, 0.229] | 0.897 [0.771, 1.005] | 0.690 [0.586, 0.775] | L42 0.144 | L41 0.086 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 191 | 25 | 0.29 [0.24, 0.35] | 0.541 [0.443, 0.720] | 1.340 [1.160, 1.618] | 0.092 [-0.008, 0.215] | 0.908 [0.785, 1.008] | 0.706 [0.618, 0.780] | L42 0.144 | L41 0.090 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 65 | 20 | 0.31 [0.24, 0.37] | 0.564 [0.415, 0.753] | 1.272 [1.133, 1.523] | 0.132 [-0.025, 0.323] | 0.868 [0.677, 1.025] | 0.646 [0.457, 0.785] | L42 0.145 | L41 0.074 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 10 | 0.39 [0.33, 0.47] | 0.918 [0.802, 1.092] | 1.414 [1.157, 1.690] | 0.471 [0.390, 0.598] | 0.529 [0.402, 0.610] | 0.544 [0.379, 0.677] | L19 0.194 | L19 0.146 |
+| Mixtral-8x7B, BOS | main, all | 256 | 19 | 0.42 [0.38, 0.47] | 0.954 [0.855, 1.071] | 1.308 [1.144, 1.487] | 0.532 [0.432, 0.650] | 0.468 [0.350, 0.568] | 0.522 [0.409, 0.624] | L19 0.173 | L19 0.172 |
+| Mixtral-8x7B, BOS | names (main, all) | 256 | 19 | 0.42 [0.38, 0.47] | 0.954 [0.855, 1.071] | 1.308 [1.144, 1.487] | 0.532 [0.432, 0.650] | 0.468 [0.350, 0.568] | 0.522 [0.409, 0.624] | L19 0.173 | L19 0.172 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 218 | 19 | 0.42 [0.37, 0.47] | 0.936 [0.836, 1.061] | 1.308 [1.141, 1.495] | 0.517 [0.428, 0.629] | 0.483 [0.371, 0.572] | 0.532 [0.418, 0.631] | L19 0.175 | L19 0.172 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 38 | 12 | 0.45 [0.40, 0.51] | 1.071 [0.977, 1.160] | 1.310 [1.075, 1.603] | 0.628 [0.444, 0.791] | 0.372 [0.209, 0.556] | 0.457 [0.318, 0.603] | L19 0.164 | L19 0.173 |
+
+
+**cp_vt_orig W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L39 | +0.543 [+0.439, +0.639] | 0.097 [0.079, 0.113] | L39E001 | 256 (≥ 128) | +0.170 [+0.128, +0.215] | +0.121 [+0.074, +0.168] | +0.560 [+0.471, +0.643] | A | +0.103 [+0.071, +0.135] |
+| Qwen3-30B-A3B-Base | main | interior | L39 | +0.543 [+0.439, +0.639] | 0.097 [0.079, 0.113] | L39E001 | 256 (≥ 128) | +0.170 [+0.128, +0.215] | +0.121 [+0.074, +0.168] | +0.560 [+0.471, +0.643] | A | +0.103 [+0.071, +0.135] |
+| Mixtral-8x7B, BOS | main | two_stage | L19 | +1.023 [+0.912, +1.128] | 0.194 [0.181, 0.206] | L19E006 | 218 (≥ 128) | +0.740 [+0.631, +0.846] | +0.505 [+0.392, +0.617] | +1.014 [+0.906, +1.117] | A | +0.090 [+0.058, +0.122] |
+| Mixtral-8x7B, BOS | main | interior | L19 | +1.023 [+0.912, +1.128] | 0.194 [0.181, 0.206] | L19E006 | 218 (≥ 128) | +0.740 [+0.631, +0.846] | +0.505 [+0.392, +0.617] | +1.014 [+0.906, +1.117] | A | +0.090 [+0.058, +0.122] |
+
+
+#### cp_vt_neu: copy prefix on the verb templates, neutral verb (task 6)
+
+- Qwen3 (128 validation pairs, 8 seeds; drop 5.51): attention share 0.26 [0.23, 0.38], A_direct 0.09 [-0.10, 0.27], M_direct 0.91 [0.73, 1.10], all-MoE M 0.74 [0.62, 0.83]; peaks MoE L43 0.180, attention L42 0.098 of the drop; expert L42E123 (Spec -0.00 [-0.04, +0.03], pattern B); Phase-3 WinoGrande expert L41E117: rescue +0.01, Spec -0.09 (discovery-active 120); top heads L41H0 +0.57, L42H30 +0.35, L42H27 +0.23; grid: MoE at the STR site peaks L37 0.05, attention at the final position L42 0.08; copy attention of the top head L41H0: in-context answer 0.00 vs other attribute 0.00 (clean), 0.00 vs 0.00 (corrupted).
+- Mixtral BOS (128 validation pairs, 8 seeds; drop 5.67): attention share 0.38 [0.33, 0.42], A_direct 0.43 [0.37, 0.52], M_direct 0.57 [0.48, 0.63], all-MoE M 0.46 [0.37, 0.63]; peaks MoE L21 0.171, attention L13 0.132 of the drop; expert L19E006 (Spec +0.05 [-0.03, +0.13], pattern B); Phase-3 WinoGrande expert L20E000: rescue +0.20, Spec -0.25 (discovery-active 173); top heads L13H18 +0.37, L19H13 +0.35, L19H12 +0.15; grid: MoE at the STR site peaks L0 0.99, attention at the final position L19 0.17; copy attention of the top head L13H18: in-context answer 0.01 vs other attribute 0.00 (clean), 0.00 vs 0.01 (corrupted).
+
+Tables: `results/tables/ext13base_cp_vt_neu_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`, `ext13base_cp_vt_neu_w5_copy.md`; figures `results/figures/ext13base_cp_vt_neu_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**cp_vt_neu: headline numbers with cluster-bootstrap 95% CIs (unit = seed; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 8 | 0.26 [0.23, 0.38] | 0.430 [0.364, 0.695] | 1.221 [1.000, 1.669] | 0.091 [-0.100, 0.271] | 0.909 [0.729, 1.100] | 0.738 [0.625, 0.828] | L43 0.180 | L42 0.098 |
+| Qwen3-30B-A3B-Base | main, all | 256 | 20 | 0.28 [0.24, 0.36] | 0.470 [0.389, 0.651] | 1.193 [1.052, 1.449] | 0.114 [-0.026, 0.278] | 0.886 [0.722, 1.026] | 0.676 [0.555, 0.767] | L43 0.154 | L42 0.080 |
+| Qwen3-30B-A3B-Base | names (main, all) | 256 | 20 | 0.28 [0.24, 0.36] | 0.470 [0.389, 0.651] | 1.193 [1.052, 1.449] | 0.114 [-0.026, 0.278] | 0.886 [0.722, 1.026] | 0.676 [0.555, 0.767] | L43 0.154 | L42 0.080 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 186 | 20 | 0.27 [0.23, 0.35] | 0.443 [0.377, 0.614] | 1.203 [1.007, 1.483] | 0.098 [-0.035, 0.249] | 0.902 [0.751, 1.035] | 0.684 [0.593, 0.758] | L43 0.157 | L42 0.078 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 70 | 13 | 0.32 [0.24, 0.40] | 0.574 [0.411, 0.919] | 1.213 [1.125, 1.457] | 0.152 [-0.033, 0.389] | 0.848 [0.611, 1.033] | 0.657 [0.457, 0.802] | L41 0.152 | L42 0.084 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 8 | 0.38 [0.33, 0.42] | 0.823 [0.749, 1.021] | 1.358 [1.332, 1.579] | 0.434 [0.370, 0.519] | 0.566 [0.481, 0.630] | 0.463 [0.372, 0.635] | L21 0.171 | L13 0.132 |
+| Mixtral-8x7B, BOS | main, all | 256 | 16 | 0.41 [0.37, 0.44] | 0.913 [0.793, 1.108] | 1.332 [1.258, 1.437] | 0.461 [0.379, 0.571] | 0.539 [0.429, 0.621] | 0.516 [0.388, 0.630] | L19 0.155 | L19 0.165 |
+| Mixtral-8x7B, BOS | names (main, all) | 256 | 16 | 0.41 [0.37, 0.44] | 0.913 [0.793, 1.108] | 1.332 [1.258, 1.437] | 0.461 [0.379, 0.571] | 0.539 [0.429, 0.621] | 0.516 [0.388, 0.630] | L19 0.155 | L19 0.165 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 234 | 15 | 0.41 [0.37, 0.44] | 0.913 [0.787, 1.107] | 1.340 [1.265, 1.447] | 0.455 [0.379, 0.563] | 0.545 [0.437, 0.621] | 0.524 [0.401, 0.637] | L19 0.156 | L19 0.168 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 22 | 7 | 0.42 [0.37, 0.49] | 0.920 [0.789, 1.146] | 1.264 [1.123, 1.477] | 0.516 [0.375, 0.696] | 0.484 [0.304, 0.625] | 0.431 [0.276, 0.594] | L21 0.154 | L19 0.133 |
+
+
+**cp_vt_neu W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L42 | +0.618 [+0.529, +0.710] | 0.110 [0.097, 0.124] | L42E123 | 256 (≥ 128) | +0.080 [+0.048, +0.111] | -0.002 [-0.036, +0.034] | +0.607 [+0.516, +0.703] | B | -0.057 [-0.090, -0.024] |
+| Qwen3-30B-A3B-Base | main | interior | L42 | +0.618 [+0.529, +0.710] | 0.110 [0.097, 0.124] | L42E123 | 256 (≥ 128) | +0.080 [+0.048, +0.111] | -0.002 [-0.036, +0.034] | +0.607 [+0.516, +0.703] | B | -0.057 [-0.090, -0.024] |
+| Mixtral-8x7B, BOS | main | two_stage | L19 | +0.810 [+0.754, +0.868] | 0.150 [0.144, 0.156] | L19E006 | 221 (≥ 128) | +0.390 [+0.331, +0.451] | +0.046 [-0.027, +0.125] | +0.812 [+0.757, +0.871] | B | -0.040 [-0.075, -0.006] |
+| Mixtral-8x7B, BOS | main | interior | L19 | +0.810 [+0.754, +0.868] | 0.150 [0.144, 0.156] | L19E006 | 221 (≥ 128) | +0.390 [+0.331, +0.451] | +0.046 [-0.027, +0.125] | +0.812 [+0.757, +0.871] | B | -0.040 [-0.075, -0.006] |
+
+
+#### vt_e2a_orig: verb templates, entity → attribute, original verb (task 4)
+
+- Qwen3 (128 validation pairs, 17 seeds; drop 6.73): attention share 0.28 [0.20, 0.36], A_direct 0.13 [0.08, 0.17], M_direct 0.87 [0.83, 0.92], all-MoE M 0.82 [0.79, 0.86]; peaks MoE L43 0.168, attention L42 0.049 of the drop; expert L39E121 (Spec +0.24 [+0.14, +0.36], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.08, Spec -0.05 (discovery-active 81); top heads L42H30 +0.32, L38H3 +0.30, L41H27 +0.29; grid: MoE at the STR site peaks L13 0.04, attention at the final position L42 0.05.
+- Mixtral BOS (128 validation pairs, 18 seeds; drop 6.36): attention share 0.41 [0.36, 0.46], A_direct 0.38 [0.31, 0.47], M_direct 0.62 [0.53, 0.69], all-MoE M 0.68 [0.58, 0.76]; peaks MoE L19 0.184, attention L19 0.152 of the drop; expert L19E006 (Spec +0.62 [+0.50, +0.74], pattern A); Phase-3 WinoGrande expert L20E000: rescue +0.53, Spec +0.19 (discovery-active 201); top heads L13H18 +0.44, L19H13 +0.37, L19H12 +0.30; grid: MoE at the STR site peaks L0 0.98, attention at the final position L19 0.15.
+
+Tables: `results/tables/ext13base_vt_e2a_orig_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_vt_e2a_orig_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**vt_e2a_orig: headline numbers with cluster-bootstrap 95% CIs (unit = seed; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 17 | 0.28 [0.20, 0.36] | 0.519 [0.365, 0.773] | 1.335 [1.119, 1.650] | 0.128 [0.080, 0.166] | 0.872 [0.834, 0.920] | 0.823 [0.788, 0.862] | L43 0.168 | L42 0.049 |
+| Qwen3-30B-A3B-Base | main, all | 256 | 33 | 0.27 [0.22, 0.33] | 0.481 [0.391, 0.613] | 1.284 [1.074, 1.527] | 0.110 [0.078, 0.141] | 0.890 [0.859, 0.922] | 0.818 [0.785, 0.850] | L42 0.143 | L42 0.056 |
+| Qwen3-30B-A3B-Base | names (main, all) | 256 | 33 | 0.27 [0.22, 0.33] | 0.481 [0.391, 0.613] | 1.284 [1.074, 1.527] | 0.110 [0.078, 0.141] | 0.890 [0.859, 0.922] | 0.818 [0.785, 0.850] | L42 0.143 | L42 0.056 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 211 | 32 | 0.27 [0.22, 0.33] | 0.476 [0.385, 0.613] | 1.312 [1.093, 1.548] | 0.112 [0.080, 0.142] | 0.888 [0.858, 0.920] | 0.820 [0.790, 0.850] | L42 0.141 | L42 0.052 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 45 | 23 | 0.30 [0.22, 0.38] | 0.514 [0.374, 0.703] | 1.182 [0.999, 1.524] | 0.099 [0.051, 0.138] | 0.901 [0.862, 0.949] | 0.810 [0.752, 0.871] | L43 0.154 | L42 0.072 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 18 | 0.41 [0.36, 0.46] | 0.889 [0.776, 1.022] | 1.293 [1.137, 1.478] | 0.383 [0.314, 0.471] | 0.617 [0.529, 0.686] | 0.676 [0.576, 0.757] | L19 0.184 | L19 0.152 |
+| Mixtral-8x7B, BOS | main, all | 256 | 32 | 0.39 [0.36, 0.43] | 0.877 [0.806, 0.953] | 1.373 [1.204, 1.547] | 0.353 [0.305, 0.411] | 0.647 [0.589, 0.695] | 0.714 [0.645, 0.774] | L19 0.189 | L19 0.150 |
+| Mixtral-8x7B, BOS | names (main, all) | 256 | 32 | 0.39 [0.36, 0.43] | 0.877 [0.806, 0.953] | 1.373 [1.204, 1.547] | 0.353 [0.305, 0.411] | 0.647 [0.589, 0.695] | 0.714 [0.645, 0.774] | L19 0.189 | L19 0.150 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 231 | 31 | 0.39 [0.36, 0.42] | 0.882 [0.815, 0.959] | 1.375 [1.214, 1.543] | 0.350 [0.306, 0.399] | 0.650 [0.601, 0.694] | 0.720 [0.658, 0.774] | L19 0.189 | L19 0.151 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 25 | 15 | 0.38 [0.31, 0.46] | 0.828 [0.681, 0.974] | 1.364 [1.084, 1.662] | 0.387 [0.271, 0.543] | 0.613 [0.457, 0.729] | 0.657 [0.479, 0.798] | L19 0.182 | L19 0.140 |
+
+
+**vt_e2a_orig W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L39 | +0.805 [+0.650, +0.972] | 0.124 [0.101, 0.148] | L39E121 | 206 (≥ 128) | +0.324 [+0.221, +0.441] | +0.241 [+0.138, +0.359] | +0.831 [+0.681, +0.992] | A | +0.054 [+0.018, +0.093] |
+| Qwen3-30B-A3B-Base | main | interior | L39 | +0.805 [+0.650, +0.972] | 0.124 [0.101, 0.148] | L39E121 | 206 (≥ 128) | +0.324 [+0.221, +0.441] | +0.241 [+0.138, +0.359] | +0.831 [+0.681, +0.992] | A | +0.054 [+0.018, +0.093] |
+| Mixtral-8x7B, BOS | main | two_stage | L19 | +1.199 [+1.066, +1.332] | 0.184 [0.170, 0.197] | L19E006 | 248 (≥ 128) | +0.880 [+0.759, +1.002] | +0.620 [+0.497, +0.744] | +1.170 [+1.043, +1.298] | A | +0.139 [+0.096, +0.183] |
+| Mixtral-8x7B, BOS | main | interior | L19 | +1.199 [+1.066, +1.332] | 0.184 [0.170, 0.197] | L19E006 | 248 (≥ 128) | +0.880 [+0.759, +1.002] | +0.620 [+0.497, +0.744] | +1.170 [+1.043, +1.298] | A | +0.139 [+0.096, +0.183] |
+
+
+#### vt_e2a_neu: verb templates, entity → attribute, neutral verb (task 4)
+
+- Qwen3 (128 validation pairs, 12 seeds; drop 6.32): attention share 0.22 [0.17, 0.30], A_direct 0.13 [0.05, 0.19], M_direct 0.87 [0.81, 0.95], all-MoE M 0.82 [0.77, 0.87]; peaks MoE L43 0.170, attention L42 0.061 of the drop; expert L42E123 (Spec +0.23 [+0.16, +0.30], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.10, Spec +0.00 (discovery-active 122); top heads L38H3 +0.35, L42H30 +0.29, L41H0 +0.22; grid: MoE at the STR site peaks L0 0.05, attention at the final position L42 0.06.
+- Mixtral BOS (128 validation pairs, 12 seeds; drop 5.70): attention share 0.42 [0.37, 0.48], A_direct 0.42 [0.32, 0.55], M_direct 0.58 [0.45, 0.68], all-MoE M 0.62 [0.48, 0.75]; peaks MoE L19 0.174, attention L19 0.144 of the drop; expert L19E006 (Spec +0.29 [+0.19, +0.39], pattern A); Phase-3 WinoGrande expert L20E000: rescue +0.50, Spec +0.10 (discovery-active 196); top heads L13H18 +0.40, L19H13 +0.35, L19H12 +0.21; grid: MoE at the STR site peaks L0 0.99, attention at the final position L19 0.15.
+
+Tables: `results/tables/ext13base_vt_e2a_neu_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_vt_e2a_neu_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**vt_e2a_neu: headline numbers with cluster-bootstrap 95% CIs (unit = seed; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 128 | 12 | 0.22 [0.17, 0.30] | 0.383 [0.330, 0.531] | 1.381 [1.152, 1.782] | 0.130 [0.053, 0.193] | 0.870 [0.807, 0.947] | 0.817 [0.767, 0.866] | L43 0.170 | L42 0.061 |
+| Qwen3-30B-A3B-Base | main, all | 256 | 28 | 0.25 [0.20, 0.31] | 0.452 [0.381, 0.554] | 1.366 [1.179, 1.610] | 0.115 [0.070, 0.156] | 0.885 [0.844, 0.930] | 0.813 [0.775, 0.850] | L42 0.147 | L42 0.059 |
+| Qwen3-30B-A3B-Base | names (main, all) | 256 | 28 | 0.25 [0.20, 0.31] | 0.452 [0.381, 0.554] | 1.366 [1.179, 1.610] | 0.115 [0.070, 0.156] | 0.885 [0.844, 0.930] | 0.813 [0.775, 0.850] | L42 0.147 | L42 0.059 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 197 | 27 | 0.24 [0.20, 0.30] | 0.446 [0.385, 0.547] | 1.394 [1.220, 1.639] | 0.111 [0.066, 0.150] | 0.889 [0.850, 0.934] | 0.817 [0.783, 0.850] | L39 0.143 | L42 0.056 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 59 | 24 | 0.27 [0.19, 0.36] | 0.480 [0.342, 0.659] | 1.299 [1.079, 1.652] | 0.128 [0.064, 0.178] | 0.872 [0.822, 0.936] | 0.804 [0.748, 0.862] | L42 0.163 | L42 0.067 |
+| Mixtral-8x7B, BOS | main, validation | 128 | 12 | 0.42 [0.37, 0.48] | 0.932 [0.818, 1.073] | 1.278 [1.091, 1.475] | 0.422 [0.319, 0.548] | 0.578 [0.452, 0.681] | 0.624 [0.477, 0.747] | L19 0.174 | L19 0.144 |
+| Mixtral-8x7B, BOS | main, all | 256 | 23 | 0.40 [0.36, 0.45] | 0.891 [0.793, 0.999] | 1.335 [1.131, 1.567] | 0.391 [0.328, 0.469] | 0.609 [0.531, 0.672] | 0.673 [0.574, 0.752] | L19 0.178 | L19 0.152 |
+| Mixtral-8x7B, BOS | names (main, all) | 256 | 23 | 0.40 [0.36, 0.45] | 0.891 [0.793, 0.999] | 1.335 [1.131, 1.567] | 0.391 [0.328, 0.469] | 0.609 [0.531, 0.672] | 0.673 [0.574, 0.752] | L19 0.178 | L19 0.152 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 228 | 21 | 0.40 [0.36, 0.45] | 0.900 [0.788, 1.011] | 1.355 [1.144, 1.581] | 0.378 [0.324, 0.440] | 0.622 [0.560, 0.676] | 0.690 [0.608, 0.755] | L19 0.181 | L19 0.154 |
+| Mixtral-8x7B, BOS | not neutral (main, all) | 28 | 14 | 0.41 [0.36, 0.47] | 0.833 [0.731, 0.944] | 1.195 [0.982, 1.479] | 0.483 [0.338, 0.643] | 0.517 [0.357, 0.662] | 0.551 [0.367, 0.730] | L20 0.173 | L19 0.131 |
+
+
+**vt_e2a_neu W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L42 | +0.801 [+0.691, +0.914] | 0.132 [0.115, 0.149] | L42E123 | 256 (≥ 128) | +0.288 [+0.217, +0.363] | +0.225 [+0.156, +0.299] | +0.781 [+0.670, +0.895] | A | +0.120 [+0.081, +0.160] |
+| Qwen3-30B-A3B-Base | main | interior | L42 | +0.801 [+0.691, +0.914] | 0.132 [0.115, 0.149] | L42E123 | 256 (≥ 128) | +0.288 [+0.217, +0.363] | +0.225 [+0.156, +0.299] | +0.781 [+0.670, +0.895] | A | +0.120 [+0.081, +0.160] |
+| Mixtral-8x7B, BOS | main | two_stage | L19 | +1.014 [+0.906, +1.118] | 0.174 [0.162, 0.187] | L19E006 | 245 (≥ 128) | +0.609 [+0.523, +0.695] | +0.290 [+0.190, +0.390] | +0.993 [+0.890, +1.093] | A | +0.016 [-0.022, +0.051] |
+| Mixtral-8x7B, BOS | main | interior | L19 | +1.014 [+0.906, +1.118] | 0.174 [0.162, 0.187] | L19E006 | 245 (≥ 128) | +0.609 [+0.523, +0.695] | +0.290 [+0.190, +0.390] | +0.993 [+0.890, +1.093] | A | +0.016 [-0.022, +0.051] |
+
+
+#### vt_a2e_orig: verb templates, attribute → entity fill-in-the-blank, original verb (task 5)
+
+- Qwen3 (37 validation pairs, 5 seeds; drop 3.38): attention share 0.79 [0.64, 0.80], A_direct 1.47 [1.34, 1.55], M_direct -0.47 [-0.55, -0.34], all-MoE M 0.21 [0.19, 0.53]; peaks MoE L37 0.080, attention L39 0.374 of the drop; expert L37E032 (Spec +0.17 [+0.13, +0.21], pattern A); Phase-3 WinoGrande expert L41E117: rescue +0.00, Spec -0.00 (discovery-active 0); top heads L42H10 +1.13, L43H24 +0.54, L39H27 +0.51; grid: MoE at the STR site peaks L2 0.29, attention at the final position L43 0.35.
+
+Tables: `results/tables/ext13base_vt_a2e_orig_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_vt_a2e_orig_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**vt_a2e_orig: headline numbers with cluster-bootstrap 95% CIs (unit = seed; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 37 | 5 | 0.79 [0.64, 0.80] | 2.331 [2.230, 3.186] | 0.623 [0.568, 1.723] | 1.469 [1.342, 1.551] | -0.469 [-0.551, -0.342] | 0.212 [0.190, 0.529] | L37 0.080 | L39 0.374 |
+| Qwen3-30B-A3B-Base | main, all | 97 | 13 | 0.76 [0.73, 0.80] | 2.309 [2.063, 2.509] | 0.711 [0.561, 0.927] | 1.507 [1.418, 1.592] | -0.507 [-0.592, -0.418] | 0.196 [0.164, 0.274] | L37 0.089 | L43 0.344 |
+| Qwen3-30B-A3B-Base | names (main, all) | 97 | 13 | 0.76 [0.73, 0.80] | 2.309 [2.063, 2.509] | 0.711 [0.561, 0.927] | 1.507 [1.418, 1.592] | -0.507 [-0.592, -0.418] | 0.196 [0.164, 0.274] | L37 0.089 | L43 0.344 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 77 | 12 | 0.76 [0.72, 0.80] | 2.356 [2.158, 2.529] | 0.758 [0.546, 0.963] | 1.524 [1.449, 1.595] | -0.524 [-0.595, -0.449] | 0.192 [0.158, 0.263] | L37 0.093 | L43 0.334 |
+| Qwen3-30B-A3B-Base | not neutral (main, all) | 20 | 5 | 0.78 [0.75, 0.80] | 2.207 [1.876, 2.482] | 0.619 [0.493, 0.815] | 1.447 [1.323, 1.572] | -0.447 [-0.572, -0.323] | 0.211 [0.144, 0.344] | L42 0.079 | L43 0.380 |
+
+
+**vt_a2e_orig W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L37 | +0.294 [+0.240, +0.350] | 0.080 [0.067, 0.095] | L37E032 | 120 (≥ 60) | +0.177 [+0.132, +0.225] | +0.167 [+0.128, +0.207] | +0.252 [+0.193, +0.309] | A | +0.025 [-0.008, +0.057] |
+| Qwen3-30B-A3B-Base | main | interior | L37 | +0.294 [+0.240, +0.350] | 0.080 [0.067, 0.095] | L37E032 | 120 (≥ 60) | +0.177 [+0.132, +0.225] | +0.167 [+0.128, +0.207] | +0.252 [+0.193, +0.309] | A | +0.025 [-0.008, +0.057] |
+
+
+#### f2e: attribute → entity, natural sentence cut at a final blank (task 3)
+
+- Qwen3 (32 validation pairs, 32 pairs; drop 8.22): attention share 0.69 [0.60, 0.75], A_direct 0.99 [0.87, 1.12], M_direct 0.01 [-0.12, 0.13], all-MoE M 0.21 [0.05, 0.35]; peaks MoE L37 0.072, attention L42 0.209 of the drop; expert L43E036 (Spec +0.15 [+0.07, +0.25], pattern A); Phase-3 WinoGrande expert L41E117: rescue -0.00, Spec -0.07 (discovery-active 2); top heads L42H10 +0.98, L43H28 +0.58, L42H12 +0.48; grid: MoE at the STR site peaks L0 0.25, attention at the final position L42 0.20.
+- Mixtral BOS (18 validation pairs, 18 pairs; drop 7.57): attention share 0.65 [0.59, 0.70], A_direct 1.35 [1.16, 1.55], M_direct -0.35 [-0.55, -0.16], all-MoE M -0.06 [-0.34, 0.19]; peaks MoE L19 0.084, attention L19 0.247 of the drop; expert L19E004 (Spec +0.35 [+0.16, +0.55], pattern A); Phase-3 WinoGrande expert L20E000: rescue +0.03, Spec -0.17 (discovery-active 11); top heads L20H21 +0.80, L18H10 +0.70, L16H0 +0.68; grid: MoE at the STR site peaks L0 0.40, attention at the final position L19 0.25.
+
+Tables: `results/tables/ext13base_f2e_{descriptors,headline,w2_peaks,w2_strata,w4,dla,w6_experts,w6_joint,w6_fixed,w5_heads,w3_sites}.md`; figures `results/figures/ext13base_f2e_{w2_curves,w3_grid_<proto>,w5_heads,w4_dla}.png`.
+
+**f2e: headline numbers with cluster-bootstrap 95% CIs (unit = pair; 5,000 resamples)**
+
+| Model | Set | Pairs | Units | Attention share (AUC+) | AUC+ attention / drop | AUC+ MoE / drop | A_direct / drop | M_direct / drop | All-MoE M / drop | MoE peak (layer, / drop) | Attention peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main, validation | 32 | 32 | 0.69 [0.60, 0.75] | 1.300 [1.109, 1.646] | 0.586 [0.394, 1.020] | 0.986 [0.865, 1.118] | 0.014 [-0.118, 0.135] | 0.211 [0.051, 0.352] | L37 0.072 | L42 0.209 |
+| Qwen3-30B-A3B-Base | main, all | 64 | 64 | 0.68 [0.62, 0.72] | 1.116 [1.006, 1.309] | 0.530 [0.415, 0.752] | 0.992 [0.909, 1.083] | 0.008 [-0.083, 0.091] | 0.150 [0.053, 0.242] | L43 0.071 | L42 0.205 |
+| Qwen3-30B-A3B-Base | objects (main, all) | 55 | 55 | 0.67 [0.60, 0.72] | 1.026 [0.924, 1.189] | 0.501 [0.391, 0.740] | 0.935 [0.851, 1.021] | 0.065 [-0.021, 0.149] | 0.084 [-0.006, 0.173] | L43 0.081 | L42 0.206 |
+| Qwen3-30B-A3B-Base | probe-neutral (main, all) | 64 | 64 | 0.68 [0.62, 0.72] | 1.116 [1.006, 1.309] | 0.530 [0.415, 0.752] | 0.992 [0.909, 1.083] | 0.008 [-0.083, 0.091] | 0.150 [0.053, 0.242] | L43 0.071 | L42 0.205 |
+| Mixtral-8x7B, BOS | main, validation | 18 | 18 | 0.65 [0.59, 0.70] | 1.356 [1.144, 1.630] | 0.738 [0.554, 0.952] | 1.347 [1.162, 1.546] | -0.347 [-0.546, -0.162] | -0.062 [-0.337, 0.189] | L19 0.084 | L19 0.247 |
+| Mixtral-8x7B, BOS | main, all | 36 | 36 | 0.67 [0.64, 0.70] | 1.311 [1.188, 1.461] | 0.650 [0.550, 0.767] | 1.320 [1.216, 1.432] | -0.320 [-0.432, -0.216] | -0.069 [-0.216, 0.075] | L19 0.084 | L19 0.247 |
+| Mixtral-8x7B, BOS | objects (main, all) | 31 | 31 | 0.67 [0.63, 0.70] | 1.223 [1.130, 1.329] | 0.604 [0.514, 0.708] | 1.302 [1.185, 1.429] | -0.302 [-0.429, -0.185] | -0.173 [-0.297, -0.065] | L19 0.087 | L19 0.206 |
+| Mixtral-8x7B, BOS | probe-neutral (main, all) | 36 | 36 | 0.67 [0.64, 0.70] | 1.311 [1.188, 1.461] | 0.650 [0.550, 0.767] | 1.320 [1.216, 1.432] | -0.320 [-0.432, -0.216] | -0.069 [-0.216, 0.075] | L19 0.084 | L19 0.247 |
+
+
+**f2e W6: two-stage expert selection (recurrence gate half of the discovery directed cases)**
+
+| Model | Family | Rule | Layer | Layer rescue (val) | Layer / drop | Selected expert | Disc. active | Val rescue | Spec | Clean top-k coalition | Pattern | Equal-norm Spec |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | two_stage | L43 | +0.538 [+0.334, +0.746] | 0.065 [0.043, 0.086] | L43E036 | 64 (≥ 32) | +0.202 [+0.108, +0.306] | +0.154 [+0.068, +0.250] | +0.567 [+0.352, +0.786] | A | +0.062 [-0.008, +0.134] |
+| Qwen3-30B-A3B-Base | main | interior | L43 | +0.538 [+0.334, +0.746] | 0.065 [0.043, 0.086] | L43E036 | 64 (≥ 32) | +0.202 [+0.108, +0.306] | +0.154 [+0.068, +0.250] | +0.567 [+0.352, +0.786] | A | +0.062 [-0.008, +0.134] |
+| Mixtral-8x7B, BOS | main | two_stage | L19 | +0.583 [+0.389, +0.795] | 0.084 [0.061, 0.106] | L19E004 | 36 (≥ 18) | +0.486 [+0.299, +0.691] | +0.351 [+0.163, +0.549] | +0.590 [+0.403, +0.795] | A | +0.028 [-0.021, +0.073] |
+| Mixtral-8x7B, BOS | main | interior | L19 | +0.583 [+0.389, +0.795] | 0.084 [0.061, 0.106] | L19E004 | 36 (≥ 18) | +0.486 [+0.299, +0.691] | +0.351 [+0.163, +0.549] | +0.590 [+0.403, +0.795] | A | +0.028 [-0.021, +0.073] |
+
+
+### Behaviour: restated format, memorisation, fill-in-the-blank on templates, copy prefixes
+
+**Restated format (F2R).** It is behaviour only, as decided. Both models are right on about two thirds of the restated prompts (Qwen3 0.62, Mixtral 0.69 per prompt), but in both twins of a pair only 0.29 / 0.39 of the time, and 9 % of the pairs pass the margin. On names the models lean to the first-mentioned candidate (Qwen3 0.64 [0.60, 0.68], Mixtral 0.58 [0.53, 0.64]); on objects they do not (0.46 / 0.33, few pairs). The restated format therefore stays unsuitable for STR tracing, as the review found (38 / 16 balanced pairs).
+
+**Memorisation check (task 7).** The 55 entity → attribute seeds with their ORIGINAL WinoGrande names behave like the same seeds filled with new IOI names. Margin rates: Qwen3 orig 0.31 vs 0.38, neutral 0.23 vs 0.26, unrelated 0.04 vs 0.05; Mixtral 0.31 vs 0.29, 0.21 vs 0.23, 0.03 vs 0.02. Mean drops also match (4.6 vs 4.8 logits orig, ≈ 0.3 vs 0.3 unrelated in Qwen3), with seed-clustered CIs overlapping everywhere. The original names give the models no advantage, and the unrelated verb removes the effect with either name set. So the name items are not solved by recall of the WinoGrande sentence: the models read the verb. Caveat: Qwen3 has 48 and Mixtral 29 of the 55 seeds, because the other original names are not single tokens or break token alignment.
+
+**Fill-in-the-blank on the verb templates (task 5) fails.** Qwen3 passes the margin on 3.7 % (orig) and 1.9 % (neutral) of the 2,640 template items, Mixtral on 0.1 % / 0.2 %. Correct in both twins: Qwen3 0.27 / 0.22, Mixtral 0.23 / 0.20, at or below the 0.25 of an independent coin flip per prompt. The same items in the entity → attribute format pass 39 % / 27 % (Qwen3) and 33 % / 21 % (Mixtral). Natural fill-in-the-blank name items do pass (Qwen3 520 balanced name pairs, original WinoGrande sentences). So in this format the models resolve the blank on natural sentences but not on the semi-synthetic templates with new names. `vt_a2e_orig` runs for Qwen3 only (60 / 37 pairs, 8 / 5 seeds); `vt_a2e_neu` (Qwen3) and both Mixtral template a2e conditions are behaviour only, so task 5's direction contrast on identical template items does not exist at the margin rule.
+
+**Copy prefixes (task 6).** The first prefix, `Of X and Y, one … t1 and the other … t2`, admits a 'respectively' reading (X ↔ t1, Y ↔ t2). Twin A's answer is option 1 (X) in every template and natural item, so one attribute order is always congruent with that reading, which answers both twins without the sentence, and the other order always contradicts it (`ext13base_cp_respectively`). Margin rates, congruent vs incongruent:
+
+| Items | Qwen3 | Mixtral |
+|---|---|---|
+| Templates, orig verb | 0.43 vs 0.10 | 0.67 vs 0.12 |
+| Templates, neutral verb | 0.37 vs 0.07 | 0.73 vs 0.04 |
+| Templates, unrelated verb | 0.07 vs 0.00 | 0.43 vs 0.00 |
+| Natural twins | 0.90 vs 0.63 | 0.98 vs 0.57 |
+
+With the unrelated verb the sentence gives no answer, yet Mixtral passes 43 % in the congruent order: it binds the attribute to the name by list position. This positional effect is a finding in itself, and it makes the prefix unusable for patching: every average would mix two mechanisms of opposite sign. The prefix `Options: t1, t2.` pairs nothing with the names, and its two orders pass about equally. Natural twins: order 1 / order 2 0.73 / 0.74 (Qwen3), 0.90 / 0.89 (Mixtral). Templates, orig verb: 0.26 / 0.35 and 0.33 / 0.25. Unrelated verb: ≤ 0.03 in every cell, so no copy without the verb. Items passing both orders: natural 464 / 653 twins; templates orig 615 / 436, neutral 350 / 228 items (`ext13base_cp_options`). The copy prefix makes templates no easier in Qwen3: orig margin 0.26 / 0.35 vs 0.39 without a prefix (vt_e2a). In Mixtral it is about neutral (0.33 / 0.25 vs 0.33).
+
+**Restated format (F2R; behaviour only): whole sentence with the blank → 'one of them', the predicate restated, entity readout (95% bootstrap CIs over pairs)**
+
+| Model | Items | Pairs (content swaps) | Correct per prompt | Correct in both twins | Margin ≥ 1 both ways | Mean Δ toward the answer (logits) | First-mentioned candidate predicted |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | names | 370 | 0.61 [0.59, 0.64] | 0.28 [0.24, 0.33] | 0.09 [0.06, 0.12] | 0.64 [0.55, 0.74] | 0.64 [0.60, 0.68] |
+| Qwen3-30B-A3B-Base | objects | 34 | 0.68 [0.60, 0.76] | 0.35 [0.21, 0.53] | 0.15 [0.03, 0.26] | 0.67 [0.42, 0.93] | 0.46 [0.32, 0.59] |
+| Qwen3-30B-A3B-Base | all | 404 | 0.62 [0.59, 0.65] | 0.29 [0.25, 0.33] | 0.09 [0.07, 0.12] | 0.65 [0.56, 0.74] | 0.63 [0.59, 0.66] |
+| Mixtral-8x7B, BOS | names | 160 | 0.69 [0.65, 0.73] | 0.39 [0.31, 0.46] | 0.09 [0.04, 0.13] | 0.58 [0.49, 0.67] | 0.58 [0.53, 0.64] |
+| Mixtral-8x7B, BOS | objects | 21 | 0.71 [0.62, 0.83] | 0.43 [0.24, 0.67] | 0.10 [0.00, 0.24] | 0.63 [0.37, 0.94] | 0.33 [0.19, 0.48] |
+| Mixtral-8x7B, BOS | all | 181 | 0.69 [0.65, 0.73] | 0.39 [0.33, 0.46] | 0.09 [0.05, 0.13] | 0.58 [0.50, 0.68] | 0.55 [0.50, 0.60] |
+
+
+**Memorisation check (task 7): the 55 entity → attribute seeds with their ORIGINAL WinoGrande names vs the IOI-name fills of the same seeds, orig / neutral / unrelated verb (Phase-3 format; seed-clustered bootstrap 95% CIs)**
+
+| Model | Verb | Names | Pairs | Seeds | Margin ≥ 1 both ways | Correct in both twins | Mean drop (logits) |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | orig | original names | 48 | 48 | 0.31 [0.19, 0.44] | 0.50 [0.35, 0.65] | 4.61 [3.90, 5.32] |
+| Qwen3-30B-A3B-Base | orig | IOI names (same seeds) | 2304 | 48 | 0.38 [0.26, 0.50] | 0.51 [0.39, 0.64] | 4.76 [4.07, 5.44] |
+| Qwen3-30B-A3B-Base | neutral | original names | 48 | 48 | 0.23 [0.12, 0.35] | 0.42 [0.27, 0.56] | 3.88 [3.23, 4.56] |
+| Qwen3-30B-A3B-Base | neutral | IOI names (same seeds) | 2304 | 48 | 0.26 [0.16, 0.37] | 0.41 [0.30, 0.53] | 4.09 [3.39, 4.80] |
+| Qwen3-30B-A3B-Base | unrelated | original names | 48 | 48 | 0.04 [0.00, 0.10] | 0.12 [0.04, 0.23] | 0.39 [0.02, 0.74] |
+| Qwen3-30B-A3B-Base | unrelated | IOI names (same seeds) | 2304 | 48 | 0.05 [0.01, 0.10] | 0.16 [0.09, 0.25] | 0.31 [-0.12, 0.76] |
+| Mixtral-8x7B, BOS | orig | original names | 29 | 29 | 0.31 [0.14, 0.48] | 0.45 [0.28, 0.62] | 4.50 [3.78, 5.24] |
+| Mixtral-8x7B, BOS | orig | IOI names (same seeds) | 1392 | 29 | 0.29 [0.16, 0.43] | 0.50 [0.34, 0.65] | 4.64 [4.01, 5.33] |
+| Mixtral-8x7B, BOS | neutral | original names | 29 | 29 | 0.21 [0.07, 0.38] | 0.31 [0.14, 0.48] | 3.83 [3.11, 4.51] |
+| Mixtral-8x7B, BOS | neutral | IOI names (same seeds) | 1392 | 29 | 0.23 [0.10, 0.37] | 0.38 [0.23, 0.54] | 3.88 [3.26, 4.49] |
+| Mixtral-8x7B, BOS | unrelated | original names | 29 | 29 | 0.03 [0.00, 0.10] | 0.10 [0.00, 0.21] | 0.03 [-0.60, 0.65] |
+| Mixtral-8x7B, BOS | unrelated | IOI names (same seeds) | 1392 | 29 | 0.02 [0.00, 0.06] | 0.11 [0.02, 0.23] | 0.04 [-0.57, 0.61] |
+
+
+**Copy prefix 'Options: t1, t2.' + newline (current; coordinator decision 2026-10-11): pass rates per attribute order (cluster bootstrap over seeds / twins)**
+
+| Model | Build | Subset | Pairs / items | Margin ≥ 1 both ways | Correct in both twins | Mean drop | Items passing both orders |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | cp_vt | neutral, order 1 | 2640 | 0.19 [0.11, 0.27] | 0.41 [0.30, 0.52] | 3.06 [2.48, 3.63] |  |
+| Qwen3-30B-A3B-Base | cp_vt | neutral, order 2 | 2640 | 0.25 [0.15, 0.35] | 0.52 [0.41, 0.63] | 3.17 [2.55, 3.77] |  |
+| Qwen3-30B-A3B-Base | cp_vt | orig, order 1 | 2640 | 0.26 [0.16, 0.37] | 0.45 [0.34, 0.55] | 3.84 [3.26, 4.42] |  |
+| Qwen3-30B-A3B-Base | cp_vt | orig, order 2 | 2640 | 0.35 [0.25, 0.46] | 0.62 [0.51, 0.72] | 4.05 [3.49, 4.58] |  |
+| Qwen3-30B-A3B-Base | cp_vt | unrelated, order 1 | 2640 | 0.02 [0.00, 0.06] | 0.06 [0.02, 0.11] | 0.09 [-0.23, 0.41] |  |
+| Qwen3-30B-A3B-Base | cp_vt | unrelated, order 2 | 2640 | 0.03 [0.00, 0.08] | 0.11 [0.05, 0.17] | 0.32 [-0.04, 0.70] |  |
+| Qwen3-30B-A3B-Base | cp_vt | orig, both orders pass | 2640 | 0.233 of items |  |  | 615 |
+| Qwen3-30B-A3B-Base | cp_vt | neutral, both orders pass | 2640 | 0.133 of items |  |  | 350 |
+| Qwen3-30B-A3B-Base | cp_vt | unrelated, both orders pass | 2640 | 0.017 of items |  |  | 45 |
+| Qwen3-30B-A3B-Base | cp_nat | order 1 | 776 | 0.73 [0.70, 0.77] | 0.92 [0.90, 0.94] | 5.40 [5.24, 5.56] |  |
+| Qwen3-30B-A3B-Base | cp_nat | order 2 | 776 | 0.74 [0.71, 0.77] | 0.93 [0.91, 0.95] | 5.39 [5.24, 5.54] |  |
+| Qwen3-30B-A3B-Base | cp_nat | both orders pass | 776 | 0.598 of twins |  |  | 464 |
+| Mixtral-8x7B, BOS | cp_vt | neutral, order 1 | 2640 | 0.24 [0.14, 0.34] | 0.43 [0.32, 0.54] | 3.16 [2.67, 3.66] |  |
+| Mixtral-8x7B, BOS | cp_vt | neutral, order 2 | 2640 | 0.14 [0.06, 0.22] | 0.43 [0.32, 0.54] | 2.69 [2.19, 3.19] |  |
+| Mixtral-8x7B, BOS | cp_vt | orig, order 1 | 2640 | 0.33 [0.23, 0.45] | 0.52 [0.41, 0.63] | 3.75 [3.22, 4.30] |  |
+| Mixtral-8x7B, BOS | cp_vt | orig, order 2 | 2640 | 0.25 [0.16, 0.34] | 0.45 [0.33, 0.57] | 3.23 [2.71, 3.78] |  |
+| Mixtral-8x7B, BOS | cp_vt | unrelated, order 1 | 2640 | 0.02 [0.00, 0.05] | 0.10 [0.04, 0.18] | 0.57 [0.16, 0.94] |  |
+| Mixtral-8x7B, BOS | cp_vt | unrelated, order 2 | 2640 | 0.02 [0.00, 0.06] | 0.05 [0.01, 0.10] | -0.11 [-0.63, 0.37] |  |
+| Mixtral-8x7B, BOS | cp_vt | orig, both orders pass | 2640 | 0.165 of items |  |  | 436 |
+| Mixtral-8x7B, BOS | cp_vt | neutral, both orders pass | 2640 | 0.086 of items |  |  | 228 |
+| Mixtral-8x7B, BOS | cp_vt | unrelated, both orders pass | 2640 | 0.009 of items |  |  | 23 |
+| Mixtral-8x7B, BOS | cp_nat | order 1 | 776 | 0.90 [0.88, 0.92] | 0.98 [0.97, 0.99] | 6.91 [6.75, 7.06] |  |
+| Mixtral-8x7B, BOS | cp_nat | order 2 | 776 | 0.89 [0.87, 0.91] | 0.97 [0.96, 0.98] | 6.74 [6.58, 6.91] |  |
+| Mixtral-8x7B, BOS | cp_nat | both orders pass | 776 | 0.841 of twins |  |  | 653 |
+
+
+**VOID copy prefix 'Of X and Y, one <frame> t1 and the other <frame> t2.' (behaviour record): twin A's answer is option 1 (X) in every item, so the order with t1 = A's attribute is 'respectively'-congruent (X ↔ t1 answers both twins without the sentence); cluster bootstrap over seeds / twins**
+
+| Model | Build | Subset | Pairs | Margin ≥ 1 both ways | Correct in both twins | Mean drop |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | cp_vt | neutral, incongruent | 2256 | 0.07 [0.03, 0.11] | 0.30 [0.20, 0.41] | 1.04 [0.50, 1.55] |
+| Qwen3-30B-A3B-Base | cp_vt | neutral, congruent (X ↔ t1) | 2256 | 0.37 [0.26, 0.48] | 0.68 [0.58, 0.78] | 3.48 [2.95, 4.00] |
+| Qwen3-30B-A3B-Base | cp_vt | orig, incongruent | 2256 | 0.10 [0.05, 0.16] | 0.37 [0.26, 0.47] | 1.54 [0.96, 2.12] |
+| Qwen3-30B-A3B-Base | cp_vt | orig, congruent (X ↔ t1) | 2256 | 0.43 [0.32, 0.54] | 0.73 [0.62, 0.82] | 3.78 [3.13, 4.45] |
+| Qwen3-30B-A3B-Base | cp_vt | unrelated, incongruent | 2256 | 0.00 [0.00, 0.01] | 0.03 [0.01, 0.08] | -1.17 [-1.63, -0.75] |
+| Qwen3-30B-A3B-Base | cp_vt | unrelated, congruent (X ↔ t1) | 2256 | 0.07 [0.03, 0.14] | 0.37 [0.27, 0.48] | 1.21 [0.80, 1.66] |
+| Qwen3-30B-A3B-Base | cp_nat | incongruent | 693 | 0.63 [0.60, 0.67] | 0.83 [0.80, 0.86] | 4.82 [4.59, 5.05] |
+| Qwen3-30B-A3B-Base | cp_nat | congruent (X ↔ t1) | 693 | 0.90 [0.88, 0.92] | 0.98 [0.97, 0.99] | 6.98 [6.77, 7.17] |
+| Mixtral-8x7B, BOS | cp_vt | neutral, incongruent | 2256 | 0.04 [0.01, 0.09] | 0.15 [0.07, 0.24] | -0.18 [-0.85, 0.52] |
+| Mixtral-8x7B, BOS | cp_vt | neutral, congruent (X ↔ t1) | 2256 | 0.73 [0.62, 0.82] | 0.91 [0.83, 0.97] | 6.11 [5.47, 6.76] |
+| Mixtral-8x7B, BOS | cp_vt | orig, incongruent | 2256 | 0.12 [0.05, 0.19] | 0.25 [0.15, 0.37] | 0.50 [-0.25, 1.25] |
+| Mixtral-8x7B, BOS | cp_vt | orig, congruent (X ↔ t1) | 2256 | 0.67 [0.55, 0.77] | 0.88 [0.80, 0.95] | 6.35 [5.61, 7.12] |
+| Mixtral-8x7B, BOS | cp_vt | unrelated, incongruent | 2256 | 0.00 [0.00, 0.01] | 0.02 [0.00, 0.06] | -2.87 [-3.45, -2.28] |
+| Mixtral-8x7B, BOS | cp_vt | unrelated, congruent (X ↔ t1) | 2256 | 0.43 [0.31, 0.55] | 0.69 [0.57, 0.80] | 3.57 [3.04, 4.08] |
+| Mixtral-8x7B, BOS | cp_nat | incongruent | 693 | 0.57 [0.53, 0.61] | 0.73 [0.70, 0.76] | 4.74 [4.42, 5.05] |
+| Mixtral-8x7B, BOS | cp_nat | congruent (X ↔ t1) | 693 | 0.98 [0.97, 0.99] | 1.00 [0.99, 1.00] | 9.60 [9.40, 9.81] |
+
+
+**Competence scans of the Phase-5 builds (cluster bootstrap over seeds / Phase-3 twins); verbs_ent2attr = the existing IOI-name entity → attribute scan**
+
+| Model | Build | Subset | Pairs | Units (seeds / twins) | Margin ≥ 1 both ways | Correct in both twins | Mean drop |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | vt_a2e | variant neutral | 2640 | 55 | 0.02 [0.00, 0.05] | 0.22 [0.16, 0.28] | 0.72 [0.53, 0.92] |
+| Qwen3-30B-A3B-Base | vt_a2e | variant orig | 2640 | 55 | 0.04 [0.01, 0.07] | 0.27 [0.20, 0.34] | 0.97 [0.73, 1.22] |
+| Qwen3-30B-A3B-Base | vt_a2e | variant unrelated | 2640 | 55 | 0.00 [0.00, 0.00] | 0.05 [0.03, 0.08] | 0.01 [-0.14, 0.16] |
+| Qwen3-30B-A3B-Base | cp_vt | variant neutral | 5280 | 55 | 0.22 [0.14, 0.30] | 0.47 [0.36, 0.57] | 3.11 [2.53, 3.68] |
+| Qwen3-30B-A3B-Base | cp_vt | variant orig | 5280 | 55 | 0.31 [0.21, 0.41] | 0.53 [0.43, 0.63] | 3.95 [3.40, 4.48] |
+| Qwen3-30B-A3B-Base | cp_vt | variant unrelated | 5280 | 55 | 0.03 [0.00, 0.07] | 0.08 [0.04, 0.14] | 0.20 [-0.11, 0.53] |
+| Qwen3-30B-A3B-Base | cp_nat | order 1 | 776 | 776 | 0.73 [0.70, 0.77] | 0.92 [0.90, 0.94] | 5.40 [5.24, 5.56] |
+| Qwen3-30B-A3B-Base | cp_nat | order 2 | 776 | 776 | 0.74 [0.71, 0.77] | 0.93 [0.91, 0.95] | 5.39 [5.24, 5.54] |
+| Qwen3-30B-A3B-Base | verbs_ent2attr | variant neutral | 2640 | 55 | 0.27 [0.18, 0.37] | 0.42 [0.31, 0.53] | 4.25 [3.48, 4.99] |
+| Qwen3-30B-A3B-Base | verbs_ent2attr | variant orig | 2640 | 55 | 0.39 [0.28, 0.50] | 0.53 [0.42, 0.65] | 4.97 [4.26, 5.65] |
+| Qwen3-30B-A3B-Base | verbs_ent2attr | variant unrelated | 2640 | 55 | 0.05 [0.01, 0.09] | 0.16 [0.09, 0.23] | 0.22 [-0.20, 0.61] |
+| Mixtral-8x7B, BOS | vt_a2e | variant neutral | 2640 | 55 | 0.00 [0.00, 0.00] | 0.20 [0.15, 0.25] | 0.37 [0.26, 0.47] |
+| Mixtral-8x7B, BOS | vt_a2e | variant orig | 2640 | 55 | 0.00 [0.00, 0.00] | 0.23 [0.17, 0.30] | 0.46 [0.33, 0.61] |
+| Mixtral-8x7B, BOS | vt_a2e | variant unrelated | 2640 | 55 | 0.00 [0.00, 0.00] | 0.06 [0.04, 0.09] | -0.02 [-0.10, 0.05] |
+| Mixtral-8x7B, BOS | cp_vt | variant neutral | 5280 | 55 | 0.19 [0.11, 0.26] | 0.43 [0.34, 0.52] | 2.92 [2.44, 3.41] |
+| Mixtral-8x7B, BOS | cp_vt | variant orig | 5280 | 55 | 0.29 [0.21, 0.38] | 0.48 [0.38, 0.59] | 3.49 [2.98, 4.02] |
+| Mixtral-8x7B, BOS | cp_vt | variant unrelated | 5280 | 55 | 0.02 [0.00, 0.05] | 0.08 [0.03, 0.13] | 0.23 [-0.23, 0.64] |
+| Mixtral-8x7B, BOS | cp_nat | order 1 | 776 | 776 | 0.90 [0.88, 0.92] | 0.98 [0.97, 0.99] | 6.91 [6.75, 7.06] |
+| Mixtral-8x7B, BOS | cp_nat | order 2 | 776 | 776 | 0.89 [0.87, 0.91] | 0.97 [0.96, 0.98] | 6.74 [6.58, 6.91] |
+| Mixtral-8x7B, BOS | verbs_ent2attr | variant neutral | 2640 | 55 | 0.21 [0.12, 0.30] | 0.39 [0.28, 0.50] | 3.91 [3.31, 4.52] |
+| Mixtral-8x7B, BOS | verbs_ent2attr | variant orig | 2640 | 55 | 0.33 [0.22, 0.43] | 0.51 [0.39, 0.63] | 4.71 [4.09, 5.34] |
+| Mixtral-8x7B, BOS | verbs_ent2attr | variant unrelated | 2640 | 55 | 0.02 [0.00, 0.04] | 0.08 [0.03, 0.15] | 0.00 [-0.61, 0.50] |
+
+
+### Deviations and caveats
+
+- **Copy prefix replaced** (coordinator decision 2026-10-11): `Options: t1, t2.` + newline instead of `Of X and Y, one … and the other …`, which is answered by name position. Rebuilt, rescanned (jobs ext13-p5-cpopt-scan-*) and re-announced 09:43Z as `CASES READY <cond>/<proto> (options prefix)`, before any cp_* base run. The registry flag `rebuild_pending` made the job planner hold the running chain until the new files were registered. The both-orders rule is kept. The void prefix's grammar rules C1–C6 (`moetrace/ext13_p5.frame_of`) are no longer used for tracing.
+- **f1 Mixtral:** half / half (101 / 101) instead of 128 / 128 + replication, because the neutral pool has 203 pairs. **f2e** is small: 32 / 32 (Qwen3) and 18 / 18 (Mixtral).
+- **Behaviour only** (< 16 pairs in a split): vt_a2e_neu (Qwen3), vt_a2e_orig and vt_a2e_neu (Mixtral). vt_a2e_orig (Qwen3) runs with 60 / 37 pairs from 8 / 5 seeds.
+- **Statistics.** The Phase-3 functions bootstrap over pairs. The headline table adds a cluster bootstrap over the independent unit: seed for templates (effective n = number of seeds) and Phase-3 twin for cp_nat (its two attribute orders are dependent). Pair-level CIs of the Phase-3 tables are anti-conservative for these conditions.
+- **Mention positions.** Every Phase-5 pair file carries explicit mention_a_pos / mention_b_pos: the first occurrence in the sentence before the blank, after the copy prefix for cp_*. The heads runner therefore uses the sentence mentions, not the prefix names. Copy-prefix positions are separate columns, and `ext13base_<cp>_w5_copy` reads them.
+- **Runner invocation.** `python -m moetrace.ext7_controls direct` has no `--agent` flag. The first f1 / Qwen3 direct job failed (rc 2, no GPU work lost). The job planner was fixed and the chain restarted with stage markers, without redoing completed stages.
+- **Probe.** v1 is flat in Mixtral (2 % responding), so Mixtral's neutral rule uses v2 only. The probes are partial-input baselines with moderate agreement (r 0.51 / 0.28); the reverse / one-sided / associative strata are descriptive.
+- **Memorisation.** The original-name items cover only the seeds whose original names are single tokens with token alignment: Qwen3 48 / 55, Mixtral 29 / 55.
+- **vt_a2e_orig (Qwen3)** is traced with 60 / 37 pairs from 8 / 5 seeds. Its headline CIs are seed-clustered, and five validation seeds make them wide; read it as indicative. The rest of task 5 is behaviour only (coordinator decision).
+
+
+## Direction 13b: Phase 5 expert add-back and deletion curves
+
+**Summary.** Expert add-back and deletion curves (Phase 3's Direction 8 machinery, `moetrace/ext8_addback.py` unchanged) for every Phase-5 condition with a ready base run, Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, STR pairs, validation directed cases, final position. M = all MoE outputs patched back (fraction of the drop); k80 = experts for 80 % of M (n/a when M ≤ 0.1, then k for 80 % of each curve's own maximum); overshoot = max r(k) − M of the per-case oracle ordering.
+
+- **attr->entity, fill-in-the-blank (F1)** (`f1`): Qwen3 M = 0.236 [0.174, 0.295] (128 pairs), k80 greedy / oracle / random 2 / 5 / 384, oracle overshoot +0.276 [+0.235, +0.322], greedy r(15) 0.321, direct attention / MoE 1.20 / -0.20; Mixtral M = 0.229 [0.135, 0.322] (101 pairs), k80 greedy / oracle / random 2 / 2 / 64, oracle overshoot +0.398 [+0.334, +0.465], greedy r(15) 0.643, direct attention / MoE 1.01 / -0.01.
+- **direction: F1 on the Phase-3 twins** (`dir_f1`): Qwen3 M = 0.097 [0.032, 0.159] (90 pairs), ceiling ≤ 0.1: k for 80 % of each curve's maximum greedy / oracle / random 5 / 128 / 384, oracle overshoot +0.375 [+0.331, +0.423], greedy r(15) 0.298, direct attention / MoE 1.08 / -0.08; Mixtral M = 0.409 [0.356, 0.459] (94 pairs), k80 greedy / oracle / random 3 / 4 / 64, oracle overshoot +0.272 [+0.234, +0.314], greedy r(15) 0.688, direct attention / MoE 0.86 / 0.14.
+- **direction: option swap on the same twins** (`dir_opt`): Qwen3 M = 0.814 [0.797, 0.833] (90 pairs), k80 greedy / oracle / random 11 / 48 / 320, oracle overshoot +0.000 [-0.009, +0.010], greedy r(15) 0.686, direct attention / MoE 0.05 / 0.95; Mixtral M = 0.755 [0.731, 0.777] (94 pairs), k80 greedy / oracle / random 8 / 9 / 48, oracle overshoot +0.034 [+0.022, +0.047], greedy r(15) 0.753, direct attention / MoE 0.31 / 0.69.
+- **copy prefix, Phase-3 twins** (`cp_nat`): Qwen3 M = 0.787 [0.768, 0.806] (140 pairs), k80 greedy / oracle / random never / 96 / 320, oracle overshoot -0.004 [-0.013, +0.009], greedy r(15) 0.598, direct attention / MoE -0.01 / 1.01; Mixtral M = 0.733 [0.710, 0.754] (204 pairs), k80 greedy / oracle / random 7 / 7 / 48, oracle overshoot +0.069 [+0.057, +0.081], greedy r(15) 0.772, direct attention / MoE 0.38 / 0.62.
+- **copy prefix, templates, orig verb** (`cp_vt_orig`): Qwen3 M = 0.699 [0.664, 0.733] (128 pairs), k80 greedy / oracle / random 8 / 24 / 320, oracle overshoot +0.065 [+0.045, +0.087], greedy r(15) 0.655, direct attention / MoE 0.11 / 0.89; Mixtral M = 0.543 [0.496, 0.584] (128 pairs), k80 greedy / oracle / random 4 / 4 / 48, oracle overshoot +0.197 [+0.167, +0.232], greedy r(15) 0.726, direct attention / MoE 0.47 / 0.53.
+- **copy prefix, templates, neutral verb** (`cp_vt_neu`): Qwen3 M = 0.737 [0.706, 0.767] (128 pairs), k80 greedy / oracle / random 9 / 32 / 320, oracle overshoot +0.033 [+0.017, +0.050], greedy r(15) 0.659, direct attention / MoE 0.09 / 0.91; Mixtral M = 0.461 [0.436, 0.487] (128 pairs), k80 greedy / oracle / random 4 / 4 / 48, oracle overshoot +0.269 [+0.251, +0.288], greedy r(15) 0.701, direct attention / MoE 0.43 / 0.57.
+- **verb templates ent->attr, orig verb** (`vt_e2a_orig`): Qwen3 M = 0.824 [0.811, 0.837] (128 pairs), k80 greedy / oracle / random 10 / 24 / 320, oracle overshoot -0.005 [-0.016, +0.007], greedy r(15) 0.722, direct attention / MoE 0.13 / 0.87; Mixtral M = 0.677 [0.643, 0.708] (128 pairs), k80 greedy / oracle / random 6 / 7 / 48, oracle overshoot +0.069 [+0.046, +0.093], greedy r(15) 0.718, direct attention / MoE 0.38 / 0.62.
+- **verb templates ent->attr, neutral verb** (`vt_e2a_neu`): Qwen3 M = 0.816 [0.800, 0.831] (128 pairs), k80 greedy / oracle / random 10 / 32 / 320, oracle overshoot +0.004 [-0.006, +0.014], greedy r(15) 0.712, direct attention / MoE 0.13 / 0.87; Mixtral M = 0.626 [0.587, 0.664] (128 pairs), k80 greedy / oracle / random 6 / 6 / 48, oracle overshoot +0.104 [+0.075, +0.134], greedy r(15) 0.696, direct attention / MoE 0.42 / 0.58.
+- **verb templates attr->entity (F1), orig verb** (`vt_a2e_orig`): Qwen3 M = 0.197 [0.151, 0.242] (37 pairs), k80 greedy / oracle / random 4 / 24 / 384, oracle overshoot +0.283 [+0.243, +0.327], greedy r(15) 0.233, direct attention / MoE 1.47 / -0.47.
+- **attr->entity, natural sentence (F2E)** (`f2e`): Qwen3 M = 0.211 [0.051, 0.359] (32 pairs), k80 greedy / oracle / random 2 / 2 / 384, oracle overshoot +0.254 [+0.157, +0.378], greedy r(15) 0.457, direct attention / MoE 0.99 / 0.01; Mixtral M = -0.051 [-0.325, 0.198] (18 pairs), ceiling ≤ 0.1: k for 80 % of each curve's maximum greedy / oracle / random 8 / 12 / n/a, oracle overshoot +0.557 [+0.382, +0.767], greedy r(15) 0.502, direct attention / MoE 1.35 / -0.35.
+- Phase-3 references (same code): WinoGrande option swap (Phase 3) Qwen3 M = 0.843, greedy / oracle k80 10 / 48, overshoot +0.003; WinoGrande option swap (Phase 3) Mixtral M = 0.787, greedy / oracle k80 7 / 8, overshoot +0.026; CounterFact (Phase 3) Qwen3 M = 0.531, greedy / oracle k80 5 / 6, overshoot +0.076; CounterFact (Phase 3) Mixtral M = 0.409, greedy / oracle k80 4 / 5, overshoot +0.108.
+- **Copy availability (C2 − C1).** Mixtral, copy availability, natural twins (C2 - C1): copy prefix - Phase-3 option swap (paired, 102 common twin units): ceiling 0.733 vs 0.794, Δ -0.061 [-0.075, -0.048]; oracle overshoot Δ +0.044 [+0.035, +0.054]; greedy AUC k ≤ 15 Δ -0.020 [-0.027, -0.012]; greedy k80 7 vs 7; answer restored by all MoE Δ -0.06 [-0.10, -0.02]. Mixtral, copy availability, templates orig verb (C2 - C1) (independent samples): ceiling 0.543 vs 0.677, Δ -0.134 [-0.319, +0.028]; oracle overshoot Δ +0.129 [+0.013, +0.267]; greedy AUC k ≤ 15 Δ -0.000 [-0.071, +0.075]; greedy k80 4 vs 6; answer restored by all MoE Δ -0.23 [-0.46, -0.01]. Mixtral, copy availability, templates neutral verb (C2 - C1) (independent samples): ceiling 0.461 vs 0.626, Δ -0.165 [-0.333, +0.048]; oracle overshoot Δ +0.166 [+0.022, +0.281]; greedy AUC k ≤ 15 Δ -0.014 [-0.063, +0.050]; greedy k80 4 vs 6; answer restored by all MoE Δ -0.30 [-0.52, -0.05]. Qwen3, copy availability, natural twins (C2 - C1): copy prefix - Phase-3 option swap (paired, 70 common twin units): ceiling 0.787 vs 0.853, Δ -0.066 [-0.085, -0.047]; oracle overshoot Δ -0.003 [-0.017, +0.015]; greedy AUC k ≤ 15 Δ -0.082 [-0.107, -0.057]; greedy k80 never vs 11; answer restored by all MoE Δ -0.08 [-0.12, -0.04]. Qwen3, copy availability, templates orig verb (C2 - C1) (independent samples): ceiling 0.699 vs 0.824, Δ -0.125 [-0.244, -0.024]; oracle overshoot Δ +0.070 [+0.010, +0.139]; greedy AUC k ≤ 15 Δ -0.061 [-0.135, +0.012]; greedy k80 8 vs 10; answer restored by all MoE Δ -0.18 [-0.38, -0.01]. Qwen3, copy availability, templates neutral verb (C2 - C1) (independent samples): ceiling 0.737 vs 0.816, Δ -0.079 [-0.209, +0.026]; oracle overshoot Δ +0.029 [-0.018, +0.101]; greedy AUC k ≤ 15 Δ -0.056 [-0.155, +0.053]; greedy k80 9 vs 10; answer restored by all MoE Δ -0.18 [-0.39, +0.02].
+- **Direction with the answer copyable in both cells (C3 − C2).** Mixtral, direction with copy fixed, natural twins (C3 - C2): F1 - copy prefix (independent samples): ceiling 0.409 vs 0.733, Δ -0.324 [-0.382, -0.269]; oracle overshoot Δ +0.203 [+0.163, +0.247]; greedy AUC k ≤ 15 Δ -0.058 [-0.078, -0.037]; greedy k80 3 vs 7; answer restored by all MoE Δ -0.43 [-0.52, -0.35]. Qwen3, direction with copy fixed, natural twins (C3 - C2): F1 - copy prefix (independent samples): ceiling 0.097 vs 0.787, Δ -0.691 [-0.757, -0.628]; oracle overshoot Δ +0.380 [+0.331, +0.427]; greedy AUC k ≤ 15 Δ -0.186 [-0.211, -0.161]; greedy k80 of own max 5 vs 6; answer restored by all MoE Δ -0.77 [-0.83, -0.71]. Qwen3, direction with copy fixed, templates orig (C3 - C2) (independent samples): ceiling 0.197 vs 0.699, Δ -0.501 [-0.597, -0.180]; oracle overshoot Δ +0.217 [+0.005, +0.284]; greedy AUC k ≤ 15 Δ -0.272 [-0.325, -0.154]; greedy k80 4 vs 8; answer restored by all MoE Δ -0.63 [-0.79, -0.23].
+- **Direction on identical items (attribute → entity minus entity → attribute).** Mixtral, direction on identical twins: F1 (attr->entity) - option swap (entity->attr) (paired, 94 common twin units): ceiling 0.409 vs 0.755, Δ -0.346 [-0.403, -0.290]; oracle overshoot Δ +0.238 [+0.198, +0.282]; greedy AUC k ≤ 15 Δ -0.049 [-0.069, -0.028]; greedy k80 3 vs 8; answer restored by all MoE Δ -0.51 [-0.59, -0.41]. Qwen3, direction on identical twins: F1 (attr->entity) - option swap (entity->attr) (paired, 90 common twin units): ceiling 0.097 vs 0.814, Δ -0.718 [-0.783, -0.654]; oracle overshoot Δ +0.375 [+0.331, +0.423]; greedy AUC k ≤ 15 Δ -0.237 [-0.264, -0.208]; greedy k80 of own max 5 vs 6; answer restored by all MoE Δ -0.84 [-0.90, -0.79]. Qwen3, direction on identical templates, orig verb (independent samples): ceiling 0.197 vs 0.824, Δ -0.626 [-0.673, -0.329]; oracle overshoot Δ +0.288 [+0.085, +0.322]; greedy AUC k ≤ 15 Δ -0.333 [-0.380, -0.219]; greedy k80 4 vs 10; answer restored by all MoE Δ -0.81 [-0.89, -0.45].
+- **Verb control.** Mixtral, verb control ent->attr: neutral - orig (independent samples): ceiling 0.626 vs 0.677, Δ -0.051 [-0.221, +0.107]; oracle overshoot Δ +0.035 [-0.078, +0.157]; greedy AUC k ≤ 15 Δ -0.018 [-0.068, +0.030]; greedy k80 6 vs 6; answer restored by all MoE Δ -0.01 [-0.25, +0.23]. Qwen3, verb control ent->attr: neutral - orig (independent samples): ceiling 0.816 vs 0.824, Δ -0.008 [-0.069, +0.053]; oracle overshoot Δ +0.008 [-0.024, +0.037]; greedy AUC k ≤ 15 Δ -0.001 [-0.081, +0.080]; greedy k80 10 vs 10; answer restored by all MoE Δ +0.02 [-0.10, +0.13].
+- **Sanity check.** Mixtral, sanity: option swap on the F1-margin twins - Phase-3 option swap (independent samples): ceiling 0.755 vs 0.787, Δ -0.033 [-0.064, -0.002]; oracle overshoot Δ +0.008 [-0.009, +0.024]; greedy AUC k ≤ 15 Δ -0.026 [-0.047, -0.007]; greedy k80 8 vs 7; answer restored by all MoE Δ +0.02 [-0.04, +0.08]. Qwen3, sanity: option swap on the F1-margin twins - Phase-3 option swap (independent samples): ceiling 0.814 vs 0.843, Δ -0.029 [-0.052, -0.004]; oracle overshoot Δ -0.003 [-0.016, +0.011]; greedy AUC k ≤ 15 Δ -0.029 [-0.057, +0.001]; greedy k80 11 vs 10; answer restored by all MoE Δ +0.02 [-0.02, +0.05].
+- **Other comparisons.** Mixtral, F1 (neutral main set) - Phase-3 option swap (independent samples): ceiling 0.229 vs 0.787, Δ -0.558 [-0.657, -0.463]; oracle overshoot Δ +0.372 [+0.307, +0.440]; greedy AUC k ≤ 15 Δ -0.099 [-0.128, -0.070]; greedy k80 2 vs 7; answer restored by all MoE Δ -0.61 [-0.69, -0.53]. Mixtral, F2E natural sentence - F1 (independent samples): ceiling -0.051 vs 0.229, Δ -0.281 [-0.561, -0.015]; oracle overshoot Δ +0.159 [-0.031, +0.373]; greedy AUC k ≤ 15 Δ -0.078 [-0.149, +0.009]; greedy k80 of own max 8 vs 8; answer restored by all MoE Δ -0.14 [-0.29, +0.04]. Qwen3, F1 (neutral main set) - Phase-3 option swap (independent samples): ceiling 0.236 vs 0.843, Δ -0.607 [-0.672, -0.546]; oracle overshoot Δ +0.274 [+0.231, +0.320]; greedy AUC k ≤ 15 Δ -0.239 [-0.267, -0.210]; greedy k80 2 vs 10; answer restored by all MoE Δ -0.70 [-0.77, -0.64]. Qwen3, F2E natural sentence - F1 (independent samples): ceiling 0.211 vs 0.236, Δ -0.024 [-0.199, +0.132]; oracle overshoot Δ -0.023 [-0.129, +0.107]; greedy AUC k ≤ 15 Δ +0.060 [+0.008, +0.112]; greedy k80 2 vs 2; answer restored by all MoE Δ -0.06 [-0.18, +0.07].
+
+**Readings** (templated from the numbers above; conditions still running are absent).
+1. **Direction decides the expert ceiling.** On identical WinoGrande twins (paired over twins), turning the option swap (entity → attribute) into fill-in-the-blank (attribute → entity) collapses what the final-position MoE outputs can repair: Qwen3 M 0.814 → 0.097 (Δ -0.718 [-0.783, -0.654]), direct-path attention share 0.05 → 1.08, oracle overshoot +0.000 → +0.375; Mixtral M 0.755 → 0.409 (Δ -0.346 [-0.403, -0.290]), direct-path attention share 0.31 → 0.86, oracle overshoot +0.034 → +0.272. In attribute → entity the final position copies a context entity, which the attention outputs write directly (direct share ≥ 0.86); the summed MoE outputs add little or even oppose the answer, while individual experts still help, so subsets overshoot the all-MoE ceiling far more than in the option swap (where overshoot ≈ 0, as in Phase 3).
+2. **F1 (neutral main set) behaves like the F1 twins**: Qwen3 M 0.236 [0.174, 0.295] (replication 0.170 [0.107, 0.230]), greedy r(15) 0.321, overshoot +0.276, k80 greedy / oracle / random 2 / 5 / 384, oracle maximum 0.512 at k = 320 of 384; Mixtral M 0.229 [0.135, 0.322], greedy r(15) 0.643, overshoot +0.398, k80 greedy / oracle / random 2 / 2 / 64, oracle maximum 0.627 at k = 48 of 64. A few experts reach 80 % of the small ceiling, but the oracle curve keeps rising well past k = 15 before the last, answer-opposing experts pull it back to M: the useful expert writes are spread over many weak contributors and partly cancelled, unlike the option swap or CounterFact.
+3. **Copy availability (C2 − C1).** Mixtral cp_nat_mixtral vs wino_mixtral: M 0.733 vs 0.794 (lower M; Δ -0.061 [-0.075, -0.048]); Mixtral cp_vt_orig_mixtral vs vt_e2a_orig_mixtral_bos: M 0.543 vs 0.677 (no detectable change in M; Δ -0.134 [-0.319, +0.028]); Mixtral cp_vt_neu_mixtral vs vt_e2a_neu_mixtral_bos: M 0.461 vs 0.626 (no detectable change in M; Δ -0.165 [-0.333, +0.048]); Qwen3 cp_nat vs wino_qwen3: M 0.787 vs 0.853 (lower M; Δ -0.066 [-0.085, -0.047]); Qwen3 cp_vt_orig vs vt_e2a_orig_qwen3: M 0.699 vs 0.824 (lower M; Δ -0.125 [-0.244, -0.024]); Qwen3 cp_vt_neu vs vt_e2a_neu_qwen3: M 0.737 vs 0.816 (no detectable change in M; Δ -0.079 [-0.209, +0.026]).
+4. **Direction with copy fixed (C3 − C2).** Mixtral dir_f1_mixtral vs cp_nat_mixtral_bos: M 0.409 vs 0.733 (lower M; Δ -0.324 [-0.382, -0.269]); Qwen3 dir_f1 vs cp_nat_qwen3: M 0.097 vs 0.787 (lower M; Δ -0.691 [-0.757, -0.628]); Qwen3 vt_a2e_orig vs cp_vt_orig_qwen3: M 0.197 vs 0.699 (lower M; Δ -0.501 [-0.597, -0.180]).
+5. **The option swap on the F1-margin subset reproduces Phase 3** (independent samples; the F1-margin twins are a subset of the 776): Qwen3 M 0.814 vs Phase 3 0.843, greedy k80 11 vs 10; Mixtral M 0.755 vs Phase 3 0.787, greedy k80 8 vs 7, so the direction contrast is not a sample artefact.
+
+### What was run
+
+**Tasks.** One add-back task per condition × model × case-set family listed in `data/wino_ref/p5_conditions.json` (agent p5-data; behaviour-only conditions excluded): ext8's WinoGrande STR task (`load_wino`) on the condition's base run `results/p5_<cond>_<proto>/` (clean-run routing at the final position, all-layer single-expert rows of discovery and validation cases, MoE-layer sweep rows), its pair parquet and case-set JSON. Candidates = the clean run's routed (layer, expert) pairs at the final position (Qwen3 48 × 8 = 384, Mixtral 32 × 2 = 64). Family `main` → `results/p5_<cond>_<proto>_ab/`, the replication family → `results/p5_<cond>_<proto>_rep_ab/` (ranking from its discovery split, curves on its validation split).
+
+**Work per task** (`moetrace/ext13ab.py`, driver `scripts/ext13ab_run.py`): A0 ceilings for every row in both directions (all MoE, all attention, both, MoE ≤ L−5, attention ≤ L−5); A1 static add-back orderings oracle, pop, layerwise, dla, vnorm, weight, rand0–4 on ext8's k grid plus the all-clean-active endpoint; A2 adaptive greedy, 15 steps (Qwen3 pool = the row's top-32 singles, Mixtral all 64); A3 noising singles (Qwen3 the first 128 validation rows as in Phase 3, Mixtral all validation rows) and deletion curves pop, oracle, layerwise, rand0–1, dla, noise_oracle plus the endpoint. Not run (as in ext12): beam, exact top-10, Shapley. Several conditions of one model share every engine pass (ext12's multi-task scheme); each run dir is in exactly the ext8 file format, so `ext8_addback.load_out` and `scripts/ext8_addback_analyze.analyse` read it unchanged.
+
+**Statistics** (`scripts/ext13ab_analyze.py`). ext8's `analyse` plus ext12's unit-cluster bootstrap of the curve summaries (5,000 resamples, seed 0, units = pairs: both directed cases of a pair together): M, answer restored by all MoE, AUC over log k (1..K and 1..15), k80, max r, overshoot, greedy − best static r(10), DLA − oracle AUC; the same for the deletion curves. Template conditions (verb templates × IOI name pairs; many pairs share a seed template) also get seed-clustered CIs (same point estimates). Contrasts on identical items are paired (restricted to items in both conditions' validation sets, same resamples over the common units) when ≥ 20 units are shared, otherwise independent (seed 0 vs seed 1). The attention-vs-MoE bars take the direct-path split from p5-data's `direct_split.parquet` (validation cases of the family); this run's own `addback_direct.parquet` (same quantity, first pass) is the fallback and a cross-check.
+
+| Run dir | Condition | Model | Family | Eval. directed cases (pairs) | Passes | Greedy rows (pool) | Noising-single rows | Prefill Δ SD across passes (median / 99th pct, clean) |
+|---|---|---|---|---|---|---|---|---|
+| `results/p5_f1_mixtral_bos_ab` | attr->entity, fill-in-the-blank (F1) | Mixtral | main | 202 (101) | 14 | 202 (64) | 202 | 0.09 / 0.25 |
+| `results/p5_f1_qwen3_ab` | attr->entity, fill-in-the-blank (F1) | Qwen3 | main | 256 (128) | 14 | 256 (32) | 128 | 0.16 / 0.45 |
+| `results/p5_f1_qwen3_rep_ab` | attr->entity, fill-in-the-blank (F1) [replication] | Qwen3 | rep | 256 (128) | 14 | 256 (32) | 128 | 0.17 / 0.42 |
+| `results/p5_dir_f1_mixtral_bos_ab` | direction: F1 on the Phase-3 twins | Mixtral | main | 188 (94) | 14 | 188 (64) | 188 | 0.08 / 0.28 |
+| `results/p5_dir_f1_qwen3_ab` | direction: F1 on the Phase-3 twins | Qwen3 | main | 180 (90) | 14 | 180 (32) | 128 | 0.16 / 0.46 |
+| `results/p5_dir_opt_mixtral_bos_ab` | direction: option swap on the same twins | Mixtral | main | 188 (94) | 14 | 188 (64) | 188 | 0.06 / 0.14 |
+| `results/p5_dir_opt_qwen3_ab` | direction: option swap on the same twins | Qwen3 | main | 180 (90) | 14 | 180 (32) | 128 | 0.17 / 0.63 |
+| `results/p5_cp_nat_mixtral_bos_ab` | copy prefix, Phase-3 twins | Mixtral | main | 408 (204) | 14 | 408 (64) | 408 | 0.06 / 0.13 |
+| `results/p5_cp_nat_qwen3_ab` | copy prefix, Phase-3 twins | Qwen3 | main | 280 (140) | 17 | 280 (32) | 128 | 0.18 / 0.48 |
+| `results/p5_cp_nat_mixtral_bos_rep_ab` | copy prefix, Phase-3 twins [replication] | Mixtral | rep | 444 (222) | 14 | 444 (64) | 444 | 0.06 / 0.12 |
+| `results/p5_cp_nat_qwen3_rep_ab` | copy prefix, Phase-3 twins [replication] | Qwen3 | rep | 316 (158) | 18 | 316 (32) | 128 | 0.17 / 0.51 |
+| `results/p5_cp_vt_orig_mixtral_bos_ab` | copy prefix, templates, orig verb | Mixtral | main | 256 (128) | 14 | 256 (64) | 256 | 0.06 / 0.15 |
+| `results/p5_cp_vt_orig_qwen3_ab` | copy prefix, templates, orig verb | Qwen3 | main | 256 (128) | 17 | 256 (32) | 128 | 0.15 / 0.39 |
+| `results/p5_cp_vt_neu_mixtral_bos_ab` | copy prefix, templates, neutral verb | Mixtral | main | 256 (128) | 14 | 256 (64) | 256 | 0.06 / 0.13 |
+| `results/p5_cp_vt_neu_qwen3_ab` | copy prefix, templates, neutral verb | Qwen3 | main | 256 (128) | 14 | 256 (32) | 128 | 0.16 / 0.31 |
+| `results/p5_vt_e2a_orig_mixtral_bos_ab` | verb templates ent->attr, orig verb | Mixtral | main | 256 (128) | 14 | 256 (64) | 256 | 0.06 / 0.17 |
+| `results/p5_vt_e2a_orig_qwen3_ab` | verb templates ent->attr, orig verb | Qwen3 | main | 256 (128) | 14 | 256 (32) | 128 | 0.13 / 0.53 |
+| `results/p5_vt_e2a_neu_mixtral_bos_ab` | verb templates ent->attr, neutral verb | Mixtral | main | 256 (128) | 14 | 256 (64) | 256 | 0.06 / 0.15 |
+| `results/p5_vt_e2a_neu_qwen3_ab` | verb templates ent->attr, neutral verb | Qwen3 | main | 256 (128) | 14 | 256 (32) | 128 | 0.13 / 0.48 |
+| `results/p5_vt_a2e_orig_qwen3_ab` | verb templates attr->entity (F1), orig verb | Qwen3 | main | 74 (37) | 14 | 74 (32) | 74 | 0.14 / 0.26 |
+| `results/p5_f2e_mixtral_bos_ab` | attr->entity, natural sentence (F2E) | Mixtral | main | 36 (18) | 14 | 36 (64) | 36 | 0.08 / 0.15 |
+| `results/p5_f2e_qwen3_ab` | attr->entity, natural sentence (F2E) | Qwen3 | main | 64 (32) | 14 | 64 (32) | 64 | 0.25 / 1.05 |
+
+### Per-condition results
+
+**Phase 5 add-back / deletion per condition (validation directed cases; fraction of the drop; pair bootstrap 95% CI)**
+
+| Model | Condition | Eval. cases | Units | Mean drop | All-MoE ceiling (add-back) | All-MoE deletion | MoE ≤ L−5 | Direct attn / MoE | k80 of ceiling greedy / oracle / random | k80 of own max greedy / oracle / random | Oracle overshoot (max r − M) | Greedy r(15) | AUC k ≤ 15 greedy / oracle | Greedy − best static r(10) | DLA − oracle AUC | Answer restored (all MoE) | Deletion k80 oracle / random |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | WinoGrande option swap (Phase 3) | 256 | 128 | 8.18 | 0.843 [0.827, 0.859] | 0.843 [0.827, 0.859] | 0.808 | 0.045 / 0.956 | 10 [9, 12] / 48 [32, 48] / 320 [320, 320] | 6 [6, 6] / 48 [32, 48] / 320 [320, 320] | +0.003 [-0.006, +0.013] | 0.721 [0.696, 0.748] | 0.486 [0.467, 0.506] / 0.422 [0.405, 0.439] | +0.072 [+0.056, +0.088] | +0.057 [+0.047, +0.067] | 0.95 [0.92, 0.97] | 48 [32, 64] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | WinoGrande option swap (Phase 3) | 256 | 128 | 7.69 | 0.787 [0.764, 0.809] | 0.788 [0.764, 0.810] | 0.811 | 0.289 / 0.711 | 7 [7, 8] / 8 [8, 9] / 48 [48, 48] | 7 [7, 7] / 9 [9, 10] / 48 [48, 48] | +0.026 [+0.015, +0.037] | 0.791 [0.774, 0.808] | 0.493 [0.480, 0.507] / 0.471 [0.458, 0.484] | +0.044 [+0.039, +0.049] | -0.027 [-0.032, -0.023] | 0.89 [0.85, 0.93] | 9 [8, 10] / 48 [48, 48] |
+| Qwen3-30B-A3B-Base | CounterFact (Phase 3) | 108 | 108 | 11.67 | 0.531 [0.489, 0.570] | 0.525 [0.485, 0.564] | 0.433 | 0.500 / 0.510 | 5 [4, 6] / 6 [5, 8] / 320 [320, 384] | 5 [5, 6] / 16 [12, 24] / 320 [320, 320] | +0.076 [+0.058, +0.096] | 0.548 [0.517, 0.578] | 0.395 [0.371, 0.419] / 0.367 [0.343, 0.391] | +0.031 [+0.022, +0.042] | +0.034 [+0.028, +0.041] | 0.44 [0.34, 0.53] | 8 [6, 10] / 384 [320, 384] |
+| Mixtral-8x7B (BOS) | CounterFact (Phase 3) | 106 | 106 | 12.98 | 0.409 [0.367, 0.451] | 0.424 [0.386, 0.462] | 0.508 | 0.630 / 0.358 | 4 [4, 5] / 5 [4, 6] / 64 [48, 64] | 7 [7, 8] / 9 [8, 10] / 48 [48, 64] | +0.108 [+0.080, +0.136] | 0.561 [0.536, 0.589] | 0.346 [0.325, 0.367] / 0.307 [0.286, 0.329] | +0.069 [+0.060, +0.079] | -0.004 [-0.010, +0.002] | 0.37 [0.27, 0.46] | 6 [5, 8] / 64 [64, 64] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | 256 | 128 | 4.62 | 0.236 [0.174, 0.295] | 0.236 [0.174, 0.295] | 0.467 | 1.197 / -0.197 | 2 [2, 3] / 5 [2, 16] / 384 [384, 384] | 4 [4, 5] / 128 [128, 128] / 384 [320, 384] | +0.276 [+0.235, +0.322] | 0.321 [0.296, 0.347] | 0.247 [0.226, 0.268] / 0.181 [0.160, 0.204] | +0.065 [+0.049, +0.080] | -0.014 [-0.032, +0.003] | 0.25 [0.19, 0.30] | 5 [2, 16] / 384 [384, never] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | 202 | 101 | 4.32 | 0.229 [0.135, 0.322] | 0.227 [0.134, 0.318] | 0.641 | 1.010 / -0.010 | 2 [1, 2] / 2 [1, 3] / 64 [48, 64] | 8 [7, 8] / 12 [12, 16] / 64 [32, 64] | +0.398 [+0.334, +0.465] | 0.643 [0.605, 0.681] | 0.394 [0.369, 0.420] / 0.343 [0.319, 0.368] | +0.095 [+0.082, +0.111] | -0.073 [-0.090, -0.058] | 0.28 [0.21, 0.36] | 2 [1, 3] / 64 [64, 64] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | 256 | 128 | 4.70 | 0.170 [0.107, 0.230] | 0.169 [0.106, 0.228] | 0.438 | 1.201 / -0.201 | 2 [1, 2] / 2 [1, 4] / 384 [384, never] | 4 [4, 5] / 128 [96, 128] / 384 [320, 384] | +0.305 [+0.266, +0.349] | 0.316 [0.292, 0.342] | 0.245 [0.225, 0.266] / 0.180 [0.159, 0.202] | +0.089 [+0.066, +0.094] | -0.010 [-0.029, +0.008] | 0.19 [0.14, 0.24] | 1 [1, 4] / never [384, never] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | 180 | 90 | 5.20 | 0.097 [0.032, 0.159] | 0.102 [0.038, 0.164] | 0.428 | 1.082 / -0.082 | n/a (M ≤ 0.1) | 5 [4, 5] / 128 [96, 128] / 384 [384, 384] | +0.375 [+0.331, +0.423] | 0.298 [0.274, 0.323] | 0.221 [0.202, 0.240] / 0.163 [0.143, 0.184] | +0.015 [-0.003, +0.035] | +0.045 [+0.029, +0.060] | 0.12 [0.07, 0.18] | 1 [1, 3] / never [384, never] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | 188 | 94 | 4.65 | 0.409 [0.356, 0.459] | 0.410 [0.357, 0.459] | 0.701 | 0.857 / 0.143 | 3 [3, 4] / 4 [3, 4] / 64 [48, 64] | 8 [7, 8] / 12 [12, 12] / 64 [48, 64] | +0.272 [+0.234, +0.314] | 0.688 [0.664, 0.712] | 0.418 [0.400, 0.436] / 0.373 [0.357, 0.389] | +0.087 [+0.074, +0.102] | -0.068 [-0.082, -0.055] | 0.41 [0.34, 0.48] | 4 [3, 4] / 64 [64, 64] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | 180 | 90 | 8.70 | 0.814 [0.797, 0.833] | 0.814 [0.797, 0.833] | 0.772 | 0.048 / 0.952 | 11 [10, 14] / 48 [32, 48] / 320 [320, 320] | 6 [6, 7] / 48 [32, 48] / 320 [320, 320] | +0.000 [-0.009, +0.010] | 0.686 [0.656, 0.717] | 0.457 [0.436, 0.479] / 0.405 [0.386, 0.424] | +0.066 [+0.048, +0.085] | +0.046 [+0.037, +0.056] | 0.97 [0.94, 0.99] | 24 [24, 48] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | 188 | 94 | 9.66 | 0.755 [0.731, 0.777] | 0.754 [0.731, 0.776] | 0.790 | 0.307 / 0.693 | 8 [7, 8] / 9 [8, 10] / 48 [48, 48] | 8 [7, 8] / 10 [10, 12] / 48 [48, 48] | +0.034 [+0.022, +0.047] | 0.753 [0.734, 0.771] | 0.467 [0.452, 0.481] / 0.447 [0.433, 0.461] | +0.038 [+0.033, +0.043] | -0.020 [-0.024, -0.016] | 0.91 [0.87, 0.95] | 9 [8, 10] / 48 [48, 64] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | 280 | 140 | 5.95 | 0.787 [0.768, 0.806] | 0.787 [0.768, 0.806] | 0.751 | -0.013 / 1.013 | never [never, never] / 96 [64, 96] / 320 [320, 320] | 6 [6, 6] / 96 [64, 96] / 320 [320, 320] | -0.004 [-0.013, +0.009] | 0.598 [0.576, 0.621] | 0.407 [0.391, 0.423] / 0.338 [0.322, 0.354] | +0.068 [+0.052, +0.084] | +0.068 [+0.057, +0.078] | 0.89 [0.86, 0.93] | 48 [48, 64] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | 408 | 204 | 7.15 | 0.733 [0.710, 0.754] | 0.731 [0.708, 0.752] | 0.807 | 0.378 / 0.622 | 7 [6, 7] / 7 [7, 8] / 48 [48, 48] | 7 [7, 8] / 10 [9, 10] / 48 [48, 48] | +0.069 [+0.057, +0.081] | 0.772 [0.758, 0.786] | 0.476 [0.465, 0.486] / 0.456 [0.445, 0.466] | +0.040 [+0.036, +0.043] | -0.041 [-0.044, -0.037] | 0.84 [0.80, 0.88] | 7 [7, 8] / 48 [48, 64] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | 316 | 158 | 5.91 | 0.756 [0.736, 0.776] | 0.757 [0.736, 0.778] | 0.737 | -0.018 / 1.018 | 12 [11, never] / 64 [48, 96] / 320 [320, 320] | 6 [6, 6] / 64 [64, 96] / 320 [320, 320] | +0.011 [-0.002, +0.024] | 0.619 [0.593, 0.646] | 0.416 [0.399, 0.433] / 0.335 [0.319, 0.351] | +0.081 [+0.065, +0.098] | +0.065 [+0.056, +0.075] | 0.87 [0.83, 0.90] | 48 [32, 96] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | 444 | 222 | 7.72 | 0.706 [0.688, 0.724] | 0.707 [0.688, 0.725] | 0.786 | 0.406 / 0.594 | 7 [6, 7] / 7 [7, 8] / 48 [48, 48] | 7 [7, 8] / 10 [10, 10] / 48 [48, 48] | +0.072 [+0.062, +0.083] | 0.748 [0.734, 0.761] | 0.463 [0.453, 0.472] / 0.441 [0.431, 0.451] | +0.041 [+0.038, +0.045] | -0.032 [-0.035, -0.029] | 0.85 [0.81, 0.88] | 7 [7, 8] / 48 [48, 64] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | 256 | 128 | 5.60 | 0.699 [0.664, 0.733] | 0.699 [0.664, 0.733] | 0.740 | 0.115 / 0.885 | 8 [7, 9] / 24 [16, 32] / 320 [320, 320] | 7 [6, 7] / 48 [32, 48] / 320 [320, 320] | +0.065 [+0.045, +0.087] | 0.655 [0.630, 0.681] | 0.422 [0.405, 0.441] / 0.350 [0.333, 0.369] | +0.106 [+0.089, +0.126] | +0.027 [+0.016, +0.037] | 0.71 [0.65, 0.77] | 24 [12, 32] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | 256 | 128 | 5.26 | 0.543 [0.496, 0.584] | 0.545 [0.498, 0.586] | 0.740 | 0.471 / 0.529 | 4 [4, 4] / 4 [4, 5] / 48 [48, 48] | 7 [7, 7] / 9 [9, 10] / 48 [48, 48] | +0.197 [+0.167, +0.232] | 0.726 [0.700, 0.749] | 0.463 [0.443, 0.481] / 0.434 [0.413, 0.454] | +0.054 [+0.047, +0.062] | -0.016 [-0.021, -0.010] | 0.46 [0.40, 0.52] | 4 [4, 5] / 48 [48, 48] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | 256 | 128 | 5.59 | 0.737 [0.706, 0.767] | 0.731 [0.699, 0.762] | 0.740 | 0.091 / 0.909 | 9 [8, 12] / 32 [24, 48] / 320 [320, 320] | 7 [7, 7] / 48 [32, 48] / 320 [320, 320] | +0.033 [+0.017, +0.050] | 0.659 [0.632, 0.689] | 0.426 [0.408, 0.446] / 0.349 [0.333, 0.367] | +0.106 [+0.086, +0.128] | +0.049 [+0.037, +0.060] | 0.74 [0.68, 0.80] | 24 [12, 24] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | 256 | 128 | 5.41 | 0.461 [0.436, 0.487] | 0.463 [0.437, 0.490] | 0.712 | 0.434 / 0.566 | 4 [3, 4] / 4 [3, 4] / 48 [48, 48] | 7 [7, 8] / 9 [9, 10] / 48 [48, 48] | +0.269 [+0.251, +0.288] | 0.701 [0.690, 0.713] | 0.431 [0.422, 0.441] / 0.412 [0.404, 0.422] | +0.034 [+0.029, +0.039] | -0.019 [-0.022, -0.015] | 0.38 [0.34, 0.43] | 4 [3, 4] / 48 [48, 48] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | 256 | 128 | 6.53 | 0.824 [0.811, 0.837] | 0.823 [0.811, 0.837] | 0.784 | 0.128 / 0.872 | 10 [8, 11] / 24 [24, 32] / 320 [320, 320] | 6 [6, 7] / 24 [24, 24] / 320 [320, 320] | -0.005 [-0.016, +0.007] | 0.722 [0.698, 0.747] | 0.483 [0.466, 0.503] / 0.432 [0.415, 0.451] | +0.085 [+0.060, +0.109] | +0.034 [+0.024, +0.044] | 0.89 [0.86, 0.93] | 24 [16, 32] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | 256 | 128 | 6.52 | 0.677 [0.643, 0.708] | 0.677 [0.643, 0.707] | 0.742 | 0.383 / 0.617 | 6 [6, 7] / 7 [6, 8] / 48 [48, 48] | 7 [7, 7] / 10 [9, 10] / 48 [48, 48] | +0.069 [+0.046, +0.093] | 0.718 [0.701, 0.734] | 0.463 [0.452, 0.475] / 0.441 [0.429, 0.451] | +0.043 [+0.037, +0.048] | -0.006 [-0.011, -0.001] | 0.69 [0.64, 0.74] | 7 [6, 8] / 64 [48, 64] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | 256 | 128 | 6.08 | 0.816 [0.800, 0.831] | 0.817 [0.802, 0.832] | 0.778 | 0.130 / 0.870 | 10 [9, 11] / 32 [24, 48] / 320 [320, 320] | 6 [6, 6] / 32 [24, 48] / 320 [320, 320] | +0.004 [-0.006, +0.014] | 0.712 [0.689, 0.735] | 0.482 [0.463, 0.503] / 0.429 [0.408, 0.450] | +0.070 [+0.055, +0.085] | +0.060 [+0.051, +0.070] | 0.91 [0.88, 0.95] | 24 [16, 32] / 320 [320, 320] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | 256 | 128 | 5.81 | 0.626 [0.587, 0.664] | 0.627 [0.588, 0.665] | 0.728 | 0.422 / 0.578 | 6 [5, 6] / 6 [5, 7] / 48 [48, 48] | 7 [7, 7] / 10 [10, 10] / 48 [48, 48] | +0.104 [+0.075, +0.134] | 0.696 [0.682, 0.712] | 0.445 [0.433, 0.456] / 0.424 [0.412, 0.435] | +0.040 [+0.035, +0.046] | -0.011 [-0.014, -0.008] | 0.68 [0.62, 0.74] | 6 [6, 7] / 48 [48, 64] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | 74 | 37 | 3.75 | 0.197 [0.151, 0.242] | 0.197 [0.151, 0.242] | 0.487 | 1.469 / -0.469 | 4 [3, 7] / 24 [10, 32] / 384 [384, never] | 7 [6, 7] / 192 [192, 256] / 384 [384, 384] | +0.283 [+0.243, +0.327] | 0.233 [0.208, 0.260] | 0.151 [0.136, 0.166] / 0.082 [0.066, 0.098] | +0.094 [+0.065, +0.108] | -0.006 [-0.028, +0.017] | 0.08 [0.03, 0.15] | 16 [8, 32] / never [never, never] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | 64 | 32 | 8.37 | 0.211 [0.051, 0.359] | 0.211 [0.051, 0.359] | 0.425 | 0.986 / 0.014 | 2 [1, 3] / 2 [1, 7] / 384 [320, never] | 7 [5, 7] / 32 [16, 64] / 384 [320, 384] | +0.254 [+0.157, +0.378] | 0.457 [0.381, 0.533] | 0.307 [0.259, 0.355] / 0.235 [0.191, 0.278] | +0.117 [+0.088, +0.151] | -0.048 [-0.098, -0.009] | 0.19 [0.08, 0.30] | 2 [1, 6] / never [384, never] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | 36 | 18 | 6.94 | -0.051 [-0.325, 0.198] | -0.051 [-0.325, 0.198] | 0.524 | 1.347 / -0.347 | n/a (M ≤ 0.1) | 8 [6, 8] / 12 [9, 16] / never [3, 64] | +0.557 [+0.382, +0.767] | 0.502 [0.411, 0.618] | 0.316 [0.249, 0.400] / 0.286 [0.227, 0.359] | +0.058 [+0.041, +0.080] | -0.085 [-0.164, -0.032] | 0.14 [0.00, 0.31] | 1 [1, 1] / 1 [1, never] |
+
+![Task-ladder overview](figures/ext13ab_overview.png)
+
+![All-MoE ceilings and direct-path split, Qwen3](figures/ext13ab_split_all_qwen3.png)
+
+![All-MoE ceilings and direct-path split, Mixtral](figures/ext13ab_split_all_mixtral.png)
+
+**attr->entity, fill-in-the-blank (F1).** ![add-back](figures/ext13ab_f1_addback.png) ![deletion](figures/ext13ab_f1_deletion.png) ![split](figures/ext13ab_f1_split.png)
+
+**attr->entity, fill-in-the-blank (F1) (replication).** ![add-back](figures/ext13ab_f1_rep_addback.png) ![deletion](figures/ext13ab_f1_rep_deletion.png) ![split](figures/ext13ab_f1_rep_split.png)
+
+**direction: F1 on the Phase-3 twins.** ![add-back](figures/ext13ab_dir_f1_addback.png) ![deletion](figures/ext13ab_dir_f1_deletion.png) ![split](figures/ext13ab_dir_f1_split.png)
+
+**direction: option swap on the same twins.** ![add-back](figures/ext13ab_dir_opt_addback.png) ![deletion](figures/ext13ab_dir_opt_deletion.png) ![split](figures/ext13ab_dir_opt_split.png)
+
+**copy prefix, Phase-3 twins.** ![add-back](figures/ext13ab_cp_nat_addback.png) ![deletion](figures/ext13ab_cp_nat_deletion.png) ![split](figures/ext13ab_cp_nat_split.png)
+
+**copy prefix, Phase-3 twins (replication).** ![add-back](figures/ext13ab_cp_nat_rep_addback.png) ![deletion](figures/ext13ab_cp_nat_rep_deletion.png) ![split](figures/ext13ab_cp_nat_rep_split.png)
+
+**copy prefix, templates, orig verb.** ![add-back](figures/ext13ab_cp_vt_orig_addback.png) ![deletion](figures/ext13ab_cp_vt_orig_deletion.png) ![split](figures/ext13ab_cp_vt_orig_split.png)
+
+**copy prefix, templates, neutral verb.** ![add-back](figures/ext13ab_cp_vt_neu_addback.png) ![deletion](figures/ext13ab_cp_vt_neu_deletion.png) ![split](figures/ext13ab_cp_vt_neu_split.png)
+
+**verb templates ent->attr, orig verb.** ![add-back](figures/ext13ab_vt_e2a_orig_addback.png) ![deletion](figures/ext13ab_vt_e2a_orig_deletion.png) ![split](figures/ext13ab_vt_e2a_orig_split.png)
+
+**verb templates ent->attr, neutral verb.** ![add-back](figures/ext13ab_vt_e2a_neu_addback.png) ![deletion](figures/ext13ab_vt_e2a_neu_deletion.png) ![split](figures/ext13ab_vt_e2a_neu_split.png)
+
+**verb templates attr->entity (F1), orig verb.** ![add-back](figures/ext13ab_vt_a2e_orig_addback.png) ![deletion](figures/ext13ab_vt_a2e_orig_deletion.png) ![split](figures/ext13ab_vt_a2e_orig_split.png)
+
+**attr->entity, natural sentence (F2E).** ![add-back](figures/ext13ab_f2e_addback.png) ![deletion](figures/ext13ab_f2e_deletion.png) ![split](figures/ext13ab_f2e_split.png)
+
+### Contrasts
+
+**Copy / direction / verb contrasts a − b (paired = restricted to common items, same resamples; 95% CI; k80 only where both finite)**
+
+| Model | Contrast | a | b | Bootstrap | Ceiling a / b | Δ ceiling | Δ oracle overshoot | Δ k80 greedy | Δ k80 oracle | Δ k80 of own max greedy | Δ greedy AUC k ≤ 15 | Δ oracle AUC | Δ answer restored | Δ deletion ceiling |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Mixtral-8x7B (BOS) | copy availability, natural twins (C2 - C1): copy prefix - Phase-3 option swap | cp_nat_mixtral_bos | wino_mixtral | paired (102 common twin units) | 0.733 / 0.794 | -0.061 [-0.075, -0.048] | +0.044 [+0.035, +0.054] | +0 [-1, +0] | -1 [-2, +0] | +0 [+0, +1] | -0.020 [-0.027, -0.012] | -0.021 [-0.028, -0.014] | -0.06 [-0.10, -0.02] | -0.063 [-0.078, -0.050] |
+| Mixtral-8x7B (BOS) | copy availability, templates orig verb (C2 - C1) | cp_vt_orig_mixtral_bos | vt_e2a_orig_mixtral_bos | independent (8 common seed template units) | 0.543 / 0.677 | -0.134 [-0.319, +0.028] | +0.129 [+0.013, +0.267] | -2 [-4, +0] | -3 [-6, +0] | +0 [-1, +1] | -0.000 [-0.071, +0.075] | -0.008 [-0.090, +0.074] | -0.23 [-0.46, -0.01] | – |
+| Mixtral-8x7B (BOS) | copy availability, templates neutral verb (C2 - C1) | cp_vt_neu_mixtral_bos | vt_e2a_neu_mixtral_bos | independent (5 common seed template units) | 0.461 / 0.626 | -0.165 [-0.333, +0.048] | +0.166 [+0.022, +0.281] | -2 [-5, +0] | -2 [-7, +0] | +0 [-1, +1] | -0.014 [-0.063, +0.050] | -0.010 [-0.065, +0.055] | -0.30 [-0.52, -0.05] | – |
+| Mixtral-8x7B (BOS) | direction with copy fixed, natural twins (C3 - C2): F1 - copy prefix | dir_f1_mixtral_bos | cp_nat_mixtral_bos | independent (5 common twin units) | 0.409 / 0.733 | -0.324 [-0.382, -0.269] | +0.203 [+0.163, +0.247] | -4 [-4, -3] | -3 [-5, -3] | +1 [+0, +1] | -0.058 [-0.078, -0.037] | -0.105 [-0.125, -0.084] | -0.43 [-0.52, -0.35] | – |
+| Mixtral-8x7B (BOS) | direction on identical twins: F1 (attr->entity) - option swap (entity->attr) | dir_f1_mixtral_bos | dir_opt_mixtral_bos | paired (94 common twin units) | 0.409 / 0.755 | -0.346 [-0.403, -0.290] | +0.238 [+0.198, +0.282] | -5 [-5, -3] | -5 [-6, -4] | +0 [-1, +1] | -0.049 [-0.069, -0.028] | -0.096 [-0.116, -0.075] | -0.51 [-0.59, -0.41] | -0.344 [-0.401, -0.289] |
+| Mixtral-8x7B (BOS) | sanity: option swap on the F1-margin twins - Phase-3 option swap | dir_opt_mixtral_bos | wino_mixtral | independent (6 common twin units) | 0.755 / 0.787 | -0.033 [-0.064, -0.002] | +0.008 [-0.009, +0.024] | +1 [+0, +1] | +1 [-1, +1] | +1 [+0, +1] | -0.026 [-0.047, -0.007] | -0.025 [-0.046, -0.006] | +0.02 [-0.04, +0.08] | – |
+| Mixtral-8x7B (BOS) | verb control ent->attr: neutral - orig | vt_e2a_neu_mixtral_bos | vt_e2a_orig_mixtral_bos | independent (10 common seed template units) | 0.626 / 0.677 | -0.051 [-0.221, +0.107] | +0.035 [-0.078, +0.157] | +0 [-3, +2] | -1 [-5, +4] | +0 [-1, +1] | -0.018 [-0.068, +0.030] | -0.017 [-0.072, +0.035] | -0.01 [-0.25, +0.23] | – |
+| Mixtral-8x7B (BOS) | F1 (neutral main set) - Phase-3 option swap | f1_mixtral_bos | wino_mixtral | independent (3 common twin units) | 0.229 / 0.787 | -0.558 [-0.657, -0.463] | +0.372 [+0.307, +0.440] | -5 [-6, -5] | -6 [-8, -6] | +1 [+0, +1] | -0.099 [-0.128, -0.070] | -0.163 [-0.195, -0.131] | -0.61 [-0.69, -0.53] | – |
+| Mixtral-8x7B (BOS) | F2E natural sentence - F1 | f2e_mixtral_bos | f1_mixtral_bos | independent (5 common twin units) | -0.051 / 0.229 | -0.281 [-0.561, -0.015] | +0.159 [-0.031, +0.373] | n/a | n/a | +0 [-1, +1] | -0.078 [-0.149, +0.009] | -0.084 [-0.160, +0.007] | -0.14 [-0.29, +0.04] | – |
+| Qwen3-30B-A3B-Base | copy availability, natural twins (C2 - C1): copy prefix - Phase-3 option swap | cp_nat_qwen3 | wino_qwen3 | paired (70 common twin units) | 0.787 / 0.853 | -0.066 [-0.085, -0.047] | -0.003 [-0.017, +0.015] | n/a [+2, +6] | +48 [+0, +64] | +0 [+0, +0] | -0.082 [-0.107, -0.057] | -0.089 [-0.112, -0.065] | -0.08 [-0.12, -0.04] | -0.064 [-0.084, -0.046] |
+| Qwen3-30B-A3B-Base | copy availability, templates orig verb (C2 - C1) | cp_vt_orig_qwen3 | vt_e2a_orig_qwen3 | independent (8 common seed template units) | 0.699 / 0.824 | -0.125 [-0.244, -0.024] | +0.070 [+0.010, +0.139] | -2 [-6, +4] | +0 [-24, +24] | +1 [-1, +1] | -0.061 [-0.135, +0.012] | -0.078 [-0.145, -0.016] | -0.18 [-0.38, -0.01] | – |
+| Qwen3-30B-A3B-Base | copy availability, templates neutral verb (C2 - C1) | cp_vt_neu_qwen3 | vt_e2a_neu_qwen3 | independent (4 common seed template units) | 0.737 / 0.816 | -0.079 [-0.209, +0.026] | +0.029 [-0.018, +0.101] | -1 [-7, +6] | +0 [-40, +48] | +1 [-1, +2] | -0.056 [-0.155, +0.053] | -0.068 [-0.150, +0.014] | -0.18 [-0.39, +0.02] | – |
+| Qwen3-30B-A3B-Base | direction with copy fixed, natural twins (C3 - C2): F1 - copy prefix | dir_f1_qwen3 | cp_nat_qwen3 | independent (10 common twin units) | 0.097 / 0.787 | -0.691 [-0.757, -0.628] | +0.380 [+0.331, +0.427] | n/a | n/a | -1 [-2, -1] | -0.186 [-0.211, -0.161] | -0.242 [-0.269, -0.215] | -0.77 [-0.83, -0.71] | – |
+| Qwen3-30B-A3B-Base | direction with copy fixed, templates orig (C3 - C2) | vt_a2e_orig_qwen3 | cp_vt_orig_qwen3 | independent (1 common seed template units) | 0.197 / 0.699 | -0.501 [-0.597, -0.180] | +0.217 [+0.005, +0.284] | -4 [-9, +4] | +0 [-32, +104] | +0 [-1, +1] | -0.272 [-0.325, -0.154] | -0.328 [-0.371, -0.192] | -0.63 [-0.79, -0.23] | – |
+| Qwen3-30B-A3B-Base | direction on identical twins: F1 (attr->entity) - option swap (entity->attr) | dir_f1_qwen3 | dir_opt_qwen3 | paired (90 common twin units) | 0.097 / 0.814 | -0.718 [-0.783, -0.654] | +0.375 [+0.331, +0.423] | n/a | n/a | -1 [-2, -1] | -0.237 [-0.264, -0.208] | -0.313 [-0.342, -0.285] | -0.84 [-0.90, -0.79] | -0.713 [-0.778, -0.650] |
+| Qwen3-30B-A3B-Base | direction on identical templates, orig verb | vt_a2e_orig_qwen3 | vt_e2a_orig_qwen3 | independent (2 common seed template units) | 0.197 / 0.824 | -0.626 [-0.673, -0.329] | +0.288 [+0.085, +0.322] | -6 [-9, +2] | +0 [-24, +104] | +1 [-1, +2] | -0.333 [-0.380, -0.219] | -0.406 [-0.450, -0.271] | -0.81 [-0.89, -0.45] | – |
+| Qwen3-30B-A3B-Base | sanity: option swap on the F1-margin twins - Phase-3 option swap | dir_opt_qwen3 | wino_qwen3 | independent (13 common twin units) | 0.814 / 0.843 | -0.029 [-0.052, -0.004] | -0.003 [-0.016, +0.011] | +1 [-1, +3] | +0 [-16, +16] | +0 [+0, +1] | -0.029 [-0.057, +0.001] | -0.018 [-0.043, +0.007] | +0.02 [-0.02, +0.05] | – |
+| Qwen3-30B-A3B-Base | verb control ent->attr: neutral - orig | vt_e2a_neu_qwen3 | vt_e2a_orig_qwen3 | independent (11 common seed template units) | 0.816 / 0.824 | -0.008 [-0.069, +0.053] | +0.008 [-0.024, +0.037] | +0 [-5, +5] | +8 [-16, +40] | +0 [-2, +1] | -0.001 [-0.081, +0.080] | -0.012 [-0.083, +0.064] | +0.02 [-0.10, +0.13] | – |
+| Qwen3-30B-A3B-Base | F1 (neutral main set) - Phase-3 option swap | f1_qwen3 | wino_qwen3 | independent (2 common twin units) | 0.236 / 0.843 | -0.607 [-0.672, -0.546] | +0.274 [+0.231, +0.320] | -8 [-10, -6] | -43 [-46, -26] | -2 [-2, -1] | -0.239 [-0.267, -0.210] | -0.307 [-0.335, -0.278] | -0.70 [-0.77, -0.64] | – |
+| Qwen3-30B-A3B-Base | F2E natural sentence - F1 | f2e_qwen3 | f1_qwen3 | independent (5 common twin units) | 0.211 / 0.236 | -0.024 [-0.199, +0.132] | -0.023 [-0.129, +0.107] | +0 [-2, +1] | -3 [-13, +2] | +3 [+1, +3] | +0.060 [+0.008, +0.112] | +0.048 [-0.008, +0.101] | -0.06 [-0.18, +0.07] | – |
+
+### Orderings (add-back)
+
+**Add-back orderings per condition (validation; 95% CI)**
+
+| Model | Condition | Ordering | r(1) | r(10) | AUC log k (1..K) | AUC log k (1..15) | k80 of ceiling | k80 of own max | max r | overshoot |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | oracle | 0.122 | 0.222 [0.198, 0.246] | 0.283 [0.260, 0.307] | 0.181 [0.160, 0.204] | 5 [2, 16] | 128 [128, 128] | 0.512 [0.483, 0.542] | +0.276 [+0.235, +0.322] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | pop | 0.109 | 0.239 [0.214, 0.263] | 0.311 [0.287, 0.337] | 0.187 [0.166, 0.209] | 5 [2, 9] | 48 [48, 48] | 0.491 [0.460, 0.524] | +0.255 [+0.217, +0.299] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | layerwise | 0.108 | 0.180 [0.161, 0.200] | 0.270 [0.250, 0.291] | 0.140 [0.122, 0.160] | 12 [9, 24] | 64 [64, 64] | 0.486 [0.455, 0.517] | +0.250 [+0.210, +0.294] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | dla | 0.065 | 0.215 [0.194, 0.237] | 0.269 [0.249, 0.289] | 0.150 [0.133, 0.167] | 8 [4, 16] | 48 [48, 48] | 0.439 [0.409, 0.469] | +0.204 [+0.156, +0.254] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | vnorm | 0.008 | -0.174 [-0.226, -0.125] | -0.004 [-0.047, 0.035] | -0.091 [-0.126, -0.058] | 128 [128, 192] | 128 [128, 128] | 0.224 [0.165, 0.283] | -0.011 [-0.023, +0.002] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | weight | 0.002 | 0.006 [-0.001, 0.014] | 0.050 [0.033, 0.066] | 0.003 [-0.002, 0.007] | 320 [320, 320] | 320 [256, 320] | 0.217 [0.158, 0.274] | -0.019 [-0.033, -0.004] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | rand | 0.001 | 0.003 [-0.003, 0.009] | 0.031 [0.020, 0.042] | 0.002 [-0.002, 0.006] | 384 [384, 384] | 384 [320, 384] | 0.217 [0.158, 0.274] | -0.019 [-0.034, -0.004] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | greedy | 0.123 | 0.304 [0.279, 0.330] | – | 0.247 [0.226, 0.268] | 2 [2, 3] | 4 [4, 5] | – | – |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | oracle | 0.151 | 0.484 [0.451, 0.516] | 0.417 [0.387, 0.446] | 0.343 [0.319, 0.368] | 2 [1, 3] | 12 [12, 16] | 0.627 [0.591, 0.663] | +0.398 [+0.334, +0.465] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | pop | 0.082 | 0.426 [0.391, 0.461] | 0.368 [0.338, 0.397] | 0.263 [0.240, 0.287] | 3 [2, 4] | 16 [16, 16] | 0.635 [0.597, 0.672] | +0.406 [+0.343, +0.471] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | layerwise | 0.069 | 0.430 [0.396, 0.464] | 0.355 [0.326, 0.383] | 0.246 [0.224, 0.268] | 4 [2, 5] | 24 [16, 24] | 0.636 [0.597, 0.673] | +0.407 [+0.344, +0.472] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | dla | 0.088 | 0.386 [0.358, 0.414] | 0.343 [0.317, 0.369] | 0.247 [0.227, 0.267] | 3 [2, 5] | 16 [16, 16] | 0.589 [0.551, 0.627] | +0.360 [+0.296, +0.426] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | vnorm | -0.122 | -0.597 [-0.680, -0.516] | -0.267 [-0.324, -0.210] | -0.400 [-0.450, -0.352] | 48 [48, 48] | 48 [48, 48] | 0.221 [0.127, 0.314] | -0.008 [-0.016, +0.001] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | weight | 0.001 | 0.163 [0.137, 0.191] | 0.120 [0.092, 0.148] | 0.076 [0.063, 0.090] | 12 [8, 48] | 12 [12, 24] | 0.233 [0.193, 0.313] | +0.004 [-0.015, +0.078] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | rand | 0.008 | 0.062 [0.042, 0.082] | 0.071 [0.048, 0.094] | 0.035 [0.024, 0.045] | 64 [48, 64] | 64 [32, 64] | 0.221 [0.126, 0.313] | -0.008 [-0.016, +0.001] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | greedy | 0.151 | 0.579 [0.544, 0.615] | – | 0.394 [0.369, 0.420] | 2 [1, 2] | 8 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | oracle | 0.124 | 0.219 [0.195, 0.245] | 0.273 [0.250, 0.297] | 0.180 [0.159, 0.202] | 2 [1, 4] | 128 [96, 128] | 0.475 [0.444, 0.508] | +0.305 [+0.266, +0.349] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | pop | 0.098 | 0.215 [0.190, 0.243] | 0.276 [0.252, 0.300] | 0.167 [0.146, 0.190] | 3 [1, 6] | 64 [48, 96] | 0.447 [0.417, 0.482] | +0.277 [+0.239, +0.322] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | layerwise | 0.098 | 0.155 [0.136, 0.175] | 0.247 [0.227, 0.267] | 0.126 [0.108, 0.146] | 9 [1, 16] | 64 [64, 64] | 0.448 [0.417, 0.483] | +0.278 [+0.239, +0.323] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | dla | 0.077 | 0.218 [0.194, 0.243] | 0.263 [0.241, 0.286] | 0.156 [0.137, 0.176] | 4 [2, 7] | 48 [32, 48] | 0.413 [0.382, 0.445] | +0.243 [+0.195, +0.293] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | vnorm | -0.002 | -0.212 [-0.262, -0.163] | -0.054 [-0.096, -0.015] | -0.119 [-0.151, -0.088] | 192 [128, never] | 128 [128, 192] | 0.149 [0.088, 0.210] | -0.021 [-0.031, -0.009] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | weight | 0.004 | 0.004 [-0.003, 0.012] | 0.030 [0.013, 0.047] | 0.003 [-0.002, 0.008] | 384 [320, never] | 320 [48, 384] | 0.149 [0.089, 0.209] | -0.021 [-0.033, -0.008] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | rand | 0.002 | 0.005 [0.000, 0.010] | 0.020 [0.009, 0.030] | 0.003 [-0.001, 0.006] | 384 [384, never] | 384 [320, 384] | 0.149 [0.087, 0.209] | -0.021 [-0.033, -0.009] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | greedy | 0.122 | 0.308 [0.285, 0.332] | – | 0.245 [0.225, 0.266] | 2 [1, 2] | 4 [4, 5] | – | – |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | oracle | 0.101 | 0.210 [0.186, 0.234] | 0.260 [0.239, 0.281] | 0.163 [0.143, 0.184] | n/a | 128 [96, 128] | 0.472 [0.449, 0.496] | +0.375 [+0.331, +0.423] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | pop | 0.049 | 0.202 [0.182, 0.222] | 0.247 [0.230, 0.264] | 0.128 [0.110, 0.146] | n/a | 96 [64, 128] | 0.458 [0.435, 0.482] | +0.361 [+0.314, +0.412] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | layerwise | 0.040 | 0.131 [0.112, 0.151] | 0.226 [0.213, 0.240] | 0.076 [0.065, 0.089] | n/a | 64 [64, 64] | 0.459 [0.435, 0.483] | +0.362 [+0.316, +0.411] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | dla | 0.088 | 0.269 [0.246, 0.293] | 0.304 [0.283, 0.326] | 0.192 [0.173, 0.211] | n/a | 32 [32, 32] | 0.454 [0.427, 0.480] | +0.357 [+0.306, +0.410] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | vnorm | -0.008 | -0.160 [-0.218, -0.103] | -0.075 [-0.126, -0.028] | -0.092 [-0.138, -0.050] | n/a | 256 [192, 384] | 0.087 [0.023, 0.148] | -0.010 [-0.022, +0.002] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | weight | -0.003 | 0.002 [-0.004, 0.009] | 0.016 [-0.002, 0.034] | 0.001 [-0.003, 0.006] | n/a | 48 [48, 384] | 0.096 [0.071, 0.148] | -0.000 [-0.020, +0.061] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | rand | -0.002 | -0.006 [-0.012, -0.000] | 0.002 [-0.009, 0.012] | -0.004 [-0.008, -0.000] | n/a | 384 [384, 384] | 0.087 [0.023, 0.148] | -0.010 [-0.022, +0.002] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | greedy | 0.100 | 0.284 [0.262, 0.307] | – | 0.221 [0.202, 0.240] | n/a | 5 [4, 5] | – | – |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | oracle | 0.163 | 0.532 [0.510, 0.552] | 0.459 [0.442, 0.476] | 0.373 [0.357, 0.389] | 4 [3, 4] | 12 [12, 12] | 0.681 [0.661, 0.701] | +0.272 [+0.234, +0.314] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | pop | 0.093 | 0.480 [0.458, 0.503] | 0.412 [0.395, 0.429] | 0.294 [0.277, 0.311] | 6 [5, 7] | 16 [16, 16] | 0.689 [0.670, 0.709] | +0.281 [+0.242, +0.324] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | layerwise | 0.092 | 0.445 [0.419, 0.470] | 0.400 [0.383, 0.418] | 0.276 [0.258, 0.294] | 7 [5, 8] | 16 [16, 16] | 0.693 [0.674, 0.713] | +0.284 [+0.245, +0.328] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | dla | 0.100 | 0.444 [0.422, 0.465] | 0.391 [0.372, 0.407] | 0.283 [0.266, 0.299] | 6 [5, 7] | 16 [16, 16] | 0.649 [0.625, 0.673] | +0.240 [+0.203, +0.282] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | vnorm | -0.112 | -0.478 [-0.561, -0.398] | -0.155 [-0.204, -0.108] | -0.315 [-0.365, -0.265] | 48 [48, 48] | 48 [48, 48] | 0.407 [0.353, 0.458] | -0.002 [-0.010, +0.007] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | weight | 0.001 | 0.184 [0.160, 0.209] | 0.174 [0.156, 0.192] | 0.098 [0.084, 0.113] | 48 [24, 48] | 48 [24, 48] | 0.407 [0.353, 0.458] | -0.002 [-0.010, +0.007] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | rand | 0.008 | 0.083 [0.067, 0.099] | 0.111 [0.094, 0.127] | 0.044 [0.035, 0.053] | 64 [48, 64] | 64 [48, 64] | 0.407 [0.353, 0.458] | -0.002 [-0.010, +0.007] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | greedy | 0.163 | 0.619 [0.596, 0.643] | – | 0.418 [0.400, 0.436] | 3 [3, 4] | 8 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | oracle | 0.205 | 0.547 [0.522, 0.572] | 0.572 [0.555, 0.591] | 0.405 [0.386, 0.424] | 48 [32, 48] | 48 [32, 48] | 0.815 [0.798, 0.832] | +0.000 [-0.009, +0.010] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | pop | 0.067 | 0.408 [0.378, 0.438] | 0.491 [0.469, 0.512] | 0.260 [0.238, 0.283] | 48 [48, 64] | 48 [48, 64] | 0.803 [0.784, 0.824] | -0.012 [-0.021, +0.001] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | layerwise | 0.087 | 0.272 [0.249, 0.294] | 0.420 [0.403, 0.438] | 0.173 [0.155, 0.193] | 96 [64, 96] | 64 [64, 96] | 0.798 [0.781, 0.819] | -0.016 [-0.024, -0.004] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | dla | 0.161 | 0.577 [0.556, 0.599] | 0.619 [0.601, 0.639] | 0.397 [0.379, 0.416] | 16 [16, 24] | 24 [24, 24] | 0.860 [0.837, 0.885] | +0.045 [+0.028, +0.064] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | vnorm | 0.035 | 0.262 [0.230, 0.293] | 0.425 [0.404, 0.444] | 0.149 [0.124, 0.174] | 64 [64, 64] | 64 [48, 64] | 0.803 [0.785, 0.823] | -0.011 [-0.015, -0.005] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | weight | 0.021 | 0.112 [0.088, 0.138] | 0.305 [0.289, 0.323] | 0.063 [0.046, 0.082] | 192 [128, 192] | 128 [128, 192] | 0.798 [0.779, 0.818] | -0.016 [-0.024, -0.005] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | rand | 0.002 | 0.028 [0.021, 0.035] | 0.155 [0.148, 0.163] | 0.015 [0.011, 0.019] | 320 [320, 320] | 320 [320, 320] | 0.798 [0.779, 0.818] | -0.016 [-0.026, -0.005] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | greedy | 0.203 | 0.643 [0.615, 0.671] | – | 0.457 [0.436, 0.479] | 11 [10, 14] | 6 [6, 7] | – | – |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | oracle | 0.191 | 0.638 [0.620, 0.656] | 0.555 [0.540, 0.569] | 0.447 [0.433, 0.461] | 9 [8, 10] | 10 [10, 12] | 0.788 [0.773, 0.804] | +0.034 [+0.022, +0.047] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | pop | 0.118 | 0.562 [0.538, 0.585] | 0.502 [0.486, 0.517] | 0.371 [0.356, 0.385] | 16 [12, 16] | 16 [16, 16] | 0.787 [0.770, 0.803] | +0.032 [+0.018, +0.047] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | layerwise | 0.118 | 0.524 [0.508, 0.540] | 0.463 [0.451, 0.474] | 0.313 [0.302, 0.324] | 16 [12, 16] | 16 [16, 16] | 0.794 [0.777, 0.811] | +0.040 [+0.026, +0.054] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | dla | 0.155 | 0.624 [0.607, 0.641] | 0.535 [0.521, 0.548] | 0.409 [0.396, 0.422] | 10 [9, 10] | 12 [12, 12] | 0.797 [0.781, 0.813] | +0.042 [+0.030, +0.055] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | vnorm | -0.061 | 0.220 [0.178, 0.259] | 0.240 [0.217, 0.263] | 0.016 [-0.009, 0.041] | 24 [24, 24] | 24 [24, 24] | 0.752 [0.728, 0.775] | -0.002 [-0.006, +0.001] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | weight | 0.100 | 0.440 [0.406, 0.472] | 0.409 [0.386, 0.429] | 0.280 [0.257, 0.303] | 24 [24, 32] | 24 [24, 32] | 0.752 [0.728, 0.775] | -0.002 [-0.006, +0.001] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | rand | 0.015 | 0.146 [0.135, 0.157] | 0.209 [0.199, 0.219] | 0.076 [0.070, 0.083] | 48 [48, 48] | 48 [48, 48] | 0.752 [0.728, 0.775] | -0.002 [-0.006, +0.001] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | greedy | 0.191 | 0.676 [0.658, 0.694] | – | 0.467 [0.452, 0.481] | 8 [7, 8] | 8 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | oracle | 0.173 | 0.443 [0.425, 0.462] | 0.501 [0.485, 0.518] | 0.338 [0.322, 0.354] | 96 [64, 96] | 96 [64, 96] | 0.783 [0.766, 0.804] | -0.004 [-0.013, +0.009] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | pop | 0.093 | 0.378 [0.352, 0.402] | 0.461 [0.440, 0.481] | 0.243 [0.224, 0.262] | 64 [48, 96] | 64 [48, 96] | 0.783 [0.764, 0.804] | -0.004 [-0.014, +0.008] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | layerwise | 0.085 | 0.252 [0.234, 0.270] | 0.394 [0.381, 0.407] | 0.158 [0.145, 0.171] | 96 [96, 96] | 96 [96, 96] | 0.793 [0.774, 0.812] | +0.005 [-0.008, +0.020] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | dla | 0.146 | 0.501 [0.483, 0.520] | 0.569 [0.553, 0.585] | 0.345 [0.331, 0.360] | 24 [24, 24] | 24 [24, 32] | 0.821 [0.800, 0.843] | +0.034 [+0.021, +0.048] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | vnorm | 0.031 | 0.157 [0.130, 0.183] | 0.372 [0.357, 0.387] | 0.099 [0.083, 0.115] | 96 [64, 96] | 96 [64, 96] | 0.787 [0.767, 0.807] | -0.001 [-0.010, +0.011] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | weight | 0.016 | 0.130 [0.111, 0.151] | 0.294 [0.281, 0.308] | 0.067 [0.056, 0.079] | 192 [192, 192] | 192 [192, 192] | 0.783 [0.762, 0.804] | -0.004 [-0.015, +0.006] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | rand | 0.003 | 0.028 [0.023, 0.034] | 0.151 [0.143, 0.158] | 0.015 [0.011, 0.018] | 320 [320, 320] | 320 [320, 320] | 0.783 [0.762, 0.804] | -0.004 [-0.015, +0.006] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | greedy | 0.171 | 0.569 [0.547, 0.592] | – | 0.407 [0.391, 0.423] | never [never, never] | 6 [6, 6] | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | oracle | 0.182 | 0.659 [0.645, 0.673] | 0.564 [0.553, 0.575] | 0.456 [0.445, 0.466] | 7 [7, 8] | 10 [9, 10] | 0.802 [0.789, 0.814] | +0.069 [+0.057, +0.081] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | pop | 0.142 | 0.595 [0.579, 0.609] | 0.524 [0.513, 0.535] | 0.395 [0.384, 0.406] | 10 [9, 12] | 16 [16, 16] | 0.802 [0.789, 0.814] | +0.069 [+0.058, +0.081] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | layerwise | 0.085 | 0.554 [0.541, 0.566] | 0.484 [0.474, 0.494] | 0.337 [0.328, 0.347] | 12 [12, 16] | 16 [16, 16] | 0.808 [0.794, 0.820] | +0.075 [+0.063, +0.086] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | dla | 0.130 | 0.616 [0.602, 0.628] | 0.523 [0.514, 0.532] | 0.391 [0.382, 0.399] | 9 [9, 10] | 12 [12, 12] | 0.801 [0.788, 0.814] | +0.068 [+0.057, +0.081] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | vnorm | -0.088 | 0.108 [0.069, 0.147] | 0.147 [0.125, 0.168] | -0.105 [-0.129, -0.082] | 32 [24, 32] | 32 [24, 32] | 0.730 [0.707, 0.751] | -0.003 [-0.006, -0.000] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | weight | 0.074 | 0.394 [0.372, 0.415] | 0.378 [0.363, 0.392] | 0.248 [0.234, 0.261] | 32 [24, 32] | 32 [24, 32] | 0.730 [0.707, 0.751] | -0.003 [-0.007, -0.000] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | rand | 0.013 | 0.138 [0.130, 0.147] | 0.201 [0.193, 0.208] | 0.072 [0.067, 0.077] | 48 [48, 48] | 48 [48, 48] | 0.730 [0.707, 0.751] | -0.003 [-0.007, -0.000] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | greedy | 0.182 | 0.699 [0.685, 0.712] | – | 0.476 [0.465, 0.486] | 7 [6, 7] | 7 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | oracle | 0.171 | 0.443 [0.422, 0.463] | 0.499 [0.482, 0.516] | 0.335 [0.319, 0.351] | 64 [48, 96] | 64 [64, 96] | 0.767 [0.748, 0.787] | +0.011 [-0.002, +0.024] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | pop | 0.081 | 0.359 [0.337, 0.383] | 0.446 [0.427, 0.465] | 0.232 [0.214, 0.250] | 64 [48, 64] | 48 [48, 64] | 0.751 [0.733, 0.772] | -0.005 [-0.013, +0.007] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | layerwise | 0.081 | 0.235 [0.219, 0.251] | 0.369 [0.357, 0.380] | 0.141 [0.130, 0.152] | 96 [96, 96] | 96 [96, 96] | 0.761 [0.741, 0.781] | +0.005 [-0.006, +0.015] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | dla | 0.146 | 0.500 [0.479, 0.521] | 0.565 [0.548, 0.581] | 0.343 [0.328, 0.358] | 24 [24, 24] | 24 [24, 32] | 0.811 [0.792, 0.833] | +0.055 [+0.043, +0.069] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | vnorm | 0.015 | 0.143 [0.115, 0.169] | 0.341 [0.323, 0.359] | 0.082 [0.063, 0.100] | 96 [96, 96] | 96 [96, 96] | 0.748 [0.727, 0.771] | -0.008 [-0.015, +0.001] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | weight | 0.015 | 0.126 [0.105, 0.147] | 0.283 [0.267, 0.299] | 0.066 [0.054, 0.079] | 192 [128, 192] | 192 [128, 192] | 0.748 [0.726, 0.770] | -0.008 [-0.017, +0.001] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | rand | 0.002 | 0.025 [0.019, 0.031] | 0.143 [0.134, 0.152] | 0.012 [0.008, 0.016] | 320 [320, 320] | 320 [320, 320] | 0.748 [0.726, 0.770] | -0.008 [-0.017, +0.001] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | greedy | 0.171 | 0.581 [0.556, 0.605] | – | 0.416 [0.399, 0.433] | 12 [11, never] | 6 [6, 6] | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | oracle | 0.182 | 0.635 [0.622, 0.648] | 0.546 [0.535, 0.556] | 0.441 [0.431, 0.451] | 7 [7, 8] | 10 [10, 10] | 0.779 [0.766, 0.790] | +0.072 [+0.062, +0.083] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | pop | 0.132 | 0.570 [0.555, 0.585] | 0.505 [0.494, 0.515] | 0.378 [0.368, 0.389] | 10 [10, 12] | 16 [16, 16] | 0.781 [0.769, 0.793] | +0.075 [+0.065, +0.086] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | layerwise | 0.131 | 0.537 [0.525, 0.548] | 0.465 [0.456, 0.474] | 0.322 [0.314, 0.331] | 12 [12, 12] | 16 [16, 16] | 0.785 [0.772, 0.796] | +0.078 [+0.069, +0.088] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | dla | 0.140 | 0.600 [0.588, 0.612] | 0.514 [0.504, 0.523] | 0.387 [0.379, 0.396] | 9 [9, 10] | 12 [12, 12] | 0.780 [0.768, 0.793] | +0.074 [+0.065, +0.084] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | vnorm | -0.093 | 0.075 [0.042, 0.105] | 0.130 [0.113, 0.147] | -0.113 [-0.132, -0.096] | 32 [32, 32] | 32 [32, 32] | 0.704 [0.686, 0.723] | -0.002 [-0.004, +0.001] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | weight | 0.072 | 0.361 [0.338, 0.383] | 0.358 [0.342, 0.372] | 0.231 [0.215, 0.247] | 32 [24, 32] | 32 [24, 32] | 0.704 [0.686, 0.723] | -0.002 [-0.004, +0.001] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | rand | 0.014 | 0.134 [0.126, 0.142] | 0.192 [0.184, 0.199] | 0.069 [0.065, 0.074] | 48 [48, 48] | 48 [48, 48] | 0.704 [0.686, 0.723] | -0.002 [-0.004, +0.001] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | greedy | 0.183 | 0.677 [0.663, 0.690] | – | 0.463 [0.453, 0.472] | 7 [6, 7] | 7 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | oracle | 0.174 | 0.479 [0.458, 0.502] | 0.523 [0.506, 0.541] | 0.350 [0.333, 0.369] | 24 [16, 32] | 48 [32, 48] | 0.764 [0.743, 0.785] | +0.065 [+0.045, +0.087] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | pop | 0.063 | 0.257 [0.238, 0.276] | 0.390 [0.371, 0.409] | 0.169 [0.151, 0.188] | 64 [48, 96] | 96 [64, 96] | 0.732 [0.709, 0.754] | +0.033 [+0.013, +0.054] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | layerwise | 0.041 | 0.194 [0.174, 0.215] | 0.348 [0.336, 0.359] | 0.103 [0.092, 0.115] | 64 [64, 96] | 96 [64, 96] | 0.735 [0.716, 0.754] | +0.037 [+0.015, +0.060] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | dla | 0.141 | 0.501 [0.481, 0.522] | 0.550 [0.534, 0.566] | 0.330 [0.314, 0.347] | 16 [12, 24] | 24 [24, 32] | 0.794 [0.774, 0.816] | +0.095 [+0.074, +0.120] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | vnorm | 0.004 | 0.038 [-0.005, 0.083] | 0.268 [0.241, 0.296] | -0.002 [-0.026, 0.022] | 96 [96, 96] | 96 [96, 96] | 0.688 [0.654, 0.724] | -0.010 [-0.017, -0.001] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | weight | 0.013 | 0.052 [0.038, 0.066] | 0.232 [0.218, 0.247] | 0.026 [0.019, 0.034] | 192 [128, 192] | 128 [128, 192] | 0.687 [0.652, 0.722] | -0.011 [-0.021, -0.002] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | rand | 0.002 | 0.026 [0.020, 0.031] | 0.127 [0.118, 0.136] | 0.013 [0.009, 0.016] | 320 [320, 320] | 320 [320, 320] | 0.687 [0.652, 0.722] | -0.011 [-0.021, -0.002] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | greedy | 0.174 | 0.607 [0.585, 0.632] | – | 0.422 [0.405, 0.441] | 8 [7, 9] | 7 [6, 7] | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | oracle | 0.191 | 0.613 [0.586, 0.638] | 0.525 [0.503, 0.545] | 0.434 [0.413, 0.454] | 4 [4, 5] | 9 [9, 10] | 0.740 [0.717, 0.761] | +0.197 [+0.167, +0.232] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | pop | 0.144 | 0.502 [0.471, 0.532] | 0.436 [0.413, 0.458] | 0.320 [0.296, 0.342] | 8 [8, 9] | 16 [16, 16] | 0.716 [0.693, 0.738] | +0.174 [+0.146, +0.205] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | layerwise | 0.149 | 0.499 [0.481, 0.516] | 0.439 [0.423, 0.453] | 0.308 [0.295, 0.319] | 8 [8, 9] | 16 [16, 16] | 0.737 [0.715, 0.757] | +0.194 [+0.164, +0.228] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | dla | 0.173 | 0.598 [0.577, 0.619] | 0.510 [0.492, 0.526] | 0.403 [0.387, 0.419] | 6 [5, 6] | 12 [10, 12] | 0.752 [0.730, 0.772] | +0.209 [+0.180, +0.243] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | vnorm | -0.087 | -0.121 [-0.185, -0.060] | 0.037 [-0.003, 0.076] | -0.157 [-0.198, -0.118] | 32 [32, 32] | 32 [32, 32] | 0.535 [0.489, 0.577] | -0.007 [-0.012, -0.002] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | weight | 0.095 | 0.350 [0.314, 0.384] | 0.315 [0.283, 0.344] | 0.229 [0.202, 0.255] | 32 [24, 32] | 32 [24, 32] | 0.548 [0.504, 0.586] | +0.005 [-0.005, +0.015] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | rand | 0.014 | 0.151 [0.135, 0.166] | 0.183 [0.167, 0.198] | 0.080 [0.071, 0.088] | 48 [48, 48] | 48 [48, 48] | 0.535 [0.489, 0.576] | -0.007 [-0.013, -0.002] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | greedy | 0.191 | 0.667 [0.643, 0.690] | – | 0.463 [0.443, 0.481] | 4 [4, 4] | 7 [7, 7] | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | oracle | 0.184 | 0.479 [0.458, 0.501] | 0.521 [0.505, 0.538] | 0.349 [0.333, 0.367] | 32 [24, 48] | 48 [32, 48] | 0.770 [0.750, 0.790] | +0.033 [+0.017, +0.050] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | pop | 0.013 | 0.199 [0.183, 0.214] | 0.361 [0.351, 0.371] | 0.115 [0.105, 0.125] | 96 [64, 96] | 96 [64, 96] | 0.740 [0.717, 0.763] | +0.003 [-0.009, +0.016] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | layerwise | 0.013 | 0.180 [0.163, 0.197] | 0.346 [0.333, 0.359] | 0.093 [0.083, 0.103] | 64 [64, 96] | 96 [64, 96] | 0.746 [0.726, 0.766] | +0.009 [-0.007, +0.027] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | dla | 0.156 | 0.506 [0.487, 0.526] | 0.570 [0.555, 0.585] | 0.352 [0.335, 0.371] | 16 [16, 16] | 24 [24, 24] | 0.807 [0.789, 0.826] | +0.070 [+0.052, +0.092] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | vnorm | -0.001 | 0.147 [0.126, 0.168] | 0.321 [0.298, 0.343] | 0.059 [0.043, 0.073] | 96 [96, 96] | 96 [64, 96] | 0.716 [0.686, 0.748] | -0.021 [-0.028, -0.010] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | weight | 0.011 | 0.051 [0.038, 0.065] | 0.233 [0.218, 0.248] | 0.035 [0.027, 0.044] | 192 [192, 192] | 192 [192, 192] | 0.716 [0.685, 0.748] | -0.021 [-0.031, -0.010] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | rand | 0.001 | 0.019 [0.014, 0.023] | 0.129 [0.121, 0.136] | 0.009 [0.005, 0.012] | 320 [320, 320] | 320 [320, 320] | 0.716 [0.685, 0.748] | -0.021 [-0.031, -0.010] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | greedy | 0.184 | 0.612 [0.586, 0.641] | – | 0.426 [0.408, 0.446] | 9 [8, 12] | 7 [7, 7] | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | oracle | 0.160 | 0.603 [0.593, 0.615] | 0.506 [0.497, 0.516] | 0.412 [0.404, 0.422] | 4 [3, 4] | 9 [9, 10] | 0.730 [0.720, 0.742] | +0.269 [+0.251, +0.288] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | pop | 0.064 | 0.366 [0.350, 0.385] | 0.346 [0.335, 0.358] | 0.218 [0.205, 0.231] | 12 [10, 12] | 24 [24, 24] | 0.679 [0.671, 0.688] | +0.218 [+0.196, +0.240] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | layerwise | 0.089 | 0.507 [0.498, 0.515] | 0.409 [0.403, 0.415] | 0.280 [0.276, 0.285] | 7 [7, 8] | 12 [12, 12] | 0.695 [0.686, 0.704] | +0.234 [+0.213, +0.255] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | dla | 0.143 | 0.586 [0.576, 0.597] | 0.488 [0.480, 0.496] | 0.385 [0.377, 0.393] | 4 [4, 5] | 10 [10, 12] | 0.725 [0.715, 0.735] | +0.264 [+0.243, +0.284] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | vnorm | -0.110 | -0.246 [-0.289, -0.201] | -0.035 [-0.061, -0.008] | -0.217 [-0.242, -0.191] | 32 [32, 32] | 32 [32, 32] | 0.461 [0.436, 0.489] | +0.000 [-0.004, +0.004] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | weight | 0.028 | 0.275 [0.256, 0.295] | 0.242 [0.226, 0.258] | 0.156 [0.144, 0.169] | 32 [24, 32] | 32 [24, 32] | 0.485 [0.460, 0.510] | +0.024 [+0.013, +0.034] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | rand | 0.014 | 0.134 [0.123, 0.144] | 0.159 [0.150, 0.167] | 0.071 [0.064, 0.076] | 48 [48, 48] | 48 [48, 48] | 0.461 [0.436, 0.489] | +0.000 [-0.004, +0.004] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | greedy | 0.160 | 0.637 [0.626, 0.649] | – | 0.431 [0.422, 0.441] | 4 [3, 4] | 7 [7, 8] | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | oracle | 0.221 | 0.580 [0.558, 0.602] | 0.601 [0.585, 0.619] | 0.432 [0.415, 0.451] | 24 [24, 32] | 24 [24, 24] | 0.819 [0.805, 0.834] | -0.005 [-0.016, +0.007] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | pop | 0.065 | 0.235 [0.210, 0.262] | 0.401 [0.382, 0.421] | 0.163 [0.143, 0.184] | 128 [96, 128] | 96 [96, 128] | 0.810 [0.795, 0.827] | -0.014 [-0.023, -0.004] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | layerwise | 0.054 | 0.205 [0.182, 0.227] | 0.387 [0.371, 0.404] | 0.118 [0.100, 0.137] | 96 [96, 96] | 96 [96, 96] | 0.810 [0.795, 0.827] | -0.014 [-0.023, -0.004] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | dla | 0.191 | 0.592 [0.572, 0.613] | 0.636 [0.621, 0.652] | 0.424 [0.406, 0.443] | 16 [16, 24] | 24 [24, 24] | 0.865 [0.849, 0.882] | +0.041 [+0.027, +0.055] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | vnorm | 0.055 | 0.249 [0.216, 0.283] | 0.420 [0.403, 0.439] | 0.136 [0.111, 0.163] | 64 [64, 64] | 64 [64, 64] | 0.810 [0.796, 0.827] | -0.014 [-0.021, -0.004] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | weight | 0.007 | 0.039 [0.011, 0.066] | 0.262 [0.244, 0.281] | 0.016 [0.001, 0.030] | 192 [128, 192] | 192 [128, 192] | 0.810 [0.795, 0.827] | -0.014 [-0.023, -0.004] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | rand | 0.002 | 0.025 [0.019, 0.031] | 0.159 [0.152, 0.166] | 0.012 [0.008, 0.016] | 320 [320, 320] | 320 [320, 320] | 0.810 [0.795, 0.827] | -0.014 [-0.023, -0.004] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | greedy | 0.221 | 0.676 [0.652, 0.703] | – | 0.483 [0.466, 0.503] | 10 [8, 11] | 6 [6, 7] | – | – |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | oracle | 0.205 | 0.609 [0.595, 0.624] | 0.533 [0.521, 0.545] | 0.441 [0.429, 0.451] | 7 [6, 8] | 10 [9, 10] | 0.746 [0.730, 0.762] | +0.069 [+0.046, +0.093] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | pop | 0.135 | 0.463 [0.445, 0.480] | 0.437 [0.421, 0.453] | 0.311 [0.292, 0.328] | 16 [16, 16] | 24 [24, 24] | 0.743 [0.727, 0.759] | +0.066 [+0.046, +0.087] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | layerwise | 0.140 | 0.510 [0.496, 0.522] | 0.451 [0.439, 0.462] | 0.320 [0.309, 0.331] | 12 [12, 16] | 16 [16, 24] | 0.750 [0.731, 0.769] | +0.073 [+0.055, +0.092] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | dla | 0.182 | 0.604 [0.588, 0.619] | 0.528 [0.517, 0.538] | 0.420 [0.410, 0.430] | 8 [7, 9] | 12 [10, 12] | 0.757 [0.741, 0.774] | +0.080 [+0.058, +0.104] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | vnorm | -0.051 | 0.154 [0.096, 0.208] | 0.187 [0.155, 0.216] | -0.023 [-0.056, 0.009] | 24 [24, 32] | 24 [24, 32] | 0.674 [0.641, 0.705] | -0.003 [-0.006, +0.000] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | weight | 0.071 | 0.299 [0.273, 0.327] | 0.310 [0.290, 0.332] | 0.180 [0.161, 0.201] | 32 [32, 32] | 32 [32, 32] | 0.674 [0.641, 0.705] | -0.003 [-0.006, +0.000] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | rand | 0.016 | 0.147 [0.135, 0.159] | 0.199 [0.187, 0.210] | 0.078 [0.071, 0.084] | 48 [48, 48] | 48 [48, 48] | 0.674 [0.641, 0.705] | -0.003 [-0.006, +0.000] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | greedy | 0.205 | 0.652 [0.637, 0.667] | – | 0.463 [0.452, 0.475] | 6 [6, 7] | 7 [7, 7] | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | oracle | 0.223 | 0.561 [0.538, 0.585] | 0.589 [0.571, 0.608] | 0.429 [0.408, 0.450] | 32 [24, 48] | 32 [24, 48] | 0.820 [0.805, 0.834] | +0.004 [-0.006, +0.014] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | pop | 0.049 | 0.247 [0.222, 0.273] | 0.397 [0.374, 0.421] | 0.156 [0.136, 0.177] | 128 [96, 128] | 96 [96, 128] | 0.800 [0.781, 0.818] | -0.016 [-0.024, -0.008] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | layerwise | 0.049 | 0.231 [0.210, 0.253] | 0.384 [0.369, 0.399] | 0.128 [0.115, 0.140] | 96 [96, 96] | 96 [96, 96] | 0.800 [0.782, 0.818] | -0.016 [-0.023, -0.007] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | dla | 0.201 | 0.604 [0.581, 0.628] | 0.650 [0.634, 0.667] | 0.434 [0.413, 0.455] | 16 [12, 16] | 24 [24, 24] | 0.886 [0.873, 0.900] | +0.070 [+0.057, +0.085] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | vnorm | 0.061 | 0.294 [0.261, 0.328] | 0.441 [0.421, 0.463] | 0.191 [0.165, 0.221] | 64 [64, 64] | 64 [64, 64] | 0.800 [0.782, 0.818] | -0.016 [-0.023, -0.008] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | weight | 0.005 | 0.080 [0.051, 0.108] | 0.271 [0.253, 0.290] | 0.033 [0.020, 0.045] | 192 [128, 192] | 192 [128, 192] | 0.800 [0.781, 0.818] | -0.016 [-0.024, -0.008] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | rand | 0.003 | 0.029 [0.023, 0.035] | 0.163 [0.155, 0.171] | 0.014 [0.011, 0.018] | 320 [320, 320] | 320 [320, 320] | 0.800 [0.781, 0.818] | -0.016 [-0.024, -0.008] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | greedy | 0.226 | 0.674 [0.651, 0.698] | – | 0.482 [0.463, 0.503] | 10 [9, 11] | 6 [6, 6] | – | – |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | oracle | 0.190 | 0.594 [0.579, 0.610] | 0.516 [0.504, 0.529] | 0.424 [0.412, 0.435] | 6 [5, 7] | 10 [10, 10] | 0.730 [0.715, 0.745] | +0.104 [+0.075, +0.134] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | pop | 0.103 | 0.403 [0.382, 0.426] | 0.390 [0.371, 0.410] | 0.267 [0.248, 0.286] | 16 [16, 24] | 24 [24, 24] | 0.696 [0.671, 0.720] | +0.069 [+0.052, +0.087] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | layerwise | 0.115 | 0.445 [0.432, 0.459] | 0.426 [0.413, 0.439] | 0.294 [0.281, 0.307] | 12 [12, 16] | 16 [16, 16] | 0.723 [0.707, 0.740] | +0.097 [+0.070, +0.126] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | dla | 0.170 | 0.586 [0.571, 0.602] | 0.505 [0.493, 0.517] | 0.400 [0.390, 0.410] | 7 [6, 8] | 12 [10, 12] | 0.733 [0.716, 0.750] | +0.106 [+0.077, +0.137] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | vnorm | -0.066 | 0.078 [0.009, 0.146] | 0.140 [0.101, 0.178] | -0.066 [-0.106, -0.028] | 24 [24, 32] | 24 [24, 32] | 0.623 [0.584, 0.662] | -0.003 [-0.007, +0.001] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | weight | 0.044 | 0.275 [0.248, 0.302] | 0.276 [0.256, 0.296] | 0.151 [0.135, 0.168] | 32 [32, 32] | 32 [32, 32] | 0.623 [0.584, 0.662] | -0.003 [-0.007, +0.001] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | rand | 0.016 | 0.144 [0.133, 0.154] | 0.188 [0.175, 0.200] | 0.075 [0.069, 0.081] | 48 [48, 48] | 48 [48, 48] | 0.623 [0.584, 0.662] | -0.003 [-0.007, +0.001] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | greedy | 0.191 | 0.635 [0.621, 0.649] | – | 0.445 [0.433, 0.456] | 6 [5, 6] | 7 [7, 7] | – | – |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | oracle | 0.037 | 0.123 [0.100, 0.146] | 0.195 [0.176, 0.215] | 0.082 [0.066, 0.098] | 24 [10, 32] | 192 [192, 256] | 0.480 [0.462, 0.498] | +0.283 [+0.243, +0.327] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | pop | 0.045 | 0.121 [0.095, 0.148] | 0.206 [0.185, 0.227] | 0.080 [0.062, 0.099] | 16 [12, 24] | 192 [128, 192] | 0.457 [0.435, 0.479] | +0.260 [+0.219, +0.305] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | layerwise | 0.045 | 0.099 [0.079, 0.118] | 0.193 [0.177, 0.209] | 0.066 [0.054, 0.077] | 24 [24, 32] | 128 [96, 192] | 0.461 [0.438, 0.485] | +0.264 [+0.227, +0.308] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | dla | 0.021 | 0.115 [0.094, 0.137] | 0.189 [0.170, 0.208] | 0.074 [0.059, 0.089] | 24 [9, 24] | 96 [64, 96] | 0.377 [0.352, 0.403] | +0.180 [+0.137, +0.227] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | vnorm | -0.000 | -0.380 [-0.446, -0.319] | -0.117 [-0.153, -0.086] | -0.145 [-0.182, -0.112] | 192 [192, never] | 192 [192, 192] | 0.172 [0.129, 0.216] | -0.026 [-0.040, -0.008] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | weight | 0.011 | 0.035 [0.023, 0.045] | 0.052 [0.039, 0.065] | 0.020 [0.013, 0.027] | 96 [96, 384] | 96 [96, 320] | 0.170 [0.146, 0.215] | -0.027 [-0.042, +0.024] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | rand | 0.004 | 0.006 [-0.006, 0.017] | 0.007 [-0.008, 0.019] | 0.003 [-0.006, 0.011] | 384 [384, never] | 384 [384, 384] | 0.170 [0.123, 0.214] | -0.027 [-0.044, -0.011] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | greedy | 0.038 | 0.217 [0.193, 0.242] | – | 0.151 [0.136, 0.166] | 4 [3, 7] | 7 [6, 7] | – | – |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | oracle | 0.128 | 0.301 [0.247, 0.355] | 0.332 [0.282, 0.381] | 0.235 [0.191, 0.278] | 2 [1, 7] | 32 [16, 64] | 0.465 [0.400, 0.541] | +0.254 [+0.157, +0.378] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | pop | 0.029 | 0.180 [0.136, 0.225] | 0.219 [0.175, 0.260] | 0.110 [0.080, 0.139] | 9 [2, 48] | 128 [64, 192] | 0.418 [0.337, 0.496] | +0.207 [+0.119, +0.313] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | layerwise | 0.022 | 0.117 [0.080, 0.150] | 0.200 [0.163, 0.234] | 0.057 [0.038, 0.074] | 24 [5, 48] | 96 [64, 128] | 0.438 [0.354, 0.520] | +0.227 [+0.139, +0.335] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | dla | 0.092 | 0.241 [0.190, 0.290] | 0.284 [0.240, 0.327] | 0.178 [0.141, 0.213] | 4 [1, 24] | 32 [16, 192] | 0.432 [0.363, 0.511] | +0.221 [+0.124, +0.343] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | vnorm | -0.046 | -0.067 [-0.149, -0.000] | 0.010 [-0.076, 0.082] | -0.056 [-0.120, 0.001] | 192 [128, never] | 192 [128, 256] | 0.193 [0.038, 0.333] | -0.019 [-0.036, -0.001] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | weight | -0.003 | 0.018 [-0.005, 0.042] | 0.069 [0.030, 0.105] | 0.012 [-0.002, 0.027] | 320 [24, 384] | 256 [24, 320] | 0.192 [0.100, 0.330] | -0.019 [-0.037, +0.075] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | rand | 0.001 | 0.008 [-0.005, 0.021] | 0.033 [0.003, 0.061] | 0.008 [-0.001, 0.016] | 384 [320, never] | 384 [320, 384] | 0.192 [0.037, 0.330] | -0.019 [-0.037, -0.002] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | greedy | 0.126 | 0.418 [0.356, 0.486] | – | 0.307 [0.259, 0.355] | 2 [1, 3] | 7 [5, 7] | – | – |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | oracle | 0.141 | 0.391 [0.314, 0.487] | 0.333 [0.262, 0.419] | 0.286 [0.227, 0.359] | n/a | 12 [9, 16] | 0.506 [0.424, 0.601] | +0.557 [+0.382, +0.767] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | pop | 0.066 | 0.321 [0.269, 0.378] | 0.273 [0.226, 0.322] | 0.198 [0.172, 0.223] | n/a | 24 [16, 24] | 0.508 [0.422, 0.605] | +0.560 [+0.388, +0.765] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | layerwise | 0.066 | 0.267 [0.236, 0.295] | 0.252 [0.214, 0.289] | 0.167 [0.148, 0.183] | n/a | 24 [16, 24] | 0.506 [0.417, 0.604] | +0.558 [+0.386, +0.762] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | dla | 0.061 | 0.291 [0.257, 0.321] | 0.248 [0.216, 0.276] | 0.180 [0.151, 0.205] | n/a | 24 [16, 32] | 0.474 [0.402, 0.553] | +0.526 [+0.341, +0.744] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | vnorm | -0.198 | -0.722 [-0.920, -0.563] | -0.424 [-0.583, -0.293] | -0.525 [-0.654, -0.420] | n/a | never [48, 64] | -0.054 [-0.227, 0.196] | -0.003 [-0.013, +0.122] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | weight | 0.018 | 0.043 [-0.047, 0.118] | 0.022 [-0.070, 0.104] | 0.028 [-0.028, 0.074] | n/a | 24 [1, 24] | 0.082 [0.022, 0.248] | +0.133 [+0.005, +0.362] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | rand | -0.008 | -0.011 [-0.061, 0.036] | -0.017 [-0.082, 0.046] | -0.008 [-0.035, 0.016] | n/a | never [3, 64] | -0.002 [-0.016, 0.197] | +0.050 [-0.009, +0.314] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | greedy | 0.141 | 0.449 [0.364, 0.558] | – | 0.316 [0.249, 0.400] | n/a | 8 [6, 8] | – | – |
+
+### Deletion
+
+**Deletion curves per condition (damage / drop; validation; 95% CI)**
+
+| Model | Condition | Ordering | Cases | Deletion ceiling (same cases) | d(1) | d(10) | AUC log k | k80 of ceiling | k80 of own max | max damage | overshoot |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | noise_oracle | 128 | 0.278 [0.193, 0.359] | 0.142 | 0.261 [0.224, 0.300] | 0.312 [0.277, 0.347] | 5 [2, 16] | 96 [96, 128] | 0.514 [0.471, 0.557] | +0.236 [+0.181, +0.293] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | oracle | 256 | 0.236 [0.174, 0.295] | 0.100 | 0.172 [0.149, 0.196] | 0.237 [0.213, 0.261] | 16 [5, 32] | 128 [128, 192] | 0.476 [0.445, 0.508] | +0.240 [+0.200, +0.285] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | pop | 256 | 0.236 [0.174, 0.295] | 0.106 | 0.234 [0.210, 0.258] | 0.303 [0.278, 0.327] | 5 [2, 9] | 48 [32, 48] | 0.472 [0.441, 0.504] | +0.236 [+0.197, +0.281] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | layerwise | 256 | 0.236 [0.174, 0.295] | 0.105 | 0.173 [0.153, 0.194] | 0.261 [0.241, 0.283] | 24 [9, 24] | 64 [64, 64] | 0.467 [0.439, 0.497] | +0.232 [+0.190, +0.279] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | dla | 256 | 0.236 [0.174, 0.295] | 0.065 | 0.211 [0.189, 0.233] | 0.267 [0.247, 0.287] | 8 [4, 16] | 48 [48, 48] | 0.433 [0.404, 0.463] | +0.198 [+0.152, +0.246] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | rand | 256 | 0.236 [0.174, 0.295] | 0.001 | 0.007 [0.001, 0.014] | 0.033 [0.022, 0.044] | 384 [384, never] | 384 [320, 384] | 0.199 [0.140, 0.254] | -0.037 [-0.051, -0.022] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | noise_oracle | 202 | 0.227 [0.134, 0.318] | 0.151 | 0.488 [0.456, 0.520] | 0.415 [0.386, 0.444] | 2 [1, 3] | 12 [10, 12] | 0.617 [0.580, 0.653] | +0.390 [+0.325, +0.457] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | oracle | 202 | 0.227 [0.134, 0.318] | 0.097 | 0.430 [0.389, 0.469] | 0.361 [0.326, 0.395] | 3 [2, 4] | 16 [16, 16] | 0.593 [0.551, 0.634] | +0.367 [+0.304, +0.432] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | pop | 202 | 0.227 [0.134, 0.318] | 0.082 | 0.423 [0.388, 0.460] | 0.363 [0.335, 0.392] | 3 [2, 4] | 16 [16, 16] | 0.623 [0.586, 0.660] | +0.396 [+0.331, +0.464] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | layerwise | 202 | 0.227 [0.134, 0.318] | 0.068 | 0.425 [0.391, 0.460] | 0.346 [0.319, 0.374] | 4 [2, 5] | 24 [16, 24] | 0.622 [0.585, 0.658] | +0.395 [+0.330, +0.463] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | dla | 202 | 0.227 [0.134, 0.318] | 0.084 | 0.382 [0.354, 0.409] | 0.334 [0.308, 0.359] | 3 [2, 5] | 16 [16, 16] | 0.572 [0.535, 0.610] | +0.346 [+0.282, +0.411] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | rand | 202 | 0.227 [0.134, 0.318] | 0.003 | 0.050 [0.022, 0.076] | 0.060 [0.035, 0.085] | 64 [64, 64] | 64 [32, 64] | 0.210 [0.119, 0.299] | -0.016 [-0.030, -0.003] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | noise_oracle | 128 | 0.186 [0.093, 0.271] | 0.153 | 0.263 [0.232, 0.296] | 0.314 [0.284, 0.345] | 1 [1, 4] | 96 [96, 128] | 0.513 [0.475, 0.552] | +0.327 [+0.263, +0.398] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | oracle | 256 | 0.169 [0.106, 0.228] | 0.103 | 0.176 [0.152, 0.203] | 0.227 [0.203, 0.253] | 3 [1, 12] | 192 [128, 192] | 0.440 [0.407, 0.475] | +0.271 [+0.233, +0.314] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | pop | 256 | 0.169 [0.106, 0.228] | 0.101 | 0.217 [0.190, 0.244] | 0.271 [0.248, 0.296] | 2 [1, 6] | 64 [48, 96] | 0.436 [0.404, 0.469] | +0.267 [+0.228, +0.311] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | layerwise | 256 | 0.169 [0.106, 0.228] | 0.101 | 0.155 [0.135, 0.177] | 0.242 [0.222, 0.263] | 9 [1, 16] | 64 [64, 96] | 0.438 [0.407, 0.470] | +0.269 [+0.229, +0.314] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | dla | 256 | 0.169 [0.106, 0.228] | 0.074 | 0.211 [0.187, 0.237] | 0.257 [0.234, 0.280] | 4 [2, 7] | 48 [32, 48] | 0.404 [0.373, 0.436] | +0.236 [+0.189, +0.286] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | rand | 256 | 0.169 [0.106, 0.228] | 0.000 | 0.003 [-0.003, 0.009] | 0.014 [0.001, 0.026] | never [384, never] | 384 [384, 384] | 0.127 [0.064, 0.187] | -0.042 [-0.054, -0.029] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | noise_oracle | 128 | 0.127 [0.052, 0.202] | 0.108 | 0.240 [0.209, 0.271] | 0.287 [0.260, 0.314] | 1 [1, 3] | 128 [96, 192] | 0.511 [0.481, 0.541] | +0.384 [+0.328, +0.442] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | oracle | 180 | 0.102 [0.038, 0.164] | 0.081 | 0.169 [0.144, 0.194] | 0.220 [0.197, 0.243] | 2 [1, 4] | 192 [128, 192] | 0.454 [0.429, 0.479] | +0.352 [+0.302, +0.404] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | pop | 180 | 0.102 [0.038, 0.164] | 0.051 | 0.207 [0.187, 0.227] | 0.250 [0.233, 0.268] | 2 [1, 5] | 96 [64, 192] | 0.458 [0.434, 0.482] | +0.356 [+0.304, +0.409] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | layerwise | 180 | 0.102 [0.038, 0.164] | 0.044 | 0.130 [0.111, 0.150] | 0.228 [0.214, 0.241] | 8 [1, 12] | 64 [64, 64] | 0.458 [0.435, 0.483] | +0.356 [+0.306, +0.411] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | dla | 180 | 0.102 [0.038, 0.164] | 0.088 | 0.270 [0.247, 0.294] | 0.303 [0.282, 0.324] | 1 [1, 2] | 32 [32, 32] | 0.451 [0.426, 0.477] | +0.350 [+0.299, +0.404] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | rand | 180 | 0.102 [0.038, 0.164] | 0.001 | -0.008 [-0.017, 0.001] | 0.002 [-0.011, 0.014] | never [384, never] | 384 [384, 384] | 0.074 [0.011, 0.135] | -0.028 [-0.041, -0.014] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | noise_oracle | 188 | 0.410 [0.357, 0.459] | 0.166 | 0.527 [0.505, 0.551] | 0.451 [0.433, 0.470] | 4 [3, 4] | 12 [10, 12] | 0.664 [0.642, 0.686] | +0.255 [+0.212, +0.299] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | oracle | 188 | 0.410 [0.357, 0.459] | 0.107 | 0.480 [0.457, 0.503] | 0.407 [0.387, 0.428] | 5 [4, 6] | 16 [16, 16] | 0.658 [0.634, 0.682] | +0.248 [+0.207, +0.291] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | pop | 188 | 0.410 [0.357, 0.459] | 0.096 | 0.477 [0.455, 0.500] | 0.403 [0.385, 0.422] | 6 [5, 7] | 16 [12, 16] | 0.667 [0.647, 0.689] | +0.258 [+0.217, +0.302] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | layerwise | 188 | 0.410 [0.357, 0.459] | 0.093 | 0.433 [0.407, 0.459] | 0.387 [0.368, 0.405] | 7 [6, 8] | 16 [16, 16] | 0.672 [0.651, 0.693] | +0.262 [+0.221, +0.307] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | dla | 188 | 0.410 [0.357, 0.459] | 0.099 | 0.430 [0.408, 0.451] | 0.381 [0.363, 0.398] | 6 [5, 7] | 16 [16, 16] | 0.633 [0.609, 0.655] | +0.223 [+0.183, +0.266] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | rand | 188 | 0.410 [0.357, 0.459] | 0.008 | 0.081 [0.058, 0.104] | 0.104 [0.085, 0.122] | 64 [64, 64] | 64 [48, 64] | 0.385 [0.335, 0.432] | -0.025 [-0.042, -0.008] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | noise_oracle | 128 | 0.817 [0.795, 0.841] | 0.207 | 0.566 [0.541, 0.592] | 0.588 [0.568, 0.610] | 24 [24, 48] | 24 [24, 32] | 0.814 [0.789, 0.840] | -0.004 [-0.022, +0.016] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | oracle | 180 | 0.814 [0.797, 0.833] | 0.137 | 0.448 [0.418, 0.478] | 0.504 [0.481, 0.529] | 64 [64, 96] | 64 [64, 96] | 0.807 [0.786, 0.829] | -0.008 [-0.022, +0.008] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | pop | 180 | 0.814 [0.797, 0.833] | 0.068 | 0.409 [0.380, 0.438] | 0.487 [0.465, 0.509] | 48 [48, 64] | 48 [48, 48] | 0.790 [0.768, 0.814] | -0.025 [-0.040, -0.007] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | layerwise | 180 | 0.814 [0.797, 0.833] | 0.091 | 0.273 [0.250, 0.296] | 0.417 [0.399, 0.436] | 96 [64, 96] | 64 [64, 64] | 0.781 [0.763, 0.804] | -0.033 [-0.043, -0.018] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | dla | 180 | 0.814 [0.797, 0.833] | 0.163 | 0.574 [0.552, 0.596] | 0.612 [0.594, 0.632] | 16 [16, 24] | 24 [24, 24] | 0.848 [0.826, 0.873] | +0.033 [+0.017, +0.052] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | rand | 180 | 0.814 [0.797, 0.833] | -0.000 | 0.026 [0.017, 0.034] | 0.150 [0.140, 0.161] | 320 [320, 320] | 320 [320, 320] | 0.781 [0.762, 0.801] | -0.033 [-0.044, -0.022] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | noise_oracle | 188 | 0.754 [0.731, 0.776] | 0.190 | 0.633 [0.614, 0.653] | 0.548 [0.533, 0.563] | 9 [8, 10] | 10 [9, 10] | 0.772 [0.755, 0.789] | +0.018 [+0.004, +0.033] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | oracle | 188 | 0.754 [0.731, 0.776] | 0.142 | 0.609 [0.588, 0.631] | 0.519 [0.503, 0.534] | 10 [9, 12] | 12 [10, 12] | 0.768 [0.749, 0.785] | +0.014 [-0.000, +0.028] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | pop | 188 | 0.754 [0.731, 0.776] | 0.117 | 0.557 [0.531, 0.581] | 0.494 [0.478, 0.511] | 16 [12, 16] | 16 [16, 16] | 0.768 [0.749, 0.786] | +0.014 [-0.003, +0.031] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | layerwise | 188 | 0.754 [0.731, 0.776] | 0.117 | 0.510 [0.492, 0.528] | 0.449 [0.435, 0.463] | 16 [16, 16] | 16 [16, 16] | 0.775 [0.756, 0.794] | +0.021 [+0.005, +0.038] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | dla | 188 | 0.754 [0.731, 0.776] | 0.154 | 0.616 [0.598, 0.635] | 0.525 [0.511, 0.539] | 10 [9, 12] | 12 [10, 12] | 0.778 [0.760, 0.795] | +0.024 [+0.010, +0.038] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | rand | 188 | 0.754 [0.731, 0.776] | 0.019 | 0.141 [0.124, 0.159] | 0.203 [0.190, 0.215] | 48 [48, 64] | 48 [48, 48] | 0.727 [0.702, 0.750] | -0.027 [-0.034, -0.020] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | noise_oracle | 128 | 0.776 [0.747, 0.804] | 0.177 | 0.479 [0.454, 0.507] | 0.523 [0.500, 0.547] | 48 [48, 64] | 48 [48, 64] | 0.768 [0.740, 0.802] | -0.008 [-0.021, +0.011] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | oracle | 280 | 0.787 [0.768, 0.806] | 0.119 | 0.318 [0.295, 0.341] | 0.423 [0.404, 0.442] | 128 [96, 128] | 128 [96, 128] | 0.778 [0.759, 0.799] | -0.009 [-0.021, +0.006] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | pop | 280 | 0.787 [0.768, 0.806] | 0.092 | 0.375 [0.349, 0.400] | 0.454 [0.434, 0.474] | 96 [64, 96] | 64 [48, 96] | 0.772 [0.752, 0.794] | -0.015 [-0.026, -0.004] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | layerwise | 280 | 0.787 [0.768, 0.806] | 0.082 | 0.250 [0.233, 0.267] | 0.387 [0.374, 0.400] | 96 [96, 96] | 96 [96, 96] | 0.778 [0.760, 0.799] | -0.009 [-0.021, +0.005] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | dla | 280 | 0.787 [0.768, 0.806] | 0.146 | 0.499 [0.481, 0.518] | 0.563 [0.547, 0.580] | 24 [24, 24] | 24 [24, 32] | 0.809 [0.788, 0.831] | +0.022 [+0.008, +0.037] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | rand | 280 | 0.787 [0.768, 0.806] | 0.002 | 0.028 [0.021, 0.034] | 0.144 [0.136, 0.151] | 320 [320, 320] | 320 [320, 320] | 0.772 [0.751, 0.794] | -0.015 [-0.026, -0.004] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | noise_oracle | 408 | 0.731 [0.708, 0.752] | 0.182 | 0.660 [0.646, 0.674] | 0.561 [0.550, 0.572] | 7 [7, 8] | 9 [9, 9] | 0.790 [0.777, 0.803] | +0.059 [+0.048, +0.072] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | oracle | 408 | 0.731 [0.708, 0.752] | 0.145 | 0.640 [0.624, 0.654] | 0.538 [0.527, 0.550] | 8 [8, 9] | 10 [10, 10] | 0.787 [0.773, 0.800] | +0.056 [+0.045, +0.068] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | pop | 408 | 0.731 [0.708, 0.752] | 0.142 | 0.592 [0.575, 0.607] | 0.519 [0.508, 0.530] | 10 [10, 12] | 16 [12, 16] | 0.790 [0.777, 0.803] | +0.060 [+0.048, +0.071] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | layerwise | 408 | 0.731 [0.708, 0.752] | 0.083 | 0.543 [0.531, 0.556] | 0.476 [0.465, 0.487] | 12 [12, 16] | 16 [16, 16] | 0.795 [0.781, 0.808] | +0.064 [+0.053, +0.075] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | dla | 408 | 0.731 [0.708, 0.752] | 0.131 | 0.610 [0.597, 0.623] | 0.518 [0.509, 0.528] | 9 [9, 10] | 12 [12, 12] | 0.790 [0.776, 0.803] | +0.059 [+0.048, +0.071] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | rand | 408 | 0.731 [0.708, 0.752] | 0.011 | 0.127 [0.115, 0.139] | 0.192 [0.183, 0.202] | 48 [48, 64] | 48 [48, 48] | 0.714 [0.690, 0.735] | -0.017 [-0.022, -0.013] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | noise_oracle | 128 | 0.765 [0.726, 0.801] | 0.191 | 0.487 [0.455, 0.519] | 0.521 [0.494, 0.548] | 48 [32, 96] | 48 [32, 64] | 0.752 [0.719, 0.785] | -0.013 [-0.028, +0.006] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | oracle | 316 | 0.757 [0.736, 0.778] | 0.111 | 0.313 [0.290, 0.336] | 0.412 [0.393, 0.431] | 128 [96, 128] | 128 [96, 128] | 0.750 [0.729, 0.771] | -0.007 [-0.019, +0.005] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | pop | 316 | 0.757 [0.736, 0.778] | 0.081 | 0.358 [0.335, 0.382] | 0.441 [0.421, 0.461] | 64 [48, 64] | 48 [48, 64] | 0.735 [0.716, 0.756] | -0.022 [-0.032, -0.008] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | layerwise | 316 | 0.757 [0.736, 0.778] | 0.081 | 0.235 [0.219, 0.251] | 0.362 [0.350, 0.374] | 96 [96, 96] | 96 [96, 96] | 0.742 [0.722, 0.764] | -0.014 [-0.026, -0.003] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | dla | 316 | 0.757 [0.736, 0.778] | 0.142 | 0.496 [0.475, 0.516] | 0.556 [0.540, 0.571] | 24 [24, 24] | 24 [24, 32] | 0.794 [0.775, 0.815] | +0.037 [+0.025, +0.052] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | rand | 316 | 0.757 [0.736, 0.778] | 0.002 | 0.021 [0.013, 0.028] | 0.138 [0.129, 0.148] | 320 [320, 320] | 320 [320, 320] | 0.730 [0.707, 0.752] | -0.027 [-0.037, -0.017] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | noise_oracle | 444 | 0.707 [0.688, 0.725] | 0.183 | 0.636 [0.623, 0.649] | 0.543 [0.532, 0.554] | 7 [7, 8] | 9 [9, 9] | 0.765 [0.752, 0.777] | +0.058 [+0.048, +0.068] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | oracle | 444 | 0.707 [0.688, 0.725] | 0.148 | 0.614 [0.599, 0.627] | 0.520 [0.508, 0.531] | 8 [8, 9] | 10 [10, 12] | 0.763 [0.750, 0.776] | +0.057 [+0.047, +0.067] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | pop | 444 | 0.707 [0.688, 0.725] | 0.133 | 0.568 [0.553, 0.582] | 0.501 [0.490, 0.512] | 10 [10, 12] | 16 [12, 16] | 0.768 [0.755, 0.781] | +0.061 [+0.051, +0.072] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | layerwise | 444 | 0.707 [0.688, 0.725] | 0.132 | 0.531 [0.519, 0.543] | 0.458 [0.448, 0.467] | 12 [12, 16] | 16 [16, 16] | 0.769 [0.756, 0.782] | +0.063 [+0.053, +0.073] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | dla | 444 | 0.707 [0.688, 0.725] | 0.140 | 0.595 [0.582, 0.607] | 0.507 [0.497, 0.516] | 9 [9, 10] | 12 [12, 12] | 0.766 [0.753, 0.779] | +0.059 [+0.050, +0.069] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | rand | 444 | 0.707 [0.688, 0.725] | 0.013 | 0.130 [0.119, 0.141] | 0.188 [0.180, 0.197] | 48 [48, 64] | 48 [48, 48] | 0.678 [0.658, 0.697] | -0.029 [-0.034, -0.023] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | noise_oracle | 128 | 0.684 [0.629, 0.736] | 0.175 | 0.497 [0.469, 0.529] | 0.525 [0.502, 0.551] | 24 [12, 32] | 32 [24, 48] | 0.741 [0.708, 0.773] | +0.057 [+0.025, +0.092] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | oracle | 256 | 0.699 [0.664, 0.733] | 0.118 | 0.355 [0.329, 0.383] | 0.441 [0.421, 0.462] | 64 [48, 96] | 96 [96, 96] | 0.767 [0.744, 0.788] | +0.068 [+0.045, +0.091] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | pop | 256 | 0.699 [0.664, 0.733] | 0.066 | 0.247 [0.227, 0.268] | 0.387 [0.368, 0.406] | 64 [64, 96] | 96 [64, 96] | 0.728 [0.704, 0.751] | +0.029 [+0.008, +0.052] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | layerwise | 256 | 0.699 [0.664, 0.733] | 0.042 | 0.191 [0.170, 0.212] | 0.344 [0.332, 0.356] | 64 [64, 96] | 96 [64, 96] | 0.728 [0.706, 0.748] | +0.029 [+0.006, +0.054] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | dla | 256 | 0.699 [0.664, 0.733] | 0.142 | 0.504 [0.485, 0.524] | 0.545 [0.529, 0.562] | 16 [12, 24] | 24 [24, 32] | 0.783 [0.762, 0.805] | +0.085 [+0.061, +0.109] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | rand | 256 | 0.699 [0.664, 0.733] | 0.004 | 0.023 [0.017, 0.030] | 0.121 [0.110, 0.131] | 320 [320, 320] | 320 [320, 320] | 0.685 [0.649, 0.720] | -0.014 [-0.024, -0.005] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | noise_oracle | 256 | 0.545 [0.498, 0.586] | 0.195 | 0.617 [0.591, 0.642] | 0.525 [0.502, 0.546] | 4 [4, 5] | 9 [8, 9] | 0.729 [0.704, 0.752] | +0.184 [+0.152, +0.219] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | oracle | 256 | 0.545 [0.498, 0.586] | 0.164 | 0.593 [0.563, 0.621] | 0.501 [0.477, 0.524] | 5 [4, 6] | 10 [9, 12] | 0.729 [0.704, 0.752] | +0.184 [+0.152, +0.219] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | pop | 256 | 0.545 [0.498, 0.586] | 0.143 | 0.493 [0.464, 0.522] | 0.429 [0.405, 0.452] | 8 [8, 9] | 16 [16, 16] | 0.699 [0.674, 0.723] | +0.154 [+0.125, +0.187] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | layerwise | 256 | 0.545 [0.498, 0.586] | 0.149 | 0.494 [0.475, 0.512] | 0.431 [0.414, 0.446] | 9 [8, 9] | 16 [16, 16] | 0.716 [0.692, 0.739] | +0.171 [+0.140, +0.207] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | dla | 256 | 0.545 [0.498, 0.586] | 0.172 | 0.592 [0.570, 0.613] | 0.502 [0.483, 0.519] | 6 [5, 6] | 10 [10, 12] | 0.731 [0.707, 0.754] | +0.186 [+0.155, +0.221] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | rand | 256 | 0.545 [0.498, 0.586] | 0.013 | 0.138 [0.117, 0.158] | 0.174 [0.155, 0.191] | 48 [48, 48] | 48 [48, 48] | 0.506 [0.459, 0.547] | -0.039 [-0.050, -0.029] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | noise_oracle | 128 | 0.705 [0.657, 0.750] | 0.178 | 0.499 [0.472, 0.527] | 0.527 [0.506, 0.550] | 24 [12, 24] | 24 [24, 32] | 0.750 [0.725, 0.774] | +0.045 [+0.016, +0.076] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | oracle | 256 | 0.731 [0.699, 0.762] | 0.122 | 0.350 [0.323, 0.377] | 0.436 [0.414, 0.458] | 96 [64, 96] | 128 [96, 128] | 0.775 [0.754, 0.796] | +0.044 [+0.026, +0.063] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | pop | 256 | 0.731 [0.699, 0.762] | 0.015 | 0.204 [0.188, 0.219] | 0.356 [0.346, 0.367] | 96 [64, 96] | 96 [96, 96] | 0.731 [0.709, 0.754] | +0.001 [-0.015, +0.016] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | layerwise | 256 | 0.731 [0.699, 0.762] | 0.015 | 0.183 [0.166, 0.200] | 0.345 [0.332, 0.357] | 64 [64, 96] | 64 [64, 96] | 0.738 [0.719, 0.758] | +0.008 [-0.011, +0.028] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | dla | 256 | 0.731 [0.699, 0.762] | 0.153 | 0.509 [0.489, 0.529] | 0.564 [0.549, 0.579] | 16 [16, 16] | 24 [24, 24] | 0.792 [0.774, 0.810] | +0.061 [+0.041, +0.083] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | rand | 256 | 0.731 [0.699, 0.762] | 0.001 | 0.015 [0.008, 0.022] | 0.125 [0.116, 0.133] | 320 [320, 320] | 320 [320, 320] | 0.718 [0.687, 0.749] | -0.013 [-0.023, -0.002] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | noise_oracle | 256 | 0.463 [0.437, 0.490] | 0.162 | 0.608 [0.597, 0.619] | 0.505 [0.496, 0.516] | 4 [3, 4] | 9 [9, 9] | 0.723 [0.712, 0.736] | +0.261 [+0.242, +0.280] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | oracle | 256 | 0.463 [0.437, 0.490] | 0.132 | 0.585 [0.574, 0.597] | 0.482 [0.472, 0.494] | 4 [4, 5] | 10 [10, 10] | 0.718 [0.706, 0.730] | +0.255 [+0.236, +0.274] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | pop | 256 | 0.463 [0.437, 0.490] | 0.066 | 0.367 [0.351, 0.386] | 0.341 [0.329, 0.353] | 12 [10, 12] | 24 [24, 24] | 0.667 [0.657, 0.677] | +0.204 [+0.181, +0.227] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | layerwise | 256 | 0.463 [0.437, 0.490] | 0.080 | 0.504 [0.495, 0.512] | 0.402 [0.396, 0.408] | 8 [7, 8] | 12 [12, 12] | 0.684 [0.675, 0.694] | +0.222 [+0.199, +0.243] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | dla | 256 | 0.463 [0.437, 0.490] | 0.143 | 0.583 [0.573, 0.594] | 0.482 [0.474, 0.491] | 5 [4, 5] | 9 [9, 10] | 0.710 [0.701, 0.720] | +0.247 [+0.226, +0.269] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | rand | 256 | 0.463 [0.437, 0.490] | 0.010 | 0.129 [0.116, 0.143] | 0.153 [0.142, 0.164] | 48 [48, 48] | 48 [48, 48] | 0.439 [0.414, 0.466] | -0.023 [-0.030, -0.018] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | noise_oracle | 128 | 0.817 [0.798, 0.836] | 0.219 | 0.583 [0.552, 0.617] | 0.601 [0.576, 0.628] | 24 [16, 32] | 24 [16, 24] | 0.810 [0.794, 0.836] | -0.007 [-0.017, +0.013] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | oracle | 256 | 0.823 [0.811, 0.837] | 0.170 | 0.491 [0.463, 0.522] | 0.545 [0.524, 0.567] | 48 [48, 64] | 48 [48, 64] | 0.819 [0.806, 0.835] | -0.004 [-0.015, +0.010] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | pop | 256 | 0.823 [0.811, 0.837] | 0.065 | 0.233 [0.207, 0.260] | 0.396 [0.376, 0.417] | 128 [96, 192] | 128 [96, 128] | 0.811 [0.797, 0.827] | -0.012 [-0.021, -0.003] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | layerwise | 256 | 0.823 [0.811, 0.837] | 0.052 | 0.192 [0.167, 0.217] | 0.380 [0.363, 0.398] | 96 [96, 96] | 96 [96, 96] | 0.811 [0.797, 0.827] | -0.012 [-0.021, -0.003] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | dla | 256 | 0.823 [0.811, 0.837] | 0.192 | 0.594 [0.574, 0.617] | 0.633 [0.617, 0.650] | 16 [16, 24] | 24 [16, 24] | 0.854 [0.838, 0.872] | +0.030 [+0.015, +0.047] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | rand | 256 | 0.823 [0.811, 0.837] | 0.003 | 0.028 [0.020, 0.036] | 0.158 [0.150, 0.166] | 320 [320, 320] | 320 [320, 320] | 0.811 [0.797, 0.827] | -0.012 [-0.021, -0.003] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | noise_oracle | 256 | 0.677 [0.643, 0.707] | 0.205 | 0.611 [0.596, 0.625] | 0.530 [0.518, 0.542] | 7 [6, 8] | 9 [8, 9] | 0.729 [0.713, 0.744] | +0.052 [+0.029, +0.077] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | oracle | 256 | 0.677 [0.643, 0.707] | 0.177 | 0.585 [0.570, 0.601] | 0.511 [0.499, 0.523] | 8 [7, 9] | 10 [10, 12] | 0.729 [0.713, 0.745] | +0.052 [+0.030, +0.077] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | pop | 256 | 0.677 [0.643, 0.707] | 0.135 | 0.456 [0.438, 0.474] | 0.430 [0.413, 0.446] | 16 [16, 24] | 24 [24, 24] | 0.722 [0.706, 0.738] | +0.046 [+0.025, +0.068] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | layerwise | 256 | 0.677 [0.643, 0.707] | 0.135 | 0.501 [0.486, 0.514] | 0.439 [0.427, 0.450] | 12 [12, 16] | 16 [16, 16] | 0.730 [0.710, 0.748] | +0.053 [+0.035, +0.073] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | dla | 256 | 0.677 [0.643, 0.707] | 0.181 | 0.598 [0.582, 0.613] | 0.519 [0.508, 0.529] | 8 [7, 9] | 10 [9, 12] | 0.736 [0.720, 0.752] | +0.059 [+0.036, +0.084] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | rand | 256 | 0.677 [0.643, 0.707] | 0.011 | 0.128 [0.112, 0.143] | 0.184 [0.171, 0.196] | 64 [48, 64] | 48 [48, 48] | 0.643 [0.610, 0.672] | -0.034 [-0.039, -0.029] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | noise_oracle | 128 | 0.819 [0.798, 0.839] | 0.230 | 0.587 [0.560, 0.616] | 0.608 [0.584, 0.633] | 24 [16, 32] | 24 [24, 32] | 0.830 [0.807, 0.853] | +0.011 [-0.005, +0.028] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | oracle | 256 | 0.817 [0.802, 0.832] | 0.196 | 0.505 [0.477, 0.535] | 0.560 [0.538, 0.583] | 48 [48, 64] | 48 [48, 64] | 0.836 [0.820, 0.851] | +0.019 [+0.006, +0.032] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | pop | 256 | 0.817 [0.802, 0.832] | 0.050 | 0.246 [0.219, 0.273] | 0.400 [0.377, 0.423] | 96 [96, 128] | 96 [96, 128] | 0.797 [0.780, 0.815] | -0.020 [-0.028, -0.011] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | layerwise | 256 | 0.817 [0.802, 0.832] | 0.050 | 0.234 [0.212, 0.255] | 0.387 [0.372, 0.401] | 96 [96, 96] | 96 [96, 96] | 0.803 [0.786, 0.821] | -0.014 [-0.024, -0.002] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | dla | 256 | 0.817 [0.802, 0.832] | 0.201 | 0.603 [0.580, 0.627] | 0.648 [0.631, 0.665] | 16 [12, 16] | 24 [24, 24] | 0.880 [0.866, 0.896] | +0.063 [+0.049, +0.079] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | rand | 256 | 0.817 [0.802, 0.832] | 0.005 | 0.031 [0.022, 0.039] | 0.165 [0.157, 0.172] | 320 [320, 320] | 320 [320, 320] | 0.797 [0.780, 0.815] | -0.020 [-0.029, -0.011] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | noise_oracle | 256 | 0.627 [0.588, 0.665] | 0.190 | 0.596 [0.582, 0.610] | 0.514 [0.501, 0.526] | 6 [6, 7] | 9 [9, 10] | 0.717 [0.701, 0.733] | +0.090 [+0.060, +0.121] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | oracle | 256 | 0.627 [0.588, 0.665] | 0.179 | 0.572 [0.556, 0.588] | 0.497 [0.484, 0.510] | 7 [6, 8] | 10 [10, 12] | 0.712 [0.696, 0.729] | +0.085 [+0.056, +0.116] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | pop | 256 | 0.627 [0.588, 0.665] | 0.101 | 0.399 [0.379, 0.421] | 0.384 [0.366, 0.404] | 24 [16, 24] | 24 [24, 24] | 0.679 [0.654, 0.702] | +0.051 [+0.032, +0.071] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | layerwise | 256 | 0.627 [0.588, 0.665] | 0.114 | 0.440 [0.425, 0.454] | 0.417 [0.404, 0.431] | 16 [12, 16] | 16 [16, 16] | 0.704 [0.687, 0.722] | +0.077 [+0.049, +0.107] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | dla | 256 | 0.627 [0.588, 0.665] | 0.170 | 0.583 [0.568, 0.598] | 0.500 [0.488, 0.512] | 7 [6, 8] | 10 [10, 12] | 0.720 [0.703, 0.737] | +0.092 [+0.063, +0.123] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | rand | 256 | 0.627 [0.588, 0.665] | 0.009 | 0.126 [0.111, 0.139] | 0.174 [0.161, 0.187] | 48 [48, 64] | 48 [48, 48] | 0.603 [0.563, 0.641] | -0.025 [-0.029, -0.020] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | noise_oracle | 74 | 0.197 [0.151, 0.242] | 0.033 | 0.126 [0.102, 0.151] | 0.201 [0.180, 0.220] | 16 [8, 32] | 192 [192, 192] | 0.468 [0.444, 0.492] | +0.271 [+0.229, +0.314] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | oracle | 74 | 0.197 [0.151, 0.242] | 0.016 | 0.073 [0.054, 0.094] | 0.145 [0.128, 0.164] | 48 [24, 64] | 256 [192, 256] | 0.438 [0.414, 0.465] | +0.241 [+0.197, +0.289] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | pop | 74 | 0.197 [0.151, 0.242] | 0.048 | 0.148 [0.126, 0.172] | 0.215 [0.195, 0.235] | 16 [7, 24] | 128 [96, 192] | 0.448 [0.423, 0.473] | +0.250 [+0.204, +0.301] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | layerwise | 74 | 0.197 [0.151, 0.242] | 0.048 | 0.116 [0.098, 0.135] | 0.187 [0.171, 0.204] | 24 [24, 32] | 96 [96, 192] | 0.424 [0.400, 0.450] | +0.227 [+0.186, +0.274] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | dla | 74 | 0.197 [0.151, 0.242] | 0.022 | 0.120 [0.100, 0.141] | 0.187 [0.168, 0.206] | 16 [9, 24] | 64 [64, 96] | 0.362 [0.335, 0.391] | +0.165 [+0.122, +0.213] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | rand | 74 | 0.197 [0.151, 0.242] | 0.007 | 0.014 [0.005, 0.022] | 0.018 [0.004, 0.031] | never [never, never] | 320 [128, 384] | 0.094 [0.047, 0.144] | -0.104 [-0.122, -0.079] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | noise_oracle | 64 | 0.211 [0.051, 0.359] | 0.138 | 0.306 [0.254, 0.357] | 0.325 [0.277, 0.372] | 2 [1, 6] | 48 [24, 96] | 0.469 [0.407, 0.539] | +0.258 [+0.161, +0.380] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | oracle | 64 | 0.211 [0.051, 0.359] | 0.085 | 0.167 [0.110, 0.229] | 0.224 [0.177, 0.276] | 12 [1, 64] | 128 [64, 192] | 0.412 [0.334, 0.495] | +0.200 [+0.107, +0.318] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | pop | 64 | 0.211 [0.051, 0.359] | 0.025 | 0.172 [0.131, 0.215] | 0.212 [0.171, 0.251] | 9 [2, 32] | 128 [48, 192] | 0.398 [0.322, 0.473] | +0.186 [+0.091, +0.301] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | layerwise | 64 | 0.211 [0.051, 0.359] | 0.023 | 0.116 [0.081, 0.148] | 0.196 [0.162, 0.229] | 24 [4, 48] | 96 [64, 128] | 0.427 [0.346, 0.509] | +0.216 [+0.123, +0.330] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | dla | 64 | 0.211 [0.051, 0.359] | 0.094 | 0.246 [0.195, 0.295] | 0.282 [0.238, 0.325] | 4 [1, 16] | 32 [16, 192] | 0.427 [0.355, 0.501] | +0.216 [+0.118, +0.335] |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | rand | 64 | 0.211 [0.051, 0.359] | -0.001 | 0.011 [-0.002, 0.024] | 0.019 [-0.010, 0.047] | never [384, never] | 384 [12, 384] | 0.157 [0.017, 0.290] | -0.055 [-0.077, -0.029] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | noise_oracle | 36 | -0.051 [-0.325, 0.198] | 0.137 | 0.388 [0.308, 0.482] | 0.321 [0.250, 0.404] | n/a | 12 [9, 16] | 0.491 [0.412, 0.586] | +0.543 [+0.366, +0.752] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | oracle | 36 | -0.051 [-0.325, 0.198] | 0.102 | 0.332 [0.242, 0.437] | 0.284 [0.211, 0.368] | n/a | 16 [12, 24] | 0.480 [0.394, 0.582] | +0.532 [+0.359, +0.739] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | pop | 36 | -0.051 [-0.325, 0.198] | 0.066 | 0.318 [0.269, 0.372] | 0.265 [0.218, 0.314] | n/a | 16 [16, 24] | 0.486 [0.399, 0.584] | +0.537 [+0.364, +0.743] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | layerwise | 36 | -0.051 [-0.325, 0.198] | 0.066 | 0.259 [0.230, 0.285] | 0.242 [0.205, 0.278] | n/a | 24 [16, 24] | 0.487 [0.398, 0.590] | +0.539 [+0.365, +0.744] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | dla | 36 | -0.051 [-0.325, 0.198] | 0.061 | 0.284 [0.249, 0.315] | 0.238 [0.206, 0.267] | n/a | 24 [16, 48] | 0.456 [0.384, 0.535] | +0.508 [+0.321, +0.725] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | rand | 36 | -0.051 [-0.325, 0.198] | -0.005 | -0.017 [-0.063, 0.022] | -0.026 [-0.085, 0.030] | n/a | never [1, 64] | -0.001 [-0.018, 0.150] | +0.051 [-0.063, +0.325] |
+
+### Strata (names / objects, association probe)
+
+**Strata: names vs objects, association-probe neutral vs not (CIs only with >= 20 pairs)**
+
+| Model | Condition | Stratum | Cases | Pairs | Ceiling | Deletion ceiling | k80 greedy / oracle | Oracle overshoot | Greedy AUC k ≤ 15 |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | WinoGrande option swap (Phase 3) | names | 20 | 10 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | WinoGrande option swap (Phase 3) | objects | 236 | 118 | 0.853 [0.837, 0.867] | 0.853 [0.837, 0.868] | 10 [9, 12] / 48 [32, 64] | +0.000 [-0.009, +0.010] | 0.490 [0.470, 0.510] |
+| Mixtral-8x7B (BOS) | WinoGrande option swap (Phase 3) | names | 20 | 10 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | WinoGrande option swap (Phase 3) | objects | 236 | 118 | 0.801 [0.781, 0.819] | 0.801 [0.781, 0.820] | 7 [7, 8] / 9 [8, 9] | +0.019 [+0.009, +0.030] | 0.499 [0.486, 0.512] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | names | 140 | 70 | 0.339 [0.268, 0.405] | 0.339 [0.268, 0.405] | 3 [2, 5] / 16 [7, 32] | +0.202 [+0.164, +0.245] | 0.288 [0.256, 0.320] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) | objects | 116 | 58 | 0.140 [0.048, 0.230] | 0.140 [0.048, 0.230] | 2 [1, 3] / 2 [1, 6] | +0.346 [+0.277, +0.418] | 0.208 [0.184, 0.234] |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | names | 24 | 12 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | attr->entity, fill-in-the-blank (F1) | objects | 178 | 89 | 0.266 [0.169, 0.353] | 0.262 [0.166, 0.350] | 2 [1, 3] / 2 [1, 3] | +0.374 [+0.312, +0.443] | 0.401 [0.376, 0.427] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | names | 120 | 60 | 0.257 [0.178, 0.333] | 0.259 [0.185, 0.332] | 2 [1, 3] / 5 [1, 24] | +0.230 [+0.186, +0.281] | 0.275 [0.243, 0.309] |
+| Qwen3-30B-A3B-Base | attr->entity, fill-in-the-blank (F1) [replication] | objects | 136 | 68 | 0.109 [0.019, 0.194] | 0.104 [0.016, 0.188] | 1 [1, 2] / 1 [1, 3] | +0.358 [+0.302, +0.420] | 0.223 [0.199, 0.248] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | names | 12 | 6 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | objects | 168 | 84 | 0.083 [0.017, 0.146] | 0.088 [0.022, 0.151] | 1 [1, 2] / 1 [1, 2] | +0.385 [+0.338, +0.436] | 0.216 [0.198, 0.235] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | assoc neutral | 100 | 50 | 0.013 [-0.066, 0.091] | 0.018 [-0.060, 0.096] | 1 [1, 1] / 1 [1, 1] | +0.437 [+0.384, +0.492] | 0.213 [0.188, 0.240] |
+| Qwen3-30B-A3B-Base | direction: F1 on the Phase-3 twins | assoc not neutral | 80 | 40 | 0.191 [0.093, 0.279] | 0.196 [0.099, 0.283] | 2 [1, 3] / 4 [1, 10] | +0.305 [+0.240, +0.385] | 0.229 [0.203, 0.257] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | names | 2 | 1 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | objects | 186 | 93 | 0.416 [0.365, 0.462] | 0.416 [0.367, 0.463] | 3 [3, 4] / 4 [3, 4] | +0.268 [+0.231, +0.308] | 0.419 [0.402, 0.437] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | assoc neutral | 90 | 45 | 0.377 [0.306, 0.446] | 0.373 [0.305, 0.442] | 3 [2, 3] / 3 [2, 4] | +0.309 [+0.260, +0.359] | 0.430 [0.404, 0.459] |
+| Mixtral-8x7B (BOS) | direction: F1 on the Phase-3 twins | assoc not neutral | 98 | 49 | 0.435 [0.360, 0.501] | 0.439 [0.363, 0.505] | 4 [3, 5] / 4 [3, 5] | +0.242 [+0.189, +0.305] | 0.408 [0.386, 0.430] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | names | 12 | 6 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | objects | 168 | 84 | 0.820 [0.803, 0.838] | 0.820 [0.803, 0.839] | 11 [10, 14] / 48 [32, 48] | -0.002 [-0.011, +0.007] | 0.459 [0.438, 0.482] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | assoc neutral | 100 | 50 | 0.805 [0.784, 0.826] | 0.805 [0.784, 0.826] | 11 [10, 14] / 48 [24, 48] | +0.006 [-0.005, +0.020] | 0.454 [0.434, 0.476] |
+| Qwen3-30B-A3B-Base | direction: option swap on the same twins | assoc not neutral | 80 | 40 | 0.825 [0.793, 0.855] | 0.825 [0.794, 0.855] | 11 [8, never] / 48 [24, 64] | -0.007 [-0.018, +0.011] | 0.461 [0.422, 0.503] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | names | 2 | 1 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | objects | 186 | 93 | 0.755 [0.732, 0.777] | 0.755 [0.731, 0.776] | 8 [7, 8] / 9 [8, 10] | +0.033 [+0.021, +0.047] | 0.467 [0.452, 0.481] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | assoc neutral | 90 | 45 | 0.780 [0.751, 0.809] | 0.780 [0.751, 0.808] | 8 [7, 9] / 9 [8, 10] | +0.023 [+0.009, +0.039] | 0.475 [0.453, 0.496] |
+| Mixtral-8x7B (BOS) | direction: option swap on the same twins | assoc not neutral | 98 | 49 | 0.731 [0.696, 0.762] | 0.729 [0.695, 0.761] | 7 [7, 8] / 9 [8, 10] | +0.043 [+0.024, +0.065] | 0.459 [0.439, 0.478] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | names | 20 | 10 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | objects | 260 | 130 | 0.800 [0.781, 0.818] | 0.800 [0.781, 0.818] | never [never, never] / 96 [64, 96] | -0.003 [-0.014, +0.009] | 0.410 [0.394, 0.429] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | assoc neutral | 120 | 60 | 0.773 [0.748, 0.798] | 0.773 [0.748, 0.798] | never [10, never] / 64 [48, 96] | +0.003 [-0.015, +0.027] | 0.419 [0.389, 0.452] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins | assoc not neutral | 160 | 80 | 0.797 [0.769, 0.822] | 0.797 [0.769, 0.822] | never [never, never] / 96 [96, 96] | -0.004 [-0.016, +0.010] | 0.399 [0.381, 0.416] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | names | 32 | 16 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | objects | 376 | 188 | 0.753 [0.734, 0.771] | 0.751 [0.732, 0.768] | 7 [6, 7] / 8 [7, 8] | +0.058 [+0.048, +0.068] | 0.484 [0.474, 0.493] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | assoc neutral | 156 | 78 | 0.711 [0.670, 0.748] | 0.710 [0.668, 0.746] | 7 [6, 7] / 8 [7, 8] | +0.072 [+0.054, +0.093] | 0.455 [0.438, 0.472] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins | assoc not neutral | 252 | 126 | 0.747 [0.722, 0.771] | 0.744 [0.719, 0.768] | 6 [6, 7] / 7 [7, 8] | +0.067 [+0.053, +0.081] | 0.488 [0.476, 0.500] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | names | 28 | 14 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | objects | 288 | 144 | 0.764 [0.744, 0.783] | 0.765 [0.745, 0.784] | 12 [11, never] / 64 [48, 96] | +0.008 [-0.005, +0.021] | 0.419 [0.401, 0.438] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | assoc neutral | 128 | 64 | 0.751 [0.716, 0.783] | 0.753 [0.717, 0.787] | never [11, never] / 96 [64, 96] | +0.009 [-0.005, +0.025] | 0.402 [0.378, 0.428] |
+| Qwen3-30B-A3B-Base | copy prefix, Phase-3 twins [replication] | assoc not neutral | 188 | 94 | 0.760 [0.734, 0.784] | 0.759 [0.733, 0.784] | 11 [9, never] / 48 [48, 96] | +0.012 [-0.006, +0.031] | 0.426 [0.402, 0.449] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | names | 40 | 20 | 0.577 [0.490, 0.671] | 0.583 [0.496, 0.678] | 5 [4, 6] / 6 [5, 6] | +0.130 [+0.085, +0.176] | 0.435 [0.387, 0.487] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | objects | 404 | 202 | 0.717 [0.699, 0.735] | 0.717 [0.699, 0.735] | 7 [6, 7] / 8 [7, 8] | +0.067 [+0.058, +0.077] | 0.465 [0.455, 0.475] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | assoc neutral | 212 | 106 | 0.696 [0.668, 0.722] | 0.697 [0.670, 0.722] | 6 [6, 7] / 7 [7, 8] | +0.078 [+0.064, +0.094] | 0.458 [0.444, 0.473] |
+| Mixtral-8x7B (BOS) | copy prefix, Phase-3 twins [replication] | assoc not neutral | 232 | 116 | 0.715 [0.688, 0.741] | 0.715 [0.688, 0.741] | 7 [6, 7] / 8 [7, 8] | +0.067 [+0.054, +0.082] | 0.466 [0.453, 0.480] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | names | 256 | 128 | 0.699 [0.664, 0.733] | 0.699 [0.664, 0.733] | 8 [7, 9] / 24 [16, 32] | +0.065 [+0.045, +0.087] | 0.422 [0.405, 0.441] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | objects | 0 | 0 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | assoc neutral | 202 | 101 | 0.689 [0.649, 0.728] | 0.689 [0.649, 0.729] | 7 [6, 9] / 24 [16, 32] | +0.075 [+0.051, +0.101] | 0.426 [0.405, 0.448] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | assoc not neutral | 54 | 27 | 0.729 [0.655, 0.792] | 0.729 [0.656, 0.793] | 10 [7, 15] / 24 [12, 48] | +0.034 [-0.004, +0.080] | 0.409 [0.381, 0.444] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | names | 256 | 128 | 0.543 [0.496, 0.584] | 0.545 [0.498, 0.586] | 4 [4, 4] / 4 [4, 5] | +0.197 [+0.167, +0.232] | 0.463 [0.443, 0.481] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | objects | 0 | 0 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | assoc neutral | 232 | 116 | 0.550 [0.503, 0.592] | 0.552 [0.505, 0.594] | 4 [4, 4] / 4 [4, 5] | +0.190 [+0.159, +0.226] | 0.462 [0.442, 0.482] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | assoc not neutral | 24 | 12 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | names | 256 | 128 | 0.737 [0.706, 0.767] | 0.731 [0.699, 0.762] | 9 [8, 12] / 32 [24, 48] | +0.033 [+0.017, +0.050] | 0.426 [0.408, 0.446] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | objects | 0 | 0 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | assoc neutral | 184 | 92 | 0.741 [0.703, 0.778] | 0.736 [0.697, 0.773] | 8 [7, 11] / 32 [24, 48] | +0.033 [+0.013, +0.055] | 0.439 [0.416, 0.465] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | assoc not neutral | 72 | 36 | 0.727 [0.666, 0.780] | 0.719 [0.654, 0.775] | 12 [8, never] / 48 [24, 64] | +0.031 [+0.005, +0.065] | 0.395 [0.366, 0.430] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | names | 256 | 128 | 0.461 [0.436, 0.487] | 0.463 [0.437, 0.490] | 4 [3, 4] / 4 [3, 4] | +0.269 [+0.251, +0.288] | 0.431 [0.422, 0.441] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | objects | 0 | 0 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | assoc neutral | 228 | 114 | 0.467 [0.441, 0.493] | 0.468 [0.441, 0.496] | 4 [3, 4] / 4 [3, 4] | +0.267 [+0.248, +0.286] | 0.433 [0.423, 0.443] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | assoc not neutral | 28 | 14 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | names | 256 | 128 | 0.824 [0.811, 0.837] | 0.823 [0.811, 0.837] | 10 [8, 11] / 24 [24, 32] | -0.005 [-0.016, +0.007] | 0.483 [0.466, 0.503] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | objects | 0 | 0 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | assoc neutral | 218 | 109 | 0.819 [0.805, 0.833] | 0.818 [0.804, 0.832] | 9 [8, 10] / 24 [16, 24] | +0.000 [-0.012, +0.013] | 0.487 [0.468, 0.507] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | assoc not neutral | 38 | 19 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | names | 256 | 128 | 0.677 [0.643, 0.708] | 0.677 [0.643, 0.707] | 6 [6, 7] / 7 [6, 8] | +0.069 [+0.046, +0.093] | 0.463 [0.452, 0.475] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | objects | 0 | 0 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | assoc neutral | 234 | 117 | 0.687 [0.655, 0.717] | 0.687 [0.655, 0.716] | 6 [6, 7] / 7 [7, 8] | +0.060 [+0.038, +0.083] | 0.462 [0.451, 0.474] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | assoc not neutral | 22 | 11 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | names | 256 | 128 | 0.816 [0.800, 0.831] | 0.817 [0.802, 0.832] | 10 [9, 11] / 32 [24, 48] | +0.004 [-0.006, +0.014] | 0.482 [0.463, 0.503] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | objects | 0 | 0 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | assoc neutral | 200 | 100 | 0.817 [0.799, 0.834] | 0.818 [0.801, 0.834] | 9 [9, 11] / 32 [24, 48] | +0.005 [-0.006, +0.016] | 0.482 [0.460, 0.505] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | assoc not neutral | 56 | 28 | 0.812 [0.783, 0.841] | 0.815 [0.786, 0.844] | 10 [7, 15] / 32 [16, 48] | -0.002 [-0.019, +0.017] | 0.482 [0.440, 0.527] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | names | 256 | 128 | 0.626 [0.587, 0.664] | 0.627 [0.588, 0.665] | 6 [5, 6] / 6 [5, 7] | +0.104 [+0.075, +0.134] | 0.445 [0.433, 0.456] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | objects | 0 | 0 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | assoc neutral | 222 | 111 | 0.652 [0.616, 0.688] | 0.653 [0.616, 0.689] | 6 [5, 7] / 7 [6, 8] | +0.081 [+0.055, +0.110] | 0.445 [0.433, 0.458] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | assoc not neutral | 34 | 17 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | names | 74 | 37 | 0.197 [0.151, 0.242] | 0.197 [0.151, 0.242] | 4 [3, 7] / 24 [10, 32] | +0.283 [+0.243, +0.327] | 0.151 [0.136, 0.166] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | objects | 0 | 0 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | assoc neutral | 52 | 26 | 0.195 [0.143, 0.250] | 0.195 [0.143, 0.250] | 4 [2, 7] / 24 [8, 32] | +0.277 [+0.229, +0.327] | 0.154 [0.136, 0.174] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | assoc not neutral | 22 | 11 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | names | 12 | 6 | – | – | – | – | – |
+| Qwen3-30B-A3B-Base | attr->entity, natural sentence (F2E) | objects | 52 | 26 | 0.108 [-0.051, 0.250] | 0.108 [-0.051, 0.250] | 1 [1, 2] / 1 [1, 3] | +0.324 [+0.225, +0.454] | 0.290 [0.244, 0.335] |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | names | 4 | 2 | – | – | – | – | – |
+| Mixtral-8x7B (BOS) | attr->entity, natural sentence (F2E) | objects | 32 | 16 | – | – | – | – | – |
+
+### Seed-clustered CIs (template conditions)
+
+**Template conditions: pair-clustered vs seed-clustered bootstrap CIs (same point estimates)**
+
+| Model | Condition | Pairs | Seed templates | Ceiling (pair CI) | Ceiling (seed CI) | k80 greedy (pair / seed CI) | k80 oracle (pair / seed CI) | Overshoot (pair / seed CI) | Greedy AUC k ≤ 15 (pair / seed CI) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | copy prefix, templates, orig verb | 128 | 13 | 0.699 [0.664, 0.733] | 0.699 [0.583, 0.791] | 8 [7, 9] / 8 [5, 14] | 24 [16, 32] / 24 [9, 48] | +0.065 [+0.045, +0.087] / +0.065 [+0.012, +0.131] | 0.422 [0.405, 0.441] / 0.422 [0.370, 0.480] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, orig verb | 128 | 10 | 0.543 [0.496, 0.584] | 0.543 [0.376, 0.676] | 4 [4, 4] / 4 [3, 5] | 4 [4, 5] / 4 [3, 6] | +0.197 [+0.167, +0.232] / +0.197 [+0.102, +0.321] | 0.463 [0.443, 0.481] / 0.463 [0.398, 0.531] |
+| Qwen3-30B-A3B-Base | copy prefix, templates, neutral verb | 128 | 8 | 0.737 [0.706, 0.767] | 0.737 [0.618, 0.830] | 9 [8, 12] / 9 [5, never] | 32 [24, 48] / 32 [16, 96] | +0.033 [+0.017, +0.050] / +0.033 [-0.007, +0.100] | 0.426 [0.408, 0.446] / 0.426 [0.355, 0.518] |
+| Mixtral-8x7B (BOS) | copy prefix, templates, neutral verb | 128 | 8 | 0.461 [0.436, 0.487] | 0.461 [0.374, 0.627] | 4 [3, 4] / 4 [3, 5] | 4 [3, 4] / 4 [3, 6] | +0.269 [+0.251, +0.288] / +0.269 [+0.161, +0.328] | 0.431 [0.422, 0.441] / 0.431 [0.401, 0.479] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, orig verb | 128 | 17 | 0.824 [0.811, 0.837] | 0.824 [0.789, 0.862] | 10 [8, 11] / 10 [7, 14] | 24 [24, 32] / 24 [16, 48] | -0.005 [-0.016, +0.007] / -0.005 [-0.019, +0.020] | 0.483 [0.466, 0.503] / 0.483 [0.437, 0.534] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, orig verb | 128 | 18 | 0.677 [0.643, 0.708] | 0.677 [0.577, 0.759] | 6 [6, 7] / 6 [5, 8] | 7 [6, 8] / 7 [5, 10] | +0.069 [+0.046, +0.093] / +0.069 [+0.011, +0.143] | 0.463 [0.452, 0.475] / 0.463 [0.434, 0.495] |
+| Qwen3-30B-A3B-Base | verb templates ent->attr, neutral verb | 128 | 12 | 0.816 [0.800, 0.831] | 0.816 [0.767, 0.865] | 10 [9, 11] / 10 [6, never] | 32 [24, 48] / 32 [16, 64] | +0.004 [-0.006, +0.014] / +0.004 [-0.016, +0.028] | 0.482 [0.463, 0.503] / 0.482 [0.423, 0.550] |
+| Mixtral-8x7B (BOS) | verb templates ent->attr, neutral verb | 128 | 12 | 0.626 [0.587, 0.664] | 0.626 [0.478, 0.750] | 6 [5, 6] / 6 [4, 8] | 6 [5, 7] / 6 [4, 10] | +0.104 [+0.075, +0.134] / +0.104 [+0.012, +0.213] | 0.445 [0.433, 0.456] / 0.445 [0.406, 0.483] |
+| Qwen3-30B-A3B-Base | verb templates attr->entity (F1), orig verb | 37 | 5 | 0.197 [0.151, 0.242] | 0.197 [0.175, 0.491] | 4 [3, 7] / 4 [3, never] | 24 [10, 32] / 24 [7, 128] | +0.283 [+0.243, +0.327] / +0.283 [+0.085, +0.316] | 0.151 [0.136, 0.166] / 0.151 [0.144, 0.250] |
+
+### Deviations and caveats
+
+- Prefill rows: a task's first pass holds every case (A0 runs on discovery rows too; the DLA and direct-split diagnostics are sliced from it); later passes hold only the validation cases, the only ones later work refers to (rows unchanged; bf16 batch-composition noise as in Phase 3, see the prefill SD column).
+- Deletion k80 is computed on each curve's own cases (noise_oracle: its noising-single rows), so its ceiling can differ slightly from the all-validation deletion ceiling shown in the figures.
+- k80 of the ceiling is undefined when M ≤ 0.1 (a negative or near-zero ceiling is reached by any k); those cells report k for 80 % of each curve's own maximum instead (a different quantity: it says how fast a curve saturates, not how much).
+- Noising singles: Qwen3 the first 128 validation rows (Phase 3), Mixtral all validation rows (Phase 3: 128; 64 candidates per row make the full set cheap).
+- No beam / exact / Shapley (ext12 scope); greedy ≈ optimal was shown in Phase 3.
+
+### Files
+
+Code `moetrace/ext13ab.py`, `scripts/ext13ab_{run,analyze,plot,text,ready}.py`, chains `scripts/ext13ab_chain.sh`, smoke `scripts/ext13ab_smoke_chain.sh` (`results/p5_F1pre_*_ab_smoke`, testing only). Runs `results/p5_*_ab/`. Numbers `results/ext13ab_summary.json`; tables `results/tables/ext13ab_*`; figures `results/figures/ext13ab_*`.
+
+
+## Direction 13c: Phase 5 head + expert add-back
+
+**Summary.** Mixed head + expert greedy add-back at the final position (validation directed cases, 20 exact joint steps, ceiling 1 = all heads): Qwen3 f1 r(20) 0.97 [0.94, 1.00], heads among the first 10 picks 8.1, k80 7; Mixtral f1 r(20) 1.03 [1.00, 1.07], heads among the first 10 picks 6.4, k80 8; Qwen3 dir_f1 r(20) 0.87 [0.84, 0.89], heads among the first 10 picks 8.2, k80 13; Mixtral dir_f1 r(20) 1.00 [0.97, 1.04], heads among the first 10 picks 5.9, k80 9; Qwen3 dir_opt r(20) 0.88 [0.86, 0.92], heads among the first 10 picks 3.6, k80 13; Mixtral dir_opt r(20) 0.89 [0.88, 0.90], heads among the first 10 picks 2.6, k80 14; Qwen3 cp_nat r(20) 0.87 [0.84, 0.89], heads among the first 10 picks 4.3, k80 14; Mixtral cp_nat r(20) 0.92 [0.91, 0.94], heads among the first 10 picks 2.9, k80 11; Qwen3 cp_vt_orig r(20) 0.94 [0.86, 1.04], heads among the first 10 picks 4.5, k80 11; Mixtral cp_vt_orig r(20) 0.94 [0.90, 0.97], heads among the first 10 picks 4.0, k80 10; Qwen3 cp_vt_neu r(20) 0.93 [0.84, 1.06], heads among the first 10 picks 4.5, k80 11; Mixtral cp_vt_neu r(20) 0.89 [0.83, 0.97], heads among the first 10 picks 3.3, k80 13; Qwen3 vt_e2a_orig r(20) 0.96 [0.89, 1.07], heads among the first 10 picks 3.6, k80 10; Mixtral vt_e2a_orig r(20) 0.93 [0.90, 0.98], heads among the first 10 picks 4.2, k80 11; Qwen3 vt_e2a_neu r(20) 0.92 [0.88, 0.97], heads among the first 10 picks 3.6, k80 10; Mixtral vt_e2a_neu r(20) 0.89 [0.85, 0.94], heads among the first 10 picks 4.0, k80 12; Qwen3 vt_a2e_orig r(20) 1.03 [0.90, 1.07], heads among the first 10 picks 9.0, k80 6; Qwen3 f2e r(20) 1.02 [0.95, 1.09], heads among the first 10 picks 7.4, k80 8; Mixtral f2e r(20) 0.83 [0.77, 0.90], heads among the first 10 picks 6.8, k80 17. Phase 4 references: Qwen3 CounterFact STR r(20) 0.97, heads in first 10 6.2; Qwen3 WinoGrande STR r(20) 0.93, heads in first 10 3.6; Qwen3 IOI STR (S2 -> IO) r(20) 0.94, heads in first 10 9.9; Mixtral CounterFact STR r(20) 1.00, heads in first 10 6.4; Mixtral WinoGrande STR r(20) 0.94, heads in first 10 2.8.
+Best single heads (rescue / drop; attention label from the clean run's final-position attention): Qwen3 f1: L40H2 +0.257 (self (final token)), L42H10 +0.212 (mover (mention: answer)), L41H20 +0.134 (mover (mention: answer)); Mixtral f1: L18H10 +0.092 (other context tokens), L20H21 +0.083 (self (final token)), L20H27 +0.081 (STR site (trigger)); Qwen3 dir_f1: L40H2 +0.210 (self (final token)), L36H23 +0.108 (STR site (trigger)), L42H10 +0.101 (mover (mention: answer)); Mixtral dir_f1: L20H27 +0.121 (STR site (trigger)), L21H11 +0.106 (mover (mention: answer)), L12H21 +0.100 (STR site (trigger)); Qwen3 dir_opt: L46H24 +0.074 (diffuse), L41H27 +0.056 (sink (pos0)), L38H18 +0.052 (sink (pos0)); Mixtral dir_opt: L25H9 +0.064 (STR site (filled entity)), L22H20 +0.056 (STR site (filled entity)), L19H13 +0.043 (STR site (filled entity)); Qwen3 cp_nat: L46H24 +0.146 (other context tokens), L41H27 +0.099 (diffuse), L38H18 +0.062 (sink (pos0)); Mixtral cp_nat: L22H20 +0.074 (STR site (filled entity)), L25H9 +0.074 (other context tokens), L19H13 +0.050 (STR site (filled entity)); Qwen3 cp_vt_orig: L41H0 +0.077 (STR site (filled entity)), L42H30 +0.076 (STR site (filled entity)), L41H5 +0.048 (diffuse); Mixtral cp_vt_orig: L13H18 +0.077 (STR site (filled entity)), L8H8 +0.056 (STR site (filled entity)), L22H20 +0.048 (other context tokens); Qwen3 cp_vt_neu: L41H0 +0.104 (STR site (filled entity)), L42H30 +0.063 (STR site (filled entity)), L31H16 +0.054 (STR site (filled entity)); Mixtral cp_vt_neu: L13H18 +0.069 (STR site (filled entity)), L19H13 +0.065 (STR site (filled entity)), L18H17 +0.041 (other context tokens); Qwen3 vt_e2a_orig: L42H30 +0.047 (diffuse), L38H3 +0.046 (STR site (filled entity)), L41H27 +0.043 (sink (pos0)); Mixtral vt_e2a_orig: L13H18 +0.066 (STR site (filled entity)), L8H8 +0.063 (STR site (filled entity)), L19H13 +0.057 (STR site (filled entity)); Qwen3 vt_e2a_neu: L38H3 +0.058 (other context tokens), L42H30 +0.048 (diffuse), L19H16 +0.044 (STR site (filled entity)); Mixtral vt_e2a_neu: L13H18 +0.068 (STR site (filled entity)), L19H13 +0.060 (STR site (filled entity)), L8H8 +0.044 (STR site (filled entity)); Qwen3 vt_a2e_orig: L40H2 +0.315 (self (final token)), L42H10 +0.303 (mover (mention: answer)), L36H23 +0.191 (STR site (trigger)); Qwen3 f2e: L40H2 +0.243 (other context tokens), L42H10 +0.119 (mover (mention: answer)), L41H18 +0.073 (mover (mention: answer)); Mixtral f2e: L20H21 +0.114 (other context tokens), L18H10 +0.103 (other context tokens), L19H8 +0.099 (mover (mention: answer)).
+
+### What was run
+
+Rows = the validation directed cases (family main) of every Phase-5 condition with a finished base run (data/wino_ref/p5_conditions.json, '[p5-data] BASE READY' lines), Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, bf16, STR corruption, denoising at the final position. Machinery = Phase 4 Direction 10 (moetrace/ext10_circuit.py, reused read-only through moetrace/ext13ci.py). Step 1 (scripts/ext13ci_heads_run.py): one attn_head patch per (layer, head) and one attn_layer patch per layer per row, patch-free head DLA and expert DLA, and the final position's attention distribution of the clean and corrupted prompts reduced to position classes from the pair files (mention_* = candidate mentions, attr_* = the in-context attributes of the copy prefix, prefix_ment_* = the names in the copy prefix, blank, str = STR site, pos0, final; _clean = the side of the clean prompt). Step 2 (scripts/ext13ci_circuit_run.py): mixed greedy over the row's top-32 heads ∪ its expert pool (Qwen3 top-32, Mixtral all 64 clean-active experts by single-expert rescue of the base run), head-only greedy, static orderings (single-patch oracle and DLA, mixed and heads only), in-pass ceilings (all heads, all attention, all MoE) and sanity rows; several conditions of one model share every pass. Bootstrap clusters = WinoGrande twins (HIT id) and, for the verb templates, the seed (template).
+
+| Model | Condition | Description | Rows / clusters | Cluster | Mean drop | Step-1 passes | Step-1 GPU min | Step-1 peak GB | Step-2 group |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | F1 attr→entity | 256 / 128 | twin (q_a HIT id) | 4.60 | 2 | 2.2 | 17.2 | g1 (3 conditions, 19 passes, 18.2 min, peak 11.9 GB) |
+| Mixtral-8x7B (BOS) | f1 | F1 attr→entity | 202 / 101 | twin (q_a HIT id) | 4.37 | 2 | 3.2 | 13.6 | g1 (3 conditions, 19 passes, 29.3 min, peak 16.1 GB) |
+| Qwen3-30B-A3B-Base | dir_f1 | dir: F1 on Phase-3 pairs | 180 / 90 | twin (q_a HIT id) | 5.23 | 2 | 2.0 | 12.8 | g1 (3 conditions, 19 passes, 18.2 min, peak 11.9 GB) |
+| Mixtral-8x7B (BOS) | dir_f1 | dir: F1 on Phase-3 pairs | 188 / 94 | twin (q_a HIT id) | 4.66 | 2 | 3.2 | 12.8 | g1 (3 conditions, 19 passes, 29.3 min, peak 16.1 GB) |
+| Qwen3-30B-A3B-Base | dir_opt | dir: option swap on the same pairs | 180 / 90 | twin (q_a HIT id) | 8.73 | 2 | 1.8 | 12.7 | g1 (3 conditions, 19 passes, 18.2 min, peak 11.9 GB) |
+| Mixtral-8x7B (BOS) | dir_opt | dir: option swap on the same pairs | 188 / 94 | twin (q_a HIT id) | 9.64 | 2 | 3.1 | 12.5 | g1 (3 conditions, 19 passes, 29.3 min, peak 16.1 GB) |
+| Qwen3-30B-A3B-Base | cp_nat | copy prefix, natural Phase-3 pairs | 280 / 70 | twin (q_a HIT id) | 5.99 | 2 | 2.3 | 18.5 | g2 (3 conditions, 19 passes, 18.2 min, peak 12.4 GB) |
+| Mixtral-8x7B (BOS) | cp_nat | copy prefix, natural Phase-3 pairs | 408 / 102 | twin (q_a HIT id) | 7.15 | 4 | 6.3 | 13.4 | g2a (1 conditions, 19 passes, 29.9 min, peak 14.1 GB) |
+| Qwen3-30B-A3B-Base | cp_vt_orig | copy prefix, templates orig | 256 / 13 | seed | 5.56 | 2 | 2.1 | 17.1 | g2 (3 conditions, 19 passes, 18.2 min, peak 12.4 GB) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | copy prefix, templates orig | 256 / 10 | seed | 5.29 | 3 | 4.7 | 11.8 | g2b (2 conditions, 19 passes, 29.3 min, peak 14.6 GB) |
+| Qwen3-30B-A3B-Base | cp_vt_neu | copy prefix, templates neutral | 256 / 8 | seed | 5.63 | 2 | 2.2 | 17.1 | g2 (3 conditions, 19 passes, 18.2 min, peak 12.4 GB) |
+| Mixtral-8x7B (BOS) | cp_vt_neu | copy prefix, templates neutral | 256 / 8 | seed | 5.41 | 3 | 4.8 | 11.8 | g2b (2 conditions, 19 passes, 29.3 min, peak 14.6 GB) |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | verb templates e→a, orig verb | 256 / 17 | seed | 6.47 | 2 | 2.1 | 17.0 | g3 (3 conditions, 19 passes, 18.7 min, peak 11.8 GB) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | verb templates e→a, orig verb | 256 / 18 | seed | 6.51 | 3 | 4.7 | 11.7 | g3 (2 conditions, 19 passes, 29.3 min, peak 14.4 GB) |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | verb templates e→a, neutral verb | 256 / 12 | seed | 6.06 | 2 | 2.2 | 17.0 | g3 (3 conditions, 19 passes, 18.7 min, peak 11.8 GB) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | verb templates e→a, neutral verb | 256 / 12 | seed | 5.81 | 3 | 4.7 | 11.7 | g3 (2 conditions, 19 passes, 29.3 min, peak 14.4 GB) |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | verb templates a→e, orig verb | 74 / 5 | seed | 3.66 | 1 | 1.0 | 10.8 | g3 (3 conditions, 19 passes, 18.7 min, peak 11.8 GB) |
+| Qwen3-30B-A3B-Base | f2e | F2E natural, blank at end | 64 / 32 | twin (q_a HIT id) | 8.38 | 1 | 1.0 | 9.7 | g4 (1 conditions, 19 passes, 18.5 min, peak 4.1 GB) |
+| Mixtral-8x7B (BOS) | f2e | F2E natural, blank at end | 36 / 18 | twin (q_a HIT id) | 6.94 | 1 | 1.6 | 8.1 | g4 (1 conditions, 19 passes, 28.9 min, peak 6.5 GB) |
+
+### Step 1. Single heads at every layer, head DLA, attention of the top heads
+
+| Run | Rows / units | Mean drop | Heads Z8 + / − (both halves) | Σ single heads / drop (all; positive) | Pop. heads for 50/80/90 % (additive) | Best head / best expert per row (median) | Rows best head > best expert | Heads in joint top-32 | DLA vs single heads: pop. r / top-1 agree | experts: row r (DLA vs single) | Σ head DLA vs direct split (r, ratio) | Σ heads vs attn_layer (row-layer r) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | 256 / 128 | 4.60 | 30 / 26 (49) | -1.03, 4.04 | 3/5/6 | 0.304 / 0.143 | 0.88 | 24 [18, 28] | 0.56 / 0.26 | 0.38 | 0.981, 0.991 | 0.34 |
+| Mixtral-8x7B (BOS), F1 attr→entity | 202 / 101 | 4.37 | 27 / 24 (40) | 2.34, 3.66 | 7/12/14 | 0.217 / 0.160 | 0.64 | 21 [16, 24] | 0.50 / 0.15 | 0.71 | 0.996, 1.008 | 0.34 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | 180 / 90 | 5.23 | 42 / 30 (61) | 3.16, 5.62 | 4/8/10 | 0.238 / 0.111 | 0.88 | 26 [21, 29] | 0.54 / 0.19 | 0.53 | 0.985, 0.995 | 0.33 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | 188 / 94 | 4.66 | 20 / 20 (38) | 2.68, 3.92 | 5/10/12 | 0.209 / 0.161 | 0.66 | 20 [17, 23] | 0.54 / 0.15 | 0.72 | 0.991, 1.004 | 0.33 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | 180 / 90 | 8.73 | 21 / 13 (26) | -0.13, 1.32 | 22/83/120 | 0.114 / 0.189 | 0.12 | 12 [8, 17] | 0.86 / 0.36 | 0.56 | 0.992, 0.992 | 0.37 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | 188 / 94 | 9.64 | 21 / 6 (24) | 0.17, 0.78 | 31/None/None | 0.087 / 0.186 | 0.10 | 13 [10, 15] | 0.79 / 0.35 | 0.82 | 0.999, 0.999 | 0.30 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | 280 / 70 | 5.99 | 16 / 14 (26) | -0.95, 1.53 | 10/33/45 | 0.192 / 0.174 | 0.53 | 14 [8, 21] | 0.91 / 0.58 | 0.39 | 0.983, 0.807 | 0.37 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | 408 / 102 | 7.15 | 20 / 5 (22) | 0.71, 1.11 | 19/71/118 | 0.108 / 0.179 | 0.15 | 14 [11, 17] | 0.77 / 0.37 | 0.82 | 0.997, 1.001 | 0.31 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | 256 / 13 | 5.56 | 38 / 26 (41) | -0.83, 2.05 | 12/27/33 | 0.154 / 0.185 | 0.36 | 15 [10, 21] | 0.81 / 0.25 | 0.44 | 0.984, 1.083 | 0.37 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | 256 / 10 | 5.29 | 30 / 15 (18) | 0.66, 1.54 | 15/35/46 | 0.172 / 0.179 | 0.44 | 14 [11, 18] | 0.62 / 0.25 | 0.76 | 0.995, 1.004 | 0.33 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | 256 / 8 | 5.63 | 32 / 33 (29) | 0.53, 2.45 | 13/30/38 | 0.164 / 0.200 | 0.27 | 14 [9, 21] | 0.77 / 0.20 | 0.40 | 0.987, 1.069 | 0.36 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | 256 / 8 | 5.41 | 31 / 21 (16) | 1.76, 2.36 | 15/32/40 | 0.118 / 0.158 | 0.28 | 14 [11, 18] | 0.66 / 0.26 | 0.79 | 0.994, 0.979 | 0.31 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | 256 / 17 | 6.47 | 35 / 21 (29) | -1.06, 1.25 | 21/58/81 | 0.144 / 0.213 | 0.20 | 12 [8, 18] | 0.83 / 0.43 | 0.58 | 0.976, 1.011 | 0.40 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | 256 / 18 | 6.51 | 32 / 10 (25) | 0.69, 1.26 | 17/41/59 | 0.175 / 0.193 | 0.41 | 13 [10, 17] | 0.67 / 0.30 | 0.83 | 0.999, 1.000 | 0.34 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | 256 / 12 | 6.06 | 27 / 23 (19) | 1.25, 2.34 | 18/45/59 | 0.140 / 0.209 | 0.22 | 12 [7, 18] | 0.82 / 0.40 | 0.55 | 0.987, 1.023 | 0.43 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | 256 / 12 | 5.81 | 32 / 12 (17) | 0.30, 1.18 | 17/40/56 | 0.185 / 0.186 | 0.37 | 14 [11, 18] | 0.67 / 0.27 | 0.82 | 0.999, 1.001 | 0.33 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | 74 / 5 | 3.66 | 27 / 22 (30) | 2.48, 7.65 | 2/3/4 | 0.323 / 0.100 | 1.00 | 28 [24, 31] | 0.53 / 0.30 | 0.47 | 0.954, 0.990 | 0.34 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | 64 / 32 | 8.38 | 26 / 23 (38) | 0.35, 3.78 | 4/10/12 | 0.249 / 0.152 | 0.69 | 24 [17, 27] | 0.57 / 0.06 | 0.48 | 0.965, 1.022 | 0.38 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | 36 / 18 | 6.94 | 22 / 15 (29) | 2.01, 3.02 | 6/14/18 | 0.175 / 0.118 | 0.64 | 20 [18, 24] | 0.54 / 0.08 | 0.83 | 0.996, 0.997 | 0.39 |
+
+**Top and bottom heads (validation).**
+
+| Run | Head | Rank | Rescue / drop [95% CI] | Rescue (logits) | z (all / halves) | Z8 both halves | DLA / drop | Row top-5 / top-1 share | Attention (clean run) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | L40H2 | 1 | +0.257 [+0.242, +0.272] | +1.18 | +14.8 / +14.3, +15.0 | yes | +0.005 | 0.93 / 0.46 | self (final token) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L42H10 | 2 | +0.212 [+0.191, +0.234] | +0.97 | +12.2 / +12.0, +12.2 | yes | +0.397 | 0.73 / 0.25 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L41H20 | 3 | +0.134 [+0.121, +0.148] | +0.62 | +7.7 / +7.8, +7.6 | yes | +0.052 | 0.41 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L39H29 | 4 | +0.119 [+0.108, +0.132] | +0.55 | +6.9 / +6.9, +6.8 | yes | +0.005 | 0.28 / 0.02 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L43H24 | 5 | +0.110 [+0.099, +0.122] | +0.51 | +6.4 / +6.0, +6.6 | yes | +0.090 | 0.25 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L36H28 | 6 | +0.107 [+0.095, +0.121] | +0.49 | +6.2 / +6.1, +6.3 | yes | +0.002 | 0.21 / 0.02 | diffuse |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L36H23 | 7 | +0.096 [+0.082, +0.111] | +0.44 | +5.5 / +5.9, +5.1 | yes | +0.001 | 0.21 / 0.05 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L38H20 | 8 | +0.093 [+0.083, +0.103] | +0.43 | +5.4 / +5.2, +5.5 | yes | +0.001 | 0.13 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L44H15 | 1536 | -0.244 [-0.278, -0.212] | -1.12 | -14.0 / -14.2, -13.5 | yes | -0.104 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L44H31 | 1535 | -0.104 [-0.116, -0.092] | -0.48 | -5.9 / -6.0, -5.8 | yes | -0.064 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L36H31 | 1534 | -0.100 [-0.111, -0.090] | -0.46 | -5.7 / -5.6, -5.8 | yes | -0.001 | 0.00 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), F1 attr→entity | L18H10 | 1 | +0.092 [+0.080, +0.105] | +0.40 | +8.3 / +8.4, +8.0 | yes | +0.003 | 0.37 / 0.07 | other context tokens |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H21 | 2 | +0.083 [+0.066, +0.102] | +0.36 | +7.4 / +8.0, +6.6 | yes | +0.008 | 0.30 / 0.05 | self (final token) |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H27 | 3 | +0.081 [+0.064, +0.100] | +0.36 | +7.3 / +5.6, +8.8 | yes | +0.024 | 0.38 / 0.15 | STR site (trigger) |
+| Mixtral-8x7B (BOS), F1 attr→entity | L21H11 | 4 | +0.072 [+0.057, +0.089] | +0.32 | +6.4 / +6.0, +6.7 | yes | +0.082 | 0.30 / 0.08 | diffuse |
+| Mixtral-8x7B (BOS), F1 attr→entity | L31H22 | 5 | +0.068 [+0.060, +0.077] | +0.30 | +6.1 / +5.4, +6.5 | yes | +0.057 | 0.19 / 0.02 | other context tokens |
+| Mixtral-8x7B (BOS), F1 attr→entity | L19H12 | 6 | +0.068 [+0.057, +0.080] | +0.30 | +6.0 / +6.2, +5.7 | yes | +0.011 | 0.27 / 0.02 | STR site (trigger) |
+| Mixtral-8x7B (BOS), F1 attr→entity | L12H21 | 7 | +0.066 [+0.051, +0.082] | +0.29 | +5.9 / +6.6, +4.9 | yes | +0.001 | 0.25 / 0.12 | STR site (trigger) |
+| Mixtral-8x7B (BOS), F1 attr→entity | L16H1 | 8 | +0.063 [+0.050, +0.077] | +0.27 | +5.6 / +6.0, +5.0 | yes | +0.002 | 0.21 / 0.07 | other context tokens |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H25 | 1024 | -0.058 [-0.069, -0.048] | -0.25 | -5.5 / -4.8, -6.2 | yes | -0.029 | 0.00 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), F1 attr→entity | L28H2 | 1023 | -0.054 [-0.063, -0.046] | -0.24 | -5.2 / -4.9, -5.4 | yes | -0.035 | 0.00 / 0.00 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), F1 attr→entity | L18H11 | 1022 | -0.049 [-0.056, -0.042] | -0.21 | -4.7 / -4.7, -4.6 | yes | -0.002 | 0.00 / 0.00 | other context tokens |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L40H2 | 1 | +0.210 [+0.194, +0.227] | +1.10 | +15.6 / +15.1, +15.8 | yes | +0.013 | 0.94 / 0.61 | self (final token) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L36H23 | 2 | +0.108 [+0.098, +0.120] | +0.57 | +8.0 / +8.4, +7.3 | yes | +0.002 | 0.42 / 0.04 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L42H10 | 3 | +0.101 [+0.082, +0.121] | +0.53 | +7.4 / +7.6, +7.0 | yes | +0.176 | 0.35 / 0.06 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L42H31 | 4 | +0.092 [+0.075, +0.110] | +0.48 | +6.7 / +7.7, +5.6 | yes | +0.054 | 0.37 / 0.18 | self (final token) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L39H29 | 5 | +0.089 [+0.076, +0.103] | +0.47 | +6.6 / +6.3, +6.6 | yes | +0.008 | 0.28 / 0.01 | diffuse |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L39H27 | 6 | +0.074 [+0.066, +0.083] | +0.39 | +5.4 / +4.8, +5.8 | yes | +0.024 | 0.13 / 0.01 | other context tokens |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L41H20 | 7 | +0.073 [+0.061, +0.087] | +0.38 | +5.4 / +4.8, +5.8 | yes | +0.023 | 0.16 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L38H3 | 8 | +0.071 [+0.064, +0.078] | +0.37 | +5.2 / +5.5, +4.7 | yes | +0.010 | 0.25 / 0.01 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L44H15 | 1536 | -0.100 [-0.119, -0.081] | -0.52 | -7.6 / -7.7, -7.4 | yes | -0.046 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L36H31 | 1535 | -0.080 [-0.090, -0.071] | -0.42 | -6.1 / -5.8, -6.3 | yes | -0.003 | 0.00 / 0.00 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L37H3 | 1534 | -0.080 [-0.088, -0.071] | -0.42 | -6.1 / -6.4, -5.7 | yes | -0.002 | 0.00 / 0.00 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H27 | 1 | +0.121 [+0.103, +0.139] | +0.56 | +9.9 / +12.1, +7.5 | yes | +0.036 | 0.55 / 0.24 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L21H11 | 2 | +0.106 [+0.090, +0.123] | +0.50 | +8.7 / +7.2, +10.1 | yes | +0.115 | 0.49 / 0.16 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L12H21 | 3 | +0.100 [+0.084, +0.118] | +0.47 | +8.2 / +7.1, +9.1 | yes | +0.002 | 0.39 / 0.20 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L19H12 | 4 | +0.093 [+0.082, +0.104] | +0.43 | +7.6 / +8.0, +7.0 | yes | +0.014 | 0.36 / 0.05 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L18H10 | 5 | +0.085 [+0.076, +0.095] | +0.40 | +6.9 / +6.6, +7.1 | yes | +0.003 | 0.35 / 0.02 | diffuse |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L15H8 | 6 | +0.083 [+0.070, +0.096] | +0.39 | +6.7 / +6.9, +6.4 | yes | +0.002 | 0.30 / 0.09 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L16H23 | 7 | +0.082 [+0.071, +0.092] | +0.38 | +6.6 / +6.9, +6.2 | yes | +0.005 | 0.38 / 0.11 | STR site (trigger) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H21 | 8 | +0.061 [+0.050, +0.072] | +0.28 | +4.9 / +4.2, +5.4 | yes | +0.005 | 0.19 / 0.01 | self (final token) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H25 | 1024 | -0.083 [-0.095, -0.071] | -0.39 | -7.2 / -7.8, -6.4 | yes | -0.037 | 0.00 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L28H2 | 1023 | -0.060 [-0.069, -0.052] | -0.28 | -5.3 / -5.4, -5.0 | yes | -0.037 | 0.00 / 0.00 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L18H28 | 1022 | -0.056 [-0.065, -0.048] | -0.26 | -5.0 / -4.5, -5.3 | yes | -0.002 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L46H24 | 1 | +0.074 [+0.064, +0.084] | +0.64 | +14.7 / +14.6, +13.7 | yes | +0.090 | 0.56 / 0.22 | diffuse |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41H27 | 2 | +0.056 [+0.047, +0.066] | +0.49 | +11.2 / +10.1, +11.6 | yes | +0.031 | 0.51 / 0.19 | sink (pos0) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H18 | 3 | +0.052 [+0.043, +0.062] | +0.46 | +10.5 / +9.7, +10.5 | yes | +0.028 | 0.46 / 0.13 | sink (pos0) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H21 | 4 | +0.036 [+0.028, +0.047] | +0.32 | +7.3 / +5.8, +8.3 | yes | +0.021 | 0.21 / 0.06 | sink (pos0) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41H0 | 5 | +0.025 [+0.019, +0.031] | +0.22 | +5.0 / +4.6, +5.0 | yes | +0.003 | 0.17 / 0.03 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L42H30 | 6 | +0.024 [+0.020, +0.028] | +0.21 | +4.9 / +5.4, +4.0 | yes | +0.014 | 0.11 / 0.01 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L39H5 | 7 | +0.022 [+0.017, +0.028] | +0.19 | +4.4 / +3.6, +4.9 | yes | -0.001 | 0.12 / 0.02 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H19 | 8 | +0.020 [+0.016, +0.024] | +0.17 | +4.0 / +2.9, +4.9 | yes | +0.010 | 0.04 / 0.01 | diffuse |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L46H25 | 1536 | -0.085 [-0.094, -0.076] | -0.74 | -17.0 / -15.6, -17.2 | yes | -0.112 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H16 | 1535 | -0.064 [-0.075, -0.055] | -0.56 | -12.8 / -12.9, -11.8 | yes | -0.049 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41H24 | 1534 | -0.037 [-0.042, -0.032] | -0.32 | -7.4 / -7.1, -7.1 | yes | -0.021 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L25H9 | 1 | +0.064 [+0.058, +0.071] | +0.62 | +15.4 / +16.6, +13.8 | yes | +0.077 | 0.80 / 0.25 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L22H20 | 2 | +0.056 [+0.048, +0.064] | +0.54 | +13.4 / +10.6, +15.4 | yes | +0.036 | 0.66 / 0.27 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L19H13 | 3 | +0.043 [+0.037, +0.049] | +0.41 | +10.2 / +10.8, +9.4 | yes | -0.000 | 0.61 / 0.14 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L20H26 | 4 | +0.028 [+0.023, +0.034] | +0.27 | +6.7 / +8.2, +5.1 | yes | +0.001 | 0.39 / 0.07 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L13H4 | 5 | +0.021 [+0.017, +0.026] | +0.21 | +5.1 / +5.7, +4.4 | yes | +0.000 | 0.20 / 0.05 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L13H18 | 6 | +0.021 [+0.017, +0.025] | +0.20 | +5.0 / +4.8, +5.0 | yes | +0.000 | 0.23 / 0.03 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L15H9 | 7 | +0.019 [+0.015, +0.022] | +0.18 | +4.4 / +3.7, +4.9 | yes | +0.002 | 0.18 / 0.03 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L31H22 | 8 | +0.018 [+0.016, +0.020] | +0.18 | +4.4 / +4.5, +4.1 | yes | +0.019 | 0.09 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L22H23 | 1024 | -0.030 [-0.033, -0.026] | -0.29 | -7.2 / -6.1, -7.9 | yes | -0.020 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L25H11 | 1023 | -0.024 [-0.028, -0.021] | -0.23 | -5.8 / -5.7, -5.8 | yes | -0.027 | 0.00 / 0.00 | sink (pos0) |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L18H18 | 1022 | -0.015 [-0.018, -0.013] | -0.15 | -3.7 / -3.3, -4.0 | yes | -0.003 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L46H24 | 1 | +0.146 [+0.125, +0.167] | +0.87 | +18.8 / +18.6, +18.3 | yes | +0.169 | 0.72 / 0.51 | other context tokens |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L41H27 | 2 | +0.099 [+0.086, +0.113] | +0.59 | +12.8 / +11.9, +13.1 | yes | +0.057 | 0.62 / 0.09 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H18 | 3 | +0.062 [+0.053, +0.073] | +0.37 | +8.1 / +8.5, +7.4 | yes | +0.038 | 0.34 / 0.10 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H21 | 4 | +0.041 [+0.034, +0.049] | +0.25 | +5.4 / +5.4, +5.2 | yes | +0.030 | 0.19 / 0.01 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L29H0 | 5 | +0.032 [+0.021, +0.044] | +0.19 | +4.2 / +4.4, +4.0 | yes | +0.001 | 0.21 / 0.06 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L40H2 | 6 | +0.031 [+0.025, +0.037] | +0.19 | +4.1 / +4.5, +3.5 | yes | +0.010 | 0.09 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L42H30 | 7 | +0.024 [+0.019, +0.031] | +0.15 | +3.2 / +3.4, +2.9 | yes | +0.012 | 0.05 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H20 | 8 | +0.024 [+0.019, +0.029] | +0.14 | +3.1 / +2.7, +3.4 | yes | +0.010 | 0.04 / 0.00 | other context tokens |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L46H25 | 1536 | -0.134 [-0.153, -0.116] | -0.80 | -17.2 / -16.8, -16.8 | yes | -0.159 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H16 | 1535 | -0.104 [-0.120, -0.089] | -0.62 | -13.3 / -12.6, -13.4 | yes | -0.088 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L41H24 | 1534 | -0.047 [-0.052, -0.043] | -0.28 | -6.0 / -6.6, -5.3 | yes | -0.028 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L22H20 | 1 | +0.074 [+0.065, +0.084] | +0.53 | +14.9 / +15.1, +14.5 | yes | +0.050 | 0.75 / 0.20 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L25H9 | 2 | +0.074 [+0.067, +0.081] | +0.53 | +14.9 / +14.4, +15.2 | yes | +0.106 | 0.79 / 0.29 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L19H13 | 3 | +0.050 [+0.043, +0.056] | +0.35 | +9.9 / +9.1, +10.6 | yes | +0.001 | 0.57 / 0.19 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L13H18 | 4 | +0.031 [+0.025, +0.037] | +0.22 | +6.1 / +6.1, +6.0 | yes | -0.000 | 0.25 / 0.06 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L31H22 | 5 | +0.029 [+0.026, +0.032] | +0.21 | +5.7 / +5.6, +5.7 | yes | +0.030 | 0.17 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L19H12 | 6 | +0.027 [+0.022, +0.033] | +0.19 | +5.4 / +5.9, +4.8 | yes | +0.011 | 0.24 / 0.02 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L13H11 | 7 | +0.026 [+0.019, +0.035] | +0.19 | +5.2 / +5.8, +4.5 | yes | +0.001 | 0.14 / 0.04 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L16H10 | 8 | +0.023 [+0.018, +0.029] | +0.16 | +4.5 / +4.7, +4.3 | yes | +0.006 | 0.13 / 0.01 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L22H23 | 1024 | -0.037 [-0.041, -0.033] | -0.26 | -7.6 / -7.4, -7.7 | yes | -0.029 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L25H11 | 1023 | -0.020 [-0.022, -0.018] | -0.14 | -4.2 / -4.2, -4.2 | yes | -0.027 | 0.00 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L31H20 | 1022 | -0.015 [-0.017, -0.013] | -0.11 | -3.2 / -3.2, -3.0 | yes | -0.015 | 0.00 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L41H0 | 1 | +0.077 [+0.034, +0.116] | +0.43 | +11.4 / +7.7, +13.8 | yes | +0.023 | 0.36 / 0.18 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L42H30 | 2 | +0.076 [+0.052, +0.099] | +0.42 | +11.2 / +9.9, +11.2 | yes | +0.062 | 0.46 / 0.05 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L41H5 | 3 | +0.048 [+0.009, +0.111] | +0.27 | +7.1 / +9.7, +3.7 | yes | +0.035 | 0.18 / 0.10 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H3 | 4 | +0.043 [+0.030, +0.057] | +0.24 | +6.4 / +6.7, +5.3 | yes | +0.022 | 0.13 / 0.01 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L31H16 | 5 | +0.042 [+0.019, +0.068] | +0.23 | +6.2 / +5.4, +6.3 | yes | +0.016 | 0.29 / 0.16 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H19 | 6 | +0.039 [+0.017, +0.069] | +0.21 | +5.7 / +7.7, +3.0 | yes | +0.009 | 0.11 / 0.06 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H18 | 7 | +0.037 [+0.021, +0.056] | +0.21 | +5.5 / +6.5, +3.8 | yes | +0.017 | 0.11 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L40H2 | 8 | +0.036 [+0.018, +0.062] | +0.20 | +5.3 / +5.9, +4.1 | yes | +0.014 | 0.15 / 0.03 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L42H26 | 1536 | -0.080 [-0.101, -0.057] | -0.44 | -11.5 / -9.2, -12.5 | yes | -0.068 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H16 | 1535 | -0.060 [-0.083, -0.040] | -0.33 | -8.7 / -8.5, -7.9 | yes | -0.023 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L36H18 | 1534 | -0.041 [-0.062, -0.022] | -0.23 | -5.8 / -5.1, -6.0 | yes | -0.008 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L13H18 | 1 | +0.077 [+0.031, +0.136] | +0.41 | +12.9 / +6.6, +15.9 | yes | +0.007 | 0.37 / 0.21 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L8H8 | 2 | +0.056 [+0.011, +0.119] | +0.29 | +9.3 / +11.3, +5.6 | yes | +0.000 | 0.25 / 0.11 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L22H20 | 3 | +0.048 [+0.014, +0.083] | +0.25 | +8.0 / +9.9, +4.6 | yes | +0.024 | 0.31 / 0.10 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H13 | 4 | +0.044 [+0.005, +0.097] | +0.23 | +7.3 / +1.2, +11.3 | no | +0.015 | 0.21 / 0.11 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H12 | 5 | +0.037 [+0.009, +0.080] | +0.19 | +6.1 / +10.7, +0.7 | no | +0.025 | 0.30 / 0.14 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H1 | 6 | +0.035 [+0.019, +0.053] | +0.19 | +5.9 / +5.6, +4.9 | yes | +0.003 | 0.19 / 0.02 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L18H10 | 7 | +0.031 [+0.014, +0.057] | +0.17 | +5.2 / +7.9, +1.7 | no | +0.007 | 0.24 / 0.03 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L27H19 | 8 | +0.029 [-0.003, +0.087] | +0.15 | +4.8 / -0.2, +8.3 | no | +0.026 | 0.11 / 0.04 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L22H23 | 1024 | -0.038 [-0.069, -0.008] | -0.20 | -6.5 / -5.8, -5.7 | yes | -0.025 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L18H18 | 1023 | -0.026 [-0.049, -0.008] | -0.14 | -4.4 / -2.4, -5.4 | yes | -0.010 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L31H20 | 1022 | -0.023 [-0.038, -0.011] | -0.12 | -3.9 / -2.3, -4.6 | yes | -0.023 | 0.00 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41H0 | 1 | +0.104 [+0.032, +0.164] | +0.58 | +15.8 / +21.2, +5.6 | yes | +0.027 | 0.49 / 0.23 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H30 | 2 | +0.063 [+0.033, +0.093] | +0.35 | +9.5 / +7.3, +9.7 | yes | +0.045 | 0.40 / 0.07 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L31H16 | 3 | +0.054 [+0.018, +0.089] | +0.30 | +8.2 / +10.6, +3.4 | yes | +0.018 | 0.30 / 0.15 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H27 | 4 | +0.042 [+0.008, +0.079] | +0.23 | +6.3 / +6.9, +4.1 | yes | +0.022 | 0.24 / 0.02 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H3 | 5 | +0.037 [+0.020, +0.056] | +0.21 | +5.6 / +5.4, +4.4 | yes | +0.018 | 0.09 / 0.00 | other context tokens |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L40H2 | 6 | +0.036 [+0.011, +0.081] | +0.20 | +5.4 / +4.8, +4.7 | yes | +0.012 | 0.10 / 0.04 | sink (pos0) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H18 | 7 | +0.030 [+0.015, +0.054] | +0.17 | +4.5 / +2.0, +6.2 | yes | +0.015 | 0.07 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41H5 | 8 | +0.028 [+0.006, +0.068] | +0.16 | +4.2 / +2.4, +5.2 | yes | +0.020 | 0.13 / 0.04 | diffuse |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H26 | 1536 | -0.067 [-0.100, -0.043] | -0.38 | -10.4 / -7.4, -11.2 | yes | -0.059 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H16 | 1535 | -0.051 [-0.081, -0.031] | -0.29 | -7.9 / -6.4, -7.6 | yes | -0.027 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41H7 | 1534 | -0.042 [-0.090, +0.016] | -0.24 | -6.5 / -12.2, +1.7 | no | -0.009 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L13H18 | 1 | +0.069 [+0.020, +0.175] | +0.37 | +11.0 / +7.0, +10.9 | yes | +0.021 | 0.39 / 0.14 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L19H13 | 2 | +0.065 [+0.008, +0.198] | +0.35 | +10.4 / +0.4, +13.4 | no | +0.038 | 0.32 / 0.22 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H17 | 3 | +0.041 [+0.012, +0.058] | +0.22 | +6.4 / +1.5, +7.6 | no | +0.009 | 0.35 / 0.04 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L31H22 | 4 | +0.040 [+0.016, +0.064] | +0.22 | +6.4 / +2.0, +7.3 | yes | +0.034 | 0.27 / 0.08 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H10 | 5 | +0.034 [+0.012, +0.082] | +0.19 | +5.4 / +10.9, +1.7 | no | +0.009 | 0.28 / 0.15 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L20H27 | 6 | +0.031 [+0.007, +0.052] | +0.17 | +4.8 / +2.1, +5.3 | yes | +0.011 | 0.25 / 0.02 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L19H12 | 7 | +0.027 [+0.005, +0.074] | +0.15 | +4.2 / +9.7, +0.7 | no | +0.012 | 0.28 / 0.02 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L15H9 | 8 | +0.027 [+0.003, +0.053] | +0.15 | +4.2 / +0.1, +5.4 | no | +0.000 | 0.18 / 0.09 | other context tokens |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H18 | 1024 | -0.048 [-0.074, -0.018] | -0.26 | -8.1 / -3.5, -8.9 | yes | -0.016 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L31H20 | 1023 | -0.038 [-0.056, -0.018] | -0.20 | -6.4 / -3.0, -6.9 | yes | -0.038 | 0.00 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L16H2 | 1022 | -0.025 [-0.048, -0.009] | -0.14 | -4.4 / -7.1, -2.3 | yes | -0.005 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L42H30 | 1 | +0.047 [+0.030, +0.066] | +0.31 | +10.0 / +9.4, +8.8 | yes | +0.030 | 0.38 / 0.06 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H3 | 2 | +0.046 [+0.020, +0.073] | +0.30 | +9.8 / +6.4, +11.1 | yes | +0.016 | 0.32 / 0.06 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L41H27 | 3 | +0.043 [+0.008, +0.087] | +0.28 | +9.2 / +8.6, +7.9 | yes | +0.019 | 0.24 / 0.13 | sink (pos0) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L19H16 | 4 | +0.031 [+0.006, +0.065] | +0.20 | +6.6 / +8.3, +3.8 | yes | +0.004 | 0.14 / 0.09 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L43H28 | 5 | +0.030 [+0.007, +0.066] | +0.19 | +6.4 / +1.5, +9.5 | no | +0.025 | 0.11 / 0.04 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L31H16 | 6 | +0.028 [+0.013, +0.047] | +0.18 | +6.0 / +6.6, +4.4 | yes | +0.008 | 0.13 / 0.06 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H19 | 7 | +0.027 [+0.016, +0.041] | +0.17 | +5.8 / +7.7, +3.0 | yes | +0.008 | 0.19 / 0.02 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L40H15 | 8 | +0.026 [+0.006, +0.054] | +0.17 | +5.7 / +2.9, +7.1 | yes | +0.012 | 0.12 / 0.04 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L42H26 | 1536 | -0.056 [-0.072, -0.041] | -0.36 | -11.5 / -8.8, -11.8 | yes | -0.035 | 0.00 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H16 | 1535 | -0.055 [-0.091, -0.026] | -0.35 | -11.3 / -17.4, -3.8 | yes | -0.024 | 0.02 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H0 | 1534 | -0.040 [-0.067, -0.011] | -0.26 | -8.3 / -7.0, -7.9 | yes | -0.019 | 0.01 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L13H18 | 1 | +0.066 [+0.039, +0.102] | +0.43 | +12.6 / +14.0, +9.2 | yes | +0.007 | 0.42 / 0.14 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L8H8 | 2 | +0.063 [+0.030, +0.109] | +0.41 | +12.0 / +11.3, +11.8 | yes | +0.000 | 0.31 / 0.11 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H13 | 3 | +0.057 [+0.026, +0.090] | +0.37 | +10.8 / +11.8, +8.2 | yes | +0.012 | 0.39 / 0.22 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H12 | 4 | +0.045 [+0.011, +0.088] | +0.29 | +8.4 / +7.5, +8.9 | yes | +0.023 | 0.25 / 0.18 | diffuse |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H1 | 5 | +0.034 [+0.024, +0.043] | +0.22 | +6.3 / +5.8, +6.4 | yes | +0.005 | 0.24 / 0.01 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L22H20 | 6 | +0.030 [+0.010, +0.056] | +0.19 | +5.6 / +3.0, +8.8 | yes | +0.013 | 0.19 / 0.07 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L15H8 | 7 | +0.024 [+0.012, +0.041] | +0.16 | +4.5 / +4.9, +3.4 | yes | +0.006 | 0.14 / 0.02 | other context tokens |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L18H10 | 8 | +0.023 [+0.010, +0.038] | +0.15 | +4.2 / +3.9, +4.3 | yes | +0.006 | 0.16 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L18H18 | 1024 | -0.023 [-0.041, -0.009] | -0.15 | -4.6 / -4.6, -4.0 | yes | -0.008 | 0.02 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L22H23 | 1023 | -0.021 [-0.039, -0.007] | -0.13 | -4.1 / -3.2, -4.9 | yes | -0.010 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H3 | 1022 | -0.019 [-0.027, -0.012] | -0.13 | -3.9 / -4.2, -3.0 | yes | -0.003 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H3 | 1 | +0.058 [+0.027, +0.093] | +0.35 | +11.1 / +14.1, +4.6 | yes | +0.016 | 0.30 / 0.10 | other context tokens |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L42H30 | 2 | +0.048 [+0.029, +0.070] | +0.29 | +9.1 / +7.7, +8.5 | yes | +0.028 | 0.34 / 0.08 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L19H16 | 3 | +0.044 [-0.000, +0.124] | +0.26 | +8.2 / +1.8, +13.9 | no | +0.004 | 0.19 / 0.12 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L41H0 | 4 | +0.037 [+0.009, +0.069] | +0.22 | +7.0 / +5.2, +7.3 | yes | +0.009 | 0.26 / 0.14 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L43H28 | 5 | +0.035 [+0.006, +0.084] | +0.21 | +6.5 / +9.9, +0.9 | no | +0.030 | 0.10 / 0.05 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L31H16 | 6 | +0.031 [+0.014, +0.054] | +0.19 | +5.8 / +3.9, +6.7 | yes | +0.010 | 0.18 / 0.05 | STR site (filled entity) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L41H27 | 7 | +0.031 [+0.004, +0.068] | +0.19 | +5.7 / +0.2, +10.9 | no | +0.019 | 0.29 / 0.15 | mover (mention: other candidate) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H19 | 8 | +0.029 [+0.015, +0.046] | +0.18 | +5.5 / +2.4, +7.8 | yes | +0.009 | 0.18 / 0.01 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H16 | 1536 | -0.071 [-0.114, -0.039] | -0.43 | -13.8 / -8.7, -16.3 | yes | -0.027 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L42H26 | 1535 | -0.054 [-0.070, -0.037] | -0.32 | -10.5 / -10.3, -8.1 | yes | -0.033 | 0.00 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H0 | 1534 | -0.053 [-0.086, -0.027] | -0.32 | -10.4 / -12.4, -5.4 | yes | -0.015 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L13H18 | 1 | +0.068 [+0.027, +0.118] | +0.39 | +12.5 / +9.0, +13.2 | yes | +0.007 | 0.36 / 0.16 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H13 | 2 | +0.060 [+0.021, +0.109] | +0.35 | +11.1 / +7.8, +12.0 | yes | +0.011 | 0.44 / 0.17 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L8H8 | 3 | +0.044 [+0.010, +0.103] | +0.26 | +8.1 / +12.8, +2.2 | yes | +0.001 | 0.17 / 0.06 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H12 | 4 | +0.034 [+0.005, +0.080] | +0.20 | +6.3 / +11.3, +0.5 | no | +0.017 | 0.24 / 0.17 | diffuse |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L21H20 | 5 | +0.031 [+0.003, +0.087] | +0.18 | +5.6 / +9.4, +1.0 | no | +0.022 | 0.10 / 0.09 | other context tokens |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L15H8 | 6 | +0.028 [+0.011, +0.053] | +0.17 | +5.2 / +7.6, +2.0 | no | +0.006 | 0.17 / 0.01 | other context tokens |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H1 | 7 | +0.028 [+0.014, +0.042] | +0.16 | +5.1 / +3.3, +5.8 | yes | +0.005 | 0.16 / 0.05 | STR site (filled entity) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L13H16 | 8 | +0.027 [+0.005, +0.051] | +0.16 | +4.9 / +1.3, +7.3 | no | +0.003 | 0.21 / 0.04 | diffuse |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L18H18 | 1024 | -0.040 [-0.063, -0.020] | -0.23 | -7.4 / -5.6, -7.7 | yes | -0.009 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L21H21 | 1023 | -0.026 [-0.060, -0.004] | -0.15 | -4.8 / -6.9, -1.9 | no | -0.015 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H3 | 1022 | -0.018 [-0.026, -0.010] | -0.11 | -3.4 / -1.9, -4.3 | no | -0.003 | 0.00 / 0.00 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L40H2 | 1 | +0.315 [+0.264, +0.337] | +1.15 | +13.0 / +13.3, +12.8 | yes | +0.001 | 1.00 / 0.66 | self (final token) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L42H10 | 2 | +0.303 [+0.174, +0.312] | +1.11 | +12.5 / +9.1, +12.6 | yes | +0.482 | 0.95 / 0.30 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L36H23 | 3 | +0.191 [+0.165, +0.254] | +0.70 | +7.8 / +8.4, +7.7 | yes | +0.000 | 0.81 / 0.01 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L43H24 | 4 | +0.148 [+0.094, +0.152] | +0.54 | +6.1 / +4.2, +6.1 | yes | +0.128 | 0.26 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L36H28 | 5 | +0.145 [+0.050, +0.153] | +0.53 | +6.0 / +3.1, +6.1 | yes | +0.001 | 0.35 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L39H27 | 6 | +0.138 [+0.078, +0.194] | +0.51 | +5.7 / +5.4, +5.6 | yes | +0.005 | 0.24 / 0.00 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L39H29 | 7 | +0.137 [+0.132, +0.234] | +0.50 | +5.6 / +7.5, +5.4 | yes | +0.004 | 0.24 / 0.01 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L33H20 | 8 | +0.136 [+0.009, +0.148] | +0.50 | +5.6 / +0.7, +5.9 | no | +0.001 | 0.31 / 0.00 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L44H15 | 1536 | -0.332 [-0.336, -0.291] | -1.21 | -13.8 / -13.4, -13.6 | yes | -0.167 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L40H30 | 1535 | -0.179 [-0.188, -0.064] | -0.66 | -7.5 / -4.6, -7.6 | yes | -0.004 | 0.00 / 0.00 | diffuse |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L36H31 | 1534 | -0.171 [-0.177, -0.109] | -0.63 | -7.2 / -4.6, -7.3 | yes | -0.001 | 0.00 / 0.00 | STR site (trigger) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L40H2 | 1 | +0.243 [+0.208, +0.278] | +2.03 | +20.5 / +21.0, +17.9 | yes | +0.010 | 0.88 / 0.53 | other context tokens |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L42H10 | 2 | +0.119 [+0.095, +0.143] | +1.00 | +10.0 / +8.3, +10.9 | yes | +0.199 | 0.44 / 0.05 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L41H18 | 3 | +0.073 [+0.059, +0.089] | +0.62 | +6.2 / +5.4, +6.4 | yes | +0.017 | 0.16 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L43H28 | 4 | +0.068 [+0.053, +0.084] | +0.57 | +5.7 / +5.9, +5.0 | yes | +0.058 | 0.25 / 0.05 | other context tokens |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L41H20 | 5 | +0.061 [+0.042, +0.083] | +0.51 | +5.1 / +3.8, +6.1 | yes | +0.020 | 0.19 / 0.02 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L42H12 | 6 | +0.059 [+0.043, +0.076] | +0.49 | +5.0 / +5.5, +3.9 | yes | +0.051 | 0.11 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L39H29 | 7 | +0.057 [+0.040, +0.077] | +0.48 | +4.8 / +3.7, +5.6 | yes | +0.007 | 0.11 / 0.02 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L43H24 | 8 | +0.056 [+0.042, +0.073] | +0.47 | +4.7 / +3.6, +5.4 | yes | +0.039 | 0.03 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L44H15 | 1536 | -0.118 [-0.155, -0.088] | -0.99 | -10.0 / -8.7, -10.5 | yes | -0.053 | 0.00 / 0.00 | mover (mention: answer) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L40H7 | 1535 | -0.080 [-0.094, -0.067] | -0.67 | -6.8 / -6.6, -6.4 | yes | -0.004 | 0.00 / 0.00 | sink (pos0) |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L47H29 | 1534 | -0.079 [-0.095, -0.065] | -0.66 | -6.7 / -7.5, -5.3 | yes | -0.087 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L20H21 | 1 | +0.114 [+0.084, +0.144] | +0.79 | +11.7 / +11.2, +11.7 | yes | +0.015 | 0.67 / 0.19 | other context tokens |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L18H10 | 2 | +0.103 [+0.085, +0.121] | +0.71 | +10.6 / +10.4, +10.0 | yes | +0.001 | 0.72 / 0.19 | other context tokens |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L19H8 | 3 | +0.099 [+0.064, +0.146] | +0.69 | +10.2 / +11.3, +8.0 | yes | +0.045 | 0.47 / 0.14 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L16H0 | 4 | +0.095 [+0.060, +0.138] | +0.66 | +9.8 / +7.4, +12.3 | yes | +0.003 | 0.56 / 0.22 | other context tokens |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L16H3 | 5 | +0.056 [+0.025, +0.092] | +0.39 | +5.6 / +5.1, +5.9 | yes | +0.005 | 0.28 / 0.11 | mover (mention: other candidate) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L17H21 | 6 | +0.042 [+0.031, +0.054] | +0.29 | +4.2 / +3.6, +4.6 | yes | +0.001 | 0.19 / 0.00 | other context tokens |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L31H22 | 7 | +0.041 [+0.031, +0.051] | +0.28 | +4.1 / +3.9, +4.0 | yes | +0.041 | 0.06 / 0.00 | diffuse |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L19H9 | 8 | +0.040 [+0.024, +0.058] | +0.27 | +4.0 / +4.1, +3.4 | yes | +0.028 | 0.06 / 0.00 | mover (mention: answer) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L20H22 | 1024 | -0.059 [-0.071, -0.048] | -0.41 | -6.4 / -5.8, -6.6 | yes | -0.022 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L21H21 | 1023 | -0.044 [-0.063, -0.026] | -0.31 | -4.8 / -4.7, -4.6 | yes | -0.051 | 0.00 / 0.00 | self (final token) |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L17H24 | 1022 | -0.043 [-0.060, -0.031] | -0.30 | -4.7 / -4.1, -5.2 | yes | -0.002 | 0.00 / 0.00 | mover (mention: answer) |
+
+**Layers with the largest attention-output patch.**
+
+| Run | Layer | attn_layer / drop | Σ heads / drop | r(Σ heads, attn_layer) rows | Top head | Top head / drop | Z8 + / − |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | L39 | +0.297 [+0.268, +0.326] | +0.225 | 0.37 | L39H29 | +0.119 | 4 / 1 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L43 | +0.249 [+0.237, +0.261] | +0.198 | 0.30 | L43H24 | +0.110 | 4 / 3 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L42 | +0.224 [+0.204, +0.243] | +0.183 | 0.35 | L42H10 | +0.212 | 1 / 1 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L45 | +0.201 [+0.182, +0.220] | +0.172 | 0.42 | L45H29 | +0.026 | 0 / 0 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L38 | +0.153 [+0.139, +0.167] | +0.122 | 0.43 | L38H20 | +0.093 | 3 / 1 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L41 | +0.111 [+0.095, +0.128] | +0.062 | 0.30 | L41H20 | +0.134 | 2 / 1 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L16 | +0.287 [+0.263, +0.313] | +0.300 | 0.43 | L16H1 | +0.063 | 7 / 2 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L19 | +0.220 [+0.193, +0.249] | +0.244 | 0.35 | L19H12 | +0.068 | 5 / 3 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L21 | +0.109 [+0.085, +0.132] | +0.125 | 0.35 | L21H11 | +0.072 | 1 / 1 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L15 | +0.096 [+0.079, +0.116] | +0.134 | 0.36 | L15H8 | +0.060 | 3 / 0 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20 | +0.094 [+0.077, +0.111] | +0.122 | 0.31 | L20H21 | +0.083 | 2 / 2 |
+| Mixtral-8x7B (BOS), F1 attr→entity | L18 | +0.077 [+0.063, +0.092] | +0.118 | 0.37 | L18H10 | +0.092 | 4 / 5 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L43 | +0.213 [+0.198, +0.229] | +0.256 | 0.33 | L43H24 | +0.060 | 5 / 2 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L39 | +0.203 [+0.178, +0.229] | +0.240 | 0.31 | L39H29 | +0.089 | 4 / 2 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L42 | +0.162 [+0.146, +0.179] | +0.195 | 0.36 | L42H10 | +0.101 | 3 / 2 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L38 | +0.162 [+0.147, +0.177] | +0.210 | 0.36 | L38H3 | +0.071 | 6 / 1 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L45 | +0.148 [+0.124, +0.173] | +0.190 | 0.47 | L45H13 | +0.029 | 1 / 0 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L30 | +0.082 [+0.071, +0.094] | +0.107 | 0.31 | L30H15 | +0.031 | 2 / 0 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L16 | +0.278 [+0.261, +0.296] | +0.301 | 0.41 | L16H23 | +0.082 | 4 / 1 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L19 | +0.205 [+0.182, +0.229] | +0.244 | 0.33 | L19H12 | +0.093 | 3 / 3 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L21 | +0.140 [+0.119, +0.162] | +0.176 | 0.31 | L21H11 | +0.106 | 1 / 1 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20 | +0.095 [+0.078, +0.112] | +0.144 | 0.30 | L20H27 | +0.121 | 2 / 2 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L12 | +0.094 [+0.078, +0.111] | +0.151 | 0.36 | L12H21 | +0.100 | 1 / 0 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L15 | +0.093 [+0.079, +0.108] | +0.164 | 0.42 | L15H8 | +0.083 | 2 / 0 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L42 | +0.039 [+0.031, +0.048] | +0.044 | 0.43 | L42H30 | +0.024 | 3 / 1 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38 | +0.029 [+0.011, +0.049] | +0.069 | 0.45 | L38H18 | +0.052 | 5 / 3 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L40 | +0.026 [+0.019, +0.033] | +0.024 | 0.38 | L40H2 | +0.012 | 1 / 0 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L39 | +0.023 [+0.014, +0.032] | +0.027 | 0.34 | L39H5 | +0.022 | 2 / 1 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41 | +0.022 [+0.013, +0.030] | +0.020 | 0.42 | L41H27 | +0.056 | 2 / 3 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L43 | +0.019 [+0.015, +0.023] | +0.016 | 0.31 | L43H28 | +0.012 | 1 / 0 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L13 | +0.126 [+0.110, +0.142] | +0.048 | 0.31 | L13H4 | +0.021 | 3 / 0 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L19 | +0.096 [+0.085, +0.107] | +0.070 | 0.28 | L19H13 | +0.043 | 3 / 0 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L25 | +0.073 [+0.066, +0.080] | +0.065 | 0.45 | L25H9 | +0.064 | 2 / 1 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L15 | +0.054 [+0.046, +0.062] | +0.030 | 0.34 | L15H9 | +0.019 | 2 / 0 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L20 | +0.044 [+0.038, +0.049] | +0.033 | 0.33 | L20H26 | +0.028 | 3 / 1 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L31 | +0.043 [+0.040, +0.046] | +0.029 | 0.51 | L31H22 | +0.018 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L43 | +0.058 [+0.050, +0.068] | +0.063 | 0.47 | L43H28 | +0.017 | 1 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L41 | +0.057 [+0.043, +0.071] | +0.071 | 0.38 | L41H27 | +0.099 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L42 | +0.047 [+0.038, +0.056] | +0.046 | 0.28 | L42H30 | +0.024 | 1 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L34 | +0.023 [+0.013, +0.033] | +0.006 | 0.33 | L34H19 | +0.007 | 0 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L25 | +0.015 [+0.004, +0.026] | +0.016 | 0.38 | L25H8 | +0.005 | 0 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L39 | +0.014 [+0.005, +0.025] | +0.020 | 0.36 | L39H5 | +0.018 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L13 | +0.152 [+0.135, +0.170] | +0.099 | 0.32 | L13H18 | +0.031 | 3 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L19 | +0.139 [+0.129, +0.149] | +0.126 | 0.42 | L19H13 | +0.050 | 5 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L25 | +0.082 [+0.075, +0.089] | +0.079 | 0.36 | L25H9 | +0.074 | 2 / 1 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L15 | +0.076 [+0.067, +0.086] | +0.064 | 0.30 | L15H8 | +0.021 | 3 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L31 | +0.050 [+0.046, +0.055] | +0.045 | 0.43 | L31H22 | +0.029 | 2 / 1 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L16 | +0.047 [+0.039, +0.055] | +0.053 | 0.38 | L16H10 | +0.023 | 2 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L41 | +0.081 [+0.043, +0.131] | +0.092 | 0.34 | L41H0 | +0.077 | 6 / 4 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L42 | +0.071 [+0.039, +0.106] | +0.081 | 0.38 | L42H30 | +0.076 | 5 / 2 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L43 | +0.069 [+0.038, +0.110] | +0.071 | 0.31 | L43H28 | +0.028 | 3 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38 | +0.042 [+0.004, +0.083] | +0.056 | 0.27 | L38H3 | +0.043 | 4 / 4 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L35 | +0.041 [+0.026, +0.056] | +0.051 | 0.25 | L35H12 | +0.021 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L39 | +0.035 [-0.000, +0.081] | +0.042 | 0.32 | L39H30 | +0.026 | 4 / 2 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19 | +0.146 [+0.102, +0.199] | +0.134 | 0.34 | L19H13 | +0.044 | 5 / 2 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L13 | +0.125 [+0.074, +0.176] | +0.095 | 0.47 | L13H18 | +0.077 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L12 | +0.066 [+0.029, +0.120] | +0.029 | 0.38 | L12H23 | +0.021 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L8 | +0.049 [+0.011, +0.107] | +0.058 | 0.47 | L8H8 | +0.056 | 1 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L15 | +0.048 [+0.023, +0.079] | +0.028 | 0.28 | L15H8 | +0.020 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L31 | +0.045 [+0.029, +0.063] | +0.044 | 0.42 | L31H22 | +0.027 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42 | +0.101 [+0.060, +0.138] | +0.103 | 0.29 | L42H30 | +0.063 | 4 / 2 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L43 | +0.059 [+0.023, +0.125] | +0.060 | 0.28 | L43H24 | +0.020 | 3 / 0 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41 | +0.054 [+0.033, +0.081] | +0.082 | 0.28 | L41H0 | +0.104 | 6 / 4 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L35 | +0.032 [+0.015, +0.048] | +0.027 | 0.24 | L35H12 | +0.020 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L39 | +0.026 [-0.010, +0.077] | +0.028 | 0.28 | L39H1 | +0.023 | 2 / 1 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L37 | +0.021 [-0.009, +0.045] | +0.031 | 0.27 | L37H4 | +0.025 | 2 / 4 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L13 | +0.133 [+0.107, +0.188] | +0.144 | 0.29 | L13H18 | +0.069 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L19 | +0.128 [+0.072, +0.186] | +0.154 | 0.31 | L19H13 | +0.065 | 4 / 2 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L15 | +0.075 [+0.042, +0.096] | +0.098 | 0.29 | L15H9 | +0.027 | 3 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L24 | +0.056 [+0.034, +0.064] | +0.083 | 0.27 | L24H13 | +0.022 | 2 / 0 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18 | +0.043 [+0.027, +0.057] | +0.087 | 0.36 | L18H17 | +0.041 | 4 / 2 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L16 | +0.040 [+0.024, +0.077] | +0.079 | 0.28 | L16H0 | +0.025 | 3 / 3 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L42 | +0.048 [+0.023, +0.075] | +0.018 | 0.35 | L42H30 | +0.047 | 3 / 1 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L41 | +0.046 [+0.018, +0.081] | +0.017 | 0.47 | L41H27 | +0.043 | 3 / 1 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L43 | +0.038 [+0.016, +0.062] | +0.022 | 0.41 | L43H28 | +0.030 | 1 / 0 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L26 | +0.033 [+0.011, +0.056] | +0.035 | 0.54 | L26H3 | +0.020 | 2 / 0 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L40 | +0.026 [+0.007, +0.044] | -0.006 | 0.50 | L40H15 | +0.026 | 3 / 3 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L31 | +0.023 [+0.004, +0.046] | +0.015 | 0.25 | L31H16 | +0.028 | 1 / 1 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19 | +0.152 [+0.116, +0.185] | +0.142 | 0.39 | L19H13 | +0.057 | 4 / 1 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L13 | +0.101 [+0.074, +0.132] | +0.091 | 0.37 | L13H18 | +0.066 | 2 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L12 | +0.066 [+0.035, +0.110] | +0.044 | 0.41 | L12H23 | +0.018 | 2 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L15 | +0.058 [+0.038, +0.079] | +0.049 | 0.32 | L15H8 | +0.024 | 1 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L16 | +0.056 [+0.032, +0.087] | +0.055 | 0.36 | L16H10 | +0.019 | 3 / 1 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L8 | +0.055 [+0.025, +0.094] | +0.058 | 0.51 | L8H8 | +0.063 | 1 / 0 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L42 | +0.062 [+0.026, +0.097] | +0.068 | 0.34 | L42H30 | +0.048 | 2 / 1 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L43 | +0.037 [+0.010, +0.071] | +0.041 | 0.32 | L43H28 | +0.035 | 1 / 1 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L41 | +0.034 [+0.014, +0.061] | +0.043 | 0.30 | L41H0 | +0.037 | 2 / 2 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L39 | +0.025 [+0.016, +0.040] | +0.031 | 0.26 | L39H13 | +0.015 | 1 / 1 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L37 | +0.024 [+0.003, +0.044] | +0.050 | 0.36 | L37H8 | +0.018 | 3 / 2 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L31 | +0.023 [+0.001, +0.045] | +0.063 | 0.53 | L31H16 | +0.031 | 1 / 2 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19 | +0.144 [+0.110, +0.186] | +0.123 | 0.40 | L19H13 | +0.060 | 4 / 1 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L13 | +0.123 [+0.083, +0.163] | +0.079 | 0.39 | L13H18 | +0.068 | 2 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L15 | +0.089 [+0.059, +0.124] | +0.058 | 0.31 | L15H8 | +0.028 | 2 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L16 | +0.067 [+0.037, +0.109] | +0.041 | 0.37 | L16H10 | +0.019 | 5 / 2 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L12 | +0.057 [+0.032, +0.090] | +0.017 | 0.26 | L12H22 | +0.011 | 1 / 0 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L24 | +0.046 [+0.024, +0.065] | +0.033 | 0.36 | L24H13 | +0.017 | 2 / 0 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L39 | +0.378 [+0.355, +0.555] | +0.393 | 0.37 | L39H27 | +0.138 | 5 / 2 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L43 | +0.344 [+0.280, +0.348] | +0.368 | 0.38 | L43H24 | +0.148 | 2 / 0 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L42 | +0.340 [+0.203, +0.352] | +0.366 | 0.44 | L42H10 | +0.303 | 1 / 1 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L45 | +0.314 [+0.191, +0.350] | +0.369 | 0.47 | L45H20 | +0.043 | 0 / 0 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L41 | +0.190 [+0.000, +0.204] | +0.193 | 0.37 | L41H20 | +0.129 | 2 / 0 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L38 | +0.161 [+0.119, +0.234] | +0.154 | 0.57 | L38H3 | +0.082 | 3 / 0 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L42 | +0.209 [+0.177, +0.240] | +0.158 | 0.48 | L42H10 | +0.119 | 2 / 1 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L45 | +0.197 [+0.147, +0.252] | +0.166 | 0.72 | L45H29 | +0.029 | 1 / 0 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L43 | +0.168 [+0.127, +0.212] | +0.152 | 0.58 | L43H28 | +0.068 | 4 / 3 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L39 | +0.142 [+0.117, +0.168] | +0.060 | 0.52 | L39H29 | +0.057 | 3 / 1 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L37 | +0.116 [+0.073, +0.171] | +0.171 | 0.77 | L37H24 | +0.053 | 6 / 2 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L40 | +0.080 [+0.041, +0.121] | +0.082 | 0.50 | L40H2 | +0.243 | 4 / 6 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L19 | +0.249 [+0.187, +0.329] | +0.272 | 0.76 | L19H8 | +0.099 | 7 / 2 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L16 | +0.224 [+0.152, +0.299] | +0.195 | 0.56 | L16H0 | +0.095 | 3 / 1 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L20 | +0.109 [+0.081, +0.132] | +0.144 | 0.40 | L20H21 | +0.114 | 1 / 1 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L18 | +0.106 [+0.079, +0.132] | +0.132 | 0.34 | L18H10 | +0.103 | 3 / 3 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L29 | +0.105 [+0.079, +0.130] | +0.124 | 0.36 | L29H17 | +0.021 | 1 / 1 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L31 | +0.097 [+0.077, +0.115] | +0.093 | 0.45 | L31H22 | +0.041 | 2 / 1 |
+
+**Final-position attention of the top heads (clean run, mean over validation rows).** Classes as in 'What was run'; a pair 'answer side / other' = the mass on the clean prompt's own candidate (the true answer's mention, or the true attribute in the copy prefix) vs on the other candidate; rest = all other tokens. Label = the largest of these. The corrupted prompts are the same set of prompts with the sides exchanged (both directions of every pair are rows), so their masses mirror the clean ones and are not shown.
+
+| Run | Head | Rescue / drop | Label | str | mention (answer side / other) | blank | pos0 | final | rest | attr (answer side / other) | prefix_ment (answer side / other) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | L40H2 | +0.257 | self (final token) | 0.01 | 0.00 / 0.00 | 0.00 | 0.11 | 0.72 | 0.16 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L42H10 | +0.212 | mover (mention: answer) | 0.01 | 0.57 / 0.10 | 0.02 | 0.15 | 0.02 | 0.14 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L41H20 | +0.134 | mover (mention: answer) | 0.01 | 0.33 / 0.09 | 0.01 | 0.31 | 0.00 | 0.24 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L39H29 | +0.119 | mover (mention: answer) | 0.03 | 0.22 / 0.10 | 0.04 | 0.17 | 0.04 | 0.41 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L43H24 | +0.110 | sink (pos0) | 0.01 | 0.00 / 0.00 | 0.01 | 0.49 | 0.31 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L36H28 | +0.107 | diffuse | 0.12 | 0.18 / 0.06 | 0.06 | 0.13 | 0.01 | 0.44 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L36H23 | +0.096 | STR site (trigger) | 0.28 | 0.02 / 0.02 | 0.01 | 0.12 | 0.09 | 0.45 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L38H20 | +0.093 | self (final token) | 0.03 | 0.00 / 0.00 | 0.02 | 0.23 | 0.39 | 0.33 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L44H15 | -0.244 | mover (mention: answer) | 0.01 | 0.38 / 0.14 | 0.01 | 0.26 | 0.02 | 0.18 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | L44H31 | -0.104 | mover (mention: answer) | 0.02 | 0.29 / 0.07 | 0.03 | 0.19 | 0.06 | 0.33 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L18H10 | +0.092 | other context tokens | 0.15 | 0.02 / 0.02 | 0.01 | 0.08 | 0.20 | 0.53 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H21 | +0.083 | self (final token) | 0.03 | 0.01 / 0.01 | 0.01 | 0.10 | 0.31 | 0.53 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H27 | +0.081 | STR site (trigger) | 0.47 | 0.01 / 0.01 | 0.01 | 0.01 | 0.07 | 0.42 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L21H11 | +0.072 | diffuse | 0.02 | 0.20 / 0.05 | 0.00 | 0.23 | 0.04 | 0.47 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L31H22 | +0.068 | other context tokens | 0.01 | 0.00 / 0.00 | 0.01 | 0.10 | 0.24 | 0.63 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L19H12 | +0.068 | STR site (trigger) | 0.46 | 0.08 / 0.03 | 0.01 | 0.04 | 0.03 | 0.36 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L12H21 | +0.066 | STR site (trigger) | 0.46 | 0.00 / 0.00 | 0.01 | 0.07 | 0.01 | 0.45 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L16H1 | +0.063 | other context tokens | 0.10 | 0.11 / 0.06 | 0.02 | 0.08 | 0.03 | 0.60 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L20H25 | -0.058 | diffuse | 0.08 | 0.16 / 0.06 | 0.01 | 0.11 | 0.15 | 0.43 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | L28H2 | -0.054 | mover (mention: answer) | 0.02 | 0.30 / 0.05 | 0.01 | 0.18 | 0.03 | 0.41 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L40H2 | +0.210 | self (final token) | 0.00 | 0.00 / 0.00 | 0.00 | 0.06 | 0.67 | 0.26 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L36H23 | +0.108 | STR site (trigger) | 0.44 | 0.03 / 0.03 | 0.01 | 0.11 | 0.15 | 0.23 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L42H10 | +0.101 | mover (mention: answer) | 0.01 | 0.35 / 0.06 | 0.02 | 0.27 | 0.04 | 0.25 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L42H31 | +0.092 | self (final token) | 0.01 | 0.00 / 0.00 | 0.01 | 0.09 | 0.35 | 0.52 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L39H29 | +0.089 | diffuse | 0.05 | 0.19 / 0.04 | 0.04 | 0.23 | 0.05 | 0.39 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L39H27 | +0.074 | other context tokens | 0.16 | 0.20 / 0.05 | 0.01 | 0.06 | 0.02 | 0.51 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L41H20 | +0.073 | mover (mention: answer) | 0.02 | 0.25 / 0.05 | 0.01 | 0.44 | 0.01 | 0.23 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L38H3 | +0.071 | STR site (trigger) | 0.34 | 0.01 / 0.00 | 0.01 | 0.00 | 0.27 | 0.36 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L44H15 | -0.100 | mover (mention: answer) | 0.01 | 0.23 / 0.07 | 0.02 | 0.32 | 0.04 | 0.31 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | L36H31 | -0.080 | STR site (trigger) | 0.25 | 0.16 / 0.04 | 0.04 | 0.17 | 0.04 | 0.29 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H27 | +0.121 | STR site (trigger) | 0.63 | 0.01 / 0.00 | 0.00 | 0.01 | 0.06 | 0.29 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L21H11 | +0.106 | mover (mention: answer) | 0.02 | 0.27 / 0.05 | 0.00 | 0.19 | 0.04 | 0.43 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L12H21 | +0.100 | STR site (trigger) | 0.58 | 0.00 / 0.00 | 0.00 | 0.06 | 0.01 | 0.35 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L19H12 | +0.093 | STR site (trigger) | 0.57 | 0.07 / 0.02 | 0.00 | 0.04 | 0.03 | 0.28 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L18H10 | +0.085 | diffuse | 0.16 | 0.03 / 0.02 | 0.00 | 0.08 | 0.22 | 0.48 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L15H8 | +0.083 | STR site (trigger) | 0.36 | 0.05 / 0.01 | 0.01 | 0.02 | 0.01 | 0.53 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L16H23 | +0.082 | STR site (trigger) | 0.67 | 0.01 / 0.01 | 0.01 | 0.00 | 0.01 | 0.29 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H21 | +0.061 | self (final token) | 0.03 | 0.01 / 0.01 | 0.01 | 0.10 | 0.34 | 0.51 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L20H25 | -0.083 | diffuse | 0.11 | 0.18 / 0.06 | 0.00 | 0.10 | 0.15 | 0.39 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | L28H2 | -0.060 | mover (mention: answer) | 0.01 | 0.32 / 0.04 | 0.01 | 0.17 | 0.03 | 0.41 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L46H24 | +0.074 | diffuse | 0.18 | 0.02 / 0.02 |  | 0.24 | 0.16 | 0.37 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41H27 | +0.056 | sink (pos0) | 0.17 | 0.02 / 0.02 |  | 0.45 | 0.07 | 0.27 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H18 | +0.052 | sink (pos0) | 0.15 | 0.06 / 0.03 |  | 0.45 | 0.11 | 0.20 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H21 | +0.036 | sink (pos0) | 0.06 | 0.06 / 0.03 |  | 0.47 | 0.07 | 0.31 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L41H0 | +0.025 | STR site (filled entity) | 0.43 | 0.02 / 0.02 |  | 0.30 | 0.06 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L42H30 | +0.024 | STR site (filled entity) | 0.37 | 0.03 / 0.02 |  | 0.17 | 0.13 | 0.28 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L39H5 | +0.022 | STR site (filled entity) | 0.38 | 0.14 / 0.04 |  | 0.27 | 0.03 | 0.14 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H19 | +0.020 | diffuse | 0.14 | 0.02 / 0.01 |  | 0.38 | 0.08 | 0.37 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L46H25 | -0.085 | self (final token) | 0.04 | 0.02 / 0.02 |  | 0.25 | 0.51 | 0.16 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | L38H16 | -0.064 | self (final token) | 0.02 | 0.01 / 0.01 |  | 0.19 | 0.64 | 0.12 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L25H9 | +0.064 | STR site (filled entity) | 0.26 | 0.05 / 0.01 |  | 0.18 | 0.11 | 0.38 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L22H20 | +0.056 | STR site (filled entity) | 0.30 | 0.02 / 0.02 |  | 0.15 | 0.20 | 0.31 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L19H13 | +0.043 | STR site (filled entity) | 0.60 | 0.09 / 0.02 |  | 0.09 | 0.04 | 0.16 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L20H26 | +0.028 | STR site (filled entity) | 0.59 | 0.15 / 0.03 |  | 0.08 | 0.04 | 0.12 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L13H4 | +0.021 | STR site (filled entity) | 0.65 | 0.04 / 0.02 |  | 0.06 | 0.03 | 0.19 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L13H18 | +0.021 | STR site (filled entity) | 0.27 | 0.08 / 0.03 |  | 0.21 | 0.03 | 0.38 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L15H9 | +0.019 | mover (mention: answer) | 0.24 | 0.24 / 0.05 |  | 0.14 | 0.02 | 0.31 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L31H22 | +0.018 | diffuse | 0.16 | 0.02 / 0.01 |  | 0.27 | 0.22 | 0.32 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L22H23 | -0.030 | self (final token) | 0.03 | 0.01 / 0.01 |  | 0.39 | 0.42 | 0.14 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | L25H11 | -0.024 | sink (pos0) | 0.03 | 0.03 / 0.02 |  | 0.53 | 0.15 | 0.25 |  |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L46H24 | +0.146 | other context tokens | 0.08 | 0.02 / 0.02 |  | 0.08 | 0.25 | 0.53 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L41H27 | +0.099 | diffuse | 0.10 | 0.01 / 0.01 |  | 0.39 | 0.14 | 0.35 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H18 | +0.062 | sink (pos0) | 0.10 | 0.04 / 0.02 |  | 0.45 | 0.11 | 0.24 | 0.02 / 0.02 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H21 | +0.041 | sink (pos0) | 0.04 | 0.03 / 0.01 |  | 0.42 | 0.05 | 0.43 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L29H0 | +0.032 | STR site (filled entity) | 0.48 | 0.03 / 0.03 |  | 0.27 | 0.02 | 0.17 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L40H2 | +0.031 | sink (pos0) | 0.09 | 0.00 / 0.00 |  | 0.47 | 0.24 | 0.18 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L42H30 | +0.024 | diffuse | 0.17 | 0.04 / 0.02 |  | 0.12 | 0.24 | 0.37 | 0.02 / 0.02 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H20 | +0.024 | other context tokens | 0.11 | 0.02 / 0.02 |  | 0.19 | 0.07 | 0.57 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L46H25 | -0.134 | self (final token) | 0.02 | 0.01 / 0.01 |  | 0.24 | 0.53 | 0.17 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | L38H16 | -0.104 | self (final token) | 0.01 | 0.01 / 0.01 |  | 0.14 | 0.70 | 0.12 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L22H20 | +0.074 | STR site (filled entity) | 0.22 | 0.02 / 0.01 |  | 0.11 | 0.19 | 0.44 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L25H9 | +0.074 | other context tokens | 0.20 | 0.04 / 0.01 |  | 0.09 | 0.12 | 0.53 | 0.01 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L19H13 | +0.050 | STR site (filled entity) | 0.55 | 0.12 / 0.03 |  | 0.06 | 0.02 | 0.22 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L13H18 | +0.031 | STR site (filled entity) | 0.29 | 0.09 / 0.03 |  | 0.12 | 0.02 | 0.45 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L31H22 | +0.029 | diffuse | 0.09 | 0.01 / 0.01 |  | 0.18 | 0.22 | 0.49 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L19H12 | +0.027 | STR site (filled entity) | 0.33 | 0.16 / 0.03 |  | 0.09 | 0.05 | 0.31 | 0.02 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L13H11 | +0.026 | STR site (filled entity) | 0.33 | 0.05 / 0.03 |  | 0.18 | 0.03 | 0.37 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L16H10 | +0.023 | other context tokens | 0.14 | 0.06 / 0.04 |  | 0.14 | 0.06 | 0.55 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L22H23 | -0.037 | self (final token) | 0.03 | 0.01 / 0.01 |  | 0.28 | 0.35 | 0.31 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | L25H11 | -0.020 | diffuse | 0.04 | 0.02 / 0.01 |  | 0.33 | 0.11 | 0.48 | 0.01 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L41H0 | +0.077 | STR site (filled entity) | 0.26 | 0.01 / 0.01 |  | 0.29 | 0.14 | 0.28 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L42H30 | +0.076 | STR site (filled entity) | 0.20 | 0.01 / 0.01 |  | 0.10 | 0.19 | 0.47 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L41H5 | +0.048 | diffuse | 0.10 | 0.06 / 0.05 |  | 0.27 | 0.07 | 0.28 | 0.11 / 0.07 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H3 | +0.043 | STR site (filled entity) | 0.20 | 0.01 / 0.01 |  | 0.04 | 0.21 | 0.51 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L31H16 | +0.042 | STR site (filled entity) | 0.26 | 0.06 / 0.05 |  | 0.19 | 0.04 | 0.35 | 0.02 / 0.02 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H19 | +0.039 | diffuse | 0.18 | 0.04 / 0.04 |  | 0.16 | 0.09 | 0.47 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H18 | +0.037 | diffuse | 0.08 | 0.03 / 0.02 |  | 0.29 | 0.14 | 0.37 | 0.06 / 0.03 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L40H2 | +0.036 | sink (pos0) | 0.10 | 0.00 / 0.00 |  | 0.41 | 0.22 | 0.26 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L42H26 | -0.080 | self (final token) | 0.06 | 0.02 / 0.02 |  | 0.33 | 0.32 | 0.20 | 0.03 / 0.02 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | L38H16 | -0.060 | self (final token) | 0.02 | 0.02 / 0.01 |  | 0.14 | 0.68 | 0.13 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L13H18 | +0.077 | STR site (filled entity) | 0.25 | 0.05 / 0.01 |  | 0.13 | 0.03 | 0.52 | 0.01 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L8H8 | +0.056 | STR site (filled entity) | 0.45 | 0.04 / 0.02 |  | 0.13 | 0.02 | 0.34 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L22H20 | +0.048 | other context tokens | 0.12 | 0.01 / 0.01 |  | 0.11 | 0.16 | 0.59 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H13 | +0.044 | other context tokens | 0.18 | 0.04 / 0.03 |  | 0.13 | 0.05 | 0.55 | 0.02 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H12 | +0.037 | other context tokens | 0.16 | 0.06 / 0.02 |  | 0.12 | 0.06 | 0.51 | 0.05 / 0.03 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L19H1 | +0.035 | other context tokens | 0.14 | 0.00 / 0.00 |  | 0.17 | 0.13 | 0.56 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L18H10 | +0.031 | other context tokens | 0.09 | 0.01 / 0.01 |  | 0.19 | 0.18 | 0.51 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L27H19 | +0.029 | other context tokens | 0.10 | 0.00 / 0.00 |  | 0.29 | 0.06 | 0.54 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L22H23 | -0.038 | self (final token) | 0.02 | 0.00 / 0.00 |  | 0.30 | 0.42 | 0.25 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | L18H18 | -0.026 | self (final token) | 0.03 | 0.01 / 0.01 |  | 0.17 | 0.44 | 0.32 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41H0 | +0.104 | STR site (filled entity) | 0.27 | 0.01 / 0.01 |  | 0.33 | 0.12 | 0.26 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H30 | +0.063 | STR site (filled entity) | 0.23 | 0.02 / 0.01 |  | 0.12 | 0.20 | 0.40 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L31H16 | +0.054 | STR site (filled entity) | 0.29 | 0.05 / 0.04 |  | 0.14 | 0.04 | 0.41 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H27 | +0.042 | sink (pos0) | 0.08 | 0.01 / 0.00 |  | 0.46 | 0.19 | 0.24 | 0.01 / 0.01 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H3 | +0.037 | other context tokens | 0.18 | 0.02 / 0.01 |  | 0.04 | 0.24 | 0.51 | 0.01 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L40H2 | +0.036 | sink (pos0) | 0.12 | 0.00 / 0.00 |  | 0.41 | 0.25 | 0.21 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H18 | +0.030 | diffuse | 0.08 | 0.03 / 0.02 |  | 0.26 | 0.13 | 0.41 | 0.04 / 0.03 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L41H5 | +0.028 | diffuse | 0.06 | 0.04 / 0.05 |  | 0.22 | 0.06 | 0.39 | 0.10 / 0.08 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L42H26 | -0.067 | self (final token) | 0.06 | 0.01 / 0.01 |  | 0.33 | 0.35 | 0.19 | 0.03 / 0.02 |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | L38H16 | -0.051 | self (final token) | 0.02 | 0.01 / 0.01 |  | 0.14 | 0.68 | 0.13 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L13H18 | +0.069 | STR site (filled entity) | 0.27 | 0.04 / 0.01 |  | 0.16 | 0.03 | 0.49 | 0.01 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L19H13 | +0.065 | STR site (filled entity) | 0.20 | 0.04 / 0.02 |  | 0.13 | 0.05 | 0.54 | 0.01 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H17 | +0.041 | other context tokens | 0.10 | 0.00 / 0.00 |  | 0.16 | 0.07 | 0.66 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L31H22 | +0.040 | other context tokens | 0.07 | 0.01 / 0.01 |  | 0.22 | 0.14 | 0.55 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H10 | +0.034 | other context tokens | 0.08 | 0.01 / 0.00 |  | 0.19 | 0.20 | 0.51 | 0.00 / 0.00 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L20H27 | +0.031 | other context tokens | 0.07 | 0.01 / 0.01 |  | 0.16 | 0.12 | 0.58 | 0.03 / 0.02 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L19H12 | +0.027 | other context tokens | 0.15 | 0.04 / 0.03 |  | 0.11 | 0.03 | 0.55 | 0.05 / 0.04 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L15H9 | +0.027 | other context tokens | 0.08 | 0.03 / 0.01 |  | 0.16 | 0.02 | 0.67 | 0.02 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L18H18 | -0.048 | self (final token) | 0.02 | 0.01 / 0.01 |  | 0.15 | 0.51 | 0.28 | 0.01 / 0.01 |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | L31H20 | -0.038 | diffuse | 0.04 | 0.01 / 0.01 |  | 0.21 | 0.28 | 0.44 | 0.00 / 0.00 |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L42H30 | +0.047 | diffuse | 0.19 | 0.08 / 0.06 |  | 0.18 | 0.15 | 0.34 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H3 | +0.046 | STR site (filled entity) | 0.20 | 0.02 / 0.02 |  | 0.06 | 0.16 | 0.53 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L41H27 | +0.043 | sink (pos0) | 0.13 | 0.19 / 0.19 |  | 0.47 | 0.09 | 0.00 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L19H16 | +0.031 | STR site (filled entity) | 0.37 | 0.10 / 0.11 |  | 0.23 | 0.02 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L43H28 | +0.030 | self (final token) | 0.12 | 0.03 / 0.02 |  | 0.06 | 0.47 | 0.30 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L31H16 | +0.028 | diffuse | 0.19 | 0.13 / 0.13 |  | 0.26 | 0.03 | 0.25 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H19 | +0.027 | diffuse | 0.17 | 0.14 / 0.13 |  | 0.34 | 0.09 | 0.14 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L40H15 | +0.026 | diffuse | 0.17 | 0.05 / 0.04 |  | 0.10 | 0.26 | 0.37 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L42H26 | -0.056 | sink (pos0) | 0.05 | 0.17 / 0.17 |  | 0.47 | 0.32 | 0.00 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | L38H16 | -0.055 | self (final token) | 0.02 | 0.06 / 0.06 |  | 0.16 | 0.71 | 0.00 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L13H18 | +0.066 | STR site (filled entity) | 0.26 | 0.03 / 0.01 |  | 0.21 | 0.05 | 0.44 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L8H8 | +0.063 | STR site (filled entity) | 0.45 | 0.04 / 0.02 |  | 0.24 | 0.02 | 0.23 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H13 | +0.057 | STR site (filled entity) | 0.24 | 0.03 / 0.01 |  | 0.20 | 0.05 | 0.47 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H12 | +0.045 | diffuse | 0.16 | 0.03 / 0.02 |  | 0.35 | 0.06 | 0.39 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L19H1 | +0.034 | STR site (filled entity) | 0.27 | 0.00 / 0.00 |  | 0.20 | 0.10 | 0.42 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L22H20 | +0.030 | STR site (filled entity) | 0.23 | 0.00 / 0.00 |  | 0.15 | 0.14 | 0.46 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L15H8 | +0.024 | other context tokens | 0.10 | 0.04 / 0.01 |  | 0.22 | 0.05 | 0.58 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L18H10 | +0.023 | diffuse | 0.15 | 0.01 / 0.00 |  | 0.29 | 0.19 | 0.36 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L18H18 | -0.023 | self (final token) | 0.04 | 0.01 / 0.01 |  | 0.28 | 0.43 | 0.23 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | L22H23 | -0.021 | self (final token) | 0.03 | 0.00 / 0.00 |  | 0.38 | 0.49 | 0.09 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H3 | +0.058 | other context tokens | 0.18 | 0.03 / 0.02 |  | 0.06 | 0.17 | 0.54 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L42H30 | +0.048 | diffuse | 0.18 | 0.07 / 0.07 |  | 0.18 | 0.16 | 0.34 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L19H16 | +0.044 | STR site (filled entity) | 0.36 | 0.13 / 0.13 |  | 0.24 | 0.03 | 0.11 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L41H0 | +0.037 | STR site (filled entity) | 0.22 | 0.16 / 0.15 |  | 0.37 | 0.10 | 0.00 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L43H28 | +0.035 | self (final token) | 0.11 | 0.02 / 0.01 |  | 0.04 | 0.44 | 0.38 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L31H16 | +0.031 | STR site (filled entity) | 0.21 | 0.13 / 0.14 |  | 0.25 | 0.03 | 0.24 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L41H27 | +0.031 | mover (mention: other candidate) | 0.14 | 0.21 / 0.22 |  | 0.49 | 0.09 | 0.00 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H19 | +0.029 | diffuse | 0.16 | 0.15 / 0.16 |  | 0.39 | 0.10 | 0.04 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L38H16 | -0.071 | self (final token) | 0.02 | 0.07 / 0.07 |  | 0.16 | 0.69 | 0.00 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | L42H26 | -0.054 | sink (pos0) | 0.05 | 0.18 / 0.19 |  | 0.46 | 0.33 | 0.00 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L13H18 | +0.068 | STR site (filled entity) | 0.28 | 0.03 / 0.02 |  | 0.24 | 0.04 | 0.40 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H13 | +0.060 | STR site (filled entity) | 0.26 | 0.03 / 0.01 |  | 0.18 | 0.04 | 0.47 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L8H8 | +0.044 | STR site (filled entity) | 0.38 | 0.03 / 0.02 |  | 0.30 | 0.02 | 0.25 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H12 | +0.034 | diffuse | 0.17 | 0.03 / 0.02 |  | 0.33 | 0.04 | 0.41 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L21H20 | +0.031 | other context tokens | 0.11 | 0.01 / 0.01 |  | 0.19 | 0.13 | 0.56 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L15H8 | +0.028 | other context tokens | 0.10 | 0.05 / 0.01 |  | 0.19 | 0.05 | 0.59 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L19H1 | +0.028 | STR site (filled entity) | 0.26 | 0.00 / 0.00 |  | 0.21 | 0.09 | 0.44 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L13H16 | +0.027 | diffuse | 0.12 | 0.02 / 0.03 |  | 0.32 | 0.03 | 0.48 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L18H18 | -0.040 | self (final token) | 0.03 | 0.01 / 0.01 |  | 0.25 | 0.50 | 0.21 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | L21H21 | -0.026 | self (final token) | 0.03 | 0.01 / 0.01 |  | 0.33 | 0.31 | 0.31 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L40H2 | +0.315 | self (final token) | 0.01 | 0.00 / 0.00 | 0.00 | 0.20 | 0.76 | 0.03 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L42H10 | +0.303 | mover (mention: answer) | 0.01 | 0.58 / 0.18 | 0.02 | 0.11 | 0.00 | 0.09 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L36H23 | +0.191 | STR site (trigger) | 0.53 | 0.01 / 0.01 | 0.00 | 0.15 | 0.07 | 0.23 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L43H24 | +0.148 | sink (pos0) | 0.03 | 0.00 / 0.00 | 0.01 | 0.50 | 0.36 | 0.08 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L36H28 | +0.145 | mover (mention: answer) | 0.20 | 0.30 / 0.13 | 0.01 | 0.10 | 0.01 | 0.25 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L39H27 | +0.138 | STR site (trigger) | 0.21 | 0.15 / 0.07 | 0.01 | 0.11 | 0.01 | 0.43 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L39H29 | +0.137 | diffuse | 0.07 | 0.19 / 0.12 | 0.02 | 0.17 | 0.04 | 0.39 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L33H20 | +0.136 | STR site (trigger) | 0.72 | 0.04 / 0.02 | 0.00 | 0.12 | 0.01 | 0.08 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L44H15 | -0.332 | mover (mention: answer) | 0.01 | 0.50 / 0.22 | 0.01 | 0.18 | 0.01 | 0.08 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | L40H30 | -0.179 | diffuse | 0.14 | 0.18 / 0.10 | 0.03 | 0.27 | 0.06 | 0.22 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L40H2 | +0.243 | other context tokens | 0.11 | 0.02 / 0.02 |  | 0.14 | 0.14 | 0.57 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L42H10 | +0.119 | mover (mention: answer) | 0.00 | 0.55 / 0.08 |  | 0.23 | 0.01 | 0.12 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L41H18 | +0.073 | mover (mention: answer) | 0.01 | 0.34 / 0.14 |  | 0.28 | 0.03 | 0.19 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L43H28 | +0.068 | other context tokens | 0.12 | 0.05 / 0.03 |  | 0.06 | 0.18 | 0.56 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L41H20 | +0.061 | mover (mention: answer) | 0.00 | 0.28 / 0.08 |  | 0.51 | 0.02 | 0.11 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L42H12 | +0.059 | mover (mention: answer) | 0.01 | 0.26 / 0.12 |  | 0.49 | 0.01 | 0.10 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L39H29 | +0.057 | mover (mention: answer) | 0.02 | 0.28 / 0.07 |  | 0.23 | 0.06 | 0.34 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L43H24 | +0.056 | sink (pos0) | 0.04 | 0.06 / 0.06 |  | 0.60 | 0.12 | 0.13 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L44H15 | -0.118 | mover (mention: answer) | 0.01 | 0.32 / 0.10 |  | 0.49 | 0.03 | 0.05 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | L40H7 | -0.080 | sink (pos0) | 0.05 | 0.04 / 0.05 |  | 0.44 | 0.30 | 0.13 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L20H21 | +0.114 | other context tokens | 0.06 | 0.01 / 0.01 |  | 0.15 | 0.20 | 0.57 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L18H10 | +0.103 | other context tokens | 0.12 | 0.00 / 0.00 |  | 0.08 | 0.07 | 0.72 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L19H8 | +0.099 | mover (mention: answer) | 0.00 | 0.68 / 0.08 |  | 0.12 | 0.01 | 0.11 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L16H0 | +0.095 | other context tokens | 0.12 | 0.01 / 0.01 |  | 0.08 | 0.04 | 0.73 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L16H3 | +0.056 | mover (mention: other candidate) | 0.02 | 0.04 / 0.21 |  | 0.27 | 0.01 | 0.45 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L17H21 | +0.042 | other context tokens | 0.08 | 0.03 / 0.02 |  | 0.27 | 0.10 | 0.51 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L31H22 | +0.041 | diffuse | 0.06 | 0.01 / 0.00 |  | 0.31 | 0.14 | 0.48 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L19H9 | +0.040 | mover (mention: answer) | 0.00 | 0.28 / 0.05 |  | 0.52 | 0.01 | 0.14 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L20H22 | -0.059 | self (final token) | 0.01 | 0.02 / 0.01 |  | 0.20 | 0.59 | 0.16 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | L21H21 | -0.044 | self (final token) | 0.01 | 0.08 / 0.03 |  | 0.26 | 0.42 | 0.20 |  |  |
+
+**Population.** all heads = mean over every head; rescue-weighted = heads weighted by their positive single-head effect; top-10 = the ten best heads; row top-1 = the best head of each row, read in that row.
+
+| Run | Heads | str | mention (answer side / other) | blank | pos0 | final | attr (answer side / other) | prefix_ment (answer side / other) |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | all heads | 0.02 | 0.02 / 0.01 | 0.03 | 0.51 | 0.12 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | positive heads, rescue-weighted | 0.06 | 0.10 / 0.04 | 0.03 | 0.28 | 0.15 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | top-10 heads, rescue-weighted | 0.06 | 0.17 / 0.04 | 0.02 | 0.20 | 0.24 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | best head of each row | 0.07 | 0.19 / 0.04 | 0.01 | 0.09 | 0.37 |  |  |
+| Qwen3-30B-A3B-Base, F1 attr→entity | labels of the top-10 heads | mover (mention: answer) 3, diffuse 3, self (final token) 2, sink (pos0) 1, STR site (trigger) 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | all heads | 0.03 | 0.02 / 0.02 | 0.02 | 0.36 | 0.06 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | positive heads, rescue-weighted | 0.10 | 0.05 / 0.02 | 0.01 | 0.22 | 0.07 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | top-10 heads, rescue-weighted | 0.24 | 0.05 / 0.02 | 0.01 | 0.08 | 0.11 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | best head of each row | 0.37 | 0.11 / 0.05 | 0.01 | 0.05 | 0.06 |  |  |
+| Mixtral-8x7B (BOS), F1 attr→entity | labels of the top-10 heads | STR site (trigger) 5, other context tokens 3, self (final token) 1, diffuse 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | all heads | 0.04 | 0.02 / 0.01 | 0.04 | 0.48 | 0.12 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | positive heads, rescue-weighted | 0.09 | 0.05 / 0.02 | 0.03 | 0.33 | 0.14 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | top-10 heads, rescue-weighted | 0.12 | 0.11 / 0.03 | 0.02 | 0.16 | 0.24 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | best head of each row | 0.04 | 0.06 / 0.01 | 0.01 | 0.07 | 0.53 |  |  |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | labels of the top-10 heads | mover (mention: answer) 3, self (final token) 2, STR site (trigger) 2, diffuse 2, other context tokens 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | all heads | 0.04 | 0.02 / 0.01 | 0.01 | 0.36 | 0.06 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | positive heads, rescue-weighted | 0.14 | 0.05 / 0.02 | 0.01 | 0.21 | 0.07 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | top-10 heads, rescue-weighted | 0.35 | 0.07 / 0.02 | 0.01 | 0.07 | 0.09 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | best head of each row | 0.51 | 0.12 / 0.02 | 0.00 | 0.04 | 0.03 |  |  |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | labels of the top-10 heads | STR site (trigger) 5, mover (mention: answer) 2, diffuse 1, self (final token) 1, other context tokens 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | all heads | 0.05 | 0.03 / 0.02 |  | 0.59 | 0.09 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | positive heads, rescue-weighted | 0.14 | 0.04 / 0.02 |  | 0.45 | 0.11 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | top-10 heads, rescue-weighted | 0.23 | 0.04 / 0.02 |  | 0.33 | 0.10 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | best head of each row | 0.26 | 0.04 / 0.02 |  | 0.26 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | labels of the top-10 heads | STR site (filled entity) 5, sink (pos0) 3, diffuse 2 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | all heads | 0.05 | 0.02 / 0.02 |  | 0.64 | 0.05 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | positive heads, rescue-weighted | 0.26 | 0.06 / 0.02 |  | 0.27 | 0.10 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | top-10 heads, rescue-weighted | 0.36 | 0.08 / 0.02 |  | 0.16 | 0.09 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | best head of each row | 0.45 | 0.06 / 0.01 |  | 0.10 | 0.11 |  |  |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | labels of the top-10 heads | STR site (filled entity) 7, diffuse 2, mover (mention: answer) 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | all heads | 0.04 | 0.02 / 0.02 |  | 0.54 | 0.10 | 0.02 / 0.01 | nan / nan |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | positive heads, rescue-weighted | 0.08 | 0.03 / 0.02 |  | 0.38 | 0.14 | 0.02 / 0.02 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | top-10 heads, rescue-weighted | 0.12 | 0.02 / 0.01 |  | 0.28 | 0.16 | 0.01 / 0.01 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | best head of each row | 0.13 | 0.03 / 0.01 |  | 0.12 | 0.25 | 0.01 / 0.01 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | labels of the top-10 heads | other context tokens 3, sink (pos0) 3, diffuse 2, STR site (filled entity) 2 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | all heads | 0.05 | 0.02 / 0.02 |  | 0.41 | 0.05 | 0.01 / 0.01 | nan / nan |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | positive heads, rescue-weighted | 0.17 | 0.05 / 0.02 |  | 0.21 | 0.09 | 0.02 / 0.01 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | top-10 heads, rescue-weighted | 0.28 | 0.07 / 0.02 |  | 0.11 | 0.09 | 0.01 / 0.00 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | best head of each row | 0.38 | 0.07 / 0.01 |  | 0.06 | 0.10 | 0.01 / 0.00 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | labels of the top-10 heads | STR site (filled entity) 6, other context tokens 2, diffuse 1, mover (mention: answer) 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | all heads | 0.04 | 0.02 / 0.02 |  | 0.52 | 0.10 | 0.02 / 0.01 | nan / nan |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | positive heads, rescue-weighted | 0.10 | 0.03 / 0.02 |  | 0.37 | 0.11 | 0.04 / 0.02 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | top-10 heads, rescue-weighted | 0.17 | 0.03 / 0.02 |  | 0.22 | 0.15 | 0.02 / 0.02 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | best head of each row | 0.31 | 0.02 / 0.02 |  | 0.17 | 0.18 | 0.05 / 0.01 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | labels of the top-10 heads | STR site (filled entity) 4, diffuse 3, sink (pos0) 2, self (final token) 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | all heads | 0.03 | 0.01 / 0.01 |  | 0.42 | 0.05 | 0.02 / 0.01 | nan / nan |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | positive heads, rescue-weighted | 0.09 | 0.02 / 0.01 |  | 0.24 | 0.08 | 0.03 / 0.02 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | top-10 heads, rescue-weighted | 0.19 | 0.03 / 0.01 |  | 0.16 | 0.08 | 0.02 / 0.01 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | best head of each row | 0.32 | 0.04 / 0.01 |  | 0.06 | 0.09 | 0.01 / 0.00 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | labels of the top-10 heads | other context tokens 6, STR site (filled entity) 2, diffuse 1, copy (attr: answer) 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | all heads | 0.04 | 0.02 / 0.02 |  | 0.51 | 0.10 | 0.02 / 0.01 | nan / nan |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | positive heads, rescue-weighted | 0.09 | 0.02 / 0.02 |  | 0.39 | 0.11 | 0.03 / 0.02 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | top-10 heads, rescue-weighted | 0.19 | 0.02 / 0.02 |  | 0.25 | 0.14 | 0.02 / 0.01 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | best head of each row | 0.28 | 0.02 / 0.01 |  | 0.18 | 0.23 | 0.02 / 0.01 | 0.00 / 0.00 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | labels of the top-10 heads | diffuse 4, STR site (filled entity) 3, sink (pos0) 2, other context tokens 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | all heads | 0.03 | 0.01 / 0.01 |  | 0.42 | 0.05 | 0.01 / 0.01 | nan / nan |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | positive heads, rescue-weighted | 0.07 | 0.01 / 0.01 |  | 0.30 | 0.06 | 0.02 / 0.01 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | top-10 heads, rescue-weighted | 0.14 | 0.02 / 0.01 |  | 0.15 | 0.08 | 0.01 / 0.01 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | best head of each row | 0.26 | 0.03 / 0.01 |  | 0.10 | 0.09 | 0.01 / 0.01 | 0.00 / 0.00 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | labels of the top-10 heads | other context tokens 8, STR site (filled entity) 2 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | all heads | 0.04 | 0.22 / 0.22 |  | 0.59 | 0.10 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | positive heads, rescue-weighted | 0.11 | 0.16 / 0.15 |  | 0.39 | 0.13 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | top-10 heads, rescue-weighted | 0.19 | 0.10 / 0.09 |  | 0.24 | 0.15 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | best head of each row | 0.31 | 0.09 / 0.07 |  | 0.20 | 0.14 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | labels of the top-10 heads | diffuse 4, STR site (filled entity) 3, sink (pos0) 2, self (final token) 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | all heads | 0.04 | 0.01 / 0.01 |  | 0.65 | 0.05 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | positive heads, rescue-weighted | 0.14 | 0.02 / 0.01 |  | 0.36 | 0.08 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | top-10 heads, rescue-weighted | 0.25 | 0.02 / 0.01 |  | 0.25 | 0.07 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | best head of each row | 0.41 | 0.03 / 0.01 |  | 0.09 | 0.07 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | labels of the top-10 heads | STR site (filled entity) 6, diffuse 2, other context tokens 2 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | all heads | 0.04 | 0.24 / 0.24 |  | 0.58 | 0.10 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | positive heads, rescue-weighted | 0.08 | 0.19 / 0.20 |  | 0.46 | 0.11 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | top-10 heads, rescue-weighted | 0.19 | 0.11 / 0.11 |  | 0.24 | 0.15 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | best head of each row | 0.25 | 0.10 / 0.07 |  | 0.20 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | labels of the top-10 heads | diffuse 3, STR site (filled entity) 3, mover (mention: other candidate) 2, other context tokens 1, self (final token) 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | all heads | 0.04 | 0.01 / 0.01 |  | 0.65 | 0.05 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | positive heads, rescue-weighted | 0.13 | 0.02 / 0.01 |  | 0.33 | 0.08 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | top-10 heads, rescue-weighted | 0.22 | 0.02 / 0.01 |  | 0.23 | 0.06 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | best head of each row | 0.41 | 0.02 / 0.01 |  | 0.09 | 0.05 |  |  |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | labels of the top-10 heads | STR site (filled entity) 4, other context tokens 4, diffuse 2 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | all heads | 0.03 | 0.02 / 0.01 | 0.03 | 0.55 | 0.13 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | positive heads, rescue-weighted | 0.12 | 0.08 / 0.04 | 0.02 | 0.34 | 0.13 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | top-10 heads, rescue-weighted | 0.17 | 0.19 / 0.08 | 0.01 | 0.20 | 0.18 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | best head of each row | 0.02 | 0.18 / 0.06 | 0.01 | 0.17 | 0.50 |  |  |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | labels of the top-10 heads | mover (mention: answer) 4, STR site (trigger) 3, self (final token) 1, sink (pos0) 1, diffuse 1 |  |  |  |  |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | all heads | 0.03 | 0.09 / 0.08 |  | 0.56 | 0.09 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | positive heads, rescue-weighted | 0.05 | 0.12 / 0.07 |  | 0.42 | 0.11 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | top-10 heads, rescue-weighted | 0.06 | 0.18 / 0.06 |  | 0.25 | 0.13 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | best head of each row | 0.06 | 0.08 / 0.02 |  | 0.15 | 0.17 |  |  |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | labels of the top-10 heads | mover (mention: answer) 5, other context tokens 2, sink (pos0) 1, self (final token) 1, diffuse 1 |  |  |  |  |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | all heads | 0.03 | 0.04 / 0.03 |  | 0.60 | 0.05 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | positive heads, rescue-weighted | 0.04 | 0.09 / 0.04 |  | 0.42 | 0.06 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | top-10 heads, rescue-weighted | 0.06 | 0.14 / 0.05 |  | 0.19 | 0.07 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | best head of each row | 0.07 | 0.12 / 0.05 |  | 0.07 | 0.04 |  |  |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | labels of the top-10 heads | other context tokens 5, mover (mention: answer) 2, mover (mention: other candidate) 1, diffuse 1, sink (pos0) 1 |  |  |  |  |  |  |
+
+**Copy heads vs entity movers (attribute → entity and copy conditions).**
+
+- Qwen3 f1: top-10 heads' rescue-weighted attention (answer side / other) mention 0.17 / 0.04; str 0.06; pos0 0.20; final 0.24; labels mover (mention: answer) 3, diffuse 3, self (final token) 2, sink (pos0) 1, STR site (trigger) 1.
+- Mixtral f1: top-10 heads' rescue-weighted attention (answer side / other) mention 0.05 / 0.02; str 0.24; pos0 0.08; final 0.11; labels STR site (trigger) 5, other context tokens 3, self (final token) 1, diffuse 1.
+- Qwen3 dir_f1: top-10 heads' rescue-weighted attention (answer side / other) mention 0.11 / 0.03; str 0.12; pos0 0.16; final 0.24; labels mover (mention: answer) 3, self (final token) 2, STR site (trigger) 2, diffuse 2, other context tokens 1.
+- Mixtral dir_f1: top-10 heads' rescue-weighted attention (answer side / other) mention 0.07 / 0.02; str 0.35; pos0 0.07; final 0.09; labels STR site (trigger) 5, mover (mention: answer) 2, diffuse 1, self (final token) 1, other context tokens 1.
+- Qwen3 cp_nat: top-10 heads' rescue-weighted attention (answer side / other) attr 0.01 / 0.01; prefix_ment 0.00 / 0.00; mention 0.02 / 0.01; str 0.12; pos0 0.28; final 0.16; labels other context tokens 3, sink (pos0) 3, diffuse 2, STR site (filled entity) 2.
+- Mixtral cp_vt_orig: top-10 heads' rescue-weighted attention (answer side / other) attr 0.02 / 0.01; prefix_ment 0.00 / 0.00; mention 0.03 / 0.01; str 0.19; pos0 0.16; final 0.08; labels other context tokens 6, STR site (filled entity) 2, diffuse 1, copy (attr: answer) 1.
+- Qwen3 cp_vt_orig: top-10 heads' rescue-weighted attention (answer side / other) attr 0.02 / 0.02; prefix_ment 0.00 / 0.00; mention 0.03 / 0.02; str 0.17; pos0 0.22; final 0.15; labels STR site (filled entity) 4, diffuse 3, sink (pos0) 2, self (final token) 1.
+- Qwen3 cp_vt_neu: top-10 heads' rescue-weighted attention (answer side / other) attr 0.02 / 0.01; prefix_ment 0.00 / 0.00; mention 0.02 / 0.02; str 0.19; pos0 0.25; final 0.14; labels diffuse 4, STR site (filled entity) 3, sink (pos0) 2, other context tokens 1.
+- Mixtral cp_vt_neu: top-10 heads' rescue-weighted attention (answer side / other) attr 0.01 / 0.01; prefix_ment 0.00 / 0.00; mention 0.02 / 0.01; str 0.14; pos0 0.15; final 0.08; labels other context tokens 8, STR site (filled entity) 2.
+- Mixtral cp_nat: top-10 heads' rescue-weighted attention (answer side / other) attr 0.01 / 0.00; prefix_ment 0.00 / 0.00; mention 0.07 / 0.02; str 0.28; pos0 0.11; final 0.09; labels STR site (filled entity) 6, other context tokens 2, diffuse 1, mover (mention: answer) 1.
+- Qwen3 vt_a2e_orig: top-10 heads' rescue-weighted attention (answer side / other) mention 0.19 / 0.08; str 0.17; pos0 0.20; final 0.18; labels mover (mention: answer) 4, STR site (trigger) 3, self (final token) 1, sink (pos0) 1, diffuse 1.
+- Qwen3 f2e: top-10 heads' rescue-weighted attention (answer side / other) mention 0.18 / 0.06; str 0.06; pos0 0.25; final 0.13; labels mover (mention: answer) 5, other context tokens 2, sink (pos0) 1, self (final token) 1, diffuse 1.
+- Mixtral f2e: top-10 heads' rescue-weighted attention (answer side / other) mention 0.14 / 0.05; str 0.06; pos0 0.19; final 0.07; labels other context tokens 5, mover (mention: answer) 2, mover (mention: other candidate) 1, diffuse 1, sink (pos0) 1.
+
+### Step 2. Heads + experts added back jointly
+
+| Run | Curve | r(1) | r(5) | r(10) | r(20) [95% CI] | r(128) | max r (k) | k50/80/90 of drop | AUC log k (1..20) | all-MoE ceiling |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | greedy_mix | 0.300 | 0.723 | 0.881 | 0.968 [0.942, 0.996] |  | 0.968 (20) | 3/7/12 | 0.677 | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | greedy_head | 0.296 | 0.701 | 0.856 | 0.930 [0.904, 0.956] |  | 0.933 (19) | 3/8/14 | 0.657 | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | greedy_expert_ab | 0.123 | 0.277 | 0.304 | 0.321 (k=15) |  | 0.321 (15) | never/never/never |  | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | static_mix_oracle | 0.300 | 0.643 | 0.762 |  | 0.978 | 0.978 (128) | 3/16/48 | 0.603 | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | static_mix_dla | 0.220 | 0.480 | 0.676 |  | 1.157 | 1.157 (128) | 6/16/24 | 0.493 | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | static_head_oracle | 0.294 | 0.630 | 0.765 |  | 0.975 | 0.975 (128) | 3/16/48 | 0.601 | 0.243 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | static_head_dla | 0.215 | 0.455 | 0.639 |  | 1.110 | 1.110 (128) | 6/24/32 | 0.469 | 0.243 |
+| Mixtral-8x7B (BOS), F1 attr→entity | greedy_mix | 0.229 | 0.668 | 0.871 | 1.031 [0.995, 1.072] |  | 1.031 (20) | 3/8/12 | 0.633 | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | greedy_head | 0.215 | 0.630 | 0.799 | 0.882 [0.853, 0.914] |  | 0.882 (20) | 4/11/never | 0.583 | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | greedy_expert_ab | 0.151 | 0.437 | 0.579 | 0.643 (k=15) |  | 0.643 (15) | 7/never/never |  | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | static_mix_oracle | 0.229 | 0.579 | 0.719 |  | 0.957 | 0.957 (128) | 4/24/48 | 0.543 | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | static_mix_dla | 0.110 | 0.348 | 0.522 |  | 1.080 | 1.080 (128) | 10/32/48 | 0.360 | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | static_head_oracle | 0.215 | 0.565 | 0.708 |  | 0.945 | 0.945 (128) | 4/24/96 | 0.530 | 0.227 |
+| Mixtral-8x7B (BOS), F1 attr→entity | static_head_dla | 0.100 | 0.305 | 0.457 |  | 1.037 | 1.037 (128) | 12/48/48 | 0.320 | 0.227 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | greedy_mix | 0.239 | 0.592 | 0.760 | 0.866 [0.843, 0.891] |  | 0.866 (20) | 4/13/never | 0.564 | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | greedy_head | 0.238 | 0.576 | 0.740 | 0.830 [0.802, 0.857] |  | 0.830 (20) | 4/15/never | 0.549 | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | greedy_expert_ab | 0.100 | 0.251 | 0.284 | 0.298 (k=15) |  | 0.299 (14) | never/never/never |  | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | static_mix_oracle | 0.236 | 0.535 | 0.656 |  | 0.922 | 0.922 (128) | 5/32/96 | 0.509 | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | static_mix_dla | 0.152 | 0.410 | 0.589 |  | 1.115 | 1.115 (128) | 8/24/32 | 0.419 | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | static_head_oracle | 0.236 | 0.526 | 0.655 |  | 0.928 | 0.928 (128) | 5/32/96 | 0.505 | 0.109 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | static_head_dla | 0.149 | 0.381 | 0.547 |  | 1.099 | 1.099 (128) | 9/24/48 | 0.389 | 0.109 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | greedy_mix | 0.230 | 0.662 | 0.855 | 1.003 [0.973, 1.038] |  | 1.003 (20) | 3/9/13 | 0.624 | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | greedy_head | 0.212 | 0.626 | 0.781 | 0.857 [0.829, 0.885] |  | 0.857 (20) | 4/12/never | 0.575 | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | greedy_expert_ab | 0.163 | 0.463 | 0.619 | 0.688 (k=15) |  | 0.688 (15) | 6/never/never |  | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | static_mix_oracle | 0.230 | 0.571 | 0.713 |  | 0.946 | 0.946 (128) | 4/24/48 | 0.538 | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | static_mix_dla | 0.118 | 0.367 | 0.543 |  | 1.060 | 1.060 (128) | 9/32/48 | 0.374 | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | static_head_oracle | 0.212 | 0.562 | 0.689 |  | 0.914 | 0.914 (128) | 4/24/96 | 0.519 | 0.408 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | static_head_dla | 0.096 | 0.292 | 0.444 |  | 1.005 | 1.005 (128) | 16/48/64 | 0.306 | 0.408 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | greedy_mix | 0.212 | 0.564 | 0.750 | 0.885 [0.857, 0.915] |  | 0.885 (20) | 4/13/never | 0.545 | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | greedy_head | 0.116 | 0.366 | 0.477 | 0.545 [0.511, 0.579] |  | 0.545 (20) | 12/never/never | 0.342 | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | greedy_expert_ab | 0.203 | 0.513 | 0.643 | 0.686 (k=15) |  | 0.686 (14) | 5/never/never |  | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | static_mix_oracle | 0.213 | 0.493 | 0.623 |  | 0.882 | 0.882 (128) | 6/48/never | 0.471 | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | static_mix_dla | 0.164 | 0.470 | 0.646 |  | 1.064 | 1.064 (128) | 6/24/48 | 0.460 | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | static_head_oracle | 0.117 | 0.300 | 0.382 |  | 0.630 | 0.630 (128) | 32/never/never | 0.287 | 0.812 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | static_head_dla | 0.094 | 0.272 | 0.374 |  | 0.755 | 0.755 (128) | 24/never/never | 0.267 | 0.812 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | greedy_mix | 0.193 | 0.549 | 0.732 | 0.888 [0.876, 0.900] |  | 0.888 (20) | 5/14/never | 0.529 | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | greedy_head | 0.093 | 0.358 | 0.536 | 0.619 [0.597, 0.641] |  | 0.619 (20) | 9/never/never | 0.348 | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | greedy_expert_ab | 0.191 | 0.521 | 0.676 | 0.753 (k=15) |  | 0.753 (15) | 5/never/never |  | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | static_mix_oracle | 0.193 | 0.522 | 0.677 |  | 0.934 | 0.934 (128) | 5/24/64 | 0.498 | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | static_mix_dla | 0.155 | 0.461 | 0.652 |  | 1.029 | 1.029 (128) | 6/24/32 | 0.459 | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | static_head_oracle | 0.092 | 0.317 | 0.460 |  | 0.744 | 0.744 (128) | 16/never/never | 0.310 | 0.756 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | static_head_dla | 0.079 | 0.207 | 0.282 |  | 0.775 | 0.775 (128) | 48/never/never | 0.207 | 0.756 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | greedy_mix | 0.222 | 0.593 | 0.762 | 0.865 [0.840, 0.890] |  | 0.865 (20) | 4/14/never | 0.558 | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | greedy_head | 0.181 | 0.461 | 0.559 | 0.598 [0.570, 0.628] |  | 0.598 (20) | 7/never/never | 0.424 | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | greedy_expert_ab | 0.171 | 0.461 | 0.569 | 0.598 (k=15) |  | 0.598 (15) | 6/never/never |  | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | static_mix_oracle | 0.220 | 0.505 | 0.598 |  | 0.868 | 0.868 (128) | 5/96/never | 0.467 | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | static_mix_dla | 0.171 | 0.486 | 0.645 |  | 1.077 | 1.077 (128) | 6/24/48 | 0.469 | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | static_head_oracle | 0.180 | 0.382 | 0.456 |  | 0.679 | 0.679 (128) | 24/never/never | 0.363 | 0.786 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | static_head_dla | 0.158 | 0.369 | 0.468 |  | 0.853 | 0.853 (128) | 16/96/never | 0.357 | 0.786 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | greedy_mix | 0.194 | 0.590 | 0.783 | 0.923 [0.910, 0.938] |  | 0.923 (20) | 4/11/18 | 0.560 | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | greedy_head | 0.117 | 0.427 | 0.595 | 0.657 [0.635, 0.680] |  | 0.657 (20) | 7/never/never | 0.399 | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | greedy_expert_ab | 0.182 | 0.537 | 0.699 | 0.772 (k=15) |  | 0.772 (15) | 5/never/never |  | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | static_mix_oracle | 0.194 | 0.548 | 0.715 |  | 0.950 | 0.950 (128) | 5/16/48 | 0.521 | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | static_mix_dla | 0.134 | 0.449 | 0.650 |  | 1.033 | 1.033 (128) | 6/24/32 | 0.444 | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | static_head_oracle | 0.117 | 0.369 | 0.506 |  | 0.758 | 0.758 (128) | 10/never/never | 0.353 | 0.732 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | static_head_dla | 0.089 | 0.228 | 0.307 |  | 0.776 | 0.776 (128) | 32/never/never | 0.227 | 0.732 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | greedy_mix | 0.207 | 0.586 | 0.795 | 0.939 [0.859, 1.035] |  | 0.939 (20) | 4/11/17 | 0.567 | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | greedy_head | 0.164 | 0.476 | 0.620 | 0.688 [0.610, 0.773] |  | 0.688 (20) | 6/never/never | 0.447 | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | greedy_expert_ab | 0.174 | 0.477 | 0.607 | 0.655 (k=15) |  | 0.655 (15) | 6/never/never |  | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | static_mix_oracle | 0.209 | 0.495 | 0.624 |  | 0.917 | 0.917 (128) | 6/48/128 | 0.472 | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | static_mix_dla | 0.176 | 0.418 | 0.598 |  | 1.112 | 1.112 (128) | 7/24/48 | 0.423 | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | static_head_oracle | 0.168 | 0.401 | 0.496 |  | 0.787 | 0.787 (128) | 12/never/never | 0.379 | 0.703 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | static_head_dla | 0.124 | 0.360 | 0.485 |  | 0.979 | 0.979 (128) | 12/48/96 | 0.355 | 0.703 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | greedy_mix | 0.240 | 0.626 | 0.809 | 0.936 [0.896, 0.975] |  | 0.936 (20) | 4/10/16 | 0.596 | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | greedy_head | 0.188 | 0.537 | 0.671 | 0.721 [0.640, 0.804] |  | 0.721 (20) | 5/never/never | 0.492 | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | greedy_expert_ab | 0.191 | 0.519 | 0.667 | 0.726 (k=15) |  | 0.726 (15) | 5/never/never |  | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | static_mix_oracle | 0.241 | 0.572 | 0.710 |  | 0.943 | 0.943 (128) | 4/24/48 | 0.541 | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | static_mix_dla | 0.174 | 0.470 | 0.632 |  | 1.050 | 1.050 (128) | 6/24/32 | 0.466 | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | static_head_oracle | 0.188 | 0.461 | 0.592 |  | 0.806 | 0.806 (128) | 7/128/never | 0.439 | 0.545 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | static_head_dla | 0.096 | 0.238 | 0.371 |  | 0.922 | 0.922 (128) | 24/96/128 | 0.255 | 0.545 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | greedy_mix | 0.208 | 0.584 | 0.787 | 0.930 [0.836, 1.059] |  | 0.930 (20) | 4/11/17 | 0.566 | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | greedy_head | 0.162 | 0.478 | 0.618 | 0.683 [0.603, 0.776] |  | 0.683 (20) | 6/never/never | 0.447 | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | greedy_expert_ab | 0.184 | 0.482 | 0.612 | 0.659 (k=15) |  | 0.659 (15) | 6/never/never |  | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | static_mix_oracle | 0.210 | 0.474 | 0.610 |  | 0.912 | 0.912 (128) | 6/48/128 | 0.461 | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | static_mix_dla | 0.155 | 0.425 | 0.592 |  | 1.078 | 1.078 (128) | 7/24/48 | 0.422 | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | static_head_oracle | 0.162 | 0.399 | 0.493 |  | 0.779 | 0.779 (128) | 12/never/never | 0.376 | 0.739 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | static_head_dla | 0.098 | 0.343 | 0.466 |  | 0.995 | 0.995 (128) | 12/48/96 | 0.335 | 0.739 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | greedy_mix | 0.174 | 0.543 | 0.735 | 0.885 [0.830, 0.967] |  | 0.885 (20) | 5/13/never | 0.523 | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | greedy_head | 0.129 | 0.442 | 0.620 | 0.706 [0.665, 0.823] |  | 0.706 (20) | 7/never/never | 0.424 | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | greedy_expert_ab | 0.160 | 0.488 | 0.637 | 0.701 (k=15) |  | 0.701 (15) | 6/never/never |  | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | static_mix_oracle | 0.174 | 0.504 | 0.662 |  | 0.936 | 0.936 (128) | 5/24/64 | 0.482 | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | static_mix_dla | 0.142 | 0.448 | 0.623 |  | 1.049 | 1.049 (128) | 7/24/48 | 0.436 | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | static_head_oracle | 0.128 | 0.390 | 0.544 |  | 0.813 | 0.813 (128) | 9/128/never | 0.381 | 0.463 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | static_head_dla | 0.087 | 0.260 | 0.376 |  | 1.040 | 1.040 (128) | 24/48/64 | 0.258 | 0.463 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | greedy_mix | 0.240 | 0.623 | 0.826 | 0.962 [0.888, 1.067] |  | 0.962 (20) | 4/10/15 | 0.600 | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | greedy_head | 0.147 | 0.440 | 0.574 | 0.627 [0.546, 0.722] |  | 0.627 (20) | 7/never/never | 0.411 | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | greedy_expert_ab | 0.221 | 0.539 | 0.676 | 0.722 (k=15) |  | 0.722 (15) | 5/never/never |  | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | static_mix_oracle | 0.239 | 0.551 | 0.692 |  | 0.955 | 0.955 (128) | 4/24/64 | 0.526 | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | static_mix_dla | 0.206 | 0.517 | 0.668 |  | 1.118 | 1.118 (128) | 5/24/32 | 0.498 | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | static_head_oracle | 0.147 | 0.373 | 0.457 |  | 0.726 | 0.726 (128) | 16/never/never | 0.348 | 0.823 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | static_head_dla | 0.120 | 0.309 | 0.432 |  | 0.966 | 0.966 (128) | 16/64/96 | 0.313 | 0.823 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | greedy_mix | 0.243 | 0.618 | 0.797 | 0.935 [0.899, 0.975] |  | 0.935 (20) | 4/11/17 | 0.592 | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | greedy_head | 0.183 | 0.519 | 0.671 | 0.737 [0.668, 0.799] |  | 0.737 (20) | 5/never/never | 0.484 | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | greedy_expert_ab | 0.205 | 0.517 | 0.652 | 0.718 (k=15) |  | 0.718 (15) | 5/never/never |  | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | static_mix_oracle | 0.243 | 0.580 | 0.716 |  | 0.957 | 0.957 (128) | 4/24/48 | 0.548 | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | static_mix_dla | 0.186 | 0.507 | 0.679 |  | 1.059 | 1.059 (128) | 5/24/32 | 0.495 | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | static_head_oracle | 0.183 | 0.459 | 0.601 |  | 0.831 | 0.831 (128) | 7/96/never | 0.441 | 0.677 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | static_head_dla | 0.117 | 0.301 | 0.411 |  | 0.959 | 0.959 (128) | 16/64/96 | 0.298 | 0.677 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | greedy_mix | 0.246 | 0.625 | 0.805 | 0.922 [0.882, 0.966] |  | 0.922 (20) | 4/10/18 | 0.593 | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | greedy_head | 0.149 | 0.424 | 0.530 | 0.578 [0.514, 0.646] |  | 0.578 (20) | 9/never/never | 0.391 | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | greedy_expert_ab | 0.226 | 0.542 | 0.674 | 0.712 (k=15) |  | 0.712 (15) | 5/never/never |  | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | static_mix_oracle | 0.246 | 0.552 | 0.673 |  | 0.924 | 0.924 (128) | 4/32/96 | 0.520 | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | static_mix_dla | 0.208 | 0.520 | 0.682 |  | 1.118 | 1.118 (128) | 5/24/32 | 0.504 | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | static_head_oracle | 0.149 | 0.346 | 0.425 |  | 0.694 | 0.694 (128) | 24/never/never | 0.330 | 0.813 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | static_head_dla | 0.107 | 0.314 | 0.419 |  | 0.975 | 0.975 (128) | 16/64/96 | 0.306 | 0.813 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | greedy_mix | 0.230 | 0.591 | 0.760 | 0.890 [0.853, 0.939] |  | 0.890 (20) | 4/12/never | 0.564 | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | greedy_head | 0.181 | 0.488 | 0.642 | 0.722 [0.664, 0.782] |  | 0.722 (20) | 6/never/never | 0.465 | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | greedy_expert_ab | 0.191 | 0.496 | 0.635 | 0.696 (k=15) |  | 0.696 (15) | 6/never/never |  | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | static_mix_oracle | 0.228 | 0.545 | 0.682 |  | 0.934 | 0.934 (128) | 4/24/64 | 0.519 | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | static_mix_dla | 0.171 | 0.475 | 0.652 |  | 1.059 | 1.059 (128) | 6/24/32 | 0.468 | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | static_head_oracle | 0.180 | 0.445 | 0.580 |  | 0.830 | 0.830 (128) | 7/96/never | 0.430 | 0.623 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | static_head_dla | 0.110 | 0.284 | 0.393 |  | 0.994 | 0.994 (128) | 16/48/96 | 0.284 | 0.623 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | greedy_mix | 0.329 | 0.758 | 0.920 | 1.027 [0.895, 1.066] |  | 1.027 (20) | 2/6/10 | 0.718 | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | greedy_head | 0.329 | 0.755 | 0.914 | 1.004 [0.870, 1.016] |  | 1.006 (19) | 2/7/10 | 0.714 | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | greedy_expert_ab | 0.038 | 0.168 | 0.217 | 0.233 (k=15) |  | 0.233 (15) | never/never/never |  | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | static_mix_oracle | 0.330 | 0.719 | 0.836 |  | 1.055 | 1.055 (128) | 2/8/16 | 0.673 | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | static_mix_dla | 0.307 | 0.602 | 0.797 |  | 1.258 | 1.258 (128) | 3/12/16 | 0.610 | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | static_head_oracle | 0.330 | 0.722 | 0.851 |  | 1.056 | 1.056 (128) | 2/8/16 | 0.678 | 0.211 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | static_head_dla | 0.307 | 0.602 | 0.797 |  | 1.244 | 1.244 (128) | 3/12/16 | 0.610 | 0.211 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | greedy_mix | 0.272 | 0.707 | 0.895 | 1.015 [0.949, 1.094] |  | 1.015 (20) | 3/8/12 | 0.658 | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | greedy_head | 0.270 | 0.676 | 0.822 | 0.894 [0.828, 0.961] |  | 0.894 (20) | 3/9/never | 0.614 | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | greedy_expert_ab | 0.126 | 0.347 | 0.418 | 0.457 (k=15) |  | 0.457 (15) | never/never/never |  | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | static_mix_oracle | 0.272 | 0.551 | 0.687 |  | 0.956 | 0.956 (128) | 4/24/64 | 0.536 | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | static_mix_dla | 0.139 | 0.471 | 0.641 |  | 1.148 | 1.148 (128) | 6/24/32 | 0.454 | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | static_head_oracle | 0.269 | 0.535 | 0.680 |  | 0.926 | 0.926 (128) | 5/24/96 | 0.528 | 0.227 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | static_head_dla | 0.121 | 0.436 | 0.620 |  | 1.081 | 1.081 (128) | 7/24/32 | 0.422 | 0.227 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | greedy_mix | 0.197 | 0.524 | 0.690 | 0.826 [0.769, 0.899] |  | 0.826 (20) | 5/17/never | 0.505 | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | greedy_head | 0.185 | 0.482 | 0.629 | 0.725 [0.669, 0.786] |  | 0.725 (20) | 6/never/never | 0.463 | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | greedy_expert_ab | 0.141 | 0.352 | 0.449 | 0.502 (k=15) |  | 0.502 (15) | 15/never/never |  | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | static_mix_oracle | 0.197 | 0.475 | 0.591 |  | 0.875 | 0.875 (128) | 6/48/never | 0.449 | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | static_mix_dla | 0.088 | 0.284 | 0.434 |  | 1.036 | 1.036 (128) | 16/48/64 | 0.294 | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | static_head_oracle | 0.184 | 0.440 | 0.556 |  | 0.816 | 0.816 (128) | 7/96/never | 0.424 | -0.056 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | static_head_dla | 0.071 | 0.273 | 0.421 |  | 1.001 | 1.001 (128) | 16/48/64 | 0.279 | -0.056 |
+
+| Run | Greedy | row k50/80/90 (median; reached) | rows restored k=1/5/10/20 | rows r ≥ 0.9 k=5/10/20 | rows top-1 at last step | heads among first 1/5/10/20 | first picks (share) | most frequent in first 5 |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | mix | 3/7/10; 1.00/0.92/0.77 | 0.16/0.84/0.97/0.99 | 0.20/0.45/0.66 | 0.89 | 0.9/4.3/8.1/13.7 | L40H2 0.39, L42H10 0.25, L37E032 0.05 | L40H2 0.84, L42H10 0.50, L36H28 0.25, L36H23 0.25, L37E032 0.23 |
+| Qwen3-30B-A3B-Base, F1 attr→entity | head | 3/7/11; 0.99/0.87/0.71 | 0.14/0.80/0.94/0.98 | 0.15/0.42/0.57 | 0.88 | 1.0/5.0/10.0/20.0 | L40H2 0.46, L42H10 0.25, L36H23 0.05 | L40H2 0.87, L42H10 0.53, L36H23 0.30, L36H28 0.27, L41H20 0.24 |
+| Mixtral-8x7B (BOS), F1 attr→entity | mix | 3/8/11; 1.00/0.93/0.76 | 0.05/0.82/0.95/0.99 | 0.13/0.48/0.76 | 0.83 | 0.6/3.4/6.4/11.3 | L20H27 0.12, L12H21 0.07, L21H11 0.07 | L20H27 0.30, L18H10 0.28, L16H1 0.24, L19H12 0.21, L12H21 0.20 |
+| Mixtral-8x7B (BOS), F1 attr→entity | head | 4/10/17; 0.98/0.71/0.51 | 0.04/0.70/0.89/0.93 | 0.11/0.33/0.47 | 0.74 | 1.0/5.0/10.0/20.0 | L20H27 0.15, L12H21 0.12, L21H11 0.08 | L18H10 0.40, L20H27 0.35, L16H23 0.32, L12H21 0.31, L16H1 0.28 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | mix | 4/11/19; 0.98/0.81/0.54 | 0.06/0.63/0.91/0.97 | 0.04/0.16/0.41 | 0.77 | 0.9/4.3/8.2/14.4 | L40H2 0.57, L42H31 0.16, L42H10 0.06 | L40H2 0.89, L36H23 0.46, L42H31 0.41, L42H10 0.25, L38H3 0.18 |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | head | 4/12/never; 0.97/0.73/0.47 | 0.07/0.64/0.86/0.93 | 0.03/0.14/0.34 | 0.75 | 1.0/5.0/10.0/20.0 | L40H2 0.61, L42H31 0.18, L42H10 0.06 | L40H2 0.93, L36H23 0.57, L42H31 0.42, L38H3 0.27, L42H10 0.26 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | mix | 3/8/12; 1.00/0.93/0.73 | 0.09/0.73/0.93/0.99 | 0.13/0.40/0.72 | 0.80 | 0.7/3.2/5.9/10.8 | L20H27 0.18, L12H21 0.14, L21H11 0.14 | L20H27 0.43, L12H21 0.36, L16H23 0.34, L15H8 0.31, L19H12 0.30 |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | head | 4/11/never; 0.96/0.70/0.43 | 0.07/0.64/0.84/0.93 | 0.12/0.26/0.41 | 0.68 | 1.0/5.0/10.0/20.0 | L20H27 0.24, L12H21 0.20, L21H11 0.16 | L16H23 0.53, L20H27 0.52, L12H21 0.48, L15H8 0.47, L19H12 0.40 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | mix | 5/13/19; 0.99/0.71/0.52 | 0.06/0.57/0.88/0.97 | 0.04/0.19/0.41 | 0.47 | 0.1/1.6/3.6/7.9 | L41E117 0.16, L31E124 0.16, L43E081 0.07 | L41E117 0.29, L46H24 0.29, L41H27 0.27, L43E081 0.25, L44E122 0.24 |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | head | 11/never/never; 0.64/0.19/0.12 | 0.01/0.24/0.43/0.52 | 0.02/0.04/0.09 | 0.22 | 1.0/5.0/10.0/20.0 | L46H24 0.22, L41H27 0.19, L38H18 0.13 | L41H27 0.53, L46H24 0.53, L38H18 0.47, L38H21 0.22, L29H0 0.21 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | mix | 5/13/never; 1.00/0.91/0.45 | 0.02/0.64/0.90/1.00 | 0.01/0.06/0.44 | 0.64 | 0.1/0.8/2.6/6.2 | L20E000 0.23, L26E002 0.13, L19E006 0.12 | L20E000 0.63, L19E006 0.60, L26E002 0.43, L21E006 0.41, L18E005 0.35 |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | head | 9/never/never; 0.72/0.23/0.11 | 0.00/0.23/0.54/0.66 | 0.00/0.03/0.10 | 0.43 | 1.0/5.0/10.0/20.0 | L22H20 0.27, L25H9 0.25, L19H13 0.14 | L25H9 0.70, L19H13 0.61, L22H20 0.58, L20H26 0.38, L13H4 0.32 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | mix | 4/11/20; 0.99/0.75/0.50 | 0.04/0.64/0.89/0.95 | 0.04/0.16/0.41 | 0.23 | 0.5/2.3/4.3/8.3 | L46H24 0.36, L41E117 0.09, L31E124 0.06 | L46H24 0.65, L41H27 0.49, L43E081 0.42, L41E117 0.37, L38H18 0.21 |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | head | 6/never/never; 0.78/0.20/0.09 | 0.01/0.40/0.57/0.64 | 0.01/0.05/0.07 | 0.11 | 1.0/5.0/10.0/20.0 | L46H24 0.51, L38H18 0.10, L41H27 0.09 | L46H24 0.74, L41H27 0.64, L38H18 0.39, L38H21 0.26, L29H0 0.24 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | mix | 4/11/17; 1.00/0.95/0.65 | 0.00/0.69/0.97/1.00 | 0.02/0.11/0.64 | 0.82 | 0.1/1.2/2.9/6.4 | L20E000 0.35, L19E006 0.17, L22H20 0.06 | L20E000 0.74, L19E006 0.72, L25H9 0.38, L16E007 0.33, L21E006 0.30 |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | head | 7/never/never; 0.83/0.25/0.09 | 0.00/0.34/0.67/0.77 | 0.01/0.04/0.08 | 0.63 | 1.0/5.0/10.0/20.0 | L25H9 0.29, L22H20 0.20, L19H13 0.19 | L25H9 0.68, L22H20 0.64, L19H13 0.62, L13H18 0.43, L13H4 0.32 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | mix | 4/10/15; 0.99/0.81/0.64 | 0.02/0.65/0.84/0.95 | 0.04/0.23/0.58 | 0.33 | 0.4/2.1/4.5/8.7 | L42E123 0.16, L41H0 0.12, L41H5 0.09 | L42H30 0.34, L41H0 0.28, L42E123 0.21, L39E121 0.19, L31H16 0.16 |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | head | 6/never/never; 0.84/0.36/0.22 | 0.02/0.46/0.61/0.70 | 0.03/0.10/0.16 | 0.21 | 1.0/5.0/10.0/20.0 | L41H0 0.18, L31H16 0.16, L41H5 0.10 | L42H30 0.45, L41H0 0.37, L31H16 0.31, L41H5 0.18, L38H3 0.16 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | mix | 4/11/16; 1.00/0.93/0.61 | 0.17/0.63/0.93/1.00 | 0.04/0.27/0.60 | 0.77 | 0.4/1.9/4.0/7.5 | L19E006 0.18, L13H18 0.12, L19H12 0.10 | L19E006 0.54, L13H18 0.23, L19H13 0.21, L16E007 0.18, L19H12 0.17 |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | head | 5/never/never; 0.78/0.46/0.28 | 0.13/0.47/0.74/0.77 | 0.04/0.15/0.24 | 0.65 | 1.0/5.0/10.0/20.0 | L13H18 0.21, L19H12 0.14, L8H8 0.11 | L13H18 0.43, L19H12 0.29, L8H8 0.27, L22H20 0.26, L19H1 0.26 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | mix | 4/10/15; 0.98/0.80/0.64 | 0.07/0.68/0.79/0.91 | 0.05/0.28/0.59 | 0.25 | 0.3/2.2/4.5/8.7 | L41H0 0.19, L43E043 0.18, L39E001 0.12 | L42H30 0.39, L41H0 0.39, L31H16 0.23, L43E043 0.18, L39E121 0.16 |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | head | 5/never/never; 0.81/0.41/0.26 | 0.05/0.48/0.62/0.68 | 0.01/0.08/0.20 | 0.16 | 1.0/5.0/10.0/20.0 | L41H0 0.23, L31H16 0.15, L42H30 0.07 | L41H0 0.50, L42H30 0.43, L31H16 0.32, L42H27 0.25, L29H0 0.17 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | mix | 5/13/never; 1.00/0.89/0.44 | 0.02/0.52/0.97/1.00 | 0.00/0.12/0.40 | 0.63 | 0.3/1.3/3.3/7.4 | L19H13 0.16, L18E000 0.16, L18E003 0.14 | L19H13 0.32, L13H18 0.31, L20E001 0.30, L19E006 0.30, L22E001 0.29 |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | head | 7/never/never; 0.91/0.31/0.17 | 0.02/0.34/0.73/0.83 | 0.00/0.05/0.16 | 0.55 | 1.0/5.0/10.0/20.0 | L19H13 0.22, L18H10 0.15, L13H18 0.14 | L13H18 0.48, L18H17 0.43, L19H13 0.32, L8H8 0.30, L16H0 0.27 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | mix | 4/10/15; 1.00/0.91/0.64 | 0.13/0.69/0.91/0.97 | 0.03/0.28/0.59 | 0.36 | 0.2/1.7/3.6/7.6 | L42E123 0.13, L39E001 0.07, L43E043 0.07 | L42E123 0.25, L41H27 0.21, L42H30 0.18, L41H0 0.18, L39E121 0.17 |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | head | 7/never/never; 0.74/0.27/0.16 | 0.07/0.39/0.59/0.66 | 0.01/0.07/0.10 | 0.16 | 1.0/5.0/10.0/20.0 | L41H5 0.13, L41H27 0.13, L41H0 0.11 | L42H30 0.36, L38H3 0.36, L41H27 0.25, L38H19 0.21, L31H16 0.20 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | mix | 4/10/16; 1.00/0.96/0.62 | 0.16/0.68/0.88/0.94 | 0.04/0.25/0.61 | 0.35 | 0.4/2.0/4.2/8.1 | L19E006 0.22, L19H12 0.13, L20E000 0.11 | L19E006 0.56, L19H13 0.32, L13H18 0.25, L20E000 0.21, L19H12 0.21 |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | head | 5/never/never; 0.86/0.48/0.24 | 0.11/0.55/0.70/0.75 | 0.05/0.17/0.22 | 0.25 | 1.0/5.0/10.0/20.0 | L19H13 0.22, L19H12 0.18, L13H18 0.14 | L13H18 0.52, L19H13 0.39, L8H8 0.36, L19H1 0.28, L19H12 0.24 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | mix | 4/10/16; 1.00/0.84/0.65 | 0.14/0.66/0.90/0.95 | 0.05/0.26/0.58 | 0.28 | 0.2/1.7/3.6/7.2 | L42E123 0.15, L39E001 0.10, L43E043 0.10 | L41H27 0.24, L41H0 0.23, L42H30 0.20, L38H3 0.17, L42E123 0.16 |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | head | 7/never/never; 0.71/0.23/0.14 | 0.06/0.37/0.54/0.61 | 0.00/0.05/0.07 | 0.14 | 1.0/5.0/10.0/20.0 | L41H27 0.15, L41H0 0.14, L19H16 0.12 | L42H30 0.36, L38H3 0.32, L41H27 0.29, L38H19 0.26, L41H0 0.25 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | mix | 4/11/19; 1.00/0.90/0.54 | 0.10/0.69/0.93/0.96 | 0.02/0.16/0.49 | 0.35 | 0.4/2.0/4.0/7.8 | L19E006 0.16, L20E000 0.14, L21H20 0.09 | L19E006 0.40, L19H13 0.31, L13H18 0.29, L20E000 0.26, L22E001 0.19 |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | head | 5/never/never; 0.86/0.44/0.18 | 0.04/0.48/0.75/0.82 | 0.01/0.05/0.15 | 0.29 | 1.0/5.0/10.0/20.0 | L19H12 0.17, L19H13 0.17, L13H18 0.16 | L13H18 0.46, L19H13 0.44, L19H12 0.24, L8H8 0.21, L13H16 0.20 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | mix | 2/6/8; 1.00/0.97/0.93 | 0.07/0.95/1.00/1.00 | 0.18/0.57/0.80 | 0.99 | 1.0/4.8/9.0/15.3 | L40H2 0.66, L42H10 0.30, L39H29 0.01 | L40H2 1.00, L42H10 0.96, L36H23 0.76, L36H28 0.36, L33H20 0.34 |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | head | 2/6/8; 1.00/0.97/0.88 | 0.07/0.95/1.00/1.00 | 0.19/0.55/0.78 | 0.99 | 1.0/5.0/10.0/20.0 | L40H2 0.66, L42H10 0.30, L39H29 0.01 | L40H2 1.00, L42H10 0.96, L36H23 0.78, L36H28 0.42, L33H20 0.36 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | mix | 3/8/12; 1.00/0.91/0.78 | 0.17/0.78/0.95/0.98 | 0.19/0.42/0.66 | 0.77 | 0.7/3.7/7.4/12.8 | L40H2 0.42, L42H10 0.05, L37H24 0.05 | L40H2 0.81, L42H10 0.31, L43H28 0.22, L40H0 0.19, L38H20 0.14 |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | head | 3/9/13; 0.97/0.78/0.59 | 0.17/0.75/0.92/0.94 | 0.17/0.36/0.47 | 0.73 | 1.0/5.0/10.0/20.0 | L40H2 0.53, L43H28 0.05, L42H10 0.05 | L40H2 0.89, L42H10 0.31, L38H20 0.22, L43H28 0.20, L40H0 0.20 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | mix | 6/19/never; 1.00/0.56/0.31 | 0.11/0.42/0.81/0.97 | 0.06/0.14/0.31 | 0.81 | 0.6/3.6/6.8/12.2 | L20H21 0.17, L16H0 0.17, L15E006 0.14 | L20H21 0.69, L18H10 0.69, L16H0 0.61, L19H8 0.31, L19E004 0.31 |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | head | 6/never/never; 0.94/0.39/0.19 | 0.03/0.42/0.78/0.86 | 0.00/0.03/0.17 | 0.72 | 1.0/5.0/10.0/20.0 | L16H0 0.22, L20H21 0.19, L18H10 0.19 | L20H21 0.72, L18H10 0.69, L16H0 0.61, L19H8 0.36, L31H22 0.25 |
+
+**In-pass ceilings and sanity.**
+
+| Run | rows / units | all heads (= 1) | all attention | all MoE | all heads: max |Δ − Δ_clean| | layer heads vs attn_layer: median / max |ΔΔ|, r | passes | complete |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | 256 / 128 | 1.001 | 1.000 | 0.243 [0.184, 0.299] | 0.500 | 0.125 / 0.875, 0.9898 | 19 | yes |
+| Mixtral-8x7B (BOS), F1 attr→entity | 202 / 101 | 1.002 | 1.001 | 0.227 [0.134, 0.318] | 0.250 | 0.000 / 0.500, 0.9980 | 19 | yes |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | 180 / 90 | 0.998 | 1.002 | 0.109 [0.045, 0.170] | 0.500 | 0.125 / 0.875, 0.9958 | 19 | yes |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | 188 / 94 | 1.003 | 1.002 | 0.408 [0.355, 0.457] | 0.500 | 0.000 / 0.500, 0.9982 | 19 | yes |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | 180 / 90 | 0.994 | 0.999 | 0.812 [0.795, 0.829] | 3.500 | 0.125 / 1.375, 0.9955 | 19 | yes |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | 188 / 94 | 1.002 | 1.001 | 0.756 [0.732, 0.778] | 0.250 | 0.000 / 0.375, 0.9991 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | 280 / 70 | 0.999 | 0.995 | 0.786 [0.760, 0.812] | 1.375 | 0.125 / 0.875, 0.9934 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | 408 / 102 | 0.999 | 0.999 | 0.732 [0.701, 0.760] | 0.250 | 0.000 / 0.250, 0.9984 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | 256 / 13 | 0.995 | 0.998 | 0.703 [0.582, 0.804] | 4.000 | 0.125 / 0.875, 0.9967 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | 256 / 10 | 1.000 | 0.999 | 0.545 [0.380, 0.679] | 0.500 | 0.000 / 0.250, 0.9989 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | 256 / 8 | 1.000 | 0.990 | 0.739 [0.621, 0.831] | 4.125 | 0.125 / 0.750, 0.9983 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | 256 / 8 | 0.999 | 1.000 | 0.463 [0.376, 0.630] | 0.125 | 0.000 / 0.250, 0.9990 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | 256 / 17 | 0.982 | 0.988 | 0.823 [0.786, 0.863] | 4.250 | 0.125 / 1.000, 0.9978 | 19 | yes |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | 256 / 18 | 1.000 | 1.000 | 0.677 [0.576, 0.758] | 0.250 | 0.000 / 0.375, 0.9996 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | 256 / 12 | 0.984 | 0.989 | 0.813 [0.762, 0.863] | 2.250 | 0.000 / 0.875, 0.9977 | 19 | yes |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | 256 / 12 | 0.998 | 1.000 | 0.623 [0.475, 0.745] | 0.375 | 0.000 / 0.375, 0.9992 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | 74 / 5 | 1.014 | 1.015 | 0.211 [0.189, 0.486] | 0.500 | 0.125 / 0.500, 0.9876 | 19 | yes |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | 64 / 32 | 1.011 | 1.000 | 0.227 [0.054, 0.380] | 4.375 | 0.125 / 1.875, 0.9964 | 19 | yes |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | 36 / 18 | 0.999 | 1.000 | -0.056 [-0.328, 0.193] | 0.125 | 0.000 / 0.250, 0.9991 | 19 | yes |
+
+### Cross-condition overview (key panel of the task ladder)
+
+![overview](../figures/ext13ci_overview.png)
+
+| Condition | Qwen3-30B-A3B-Base: heads in first 10 / r(20) [CI] / k80 / all-MoE | Mixtral-8x7B (BOS): heads in first 10 / r(20) [CI] / k80 / all-MoE |
+|---|---|---|
+| P4 CounterFact | 6.2 / 0.97 [0.95, 1.00] / 8 / 0.53 | 6.4 / 1.00 [0.98, 1.03] / 9 / 0.41 |
+| P4 WinoGrande | 3.6 / 0.93 [0.91, 0.96] / 10 / 0.86 | 2.8 / 0.94 [0.93, 0.95] / 10 / 0.79 |
+| P4 IOI | 9.9 / 0.94 [0.93, 0.96] / 11 / -0.27 |  |
+| f1 (F1 attr→entity) | 8.1 / 0.97 [0.94, 1.00] / 7 / 0.24 | 6.4 / 1.03 [1.00, 1.07] / 8 / 0.23 |
+| dir_f1 (dir: F1 on Phase-3 pairs) | 8.2 / 0.87 [0.84, 0.89] / 13 / 0.11 | 5.9 / 1.00 [0.97, 1.04] / 9 / 0.41 |
+| dir_opt (dir: option swap on the same pairs) | 3.6 / 0.88 [0.86, 0.92] / 13 / 0.81 | 2.6 / 0.89 [0.88, 0.90] / 14 / 0.76 |
+| cp_nat (copy prefix, natural Phase-3 pairs) | 4.3 / 0.87 [0.84, 0.89] / 14 / 0.79 | 2.9 / 0.92 [0.91, 0.94] / 11 / 0.73 |
+| cp_vt_orig (copy prefix, templates orig) | 4.5 / 0.94 [0.86, 1.04] / 11 / 0.70 | 4.0 / 0.94 [0.90, 0.97] / 10 / 0.54 |
+| cp_vt_neu (copy prefix, templates neutral) | 4.5 / 0.93 [0.84, 1.06] / 11 / 0.74 | 3.3 / 0.89 [0.83, 0.97] / 13 / 0.46 |
+| vt_e2a_orig (verb templates e→a, orig verb) | 3.6 / 0.96 [0.89, 1.07] / 10 / 0.82 | 4.2 / 0.93 [0.90, 0.98] / 11 / 0.68 |
+| vt_e2a_neu (verb templates e→a, neutral verb) | 3.6 / 0.92 [0.88, 0.97] / 10 / 0.81 | 4.0 / 0.89 [0.85, 0.94] / 12 / 0.62 |
+| vt_a2e_orig (verb templates a→e, orig verb) | 9.0 / 1.03 [0.90, 1.07] / 6 / 0.21 |  |
+| f2e (F2E natural, blank at end) | 7.4 / 1.02 [0.95, 1.09] / 8 / 0.23 | 6.8 / 0.83 [0.77, 0.90] / 17 / -0.06 |
+
+### Contrasts (paired over shared clusters)
+
+Per cluster (twin or template seed): r = Σ rescue / Σ drop over its rows, heads = mean count among the first 10 mixed-greedy picks; difference A − B averaged over the clusters present in both conditions, 95 % percentile bootstrap over clusters (5,000 resamples). 'P3wino' = Phase 4's WinoGrande option-swap rows (Direction 10).
+
+| Contrast | Model | A − B | shared clusters (A / B) | r(20): A vs B: diff [95% CI] | r(10) | heads among first 10 |
+|---|---|---|---|---|---|---|
+| direction on identical twins: attribute→entity (F1) − entity→attribute (option swap) | Qwen3-30B-A3B-Base | dir_f1 − dir_opt | 90 (90 / 90) | 0.87 vs 0.90: -0.03 [-0.08, +0.01] | 0.77 vs 0.77: +0.00 [-0.04, +0.04] | 8.19 vs 3.63: +4.56 [+4.20, +4.92] |
+| direction on identical twins: attribute→entity (F1) − entity→attribute (option swap) | Mixtral-8x7B (BOS) | dir_f1 − dir_opt | 94 (94 / 94) | 1.03 vs 0.90: +0.13 [+0.10, +0.17] | 0.88 vs 0.74: +0.14 [+0.11, +0.16] | 5.87 vs 2.59: +3.28 [+2.82, +3.72] |
+| direction on the verb templates, original verb (a→e − e→a) | Qwen3-30B-A3B-Base | vt_a2e_orig − vt_e2a_orig | 2 (5 / 17) | 1.03 vs 0.96 (unpaired) | 0.92 vs 0.83 (unpaired) | 8.47 vs 3.65 (unpaired) |
+| copy availability on the templates, original verb (C2 − C1) | Qwen3-30B-A3B-Base | cp_vt_orig − vt_e2a_orig | 9 (13 / 17) | 0.95 vs 0.92: +0.03 [-0.05, +0.12] | 0.82 vs 0.79: +0.02 [-0.06, +0.10] | 4.50 vs 3.71: +0.79 [+0.15, +1.44] |
+| copy availability on the templates, original verb (C2 − C1) | Mixtral-8x7B (BOS) | cp_vt_orig − vt_e2a_orig | 9 (10 / 18) | 0.94 vs 0.96: -0.02 [-0.05, +0.02] | 0.81 vs 0.83: -0.02 [-0.05, +0.02] | 3.87 vs 4.08: -0.21 [-0.86, +0.45] |
+| copy availability on the templates, neutral verb (C2 − C1) | Qwen3-30B-A3B-Base | cp_vt_neu − vt_e2a_neu | 4 (8 / 12) | 0.93 vs 0.92 (unpaired) | 0.79 vs 0.80 (unpaired) | 4.68 vs 3.56 (unpaired) |
+| copy availability on the templates, neutral verb (C2 − C1) | Mixtral-8x7B (BOS) | cp_vt_neu − vt_e2a_neu | 6 (8 / 12) | 0.89 vs 0.89 (unpaired) | 0.74 vs 0.76 (unpaired) | 4.28 vs 3.94 (unpaired) |
+| copy availability on natural pairs (C2 − Phase-3 option swap C1) | Qwen3-30B-A3B-Base | cp_nat − P3wino | 70 (70 / 128) | 0.87 vs 0.95: -0.08 [-0.12, -0.03] | 0.77 vs 0.81: -0.04 [-0.08, -0.00] | 4.34 vs 3.53: +0.81 [+0.51, +1.11] |
+| copy availability on natural pairs (C2 − Phase-3 option swap C1) | Mixtral-8x7B (BOS) | cp_nat − P3wino | 102 (102 / 128) | 0.93 vs 0.94: -0.02 [-0.03, -0.00] | 0.79 vs 0.81: -0.02 [-0.03, -0.01] | 2.89 vs 2.71: +0.19 [-0.00, +0.38] |
+| direction with copy fixed, original verb (C3 − C2) | Qwen3-30B-A3B-Base | vt_a2e_orig − cp_vt_orig | 4 (5 / 13) | 1.03 vs 0.94 (unpaired) | 0.92 vs 0.79 (unpaired) | 8.47 vs 4.64 (unpaired) |
+| direction with copy fixed on natural pairs (C3 − C2) | Qwen3-30B-A3B-Base | dir_f1 − cp_nat | 10 (90 / 70) | 0.85 vs 0.88: -0.03 [-0.11, +0.04] | 0.76 vs 0.78: -0.03 [-0.07, +0.03] | 7.40 vs 4.33: +3.08 [+1.62, +4.45] |
+| direction with copy fixed on natural pairs (C3 − C2) | Mixtral-8x7B (BOS) | dir_f1 − cp_nat | 5 (94 / 102) | 1.00 vs 0.92 (unpaired) | 0.86 vs 0.78 (unpaired) | 5.87 vs 2.89 (unpaired) |
+| F1 attribute→entity vs Phase-3 option swap (shared twins only) | Qwen3-30B-A3B-Base | f1 − P3wino | 2 (128 / 128) | 0.97 vs 0.93 (unpaired) | 0.88 vs 0.80 (unpaired) | 8.11 vs 3.61 (unpaired) |
+| F1 attribute→entity vs Phase-3 option swap (shared twins only) | Mixtral-8x7B (BOS) | f1 − P3wino | 3 (101 / 128) | 1.03 vs 0.94 (unpaired) | 0.87 vs 0.80 (unpaired) | 6.44 vs 2.81 (unpaired) |
+
+### Deviations and caveats
+
+- Σ of single-head effects (step-1 summary, additive k for q) carries the wavefront-vs-prefill bf16 offset of every
+  single patch (about −0.0015 of the drop per head; visible as a constant negative Σ-heads curve at early layers in the
+  layer figures); the joint patches of step 2 are exact and do not have it.
+- Expert pool / oracle order of step 2 = the base run's single-expert rescue (W6 rows); entries missing there are replaced by
+  the step-1 expert DLA (count per condition in the step-1 summary JSON, experts.n_single_proxied_by_dla).
+- Attention masses are shown for the clean prompts only: with both directions of every pair as rows, the corrupted prompts
+  are the same set of prompts with the sides exchanged.
+- Head labels are a descriptive rule on mean attention (see the attention table caption), not a causal test of copying.
+- Not run (registry behaviour-only, too few pairs): vt_a2e_neu (both models), vt_a2e_orig for Mixtral. f2e Mixtral has
+  18 validation pairs (36 rows): wide CIs.
+- Phase-4 reference values (CounterFact, WinoGrande option swap, IOI) come from ext10 on different items; the paired
+  contrasts use only shared clusters (twins / template seeds), the f1 − P3wino comparison is unpaired (2–3 shared twins).
+- k50/80/90 = 'never' when the mixed greedy does not reach that fraction within its 20 steps.
+### Files
+
+Code moetrace/ext13ci.py, scripts/ext13ci_{heads_run,circuit_run,analyze,chain,text}.py; runs results/p5_<cond>_<proto>_ci/ (step 1), results/p5_<proto>_ci/<group>/ (step 2); numbers results/ext13ci_summary.json; tables results/tables/ext13ci_*; figures results/figures/ext13ci_{heads_heatmap,heads_dla_layers,heads_attn,circuit_curves,circuit_composition}_<cond>.png and ext13ci_overview.png.
+
+_Generated 2026-10-12T05:38:01Z by scripts/ext13ci_text.py._
+
+
+## Direction 13d: Phase 5 expert knockout
+
+**Summary.** Phase 4's knockout (engine route mask at every position, reroute: the expert leaves the router's menu and the next-best expert takes the slot; F = fraction of the clean margin lost) applied to every Phase-5 condition on clean prompts of the validation and replication pairs (both twins). Targets: each condition's own selected expert, Phase 3's WinoGrande expert (Qwen3 L41E117, Mixtral L20E000) on every condition, the CounterFact experts as cross-task controls, the condition's population top-1/3/5/10 sets, frequency-matched random sets and same-layer controls. Qwen3-30B-A3B-Base, WinoGrande expert L41E117 knocked out — entity → attribute: dir_opt +0.025 [+0.011, +0.041]; vt_e2a_orig +0.001 [-0.009, +0.013]; vt_e2a_neu +0.001 [-0.009, +0.012] | copyable answer (prefix): cp_nat +0.027 [+0.019, +0.034]; cp_vt_orig -0.001 [-0.009, +0.006]; cp_vt_neu +0.000 [-0.009, +0.011] | attribute → entity: f1 -0.004 [-0.009, +0.002]; dir_f1 +0.001 [-0.008, +0.011]; f2e +0.004 [-0.009, +0.017]; vt_a2e_orig -0.009 [-0.031, -0.006]. Qwen3-30B-A3B-Base, own selections — f1: L37E032 +0.042 [+0.029, +0.055] (rank 1/17 in its layer), necessary; top-10 +0.189 (random 10-sets +0.007) | dir_f1: L44E116 +0.021 [+0.007, +0.036] (rank 1/17 in its layer), below the necessity criterion; top-10 +0.182 (random 10-sets -0.022) | dir_opt: L41E117 +0.025 [+0.011, +0.041] (rank 2/17 in its layer), below the necessity criterion; top-10 +0.185 (random 10-sets -0.006) | f2e: L43E036 +0.015 [-0.004, +0.032] (rank 1/17 in its layer), below the necessity criterion; top-10 +0.029 (random 10-sets -0.020) | vt_e2a_orig: L39E121 +0.005 [-0.013, +0.030] (rank 15/17 in its layer), below the necessity criterion; top-10 +0.056 (random 10-sets +0.001) | vt_e2a_neu: L42E123 +0.020 [-0.006, +0.046] (rank 1/17 in its layer), below the necessity criterion; top-10 +0.161 (random 10-sets +0.037) | vt_a2e_orig: L37E032 +0.034 [+0.024, +0.118] (rank 2/17 in its layer), necessary; top-10 +0.288 (random 10-sets +0.003) | cp_vt_orig: L39E001 +0.008 [-0.017, +0.035] (rank 6/17 in its layer), below the necessity criterion; top-10 +0.097 (random 10-sets +0.030) | cp_vt_neu: L42E123 -0.007 [-0.021, +0.010] (rank 8/17 in its layer), below the necessity criterion; top-10 +0.058 (random 10-sets +0.013) | cp_nat: L41E117 +0.027 [+0.019, +0.034] (rank 1/17 in its layer), necessary; top-10 +0.203 (random 10-sets +0.030). Mixtral-8x7B (BOS), WinoGrande expert L20E000 knocked out — entity → attribute: dir_opt +0.025 [+0.016, +0.034]; vt_e2a_orig +0.012 [-0.016, +0.040]; vt_e2a_neu +0.023 [-0.007, +0.056] | copyable answer (prefix): cp_nat +0.045 [+0.039, +0.050]; cp_vt_orig +0.020 [-0.012, +0.062]; cp_vt_neu -0.001 [-0.017, +0.034] | attribute → entity: f1 +0.005 [-0.002, +0.012]; dir_f1 +0.002 [-0.004, +0.008]; f2e +0.000 [-0.007, +0.008]. Mixtral-8x7B (BOS), own selections — f1: L20E001 +0.008 [-0.006, +0.022] (rank 1/7 in its layer), below the necessity criterion; top-10 +0.229 (random 10-sets -0.002) | dir_f1: L20E001 -0.005 [-0.021, +0.011] (rank 3/7 in its layer), below the necessity criterion; top-10 +0.243 (random 10-sets -0.027) | dir_opt: L20E000 +0.025 [+0.016, +0.034] (rank 1/8 in its layer), necessary; top-10 +0.171 (random 10-sets -0.000) | f2e: L19E004 +0.030 [+0.005, +0.056] (rank 1/7 in its layer), below the necessity criterion; top-10 +0.017 (random 10-sets +0.007) | vt_e2a_orig: L19E006 +0.042 [+0.024, +0.061] (rank 1/7 in its layer), necessary; top-10 +0.075 (random 10-sets +0.014) | vt_e2a_neu: L19E006 +0.037 [+0.013, +0.064] (rank 1/7 in its layer), necessary; top-10 +0.058 (random 10-sets +0.040) | cp_vt_orig: L19E006 +0.017 [-0.004, +0.036] (rank 1/7 in its layer), below the necessity criterion; top-10 +0.087 (random 10-sets -0.002) | cp_vt_neu: L19E006 +0.035 [+0.012, +0.071] (rank 1/7 in its layer), necessary; top-10 +0.045 (random 10-sets +0.013) | cp_nat: L21E006 +0.023 [+0.019, +0.027] (rank 1/7 in its layer), necessary; top-10 +0.185 (random 10-sets +0.009). **P5-8 (is the WinoGrande expert necessary when the answer can be copied?)** Qwen3-30B-A3B-Base L41E117: cp_vt_orig F +0.002 vs vt_e2a_orig -0.010, difference +0.012 [-0.005, +0.038] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: cp_vt_neu F -0.006 vs vt_e2a_neu -0.005, difference -0.001 [-0.030, +0.033] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: cp_nat F +0.023 vs dir_opt +0.033, difference -0.010 [-0.041, +0.020] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_vt_orig F +0.025 vs vt_e2a_orig -0.004, difference +0.029 [-0.000, +0.057] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_vt_neu F -0.000 vs vt_e2a_neu +0.004, difference -0.004 [-0.008, +0.015] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_nat F +0.032 vs dir_opt +0.036, difference -0.003 [-0.014, +0.007] (paired, shared source items) -> unchanged within the CI. **Direction (same items, answer in context vs generated):** Qwen3-30B-A3B-Base L41E117: vt_a2e_orig F -0.009 vs cp_vt_orig -0.001, difference -0.008 [-0.030, +0.000] (unpaired) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: dir_f1 F -0.001 vs cp_nat +0.023, difference -0.024 [-0.052, +0.004] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: dir_f1 F +0.001 vs dir_opt +0.025, difference -0.024 [-0.042, -0.007] (paired, shared source items) -> reduced to about zero; Qwen3-30B-A3B-Base L41E117: vt_a2e_orig F -0.009 vs vt_e2a_orig +0.001, difference -0.011 [-0.034, -0.000] (unpaired) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: dir_f1 F +0.008 vs cp_nat +0.032, difference -0.024 [-0.047, -0.003] (paired, shared source items) -> reduced to about zero; Mixtral-8x7B (BOS) L20E000: dir_f1 F +0.002 vs dir_opt +0.025, difference -0.023 [-0.034, -0.012] (paired, shared source items) -> reduced to about zero.
+
+### What was run
+
+**Design.** Models Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1 with BOS (Phases 3-4 default), bf16, engine E4 route masks (`PrefillSpec.route_mask`, reroute; Phase 4 verification `results/verify_ext9_engine_olmoe.json`). Per condition (registry `data/wino_ref/p5_conditions.json`, agent p5-data): items = clean prompts of both twins of every pair except the main discovery pairs (validation + replication splits; the discovery pairs selected the experts), Δ toward each prompt's own answer. Full scope (baseline, targets, population sets, null) = these eval items; sub scope (same-layer controls, 5 frequency-matched random sets per set size, final-position-only masks, cross-condition knockouts) = the main validation pairs. Same-layer controls for the main targets (own selected expert, WinoGrande expert): Mixtral the 7 other experts of the layer, Qwen3 the 16 experts of the layer most often routed at the final position on the condition's eval prompts (targets excluded). Random sets: each member of the population top-k replaced by one of the 4 (Qwen3) / 3 (Mixtral) experts of its layer with the nearest final-position routing frequency (Phase 4 rule). Null = the unmasked baseline recomputed in passes of another composition (noise floor). F = (Σ Δ_base − Σ Δ_ko) / Σ Δ_base; bootstrap (5,000) over the condition's units: template seeds for the semi-synthetic template conditions (vt_*, cp_vt_*; 48 name pairs per seed are not independent), source pairs for cp_nat (both prefix orders together), pairs otherwise. Cross-condition differences resample the conditions independently; paired differences use the source items present in both conditions with a joint bootstrap over shared units. Not run: zero mode (Phase 4: zero ≈ reroute for every target, `results/tables/ext9_knockout_final_zero.md`) and the wikitext NLL control (generic damage of the same experts measured in Phase 4, ≤ 0.008 nats/token for single experts).
+
+| Model | Condition | Eval pairs (units) | Baseline Δ | Pair acc | Selected expert | Population top-3 | GPU (min) |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 (F1 attribute → entity (fill-in-the-blank)) | 384 (384 pair_id) | 2.36 | 1.000 | L37E032 | L37E032 L44E116 L39E103 | 5.0 |
+| Qwen3-30B-A3B-Base | dir_f1 (776 set, attribute → entity (fill-in-the-blank)) | 90 (90 pair_id) | 2.61 | 1.000 | L44E116 | L44E116 L37E032 L43E070 | 4.0 |
+| Qwen3-30B-A3B-Base | dir_opt (776 set, entity → attribute (Phase-3 option swap)) | 90 (90 pair_id) | 4.38 | 1.000 | L41E117 | L43E081 L41E117 L31E124 | 3.6 |
+| Qwen3-30B-A3B-Base | f2e (attribute → entity, natural sentence) | 32 (32 pair_id) | 4.08 | 1.000 | L43E036 | L37E107 L44E116 L43E036 | 3.0 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig (templates entity → attribute, original verb) | 128 (17 seed) | 3.27 | 1.000 | L39E121 | L42E123 L39E121 L45E092 | 4.9 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu (templates entity → attribute, neutral verb) | 128 (12 seed) | 3.02 | 1.000 | L42E123 | L42E123 L39E121 L45E092 | 4.7 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig (templates attribute → entity, original verb) | 37 (5 seed) | 1.82 | 1.000 | L37E032 | L37E032 L32E061 L39E103 | 2.7 |
+| Qwen3-30B-A3B-Base | cp_vt_orig (copy: templates e → a + prefix, original verb) | 128 (13 seed) | 2.80 | 1.000 | L39E001 | L42E123 L39E001 L39E121 | 4.5 |
+| Qwen3-30B-A3B-Base | cp_vt_neu (copy: templates e → a + prefix, neutral verb) | 128 (8 seed) | 2.78 | 1.000 | L42E123 | L42E123 L39E121 L37E101 | 4.9 |
+| Qwen3-30B-A3B-Base | cp_nat (copy: 776 set e → a + prefix) | 460 (230 base_pair_id) | 3.02 | 1.000 | L41E117 | L43E081 L41E117 L34E119 | 6.0 |
+| Mixtral-8x7B (BOS) | f1 (F1 attribute → entity (fill-in-the-blank)) | 101 (101 pair_id) | 2.18 | 1.000 | L20E001 | L19E004 L20E001 L20E005 | 6.4 |
+| Mixtral-8x7B (BOS) | dir_f1 (776 set, attribute → entity (fill-in-the-blank)) | 94 (94 pair_id) | 2.33 | 1.000 | L20E001 | L19E004 L20E001 L23E000 | 6.1 |
+| Mixtral-8x7B (BOS) | dir_opt (776 set, entity → attribute (Phase-3 option swap)) | 94 (94 pair_id) | 4.83 | 1.000 | L20E000 | L20E000 L19E006 L21E006 | 6.1 |
+| Mixtral-8x7B (BOS) | f2e (attribute → entity, natural sentence) | 18 (18 pair_id) | 3.47 | 1.000 | L19E004 | L19E004 L17E005 L20E005 | 4.4 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig (templates entity → attribute, original verb) | 128 (18 seed) | 3.25 | 1.000 | L19E006 | L19E006 L20E000 L21E003 | 6.3 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu (templates entity → attribute, neutral verb) | 128 (12 seed) | 2.92 | 1.000 | L19E006 | L19E006 L21E003 L20E000 | 6.2 |
+| Mixtral-8x7B (BOS) | cp_vt_orig (copy: templates e → a + prefix, original verb) | 128 (10 seed) | 2.63 | 1.000 | L19E006 | L19E006 L21E003 L14E007 | 6.3 |
+| Mixtral-8x7B (BOS) | cp_vt_neu (copy: templates e → a + prefix, neutral verb) | 128 (8 seed) | 2.70 | 1.000 | L19E006 | L21E003 L19E006 L20E005 | 4.6 |
+| Mixtral-8x7B (BOS) | cp_nat (copy: 776 set e → a + prefix) | 640 (320 base_pair_id) | 3.67 | 1.000 | L21E006 | L20E000 L19E006 L21E006 | 12.3 |
+
+
+### 1. Targets and population sets (eval items)
+
+| model | condition | knockout | role | routed at final | F [95% CI] | pair acc base -> ko | F routed items | null F |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | selected | 0.9818 | +0.042 [+0.029, +0.055] | 1.000 -> 0.979 | 0.043 | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | wg | 0.0221 | -0.004 [-0.009, +0.002] | 1.000 -> 1.000 | 0.0127 | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | cf | 0.0924 | +0.000 [-0.007, +0.007] | 1.000 -> 1.000 | 0.0161 | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | cf | 0.3568 | -0.009 [-0.016, -0.002] | 1.000 -> 1.000 | -0.012 | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | top-3 | pop |  | +0.089 [+0.077, +0.101] | 1.000 -> 0.974 |  | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | top-5 | pop |  | +0.105 [+0.092, +0.119] | 1.000 -> 0.964 |  | -0.004 |
+| Qwen3-30B-A3B-Base | f1 | top-10 | pop |  | +0.189 [+0.175, +0.204] | 1.000 -> 0.922 |  | -0.004 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | selected | 0.85 | +0.021 [+0.007, +0.036] | 1.000 -> 1.000 | 0.0233 | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | wg | 0.0 | +0.001 [-0.008, +0.011] | 1.000 -> 1.000 |  | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | cf | 0.0833 | -0.001 [-0.012, +0.010] | 1.000 -> 1.000 | 0.0069 | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | cf | 0.1333 | -0.006 [-0.018, +0.005] | 1.000 -> 1.000 | -0.0243 | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-3 | pop |  | +0.107 [+0.088, +0.128] | 1.000 -> 1.000 |  | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-5 | pop |  | +0.128 [+0.105, +0.150] | 1.000 -> 0.989 |  | -0.012 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-10 | pop |  | +0.182 [+0.146, +0.218] | 1.000 -> 0.967 |  | -0.012 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | selected+wg | 0.7722 | +0.025 [+0.011, +0.041] | 1.000 -> 1.000 | 0.0327 | +0.011 |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | cf | 0.0111 | -0.003 [-0.009, +0.004] | 1.000 -> 1.000 |  | +0.011 |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | cf | 0.0111 | +0.001 [-0.007, +0.008] | 1.000 -> 1.000 |  | +0.011 |
+| Qwen3-30B-A3B-Base | dir_opt | top-3 | pop |  | +0.067 [+0.043, +0.090] | 1.000 -> 0.989 |  | +0.011 |
+| Qwen3-30B-A3B-Base | dir_opt | top-5 | pop |  | +0.122 [+0.091, +0.154] | 1.000 -> 0.967 |  | +0.011 |
+| Qwen3-30B-A3B-Base | dir_opt | top-10 | pop |  | +0.185 [+0.154, +0.215] | 1.000 -> 0.944 |  | +0.011 |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | selected | 0.9844 | +0.015 [-0.004, +0.032] | 1.000 -> 1.000 | 0.0149 | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | wg | 0.0625 | +0.004 [-0.009, +0.017] | 1.000 -> 1.000 |  | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | cf | 0.4375 | +0.001 [-0.011, +0.013] | 1.000 -> 1.000 | -0.0079 | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | cf | 0.625 | +0.008 [-0.011, +0.027] | 1.000 -> 1.000 | 0.009 | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | top-3 | pop |  | +0.013 [-0.029, +0.047] | 1.000 -> 1.000 |  | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | top-5 | pop |  | +0.018 [-0.032, +0.058] | 1.000 -> 1.000 |  | -0.018 |
+| Qwen3-30B-A3B-Base | f2e | top-10 | pop |  | +0.029 [-0.047, +0.091] | 1.000 -> 1.000 |  | -0.018 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | selected | 0.7188 | +0.005 [-0.013, +0.030] | 1.000 -> 1.000 | 0.0133 | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | wg | 0.4648 | +0.001 [-0.009, +0.013] | 1.000 -> 1.000 | -0.0037 | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | cf | 0.2383 | +0.010 [-0.009, +0.034] | 1.000 -> 1.000 | 0.0504 | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | cf | 0.0781 | -0.001 [-0.011, +0.008] | 1.000 -> 1.000 | -0.0047 | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-3 | pop |  | +0.035 [+0.003, +0.066] | 1.000 -> 1.000 |  | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-5 | pop |  | +0.025 [-0.016, +0.065] | 1.000 -> 1.000 |  | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-10 | pop |  | +0.056 [-0.030, +0.141] | 1.000 -> 0.969 |  | +0.001 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | selected | 1.0 | +0.020 [-0.006, +0.046] | 1.000 -> 0.992 | 0.0201 | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | wg | 0.3867 | +0.001 [-0.009, +0.012] | 1.000 -> 1.000 | 0.0019 | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | cf | 0.2031 | +0.009 [-0.009, +0.035] | 1.000 -> 1.000 | 0.0492 | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | cf | 0.0938 | -0.002 [-0.005, +0.000] | 1.000 -> 1.000 | 0.0026 | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-3 | pop |  | +0.031 [-0.018, +0.074] | 1.000 -> 0.992 |  | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-5 | pop |  | +0.037 [-0.041, +0.111] | 1.000 -> 1.000 |  | +0.000 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-10 | pop |  | +0.161 [+0.080, +0.243] | 1.000 -> 0.891 |  | +0.000 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | selected | 1.0 | +0.034 [+0.024, +0.118] | 1.000 -> 1.000 | 0.0335 | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | wg | 0.0 | -0.009 [-0.031, -0.006] | 1.000 -> 1.000 |  | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E069 | cf | 0.0 | -0.001 [-0.017, +0.013] | 1.000 -> 1.000 |  | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | cf | 0.6486 | +0.003 [+0.000, +0.017] | 1.000 -> 1.000 | -0.0029 | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-3 | pop |  | +0.275 [+0.250, +0.377] | 1.000 -> 0.973 |  | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-5 | pop |  | +0.288 [+0.265, +0.402] | 1.000 -> 0.973 |  | +0.004 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-10 | pop |  | +0.288 [+0.280, +0.426] | 1.000 -> 0.865 |  | +0.004 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | selected | 0.7109 | +0.008 [-0.017, +0.035] | 1.000 -> 1.000 | 0.0173 | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | wg | 0.4258 | -0.001 [-0.009, +0.006] | 1.000 -> 1.000 | -0.0073 | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | cf | 0.3828 | +0.005 [-0.003, +0.017] | 1.000 -> 1.000 | 0.0229 | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | cf | 0.2148 | +0.002 [-0.006, +0.011] | 1.000 -> 1.000 | 0.0034 | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-3 | pop |  | +0.035 [-0.022, +0.099] | 1.000 -> 1.000 |  | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-5 | pop |  | +0.072 [-0.009, +0.165] | 1.000 -> 0.977 |  | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-10 | pop |  | +0.097 [-0.012, +0.210] | 1.000 -> 0.914 |  | +0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | selected | 1.0 | -0.007 [-0.021, +0.010] | 1.000 -> 1.000 | -0.0067 | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | wg | 0.543 | +0.000 [-0.009, +0.011] | 1.000 -> 1.000 | 0.0093 | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | cf | 0.2617 | -0.000 [-0.006, +0.010] | 1.000 -> 1.000 | -0.0032 | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | cf | 0.1367 | -0.004 [-0.018, +0.013] | 1.000 -> 1.000 | 0.0095 | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-3 | pop |  | +0.029 [-0.009, +0.089] | 1.000 -> 1.000 |  | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-5 | pop |  | +0.043 [-0.001, +0.100] | 1.000 -> 1.000 |  | -0.010 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-10 | pop |  | +0.058 [+0.023, +0.086] | 1.000 -> 1.000 |  | -0.010 |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | selected+wg | 0.8924 | +0.027 [+0.019, +0.034] | 1.000 -> 0.998 | 0.0302 | -0.004 |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | cf | 0.012 | -0.005 [-0.012, +0.001] | 1.000 -> 1.000 | -0.0412 | -0.004 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | cf | 0.0043 | -0.009 [-0.015, -0.003] | 1.000 -> 1.000 |  | -0.004 |
+| Qwen3-30B-A3B-Base | cp_nat | top-3 | pop |  | +0.070 [+0.053, +0.086] | 1.000 -> 0.983 |  | -0.004 |
+| Qwen3-30B-A3B-Base | cp_nat | top-5 | pop |  | +0.103 [+0.087, +0.120] | 1.000 -> 0.978 |  | -0.004 |
+| Qwen3-30B-A3B-Base | cp_nat | top-10 | pop |  | +0.203 [+0.180, +0.226] | 1.000 -> 0.937 |  | -0.004 |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | selected | 0.7426 | +0.008 [-0.006, +0.022] | 1.000 -> 0.990 | 0.0071 | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | wg | 0.1881 | +0.005 [-0.002, +0.012] | 1.000 -> 1.000 | 0.0137 | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | cf | 0.0396 | +0.003 [-0.004, +0.010] | 1.000 -> 1.000 | 0.0246 | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | cf | 0.3515 | +0.008 [+0.002, +0.015] | 1.000 -> 1.000 | 0.006 | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | cf | 0.1188 | +0.003 [-0.005, +0.011] | 1.000 -> 1.000 | 0.0164 | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | top-3 | pop |  | +0.062 [+0.037, +0.088] | 1.000 -> 0.990 |  | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | top-5 | pop |  | +0.190 [+0.155, +0.228] | 1.000 -> 0.941 |  | +0.001 |
+| Mixtral-8x7B (BOS) | f1 | top-10 | pop |  | +0.229 [+0.187, +0.272] | 1.000 -> 0.822 |  | +0.001 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | selected | 0.8777 | -0.005 [-0.021, +0.011] | 1.000 -> 1.000 | -0.0052 | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | wg | 0.0745 | +0.002 [-0.004, +0.008] | 1.000 -> 1.000 | 0.0216 | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E002 | cf | 0.0106 | +0.001 [-0.005, +0.007] | 1.000 -> 1.000 |  | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | cf | 0.3723 | -0.001 [-0.011, +0.008] | 1.000 -> 1.000 | -0.0049 | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E001 | cf | 0.0106 | +0.000 [-0.007, +0.007] | 1.000 -> 1.000 |  | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-3 | pop |  | +0.056 [+0.029, +0.080] | 1.000 -> 1.000 |  | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-5 | pop |  | +0.132 [+0.099, +0.166] | 1.000 -> 0.979 |  | -0.007 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-10 | pop |  | +0.243 [+0.199, +0.286] | 1.000 -> 0.894 |  | -0.007 |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | selected+wg | 0.984 | +0.025 [+0.016, +0.034] | 1.000 -> 1.000 | 0.0256 | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | L19E002 | cf | 0.0053 | -0.001 [-0.004, +0.002] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | cf | 0.0213 | +0.000 [-0.002, +0.003] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | L18E001 | cf | 0.0 | -0.000 [-0.003, +0.003] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | top-3 | pop |  | +0.073 [+0.057, +0.089] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | top-5 | pop |  | +0.127 [+0.108, +0.146] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | dir_opt | top-10 | pop |  | +0.171 [+0.149, +0.194] | 1.000 -> 1.000 |  | -0.000 |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | selected | 1.0 | +0.030 [+0.005, +0.056] | 1.000 -> 1.000 | 0.03 | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | wg | 0.2778 | +0.000 [-0.007, +0.008] | 1.000 -> 1.000 | 0.0 | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | L19E002 | cf | 0.0 | -0.001 [-0.007, +0.006] | 1.000 -> 1.000 |  | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | cf | 0.4444 | +0.010 [+0.002, +0.019] | 1.000 -> 1.000 | 0.0148 | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | cf | 0.1111 | -0.008 [-0.023, +0.006] | 1.000 -> 1.000 |  | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | top-3 | pop |  | +0.029 [-0.013, +0.065] | 1.000 -> 1.000 |  | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | top-5 | pop |  | +0.032 [-0.010, +0.069] | 1.000 -> 1.000 |  | +0.004 |
+| Mixtral-8x7B (BOS) | f2e | top-10 | pop |  | +0.017 [-0.036, +0.062] | 1.000 -> 1.000 |  | +0.004 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | selected | 0.9375 | +0.042 [+0.024, +0.061] | 1.000 -> 1.000 | 0.0437 | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | wg | 0.9297 | +0.012 [-0.016, +0.040] | 1.000 -> 1.000 | 0.0123 | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | cf | 0.1875 | -0.006 [-0.013, -0.001] | 1.000 -> 1.000 | -0.0166 | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | cf | 0.2617 | +0.001 [-0.004, +0.006] | 1.000 -> 1.000 | 0.0094 | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | cf | 0.0781 | +0.002 [-0.004, +0.006] | 1.000 -> 1.000 | -0.0205 | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-3 | pop |  | +0.052 [+0.016, +0.089] | 1.000 -> 1.000 |  | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-5 | pop |  | +0.060 [+0.016, +0.104] | 1.000 -> 0.992 |  | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-10 | pop |  | +0.075 [+0.020, +0.127] | 1.000 -> 0.945 |  | -0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | selected | 0.9062 | +0.037 [+0.013, +0.064] | 1.000 -> 1.000 | 0.0373 | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | wg | 0.8594 | +0.023 [-0.007, +0.056] | 1.000 -> 1.000 | 0.0262 | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | cf | 0.0664 | +0.004 [-0.001, +0.008] | 1.000 -> 1.000 | -0.0026 | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | cf | 0.3555 | +0.004 [+0.001, +0.007] | 1.000 -> 1.000 | 0.0123 | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | cf | 0.1094 | +0.001 [-0.005, +0.006] | 1.000 -> 1.000 | -0.0362 | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-3 | pop |  | +0.053 [+0.010, +0.094] | 1.000 -> 1.000 |  | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-5 | pop |  | +0.060 [+0.014, +0.099] | 1.000 -> 1.000 |  | +0.003 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-10 | pop |  | +0.058 [+0.012, +0.105] | 1.000 -> 1.000 |  | +0.003 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | selected | 0.8906 | +0.017 [-0.004, +0.036] | 1.000 -> 1.000 | 0.0172 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | wg | 0.7812 | +0.020 [-0.012, +0.062] | 1.000 -> 1.000 | 0.0237 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | cf | 0.0547 | -0.002 [-0.009, +0.005] | 1.000 -> 1.000 | -0.0146 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | cf | 0.332 | +0.003 [-0.004, +0.011] | 1.000 -> 1.000 | 0.0113 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E001 | cf | 0.0 | +0.005 [-0.002, +0.014] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-3 | pop |  | +0.076 [+0.028, +0.130] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-5 | pop |  | +0.083 [+0.004, +0.184] | 1.000 -> 0.977 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-10 | pop |  | +0.087 [-0.003, +0.198] | 1.000 -> 0.945 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | selected | 0.6953 | +0.035 [+0.012, +0.071] | 1.000 -> 1.000 | 0.0367 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | wg | 0.6797 | -0.001 [-0.017, +0.034] | 1.000 -> 1.000 | -0.0022 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | cf | 0.0156 | +0.002 [-0.002, +0.007] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | cf | 0.3906 | +0.013 [-0.001, +0.029] | 1.000 -> 1.000 | 0.0388 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E001 | cf | 0.0 | +0.003 [-0.002, +0.013] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-3 | pop |  | +0.047 [+0.016, +0.105] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-5 | pop |  | +0.070 [+0.022, +0.141] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-10 | pop |  | +0.045 [-0.069, +0.138] | 1.000 -> 0.984 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | selected | 0.9219 | +0.023 [+0.019, +0.027] | 1.000 -> 1.000 | 0.0248 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | wg | 0.9734 | +0.045 [+0.039, +0.050] | 1.000 -> 1.000 | 0.0459 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | cf | 0.0219 | -0.001 [-0.002, +0.001] | 1.000 -> 1.000 | 0.0012 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | cf | 0.0219 | +0.001 [-0.001, +0.002] | 1.000 -> 1.000 | 0.0034 | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | L18E001 | cf | 0.0031 | +0.002 [+0.000, +0.003] | 1.000 -> 1.000 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | top-3 | pop |  | +0.101 [+0.092, +0.111] | 1.000 -> 0.998 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | top-5 | pop |  | +0.146 [+0.135, +0.157] | 1.000 -> 0.991 |  | -0.001 |
+| Mixtral-8x7B (BOS) | cp_nat | top-10 | pop |  | +0.185 [+0.172, +0.198] | 1.000 -> 0.988 |  | -0.001 |
+
+
+### 2. Main targets against same-layer controls (validation pairs)
+
+| model | condition | target | target F | controls mean | controls max | max control | rank | z |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | 0.0484 | 0.0038 | 0.0444 | L37E026 | 1/17 | 3.1693 |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | -0.0055 | 0.0027 | 0.0146 | L41E018 | 16/17 | -1.3517 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | 0.0213 | -0.0065 | 0.0024 | L44E108 | 1/17 | 5.8369 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | 0.0011 | -0.0048 | 0.0133 | L41E062 | 5/17 | 0.5793 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | 0.0254 | 0.0111 | 0.0297 | L41E053 | 2/17 | 1.6523 |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | 0.0146 | -0.029 | -0.0168 | L43E097 | 1/17 | 4.367 |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | 0.0041 | -0.0296 | -0.0122 | L41E121 | 1/17 | 3.9062 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | 0.005 | 0.01 | 0.0179 | L39E098 | 15/17 | -1.095 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | 0.0014 | 0.006 | 0.0292 | L41E062 | 11/17 | -0.4379 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | 0.0201 | -0.0053 | 0.0122 | L42E074 | 1/17 | 3.3384 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | 0.0011 | -0.0049 | 0.0099 | L41E062 | 3/17 | 0.9181 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | 0.0335 | -0.0046 | 0.0651 | L37E026 | 2/17 | 1.6511 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | -0.0093 | -0.0066 | 0.0297 | L41E042 | 9/17 | -0.1819 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | 0.0084 | 0.004 | 0.0176 | L39E007 | 6/17 | 0.4721 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | -0.0013 | 0.0001 | 0.0126 | L41E017 | 12/17 | -0.2078 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | -0.0067 | -0.0094 | 0.0072 | L42E074 | 8/17 | 0.2877 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | 0.0002 | -0.0062 | 0.0147 | L41E062 | 5/17 | 0.6556 |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | 0.0344 | -0.0052 | 0.0116 | L41E053 | 1/17 | 6.3972 |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | 0.0079 | 0.0015 | 0.0074 | L20E005 | 1/7 | 1.291 |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | 0.0051 | 0.0015 | 0.0074 | L20E005 | 3/7 | 0.7214 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | -0.0046 | -0.006 | 0.0049 | L20E005 | 3/7 | 0.191 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | 0.002 | -0.006 | 0.0049 | L20E005 | 2/7 | 1.0997 |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | 0.0251 | 0.0008 | 0.0073 | L20E001 | 1/8 | 8.0894 |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | 0.03 | 0.006 | 0.01 | L19E006 | 1/7 | 7.746 |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | 0.0 | 0.003 | 0.009 | L20E004 | 6/8 | -0.6167 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | 0.0422 | -0.0022 | 0.0117 | L19E000 | 1/7 | 6.2181 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | 0.0117 | -0.0016 | 0.0008 | L20E006 | 1/8 | 9.5941 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | 0.0368 | 0.0066 | 0.0202 | L19E000 | 1/7 | 4.2924 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | 0.0231 | 0.0026 | 0.006 | L20E003 | 1/8 | 5.1222 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | 0.0167 | -0.003 | 0.0019 | L19E000 | 1/7 | 5.5421 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | 0.0202 | -0.0006 | 0.0032 | L20E001 | 1/8 | 9.0252 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | 0.0345 | -0.0039 | 0.0042 | L19E001 | 1/7 | 6.1197 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | -0.0009 | 0.0016 | 0.0045 | L20E004 | 8/8 | -1.741 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | 0.0258 | -0.0015 | 0.0014 | L21E000 | 1/7 | 9.2239 |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | 0.0542 | 0.0012 | 0.0052 | L20E001 | 1/8 | 24.6715 |
+
+
+### 3. Population sets against frequency-matched random sets (validation pairs)
+
+| model | condition | set | members | population set F | random mean | random max | rank |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | top-1 | L37E032 | 0.0484 | 0.0219 | 0.0258 | 1/6 |
+| Qwen3-30B-A3B-Base | f1 | top-3 | L37E032 L44E116 L39E103 | 0.1066 | 0.0013 | 0.0072 | 1/6 |
+| Qwen3-30B-A3B-Base | f1 | top-5 | L37E032 L44E116 L39E103 L32E061 L43E070 | 0.1152 | 0.01 | 0.0252 | 1/6 |
+| Qwen3-30B-A3B-Base | f1 | top-10 | L37E032 L44E116 L39E103 L32E061 L43E070 L44E022 L36E009 L33E122 L42E102 L35E090 | 0.1948 | 0.0071 | 0.0347 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-1 | L44E116 | 0.0213 | -0.01 | -0.0093 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-3 | L44E116 L37E032 L43E070 | 0.1074 | -0.0114 | 0.0235 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-5 | L44E116 L37E032 L43E070 L40E037 L43E114 | 0.1279 | -0.0045 | 0.02 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-10 | L44E116 L37E032 L43E070 L40E037 L43E114 L41E062 L42E018 L42E102 L44E022 L31E124 | 0.1818 | -0.0223 | 0.0168 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_opt | top-1 | L43E081 | 0.0186 | 0.028 | 0.032 | 5/6 |
+| Qwen3-30B-A3B-Base | dir_opt | top-3 | L43E081 L41E117 L31E124 | 0.0667 | 0.0064 | 0.0128 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_opt | top-5 | L43E081 L41E117 L31E124 L44E122 L41E053 | 0.1219 | 0.0216 | 0.0273 | 1/6 |
+| Qwen3-30B-A3B-Base | dir_opt | top-10 | L43E081 L41E117 L31E124 L44E122 L41E053 L43E114 L40E040 L39E071 L42E123 L41E062 | 0.1849 | -0.0056 | 0.0194 | 1/6 |
+| Qwen3-30B-A3B-Base | f2e | top-1 | L37E107 | -0.0165 | -0.0264 | -0.0256 | 1/6 |
+| Qwen3-30B-A3B-Base | f2e | top-3 | L37E107 L44E116 L43E036 | 0.0129 | -0.03 | -0.0278 | 1/6 |
+| Qwen3-30B-A3B-Base | f2e | top-5 | L37E107 L44E116 L43E036 L42E055 L36E120 | 0.018 | -0.0252 | -0.0081 | 1/6 |
+| Qwen3-30B-A3B-Base | f2e | top-10 | L37E107 L44E116 L43E036 L42E055 L36E120 L42E102 L44E022 L37E055 L41E121 L44E098 | 0.0295 | -0.0202 | 0.017 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-1 | L42E123 | 0.0294 | 0.0084 | 0.0114 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-3 | L42E123 L39E121 L45E092 | 0.0354 | 0.0089 | 0.0188 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-5 | L42E123 L39E121 L45E092 L41E106 L41E017 | 0.0246 | 0.014 | 0.0293 | 3/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-10 | L42E123 L39E121 L45E092 L41E106 L41E017 L37E101 L22E035 L39E001 L36E087 L43E042 | 0.056 | 0.0011 | 0.0197 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-1 | L42E123 | 0.0201 | -0.0039 | -0.0023 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-3 | L42E123 L39E121 L45E092 | 0.031 | 0.0046 | 0.0079 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-5 | L42E123 L39E121 L45E092 L44E044 L37E101 | 0.0372 | 0.0023 | 0.0154 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-10 | L42E123 L39E121 L45E092 L44E044 L37E101 L22E035 L23E105 L39E001 L43E097 L42E074 | 0.1613 | 0.0373 | 0.0541 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-1 | L37E032 | 0.0335 | 0.047 | 0.0651 | 5/6 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-3 | L37E032 L32E061 L39E103 | 0.2751 | -0.0145 | 0.0056 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-5 | L37E032 L32E061 L39E103 L42E031 L34E085 | 0.2881 | 0.0387 | 0.0874 | 1/6 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-10 | L37E032 L32E061 L39E103 L42E031 L34E085 L38E115 L35E090 L40E115 L36E065 L41E112 | 0.2881 | 0.0033 | 0.0511 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-1 | L42E123 | 0.0225 | -0.0017 | 0.0188 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-3 | L42E123 L39E001 L39E121 | 0.035 | 0.0111 | 0.023 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-5 | L42E123 L39E001 L39E121 L37E101 L22E035 | 0.072 | -0.0014 | 0.0267 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-10 | L42E123 L39E001 L39E121 L37E101 L22E035 L41E106 L45E092 L40E075 L44E122 L37E002 | 0.0969 | 0.0299 | 0.0438 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-1 | L42E123 | -0.0067 | -0.0117 | -0.0002 | 2/6 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-3 | L42E123 L39E121 L37E101 | 0.0295 | 0.007 | 0.0228 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-5 | L42E123 L39E121 L37E101 L41E106 L39E001 | 0.0427 | -0.0079 | 0.0186 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-10 | L42E123 L39E121 L37E101 L41E106 L39E001 L45E092 L22E035 L41E112 L25E002 L42E016 | 0.0583 | 0.0135 | 0.0539 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_nat | top-1 | L43E081 | 0.0188 | -0.0017 | 0.0014 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_nat | top-3 | L43E081 L41E117 L34E119 | 0.0839 | -0.0099 | -0.0023 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_nat | top-5 | L43E081 L41E117 L34E119 L44E122 L41E053 | 0.1188 | 0.0119 | 0.0339 | 1/6 |
+| Qwen3-30B-A3B-Base | cp_nat | top-10 | L43E081 L41E117 L34E119 L44E122 L41E053 L42E073 L38E021 L42E123 L39E007 L39E071 | 0.2393 | 0.0296 | 0.0579 | 1/6 |
+| Mixtral-8x7B (BOS) | f1 | top-1 | L19E004 | 0.0422 | 0.0027 | 0.0079 | 1/6 |
+| Mixtral-8x7B (BOS) | f1 | top-3 | L19E004 L20E001 L20E005 | 0.0624 | -0.002 | 0.0 | 1/6 |
+| Mixtral-8x7B (BOS) | f1 | top-5 | L19E004 L20E001 L20E005 L15E006 L17E005 | 0.19 | 0.0011 | 0.0139 | 1/6 |
+| Mixtral-8x7B (BOS) | f1 | top-10 | L19E004 L20E001 L20E005 L15E006 L17E005 L17E007 L21E000 L18E002 L24E002 L18E000 | 0.2288 | -0.0018 | 0.0269 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-1 | L19E004 | 0.062 | -0.0045 | -0.002 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-3 | L19E004 L20E001 L23E000 | 0.0557 | -0.0066 | -0.002 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-5 | L19E004 L20E001 L23E000 L20E005 L16E007 | 0.1324 | -0.0306 | -0.0109 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-10 | L19E004 L20E001 L23E000 L20E005 L16E007 L24E002 L21E000 L18E000 L17E005 L15E006 | 0.243 | -0.0268 | -0.0014 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_opt | top-1 | L20E000 | 0.0251 | 0.0012 | 0.0073 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_opt | top-3 | L20E000 L19E006 L21E006 | 0.073 | -0.0014 | 0.0021 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_opt | top-5 | L20E000 L19E006 L21E006 L26E002 L18E005 | 0.1273 | 0.0031 | 0.0101 | 1/6 |
+| Mixtral-8x7B (BOS) | dir_opt | top-10 | L20E000 L19E006 L21E006 L26E002 L18E005 L22E005 L13E005 L24E002 L21E004 L16E007 | 0.1711 | -0.0001 | 0.0095 | 1/6 |
+| Mixtral-8x7B (BOS) | f2e | top-1 | L19E004 | 0.03 | 0.0076 | 0.01 | 1/6 |
+| Mixtral-8x7B (BOS) | f2e | top-3 | L19E004 L17E005 L20E005 | 0.029 | 0.0068 | 0.025 | 1/6 |
+| Mixtral-8x7B (BOS) | f2e | top-5 | L19E004 L17E005 L20E005 L21E000 L20E001 | 0.032 | 0.0088 | 0.021 | 1/6 |
+| Mixtral-8x7B (BOS) | f2e | top-10 | L19E004 L17E005 L20E005 L21E000 L20E001 L23E007 L18E002 L24E002 L22E000 L17E001 | 0.017 | 0.0074 | 0.028 | 2/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-1 | L19E006 | 0.0422 | -0.0036 | 0.0117 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-3 | L19E006 L20E000 L21E003 | 0.0522 | 0.0066 | 0.0131 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-5 | L19E006 L20E000 L21E003 L25E002 L17E007 | 0.0602 | 0.0013 | 0.014 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-10 | L19E006 L20E000 L21E003 L25E002 L17E007 L14E007 L18E006 L24E004 L22E000 L23E000 | 0.0753 | 0.0141 | 0.0233 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-1 | L19E006 | 0.0368 | 0.0089 | 0.0202 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-3 | L19E006 L21E003 L20E000 | 0.0535 | 0.0169 | 0.0212 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-5 | L19E006 L21E003 L20E000 L23E000 L25E002 | 0.0599 | 0.0062 | 0.0162 | 1/6 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-10 | L19E006 L21E003 L20E000 L23E000 L25E002 L14E007 L18E006 L17E007 L27E005 L20E005 | 0.0581 | 0.0404 | 0.0649 | 2/6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-1 | L19E006 | 0.0167 | -0.0013 | 0.0019 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-3 | L19E006 L21E003 L14E007 | 0.0758 | -0.0128 | -0.0004 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-5 | L19E006 L21E003 L14E007 L20E000 L18E006 | 0.0827 | 0.0159 | 0.0276 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-10 | L19E006 L21E003 L14E007 L20E000 L18E006 L23E007 L19E004 L20E005 L17E007 L23E000 | 0.0871 | -0.0017 | 0.0196 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-1 | L21E003 | 0.0034 | -0.0006 | 0.0025 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-3 | L21E003 L19E006 L20E005 | 0.0466 | -0.0008 | 0.0061 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-5 | L21E003 L19E006 L20E005 L14E007 L23E000 | 0.07 | -0.0096 | 0.0141 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-10 | L21E003 L19E006 L20E005 L14E007 L23E000 L19E004 L13E001 L23E007 L20E000 L18E006 | 0.0448 | 0.0125 | 0.0468 | 2/6 |
+| Mixtral-8x7B (BOS) | cp_nat | top-1 | L20E000 | 0.0542 | 0.0015 | 0.0052 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_nat | top-3 | L20E000 L19E006 L21E006 | 0.1213 | 0.0054 | 0.0089 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_nat | top-5 | L20E000 L19E006 L21E006 L26E002 L16E007 | 0.1683 | 0.0036 | 0.0115 | 1/6 |
+| Mixtral-8x7B (BOS) | cp_nat | top-10 | L20E000 L19E006 L21E006 L26E002 L16E007 L18E005 L24E002 L21E004 L22E005 L22E000 | 0.2138 | 0.0087 | 0.0222 | 1/6 |
+
+
+### 4. P5-8: copy vs generate, and direction
+
+Contrasts of F between conditions (a − b). C1 = entity → attribute, answer generated (dir_opt, vt_e2a_*); C2 = the same items with a prefix that names both attributes (cp_*), answer copyable; C3 = attribute → entity (fill-in-the-blank; the entity is copyable from the sentence). C2 − C1 isolates copy availability at fixed direction and format; C3 − C2 isolates direction at fixed copy availability (the fill-in wrapper still differs).
+
+| model | contrast | expert(s) | a | b | F a | F b | a - b [95% CI] | paired: source items (units) | paired F a / F b | paired a - b [95% CI] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | copy availability (templates, orig verb): C2 - C1 | L41E117 | cp_vt_orig | vt_e2a_orig | -0.0013 | 0.0014 | -0.003 [-0.016, +0.010] | 28 (8) | +0.002 / -0.010 | +0.012 [-0.005, +0.038] |
+| Qwen3-30B-A3B-Base | copy availability (templates, orig verb): C2 - C1 | L39E121 | cp_vt_orig | vt_e2a_orig | -0.0005 | 0.005 | -0.005 [-0.039, +0.032] | 28 (8) | -0.021 / -0.019 | -0.002 [-0.022, +0.043] |
+| Qwen3-30B-A3B-Base | copy availability (templates, orig verb): C2 - C1 | own top-10 | cp_vt_orig | vt_e2a_orig | 0.0969 | 0.056 | +0.041 [-0.097, +0.177] | 28 (8) | +0.067 / +0.043 | +0.023 [-0.119, +0.207] |
+| Qwen3-30B-A3B-Base | copy availability (templates, neutral verb): C2 - C1 | L41E117 | cp_vt_neu | vt_e2a_neu | 0.0002 | 0.0011 | -0.001 [-0.015, +0.013] | 25 (4) | -0.006 / -0.005 | -0.001 [-0.030, +0.033] |
+| Qwen3-30B-A3B-Base | copy availability (templates, neutral verb): C2 - C1 | L42E123 | cp_vt_neu | vt_e2a_neu | -0.0067 | 0.0201 | -0.027 [-0.056, +0.004] | 25 (4) | -0.005 / +0.025 | -0.031 [-0.058, -0.008] |
+| Qwen3-30B-A3B-Base | copy availability (templates, neutral verb): C2 - C1 | own top-10 | cp_vt_neu | vt_e2a_neu | 0.0583 | 0.1613 | -0.103 [-0.192, -0.017] | 25 (4) | +0.048 / +0.129 | -0.081 [-0.126, -0.029] |
+| Qwen3-30B-A3B-Base | copy availability (natural 776 pairs): C2 - C1 | L41E117 | cp_nat | dir_opt | 0.0267 | 0.0254 | +0.001 [-0.016, +0.017] | 29 (29) | +0.023 / +0.033 | -0.010 [-0.041, +0.020] |
+| Qwen3-30B-A3B-Base | copy availability (natural 776 pairs): C2 - C1 | own top-10 | cp_nat | dir_opt | 0.2035 | 0.1849 | +0.018 [-0.019, +0.056] | 29 (29) | +0.181 / +0.147 | +0.034 [-0.012, +0.084] |
+| Qwen3-30B-A3B-Base | direction (templates, orig; copy fixed): C3 - C2 | L41E117 | vt_a2e_orig | cp_vt_orig | -0.0093 | -0.0013 | -0.008 [-0.030, +0.000] |  |  |  |
+| Qwen3-30B-A3B-Base | direction (templates, orig; copy fixed): C3 - C2 | L39E001 | vt_a2e_orig | cp_vt_orig | -0.0177 | 0.0084 | -0.026 [-0.062, +0.024] |  |  |  |
+| Qwen3-30B-A3B-Base | direction (templates, orig; copy fixed): C3 - C2 | own top-10 | vt_a2e_orig | cp_vt_orig | 0.2881 | 0.0969 | +0.191 [+0.084, +0.366] |  |  |  |
+| Qwen3-30B-A3B-Base | direction (natural 776 pairs; copy fixed): C3 - C2 | L41E117 | dir_f1 | cp_nat | 0.0011 | 0.0267 | -0.026 [-0.038, -0.013] | 29 (29) | -0.001 / +0.023 | -0.024 [-0.052, +0.004] |
+| Qwen3-30B-A3B-Base | direction (natural 776 pairs; copy fixed): C3 - C2 | own top-10 | dir_f1 | cp_nat | 0.1818 | 0.2035 | -0.022 [-0.064, +0.021] | 29 (29) | +0.097 / +0.181 | -0.084 [-0.149, -0.019] |
+| Qwen3-30B-A3B-Base | direction on identical items (fill-in a→e - option swap e→a) | L41E117 | dir_f1 | dir_opt | 0.0011 | 0.0254 | -0.024 [-0.042, -0.008] | 90 (90) | +0.001 / +0.025 | -0.024 [-0.042, -0.007] |
+| Qwen3-30B-A3B-Base | direction on identical items (fill-in a→e - option swap e→a) | own top-10 | dir_f1 | dir_opt | 0.1818 | 0.1849 | -0.003 [-0.040, +0.034] | 90 (90) | +0.182 / +0.185 | -0.003 [-0.040, +0.032] |
+| Qwen3-30B-A3B-Base | direction (templates, orig): a→e - e→a | L41E117 | vt_a2e_orig | vt_e2a_orig | -0.0093 | 0.0014 | -0.011 [-0.034, -0.000] |  |  |  |
+| Qwen3-30B-A3B-Base | direction (templates, orig): a→e - e→a | L39E121 | vt_a2e_orig | vt_e2a_orig | -0.0548 | 0.005 | -0.060 [-0.085, +0.053] |  |  |  |
+| Qwen3-30B-A3B-Base | direction (templates, orig): a→e - e→a | own top-10 | vt_a2e_orig | vt_e2a_orig | 0.2881 | 0.056 | +0.232 [+0.153, +0.390] |  |  |  |
+| Qwen3-30B-A3B-Base | verb: neutral - orig (e→a) | L41E117 | vt_e2a_neu | vt_e2a_orig | 0.0011 | 0.0014 | -0.000 [-0.015, +0.015] |  |  |  |
+| Qwen3-30B-A3B-Base | verb: neutral - orig (e→a) | L39E121 | vt_e2a_neu | vt_e2a_orig | 0.0113 | 0.005 | +0.006 [-0.036, +0.057] |  |  |  |
+| Qwen3-30B-A3B-Base | verb: neutral - orig (e→a) | own top-10 | vt_e2a_neu | vt_e2a_orig | 0.1613 | 0.056 | +0.105 [-0.011, +0.220] |  |  |  |
+| Mixtral-8x7B (BOS) | copy availability (templates, orig verb): C2 - C1 | L20E000 | cp_vt_orig | vt_e2a_orig | 0.0202 | 0.0117 | +0.009 [-0.037, +0.059] | 35 (8) | +0.025 / -0.004 | +0.029 [-0.000, +0.057] |
+| Mixtral-8x7B (BOS) | copy availability (templates, orig verb): C2 - C1 | L19E006 | cp_vt_orig | vt_e2a_orig | 0.0167 | 0.0422 | -0.025 [-0.053, +0.001] | 35 (8) | +0.020 / +0.043 | -0.022 [-0.055, +0.004] |
+| Mixtral-8x7B (BOS) | copy availability (templates, orig verb): C2 - C1 | own top-10 | cp_vt_orig | vt_e2a_orig | 0.0871 | 0.0753 | +0.012 [-0.096, +0.136] | 35 (8) | +0.108 / +0.060 | +0.048 [-0.035, +0.140] |
+| Mixtral-8x7B (BOS) | copy availability (templates, neutral verb): C2 - C1 | L20E000 | cp_vt_neu | vt_e2a_neu | -0.0009 | 0.0231 | -0.024 [-0.060, +0.023] | 31 (5) | -0.000 / +0.004 | -0.004 [-0.008, +0.015] |
+| Mixtral-8x7B (BOS) | copy availability (templates, neutral verb): C2 - C1 | L19E006 | cp_vt_neu | vt_e2a_neu | 0.0345 | 0.0368 | -0.002 [-0.039, +0.042] | 31 (5) | +0.032 / +0.035 | -0.003 [-0.028, +0.011] |
+| Mixtral-8x7B (BOS) | copy availability (templates, neutral verb): C2 - C1 | own top-10 | cp_vt_neu | vt_e2a_neu | 0.0448 | 0.0581 | -0.013 [-0.129, +0.099] | 31 (5) | +0.048 / +0.044 | +0.004 [-0.074, +0.066] |
+| Mixtral-8x7B (BOS) | copy availability (natural 776 pairs): C2 - C1 | L20E000 | cp_nat | dir_opt | 0.0446 | 0.0251 | +0.019 [+0.009, +0.030] | 30 (30) | +0.032 / +0.036 | -0.003 [-0.014, +0.007] |
+| Mixtral-8x7B (BOS) | copy availability (natural 776 pairs): C2 - C1 | own top-10 | cp_nat | dir_opt | 0.1846 | 0.1711 | +0.013 [-0.013, +0.040] | 30 (30) | +0.149 / +0.162 | -0.013 [-0.036, +0.009] |
+| Mixtral-8x7B (BOS) | direction (natural 776 pairs; copy fixed): C3 - C2 | L20E000 | dir_f1 | cp_nat | 0.002 | 0.0446 | -0.043 [-0.051, -0.035] | 30 (30) | +0.008 / +0.032 | -0.024 [-0.047, -0.003] |
+| Mixtral-8x7B (BOS) | direction (natural 776 pairs; copy fixed): C3 - C2 | L21E006 | dir_f1 | cp_nat | 0.0114 | 0.023 | -0.012 [-0.023, +0.000] | 30 (30) | -0.005 / +0.015 | -0.020 [-0.040, -0.001] |
+| Mixtral-8x7B (BOS) | direction (natural 776 pairs; copy fixed): C3 - C2 | own top-10 | dir_f1 | cp_nat | 0.243 | 0.1846 | +0.058 [+0.012, +0.104] | 30 (30) | +0.255 / +0.149 | +0.106 [+0.036, +0.173] |
+| Mixtral-8x7B (BOS) | direction on identical items (fill-in a→e - option swap e→a) | L20E000 | dir_f1 | dir_opt | 0.002 | 0.0251 | -0.023 [-0.035, -0.012] | 94 (94) | +0.002 / +0.025 | -0.023 [-0.034, -0.012] |
+| Mixtral-8x7B (BOS) | direction on identical items (fill-in a→e - option swap e→a) | own top-10 | dir_f1 | dir_opt | 0.243 | 0.1711 | +0.072 [+0.028, +0.115] | 94 (94) | +0.243 / +0.171 | +0.072 [+0.029, +0.114] |
+| Mixtral-8x7B (BOS) | verb: neutral - orig (e→a) | L20E000 | vt_e2a_neu | vt_e2a_orig | 0.0231 | 0.0117 | +0.011 [-0.031, +0.054] |  |  |  |
+| Mixtral-8x7B (BOS) | verb: neutral - orig (e→a) | L19E006 | vt_e2a_neu | vt_e2a_orig | 0.0368 | 0.0422 | -0.005 [-0.036, +0.027] |  |  |  |
+| Mixtral-8x7B (BOS) | verb: neutral - orig (e→a) | own top-10 | vt_e2a_neu | vt_e2a_orig | 0.0581 | 0.0753 | -0.017 [-0.088, +0.055] |  |  |  |
+
+
+**Reading (P5-8, WinoGrande expert).** Qwen3-30B-A3B-Base L41E117: cp_vt_orig F +0.002 vs vt_e2a_orig -0.010, difference +0.012 [-0.005, +0.038] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: cp_vt_neu F -0.006 vs vt_e2a_neu -0.005, difference -0.001 [-0.030, +0.033] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: cp_nat F +0.023 vs dir_opt +0.033, difference -0.010 [-0.041, +0.020] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_vt_orig F +0.025 vs vt_e2a_orig -0.004, difference +0.029 [-0.000, +0.057] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_vt_neu F -0.000 vs vt_e2a_neu +0.004, difference -0.004 [-0.008, +0.015] (paired, shared source items) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: cp_nat F +0.032 vs dir_opt +0.036, difference -0.003 [-0.014, +0.007] (paired, shared source items) -> unchanged within the CI. If F stays at the e → a level the expert is still necessary although the answer token is in the prefix (the attribute is still computed by the MoE); if it falls to about zero the copy route replaces it.
+
+
+**Reading (direction).** Qwen3-30B-A3B-Base L41E117: vt_a2e_orig F -0.009 vs cp_vt_orig -0.001, difference -0.008 [-0.030, +0.000] (unpaired) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: dir_f1 F -0.001 vs cp_nat +0.023, difference -0.024 [-0.052, +0.004] (paired, shared source items) -> unchanged within the CI; Qwen3-30B-A3B-Base L41E117: dir_f1 F +0.001 vs dir_opt +0.025, difference -0.024 [-0.042, -0.007] (paired, shared source items) -> reduced to about zero; Qwen3-30B-A3B-Base L41E117: vt_a2e_orig F -0.009 vs vt_e2a_orig +0.001, difference -0.011 [-0.034, -0.000] (unpaired) -> unchanged within the CI; Mixtral-8x7B (BOS) L20E000: dir_f1 F +0.008 vs cp_nat +0.032, difference -0.024 [-0.047, -0.003] (paired, shared source items) -> reduced to about zero; Mixtral-8x7B (BOS) L20E000: dir_f1 F +0.002 vs dir_opt +0.025, difference -0.023 [-0.034, -0.012] (paired, shared source items) -> reduced to about zero.
+
+
+### 5. Final position only, and which expert takes the slot
+
+| model | condition | knockout | all positions | final position only | final / all |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | 0.0484 | 0.0334 | 0.69 |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | -0.0055 | 0.0097 | -1.7692 |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | 0.0019 | -0.0002 | -0.1111 |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | -0.008 | -0.0013 | 0.1579 |
+| Qwen3-30B-A3B-Base | f1 | pop:k10 | 0.1948 | 0.1643 | 0.8436 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | 0.0213 | 0.02 | 0.9375 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | 0.0011 | -0.004 | -3.75 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | -0.0013 | -0.0013 | 1.0 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | -0.0061 | -0.0048 | 0.7826 |
+| Qwen3-30B-A3B-Base | dir_f1 | pop:k10 | 0.1818 | 0.1106 | 0.6085 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | 0.0254 | 0.0353 | 1.3863 |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | -0.0025 | 0.0111 | -4.375 |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | 0.0005 | 0.0101 | 21.3333 |
+| Qwen3-30B-A3B-Base | dir_opt | pop:k10 | 0.1849 | 0.1612 | 0.8718 |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | 0.0146 | -0.0187 | -1.2787 |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | 0.0041 | -0.0316 | -7.7647 |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | 0.0007 | -0.0319 | -44.3333 |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | 0.0084 | -0.0201 | -2.4 |
+| Qwen3-30B-A3B-Base | f2e | pop:k10 | 0.0295 | -0.0323 | -1.0976 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | 0.005 | 0.0132 | 2.6418 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | 0.0014 | -0.0055 | -3.8421 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | 0.0101 | 0.0089 | 0.8815 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | -0.0008 | -0.0046 | 5.6364 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | pop:k10 | 0.056 | 0.0587 | 1.0481 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | 0.0201 | 0.0061 | 0.3012 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | 0.0011 | 0.0013 | 1.1429 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | 0.009 | 0.0054 | 0.6036 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | -0.0023 | -0.0088 | 3.8929 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | pop:k10 | 0.1613 | 0.0756 | 0.4686 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | 0.0335 | 0.0446 | 1.3333 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | -0.0093 | -0.0009 | 0.1 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E069 | -0.0009 | -0.0112 | 12.0 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | 0.0028 | -0.0019 | -0.6667 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | pop:k10 | 0.2881 | 0.0446 | 0.1548 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | 0.0084 | 0.0239 | 2.8542 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | -0.0013 | 0.0035 | -2.6667 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | 0.0047 | 0.011 | 2.3333 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | 0.0017 | 0.0077 | 4.4 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | pop:k10 | 0.0969 | 0.0875 | 0.9029 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | -0.0067 | -0.0237 | 3.5526 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | 0.0002 | -0.0061 | -35.0 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | -0.0002 | -0.0118 | 67.0 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | -0.0042 | -0.0137 | 3.25 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | pop:k10 | 0.0583 | 0.0409 | 0.7018 |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | 0.0344 | 0.0176 | 0.5109 |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | -0.0026 | -0.0069 | 2.6286 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | -0.0074 | -0.0063 | 0.8571 |
+| Qwen3-30B-A3B-Base | cp_nat | pop:k10 | 0.2393 | 0.1781 | 0.744 |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | 0.0079 | 0.0128 | 1.6071 |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | 0.0051 | 0.0006 | 0.1111 |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | 0.0026 | -0.0014 | -0.5556 |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | 0.0082 | 0.0006 | 0.069 |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | 0.0028 | -0.0003 | -0.1 |
+| Mixtral-8x7B (BOS) | f1 | pop:k10 | 0.2288 | 0.2189 | 0.9566 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | -0.0046 | 0.006 | -1.3125 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | 0.002 | -0.0051 | -2.5714 |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E002 | 0.0011 | -0.0034 | -3.0 |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | -0.0014 | -0.0037 | 2.6 |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E001 | 0.0 | -0.0049 |  |
+| Mixtral-8x7B (BOS) | dir_f1 | pop:k10 | 0.243 | 0.2541 | 1.0459 |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | 0.0251 | 0.0231 | 0.9231 |
+| Mixtral-8x7B (BOS) | dir_opt | L19E002 | -0.0011 | -0.0017 | 1.5 |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | 0.0004 | -0.0015 | -3.6667 |
+| Mixtral-8x7B (BOS) | dir_opt | L18E001 | -0.0003 | -0.0011 | 4.0 |
+| Mixtral-8x7B (BOS) | dir_opt | pop:k10 | 0.1711 | 0.1478 | 0.8639 |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | 0.03 | 0.018 | 0.6 |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | 0.0 | 0.009 |  |
+| Mixtral-8x7B (BOS) | f2e | L19E002 | -0.001 | 0.006 | -6.0 |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | 0.01 | 0.009 | 0.9 |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | -0.008 | 0.004 | -0.5 |
+| Mixtral-8x7B (BOS) | f2e | pop:k10 | 0.017 | 0.003 | 0.1765 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | 0.0422 | 0.0297 | 0.7046 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | 0.0117 | 0.0096 | 0.8205 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | -0.0065 | -0.0084 | 1.3023 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | 0.0009 | 0.0006 | 0.6667 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | 0.0015 | -0.0033 | -2.2 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | pop:k10 | 0.0753 | 0.0516 | 0.6853 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | 0.0368 | 0.0248 | 0.6727 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | 0.0231 | 0.0226 | 0.9783 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | 0.0037 | 0.0038 | 1.0455 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | 0.004 | 0.0055 | 1.375 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | 0.001 | 0.0017 | 1.6667 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | pop:k10 | 0.0581 | 0.0356 | 0.6138 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | 0.0167 | 0.0122 | 0.7333 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | 0.0202 | 0.0191 | 0.945 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | -0.0019 | -0.0048 | 2.6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | 0.0032 | 0.0013 | 0.4118 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E001 | 0.0052 | -0.0013 | -0.25 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | pop:k10 | 0.0871 | 0.0849 | 0.9745 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | 0.0345 | 0.0258 | 0.7487 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | -0.0009 | 0.0045 | -5.0 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | 0.0023 | -0.0011 | -0.4615 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | 0.0128 | 0.0083 | 0.6479 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E001 | 0.0031 | 0.0004 | 0.1176 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | pop:k10 | 0.0448 | 0.0163 | 0.3629 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | 0.0258 | 0.0182 | 0.7076 |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | 0.0542 | 0.0493 | 0.91 |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | -0.0001 | -0.0001 | 1.0 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | 0.0006 | -0.0009 | -1.5714 |
+| Mixtral-8x7B (BOS) | cp_nat | L18E001 | 0.0022 | -0.0009 | -0.3846 |
+| Mixtral-8x7B (BOS) | cp_nat | pop:k10 | 0.2138 | 0.1786 | 0.8353 |
+
+
+| model | condition | expert | routed at final | clean one-for-one swap | top replacements (share) |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | 0.9818 | 0.9721 | L37E104 (0.1061), L37E081 (0.0955), L37E015 (0.0955) |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | 0.0221 | 1.0 | L41E018 (0.2941), L41E112 (0.1765), L41E121 (0.1765) |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | 0.0924 | 0.9577 | L44E027 (0.1268), L44E081 (0.1127), L44E006 (0.0845) |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | 0.3568 | 0.9854 | L42E021 (0.1825), L42E030 (0.1204), L42E092 (0.1131) |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | 0.85 | 0.9739 | L44E047 (0.2092), L44E068 (0.0784), L44E001 (0.0588) |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | 0.0 | 0.0 |  |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | 0.0833 | 1.0 | L44E044 (0.2), L44E047 (0.1333), L44E017 (0.1333) |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | 0.1333 | 0.9583 | L42E016 (0.125), L42E030 (0.125), L42E123 (0.125) |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | 0.7722 | 0.9856 | L41E121 (0.1511), L41E011 (0.0863), L41E079 (0.0863) |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | 0.0111 | 1.0 | L44E020 (0.5), L44E022 (0.5) |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | 0.0111 | 1.0 | L42E093 (0.5), L42E080 (0.5) |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | 0.9844 | 0.9524 | L43E042 (0.0794), L43E081 (0.0794), L43E104 (0.0794) |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | 0.0625 | 1.0 | L41E112 (0.25), L41E106 (0.25), L41E045 (0.25) |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | 0.4375 | 1.0 | L44E027 (0.1429), L44E003 (0.1429), L44E056 (0.1429) |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | 0.625 | 1.0 | L42E016 (0.175), L42E123 (0.175), L42E071 (0.075) |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | 0.7188 | 0.9891 | L39E086 (0.0815), L39E003 (0.0761), L39E055 (0.0652) |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | 0.4648 | 1.0 | L41E018 (0.2269), L41E126 (0.1849), L41E112 (0.1345) |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | 0.2383 | 0.9344 | L44E006 (0.2131), L44E022 (0.1803), L44E011 (0.0984) |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | 0.0781 | 1.0 | L42E027 (0.35), L42E023 (0.3), L42E002 (0.15) |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | 1.0 | 1.0 | L42E023 (0.1953), L42E055 (0.1289), L42E074 (0.0859) |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | 0.3867 | 1.0 | L41E018 (0.202), L41E112 (0.1818), L41E079 (0.1717) |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | 0.2031 | 0.8846 | L44E006 (0.4038), L44E118 (0.1346), L44E003 (0.0577) |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | 0.0938 | 1.0 | L42E003 (0.4583), L42E023 (0.3333), L42E027 (0.0833) |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | 1.0 | 1.0 | L37E073 (0.7027), L37E091 (0.1216), L37E110 (0.0541) |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | 0.0 | 0.0 |  |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E069 | 0.0 | 0.0 |  |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | 0.6486 | 0.9792 | L42E021 (0.6667), L42E006 (0.1042), L42E016 (0.0625) |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | 0.7109 | 0.978 | L39E007 (0.2363), L39E095 (0.1099), L39E059 (0.0934) |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | 0.4258 | 1.0 | L41E018 (0.3028), L41E112 (0.2844), L41E009 (0.1101) |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | 0.3828 | 0.9694 | L44E022 (0.3265), L44E030 (0.1531), L44E027 (0.102) |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | 0.2148 | 1.0 | L42E002 (0.2364), L42E023 (0.1818), L42E093 (0.1091) |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | 1.0 | 0.9883 | L42E068 (0.2305), L42E002 (0.1289), L42E032 (0.125) |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | 0.543 | 1.0 | L41E018 (0.2878), L41E112 (0.1942), L41E079 (0.1583) |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | 0.2617 | 1.0 | L44E022 (0.2388), L44E027 (0.1642), L44E008 (0.1642) |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | 0.1367 | 1.0 | L42E093 (0.3429), L42E023 (0.2571), L42E002 (0.1714) |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | 0.8924 | 0.9805 | L41E079 (0.1571), L41E011 (0.1255), L41E018 (0.1145) |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | 0.012 | 0.9091 | L44E006 (0.2727), L44E027 (0.1818), L44E080 (0.1818) |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | 0.0043 | 1.0 | L42E123 (0.75), L42E032 (0.25) |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | 0.7426 | 1.0 | L20E006 (0.4333), L20E000 (0.3933), L20E005 (0.1067) |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | 0.1881 | 1.0 | L20E005 (0.5263), L20E001 (0.2632), L20E003 (0.1316) |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | 0.0396 | 1.0 | L19E006 (0.5), L19E004 (0.25), L19E007 (0.25) |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | 0.3515 | 1.0 | L21E005 (0.338), L21E004 (0.2958), L21E007 (0.2113) |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | 0.1188 | 1.0 | L18E000 (0.5417), L18E005 (0.3333), L18E006 (0.125) |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | 0.8777 | 1.0 | L20E006 (0.4424), L20E000 (0.3939), L20E003 (0.0727) |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | 0.0745 | 1.0 | L20E005 (0.5), L20E001 (0.2857), L20E003 (0.1429) |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E002 | 0.0106 | 1.0 | L19E006 (1.0) |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | 0.3723 | 1.0 | L21E005 (0.3143), L21E004 (0.3), L21E007 (0.2714) |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E001 | 0.0106 | 1.0 | L18E005 (0.5), L18E000 (0.5) |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | 0.984 | 1.0 | L20E007 (0.5676), L20E005 (0.1676), L20E001 (0.1405) |
+| Mixtral-8x7B (BOS) | dir_opt | L19E002 | 0.0053 | 1.0 | L19E003 (1.0) |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | 0.0213 | 1.0 | L21E004 (0.5), L21E005 (0.5) |
+| Mixtral-8x7B (BOS) | dir_opt | L18E001 | 0.0 | 0.0 |  |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | 1.0 | 1.0 | L19E001 (0.6389), L19E007 (0.1667), L19E000 (0.1111) |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | 0.2778 | 1.0 | L20E005 (0.7), L20E001 (0.2), L20E006 (0.1) |
+| Mixtral-8x7B (BOS) | f2e | L19E002 | 0.0 | 0.0 |  |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | 0.4444 | 1.0 | L21E005 (0.25), L21E007 (0.25), L21E000 (0.1875) |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | 0.1111 | 1.0 | L18E006 (0.5), L18E003 (0.5) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | 0.9375 | 1.0 | L19E000 (0.375), L19E004 (0.1875), L19E003 (0.1625) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | 0.9297 | 1.0 | L20E001 (0.2689), L20E005 (0.1597), L20E004 (0.1387) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | 0.1875 | 1.0 | L19E000 (1.0) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | 0.2617 | 1.0 | L21E004 (0.5672), L21E005 (0.2687), L21E000 (0.0896) |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | 0.0781 | 1.0 | L18E005 (0.95), L18E000 (0.05) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | 0.9062 | 1.0 | L19E002 (0.3103), L19E001 (0.2155), L19E004 (0.1897) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | 0.8594 | 1.0 | L20E005 (0.3545), L20E001 (0.2864), L20E004 (0.1409) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | 0.0664 | 1.0 | L19E000 (1.0) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | 0.3555 | 1.0 | L21E004 (0.6703), L21E005 (0.1868), L21E003 (0.0769) |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | 0.1094 | 1.0 | L18E005 (0.8214), L18E000 (0.1429), L18E006 (0.0357) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | 0.8906 | 1.0 | L19E004 (0.2982), L19E000 (0.2675), L19E003 (0.2368) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | 0.7812 | 1.0 | L20E001 (0.375), L20E005 (0.165), L20E007 (0.155) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | 0.0547 | 1.0 | L19E000 (1.0) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | 0.332 | 1.0 | L21E004 (0.5765), L21E003 (0.2118), L21E005 (0.1176) |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E001 | 0.0 | 0.0 |  |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | 0.6953 | 1.0 | L19E001 (0.4607), L19E004 (0.4551), L19E003 (0.0449) |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | 0.6797 | 1.0 | L20E001 (0.3851), L20E005 (0.3046), L20E004 (0.1954) |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | 0.0156 | 1.0 | L19E000 (1.0) |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | 0.3906 | 1.0 | L21E004 (0.74), L21E007 (0.16), L21E000 (0.05) |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E001 | 0.0 | 0.0 |  |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | 0.9219 | 1.0 | L21E003 (0.3992), L21E004 (0.1636), L21E000 (0.1585) |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | 0.9734 | 1.0 | L20E007 (0.4374), L20E005 (0.2737), L20E001 (0.1421) |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | 0.0219 | 1.0 | L19E004 (0.6429), L19E000 (0.2857), L19E003 (0.0714) |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | 0.0219 | 1.0 | L21E004 (0.2857), L21E006 (0.25), L21E003 (0.1786) |
+| Mixtral-8x7B (BOS) | cp_nat | L18E001 | 0.0031 | 1.0 | L18E004 (1.0) |
+
+
+### 6. Self-repair: knockout loss vs the expert's own direct write
+
+Only meaningful for experts with a sizeable direct write (W); for experts that act through later layers (W ≈ 0) the ratios are undefined (see the writer section).
+
+| model | condition | expert | routed items | direct write W | net layer direct change N | knockout K | K / W [95% CI] | K / N [95% CI] |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | 754 | 0.0021 | 0.0022 | 0.1016 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | 17 | 0.019 | 0.0125 | 0.0368 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | 71 | 0.0245 | 0.0139 | 0.0458 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | 274 | 0.0046 | 0.0005 | -0.0287 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | 153 | 0.2842 | 0.2486 | 0.0596 | 0.21 [0.07, 0.34] | 0.24 [0.08, 0.39] |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | 15 | 0.0495 | -0.0024 | 0.0167 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | 24 | 0.015 | 0.009 | -0.0729 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | 139 | 0.3776 | 0.3351 | 0.1425 | 0.38 [0.19, 0.55] | 0.43 [0.22, 0.62] |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | 63 | 0.1373 | 0.0975 | 0.0605 | 0.44 [-0.18, 1.18] | n/a |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | 28 | 0.0205 | 0.0101 | -0.029 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | 40 | 0.0225 | 0.0124 | 0.0359 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | 184 | 0.1801 | 0.1505 | 0.0421 | 0.23 [-1.01, 0.47] | 0.28 [-1.61, 0.75] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | 119 | 0.1313 | 0.1056 | -0.011 | -0.08 [-12.79, 6.94] | -0.10 [-5.04, 8.49] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | 61 | 0.1769 | 0.1258 | 0.1762 | 1.00 [-3.23, 1.59] | 1.40 [-1.07, 3.07] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | 20 | -0.0082 | 0.0735 | -0.0187 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | 256 | 0.1896 | 0.1751 | 0.0608 | 0.32 [-0.10, 0.81] | 0.35 [-0.11, 0.94] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | 99 | 0.2296 | 0.2044 | 0.0051 | 0.02 [-0.14, 2.99] | 0.02 [-0.15, 1.09] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | 52 | 0.2133 | 0.155 | 0.1875 | 0.88 [-19.91, 1.22] | 1.21 [-0.10, 2.73] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | 24 | -0.0063 | 0.0285 | 0.0104 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | 74 | -0.0002 | -0.0017 | 0.0608 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | 48 | -0.003 | 0.0027 | -0.0052 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | 182 | 0.1589 | 0.1257 | 0.0515 | 0.32 [-0.87, 0.84] | 0.41 [-1.85, 1.36] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | 109 | 0.012 | 0.0042 | -0.0235 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | 98 | 0.0112 | -0.0036 | 0.0561 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | 55 | -0.0044 | -0.0339 | 0.0091 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | 256 | 0.0784 | 0.0478 | -0.0186 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | 139 | 0.0097 | 0.0289 | 0.0261 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | 67 | 0.003 | -0.015 | -0.0075 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | 35 | 0.0101 | -0.0213 | 0.025 | n/a (W < 0.1: acts indirectly) | n/a |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | 821 | 0.327 | 0.3086 | 0.093 | 0.28 [0.22, 0.35] | 0.30 [0.23, 0.37] |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | 11 | 0.0384 | -0.0686 | -0.1364 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | 150 | 0.1337 | 0.0527 | 0.0158 | 0.12 [-0.19, 0.42] | n/a |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | 38 | 0.0542 | 0.0238 | 0.0296 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | 8 | 0.0132 | 0.0081 | 0.0469 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | 71 | 0.0745 | 0.0045 | 0.0123 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | 24 | -0.0113 | -0.0175 | 0.0312 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | 165 | 0.1975 | 0.0838 | -0.0121 | -0.06 [-0.28, 0.15] | n/a |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | 14 | 0.0608 | 0.0026 | 0.0446 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | 70 | 0.1155 | 0.0013 | -0.0107 | -0.09 [-0.69, 0.38] | n/a |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | 185 | 0.4258 | 0.2481 | 0.1243 | 0.29 [0.19, 0.40] | 0.50 [0.34, 0.67] |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | 36 | 0.2181 | 0.0864 | 0.1042 | 0.48 [0.08, 0.86] | n/a |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | 10 | 0.0251 | -0.0381 | 0.0 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | 16 | 0.1489 | 0.0321 | 0.0625 | 0.42 [0.15, 2.20] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | 240 | 0.2876 | 0.1198 | 0.1417 | 0.49 [0.29, 0.82] | 1.18 [0.78, 2.22] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | 238 | 0.2722 | 0.088 | 0.0399 | 0.15 [-0.31, 0.40] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | 48 | 0.1367 | -0.0533 | -0.0755 | -0.55 [-2.17, 0.09] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | 67 | 0.1565 | 0.0287 | 0.0373 | 0.24 [0.00, 0.79] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | 20 | 0.038 | -0.033 | -0.0375 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | 232 | 0.1773 | 0.056 | 0.1056 | 0.60 [0.17, 1.20] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | 220 | 0.2496 | 0.1018 | 0.0756 | 0.30 [-0.22, 0.55] | 0.74 [-1.19, 2.36] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | 17 | 0.215 | 0.0174 | -0.0147 | -0.07 [-0.34, 0.62] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | 91 | 0.1334 | 0.0359 | 0.0357 | 0.27 [0.11, 1.17] | n/a |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | 28 | 0.0352 | -0.0224 | -0.058 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | 228 | 0.2751 | 0.092 | 0.0471 | 0.17 [-0.04, 0.44] | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | 200 | 0.336 | 0.1366 | 0.0688 | 0.20 [-0.19, 0.37] | 0.50 [-2.09, 1.38] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | 14 | 0.2276 | -0.089 | -0.0804 | -0.35 [-0.35, -0.35] | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | 85 | 0.1456 | 0.0216 | 0.0206 | 0.14 [-0.08, 0.65] | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | 178 | 0.176 | 0.0857 | 0.1074 | 0.61 [0.06, 0.95] | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | 174 | 0.1434 | -0.041 | -0.0065 | -0.05 [-1.52, 0.45] | n/a |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | 100 | 0.1026 | 0.0325 | 0.0887 | 0.87 [0.36, 1.43] | n/a |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | 1180 | 0.2631 | 0.0675 | 0.0907 | 0.34 [0.28, 0.41] | n/a |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | 1246 | 0.3608 | 0.2145 | 0.1681 | 0.47 [0.41, 0.52] | 0.78 [0.70, 0.88] |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | 28 | 0.0515 | 0.0018 | 0.0045 | n/a (W < 0.1: acts indirectly) | n/a |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | 28 | 0.0775 | 0.015 | 0.0134 | n/a (W < 0.1: acts indirectly) | n/a |
+
+
+### 7. Cross-condition knockout (other conditions' selected experts)
+
+| model | evaluated on | knockout | selected on | F [95% CI] |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L44E116 | dir_f1 | +0.021 [+0.004, +0.038] |
+| Qwen3-30B-A3B-Base | f1 | L43E036 | f2e | +0.007 [-0.006, +0.020] |
+| Qwen3-30B-A3B-Base | f1 | L39E121 | vt_e2a_orig | -0.012 [-0.029, +0.004] |
+| Qwen3-30B-A3B-Base | f1 | L42E123 | vt_e2a_neu | -0.008 [-0.023, +0.007] |
+| Qwen3-30B-A3B-Base | f1 | L39E001 | cp_vt_orig | +0.003 [-0.013, +0.018] |
+| Qwen3-30B-A3B-Base | dir_f1 | L37E032 | f1 | +0.075 [+0.057, +0.094] |
+| Qwen3-30B-A3B-Base | dir_f1 | L43E036 | f2e | -0.001 [-0.015, +0.013] |
+| Qwen3-30B-A3B-Base | dir_f1 | L39E121 | vt_e2a_orig | -0.003 [-0.017, +0.011] |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E123 | vt_e2a_neu | -0.001 [-0.015, +0.013] |
+| Qwen3-30B-A3B-Base | dir_f1 | L39E001 | cp_vt_orig | +0.004 [-0.010, +0.018] |
+| Qwen3-30B-A3B-Base | dir_opt | L37E032 | f1 | +0.000 [-0.011, +0.012] |
+| Qwen3-30B-A3B-Base | dir_opt | L44E116 | dir_f1 | +0.001 [-0.012, +0.013] |
+| Qwen3-30B-A3B-Base | dir_opt | L43E036 | f2e | +0.007 [-0.005, +0.019] |
+| Qwen3-30B-A3B-Base | dir_opt | L39E121 | vt_e2a_orig | +0.003 [-0.009, +0.014] |
+| Qwen3-30B-A3B-Base | dir_opt | L42E123 | vt_e2a_neu | +0.008 [-0.004, +0.021] |
+| Qwen3-30B-A3B-Base | dir_opt | L39E001 | cp_vt_orig | +0.009 [-0.004, +0.021] |
+| Qwen3-30B-A3B-Base | f2e | L37E032 | f1 | -0.002 [-0.027, +0.025] |
+| Qwen3-30B-A3B-Base | f2e | L44E116 | dir_f1 | +0.016 [-0.014, +0.048] |
+| Qwen3-30B-A3B-Base | f2e | L39E121 | vt_e2a_orig | +0.000 [-0.022, +0.025] |
+| Qwen3-30B-A3B-Base | f2e | L42E123 | vt_e2a_neu | -0.001 [-0.023, +0.025] |
+| Qwen3-30B-A3B-Base | f2e | L39E001 | cp_vt_orig | -0.006 [-0.034, +0.022] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L37E032 | f1 | +0.000 [-0.008, +0.008] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E116 | dir_f1 | +0.010 [+0.002, +0.016] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L43E036 | f2e | +0.019 [-0.004, +0.051] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E123 | vt_e2a_neu | +0.029 [+0.009, +0.050] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E001 | cp_vt_orig | +0.017 [-0.005, +0.046] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L37E032 | f1 | -0.007 [-0.019, +0.003] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E116 | dir_f1 | -0.012 [-0.025, -0.002] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L43E036 | f2e | +0.003 [-0.027, +0.044] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E121 | vt_e2a_orig | +0.011 [-0.022, +0.058] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E001 | cp_vt_orig | +0.011 [-0.015, +0.051] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E116 | dir_f1 | -0.010 [-0.013, +0.030] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L43E036 | f2e | -0.019 [-0.024, +0.042] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L39E121 | vt_e2a_orig | -0.055 [-0.064, +0.053] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E123 | vt_e2a_neu | -0.023 [-0.027, +0.026] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L39E001 | cp_vt_orig | -0.018 [-0.048, +0.025] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L37E032 | f1 | +0.007 [-0.007, +0.023] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E116 | dir_f1 | -0.001 [-0.013, +0.013] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L43E036 | f2e | +0.001 [-0.012, +0.014] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E121 | vt_e2a_orig | -0.001 [-0.022, +0.030] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E123 | vt_e2a_neu | +0.022 [-0.012, +0.061] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L37E032 | f1 | -0.002 [-0.014, +0.010] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E116 | dir_f1 | -0.014 [-0.029, -0.004] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L43E036 | f2e | -0.007 [-0.019, +0.003] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E121 | vt_e2a_orig | +0.010 [-0.016, +0.060] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E001 | cp_vt_orig | -0.001 [-0.050, +0.062] |
+| Qwen3-30B-A3B-Base | cp_nat | L37E032 | f1 | -0.013 [-0.029, +0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | L44E116 | dir_f1 | -0.016 [-0.029, -0.004] |
+| Qwen3-30B-A3B-Base | cp_nat | L43E036 | f2e | +0.007 [-0.007, +0.021] |
+| Qwen3-30B-A3B-Base | cp_nat | L39E121 | vt_e2a_orig | -0.011 [-0.025, +0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | L42E123 | vt_e2a_neu | -0.007 [-0.023, +0.009] |
+| Qwen3-30B-A3B-Base | cp_nat | L39E001 | cp_vt_orig | -0.013 [-0.028, -0.000] |
+| Mixtral-8x7B (BOS) | f1 | L19E004 | f2e | +0.042 [+0.026, +0.059] |
+| Mixtral-8x7B (BOS) | f1 | L19E006 | vt_e2a_orig | +0.008 [-0.007, +0.022] |
+| Mixtral-8x7B (BOS) | f1 | L21E006 | cp_nat | +0.004 [-0.008, +0.016] |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E004 | f2e | +0.062 [+0.045, +0.079] |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E006 | vt_e2a_orig | -0.002 [-0.015, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E006 | cp_nat | +0.011 [+0.001, +0.022] |
+| Mixtral-8x7B (BOS) | dir_opt | L20E001 | f1 | +0.007 [+0.003, +0.012] |
+| Mixtral-8x7B (BOS) | dir_opt | L19E004 | f2e | -0.000 [-0.004, +0.004] |
+| Mixtral-8x7B (BOS) | dir_opt | L19E006 | vt_e2a_orig | +0.042 [+0.033, +0.051] |
+| Mixtral-8x7B (BOS) | dir_opt | L21E006 | cp_nat | +0.013 [+0.005, +0.021] |
+| Mixtral-8x7B (BOS) | f2e | L20E001 | f1 | +0.004 [-0.008, +0.015] |
+| Mixtral-8x7B (BOS) | f2e | L19E006 | vt_e2a_orig | +0.010 [-0.004, +0.024] |
+| Mixtral-8x7B (BOS) | f2e | L21E006 | cp_nat | +0.005 [-0.006, +0.014] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E001 | f1 | -0.002 [-0.006, +0.003] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E004 | f2e | -0.008 [-0.020, +0.002] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E006 | cp_nat | -0.005 [-0.015, +0.002] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E001 | f1 | -0.005 [-0.018, +0.005] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E004 | f2e | +0.006 [-0.001, +0.016] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E006 | cp_nat | -0.002 [-0.011, +0.007] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E001 | f1 | +0.003 [-0.001, +0.007] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E004 | f2e | -0.008 [-0.018, +0.000] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E006 | cp_nat | -0.003 [-0.012, +0.007] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E001 | f1 | +0.000 [-0.003, +0.006] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E004 | f2e | -0.009 [-0.025, +0.007] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E006 | cp_nat | +0.000 [-0.008, +0.007] |
+| Mixtral-8x7B (BOS) | cp_nat | L20E001 | f1 | +0.005 [+0.001, +0.009] |
+| Mixtral-8x7B (BOS) | cp_nat | L19E004 | f2e | -0.001 [-0.005, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | L19E006 | vt_e2a_orig | +0.043 [+0.031, +0.054] |
+
+
+### 8. Strata
+
+| model | condition | stratum | items | knockout | F [95% CI] |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | names=False | 374 | L37E032 | +0.075 [+0.062, +0.087] |
+| Qwen3-30B-A3B-Base | f1 | names=False | 374 | L41E117 | -0.002 [-0.010, +0.006] |
+| Qwen3-30B-A3B-Base | f1 | names=False | 374 | L44E069 | +0.003 [-0.006, +0.011] |
+| Qwen3-30B-A3B-Base | f1 | names=False | 374 | L42E115 | -0.004 [-0.012, +0.004] |
+| Qwen3-30B-A3B-Base | f1 | names=False | 374 | pop:k10 | +0.171 [+0.154, +0.189] |
+| Qwen3-30B-A3B-Base | f1 | names=True | 394 | L37E032 | +0.004 [-0.020, +0.027] |
+| Qwen3-30B-A3B-Base | f1 | names=True | 394 | L41E117 | -0.005 [-0.014, +0.003] |
+| Qwen3-30B-A3B-Base | f1 | names=True | 394 | L44E069 | -0.003 [-0.015, +0.009] |
+| Qwen3-30B-A3B-Base | f1 | names=True | 394 | L42E115 | -0.016 [-0.027, -0.005] |
+| Qwen3-30B-A3B-Base | f1 | names=True | 394 | pop:k10 | +0.211 [+0.188, +0.234] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=False | 168 | L44E116 | +0.022 [+0.007, +0.037] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=False | 168 | L41E117 | -0.000 [-0.010, +0.009] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=False | 168 | L44E069 | -0.003 [-0.013, +0.008] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=False | 168 | L42E115 | -0.006 [-0.017, +0.004] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=False | 168 | pop:k10 | +0.182 [+0.145, +0.220] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=True | 12 | L44E116 | +0.009 [-0.039, +0.075] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=True | 12 | L41E117 | +0.023 [-0.030, +0.104] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=True | 12 | L44E069 | +0.018 [-0.038, +0.090] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=True | 12 | L42E115 | -0.005 [-0.089, +0.071] |
+| Qwen3-30B-A3B-Base | dir_f1 | names=True | 12 | pop:k10 | +0.176 [+0.085, +0.257] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=neutral | 100 | L44E116 | +0.033 [+0.013, +0.053] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=neutral | 100 | L41E117 | +0.002 [-0.009, +0.013] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=neutral | 100 | L44E069 | -0.001 [-0.015, +0.014] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=neutral | 100 | L42E115 | -0.005 [-0.020, +0.009] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=neutral | 100 | pop:k10 | +0.250 [+0.201, +0.297] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=one-sided | 32 | L44E116 | -0.003 [-0.024, +0.014] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=one-sided | 32 | L41E117 | -0.007 [-0.026, +0.014] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=one-sided | 32 | L44E069 | -0.011 [-0.027, +0.004] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=one-sided | 32 | L42E115 | +0.009 [-0.010, +0.029] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=one-sided | 32 | pop:k10 | +0.127 [+0.062, +0.202] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=reverse | 40 | L44E116 | +0.011 [-0.025, +0.046] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=reverse | 40 | L41E117 | +0.007 [-0.021, +0.037] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=reverse | 40 | L44E069 | +0.006 [-0.018, +0.032] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=reverse | 40 | L42E115 | -0.018 [-0.046, +0.009] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_assoc=reverse | 40 | pop:k10 | +0.099 [+0.043, +0.154] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=False | 166 | L44E116 | +0.020 [+0.005, +0.035] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=False | 166 | L41E117 | -0.002 [-0.012, +0.009] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=False | 166 | L44E069 | -0.001 [-0.011, +0.011] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=False | 166 | L42E115 | -0.004 [-0.016, +0.007] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=False | 166 | pop:k10 | +0.186 [+0.148, +0.225] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=True | 14 | L44E116 | +0.035 [+0.007, +0.086] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=True | 14 | L41E117 | +0.032 [+0.010, +0.073] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=True | 14 | L44E069 | -0.010 [-0.047, +0.035] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=True | 14 | L42E115 | -0.029 [-0.073, +0.008] |
+| Qwen3-30B-A3B-Base | dir_f1 | stratum_local_assoc=True | 14 | pop:k10 | +0.140 [+0.051, +0.220] |
+| Qwen3-30B-A3B-Base | dir_opt | names=False | 168 | L41E117 | +0.026 [+0.010, +0.041] |
+| Qwen3-30B-A3B-Base | dir_opt | names=False | 168 | L44E069 | -0.004 [-0.010, +0.003] |
+| Qwen3-30B-A3B-Base | dir_opt | names=False | 168 | L42E115 | -0.001 [-0.008, +0.006] |
+| Qwen3-30B-A3B-Base | dir_opt | names=False | 168 | pop:k10 | +0.190 [+0.158, +0.222] |
+| Qwen3-30B-A3B-Base | dir_opt | names=True | 12 | L41E117 | +0.022 [-0.025, +0.088] |
+| Qwen3-30B-A3B-Base | dir_opt | names=True | 12 | L44E069 | +0.017 [-0.006, +0.044] |
+| Qwen3-30B-A3B-Base | dir_opt | names=True | 12 | L42E115 | +0.028 [+0.003, +0.069] |
+| Qwen3-30B-A3B-Base | dir_opt | names=True | 12 | pop:k10 | +0.104 [+0.009, +0.223] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=neutral | 100 | L41E117 | +0.015 [+0.001, +0.029] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=neutral | 100 | L44E069 | -0.002 [-0.007, +0.004] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=neutral | 100 | L42E115 | -0.004 [-0.011, +0.002] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=neutral | 100 | pop:k10 | +0.221 [+0.177, +0.263] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=one-sided | 32 | L41E117 | +0.011 [-0.025, +0.046] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=one-sided | 32 | L44E069 | +0.004 [-0.010, +0.017] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=one-sided | 32 | L42E115 | +0.002 [-0.017, +0.021] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=one-sided | 32 | pop:k10 | +0.160 [+0.093, +0.222] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=reverse | 40 | L41E117 | +0.065 [+0.031, +0.107] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=reverse | 40 | L44E069 | +0.003 [-0.009, +0.017] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=reverse | 40 | L42E115 | +0.016 [-0.001, +0.035] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_assoc=reverse | 40 | pop:k10 | +0.159 [+0.108, +0.209] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=False | 166 | L41E117 | +0.025 [+0.009, +0.041] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=False | 166 | L44E069 | -0.003 [-0.010, +0.004] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=False | 166 | L42E115 | +0.001 [-0.007, +0.009] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=False | 166 | pop:k10 | +0.191 [+0.158, +0.223] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=True | 14 | L41E117 | +0.035 [-0.010, +0.071] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=True | 14 | L44E069 | +0.002 [-0.007, +0.013] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=True | 14 | L42E115 | -0.004 [-0.028, +0.015] |
+| Qwen3-30B-A3B-Base | dir_opt | stratum_local_assoc=True | 14 | pop:k10 | +0.125 [+0.004, +0.201] |
+| Qwen3-30B-A3B-Base | f2e | names=False | 52 | L43E036 | +0.016 [-0.005, +0.035] |
+| Qwen3-30B-A3B-Base | f2e | names=False | 52 | L41E117 | +0.007 [-0.003, +0.016] |
+| Qwen3-30B-A3B-Base | f2e | names=False | 52 | L44E069 | -0.003 [-0.017, +0.009] |
+| Qwen3-30B-A3B-Base | f2e | names=False | 52 | L42E115 | +0.011 [-0.002, +0.026] |
+| Qwen3-30B-A3B-Base | f2e | names=False | 52 | pop:k10 | +0.042 [-0.027, +0.097] |
+| Qwen3-30B-A3B-Base | f2e | names=True | 12 | L43E036 | +0.009 [-0.030, +0.063] |
+| Qwen3-30B-A3B-Base | f2e | names=True | 12 | L41E117 | -0.009 [-0.060, +0.063] |
+| Qwen3-30B-A3B-Base | f2e | names=True | 12 | L44E069 | +0.021 [-0.005, +0.062] |
+| Qwen3-30B-A3B-Base | f2e | names=True | 12 | L42E115 | -0.006 [-0.094, +0.087] |
+| Qwen3-30B-A3B-Base | f2e | names=True | 12 | pop:k10 | -0.032 [-0.298, +0.215] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=neutral | 218 | L39E121 | +0.005 [-0.013, +0.027] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=neutral | 218 | L41E117 | +0.002 [-0.007, +0.012] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=neutral | 218 | L44E069 | +0.009 [-0.011, +0.037] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=neutral | 218 | L42E115 | -0.002 [-0.009, +0.005] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=neutral | 218 | pop:k10 | +0.046 [-0.036, +0.129] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=one-sided | 14 | L39E121 | +0.010 [-0.045, +0.077] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=one-sided | 14 | L41E117 | -0.007 [-0.070, +0.056] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=one-sided | 14 | L44E069 | +0.024 [-0.011, +0.069] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=one-sided | 14 | L42E115 | +0.021 [-0.062, +0.107] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=one-sided | 14 | pop:k10 | +0.112 [-0.037, +0.267] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=reverse | 24 | L39E121 | -0.002 [-0.031, +0.052] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=reverse | 24 | L41E117 | +0.003 [-0.021, +0.030] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=reverse | 24 | L44E069 | +0.007 [-0.006, +0.023] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=reverse | 24 | L42E115 | -0.007 [-0.022, +0.006] |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | stratum_assoc=reverse | 24 | pop:k10 | +0.111 [+0.025, +0.206] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=neutral | 200 | L42E123 | +0.022 [-0.004, +0.049] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=neutral | 200 | L41E117 | -0.002 [-0.014, +0.010] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=neutral | 200 | L44E069 | +0.007 [-0.008, +0.027] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=neutral | 200 | L42E115 | -0.004 [-0.007, +0.000] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=neutral | 200 | pop:k10 | +0.156 [+0.074, +0.242] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=one-sided | 20 | L42E123 | +0.025 [+0.002, +0.044] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=one-sided | 20 | L41E117 | +0.004 [-0.019, +0.031] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=one-sided | 20 | L44E069 | -0.002 [-0.021, +0.024] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=one-sided | 20 | L42E115 | -0.002 [-0.022, +0.015] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=one-sided | 20 | pop:k10 | +0.152 [+0.081, +0.238] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=reverse | 36 | L42E123 | +0.008 [-0.027, +0.036] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=reverse | 36 | L41E117 | +0.017 [-0.002, +0.034] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=reverse | 36 | L44E069 | +0.027 [-0.015, +0.091] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=reverse | 36 | L42E115 | +0.004 [-0.008, +0.019] |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | stratum_assoc=reverse | 36 | pop:k10 | +0.195 [+0.107, +0.294] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | stratum_assoc=neutral | 52 | L37E032 | +0.044 [+0.025, +0.118] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | stratum_assoc=neutral | 52 | L41E117 | +0.000 [-0.031, +0.003] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | stratum_assoc=neutral | 52 | L44E069 | +0.012 [-0.017, +0.015] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | stratum_assoc=neutral | 52 | L42E115 | +0.016 [+0.000, +0.018] |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | stratum_assoc=neutral | 52 | pop:k10 | +0.292 [+0.280, +0.426] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=neutral | 202 | L39E001 | +0.013 [-0.015, +0.042] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=neutral | 202 | L41E117 | +0.000 [-0.009, +0.009] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=neutral | 202 | L44E069 | +0.002 [-0.005, +0.010] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=neutral | 202 | L42E115 | +0.002 [-0.008, +0.013] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=neutral | 202 | pop:k10 | +0.099 [+0.005, +0.211] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=reverse | 38 | L39E001 | -0.003 [-0.036, +0.031] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=reverse | 38 | L41E117 | -0.007 [-0.025, +0.005] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=reverse | 38 | L44E069 | -0.002 [-0.019, +0.010] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=reverse | 38 | L42E115 | +0.001 [-0.015, +0.015] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | stratum_assoc=reverse | 38 | pop:k10 | +0.095 [-0.102, +0.285] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=1 | 132 | L39E001 | -0.001 [-0.034, +0.025] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=1 | 132 | L41E117 | -0.008 [-0.032, +0.007] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=1 | 132 | L44E069 | +0.004 [-0.007, +0.017] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=1 | 132 | L42E115 | +0.000 [-0.013, +0.011] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=1 | 132 | pop:k10 | +0.068 [-0.050, +0.190] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=2 | 124 | L39E001 | +0.019 [-0.007, +0.049] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=2 | 124 | L41E117 | +0.006 [-0.005, +0.022] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=2 | 124 | L44E069 | +0.005 [-0.007, +0.022] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=2 | 124 | L42E115 | +0.004 [-0.010, +0.022] |
+| Qwen3-30B-A3B-Base | cp_vt_orig | order=2 | 124 | pop:k10 | +0.129 [+0.025, +0.236] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=neutral | 184 | L42E123 | -0.004 [-0.018, +0.013] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=neutral | 184 | L41E117 | +0.001 [-0.011, +0.013] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=neutral | 184 | L44E069 | -0.001 [-0.011, +0.010] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=neutral | 184 | L42E115 | -0.002 [-0.017, +0.017] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=neutral | 184 | pop:k10 | +0.040 [+0.007, +0.069] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=reverse | 56 | L42E123 | -0.002 [-0.025, +0.015] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=reverse | 56 | L41E117 | -0.002 [-0.029, +0.020] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=reverse | 56 | L44E069 | +0.003 [-0.009, +0.019] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=reverse | 56 | L42E115 | -0.012 [-0.036, +0.007] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | stratum_assoc=reverse | 56 | pop:k10 | +0.113 [+0.051, +0.176] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=1 | 132 | L42E123 | -0.002 [-0.010, +0.011] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=1 | 132 | L41E117 | +0.007 [-0.007, +0.025] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=1 | 132 | L44E069 | +0.002 [-0.006, +0.011] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=1 | 132 | L42E115 | +0.005 [-0.013, +0.030] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=1 | 132 | pop:k10 | +0.057 [+0.024, +0.092] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=2 | 124 | L42E123 | -0.012 [-0.035, +0.011] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=2 | 124 | L41E117 | -0.007 [-0.017, +0.002] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=2 | 124 | L44E069 | -0.003 [-0.012, +0.013] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=2 | 124 | L42E115 | -0.014 [-0.024, -0.005] |
+| Qwen3-30B-A3B-Base | cp_vt_neu | order=2 | 124 | pop:k10 | +0.060 [-0.014, +0.108] |
+| Qwen3-30B-A3B-Base | cp_nat | names=False | 868 | L41E117 | +0.027 [+0.019, +0.035] |
+| Qwen3-30B-A3B-Base | cp_nat | names=False | 868 | L44E069 | -0.005 [-0.011, +0.002] |
+| Qwen3-30B-A3B-Base | cp_nat | names=False | 868 | L42E115 | -0.009 [-0.016, -0.003] |
+| Qwen3-30B-A3B-Base | cp_nat | names=False | 868 | pop:k10 | +0.217 [+0.195, +0.240] |
+| Qwen3-30B-A3B-Base | cp_nat | names=True | 52 | L41E117 | +0.021 [-0.009, +0.046] |
+| Qwen3-30B-A3B-Base | cp_nat | names=True | 52 | L44E069 | -0.010 [-0.040, +0.012] |
+| Qwen3-30B-A3B-Base | cp_nat | names=True | 52 | L42E115 | +0.000 [-0.016, +0.014] |
+| Qwen3-30B-A3B-Base | cp_nat | names=True | 52 | pop:k10 | +0.006 [-0.034, +0.049] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=associative | 28 | L41E117 | +0.021 [-0.002, +0.049] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=associative | 28 | L44E069 | +0.018 [-0.015, +0.058] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=associative | 28 | L42E115 | -0.013 [-0.046, +0.011] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=associative | 28 | pop:k10 | +0.155 [+0.045, +0.239] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=neutral | 388 | L41E117 | +0.017 [+0.005, +0.029] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=neutral | 388 | L44E069 | -0.007 [-0.017, +0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=neutral | 388 | L42E115 | -0.008 [-0.017, +0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=neutral | 388 | pop:k10 | +0.207 [+0.172, +0.242] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=no_probe | 32 | L41E117 | -0.016 [-0.047, +0.012] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=no_probe | 32 | L44E069 | -0.004 [-0.025, +0.016] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=no_probe | 32 | L42E115 | -0.049 [-0.080, -0.025] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=no_probe | 32 | pop:k10 | +0.067 [+0.004, +0.123] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=one-sided | 144 | L41E117 | +0.029 [+0.010, +0.047] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=one-sided | 144 | L44E069 | -0.009 [-0.024, +0.005] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=one-sided | 144 | L42E115 | -0.006 [-0.024, +0.009] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=one-sided | 144 | pop:k10 | +0.131 [+0.075, +0.193] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=reverse | 328 | L41E117 | +0.041 [+0.027, +0.054] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=reverse | 328 | L44E069 | -0.003 [-0.015, +0.008] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=reverse | 328 | L42E115 | -0.006 [-0.016, +0.004] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_assoc=reverse | 328 | pop:k10 | +0.251 [+0.216, +0.285] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=False | 808 | L41E117 | +0.025 [+0.016, +0.033] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=False | 808 | L44E069 | -0.004 [-0.011, +0.002] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=False | 808 | L42E115 | -0.009 [-0.016, -0.003] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=False | 808 | pop:k10 | +0.202 [+0.178, +0.228] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=True | 112 | L41E117 | +0.039 [+0.019, +0.058] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=True | 112 | L44E069 | -0.009 [-0.025, +0.006] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=True | 112 | L42E115 | -0.004 [-0.021, +0.010] |
+| Qwen3-30B-A3B-Base | cp_nat | stratum_local_assoc=True | 112 | pop:k10 | +0.211 [+0.151, +0.271] |
+| Qwen3-30B-A3B-Base | cp_nat | order=1 | 460 | L41E117 | +0.025 [+0.015, +0.034] |
+| Qwen3-30B-A3B-Base | cp_nat | order=1 | 460 | L44E069 | -0.009 [-0.018, -0.000] |
+| Qwen3-30B-A3B-Base | cp_nat | order=1 | 460 | L42E115 | -0.009 [-0.017, -0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | order=1 | 460 | pop:k10 | +0.205 [+0.181, +0.230] |
+| Qwen3-30B-A3B-Base | cp_nat | order=2 | 460 | L41E117 | +0.029 [+0.019, +0.038] |
+| Qwen3-30B-A3B-Base | cp_nat | order=2 | 460 | L44E069 | -0.001 [-0.009, +0.006] |
+| Qwen3-30B-A3B-Base | cp_nat | order=2 | 460 | L42E115 | -0.008 [-0.017, +0.001] |
+| Qwen3-30B-A3B-Base | cp_nat | order=2 | 460 | pop:k10 | +0.202 [+0.177, +0.227] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | L20E001 | +0.006 [-0.009, +0.021] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | L20E000 | +0.007 [-0.000, +0.013] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | L19E002 | +0.001 [-0.005, +0.006] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | L21E001 | +0.009 [+0.002, +0.015] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | L18E001 | +0.001 [-0.005, +0.008] |
+| Mixtral-8x7B (BOS) | f1 | names=False | 178 | pop:k10 | +0.243 [+0.198, +0.290] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | L20E001 | +0.025 [+0.009, +0.037] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | L20E000 | -0.008 [-0.040, +0.023] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | L19E002 | +0.019 [-0.024, +0.066] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | L21E001 | +0.003 [-0.020, +0.029] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | L18E001 | +0.016 [-0.037, +0.083] |
+| Mixtral-8x7B (BOS) | f1 | names=True | 24 | pop:k10 | +0.101 [+0.012, +0.182] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | L20E001 | -0.005 [-0.021, +0.010] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | L20E000 | +0.002 [-0.004, +0.008] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | L19E002 | +0.000 [-0.006, +0.006] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | L21E001 | -0.001 [-0.011, +0.009] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | L18E001 | +0.000 [-0.007, +0.007] |
+| Mixtral-8x7B (BOS) | dir_f1 | names=False | 186 | pop:k10 | +0.248 [+0.204, +0.291] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | L20E001 | -0.007 [-0.034, +0.018] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | L20E000 | +0.002 [-0.007, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | L19E002 | +0.002 [-0.007, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | L21E001 | +0.001 [-0.011, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | L18E001 | -0.003 [-0.015, +0.009] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=neutral | 90 | pop:k10 | +0.277 [+0.211, +0.340] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | L20E001 | -0.016 [-0.048, +0.013] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | L20E000 | -0.003 [-0.013, +0.006] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | L19E002 | -0.001 [-0.015, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | L21E001 | +0.007 [-0.010, +0.025] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | L18E001 | +0.000 [-0.013, +0.012] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=one-sided | 40 | pop:k10 | +0.169 [+0.097, +0.240] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | L20E001 | +0.005 [-0.023, +0.031] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | L20E000 | +0.007 [-0.005, +0.021] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | L19E002 | +0.001 [-0.010, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | L21E001 | -0.011 [-0.034, +0.013] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | L18E001 | +0.004 [-0.007, +0.014] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_assoc=reverse | 54 | pop:k10 | +0.237 [+0.148, +0.329] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | L20E001 | -0.004 [-0.024, +0.015] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | L20E000 | +0.003 [-0.004, +0.010] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | L19E002 | +0.002 [-0.005, +0.008] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | L21E001 | -0.000 [-0.010, +0.010] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | L18E001 | +0.001 [-0.007, +0.008] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=False | 148 | pop:k10 | +0.259 [+0.209, +0.307] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | L20E001 | -0.006 [-0.031, +0.017] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | L20E000 | -0.001 [-0.013, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | L19E002 | -0.001 [-0.012, +0.011] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | L21E001 | -0.005 [-0.033, +0.015] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | L18E001 | -0.003 [-0.016, +0.010] |
+| Mixtral-8x7B (BOS) | dir_f1 | stratum_local_assoc=True | 40 | pop:k10 | +0.189 [+0.088, +0.270] |
+| Mixtral-8x7B (BOS) | dir_opt | names=False | 186 | L20E000 | +0.025 [+0.017, +0.035] |
+| Mixtral-8x7B (BOS) | dir_opt | names=False | 186 | L19E002 | -0.001 [-0.004, +0.002] |
+| Mixtral-8x7B (BOS) | dir_opt | names=False | 186 | L21E001 | +0.000 [-0.002, +0.002] |
+| Mixtral-8x7B (BOS) | dir_opt | names=False | 186 | L18E001 | -0.000 [-0.003, +0.003] |
+| Mixtral-8x7B (BOS) | dir_opt | names=False | 186 | pop:k10 | +0.173 [+0.150, +0.195] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=neutral | 90 | L20E000 | +0.030 [+0.018, +0.043] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=neutral | 90 | L19E002 | -0.002 [-0.007, +0.002] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=neutral | 90 | L21E001 | +0.001 [-0.002, +0.005] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=neutral | 90 | L18E001 | +0.001 [-0.004, +0.006] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=neutral | 90 | pop:k10 | +0.196 [+0.160, +0.232] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=one-sided | 40 | L20E000 | +0.025 [+0.006, +0.050] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=one-sided | 40 | L19E002 | +0.002 [-0.003, +0.007] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=one-sided | 40 | L21E001 | +0.003 [-0.001, +0.006] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=one-sided | 40 | L18E001 | -0.001 [-0.007, +0.004] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=one-sided | 40 | pop:k10 | +0.117 [+0.071, +0.160] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=reverse | 54 | L20E000 | +0.017 [+0.002, +0.032] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=reverse | 54 | L19E002 | -0.001 [-0.004, +0.003] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=reverse | 54 | L21E001 | -0.002 [-0.006, +0.002] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=reverse | 54 | L18E001 | -0.001 [-0.006, +0.004] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_assoc=reverse | 54 | pop:k10 | +0.174 [+0.142, +0.206] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=False | 148 | L20E000 | +0.024 [+0.016, +0.034] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=False | 148 | L19E002 | -0.001 [-0.004, +0.003] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=False | 148 | L21E001 | +0.002 [-0.001, +0.004] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=False | 148 | L18E001 | -0.001 [-0.004, +0.003] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=False | 148 | pop:k10 | +0.175 [+0.150, +0.198] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=True | 40 | L20E000 | +0.028 [+0.003, +0.054] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=True | 40 | L19E002 | -0.003 [-0.010, +0.003] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=True | 40 | L21E001 | -0.004 [-0.009, +0.001] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=True | 40 | L18E001 | +0.001 [-0.007, +0.009] |
+| Mixtral-8x7B (BOS) | dir_opt | stratum_local_assoc=True | 40 | pop:k10 | +0.156 [+0.099, +0.215] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | L19E004 | +0.032 [+0.005, +0.060] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | L20E000 | -0.002 [-0.009, +0.005] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | L19E002 | +0.001 [-0.005, +0.007] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | L21E001 | +0.009 [+0.000, +0.019] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | L18E001 | -0.004 [-0.016, +0.009] |
+| Mixtral-8x7B (BOS) | f2e | names=False | 32 | pop:k10 | +0.018 [-0.041, +0.069] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | L19E006 | +0.043 [+0.026, +0.060] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | L20E000 | +0.010 [-0.018, +0.039] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | L19E002 | -0.007 [-0.014, -0.001] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | L21E001 | +0.001 [-0.004, +0.005] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | L18E001 | +0.001 [-0.004, +0.006] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=neutral | 234 | pop:k10 | +0.075 [+0.023, +0.123] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | L19E006 | +0.028 [-0.003, +0.055] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | L20E000 | +0.034 [-0.003, +0.083] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | L19E002 | -0.008 [-0.019, +0.004] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | L21E001 | +0.003 [-0.008, +0.012] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | L18E001 | -0.003 [-0.028, +0.009] |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | stratum_assoc=reverse | 14 | pop:k10 | +0.067 [-0.045, +0.171] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | L19E006 | +0.036 [+0.011, +0.062] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | L20E000 | +0.019 [-0.009, +0.054] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | L19E002 | +0.003 [-0.002, +0.007] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | L21E001 | +0.004 [+0.000, +0.007] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | L18E001 | -0.001 [-0.007, +0.004] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=neutral | 222 | pop:k10 | +0.057 [+0.010, +0.105] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | L19E006 | +0.054 [+0.029, +0.108] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | L20E000 | +0.027 [-0.015, +0.062] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | L19E002 | +0.004 [+0.000, +0.011] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | L21E001 | +0.002 [-0.005, +0.018] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | L18E001 | +0.011 [+0.000, +0.020] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=one-sided | 18 | pop:k10 | +0.060 [+0.042, +0.099] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | L19E006 | +0.029 [+0.007, +0.045] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | L20E000 | +0.062 [+0.036, +0.089] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | L19E002 | +0.009 [+0.005, +0.015] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | L21E001 | +0.007 [+0.000, +0.013] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | L18E001 | +0.009 [+0.000, +0.019] |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | stratum_assoc=reverse | 16 | pop:k10 | +0.069 [+0.000, +0.149] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | L19E006 | +0.015 [-0.006, +0.033] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | L20E000 | +0.024 [-0.007, +0.066] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | L19E002 | -0.002 [-0.010, +0.006] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | L21E001 | +0.002 [-0.005, +0.011] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | L18E001 | +0.006 [-0.001, +0.015] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | stratum_assoc=neutral | 232 | pop:k10 | +0.088 [-0.006, +0.202] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | L19E006 | +0.009 [-0.011, +0.029] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | L20E000 | +0.015 [-0.016, +0.050] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | L19E002 | -0.002 [-0.011, +0.006] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | L21E001 | +0.002 [-0.006, +0.011] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | L18E001 | +0.004 [-0.004, +0.012] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=1 | 130 | pop:k10 | +0.069 [-0.011, +0.157] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | L19E006 | +0.026 [+0.002, +0.048] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | L20E000 | +0.026 [-0.012, +0.074] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | L19E002 | -0.002 [-0.009, +0.007] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | L21E001 | +0.004 [-0.003, +0.014] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | L18E001 | +0.007 [-0.002, +0.017] |
+| Mixtral-8x7B (BOS) | cp_vt_orig | order=2 | 126 | pop:k10 | +0.108 [-0.002, +0.238] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | L19E006 | +0.035 [+0.011, +0.071] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | L20E000 | +0.000 [-0.017, +0.037] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | L19E002 | +0.003 [-0.001, +0.009] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | L21E001 | +0.012 [-0.002, +0.028] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | L18E001 | +0.003 [-0.003, +0.012] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | stratum_assoc=neutral | 228 | pop:k10 | +0.042 [-0.067, +0.141] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | L19E006 | +0.035 [+0.012, +0.068] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | L20E000 | -0.004 [-0.030, +0.043] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | L19E002 | +0.001 [-0.003, +0.006] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | L21E001 | +0.013 [+0.001, +0.025] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | L18E001 | +0.001 [-0.005, +0.014] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=1 | 130 | pop:k10 | +0.051 [-0.061, +0.137] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | L19E006 | +0.035 [+0.010, +0.074] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | L20E000 | +0.003 [-0.008, +0.041] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | L19E002 | +0.004 [-0.001, +0.010] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | L21E001 | +0.013 [-0.003, +0.035] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | L18E001 | +0.005 [+0.000, +0.017] |
+| Mixtral-8x7B (BOS) | cp_vt_neu | order=2 | 126 | pop:k10 | +0.038 [-0.070, +0.147] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | L21E006 | +0.024 [+0.019, +0.029] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | L20E000 | +0.047 [+0.041, +0.052] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | L19E002 | -0.001 [-0.002, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | L21E001 | +0.001 [-0.000, +0.002] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | L18E001 | +0.001 [-0.000, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | names=False | 1188 | pop:k10 | +0.192 [+0.178, +0.206] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | L21E006 | +0.011 [+0.003, +0.021] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | L20E000 | +0.018 [+0.003, +0.034] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | L19E002 | +0.002 [-0.002, +0.007] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | L21E001 | +0.002 [-0.006, +0.010] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | L18E001 | +0.004 [-0.001, +0.008] |
+| Mixtral-8x7B (BOS) | cp_nat | names=True | 92 | pop:k10 | +0.086 [+0.046, +0.129] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | L21E006 | +0.057 [+0.007, +0.111] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | L20E000 | +0.035 [-0.010, +0.076] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | L19E002 | +0.000 [-0.010, +0.010] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | L21E001 | +0.007 [+0.003, +0.013] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | L18E001 | +0.012 [+0.004, +0.026] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=associative | 20 | pop:k10 | +0.258 [+0.180, +0.311] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | L21E006 | +0.021 [+0.015, +0.026] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | L20E000 | +0.041 [+0.034, +0.048] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | L19E002 | +0.000 [-0.002, +0.002] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | L21E001 | +0.001 [-0.001, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | L18E001 | +0.002 [-0.000, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=neutral | 592 | pop:k10 | +0.173 [+0.155, +0.192] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | L21E006 | +0.020 [+0.002, +0.039] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | L20E000 | +0.044 [+0.020, +0.068] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | L19E002 | -0.003 [-0.007, +0.002] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | L21E001 | -0.003 [-0.008, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | L18E001 | +0.002 [-0.003, +0.006] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=no_probe | 88 | pop:k10 | +0.126 [+0.079, +0.180] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | L21E006 | +0.014 [+0.005, +0.024] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | L20E000 | +0.053 [+0.041, +0.065] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | L19E002 | -0.000 [-0.004, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | L21E001 | +0.000 [-0.003, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | L18E001 | +0.001 [-0.003, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=one-sided | 204 | pop:k10 | +0.189 [+0.153, +0.224] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | L21E006 | +0.031 [+0.022, +0.040] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | L20E000 | +0.046 [+0.035, +0.057] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | L19E002 | -0.002 [-0.004, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | L21E001 | +0.001 [-0.001, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | L18E001 | +0.001 [-0.003, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_assoc=reverse | 376 | pop:k10 | +0.208 [+0.183, +0.233] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | L21E006 | +0.024 [+0.020, +0.029] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | L20E000 | +0.043 [+0.038, +0.049] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | L19E002 | -0.000 [-0.002, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | L21E001 | +0.001 [-0.000, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | L18E001 | +0.002 [+0.000, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=False | 1100 | pop:k10 | +0.188 [+0.174, +0.202] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | L21E006 | +0.015 [+0.005, +0.024] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | L20E000 | +0.053 [+0.038, +0.070] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | L19E002 | -0.004 [-0.008, +0.000] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | L21E001 | -0.001 [-0.004, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | L18E001 | -0.002 [-0.006, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | stratum_local_assoc=True | 180 | pop:k10 | +0.163 [+0.129, +0.196] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | L21E006 | +0.024 [+0.019, +0.028] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | L20E000 | +0.044 [+0.039, +0.050] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | L19E002 | -0.001 [-0.002, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | L21E001 | +0.002 [-0.000, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | L18E001 | +0.002 [-0.001, +0.004] |
+| Mixtral-8x7B (BOS) | cp_nat | order=1 | 640 | pop:k10 | +0.182 [+0.169, +0.196] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | L21E006 | +0.022 [+0.018, +0.027] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | L20E000 | +0.045 [+0.039, +0.050] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | L19E002 | -0.001 [-0.003, +0.001] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | L21E001 | +0.000 [-0.002, +0.002] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | L18E001 | +0.002 [-0.000, +0.003] |
+| Mixtral-8x7B (BOS) | cp_nat | order=2 | 640 | pop:k10 | +0.187 [+0.173, +0.201] |
+
+
+### Caveats
+
+- Item sets differ between conditions (each has its own margin filter and split); only the paired contrasts compare the same source items. Template conditions have about 27-28 validation seeds: their CIs are wide by design.
+- F is a ratio of means over items; small baselines (low-margin conditions) inflate F's variance.
+- bf16: rows of different pass compositions differ at the 0.1-logit level (null row of every table).
+- The selected expert and population ranking come from p5-data's discovery runs (STR single-expert patches); knockout tests necessity on held-out pairs only.
+- Figures: `results/figures/ext13ko_<proto>_<cond>.png` (targets vs same-layer controls; sets vs random), `results/figures/ext13ko_overview.png` (all conditions).
+
+
+## Direction 13e: Phase 5 writer vs computer experts
+
+**Summary.** Writer vs computer (Phase 4 Direction 11) per Phase-5 condition: the single-expert STR patch rescue T (p5-data's expert rows) split into the expert's direct write D (DLA of δ_e = c_e(clean) − c_e(corrupted twin), final norm frozen at the corrupted twin; one prefill pass per condition with `DiagSpec.contrib_dla`) and the indirect rest I = T − D; vocabulary projections of the targets' writes (`DiagSpec.contrib_final_vectors`). Qwen3-30B-A3B-Base (validation cases) — f1: L37E032 D/drop +0.001, D/T 0.01, δ_e rank of r 74082, L41E117 D/drop +0.004, D/T 1.14, δ_e rank of r 57729, top-10 D/T 0.57 | dir_f1: L44E116 D/drop +0.110, D/T 2.25, δ_e rank of r 6096, top-10 D/T 1.41 | dir_opt: L41E117 D/drop +0.086, D/T 0.99, δ_e rank of r 2532, top-10 D/T 1.19 | f2e: L43E036 D/drop +0.033, D/T 1.34, δ_e rank of r 30296, L41E117 D/drop -0.003, D/T 0.34, δ_e rank of r 71930, top-10 D/T 1.17 | vt_e2a_orig: L39E121 D/drop +0.057, D/T 0.80, δ_e rank of r 23868, L41E117 D/drop +0.045, D/T 1.56, δ_e rank of r 42242, top-10 D/T 0.93 | vt_e2a_neu: L42E123 D/drop +0.063, D/T 1.34, δ_e rank of r 21848, L41E117 D/drop +0.089, D/T 1.83, δ_e rank of r 42066, top-10 D/T 0.82 | vt_a2e_orig: L37E032 D/drop +0.000, D/T 0.01, δ_e rank of r 74682, top-10 D/T 0.11 | cp_vt_orig: L39E001 D/drop +0.056, D/T 1.38, δ_e rank of r 11028, L41E117 D/drop +0.005, D/T 2.16, δ_e rank of r 31578, top-10 D/T 1.50 | cp_vt_neu: L42E123 D/drop +0.029, D/T 2.02, δ_e rank of r 52554, L41E117 D/drop +0.003, D/T 1.01, δ_e rank of r 45285, top-10 D/T 1.24 | cp_nat: L41E117 D/drop +0.123, D/T 1.38, δ_e rank of r 103, top-10 D/T 1.18. Mixtral-8x7B (BOS) (validation cases) — f1: L20E001 D/drop +0.060, D/T 0.86, δ_e rank of r 1906, L20E000 D/drop +0.023, D/T 0.70, δ_e rank of r 3412, top-10 D/T 0.62 | dir_f1: L20E001 D/drop +0.082, D/T 0.84, δ_e rank of r 889, L20E000 D/drop +0.019, D/T 0.48, δ_e rank of r 43, top-10 D/T 0.70 | dir_opt: L20E000 D/drop +0.087, D/T 0.74, δ_e rank of r 114, top-10 D/T 0.83 | f2e: L19E004 D/drop +0.063, D/T 0.91, δ_e rank of r 2319, L20E000 D/drop +0.008, D/T 0.55, δ_e rank of r 579, top-10 D/T 1.01 | vt_e2a_orig: L19E006 D/drop +0.089, D/T 0.61, δ_e rank of r 1090, L20E000 D/drop +0.086, D/T 0.97, δ_e rank of r 667, top-10 D/T 0.76 | vt_e2a_neu: L19E006 D/drop +0.064, D/T 0.54, δ_e rank of r 1065, L20E000 D/drop +0.087, D/T 0.87, δ_e rank of r 520, top-10 D/T 0.73 | cp_vt_orig: L19E006 D/drop +0.102, D/T 0.68, δ_e rank of r 928, L20E000 D/drop +0.122, D/T 1.17, δ_e rank of r 863, top-10 D/T 0.78 | cp_vt_neu: L19E006 D/drop +0.061, D/T 0.64, δ_e rank of r 2330, L20E000 D/drop +0.050, D/T 1.01, δ_e rank of r 1786, top-10 D/T 0.72 | cp_nat: L21E006 D/drop +0.071, D/T 0.81, δ_e rank of r 68, L20E000 D/drop +0.098, D/T 0.68, δ_e rank of r 194, top-10 D/T 0.85.
+
+### What was run
+
+For each condition × model one prefill pass over both twins of every pair of the case sets (discovery, validation, replication) records, at the final position, every routed expert's DLA numerator (c_e ⊙ γ)·(W_U[r] − W_U[r']) and the final RMS (`DiagSpec.contrib_dla`), the contribution vectors of the experts of interest (targets + the condition's population top-10; `contrib_final_vectors`) and the final residual. For directed case (X clean, Y = twin corrupted) D = (cdla_X + cdla_Y) / rms_Y, since the twin's readout direction is the negative of X's; T comes from p5-data's single-expert patch rows of the same case (a different pass: (case, expert) pairs whose routing differs between the two passes are dropped; routing match in the band table). Statistics as `moetrace/ext11_writer.py` (cluster bootstrap over the condition's units). Vocabulary: projections ((v ⊙ γ) W_Uᵀ) / rms with the norm frozen at the corrupted twin (δ_e) or at the prompt (c_e); classes = the condition's own attribute words (trigger words; readout class of entity → attribute conditions), its entities (answers; readout class of attribute → entity conditions), Phase 3's trigger vocabulary, IOI names, CounterFact objects.
+
+
+### Part A. Total vs direct vs indirect, by expert
+
+| model | condition | expert | role | active cases | total T / drop | direct D / drop | direct share D/T | all-case T / drop |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | selected+pop1 | 250/256 | +0.109 [+0.092, +0.129] | +0.001 [-0.001, +0.003] | +0.01 [-0.01, +0.02] | 0.1071 |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | WG | 7/256 | +0.004 [-0.009, +0.014] | +0.004 [+0.002, +0.007] | +1.14 [-1.21, +nan] | 0.0001 |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | CF | 22/256 | +0.005 [-0.007, +0.020] | +0.018 [+0.001, +0.035] | +3.46 [-9.90, +nan] | 0.0005 |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | CF | 71/256 | +0.007 [+0.002, +0.013] | +0.000 [-0.002, +0.002] | +0.02 [-0.58, +0.34] | 0.002 |
+| Qwen3-30B-A3B-Base | f1 | L44E116 | pop2 | 98/256 | +0.067 [+0.045, +0.090] | +0.164 [+0.103, +0.242] | +2.44 [+1.92, +3.30] | 0.0286 |
+| Qwen3-30B-A3B-Base | f1 | L39E103 | pop3 | 115/256 | +0.053 [+0.042, +0.064] | +0.002 [-0.000, +0.004] | +0.04 [-0.01, +0.09] | 0.0212 |
+| Qwen3-30B-A3B-Base | f1 | L32E061 | pop4 | 150/256 | +0.010 [+0.004, +0.015] | -0.000 [-0.001, +0.000] | -0.04 [-0.11, +0.03] | 0.0054 |
+| Qwen3-30B-A3B-Base | f1 | L43E070 | pop5 | 79/256 | +0.046 [+0.027, +0.067] | +0.120 [+0.066, +0.184] | +2.61 [+1.95, +3.27] | 0.0153 |
+| Qwen3-30B-A3B-Base | f1 | L44E022 | pop6 | 106/256 | +0.015 [+0.007, +0.026] | +0.021 [+0.007, +0.036] | +1.37 [+0.69, +2.24] | 0.007 |
+| Qwen3-30B-A3B-Base | f1 | L36E009 | pop7 | 256/256 | +0.005 [+0.000, +0.010] | -0.001 [-0.002, +0.001] | -0.12 [-0.96, +0.19] | 0.0047 |
+| Qwen3-30B-A3B-Base | f1 | L33E122 | pop8 | 256/256 | +0.009 [+0.004, +0.013] | -0.000 [-0.001, +0.001] | -0.02 [-0.15, +0.10] | 0.0086 |
+| Qwen3-30B-A3B-Base | f1 | L42E102 | pop9 | 116/256 | +0.017 [+0.012, +0.022] | +0.003 [-0.001, +0.007] | +0.16 [-0.10, +0.36] | 0.0087 |
+| Qwen3-30B-A3B-Base | f1 | L35E090 | pop10 | 256/256 | +0.005 [+0.001, +0.010] | +0.000 [-0.000, +0.001] | +0.05 [-0.09, +0.41] | 0.0055 |
+| Qwen3-30B-A3B-Base | f1 | top-10 set | pop |  | +0.212 [+0.186, +0.239] | +0.122 [+0.082, +0.165] | +0.57 [+0.39, +0.77] |  |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | selected+pop1 | 153/180 | +0.049 [+0.037, +0.061] | +0.110 [+0.082, +0.140] | +2.25 [+1.93, +2.63] | 0.0405 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | WG | 0/180 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | CF | 15/180 | +0.008 [-0.005, +0.022] | +0.012 [+0.000, +0.026] | +1.59 [-3.85, +nan] | 0.0007 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | CF | 21/180 | +0.005 [-0.003, +0.014] | +0.005 [+0.002, +0.008] | +1.04 [-3.96, +nan] | 0.0007 |
+| Qwen3-30B-A3B-Base | dir_f1 | L37E032 | pop2 | 176/180 | +0.037 [+0.026, +0.049] | -0.000 [-0.001, +0.001] | -0.00 [-0.04, +0.04] | 0.0356 |
+| Qwen3-30B-A3B-Base | dir_f1 | L43E070 | pop3 | 95/180 | +0.054 [+0.035, +0.075] | +0.137 [+0.087, +0.191] | +2.53 [+2.13, +3.04] | 0.0288 |
+| Qwen3-30B-A3B-Base | dir_f1 | L40E037 | pop4 | 109/180 | +0.027 [+0.019, +0.035] | +0.026 [+0.020, +0.034] | +0.98 [+0.78, +1.31] | 0.0161 |
+| Qwen3-30B-A3B-Base | dir_f1 | L43E114 | pop5 | 127/180 | +0.011 [+0.005, +0.017] | +0.039 [+0.021, +0.062] | +3.72 [+2.31, +7.00] | 0.0073 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E062 | pop6 | 135/180 | +0.020 [+0.014, +0.027] | +0.027 [+0.021, +0.035] | +1.36 [+1.07, +1.82] | 0.0147 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E018 | pop7 | 170/180 | +0.016 [+0.011, +0.021] | +0.014 [+0.007, +0.022] | +0.88 [+0.56, +1.27] | 0.015 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E102 | pop8 | 170/180 | +0.012 [+0.008, +0.016] | +0.002 [+0.000, +0.004] | +0.18 [+0.00, +0.38] | 0.0116 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E022 | pop9 | 148/180 | +0.012 [+0.005, +0.018] | +0.033 [+0.017, +0.051] | +2.85 [+1.96, +4.34] | 0.0096 |
+| Qwen3-30B-A3B-Base | dir_f1 | L31E124 | pop10 | 70/180 | +0.035 [+0.024, +0.046] | +0.004 [+0.002, +0.007] | +0.12 [+0.05, +0.22] | 0.0137 |
+| Qwen3-30B-A3B-Base | dir_f1 | top-10 set | pop |  | +0.193 [+0.161, +0.224] | +0.271 [+0.220, +0.328] | +1.41 [+1.22, +1.61] |  |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | selected+WG+pop2 | 139/180 | +0.087 [+0.065, +0.111] | +0.086 [+0.063, +0.110] | +0.99 [+0.91, +1.08] | 0.0673 |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | CF | 2/180 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | CF | 1/180 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | dir_opt | L43E081 | pop1 | 180/180 | +0.066 [+0.051, +0.082] | +0.094 [+0.069, +0.124] | +1.43 [+1.28, +1.58] | 0.0659 |
+| Qwen3-30B-A3B-Base | dir_opt | L31E124 | pop3 | 110/180 | +0.092 [+0.061, +0.123] | +0.055 [+0.039, +0.071] | +0.60 [+0.49, +0.75] | 0.0575 |
+| Qwen3-30B-A3B-Base | dir_opt | L44E122 | pop4 | 153/180 | +0.063 [+0.050, +0.075] | +0.129 [+0.101, +0.159] | +2.06 [+1.87, +2.25] | 0.053 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E053 | pop5 | 178/180 | +0.049 [+0.039, +0.059] | +0.067 [+0.051, +0.084] | +1.36 [+1.21, +1.50] | 0.0486 |
+| Qwen3-30B-A3B-Base | dir_opt | L43E114 | pop6 | 142/180 | +0.044 [+0.033, +0.056] | +0.058 [+0.042, +0.075] | +1.30 [+1.14, +1.49] | 0.0349 |
+| Qwen3-30B-A3B-Base | dir_opt | L40E040 | pop7 | 180/180 | +0.037 [+0.028, +0.048] | +0.034 [+0.024, +0.045] | +0.92 [+0.75, +1.08] | 0.0373 |
+| Qwen3-30B-A3B-Base | dir_opt | L39E071 | pop8 | 132/180 | +0.056 [+0.044, +0.068] | +0.041 [+0.032, +0.051] | +0.74 [+0.64, +0.84] | 0.0423 |
+| Qwen3-30B-A3B-Base | dir_opt | L42E123 | pop9 | 159/180 | +0.021 [+0.013, +0.029] | +0.026 [+0.018, +0.035] | +1.24 [+1.03, +1.57] | 0.0182 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E062 | pop10 | 137/180 | +0.039 [+0.028, +0.052] | +0.047 [+0.035, +0.059] | +1.20 [+1.00, +1.42] | 0.0295 |
+| Qwen3-30B-A3B-Base | dir_opt | top-10 set | pop |  | +0.454 [+0.407, +0.504] | +0.539 [+0.482, +0.596] | +1.19 [+1.13, +1.25] |  |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | selected+pop3 | 63/64 | +0.025 [+0.015, +0.035] | +0.033 [+0.015, +0.055] | +1.34 [+0.82, +1.89] | 0.0243 |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | WG | 3/64 | -0.009 [-0.022, +0.019] | -0.003 [-0.007, +0.001] | +0.34 [+nan, +0.34] | -0.0005 |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | CF | 26/64 | +0.001 [-0.005, +0.006] | +0.004 [+0.002, +0.007] | +6.32 [-6.88, +nan] | 0.0002 |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | CF | 40/64 | +0.010 [+0.003, +0.018] | +0.005 [-0.001, +0.011] | +0.49 [-0.11, +1.25] | 0.0065 |
+| Qwen3-30B-A3B-Base | f2e | L37E107 | pop1 | 56/64 | +0.026 [+0.004, +0.052] | +0.000 [-0.004, +0.004] | +0.01 [-0.40, +0.14] | 0.0227 |
+| Qwen3-30B-A3B-Base | f2e | L44E116 | pop2 | 45/64 | +0.044 [+0.013, +0.075] | +0.093 [+0.032, +0.155] | +2.12 [+1.48, +3.54] | 0.0311 |
+| Qwen3-30B-A3B-Base | f2e | L42E055 | pop4 | 49/64 | +0.008 [-0.005, +0.025] | +0.028 [+0.004, +0.059] | +3.37 [-14.03, +31.35] | 0.0068 |
+| Qwen3-30B-A3B-Base | f2e | L36E120 | pop5 | 49/64 | -0.000 [-0.009, +0.008] | +0.001 [-0.005, +0.005] | -1.29 [-6.56, +8.74] | -0.0004 |
+| Qwen3-30B-A3B-Base | f2e | L42E102 | pop6 | 52/64 | +0.014 [+0.007, +0.020] | +0.003 [-0.006, +0.010] | +0.19 [-0.60, +0.77] | 0.0114 |
+| Qwen3-30B-A3B-Base | f2e | L44E022 | pop7 | 47/64 | +0.009 [+0.001, +0.017] | +0.008 [-0.007, +0.022] | +0.92 [-1.35, +3.18] | 0.0068 |
+| Qwen3-30B-A3B-Base | f2e | L37E055 | pop8 | 61/64 | +0.015 [+0.005, +0.025] | +0.000 [-0.002, +0.003] | +0.03 [-0.18, +0.29] | 0.014 |
+| Qwen3-30B-A3B-Base | f2e | L41E121 | pop9 | 35/64 | +0.029 [+0.010, +0.051] | +0.043 [+0.012, +0.082] | +1.46 [+0.76, +2.38] | 0.0163 |
+| Qwen3-30B-A3B-Base | f2e | L44E098 | pop10 | 1/64 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f2e | top-10 set | pop |  | +0.133 [+0.092, +0.171] | +0.155 [+0.094, +0.221] | +1.17 [+0.78, +1.60] |  |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | selected+pop2 | 182/256 | +0.072 [+0.016, +0.149] | +0.057 [+0.011, +0.120] | +0.80 [+0.53, +1.09] | 0.0501 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | WG | 119/256 | +0.029 [+0.002, +0.073] | +0.045 [+0.000, +0.129] | +1.56 [+0.07, +1.92] | 0.0126 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | CF | 58/256 | +0.060 [+0.006, +0.118] | +0.057 [-0.017, +0.129] | +0.96 [-2.92, +1.10] | 0.0144 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | CF | 19/256 | -0.000 [-0.009, +0.000] | -0.000 [-0.022, +0.002] | +0.75 [+nan, +nan] | -0.0 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E123 | pop1 | 254/256 | +0.067 [+0.029, +0.122] | +0.086 [+0.029, +0.169] | +1.27 [+0.86, +1.58] | 0.0668 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L45E092 | pop3 | 114/256 | +0.006 [-0.009, +0.024] | +0.013 [-0.007, +0.033] | +2.16 [-3.97, +7.37] | 0.0027 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E106 | pop4 | 240/256 | +0.027 [-0.001, +0.068] | +0.035 [+0.008, +0.070] | +1.28 [-0.92, +4.87] | 0.0246 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E017 | pop5 | 92/256 | +0.033 [+0.012, +0.050] | +0.036 [+0.008, +0.055] | +1.08 [+0.43, +2.02] | 0.0111 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L37E101 | pop6 | 255/256 | +0.025 [+0.011, +0.038] | +0.008 [-0.000, +0.015] | +0.31 [-0.02, +0.48] | 0.0246 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L22E035 | pop7 | 238/256 | +0.018 [-0.001, +0.038] | +0.006 [-0.004, +0.018] | +0.32 [-0.33, +2.22] | 0.0159 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E001 | pop8 | 218/256 | +0.037 [+0.016, +0.067] | +0.029 [+0.009, +0.055] | +0.78 [+0.53, +0.96] | 0.0312 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L36E087 | pop9 | 256/256 | +0.010 [-0.001, +0.023] | +0.006 [+0.001, +0.012] | +0.64 [-0.95, +3.41] | 0.0099 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L43E042 | pop10 | 83/256 | +0.004 [-0.003, +0.014] | +0.011 [+0.002, +0.029] | +2.62 [-8.46, +43.60] | 0.0014 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | top-10 set | pop |  | +0.238 [+0.148, +0.339] | +0.221 [+0.120, +0.344] | +0.93 [+0.75, +1.09] |  |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | selected+pop1 | 256/256 | +0.047 [+0.018, +0.087] | +0.063 [+0.022, +0.127] | +1.34 [+0.88, +1.94] | 0.0474 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | WG | 97/256 | +0.048 [-0.004, +0.136] | +0.089 [-0.005, +0.252] | +1.83 [+0.17, +5.50] | 0.0165 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | CF | 52/256 | +0.074 [-0.021, +0.135] | +0.070 [-0.031, +0.146] | +0.95 [-0.06, +5.92] | 0.019 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | CF | 23/256 | -0.009 [-0.009, -0.009] | +0.001 [+0.001, +0.001] | -0.11 [-0.11, -0.11] | -0.0011 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E121 | pop2 | 177/256 | +0.094 [+0.013, +0.205] | +0.079 [+0.014, +0.166] | +0.84 [+0.68, +1.94] | 0.0666 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L45E092 | pop3 | 97/256 | +0.014 [-0.011, +0.041] | +0.025 [-0.009, +0.051] | +1.79 [-5.93, +2.42] | 0.0054 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E044 | pop4 | 231/256 | -0.000 [-0.008, +0.005] | -0.000 [-0.008, +0.005] | +0.98 [-4.91, +7.98] | -0.0002 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L37E101 | pop5 | 256/256 | +0.019 [-0.004, +0.039] | +0.004 [-0.009, +0.017] | +0.22 [-2.02, +1.67] | 0.0187 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L22E035 | pop6 | 230/256 | +0.020 [+0.002, +0.045] | +0.012 [+0.000, +0.027] | +0.59 [-0.01, +1.43] | 0.0168 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L23E105 | pop7 | 237/256 | +0.024 [+0.005, +0.046] | -0.000 [-0.005, +0.004] | -0.01 [-0.26, +0.29] | 0.0218 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E001 | pop8 | 206/256 | +0.044 [+0.014, +0.096] | +0.031 [+0.009, +0.069] | +0.70 [+0.47, +0.97] | 0.0339 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L43E097 | pop9 | 156/256 | +0.013 [+0.005, +0.029] | +0.016 [+0.003, +0.042] | +1.19 [+0.38, +1.56] | 0.0078 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E074 | pop10 | 130/256 | +0.049 [-0.002, +0.103] | +0.050 [+0.015, +0.074] | +1.01 [-0.71, +4.05] | 0.0236 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | top-10 set | pop |  | +0.242 [+0.132, +0.351] | +0.200 [+0.109, +0.303] | +0.82 [+0.63, +1.10] |  |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | selected+pop1 | 74/74 | +0.049 [+0.046, +0.097] | +0.000 [-0.012, +0.001] | +0.01 [-0.20, +0.02] | 0.0489 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | WG | 0/74 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E069 | CF | 0/74 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | CF | 46/74 | +0.005 [-0.019, +0.007] | -0.000 [-0.011, +0.004] | -0.00 [-0.34, +0.69] | 0.0033 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L32E061 | pop2 | 73/74 | +0.001 [-0.003, +0.059] | -0.002 [-0.008, +0.002] | -1.36 [-2.53, +3.90] | 0.0014 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L39E103 | pop3 | 39/74 | +0.025 [+0.016, +0.087] | +0.002 [-0.004, +0.006] | +0.07 [-0.05, +0.14] | 0.013 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E031 | pop4 | 65/74 | -0.009 [-0.014, +0.041] | +0.001 [-0.001, +0.030] | -0.07 [-0.27, +1.99] | -0.0079 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L34E085 | pop5 | 68/74 | +0.018 [-0.021, +0.019] | +0.000 [+0.000, +0.006] | +0.01 [-0.44, +nan] | 0.0168 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L38E115 | pop6 | 54/74 | +0.024 [+0.016, +0.082] | -0.001 [-0.002, +0.001] | -0.04 [-0.06, +0.01] | 0.0168 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L35E090 | pop7 | 74/74 | +0.017 [+0.004, +0.036] | -0.000 [-0.001, +0.003] | -0.00 [-0.10, +0.10] | 0.0168 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L40E115 | pop8 | 74/74 | -0.007 [-0.018, +0.021] | +0.014 [-0.002, +0.016] | -2.20 [-3.81, +2.95] | -0.0065 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L36E065 | pop9 | 74/74 | -0.002 [-0.004, +0.020] | -0.000 [-0.004, +0.001] | +0.08 [+nan, +0.51] | -0.0023 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E112 | pop10 | 74/74 | +0.013 [+0.012, +0.031] | -0.001 [-0.002, +0.020] | -0.07 [-0.19, +0.66] | 0.013 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | top-10 set | pop |  | +0.110 [+0.086, +0.406] | +0.013 [+0.008, +0.048] | +0.11 [+0.02, +0.17] |  |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | selected+pop2 | 177/256 | +0.041 [+0.013, +0.063] | +0.056 [+0.010, +0.102] | +1.38 [+0.56, +1.90] | 0.0303 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | WG | 107/256 | +0.002 [-0.002, +0.005] | +0.005 [-0.001, +0.015] | +2.16 [-6.21, +22.58] | 0.001 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | CF | 97/256 | +0.013 [-0.000, +0.037] | +0.004 [-0.042, +0.049] | +0.32 [-22.85, +10.32] | 0.0041 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | CF | 54/256 | +0.010 [-0.003, +0.018] | -0.002 [-0.006, +0.007] | -0.17 [-0.84, +1.32] | 0.0017 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E123 | pop1 | 256/256 | +0.064 [+0.013, +0.124] | +0.133 [+0.022, +0.256] | +2.07 [+1.55, +2.49] | 0.0644 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E121 | pop3 | 202/256 | +0.043 [+0.011, +0.089] | +0.049 [+0.018, +0.098] | +1.14 [+0.78, +2.29] | 0.0348 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L37E101 | pop4 | 220/256 | +0.026 [-0.001, +0.061] | +0.020 [+0.004, +0.045] | +0.79 [-1.65, +3.16] | 0.023 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L22E035 | pop5 | 248/256 | +0.004 [-0.009, +0.022] | +0.005 [-0.002, +0.017] | +1.36 [-3.70, +6.27] | 0.0037 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E106 | pop6 | 249/256 | +0.040 [+0.008, +0.073] | +0.057 [+0.014, +0.096] | +1.42 [+1.08, +2.54] | 0.0386 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L45E092 | pop7 | 102/256 | +0.015 [-0.009, +0.035] | +0.014 [-0.036, +0.048] | +0.93 [-6.46, +7.94] | 0.0072 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L40E075 | pop8 | 202/256 | +0.003 [-0.002, +0.008] | +0.009 [+0.004, +0.015] | +2.63 [-10.51, +18.77] | 0.0028 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E122 | pop9 | 127/256 | -0.001 [-0.019, +0.015] | +0.014 [+0.002, +0.026] | -17.30 [-22.78, +21.71] | -0.0004 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L37E002 | pop10 | 84/256 | +0.010 [-0.003, +0.021] | -0.003 [-0.011, +0.005] | -0.32 [-1.94, +0.67] | 0.0043 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | top-10 set | pop |  | +0.209 [+0.124, +0.283] | +0.313 [+0.162, +0.468] | +1.50 [+1.14, +1.82] |  |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | selected+pop1 | 256/256 | +0.014 [+0.000, +0.033] | +0.029 [+0.002, +0.068] | +2.02 [+0.69, +3.97] | 0.0142 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | WG | 137/256 | +0.003 [-0.007, +0.009] | +0.003 [-0.001, +0.006] | +1.01 [-4.99, +6.29] | 0.0019 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | CF | 62/256 | +0.004 [+0.000, +0.018] | +0.002 [-0.012, +0.005] | +0.42 [-0.64, +nan] | 0.0008 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | CF | 34/256 | +0.006 [+0.005, +0.009] | +0.002 [-0.005, +0.006] | +0.32 [-0.53, +0.89] | 0.0007 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E121 | pop2 | 212/256 | +0.037 [+0.006, +0.090] | +0.030 [+0.003, +0.079] | +0.82 [+0.23, +2.22] | 0.0325 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L37E101 | pop3 | 233/256 | +0.013 [-0.002, +0.033] | +0.008 [+0.003, +0.013] | +0.60 [-4.95, +4.95] | 0.0123 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E106 | pop4 | 253/256 | +0.036 [-0.003, +0.085] | +0.044 [-0.001, +0.096] | +1.23 [-7.92, +9.18] | 0.0359 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E001 | pop5 | 174/256 | +0.053 [+0.009, +0.114] | +0.056 [+0.012, +0.121] | +1.07 [+0.65, +2.21] | 0.0406 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L45E092 | pop6 | 100/256 | +0.028 [+0.005, +0.045] | +0.044 [+0.032, +0.051] | +1.60 [+1.15, +7.16] | 0.0135 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L22E035 | pop7 | 254/256 | +0.003 [-0.010, +0.018] | +0.006 [-0.002, +0.021] | +2.06 [-9.65, +8.73] | 0.003 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E112 | pop8 | 133/256 | +0.036 [+0.002, +0.088] | +0.080 [+0.003, +0.204] | +2.23 [+1.38, +2.49] | 0.0195 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L25E002 | pop9 | 158/256 | +0.009 [-0.006, +0.022] | -0.002 [-0.013, +0.003] | -0.20 [-7.22, +3.05] | 0.0064 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E016 | pop10 | 131/256 | +0.009 [+0.003, +0.019] | +0.010 [-0.001, +0.032] | +1.15 [-0.29, +1.84] | 0.0046 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | top-10 set | pop |  | +0.183 [+0.090, +0.266] | +0.226 [+0.150, +0.308] | +1.24 [+1.06, +1.92] |  |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | selected+WG+pop2 | 251/280 | +0.089 [+0.075, +0.104] | +0.123 [+0.101, +0.149] | +1.38 [+1.26, +1.51] | 0.081 |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | CF | 8/280 | +0.018 [+0.007, +0.041] | +0.031 [-0.001, +0.094] | +1.69 [-0.13, +2.30] | 0.0006 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | CF | 4/280 | +0.218 [+0.218, +0.218] | +0.443 [+0.443, +0.443] | +2.03 [+2.03, +2.03] | 0.0024 |
+| Qwen3-30B-A3B-Base | cp_nat | L43E081 | pop1 | 278/280 | +0.094 [+0.077, +0.111] | +0.173 [+0.139, +0.209] | +1.85 [+1.69, +1.99] | 0.0932 |
+| Qwen3-30B-A3B-Base | cp_nat | L34E119 | pop3 | 238/280 | +0.056 [+0.039, +0.074] | +0.040 [+0.031, +0.049] | +0.72 [+0.58, +0.92] | 0.0466 |
+| Qwen3-30B-A3B-Base | cp_nat | L44E122 | pop4 | 248/280 | +0.036 [+0.028, +0.047] | +0.076 [+0.053, +0.105] | +2.07 [+1.68, +2.57] | 0.0319 |
+| Qwen3-30B-A3B-Base | cp_nat | L41E053 | pop5 | 268/280 | +0.029 [+0.025, +0.034] | +0.028 [+0.022, +0.036] | +0.96 [+0.80, +1.15] | 0.0279 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E073 | pop6 | 276/280 | +0.025 [+0.019, +0.031] | +0.014 [+0.009, +0.019] | +0.57 [+0.41, +0.74] | 0.0246 |
+| Qwen3-30B-A3B-Base | cp_nat | L38E021 | pop7 | 239/280 | +0.054 [+0.044, +0.064] | +0.021 [+0.014, +0.027] | +0.38 [+0.27, +0.51] | 0.044 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E123 | pop8 | 268/280 | +0.017 [+0.012, +0.023] | +0.017 [+0.012, +0.023] | +1.00 [+0.71, +1.37] | 0.0165 |
+| Qwen3-30B-A3B-Base | cp_nat | L39E007 | pop9 | 240/280 | +0.037 [+0.028, +0.048] | +0.030 [+0.019, +0.042] | +0.80 [+0.62, +0.98] | 0.0312 |
+| Qwen3-30B-A3B-Base | cp_nat | L39E071 | pop10 | 182/280 | +0.056 [+0.046, +0.067] | +0.045 [+0.037, +0.054] | +0.80 [+0.70, +0.92] | 0.0356 |
+| Qwen3-30B-A3B-Base | cp_nat | top-10 set | pop |  | +0.432 [+0.379, +0.485] | +0.512 [+0.448, +0.578] | +1.18 [+1.09, +1.28] |  |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | selected+pop2 | 149/202 | +0.070 [+0.057, +0.084] | +0.060 [+0.047, +0.075] | +0.86 [+0.72, +1.02] | 0.0523 |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | WG | 38/202 | +0.032 [+0.014, +0.050] | +0.023 [+0.005, +0.041] | +0.70 [+0.24, +1.03] | 0.0064 |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | CF | 7/202 | +0.023 [-0.010, +0.059] | +0.008 [-0.003, +0.018] | +0.33 [-1.19, +nan] | 0.0007 |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | CF | 71/202 | +0.026 [+0.018, +0.035] | +0.029 [+0.018, +0.042] | +1.11 [+0.73, +1.72] | 0.0088 |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | CF | 24/202 | +0.044 [+0.018, +0.081] | -0.006 [-0.017, +0.005] | -0.13 [-0.58, +0.09] | 0.0046 |
+| Mixtral-8x7B (BOS) | f1 | L19E004 | pop1 | 181/202 | +0.085 [+0.072, +0.100] | +0.057 [+0.046, +0.069] | +0.67 [+0.57, +0.79] | 0.0781 |
+| Mixtral-8x7B (BOS) | f1 | L20E005 | pop3 | 168/202 | +0.062 [+0.049, +0.076] | +0.057 [+0.042, +0.073] | +0.92 [+0.74, +1.11] | 0.0523 |
+| Mixtral-8x7B (BOS) | f1 | L15E006 | pop4 | 202/202 | +0.056 [+0.043, +0.070] | +0.004 [+0.002, +0.006] | +0.07 [+0.03, +0.11] | 0.0557 |
+| Mixtral-8x7B (BOS) | f1 | L17E005 | pop5 | 177/202 | +0.049 [+0.039, +0.059] | +0.006 [+0.002, +0.010] | +0.13 [+0.05, +0.21] | 0.0436 |
+| Mixtral-8x7B (BOS) | f1 | L17E007 | pop6 | 195/202 | +0.055 [+0.044, +0.067] | +0.004 [+0.001, +0.007] | +0.07 [+0.01, +0.13] | 0.0527 |
+| Mixtral-8x7B (BOS) | f1 | L21E000 | pop7 | 191/202 | +0.044 [+0.035, +0.054] | +0.062 [+0.049, +0.074] | +1.39 [+1.15, +1.70] | 0.0422 |
+| Mixtral-8x7B (BOS) | f1 | L18E002 | pop8 | 178/202 | +0.049 [+0.038, +0.059] | +0.017 [+0.012, +0.023] | +0.36 [+0.26, +0.47] | 0.0436 |
+| Mixtral-8x7B (BOS) | f1 | L24E002 | pop9 | 157/202 | +0.042 [+0.030, +0.055] | +0.081 [+0.053, +0.112] | +1.92 [+1.56, +2.32] | 0.0331 |
+| Mixtral-8x7B (BOS) | f1 | L18E000 | pop10 | 187/202 | +0.043 [+0.034, +0.052] | +0.010 [+0.005, +0.014] | +0.22 [+0.12, +0.35] | 0.0399 |
+| Mixtral-8x7B (BOS) | f1 | top-10 set | pop |  | +0.494 [+0.437, +0.552] | +0.306 [+0.263, +0.351] | +0.62 [+0.55, +0.70] |  |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | selected+pop2 | 163/188 | +0.097 [+0.081, +0.113] | +0.082 [+0.068, +0.096] | +0.84 [+0.73, +0.99] | 0.0843 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | WG | 14/188 | +0.040 [+0.028, +0.054] | +0.019 [-0.002, +0.038] | +0.48 [-0.06, +1.11] | 0.0026 |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E002 | CF | 2/188 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | CF | 66/188 | +0.037 [+0.026, +0.049] | +0.043 [+0.024, +0.062] | +1.15 [+0.68, +1.88] | 0.0129 |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E001 | CF | 2/188 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E004 | pop1 | 186/188 | +0.093 [+0.083, +0.104] | +0.061 [+0.050, +0.073] | +0.65 [+0.56, +0.77] | 0.0926 |
+| Mixtral-8x7B (BOS) | dir_f1 | L23E000 | pop3 | 151/188 | +0.057 [+0.047, +0.068] | +0.075 [+0.057, +0.095] | +1.31 [+1.08, +1.56] | 0.0455 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E005 | pop4 | 176/188 | +0.066 [+0.053, +0.078] | +0.051 [+0.038, +0.064] | +0.78 [+0.65, +0.92] | 0.0612 |
+| Mixtral-8x7B (BOS) | dir_f1 | L16E007 | pop5 | 179/188 | +0.059 [+0.050, +0.069] | +0.007 [+0.004, +0.011] | +0.12 [+0.06, +0.18] | 0.0565 |
+| Mixtral-8x7B (BOS) | dir_f1 | L24E002 | pop6 | 163/188 | +0.057 [+0.045, +0.071] | +0.098 [+0.068, +0.128] | +1.70 [+1.41, +1.96] | 0.0499 |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E000 | pop7 | 180/188 | +0.059 [+0.049, +0.069] | +0.075 [+0.060, +0.093] | +1.28 [+1.09, +1.49] | 0.0561 |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E000 | pop8 | 186/188 | +0.050 [+0.042, +0.058] | +0.012 [+0.008, +0.016] | +0.24 [+0.16, +0.33] | 0.0499 |
+| Mixtral-8x7B (BOS) | dir_f1 | L17E005 | pop9 | 183/188 | +0.058 [+0.048, +0.068] | +0.007 [+0.003, +0.011] | +0.11 [+0.05, +0.19] | 0.0565 |
+| Mixtral-8x7B (BOS) | dir_f1 | L15E006 | pop10 | 188/188 | +0.053 [+0.043, +0.064] | +0.002 [-0.000, +0.004] | +0.03 [-0.00, +0.07] | 0.0531 |
+| Mixtral-8x7B (BOS) | dir_f1 | top-10 set | pop |  | +0.606 [+0.558, +0.651] | +0.423 [+0.376, +0.473] | +0.70 [+0.64, +0.77] |  |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | selected+WG+pop1 | 185/188 | +0.118 [+0.108, +0.130] | +0.087 [+0.080, +0.095] | +0.74 [+0.67, +0.81] | 0.117 |
+| Mixtral-8x7B (BOS) | dir_opt | L19E002 | CF | 1/188 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | CF | 4/188 | +0.051 [+0.005, +0.132] | +0.039 [-0.000, +0.108] | +0.77 [-0.01, +0.82] | 0.0012 |
+| Mixtral-8x7B (BOS) | dir_opt | L18E001 | CF | 0/188 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | dir_opt | L19E006 | pop2 | 184/188 | +0.102 [+0.093, +0.111] | +0.054 [+0.049, +0.060] | +0.53 [+0.48, +0.59] | 0.1002 |
+| Mixtral-8x7B (BOS) | dir_opt | L21E006 | pop3 | 181/188 | +0.095 [+0.086, +0.104] | +0.058 [+0.050, +0.067] | +0.61 [+0.55, +0.67] | 0.092 |
+| Mixtral-8x7B (BOS) | dir_opt | L26E002 | pop4 | 182/188 | +0.097 [+0.084, +0.110] | +0.145 [+0.123, +0.167] | +1.50 [+1.43, +1.57] | 0.0941 |
+| Mixtral-8x7B (BOS) | dir_opt | L18E005 | pop5 | 172/188 | +0.080 [+0.066, +0.093] | +0.034 [+0.028, +0.039] | +0.42 [+0.39, +0.46] | 0.0728 |
+| Mixtral-8x7B (BOS) | dir_opt | L22E005 | pop6 | 97/188 | +0.127 [+0.108, +0.144] | +0.218 [+0.185, +0.248] | +1.72 [+1.62, +1.83] | 0.0703 |
+| Mixtral-8x7B (BOS) | dir_opt | L13E005 | pop7 | 184/188 | +0.047 [+0.034, +0.060] | +0.018 [+0.013, +0.022] | +0.38 [+0.33, +0.43] | 0.0457 |
+| Mixtral-8x7B (BOS) | dir_opt | L24E002 | pop8 | 129/188 | +0.055 [+0.042, +0.068] | +0.054 [+0.040, +0.067] | +0.98 [+0.88, +1.08] | 0.0369 |
+| Mixtral-8x7B (BOS) | dir_opt | L21E004 | pop9 | 114/188 | +0.043 [+0.033, +0.054] | +0.030 [+0.022, +0.037] | +0.69 [+0.61, +0.78] | 0.026 |
+| Mixtral-8x7B (BOS) | dir_opt | L16E007 | pop10 | 181/188 | +0.028 [+0.020, +0.036] | +0.007 [+0.004, +0.010] | +0.25 [+0.17, +0.33] | 0.027 |
+| Mixtral-8x7B (BOS) | dir_opt | top-10 set | pop |  | +0.682 [+0.635, +0.727] | +0.566 [+0.508, +0.622] | +0.83 [+0.78, +0.88] |  |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | selected+pop1 | 36/36 | +0.070 [+0.047, +0.092] | +0.063 [+0.039, +0.089] | +0.91 [+0.62, +1.27] | 0.0697 |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | WG | 10/36 | +0.015 [+0.005, +0.027] | +0.008 [-0.009, +0.032] | +0.55 [-1.23, +1.39] | 0.004 |
+| Mixtral-8x7B (BOS) | f2e | L19E002 | CF | 0/36 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | CF | 14/36 | +0.039 [+0.021, +0.053] | +0.035 [-0.001, +0.064] | +0.90 [-0.04, +1.29] | 0.0179 |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | CF | 4/36 | +0.049 [+0.023, +0.060] | +0.005 [+0.002, +0.010] | +0.10 [+0.04, +0.44] | 0.0065 |
+| Mixtral-8x7B (BOS) | f2e | L17E005 | pop2 | 34/36 | +0.030 [+0.022, +0.038] | +0.008 [+0.002, +0.015] | +0.26 [+0.08, +0.44] | 0.0279 |
+| Mixtral-8x7B (BOS) | f2e | L20E005 | pop3 | 25/36 | +0.048 [+0.030, +0.066] | +0.045 [+0.019, +0.076] | +0.94 [+0.51, +1.47] | 0.0353 |
+| Mixtral-8x7B (BOS) | f2e | L21E000 | pop4 | 30/36 | +0.051 [+0.027, +0.083] | +0.080 [+0.049, +0.115] | +1.57 [+1.19, +2.32] | 0.0393 |
+| Mixtral-8x7B (BOS) | f2e | L20E001 | pop5 | 27/36 | +0.031 [+0.021, +0.039] | +0.040 [+0.024, +0.054] | +1.28 [+0.87, +1.72] | 0.0224 |
+| Mixtral-8x7B (BOS) | f2e | L23E007 | pop6 | 29/36 | +0.037 [+0.025, +0.047] | +0.059 [+0.033, +0.081] | +1.60 [+1.17, +1.98] | 0.0294 |
+| Mixtral-8x7B (BOS) | f2e | L18E002 | pop7 | 32/36 | +0.034 [+0.019, +0.049] | +0.028 [+0.016, +0.041] | +0.81 [+0.49, +1.32] | 0.0299 |
+| Mixtral-8x7B (BOS) | f2e | L24E002 | pop8 | 28/36 | +0.034 [+0.013, +0.055] | +0.057 [+0.009, +0.101] | +1.68 [+0.54, +2.79] | 0.0259 |
+| Mixtral-8x7B (BOS) | f2e | L22E000 | pop9 | 23/36 | +0.024 [+0.014, +0.037] | +0.037 [+0.019, +0.061] | +1.52 [+1.06, +2.15] | 0.0159 |
+| Mixtral-8x7B (BOS) | f2e | L17E001 | pop10 | 13/36 | +0.099 [+0.014, +0.184] | -0.001 [-0.011, +0.009] | -0.01 [-0.06, +0.49] | 0.0328 |
+| Mixtral-8x7B (BOS) | f2e | top-10 set | pop |  | +0.328 [+0.274, +0.385] | +0.332 [+0.231, +0.431] | +1.01 [+0.75, +1.29] |  |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | selected+pop1 | 240/256 | +0.144 [+0.103, +0.182] | +0.089 [+0.058, +0.120] | +0.61 [+0.46, +0.74] | 0.1347 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | WG+pop2 | 238/256 | +0.088 [+0.047, +0.133] | +0.086 [+0.046, +0.128] | +0.97 [+0.78, +1.19] | 0.0819 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | CF | 47/256 | +0.034 [+0.020, +0.049] | +0.024 [+0.010, +0.039] | +0.71 [+0.49, +0.87] | 0.0078 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | CF | 67/256 | +0.054 [+0.021, +0.083] | +0.044 [+0.010, +0.077] | +0.82 [+0.44, +0.97] | 0.0147 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | CF | 19/256 | +0.044 [+0.010, +0.051] | +0.023 [-0.001, +0.029] | +0.54 [-0.12, +0.56] | 0.0018 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E003 | pop3 | 145/256 | +0.079 [+0.053, +0.107] | +0.083 [+0.050, +0.122] | +1.05 [+0.82, +1.28] | 0.0463 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L25E002 | pop4 | 193/256 | +0.022 [+0.006, +0.043] | +0.031 [+0.014, +0.058] | +1.43 [+0.95, +2.89] | 0.0167 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L17E007 | pop5 | 159/256 | +0.032 [+0.018, +0.053] | +0.013 [+0.007, +0.019] | +0.39 [+0.21, +0.66] | 0.0205 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L14E007 | pop6 | 207/256 | +0.038 [+0.021, +0.057] | +0.009 [+0.005, +0.013] | +0.24 [+0.13, +0.46] | 0.0327 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E006 | pop7 | 130/256 | +0.041 [+0.032, +0.051] | +0.006 [-0.003, +0.013] | +0.16 [-0.08, +0.33] | 0.0231 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L24E004 | pop8 | 120/256 | +0.030 [+0.019, +0.045] | +0.030 [+0.020, +0.041] | +0.99 [+0.77, +1.46] | 0.0138 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L22E000 | pop9 | 193/256 | +0.053 [+0.036, +0.076] | +0.049 [+0.029, +0.074] | +0.92 [+0.76, +1.08] | 0.0383 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L23E000 | pop10 | 122/256 | +0.066 [+0.036, +0.101] | +0.061 [+0.025, +0.103] | +0.92 [+0.60, +1.16] | 0.0326 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | top-10 set | pop |  | +0.440 [+0.327, +0.543] | +0.333 [+0.243, +0.421] | +0.76 [+0.66, +0.85] |  |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | selected+pop1 | 232/256 | +0.119 [+0.074, +0.164] | +0.064 [+0.040, +0.091] | +0.54 [+0.41, +0.71] | 0.1047 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | WG+pop3 | 220/256 | +0.100 [+0.050, +0.160] | +0.087 [+0.046, +0.142] | +0.87 [+0.77, +1.01] | 0.0857 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | CF | 16/256 | +0.037 [-0.062, +0.042] | +0.031 [-0.018, +0.040] | +0.82 [+0.29, +1.00] | 0.0029 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | CF | 91/256 | +0.050 [+0.020, +0.071] | +0.046 [+0.011, +0.078] | +0.91 [+0.51, +1.10] | 0.0176 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | CF | 28/256 | +0.044 [+0.000, +0.078] | +0.025 [-0.001, +0.045] | +0.56 [+nan, +0.57] | 0.0027 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E003 | pop2 | 147/256 | +0.059 [+0.021, +0.090] | +0.048 [+0.025, +0.064] | +0.81 [+0.67, +1.44] | 0.0312 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L23E000 | pop4 | 118/256 | +0.052 [+0.034, +0.066] | +0.041 [+0.009, +0.073] | +0.78 [+0.20, +1.17] | 0.0267 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L25E002 | pop5 | 197/256 | +0.032 [+0.009, +0.071] | +0.051 [+0.015, +0.119] | +1.62 [+1.17, +1.96] | 0.0241 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L14E007 | pop6 | 190/256 | +0.029 [+0.010, +0.050] | +0.011 [+0.005, +0.019] | +0.38 [+0.20, +1.22] | 0.0239 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E006 | pop7 | 116/256 | +0.035 [+0.023, +0.048] | +0.007 [+0.002, +0.014] | +0.19 [+0.04, +0.40] | 0.0171 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L17E007 | pop8 | 134/256 | +0.040 [+0.023, +0.070] | +0.013 [+0.006, +0.024] | +0.33 [+0.16, +0.57] | 0.0205 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L27E005 | pop9 | 151/256 | +0.005 [-0.024, +0.055] | +0.007 [-0.070, +0.125] | +1.41 [-0.50, +8.62] | 0.0028 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E005 | pop10 | 100/256 | +0.077 [+0.028, +0.144] | +0.078 [+0.021, +0.155] | +1.02 [+0.78, +1.11] | 0.0301 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | top-10 set | pop |  | +0.367 [+0.238, +0.514] | +0.269 [+0.145, +0.420] | +0.73 [+0.56, +0.90] |  |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | selected+pop1 | 228/256 | +0.151 [+0.096, +0.195] | +0.102 [+0.062, +0.147] | +0.68 [+0.47, +0.89] | 0.1408 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | WG+pop4 | 200/256 | +0.104 [+0.051, +0.174] | +0.122 [+0.062, +0.203] | +1.17 [+1.02, +1.47] | 0.0895 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | CF | 14/256 | +0.050 [+0.050, +0.050] | +0.041 [+0.041, +0.041] | +0.82 [+0.82, +0.82] | 0.0037 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | CF | 83/256 | +0.073 [+0.047, +0.100] | +0.075 [+0.030, +0.132] | +1.03 [+0.61, +1.38] | 0.0174 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E001 | CF | 0/256 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E003 | pop2 | 109/256 | +0.070 [+0.052, +0.097] | +0.067 [+0.053, +0.098] | +0.96 [+0.70, +1.37] | 0.0308 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L14E007 | pop3 | 215/256 | +0.054 [+0.034, +0.081] | +0.009 [+0.001, +0.017] | +0.17 [+0.01, +0.29] | 0.0489 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E006 | pop5 | 136/256 | +0.052 [+0.035, +0.060] | +0.019 [+0.009, +0.026] | +0.36 [+0.17, +0.60] | 0.0295 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L23E007 | pop6 | 142/256 | +0.006 [-0.024, +0.028] | -0.004 [-0.055, +0.029] | -0.67 [-12.18, +12.19] | 0.0033 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E004 | pop7 | 144/256 | +0.047 [+0.015, +0.076] | +0.040 [+0.018, +0.061] | +0.85 [+0.69, +1.61] | 0.0287 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E005 | pop8 | 120/256 | +0.061 [+0.036, +0.096] | +0.120 [+0.058, +0.188] | +1.96 [+1.43, +2.78] | 0.0211 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L17E007 | pop9 | 136/256 | +0.060 [+0.030, +0.094] | +0.019 [+0.014, +0.028] | +0.32 [+0.16, +0.66] | 0.0357 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L23E000 | pop10 | 128/256 | +0.059 [+0.049, +0.068] | +0.067 [+0.013, +0.145] | +1.14 [+0.23, +2.24] | 0.0264 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | top-10 set | pop |  | +0.455 [+0.332, +0.571] | +0.354 [+0.265, +0.453] | +0.78 [+0.62, +1.06] |  |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | selected+pop2 | 178/256 | +0.096 [+0.060, +0.181] | +0.061 [+0.039, +0.173] | +0.64 [+0.57, +0.99] | 0.072 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | WG+pop9 | 174/256 | +0.050 [+0.027, +0.187] | +0.050 [+0.016, +0.221] | +1.01 [+0.61, +1.25] | 0.0372 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | CF | 4/256 | +0.038 [+0.022, +0.045] | +0.028 [+0.004, +0.038] | +0.73 [+0.19, +0.84] | 0.0005 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | CF | 99/256 | +0.069 [+0.042, +0.075] | +0.043 [+0.026, +0.088] | +0.62 [+0.58, +1.32] | 0.0227 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E001 | CF | 0/256 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E003 | pop1 | 84/256 | +0.093 [+0.050, +0.108] | +0.076 [+0.058, +0.105] | +0.82 [+0.80, +1.16] | 0.027 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E005 | pop3 | 164/256 | +0.035 [+0.025, +0.088] | +0.058 [+0.028, +0.125] | +1.65 [+1.14, +1.95] | 0.0186 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L14E007 | pop4 | 227/256 | +0.034 [+0.010, +0.073] | +0.012 [-0.000, +0.023] | +0.35 [+0.04, +0.48] | 0.0306 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L23E000 | pop5 | 164/256 | +0.053 [+0.028, +0.054] | +0.016 [-0.025, +0.043] | +0.31 [-0.47, +1.49] | 0.037 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E004 | pop6 | 113/256 | +0.081 [+0.018, +0.095] | +0.053 [-0.010, +0.066] | +0.65 [-0.52, +0.78] | 0.0429 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L13E001 | pop7 | 0/256 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L23E007 | pop8 | 165/256 | +0.031 [-0.014, +0.041] | +0.033 [-0.027, +0.040] | +1.05 [+0.70, +2.30] | 0.0215 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E006 | pop10 | 94/256 | +0.033 [+0.023, +0.092] | +0.013 [+0.009, +0.029] | +0.38 [+0.30, +0.42] | 0.0102 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | top-10 set | pop |  | +0.297 [+0.127, +0.461] | +0.213 [+0.118, +0.328] | +0.72 [+0.62, +0.96] |  |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | selected+pop3 | 370/408 | +0.088 [+0.080, +0.097] | +0.071 [+0.063, +0.080] | +0.81 [+0.75, +0.87] | 0.0791 |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | WG+pop1 | 396/408 | +0.145 [+0.134, +0.156] | +0.098 [+0.089, +0.108] | +0.68 [+0.62, +0.75] | 0.1397 |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | CF | 7/408 | +0.022 [+0.000, +0.041] | +0.013 [-0.002, +0.024] | +0.57 [+nan, +0.59] | 0.0005 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | CF | 12/408 | +0.015 [+0.015, +0.016] | +0.029 [+0.016, +0.048] | +1.88 [+1.05, +2.94] | 0.0006 |
+| Mixtral-8x7B (BOS) | cp_nat | L18E001 | CF | 0/408 | n/a | n/a | n/a |  |
+| Mixtral-8x7B (BOS) | cp_nat | L19E006 | pop2 | 407/408 | +0.122 [+0.114, +0.129] | +0.058 [+0.052, +0.065] | +0.48 [+0.43, +0.53] | 0.1217 |
+| Mixtral-8x7B (BOS) | cp_nat | L26E002 | pop4 | 385/408 | +0.078 [+0.069, +0.088] | +0.136 [+0.118, +0.155] | +1.74 [+1.65, +1.84] | 0.0735 |
+| Mixtral-8x7B (BOS) | cp_nat | L16E007 | pop5 | 398/408 | +0.065 [+0.056, +0.074] | +0.015 [+0.013, +0.018] | +0.23 [+0.20, +0.27] | 0.063 |
+| Mixtral-8x7B (BOS) | cp_nat | L18E005 | pop6 | 382/408 | +0.050 [+0.041, +0.061] | +0.024 [+0.019, +0.030] | +0.48 [+0.44, +0.53] | 0.0469 |
+| Mixtral-8x7B (BOS) | cp_nat | L24E002 | pop7 | 363/408 | +0.075 [+0.063, +0.086] | +0.091 [+0.076, +0.106] | +1.22 [+1.15, +1.31] | 0.066 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E004 | pop8 | 311/408 | +0.083 [+0.070, +0.096] | +0.070 [+0.060, +0.081] | +0.84 [+0.78, +0.92] | 0.0628 |
+| Mixtral-8x7B (BOS) | cp_nat | L22E005 | pop9 | 176/408 | +0.073 [+0.051, +0.095] | +0.139 [+0.093, +0.184] | +1.91 [+1.71, +2.06] | 0.0347 |
+| Mixtral-8x7B (BOS) | cp_nat | L22E000 | pop10 | 319/408 | +0.056 [+0.050, +0.061] | +0.050 [+0.042, +0.058] | +0.90 [+0.80, +1.00] | 0.0417 |
+| Mixtral-8x7B (BOS) | cp_nat | top-10 set | pop |  | +0.729 [+0.687, +0.769] | +0.620 [+0.577, +0.661] | +0.85 [+0.80, +0.90] |  |
+
+
+### Part A. Summed writes by depth band
+
+| model | condition | routing match | first half: T / D / share | L/2..L-9: T / D / share | L-8..L-5: T / D / share | last 4: T / D / share | r(D, T) all |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | 0.9768 | -0.086 / -0.000 / 0.0 | +0.266 / +0.014 / 0.05 | +0.139 / +0.205 / 1.47 | -0.393 / -0.444 / 1.13 | 0.425 |
+| Qwen3-30B-A3B-Base | dir_f1 | 0.9688 | +0.245 / -0.002 / -0.01 | +0.265 / +0.041 / 0.16 | +0.271 / +0.370 / 1.37 | -0.443 / -0.481 / 1.09 | 0.513 |
+| Qwen3-30B-A3B-Base | dir_opt | 0.9825 | +0.054 / +0.043 / 0.8 | +0.561 / +0.308 / 0.55 | +0.517 / +0.579 / 1.12 | -0.042 / -0.015 / 0.35 | 0.499 |
+| Qwen3-30B-A3B-Base | f2e | 0.9721 | +0.099 / +0.005 / 0.05 | +0.262 / +0.088 / 0.34 | +0.227 / +0.289 / 1.28 | -0.345 / -0.388 / 1.13 | 0.443 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | 0.9847 | +0.038 / +0.042 / 1.1 | +0.460 / +0.299 / 0.65 | +0.501 / +0.527 / 1.05 | +0.031 / +0.006 / 0.19 | 0.467 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | 0.9846 | +0.063 / +0.036 / 0.58 | +0.669 / +0.290 / 0.43 | +0.472 / +0.507 / 1.08 | +0.039 / +0.025 / 0.65 | 0.487 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | 0.9839 | -0.129 / +0.000 / -0.0 | +0.064 / +0.011 / 0.18 | +0.078 / +0.026 / 0.34 | -0.550 / -0.552 / 1.0 | 0.461 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | 0.9835 | +0.006 / +0.064 / 11.51 | +0.705 / +0.336 / 0.48 | +0.478 / +0.709 / 1.48 | -0.257 / -0.250 / 0.97 | 0.479 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | 0.9834 | +0.040 / +0.059 / 1.47 | +0.563 / +0.294 / 0.52 | +0.510 / +0.681 / 1.33 | -0.207 / -0.166 / 0.8 | 0.456 |
+| Qwen3-30B-A3B-Base | cp_nat | 0.9817 | +0.119 / +0.041 / 0.34 | +0.484 / +0.382 / 0.79 | +0.429 / +0.556 / 1.3 | -0.015 / +0.006 / -0.4 | 0.372 |
+| Mixtral-8x7B (BOS) | f1 | 0.9891 | +0.129 / +0.008 / 0.06 | +0.740 / +0.510 / 0.69 | +0.143 / +0.316 / 2.2 | -0.582 / -0.846 / 1.45 | 0.68 |
+| Mixtral-8x7B (BOS) | dir_f1 | 0.9913 | +0.096 / +0.006 / 0.07 | +0.844 / +0.628 / 0.74 | +0.185 / +0.366 / 1.97 | -0.602 / -0.873 / 1.45 | 0.715 |
+| Mixtral-8x7B (BOS) | dir_opt | 0.9955 | +0.146 / +0.055 / 0.38 | +0.786 / +0.553 / 0.7 | +0.321 / +0.409 / 1.28 | -0.273 / -0.365 / 1.34 | 0.793 |
+| Mixtral-8x7B (BOS) | f2e | 0.9926 | +0.138 / +0.008 / 0.06 | +0.475 / +0.443 / 0.93 | +0.057 / +0.134 / 2.34 | -0.653 / -0.913 / 1.4 | 0.783 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | 0.9954 | +0.231 / +0.035 / 0.15 | +0.879 / +0.552 / 0.63 | +0.219 / +0.234 / 1.07 | -0.156 / -0.226 / 1.45 | 0.783 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | 0.9961 | +0.206 / +0.040 / 0.19 | +0.860 / +0.557 / 0.65 | +0.229 / +0.274 / 1.19 | -0.235 / -0.320 / 1.36 | 0.764 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | 0.9944 | +0.257 / +0.046 / 0.18 | +0.873 / +0.739 / 0.85 | +0.136 / +0.196 / 1.44 | -0.351 / -0.562 / 1.6 | 0.736 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | 0.9958 | +0.279 / +0.051 / 0.18 | +0.919 / +0.840 / 0.91 | +0.093 / +0.166 / 1.78 | -0.351 / -0.583 / 1.66 | 0.727 |
+| Mixtral-8x7B (BOS) | cp_nat | 0.9977 | +0.124 / +0.038 / 0.31 | +0.825 / +0.593 / 0.72 | +0.301 / +0.451 / 1.5 | -0.373 / -0.504 / 1.35 | 0.786 |
+
+
+### Part B. Vocabulary projections
+
+| model | condition | expert | vectors | n | median rank of r (of V) | r in top-10 / top-100 (%) | median rank in own class (size) | z attr_own | z ent_own | z wg_trigger | z names | z cf_any | top-50 attr / ent (%) | most promoted |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L32E061 | delta | 592 | 77332 | 0 / 0 | 196 (386) | +0.01 | +0.01 | +0.01 | +0.00 | +0.05 | 0.9 / 0.2 | 'wr' 2%; ' receiver' 2%; ' whoever' 2%; ' poorer' 2%; '拳头' 2%; '致' 2% |
+| Qwen3-30B-A3B-Base | f1 | L33E122 | delta | 1019 | 75357 | 0 / 0 | 196 (386) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 0.7 / 0.3 | ' Marino' 1%; '答案' 1%; '公益性' 1%; 'asto' 1%; ' lacks' 1%; ' lacked' 1% |
+| Qwen3-30B-A3B-Base | f1 | L35E090 | delta | 1015 | 73938 | 0 / 0 | 183 (386) | -0.00 | +0.00 | -0.00 | -0.00 | +0.00 | 0.4 / 0.3 | ' pe' 1%; " '.." 1%; '象' 1%; '额' 1%; ' Lik' 1%; '斗' 1% |
+| Qwen3-30B-A3B-Base | f1 | L36E009 | delta | 1022 | 74878 | 0 / 0 | 194 (386) | -0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 0.5 / 0.3 | ' plural' 7%; 'plural' 6%; 'singular' 4%; ' termed' 4%; '称之为' 4%; '不合理' 3% |
+| Qwen3-30B-A3B-Base | f1 | L37E032 | delta | 1004 | 74082 | 0 / 0 | 192 (386) | -0.00 | +0.00 | -0.00 | -0.00 | +0.00 | 0.6 / 0.3 | '私自' 5%; ' secondary' 4%; 'bu' 4%; ' Option' 4%; ' option' 3%; '座' 3% |
+| Qwen3-30B-A3B-Base | f1 | L37E032 | clean | 1004 | 58372 | 0 / 0 | 146 (386) | -0.39 | -0.03 | -0.35 | +0.06 | +0.20 | 0.0 / 0.2 | '第二种' 38%; '或者其他' 32%; '第一步' 27%; '第一条' 22%; 'escaped' 17%; 'IService' 16% |
+| Qwen3-30B-A3B-Base | f1 | L39E103 | delta | 432 | 71220 | 0 / 0 | 179 (386) | +0.00 | -0.00 | +0.00 | -0.02 | -0.00 | 0.4 / 0.2 | '两者' 13%; ' both' 11%; 'Both' 9%; '二者' 9%; 'both' 9%; ' Both' 8% |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | delta | 19 | 57729 | 0 / 0 | 163 (386) | +0.16 | +0.07 | +0.13 | +0.04 | +0.05 | 7.3 / 0.2 | ' less' 26%; ' more' 21%; ' richer' 16%; ' benign' 16%; ' innoc' 16%; ' healthier' 16% |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | clean | 19 | 35631 | 0 / 0 | 132 (386) | +0.42 | +0.24 | +0.34 | +0.24 | +0.08 | 11.6 / 0.4 | ' healthier' 37%; ' more' 32%; ' smarter' 16%; ' lighter' 16%; ' stronger' 16%; ' richer' 16% |
+| Qwen3-30B-A3B-Base | f1 | L42E102 | delta | 501 | 72932 | 0 / 0 | 186 (386) | +0.00 | +0.00 | +0.00 | -0.00 | +0.00 | 0.8 / 0.2 | '\xa0' 4%; '在那里' 3%; '在他的' 2%; ' first' 2%; '\xa0\n' 2%; '<|endoftext|>' 2% |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | delta | 359 | 62182 | 0 / 0 | 163 (386) | -0.01 | +0.02 | -0.01 | -0.01 | -0.03 | 0.7 / 0.5 | 'marvin' 10%; ' маш' 5%; ' robert' 4%; ' canadian' 3%; ' vegas' 3%; ' mex' 3% |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | clean | 359 | 38222 | 1 / 3 | 121 (386) | +0.04 | +0.13 | -0.00 | -0.10 | -0.24 | 1.3 / 0.6 | 'marvin' 51%; ' maur' 22%; ' louis' 22%; ' маш' 20%; ' kali' 18%; ' robert' 17% |
+| Qwen3-30B-A3B-Base | f1 | L43E070 | delta | 309 | 8183 | 18 / 29 | 44 (386) | -0.01 | -0.00 | -0.00 | +0.01 | +0.01 | 1.1 / 3.5 | ' bowl' 6%; ' food' 4%; ' bowls' 3%; '果' 3%; ' fruit' 3%; ' fruits' 3% |
+| Qwen3-30B-A3B-Base | f1 | L44E022 | delta | 452 | 49938 | 4 / 9 | 134 (386) | +0.01 | +0.00 | +0.01 | +0.01 | +0.01 | 0.8 / 2.1 | ' building' 6%; 'building' 4%; ' Building' 4%; 'Building' 3%; ' guest' 3%; '-building' 3% |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | delta | 95 | 51269 | 1 / 3 | 122 (386) | -0.02 | -0.01 | -0.00 | +0.04 | +0.05 | 0.4 / 0.4 | ' New' 12%; 'New' 10%; ' Usa' 8%; ' america' 7%; '-New' 7%; ' US' 6% |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | clean | 95 | 50932 | 2 / 3 | 142 (386) | -0.03 | +0.06 | +0.03 | +0.38 | +0.23 | 0.5 / 0.5 | ' New' 24%; 'New' 18%; '-New' 13%; ' Usa' 12%; '(New' 12%; '.New' 12% |
+| Qwen3-30B-A3B-Base | f1 | L44E116 | delta | 448 | 14794 | 16 / 27 | 65 (386) | +0.00 | +0.01 | +0.00 | +0.01 | +0.00 | 0.8 / 4.3 | ' materials' 4%; ' barrel' 4%; '材料' 3%; ' bag' 3%; 'bag' 3%; ' sack' 3% |
+| Qwen3-30B-A3B-Base | dir_f1 | L31E124 | delta | 134 | 40481 | 0 / 1 | 68 (215) | +0.06 | +0.07 | +0.03 | +0.01 | -0.01 | 0.8 / 0.5 | ' depletion' 32%; ' depleted' 23%; ' Transfer' 15%; '-transfer' 13%; ' emptied' 13%; '消失' 13% |
+| Qwen3-30B-A3B-Base | dir_f1 | L37E032 | delta | 351 | 73669 | 0 / 0 | 102 (215) | -0.00 | +0.00 | -0.00 | -0.00 | +0.00 | 0.1 / 0.2 | ' lows' 3%; ' secondary' 3%; 'wrap' 3%; '座' 3%; 'igits' 2%; 'iffe' 2% |
+| Qwen3-30B-A3B-Base | dir_f1 | L40E037 | delta | 213 | 10073 | 9 / 23 | 25 (215) | -0.00 | -0.01 | -0.01 | -0.01 | +0.01 | 0.5 / 2.3 | '瓶子' 13%; '瓶' 12%; ' bottles' 10%; ' bottle' 10%; ' mouth' 8%; '桶' 7% |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E062 | delta | 264 | 14114 | 4 / 10 | 32 (215) | -0.00 | +0.00 | +0.00 | +0.02 | +0.01 | 0.9 / 1.4 | ' empty' 9%; 'empty' 7%; '满' 6%; '包装' 6%; ' packaging' 5%; '-empty' 5% |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E018 | delta | 334 | 51791 | 2 / 4 | 82 (215) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.1 / 0.9 | ' point' 16%; 'point' 13%; ' Point' 11%; '_point' 10%; 'Point' 10%; '.point' 10% |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E102 | delta | 334 | 69680 | 0 / 0 | 96 (215) | +0.00 | +0.00 | +0.00 | -0.00 | +0.00 | 0.1 / 0.1 | '\xa0' 5%; '给他' 3%; '在那里' 3%; '在他的' 2%; '把它' 2%; '告诉他' 2% |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | delta | 41 | 53484 | 0 / 0 | 83 (215) | -0.01 | +0.04 | +0.00 | -0.18 | -0.18 | 0.0 / 0.2 | 'marvin' 10%; ' medieval' 5%; ' maple' 5%; '格將' 5%; '��' 5%; '时表示' 5% |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | clean | 41 | 32294 | 0 / 0 | 50 (215) | -0.08 | +0.08 | +0.01 | -0.89 | -0.58 | 0.0 / 0.3 | ' маш' 17%; 'marvin' 15%; ' ench' 12%; ' pep' 10%; ' beet' 10%; ' maneu' 10% |
+| Qwen3-30B-A3B-Base | dir_f1 | L43E070 | delta | 183 | 4170 | 20 / 36 | 15 (215) | +0.00 | -0.00 | +0.00 | -0.01 | +0.01 | 0.1 / 2.6 | ' bowl' 8%; ' glass' 7%; ' stomach' 6%; ' glasses' 6%; ' portions' 5%; ' portion' 5% |
+| Qwen3-30B-A3B-Base | dir_f1 | L43E114 | delta | 256 | 22610 | 3 / 12 | 42 (215) | -0.02 | -0.01 | -0.01 | -0.02 | -0.00 | 0.4 / 1.1 | ' opening' 12%; ' Opening' 11%; ' openings' 10%; 'opening' 10%; 'Opening' 7%; '包装' 6% |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E022 | delta | 287 | 40522 | 4 / 10 | 74 (215) | +0.01 | +0.01 | +0.01 | -0.00 | +0.01 | 0.1 / 1.3 | '_counter' 7%; 'Counter' 6%; ' counters' 6%; ' counter' 6%; ' building' 6%; '-counter' 6% |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | delta | 32 | 27408 | 0 / 3 | 42 (215) | -0.02 | -0.00 | +0.03 | +0.10 | +0.07 | 0.1 / 0.3 | ' New' 9%; ' California' 9%; ' Southern' 9%; 'Southern' 9%; ' southern' 9%; ' Arizona' 9% |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | clean | 32 | 26173 | 0 / 3 | 41 (215) | +0.02 | +0.05 | +0.08 | +0.19 | +0.40 | 0.2 / 0.3 | ' New' 22%; ' Los' 19%; '-New' 16%; ' San' 12%; ' Walton' 9%; ' Usa' 9% |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | delta | 297 | 6096 | 18 / 31 | 23 (215) | -0.00 | +0.02 | +0.00 | +0.00 | +0.00 | 0.4 / 3.6 | ' barrel' 6%; ' bag' 6%; ' bags' 5%; ' empty' 5%; 'bag' 5%; ' Bag' 5% |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | clean | 297 | 103 | 30 / 50 | 6 (215) | +0.09 | +0.37 | +0.03 | +0.05 | +0.04 | 0.3 / 7.9 | ' jug' 16%; ' barrel' 11%; ' bucket' 11%; ' sack' 9%; ' bag' 8%; ' sac' 8% |
+| Qwen3-30B-A3B-Base | dir_opt | L31E124 | delta | 205 | 46020 | 15 / 25 | 33 (111) | +0.02 | +0.00 | +0.00 | -0.01 | +0.00 | 0.7 / 0.3 | ' empt' 22%; ' emptied' 20%; 'empty' 18%; ' empty' 16%; '-empty' 15%; 'Empty' 14% |
+| Qwen3-30B-A3B-Base | dir_opt | L39E071 | delta | 272 | 11112 | 9 / 23 | 16 (111) | +0.01 | +0.02 | +0.00 | +0.03 | +0.01 | 2.4 / 0.1 | '低于' 19%; ' smaller' 10%; '小于' 10%; '较小' 9%; ' lesser' 8%; '较低' 8% |
+| Qwen3-30B-A3B-Base | dir_opt | L40E040 | delta | 355 | 43420 | 10 / 14 | 36 (111) | +0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 1.0 / 0.1 | ' full' 11%; ' occupied' 10%; ' too' 10%; 'full' 10%; ' finished' 9%; 'too' 9% |
+| Qwen3-30B-A3B-Base | dir_opt | L41E053 | delta | 350 | 13250 | 18 / 24 | 13 (111) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 1.4 / 0.1 | ' empty' 17%; ' Empty' 15%; '空' 15%; 'Empty' 15%; '_empty' 14%; 'empty' 13% |
+| Qwen3-30B-A3B-Base | dir_opt | L41E062 | delta | 266 | 10924 | 21 / 30 | 12 (111) | +0.03 | +0.00 | +0.01 | +0.02 | +0.01 | 2.0 / 0.9 | ' empty' 17%; '空' 15%; ' empt' 15%; ' charge' 14%; 'Empty' 14%; ' Empty' 14% |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | delta | 276 | 2532 | 19 / 34 | 10 (111) | +0.01 | +0.00 | +0.01 | -0.01 | +0.00 | 3.5 / 0.1 | ' small' 12%; ' smaller' 10%; 'small' 10%; '小' 10%; ' large' 9%; ' SMALL' 9% |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | clean | 276 | 741 | 20 / 36 | 6 (111) | +0.26 | +0.05 | +0.07 | -0.14 | +0.08 | 3.4 / 0.1 | ' small' 13%; '小' 12%; 'small' 10%; ' SMALL' 10%; ' too' 10%; ' more' 10% |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | delta | 6 | 52148 | 0 / 0 | 22 (111) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.0 / 0.0 | 'BarItem' 17%; '-te' 17%; '痞' 17%; 'calls' 17%; 'maries' 17%; 'itemName' 17% |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | clean | 6 | 12814 | 0 / 0 | 6 (111) | -0.33 | -0.16 | -0.11 | -0.06 | -0.04 | 0.0 / 0.0 | ' (%)' 33%; '’S' 33%; "'C" 33%; '呙' 17%; ' Twig' 17%; '痞' 17% |
+| Qwen3-30B-A3B-Base | dir_opt | L42E123 | delta | 326 | 8204 | 13 / 24 | 12 (111) | +0.01 | +0.01 | +0.01 | +0.01 | +0.00 | 1.6 / 0.3 | ' blank' 10%; 'blank' 9%; 'Blank' 8%; ' Blank' 7%; ' blanks' 7%; '空白' 6% |
+| Qwen3-30B-A3B-Base | dir_opt | L43E081 | delta | 358 | 8043 | 13 / 23 | 16 (111) | -0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 4.0 / 0.0 | ' too' 10%; ' heavy' 10%; ' much' 9%; ' lighter' 8%; 'much' 8%; 'too' 8% |
+| Qwen3-30B-A3B-Base | dir_opt | L43E114 | delta | 280 | 17940 | 8 / 16 | 19 (111) | +0.00 | -0.00 | +0.00 | +0.01 | +0.01 | 1.4 / 0.2 | '翻' 10%; ' filled' 6%; ' fill' 6%; ' cracked' 6%; '裂' 6%; '轻' 5% |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | delta | 7 | 27369 | 0 / 0 | 34 (111) | -0.02 | +0.00 | -0.00 | +0.12 | +0.25 | 0.6 / 0.3 | ' third' 29%; '第三' 29%; 'third' 29%; ' треть' 29%; ' THIRD' 14%; '第二大' 14% |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | clean | 7 | 60436 | 0 / 0 | 38 (111) | -0.04 | -0.12 | +0.08 | -0.73 | +0.39 | 0.3 / 0.0 | ' Padres' 29%; ' Suns' 29%; ' Chiefs' 29%; ' New' 29%; 'New' 29%; '-New' 29% |
+| Qwen3-30B-A3B-Base | dir_opt | L44E122 | delta | 311 | 1643 | 30 / 38 | 6 (111) | +0.01 | +0.00 | +0.00 | +0.01 | +0.00 | 2.2 / 0.6 | '空' 18%; ' empty' 18%; ' Empty' 18%; 'Empty' 18%; 'empty' 17%; '满' 17% |
+| Qwen3-30B-A3B-Base | f2e | L36E120 | delta | 110 | 77941 | 0 / 1 | 58 (111) | +0.01 | +0.01 | +0.00 | +0.03 | +0.02 | 0.1 / 0.0 | '前者' 9%; '后者' 8%; '更多的是' 4%; '该项目' 3%; '忘' 3%; ' both' 3% |
+| Qwen3-30B-A3B-Base | f2e | L37E055 | delta | 124 | 71834 | 0 / 0 | 55 (111) | -0.00 | +0.00 | -0.00 | -0.00 | -0.00 | 0.1 / 0.1 | '什么' 12%; '两者' 11%; ' both' 11%; 'both' 11%; '二者' 10%; ' ______' 10% |
+| Qwen3-30B-A3B-Base | f2e | L37E107 | delta | 115 | 75131 | 0 / 0 | 54 (111) | -0.00 | +0.01 | -0.00 | +0.01 | +0.00 | 0.3 / 0.1 | '而不是' 4%; '后者' 4%; ' different' 3%; ' Other' 3%; ' secondary' 3%; '第二种' 3% |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | delta | 5 | 71930 | 0 / 0 | 66 (111) | +0.11 | +0.33 | -0.01 | -0.06 | +0.11 | 1.2 / 0.0 | ' valuable' 20%; '价值' 20%; ' valu' 20%; 'val' 20%; ' val' 20%; ' value' 20% |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | clean | 5 | 71930 | 0 / 0 | 66 (111) | +0.11 | +0.33 | -0.01 | -0.06 | +0.11 | 1.2 / 0.0 | ' valuable' 20%; '价值' 20%; ' valu' 20%; 'val' 20%; ' val' 20%; ' value' 20% |
+| Qwen3-30B-A3B-Base | f2e | L41E121 | delta | 76 | 14623 | 9 / 18 | 16 (111) | +0.00 | -0.01 | -0.00 | +0.03 | +0.00 | 0.2 / 1.2 | ' neighborhood' 5%; '地面' 4%; ' Room' 4%; '烈' 4%; ' hot' 4%; '的地' 4% |
+| Qwen3-30B-A3B-Base | f2e | L42E055 | delta | 104 | 60407 | 9 / 11 | 40 (111) | +0.00 | +0.00 | +0.00 | +0.03 | +0.00 | 0.2 / 1.4 | ' open' 8%; ' front' 7%; ' door' 4%; ' Door' 4%; 'door' 4%; 'Door' 4% |
+| Qwen3-30B-A3B-Base | f2e | L42E102 | delta | 110 | 65526 | 0 / 0 | 50 (111) | -0.00 | -0.00 | -0.00 | +0.00 | -0.00 | 0.1 / 0.0 | ' __' 6%; '——' 6%; '__:' 6%; ' **' 6%; ':' 6%; '\xa0' 6% |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | delta | 78 | 55809 | 0 / 0 | 41 (111) | -0.01 | -0.00 | +0.01 | -0.04 | -0.01 | 0.0 / 0.1 | '....' 6%; ' *"' 5%; '...' 5%; ' China' 4%; ' "' 4%; ' “' 4% |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | clean | 78 | 45862 | 3 / 5 | 40 (111) | -0.02 | +0.05 | +0.21 | -0.25 | -0.16 | 0.0 / 0.3 | '’S' 12%; ' (“' 9%; ' adorable' 9%; ' sleepy' 9%; ' “' 8%; ' ("' 8% |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | delta | 127 | 30296 | 6 / 12 | 28 (111) | -0.00 | +0.00 | +0.00 | +0.01 | +0.00 | 0.1 / 1.0 | ' home' 5%; ' local' 3%; ' cities' 3%; ' Cities' 3%; ' schools' 3%; ' Regular' 3% |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | clean | 127 | 4219 | 9 / 17 | 9 (111) | +0.16 | +0.13 | +0.21 | +0.21 | +0.06 | 0.3 / 1.5 | ' school' 5%; ' local' 4%; '-library' 3%; ' brick' 3%; ' bag' 3%; ' social' 3% |
+| Qwen3-30B-A3B-Base | f2e | L44E022 | delta | 94 | 41044 | 3 / 9 | 40 (111) | +0.03 | +0.01 | +0.03 | +0.01 | +0.03 | 0.0 / 1.0 | ' drive' 4%; ' building' 4%; ' Building' 4%; ' living' 4%; ' store' 4%; ' reception' 3% |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | delta | 52 | 59021 | 0 / 0 | 41 (111) | +0.01 | +0.03 | +0.03 | -0.13 | +0.11 | 0.0 / 0.0 | ' New' 15%; 'New' 12%; '(New' 10%; '>New' 10%; '/New' 10%; '-New' 10% |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | clean | 52 | 24716 | 0 / 0 | 19 (111) | +0.03 | +0.05 | +0.06 | -0.36 | +0.57 | 0.0 / 0.0 | ' New' 19%; ' Local' 15%; 'Local' 15%; '-New' 14%; ' local' 12%; 'local' 12% |
+| Qwen3-30B-A3B-Base | f2e | L44E098 | delta | 7 | 1801 | 14 / 14 | 4 (111) | +0.06 | +0.04 | +0.05 | -0.11 | -0.02 | 0.3 / 0.6 | '-com' 14%; ' comp' 14%; ' комп' 14%; ' kom' 14%; '-comp' 14%; '\tcom' 14% |
+| Qwen3-30B-A3B-Base | f2e | L44E116 | delta | 94 | 34046 | 12 / 20 | 28 (111) | +0.02 | +0.00 | +0.02 | +0.01 | +0.00 | 0.1 / 1.2 | '木' 5%; ' mat' 3%; ' Mat' 3%; ' grass' 3%; ' bro' 3%; ' plastic' 3% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L22E035 | delta | 494 | 55348 | 1 / 4 | 24 (58) | -0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.1 / 0.0 | 'TI' 6%; ' Everyone' 5%; ' herself' 4%; '把自己' 4%; '廓' 4%; 'Dire' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L36E087 | delta | 512 | 63404 | 2 / 5 | 25 (58) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.2 / 0.0 | '嫉妒' 4%; ' envy' 4%; '他自己' 4%; '妒' 4%; '死亡' 3%; ' jealous' 3% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L37E101 | delta | 511 | 47444 | 0 / 7 | 21 (58) | -0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 0.3 / 0.0 | '感謝' 4%; ' neighbour' 3%; ' apolog' 3%; ' apologized' 3%; ' apologize' 3%; ' apology' 3% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E001 | delta | 470 | 22946 | 4 / 12 | 11 (58) | +0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 0.6 / 0.0 | ' generosity' 5%; ' generous' 4%; '精力' 4%; '支持' 4%; ' independ' 4%; ' kindness' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | delta | 392 | 23868 | 5 / 11 | 14 (58) | +0.01 | -0.00 | -0.00 | -0.00 | -0.00 | 0.4 / 0.0 | ' experienced' 7%; ' new' 6%; '新' 6%; ' oldest' 5%; '本地' 5%; ' Experienced' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | clean | 392 | 11658 | 5 / 18 | 9 (58) | +0.38 | -0.18 | +0.14 | -0.17 | +0.05 | 0.7 / 0.0 | ' deaf' 10%; ' senior' 8%; '聋' 7%; '身材' 6%; ' oldest' 6%; '专业' 6% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E017 | delta | 259 | 20795 | 1 / 8 | 10 (58) | +0.01 | +0.00 | +0.00 | +0.00 | +0.00 | 0.5 / 0.0 | ' want' 8%; ' disagree' 8%; '不想' 8%; ' wanting' 7%; '不同意' 7%; ' lack' 7% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E106 | delta | 496 | 48454 | 7 / 8 | 20 (58) | +0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.7 / 0.0 | ' jealousy' 5%; ' surprised' 4%; ' impressed' 4%; ' jealous' 4%; ' envy' 4%; ' surprise' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | delta | 201 | 42242 | 6 / 16 | 20 (58) | +0.08 | +0.02 | +0.04 | +0.02 | +0.02 | 0.5 / 0.0 | ' more' 15%; 'more' 12%; '更适合' 10%; ' better' 10%; ' easy' 9%; ' challenging' 8% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | clean | 201 | 10307 | 8 / 14 | 6 (58) | +0.18 | -0.09 | +0.15 | -0.06 | +0.06 | 0.7 / 0.0 | ' more' 22%; 'more' 18%; ' too' 13%; ' mehr' 12%; ' high' 11%; ' TOO' 10% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | delta | 23 | 51272 | 0 / 0 | 24 (58) | +0.05 | +0.09 | +0.04 | +0.06 | +0.15 | 0.0 / 0.0 | ' Harlem' 22%; "'al" 22%; ' Chow' 17%; ' Hungarian' 17%; '/mark' 17%; ' Browns' 13% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | clean | 23 | 9472 | 0 / 0 | 4 (58) | +0.04 | -0.73 | -0.08 | -0.78 | -0.02 | 0.0 / 0.0 | ' (%' 74%; ' (${' 74%; ' (%)' 74%; ' ($' 70%; ' (' 65%; ' (=' 61% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E123 | delta | 510 | 27548 | 10 / 15 | 14 (58) | -0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 0.9 / 0.0 | ' relief' 5%; ' guilt' 4%; ' charm' 4%; '-rel' 4%; ' grateful' 4%; ' thank' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L43E042 | delta | 270 | 54354 | 0 / 7 | 20 (58) | +0.02 | -0.01 | +0.01 | -0.01 | -0.00 | 0.4 / 0.0 | ' injury' 8%; ' sore' 6%; ' strength' 6%; ' caul' 6%; ' ph' 6%; ' neck' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | delta | 73 | 29009 | 0 / 3 | 12 (58) | -0.02 | -0.24 | -0.01 | -0.21 | +0.25 | 0.2 / 0.0 | ' out' 27%; 'out' 26%; '-out' 26%; '\tout' 25%; 'Out' 23%; '(out' 20% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | clean | 73 | 32977 | 0 / 0 | 12 (58) | -0.07 | -0.95 | -0.05 | -0.85 | +0.66 | 0.2 / 0.0 | ' out' 38%; '=out' 34%; '-out' 34%; 'out' 33%; ' Out' 32%; 'Out' 29% |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L45E092 | delta | 313 | 58799 | 1 / 2 | 24 (58) | +0.03 | -0.01 | +0.01 | -0.01 | -0.00 | 0.2 / 0.0 | ' app' 6%; '-under' 5%; ' cross' 5%; ' under' 5%; ' a' 5%; '-el' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L22E035 | delta | 486 | 58810 | 0 / 4 | 20 (51) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.1 / 0.0 | 'TI' 8%; ' herself' 6%; ' mechanically' 6%; ' Everyone' 5%; '姥' 4%; ' ineffective' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L23E105 | delta | 491 | 83432 | 0 / 1 | 28 (51) | +0.01 | +0.00 | +0.00 | +0.00 | -0.00 | 0.1 / 0.0 | 'missive' 5%; '在他' 4%; '-upper' 4%; '对他' 3%; ' myself' 3%; 'iov' 3% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L37E101 | delta | 512 | 61180 | 0 / 6 | 22 (51) | +0.00 | -0.00 | -0.00 | +0.00 | +0.00 | 0.4 / 0.0 | ' apologized' 4%; ' apologize' 4%; ' apolog' 4%; ' apology' 4%; ' apologies' 4%; ' apologise' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E001 | delta | 455 | 26939 | 2 / 7 | 11 (51) | -0.00 | -0.00 | +0.00 | +0.00 | -0.00 | 0.4 / 0.0 | ' busy' 7%; 'busy' 6%; ' Busy' 5%; ' generosity' 5%; ' generous' 4%; '高兴' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L39E121 | delta | 340 | 19614 | 7 / 13 | 10 (51) | -0.04 | +0.01 | -0.02 | +0.00 | +0.00 | 0.4 / 0.0 | ' experienced' 9%; '当地人' 7%; ' natives' 6%; ' Experienced' 6%; '本地' 6%; '新' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | delta | 220 | 42066 | 8 / 22 | 21 (51) | +0.02 | +0.02 | +0.00 | +0.02 | +0.01 | 0.6 / 0.0 | ' more' 17%; ' stronger' 10%; ' easier' 10%; 'Easy' 9%; ' Easy' 9%; '更强' 9% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | clean | 220 | 12352 | 12 / 22 | 7 (51) | +0.05 | -0.09 | +0.04 | -0.05 | +0.04 | 0.6 / 0.0 | ' more' 23%; ' too' 17%; 'more' 16%; ' stronger' 16%; ' much' 11%; ' old' 11% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E074 | delta | 267 | 14557 | 7 / 12 | 8 (51) | +0.02 | +0.00 | +0.02 | -0.00 | +0.01 | 0.8 / 0.0 | ' experiencing' 10%; ' tired' 9%; ' referring' 9%; ' experience' 8%; ' suffer' 8%; ' refer' 8% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | delta | 26 | 62940 | 0 / 0 | 20 (51) | +0.00 | +0.01 | -0.01 | +0.01 | +0.04 | 0.0 / 0.0 | ' Brook' 31%; ' Buffalo' 27%; ' Pl' 23%; 'Germany' 19%; '这是一种' 19%; ' germany' 15% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | clean | 26 | 16035 | 0 / 0 | 4 (51) | -0.03 | -0.88 | -0.21 | -0.92 | -0.13 | 0.0 / 0.0 | ' (%' 85%; ' (=' 85%; ' (%)' 81%; ' (${' 77%; ' (' 54%; ' (�' 46% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | delta | 512 | 21848 | 6 / 13 | 11 (51) | -0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 0.8 / 0.0 | ' guilty' 5%; ' guilt' 5%; ' Gu' 5%; 'gu' 4%; 'Gu' 4%; ' gu' 4% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | clean | 512 | 4503 | 11 / 22 | 4 (51) | +0.32 | +0.06 | +0.18 | +0.10 | +0.05 | 1.2 / 0.0 | ' gr' 6%; ' overwhelming' 6%; ' guilt' 6%; ' relief' 6%; ' relieved' 5%; ' depressed' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L43E097 | delta | 358 | 47883 | 2 / 8 | 18 (51) | +0.01 | +0.01 | +0.01 | +0.01 | +0.03 | 0.8 / 0.0 | ' nervous' 8%; ' nerv' 8%; ' late' 7%; '迟' 7%; '紧张' 7%; '遲' 7% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E044 | delta | 477 | 58472 | 2 / 4 | 20 (51) | +0.01 | -0.00 | +0.01 | -0.00 | +0.01 | 0.5 / 0.0 | ' oldest' 7%; ' mother' 5%; ' popular' 5%; ' adopt' 5%; ' adopted' 5%; ' transfer' 5% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | delta | 56 | 23983 | 0 / 4 | 10 (51) | -0.00 | -0.09 | +0.01 | -0.08 | +0.12 | 0.5 / 0.0 | ' out' 23%; '_out' 23%; '\tout' 23%; 'Out' 23%; ' Out' 23%; ' local' 23% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | clean | 56 | 35473 | 0 / 0 | 8 (51) | -0.18 | -0.37 | -0.09 | -0.31 | +0.62 | 0.2 / 0.0 | ' Out' 36%; ' out' 32%; '=out' 30%; '-out' 29%; 'out' 27%; '\tout' 25% |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L45E092 | delta | 313 | 50966 | 3 / 3 | 20 (51) | +0.01 | +0.00 | +0.00 | +0.00 | +0.00 | 0.2 / 0.0 | ' broke' 6%; ' app' 5%; ' fl' 5%; ' gl' 4%; ' engages' 4%; ' engage' 4% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L32E061 | delta | 179 | 82137 | 0 / 0 | 24 (45) | +0.00 | -0.01 | +0.01 | -0.01 | +0.03 | 0.0 / 0.0 | ' Cork' 17%; '主导' 16%; 'visor' 16%; '服务能力' 16%; 'itia' 14%; 'rego' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L34E085 | delta | 143 | 74074 | 0 / 0 | 22 (45) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.0 / 0.0 | '工作人员' 22%; ' interventions' 22%; ' intervention' 22%; 'theless' 22%; ' conduc' 19%; '隐身' 18% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L35E090 | delta | 194 | 74726 | 0 / 0 | 22 (45) | +0.00 | -0.00 | -0.00 | +0.00 | -0.00 | 0.0 / 0.0 | 'ret' 16%; '签订了' 16%; '豫' 16%; '>Lorem' 16%; '女生' 14%; '行长' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L36E065 | delta | 194 | 71938 | 0 / 0 | 24 (45) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.2 / 0.0 | '/as' 16%; ' Nested' 12%; ' diz' 12%; '蕨' 11%; ' sights' 11%; '.”\n' 11% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | delta | 194 | 74682 | 0 / 0 | 22 (45) | -0.00 | -0.00 | +0.00 | +0.00 | -0.00 | 0.0 / 0.0 | '珠' 16%; 'eer' 15%; 'これらの' 15%; '书中' 14%; ' ordering' 14%; ' Rotary' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | clean | 194 | 62365 | 0 / 0 | 25 (45) | -0.59 | +0.40 | -0.36 | +0.35 | +0.39 | 0.0 / 0.0 | ' Learned' 61%; ')":' 60%; '第二种' 54%; ' Desert' 47%; ' Inch' 46%; 'igits' 32% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L38E115 | delta | 149 | 58177 | 0 / 0 | 22 (45) | -0.03 | +0.12 | -0.03 | +0.11 | -0.03 | 0.2 / 0.0 | ' bapt' 20%; '‘s' 20%; 'ply' 20%; ' деп' 19%; '卢' 17%; '行长' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L39E103 | delta | 148 | 59948 | 0 / 0 | 18 (45) | -0.05 | +0.03 | -0.07 | +0.03 | +0.04 | 0.0 / 0.0 | ' customers' 21%; ' patients' 20%; '用户提供' 20%; 'akov' 20%; '学员' 20%; 'Patients' 19% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L40E115 | delta | 194 | 75035 | 0 / 1 | 22 (45) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.3 / 0.0 | '它' 24%; '它是' 19%; 'それが' 16%; 'trim' 16%; '的日子里' 15%; '它们' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E112 | delta | 193 | 74386 | 0 / 0 | 23 (45) | -0.00 | +0.01 | -0.00 | +0.01 | -0.00 | 0.2 / 0.0 | '老师们' 19%; ' educators' 17%; ' instructors' 17%; '这个人' 16%; ' researchers' 14%; '这位' 14% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E031 | delta | 187 | 74538 | 0 / 1 | 23 (45) | +0.01 | +0.01 | +0.00 | +0.01 | +0.00 | 0.0 / 0.0 | '他们的' 19%; ' she' 18%; '她' 17%; ' he' 17%; '他' 17%; ' their' 16% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | delta | 149 | 81441 | 0 / 0 | 24 (45) | -0.03 | +0.03 | -0.06 | +0.03 | +0.03 | 0.0 / 0.0 | ' McKenzie' 15%; ' Iranians' 14%; ' Caribbean' 12%; 'ppe' 11%; '钽' 11%; ' descriptor' 10% |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | clean | 149 | 54101 | 0 / 0 | 17 (45) | -0.22 | +0.03 | -0.16 | +0.05 | -0.04 | 0.0 / 0.0 | ' nich' 44%; 'marvin' 39%; ' louis' 38%; ' maur' 34%; ' canadian' 32%; 'ppe' 30% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L22E035 | delta | 506 | 66598 | 0 / 3 | 21 (48) | +0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.0 / 0.0 | 'TI' 8%; ' themselves' 6%; ' lacked' 6%; 'privileged' 5%; 'abh' 5%; ' insufficient' 4% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L37E002 | delta | 278 | 60984 | 0 / 0 | 22 (48) | -0.00 | -0.00 | -0.00 | +0.00 | -0.00 | 0.0 / 0.0 | '存在' 5%; 'edImage' 5%; ' proposing' 5%; '后续' 5%; 'orgen' 5%; ' Roch' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L37E101 | delta | 477 | 38810 | 1 / 6 | 14 (48) | +0.01 | -0.00 | +0.00 | +0.00 | -0.00 | 0.5 / 0.0 | ' addChild' 6%; 'addChild' 5%; ' asking' 4%; ' apologies' 4%; ' apologize' 4%; ' apology' 4% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | delta | 435 | 11028 | 13 / 25 | 6 (48) | +0.02 | -0.01 | +0.01 | -0.01 | -0.00 | 0.8 / 0.0 | '支持' 9%; ' support' 8%; 'support' 7%; ' supportive' 7%; ' Support' 7%; 'Support' 6% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | clean | 435 | 4681 | 29 / 36 | 4 (48) | +0.37 | -0.13 | +0.06 | -0.09 | -0.04 | 1.4 / 0.0 | ' support' 14%; '支持' 14%; 'support' 13%; ' supporting' 12%; ' supportive' 12%; 'Support' 10% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E121 | delta | 412 | 18498 | 2 / 9 | 9 (48) | +0.01 | -0.02 | +0.00 | -0.02 | -0.00 | 0.3 / 0.0 | ' clients' 9%; ' Clients' 8%; ' experienced' 7%; 'Clients' 6%; ' customers' 5%; '资深' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L40E075 | delta | 420 | 30666 | 7 / 14 | 14 (48) | +0.00 | +0.00 | -0.00 | +0.00 | -0.00 | 0.6 / 0.0 | '职业' 10%; '的职业' 9%; '年轻' 7%; '一个职业' 5%; '女儿' 5%; '儿子' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E106 | delta | 507 | 47973 | 12 / 16 | 17 (48) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 1.0 / 0.0 | ' impressed' 10%; ' so' 6%; ' Impress' 5%; ' impressions' 4%; ' embarrassing' 4%; ' always' 4% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | delta | 250 | 31578 | 6 / 16 | 14 (48) | +0.07 | +0.09 | +0.07 | +0.09 | +0.05 | 0.4 / 0.0 | ' more' 24%; 'more' 18%; '更' 12%; ' более' 11%; '更大' 10%; ' bigger' 10% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | clean | 250 | 17018 | 8 / 17 | 10 (48) | +0.19 | +0.10 | +0.15 | +0.13 | +0.15 | 0.5 / 0.0 | ' more' 30%; ' extremely' 25%; ' extraordinarily' 19%; ' incredibly' 19%; ' much' 18%; 'more' 17% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | delta | 62 | 85032 | 0 / 0 | 27 (48) | +0.14 | -0.38 | +0.01 | -0.40 | -0.40 | 0.2 / 0.0 | ' (%)' 32%; ' (\\<' 29%; 'RG' 21%; ' [' 21%; ' ..' 21%; '....' 21% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | clean | 62 | 3841 | 0 / 2 | 4 (48) | +0.23 | -0.34 | +0.07 | -0.37 | -0.28 | 0.1 / 0.1 | '-New' 36%; ' (“' 32%; ' (%)' 32%; 'aal' 31%; ' (\\<' 29%; '’T' 29% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E123 | delta | 512 | 16057 | 13 / 29 | 7 (48) | +0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 1.1 / 0.0 | ' sympathetic' 9%; ' compassionate' 6%; ' sympath' 6%; ' relief' 6%; ' sympathy' 6%; ' hum' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | delta | 120 | 39749 | 0 / 2 | 14 (48) | +0.00 | -0.06 | +0.00 | -0.06 | +0.05 | 0.3 / 0.0 | ' New' 15%; ' Los' 14%; ' Bay' 13%; ' out' 12%; 'New' 12%; ' area' 12% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | clean | 120 | 23956 | 0 / 0 | 11 (48) | +0.05 | -0.73 | +0.03 | -0.61 | +0.66 | 0.2 / 0.0 | ' Massachusetts' 22%; ' Los' 21%; ' New' 18%; 'Los' 17%; '=out' 15%; ' area' 15% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E122 | delta | 289 | 31105 | 4 / 14 | 13 (48) | +0.07 | +0.05 | +0.04 | +0.05 | +0.03 | 0.5 / 0.0 | '红' 11%; ' red' 10%; ' Hard' 9%; ' heavy' 9%; ' Heavy' 9%; ' shaking' 9% |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L45E092 | delta | 299 | 42007 | 3 / 3 | 17 (48) | +0.03 | -0.01 | +0.00 | -0.00 | -0.01 | 0.2 / 0.0 | ' pet' 12%; ' Pet' 10%; 'pet' 8%; ' fl' 6%; ' DUP' 6%; ' self' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L22E035 | delta | 510 | 57532 | 1 / 4 | 16 (38) | +0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.1 / 0.0 | ' lacked' 7%; '缺乏' 6%; ' herself' 5%; ' [+' 5%; ' kịch' 4%; 'FEATURE' 4% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L25E002 | delta | 394 | 61086 | 0 / 0 | 16 (38) | -0.01 | -0.01 | -0.00 | -0.01 | -0.01 | 0.0 / 0.0 | ' reply' 8%; '回应' 7%; 'ts' 6%; '沽' 6%; 'imson' 6%; 'otti' 6% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L37E101 | delta | 494 | 39045 | 0 / 2 | 12 (38) | +0.01 | +0.01 | +0.00 | +0.01 | +0.00 | 0.2 / 0.0 | ' addChild' 5%; ' daughters' 5%; 'addChild' 5%; '-Day' 5%; '缓解' 5%; '弟弟' 4% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E001 | delta | 433 | 10923 | 10 / 27 | 4 (38) | +0.01 | -0.02 | -0.00 | -0.02 | -0.01 | 0.8 / 0.0 | '支持' 11%; ' support' 10%; 'support' 10%; 'Support' 10%; 'upport' 9%; ' SUPPORT' 8% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L39E121 | delta | 444 | 18922 | 1 / 9 | 9 (38) | +0.01 | -0.02 | +0.00 | -0.02 | -0.00 | 0.4 / 0.0 | '老师的' 6%; ' clients' 6%; '弟子' 6%; '年轻' 6%; '的实力' 5%; 'qualified' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E106 | delta | 509 | 57219 | 10 / 11 | 13 (38) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.6 / 0.0 | ' impressed' 10%; ' amazed' 6%; ' pay' 6%; ' impress' 6%; ' impression' 5%; ' Impress' 5% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E112 | delta | 309 | 27613 | 10 / 20 | 10 (38) | +0.00 | +0.13 | +0.01 | +0.13 | -0.01 | 1.0 / 0.0 | '客户的' 17%; ' clients' 15%; '客户' 14%; ' clientes' 13%; ' customers' 12%; '小' 11% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | delta | 263 | 45285 | 7 / 14 | 13 (38) | +0.01 | +0.06 | +0.03 | +0.07 | +0.02 | 0.5 / 0.0 | ' more' 25%; ' incredibly' 17%; 'more' 14%; ' extremely' 13%; ' extraordinarily' 13%; '更为' 11% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | clean | 263 | 27182 | 8 / 14 | 9 (38) | +0.16 | +0.11 | +0.11 | +0.16 | +0.15 | 0.4 / 0.0 | ' extremely' 39%; ' incredibly' 34%; '非常' 31%; ' more' 29%; ' extraordinarily' 27%; 'more' 21% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E016 | delta | 335 | 29059 | 7 / 13 | 12 (38) | +0.03 | -0.00 | +0.02 | -0.00 | +0.01 | 0.4 / 0.0 | ' homosexual' 9%; ' gay' 8%; ' sick' 8%; ' lesbian' 8%; ' ill' 7%; 'head' 6% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | delta | 41 | 13560 | 0 / 0 | 9 (38) | +0.31 | -0.73 | +0.09 | -0.66 | -0.86 | 0.0 / 0.0 | ' (>' 51%; ' (*.' 49%; ' (<' 42%; ' (...' 34%; ' (*' 34%; ' (%)' 32% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | clean | 41 | 9798 | 0 / 0 | 3 (38) | +0.33 | -0.70 | +0.11 | -0.62 | -0.81 | 0.0 / 0.0 | ' (>' 51%; ' (*.' 49%; ' (<' 42%; ' (...' 34%; ' (*' 34%; ' [...' 32% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | delta | 512 | 52554 | 5 / 16 | 14 (38) | +0.00 | +0.00 | +0.00 | +0.00 | -0.00 | 0.5 / 0.0 | ' sympathetic' 12%; ' sympath' 8%; ' compassionate' 7%; ' empath' 6%; ' sympathy' 6%; ' empathy' 6% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | clean | 512 | 8560 | 11 / 26 | 5 (38) | +0.37 | -0.01 | +0.24 | -0.03 | -0.03 | 1.2 / 0.0 | ' sympathetic' 14%; ' relieved' 11%; ' sting' 10%; ' penny' 10%; ' really' 10%; ' true' 10% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | delta | 79 | 45461 | 0 / 0 | 13 (38) | +0.01 | -0.16 | -0.00 | -0.14 | +0.26 | 0.0 / 0.0 | '_area' 29%; 'Area' 29%; ' area' 28%; ' Area' 28%; '-area' 28%; '.area' 28% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | clean | 79 | 24974 | 0 / 0 | 9 (38) | +0.07 | -0.58 | -0.05 | -0.45 | +0.88 | 0.0 / 0.0 | ' Usa' 32%; ' area' 29%; '-area' 29%; '\tarea' 29%; '.area' 29%; 'area' 28% |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L45E092 | delta | 289 | 34012 | 6 / 6 | 9 (38) | -0.00 | +0.01 | +0.00 | +0.01 | +0.01 | 0.3 / 0.0 | ' pet' 9%; ' gl' 8%; ' Pet' 8%; ' sorry' 8%; ' bum' 8%; ' Bram' 7% |
+| Qwen3-30B-A3B-Base | cp_nat | L34E119 | delta | 999 | 19625 | 0 / 6 | 30 (152) | -0.03 | +0.01 | -0.02 | -0.03 | -0.02 | 1.5 / 0.1 | ' inadequate' 8%; '太少' 7%; '狭窄' 6%; '有限' 6%; '沉默' 5%; ' insufficient' 5% |
+| Qwen3-30B-A3B-Base | cp_nat | L38E021 | delta | 957 | 20752 | 1 / 7 | 30 (152) | -0.00 | +0.01 | +0.00 | +0.01 | +0.00 | 1.5 / 0.1 | '最小' 17%; ' High' 9%; ' high' 9%; '较小' 7%; '低于' 7%; ' minimum' 7% |
+| Qwen3-30B-A3B-Base | cp_nat | L39E007 | delta | 1051 | 22137 | 7 / 15 | 34 (152) | -0.00 | -0.00 | -0.00 | -0.01 | +0.00 | 2.0 / 0.5 | '大小' 6%; '的眼睛' 6%; ' large' 6%; ' size' 4%; '大き' 4%; ' bulky' 4% |
+| Qwen3-30B-A3B-Base | cp_nat | L39E071 | delta | 713 | 466 | 18 / 38 | 6 (152) | +0.04 | +0.04 | +0.00 | -0.03 | +0.01 | 3.7 / 0.1 | ' large' 16%; '低于' 16%; ' smaller' 12%; '高达' 11%; ' larger' 11%; '小于' 10% |
+| Qwen3-30B-A3B-Base | cp_nat | L41E053 | delta | 1180 | 22940 | 5 / 10 | 27 (152) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 1.2 / 0.1 | '...' 10%; '....' 9%; '?\n' 8%; '........' 8%; ' this' 7%; '................' 6% |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | delta | 1077 | 103 | 30 / 50 | 5 (152) | +0.01 | +0.01 | +0.00 | -0.00 | +0.00 | 5.3 / 0.0 | ' small' 22%; 'small' 20%; ' smaller' 17%; '小' 16%; ' SMALL' 16%; ' wider' 15% |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | clean | 1077 | 324 | 25 / 42 | 5 (152) | +0.13 | +0.01 | -0.02 | -0.21 | +0.06 | 4.6 / 0.0 | ' small' 20%; ' extremely' 20%; ' incredibly' 17%; ' tight' 16%; 'small' 15%; '小' 14% |
+| Qwen3-30B-A3B-Base | cp_nat | L42E073 | delta | 1196 | 39012 | 3 / 8 | 48 (152) | -0.00 | +0.00 | -0.00 | -0.00 | -0.00 | 2.2 / 0.2 | ' too' 16%; 'too' 14%; ' Too' 14%; 'Too' 12%; ' TOO' 12%; '-too' 10% |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | delta | 8 | 7974 | 25 / 38 | 12 (152) | -0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.5 / 0.2 | ' USA' 25%; 'USA' 25%; '美国人' 25%; ' Spanish' 25%; ' Span' 25%; '.Span' 25% |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | clean | 8 | 22206 | 50 / 50 | 26 (152) | +0.23 | -0.07 | +0.09 | -0.73 | -0.20 | 1.5 / 0.0 | ' Spanish' 50%; ' Portuguese' 38%; ' Portug' 38%; 'Spanish' 38%; 'aths' 38%; ' English' 25% |
+| Qwen3-30B-A3B-Base | cp_nat | L42E123 | delta | 1135 | 25902 | 4 / 9 | 34 (152) | +0.01 | +0.00 | +0.01 | +0.00 | -0.00 | 1.6 / 0.5 | '窒息' 8%; ' conf' 8%; ' inv' 4%; ' bored' 4%; ' loud' 4%; ' noisy' 4% |
+| Qwen3-30B-A3B-Base | cp_nat | L43E081 | delta | 1196 | 1646 | 23 / 37 | 13 (152) | -0.00 | -0.00 | -0.00 | +0.00 | +0.00 | 6.5 / 0.1 | ' much' 17%; ' small' 14%; 'much' 14%; '小' 14%; ' MUCH' 12%; 'small' 11% |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | delta | 21 | 38176 | 5 / 5 | 59 (152) | +0.09 | +0.05 | +0.06 | -0.08 | +0.26 | 0.2 / 0.6 | ' San' 14%; ' Main' 14%; 'Main' 14%; ' san' 10%; 'San' 10%; 'SAN' 10% |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | clean | 21 | 69606 | 0 / 5 | 94 (152) | +0.16 | +0.12 | +0.15 | -0.49 | +0.56 | 0.2 / 0.7 | ' New' 24%; ' Dallas' 19%; ' Houston' 19%; ' Usa' 19%; ' Main' 19%; ' span' 14% |
+| Qwen3-30B-A3B-Base | cp_nat | L44E122 | delta | 1074 | 11706 | 11 / 18 | 21 (152) | +0.01 | +0.01 | +0.00 | +0.01 | +0.00 | 2.8 / 0.4 | ' tight' 11%; '厚' 11%; ' Tight' 10%; '紧' 10%; '空' 10%; ' squeezed' 9% |
+| Mixtral-8x7B (BOS) | f1 | L15E006 | delta | 404 | 14654 | 0 / 0 | 102 (224) | +0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 0.6 / 0.6 | ' /******/' 16%; ' oppon' 5%; ' PARTICULAR' 5%; '>\r' 4%; ' calc' 3%; '❶' 2% |
+| Mixtral-8x7B (BOS) | f1 | L17E005 | delta | 354 | 13044 | 0 / 3 | 94 (224) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 0.7 / 1.0 | ' /******/' 18%; ' Kab' 7%; '\ufeff' 5%; 'uba' 4%; ' Станов' 4%; ' /***/' 4% |
+| Mixtral-8x7B (BOS) | f1 | L17E007 | delta | 398 | 13648 | 1 / 3 | 90 (224) | +0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 0.5 / 0.9 | ' /******/' 19%; ' /***/' 7%; '\ufeff' 7%; ' COPYRIGHT' 5%; 'ęd' 5%; ' ==>' 5% |
+| Mixtral-8x7B (BOS) | f1 | L18E000 | delta | 370 | 11764 | 1 / 4 | 88 (224) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.8 / 0.9 | ' /******/' 15%; ' --(' 5%; '\ufeff' 5%; 'ncia' 4%; 'hba' 3%; 'ERCHANT' 3% |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | delta | 49 | 15660 | 0 / 0 | 111 (224) | +0.00 | +0.01 | +0.00 | -0.01 | +0.00 | 0.6 / 0.7 | ' /******/' 26%; ' FITNESS' 8%; ' /***/' 8%; ' oppon' 6%; 'peon' 6%; ' toget' 6% |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | clean | 49 | 8741 | 0 / 0 | 76 (224) | +0.35 | +0.19 | +0.27 | +0.38 | +0.23 | 1.5 / 1.5 | ' none' 35%; ' both' 20%; ' loc' 16%; ' beskrevs' 16%; ' while' 16%; 'ittest' 16% |
+| Mixtral-8x7B (BOS) | f1 | L18E002 | delta | 356 | 9534 | 2 / 6 | 68 (224) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 1.0 / 0.9 | ' /******/' 18%; ' plural' 7%; ' word' 5%; ' second' 5%; 'ncia' 4%; ' /***/' 4% |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | delta | 14 | 12486 | 0 / 0 | 94 (224) | +0.00 | +0.02 | +0.02 | +0.01 | +0.07 | 0.6 / 1.1 | ' /******/' 50%; ' sake' 7%; ' purposes' 7%; ' Flag' 7%; 'riterion' 7%; 'gebra' 7% |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | clean | 14 | 22310 | 0 / 0 | 150 (224) | -0.01 | +0.05 | +0.04 | +0.00 | +0.24 | 0.0 / 1.0 | ' /******/' 86%; ' oppon' 29%; ' /***/' 29%; 'eron' 21%; 'refix' 21%; 'lette' 21% |
+| Mixtral-8x7B (BOS) | f1 | L19E004 | delta | 365 | 2798 | 12 / 23 | 24 (224) | +0.00 | +0.00 | +0.00 | -0.00 | +0.00 | 1.3 / 2.2 | ' /******/' 22%; ' former' 7%; ' Former' 6%; ' bott' 5%; ' entire' 4%; 'former' 4% |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | delta | 85 | 3412 | 19 / 27 | 33 (224) | +0.08 | +0.10 | +0.06 | +0.07 | +0.07 | 2.1 / 2.0 | ' /******/' 25%; ' /***/' 11%; ' none' 5%; 'none' 5%; ' mystery' 4%; ' silence' 4% |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | clean | 85 | 1772 | 18 / 31 | 32 (224) | +0.29 | +0.40 | +0.19 | +0.39 | +0.29 | 2.7 / 2.9 | ' /******/' 21%; ' both' 14%; ' option' 13%; ' true' 12%; 'both' 9%; ' Option' 9% |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | delta | 289 | 1906 | 18 / 29 | 20 (224) | +0.03 | +0.04 | +0.03 | +0.01 | +0.01 | 1.0 / 3.3 | ' /******/' 19%; ' packaging' 7%; ' contents' 6%; ' packing' 6%; ' content' 4%; ' wr' 4% |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | clean | 289 | 141 | 26 / 47 | 6 (224) | +0.26 | +0.32 | +0.22 | +0.09 | +0.10 | 1.8 / 5.2 | ' /******/' 44%; ' contents' 8%; 'WEBPACK' 8%; ' embedding' 8%; 'NOWN' 7%; ' box' 6% |
+| Mixtral-8x7B (BOS) | f1 | L20E005 | delta | 340 | 2890 | 13 / 24 | 30 (224) | +0.02 | +0.02 | +0.01 | +0.01 | +0.01 | 1.4 / 2.3 | ' /******/' 18%; ' packaging' 8%; ' package' 4%; ' /***/' 3%; ' contents' 3%; '__);' 3% |
+| Mixtral-8x7B (BOS) | f1 | L21E000 | delta | 374 | 2120 | 17 / 27 | 18 (224) | +0.01 | +0.01 | +0.01 | -0.00 | +0.01 | 1.2 / 3.0 | ' /******/' 17%; ' interior' 4%; ' inside' 4%; ' sink' 3%; ' bottles' 3%; ' limited' 3% |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | delta | 146 | 1038 | 18 / 31 | 18 (224) | +0.18 | +0.20 | +0.15 | +0.11 | +0.11 | 1.0 / 3.6 | ' /******/' 14%; ' touch' 6%; ' lid' 4%; ' jar' 3%; ' bucket' 3%; ' parking' 3% |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | clean | 146 | 430 | 23 / 36 | 14 (224) | +0.42 | +0.47 | +0.35 | +0.26 | +0.26 | 1.4 / 5.0 | ' touch' 8%; ' Rub' 6%; ' him' 5%; ' lui' 5%; ' pile' 5%; 'istrzost' 5% |
+| Mixtral-8x7B (BOS) | f1 | L24E002 | delta | 309 | 1453 | 21 / 34 | 18 (224) | +0.03 | +0.03 | +0.02 | +0.01 | +0.01 | 1.1 / 3.6 | ' /******/' 9%; ' bag' 6%; ' bags' 5%; ' Bag' 5%; 'bag' 5%; 'Bag' 5% |
+| Mixtral-8x7B (BOS) | dir_f1 | L15E006 | delta | 376 | 14768 | 0 / 1 | 88 (183) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 0.4 / 0.6 | ' /******/' 15%; ' PARTICULAR' 6%; ' oppon' 6%; ' calc' 6%; ':\r' 5%; 'uilder' 4% |
+| Mixtral-8x7B (BOS) | dir_f1 | L16E007 | delta | 364 | 10634 | 0 / 2 | 66 (183) | +0.01 | +0.01 | +0.00 | -0.01 | +0.00 | 0.9 / 1.0 | ' /******/' 22%; 'Pyx' 8%; ' toget' 7%; '❶' 7%; '┐' 6%; 'ournal' 6% |
+| Mixtral-8x7B (BOS) | dir_f1 | L17E005 | delta | 370 | 11507 | 1 / 3 | 62 (183) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 0.6 / 1.0 | ' /******/' 16%; ' Kab' 9%; ' Станов' 9%; 'uba' 8%; '\ufeff' 7%; 'Ē' 4% |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E000 | delta | 374 | 9810 | 0 / 4 | 57 (183) | -0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 0.6 / 0.8 | ' /******/' 15%; ' --(' 6%; 'hba' 4%; 'ENDOR' 4%; '\ufeff' 4%; ' shared' 4% |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E004 | delta | 374 | 2366 | 11 / 21 | 18 (183) | -0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.9 / 2.5 | ' /******/' 18%; ' bott' 8%; '\ufeff' 5%; ' bom' 4%; ' entire' 4%; ' contents' 4% |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | delta | 36 | 43 | 36 / 56 | 2 (183) | +0.30 | +0.31 | +0.15 | +0.04 | +0.12 | 1.8 / 4.4 | ' bat' 33%; 'bat' 28%; ' pan' 19%; ' /******/' 17%; ' mess' 14%; ' f' 14% |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | clean | 36 | 43 | 42 / 53 | 4 (183) | +0.31 | +0.36 | +0.16 | +0.05 | +0.14 | 2.2 / 4.4 | ' bat' 33%; 'bat' 31%; ' /******/' 25%; ' pan' 22%; ' golf' 17%; ' mess' 14% |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | delta | 334 | 889 | 19 / 32 | 12 (183) | +0.01 | +0.02 | +0.01 | +0.01 | +0.00 | 0.7 / 3.6 | ' /******/' 16%; ' contents' 10%; ' packaging' 10%; ' packing' 7%; ' content' 7%; ' Content' 6% |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | clean | 334 | 93 | 31 / 51 | 4 (183) | +0.23 | +0.25 | +0.15 | +0.03 | +0.06 | 0.8 / 5.5 | ' /******/' 50%; ' contents' 12%; ' embedding' 11%; 'WEBPACK' 10%; ' /***/' 8%; 'contents' 8% |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E005 | delta | 344 | 2142 | 14 / 28 | 22 (183) | +0.03 | +0.03 | +0.01 | +0.01 | +0.01 | 1.0 / 3.0 | ' /******/' 18%; ' packaging' 12%; ' /***/' 5%; ' contents' 5%; ' package' 4%; ' empty' 4% |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E000 | delta | 364 | 1646 | 18 / 29 | 15 (183) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 0.8 / 3.5 | ' /******/' 15%; ' Storage' 6%; ' interior' 6%; ' bottle' 5%; ' bottles' 5%; ' storage' 5% |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | delta | 126 | 472 | 23 / 39 | 8 (183) | +0.22 | +0.23 | +0.16 | +0.16 | +0.13 | 0.8 / 3.7 | ' /******/' 18%; ' touch' 7%; ' lid' 6%; ' jar' 5%; ' pan' 5%; ' bowl' 5% |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | clean | 126 | 102 | 29 / 50 | 5 (183) | +0.45 | +0.49 | +0.32 | +0.26 | +0.25 | 1.1 / 5.1 | ' touch' 9%; ' Reyn' 7%; ' /******/' 7%; ' pan' 6%; ' jar' 5%; ' lid' 5% |
+| Mixtral-8x7B (BOS) | dir_f1 | L23E000 | delta | 317 | 481 | 22 / 38 | 7 (183) | +0.02 | +0.04 | +0.02 | +0.02 | +0.02 | 0.7 / 4.1 | ' /******/' 13%; ' opening' 10%; ' bow' 6%; 'öff' 6%; ' cart' 6%; ' Cart' 6% |
+| Mixtral-8x7B (BOS) | dir_f1 | L24E002 | delta | 332 | 1044 | 22 / 35 | 11 (183) | +0.02 | +0.03 | +0.02 | +0.01 | +0.02 | 0.7 / 4.2 | ' /******/' 11%; ' bag' 6%; ' bags' 6%; ' Bag' 6%; 'Bag' 6%; 'bag' 5% |
+| Mixtral-8x7B (BOS) | dir_opt | L13E005 | delta | 372 | 7326 | 16 / 18 | 19 (87) | +0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 0.9 / 0.6 | ' /******/' 20%; 'teger' 17%; ' empty' 16%; ' empt' 14%; 'empty' 13%; ' remaining' 13% |
+| Mixtral-8x7B (BOS) | dir_opt | L16E007 | delta | 369 | 10532 | 2 / 8 | 29 (87) | +0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 1.0 / 1.1 | ' /******/' 12%; 'berger' 6%; ' squeez' 5%; ':\r' 5%; ' laug' 4%; ' Freedom' 4% |
+| Mixtral-8x7B (BOS) | dir_opt | L18E005 | delta | 352 | 1274 | 12 / 29 | 8 (87) | +0.01 | -0.00 | +0.00 | -0.00 | -0.00 | 2.3 / 0.7 | ' /******/' 16%; ' packed' 15%; ' crowded' 15%; 'akespe' 13%; ' fewer' 12%; ' halfway' 12% |
+| Mixtral-8x7B (BOS) | dir_opt | L19E006 | delta | 372 | 824 | 15 / 31 | 6 (87) | -0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 2.3 / 1.3 | ' /******/' 18%; ' empty' 9%; ' domin' 7%; ' crowded' 7%; ' /***/' 6%; ' tort' 6% |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | delta | 372 | 114 | 35 / 49 | 3 (87) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 4.0 / 1.2 | ' empty' 19%; 'Empty' 19%; ' empt' 18%; 'empty' 18%; ' /******/' 16%; ' vac' 14% |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | clean | 372 | 6 | 63 / 86 | 2 (87) | +1.05 | -0.07 | +0.34 | +0.12 | +0.05 | 11.2 / 1.1 | ' empty' 24%; ' filled' 23%; ' empt' 19%; 'empty' 19%; 'Empty' 18%; 'EMPTY' 18% |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | delta | 6 | 998 | 33 / 50 | 6 (87) | +0.16 | -0.01 | +0.05 | +0.03 | +0.03 | 1.7 / 1.3 | ' /******/' 17%; ' pictures' 17%; ' picture' 17%; ' image' 17%; ' images' 17%; ' --(' 17% |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | clean | 6 | 115 | 33 / 50 | 2 (87) | +0.23 | -0.06 | +0.07 | -0.15 | -0.02 | 2.0 / 2.0 | ' map' 33%; ' overhead' 33%; ' Map' 33%; ' maps' 33%; ' chart' 33%; ' prosecut' 33% |
+| Mixtral-8x7B (BOS) | dir_opt | L21E004 | delta | 238 | 96 | 36 / 50 | 4 (87) | +0.11 | -0.01 | +0.04 | -0.03 | -0.00 | 4.8 / 1.1 | ' filled' 25%; ' empty' 24%; ' full' 24%; 'filled' 24%; ' fill' 21%; ' filling' 18% |
+| Mixtral-8x7B (BOS) | dir_opt | L21E006 | delta | 365 | 175 | 25 / 47 | 5 (87) | +0.01 | -0.00 | +0.00 | +0.01 | +0.00 | 5.9 / 1.3 | ' filled' 18%; 'filled' 17%; ' naked' 16%; ' overflow' 16%; ' fill' 14%; ' bare' 14% |
+| Mixtral-8x7B (BOS) | dir_opt | L22E005 | delta | 199 | 6 | 54 / 71 | 1 (87) | +0.10 | +0.04 | +0.05 | +0.00 | +0.03 | 4.0 / 0.9 | ' empty' 36%; ' empt' 35%; 'empty' 35%; 'Empty' 35%; ' vac' 35%; 'EMPTY' 34% |
+| Mixtral-8x7B (BOS) | dir_opt | L24E002 | delta | 272 | 290 | 24 / 44 | 5 (87) | +0.10 | +0.03 | +0.06 | +0.00 | -0.01 | 4.9 / 1.0 | ' over' 17%; ' Over' 14%; 'over' 14%; 'Over' 14%; ' overs' 13%; ' overflow' 13% |
+| Mixtral-8x7B (BOS) | dir_opt | L26E002 | delta | 364 | 30 | 40 / 58 | 2 (87) | +0.01 | +0.00 | +0.00 | +0.00 | +0.00 | 4.2 / 0.8 | ' full' 24%; ' Full' 23%; 'full' 22%; 'Full' 22%; 'FULL' 15%; ' voll' 15% |
+| Mixtral-8x7B (BOS) | f2e | L17E001 | delta | 28 | 11824 | 11 / 11 | 24 (59) | +0.03 | +0.06 | +0.04 | +0.05 | +0.02 | 0.6 / 0.5 | ' /******/' 21%; ' latter' 11%; 'THOD' 11%; 'olan' 11%; ' geldig' 7%; ' /***/' 7% |
+| Mixtral-8x7B (BOS) | f2e | L17E005 | delta | 70 | 13696 | 3 / 6 | 22 (59) | -0.00 | +0.00 | -0.00 | +0.01 | -0.00 | 0.1 / 0.4 | ' latter' 23%; ' /******/' 11%; ' cref' 4%; 'istribute' 4%; ' Станов' 4%; 'stract' 4% |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | delta | 10 | 15392 | 0 / 0 | 27 (59) | +0.00 | +0.00 | +0.00 | +0.00 | -0.00 | 0.2 / 0.0 | ' /******/' 20%; 'reader' 10%; 'ygon' 10%; 'Reader' 10%; 'ctrine' 10%; 'EO' 10% |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | clean | 10 | 18131 | 0 / 0 | 29 (59) | +0.11 | -0.28 | +0.06 | +0.03 | -0.04 | 0.6 / 0.0 | ' noten' 50%; ' oppon' 40%; 'ityEngine' 40%; ' /***/' 40%; ' sorts' 20%; 'course' 20% |
+| Mixtral-8x7B (BOS) | f2e | L18E002 | delta | 62 | 7770 | 10 / 15 | 13 (59) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 0.3 / 0.5 | ' latter' 31%; ' second' 23%; 'second' 16%; 'first' 13%; ' segundo' 13%; ' first' 11% |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | delta | 72 | 2319 | 18 / 28 | 5 (59) | -0.00 | +0.00 | -0.00 | -0.00 | +0.00 | 0.4 / 0.9 | ' former' 39%; ' Former' 35%; 'former' 32%; ' ehemal' 31%; ' formerly' 24%; ' latter' 22% |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | clean | 72 | 146 | 19 / 46 | 2 (59) | +0.01 | +0.21 | +0.11 | -0.03 | +0.04 | 0.3 / 1.5 | ' latter' 81%; ' former' 78%; ' Former' 72%; 'former' 69%; ' /******/' 67%; ' ehemal' 49% |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | delta | 21 | 579 | 14 / 24 | 5 (59) | +0.03 | +0.05 | +0.03 | +0.02 | +0.00 | 1.0 / 0.9 | ' winter' 14%; ' Winter' 14%; ' frozen' 14%; ' snow' 14%; ' cold' 14%; ' /******/' 14% |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | clean | 21 | 163 | 29 / 48 | 2 (59) | +0.39 | +0.26 | +0.21 | +0.10 | +0.01 | 1.9 / 1.8 | ' /******/' 38%; ' winter' 19%; ' cold' 14%; ' Ind' 10%; 'rdev' 10%; ' shorter' 10% |
+| Mixtral-8x7B (BOS) | f2e | L20E001 | delta | 56 | 176 | 34 / 46 | 2 (59) | +0.00 | +0.02 | +0.01 | +0.00 | +0.00 | 0.4 / 1.5 | ' /******/' 20%; ' second' 7%; ' oppon' 7%; ' /***/' 5%; ' swimming' 5%; ' cold' 5% |
+| Mixtral-8x7B (BOS) | f2e | L20E005 | delta | 52 | 1068 | 19 / 38 | 4 (59) | +0.01 | +0.03 | +0.01 | -0.01 | -0.00 | 0.3 / 0.9 | ' /******/' 17%; ' second' 10%; 'second' 8%; ' вто' 8%; ' Second' 8%; ' acknow' 8% |
+| Mixtral-8x7B (BOS) | f2e | L21E000 | delta | 58 | 244 | 22 / 41 | 2 (59) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.4 / 1.2 | ' first' 19%; 'first' 17%; ' /******/' 16%; ' former' 16%; ' latter' 12%; ' Former' 10% |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | delta | 27 | 1647 | 33 / 44 | 4 (59) | +0.07 | +0.10 | +0.07 | +0.01 | +0.03 | 0.5 / 1.7 | ' /******/' 22%; ' first' 15%; ' computers' 7%; ' notebook' 7%; ' lapt' 7%; ' smart' 7% |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | clean | 27 | 227 | 37 / 44 | 2 (59) | +0.44 | +0.26 | +0.35 | +0.01 | +0.17 | 0.6 / 1.7 | ' /******/' 26%; ' flash' 15%; ' storage' 11%; ' first' 11%; ' dog' 11%; ' personality' 11% |
+| Mixtral-8x7B (BOS) | f2e | L22E000 | delta | 49 | 2070 | 31 / 35 | 5 (59) | +0.01 | +0.02 | +0.01 | +0.00 | +0.01 | 1.1 / 1.3 | ' /******/' 14%; ' noten' 6%; ' summer' 6%; 'sum' 6%; ' Summer' 6%; 'Sum' 6% |
+| Mixtral-8x7B (BOS) | f2e | L23E007 | delta | 53 | 93 | 30 / 53 | 2 (59) | +0.04 | +0.05 | +0.03 | +0.01 | +0.01 | 0.7 / 1.6 | ' /******/' 9%; ' oppon' 8%; ' warm' 6%; ' ingår' 6%; ' olymp' 6%; 'leg' 4% |
+| Mixtral-8x7B (BOS) | f2e | L24E002 | delta | 52 | 1806 | 23 / 31 | 5 (59) | +0.02 | +0.02 | +0.02 | -0.01 | +0.00 | 0.2 / 1.3 | ' /******/' 12%; ' PC' 8%; 'comput' 8%; ' computers' 8%; ' pc' 6%; ' computer' 6% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L14E007 | delta | 427 | 9930 | 0 / 0 | 18 (55) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.1 / 0.0 | ' /******/' 23%; ' easier' 8%; 'Ď' 7%; '\ufeff' 6%; ' eerst' 6%; ' inwon' 5% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L17E007 | delta | 383 | 5300 | 1 / 3 | 13 (55) | +0.01 | -0.01 | +0.00 | -0.01 | +0.00 | 0.6 / 0.0 | ' /******/' 19%; 'Disabled' 12%; ' disabled' 12%; 'disabled' 9%; 'mero' 9%; 'agma' 6% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | delta | 20 | 3076 | 15 / 25 | 8 (55) | +0.02 | -0.09 | +0.03 | -0.09 | -0.06 | 0.5 / 0.0 | ' /******/' 35%; ' fond' 35%; 'MLE' 30%; 'interest' 25%; 'loat' 25%; 'oki' 25% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | clean | 20 | 716 | 10 / 40 | 3 (55) | +0.08 | -0.20 | -0.03 | -0.15 | -0.22 | 0.6 / 0.0 | ' eyes' 80%; ' eye' 80%; 'Geplaatst' 80%; '込' 80%; ' gaze' 65%; '🟠' 65% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E006 | delta | 306 | 6408 | 5 / 10 | 11 (55) | +0.01 | +0.00 | +0.01 | +0.00 | +0.00 | 0.4 / 0.0 | ' /******/' 16%; ' kennis' 9%; ' /***/' 6%; 'adesh' 6%; ' medium' 6%; ' env' 5% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | delta | 97 | 1482 | 19 / 41 | 8 (55) | +0.10 | +0.02 | +0.02 | +0.03 | -0.02 | 3.5 / 0.0 | ' pity' 24%; ' Станов' 21%; 'alia' 18%; 'LIED' 16%; 'wan' 16%; ' anal' 16% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | clean | 97 | 65 | 26 / 56 | 2 (55) | +0.29 | +0.02 | -0.01 | +0.05 | -0.20 | 3.6 / 0.0 | ' /******/' 74%; ' Станов' 63%; ' /***/' 42%; 'Ő' 32%; 'imeq' 31%; ' upset' 29% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | delta | 485 | 1090 | 19 / 36 | 4 (55) | +0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 1.6 / 0.0 | ' /******/' 13%; ' stronger' 13%; ' correct' 8%; ' sym' 7%; 'correct' 7%; '\ufeff' 7% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | clean | 485 | 236 | 23 / 43 | 2 (55) | +0.23 | +0.02 | +0.07 | +0.07 | -0.07 | 1.9 / 0.0 | ' /******/' 73%; ' Станов' 49%; ' /***/' 46%; 'ityEngine' 16%; '\ufeff' 15%; 'AtA' 14% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | delta | 439 | 667 | 25 / 37 | 4 (55) | +0.03 | +0.01 | +0.01 | +0.01 | +0.01 | 2.0 / 0.0 | ' /******/' 12%; ' stronger' 9%; ' aston' 8%; ' bigger' 8%; ' larger' 7%; ' Size' 6% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | clean | 439 | 73 | 28 / 55 | 2 (55) | +0.44 | +0.01 | +0.23 | +0.03 | +0.05 | 2.6 / 0.0 | ' /******/' 42%; ' Станов' 38%; 'ityEngine' 16%; ' /***/' 11%; 'vscale' 10%; ' able' 8% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | delta | 96 | 479 | 23 / 43 | 4 (55) | +0.16 | +0.01 | +0.08 | -0.02 | +0.02 | 1.6 / 0.0 | ' coaches' 15%; ' ment' 14%; ' role' 12%; ' coach' 12%; ' promise' 12%; ' hospitals' 12% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | clean | 96 | 20 | 42 / 56 | 2 (55) | +0.67 | -0.03 | +0.31 | -0.07 | +0.10 | 3.2 / 0.0 | ' Станов' 24%; ' teachers' 17%; 'Geplaatst' 17%; ' student' 16%; ' ment' 14%; ' coaches' 14% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E003 | delta | 383 | 811 | 11 / 25 | 4 (55) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 1.0 / 0.0 | ' /******/' 12%; ' spare' 10%; ' bigger' 9%; ' busy' 8%; ' larger' 8%; ' greater' 8% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L22E000 | delta | 418 | 1764 | 18 / 28 | 6 (55) | +0.04 | +0.00 | +0.02 | +0.00 | +0.01 | 1.3 / 0.1 | ' /******/' 21%; ' concern' 7%; ' tall' 7%; ' concerning' 6%; ' concerns' 6%; ' sensitivity' 6% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L23E000 | delta | 232 | 276 | 25 / 44 | 2 (55) | +0.21 | +0.00 | +0.14 | -0.01 | +0.04 | 1.5 / 0.0 | ' strong' 13%; ' Strong' 13%; 'strong' 13%; ' stronger' 12%; ' strength' 12%; ' strongest' 12% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L24E004 | delta | 270 | 2494 | 11 / 24 | 8 (55) | +0.10 | +0.04 | +0.07 | +0.03 | +0.03 | 1.0 / 0.0 | ' ske' 14%; ' strength' 12%; ' /******/' 12%; ' twice' 12%; ' strong' 12%; 'ske' 11% |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L25E002 | delta | 432 | 3842 | 6 / 14 | 8 (55) | +0.02 | +0.04 | +0.02 | +0.03 | +0.01 | 0.7 / 0.0 | ' /******/' 13%; ' ill' 9%; ' thin' 9%; ' sick' 8%; ' Tall' 8%; ' ingår' 8% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L14E007 | delta | 387 | 9484 | 0 / 0 | 13 (40) | -0.00 | +0.00 | -0.00 | +0.00 | -0.00 | 0.1 / 0.0 | ' /******/' 15%; ' eerst' 12%; 'decess' 8%; 'HECK' 8%; ' inwon' 7%; ' /***/' 7% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L17E007 | delta | 314 | 4965 | 4 / 8 | 8 (40) | +0.04 | -0.02 | +0.01 | -0.02 | -0.00 | 0.2 / 0.1 | ' /******/' 21%; 'mero' 17%; 'Disabled' 10%; ' surprise' 9%; ' shock' 9%; ' surprised' 9% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | delta | 28 | 4726 | 21 / 25 | 4 (40) | +0.05 | -0.10 | +0.04 | -0.12 | -0.06 | 0.6 / 0.0 | ' suddenly' 32%; ' Suddenly' 32%; 'wig' 29%; ' sudden' 29%; 'inition' 29%; ' dup' 29% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | clean | 28 | 963 | 11 / 29 | 4 (40) | +0.11 | -0.21 | +0.04 | -0.19 | -0.21 | 0.8 / 0.0 | ' /******/' 61%; ' eyes' 57%; ' eye' 57%; ' suspicion' 57%; '込' 57%; ' gaze' 57% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E006 | delta | 312 | 2716 | 6 / 10 | 6 (40) | -0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 0.5 / 0.0 | ' /******/' 19%; ' /***/' 12%; ' env' 8%; ':\r' 8%; 'ERCHANT' 8%; 'ghai' 7% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | delta | 71 | 66 | 13 / 56 | 2 (40) | +0.09 | +0.04 | +0.01 | +0.06 | -0.04 | 3.2 / 0.0 | ' pity' 34%; 'awa' 34%; 'Anchor' 34%; 'wan' 32%; ' anchor' 32%; ' kennis' 31% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | clean | 71 | 68 | 0 / 56 | 2 (40) | +0.10 | +0.17 | -0.07 | +0.19 | -0.20 | 1.9 / 0.0 | ' Станов' 84%; ' /******/' 70%; ' upset' 44%; ' confused' 39%; 'imeq' 37%; 'bolds' 37% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | delta | 477 | 1065 | 19 / 34 | 3 (40) | +0.00 | -0.00 | +0.00 | -0.00 | +0.00 | 1.1 / 0.1 | ' /******/' 12%; ' stronger' 9%; ' correct' 9%; ' shocked' 9%; ' referring' 8%; 'istribute' 8% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | clean | 477 | 140 | 21 / 44 | 2 (40) | +0.22 | -0.03 | +0.06 | +0.02 | -0.07 | 1.0 / 0.0 | ' /******/' 71%; ' Станов' 59%; ' /***/' 44%; 'WEBPACK' 19%; 'ityEngine' 17%; ' gepublice' 13% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | delta | 415 | 520 | 27 / 38 | 4 (40) | +0.05 | +0.01 | +0.03 | +0.01 | +0.01 | 1.4 / 0.0 | ' surprised' 12%; ' shocked' 12%; ' shock' 11%; ' surprise' 10%; ' /******/' 9%; ' aston' 9% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | clean | 415 | 66 | 25 / 55 | 2 (40) | +0.55 | +0.03 | +0.25 | +0.04 | +0.06 | 2.3 / 0.0 | ' Станов' 40%; ' /******/' 32%; 'ityEngine' 18%; ' larger' 11%; ' shocked' 10%; ' /***/' 10% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E005 | delta | 150 | 162 | 35 / 48 | 1 (40) | +0.04 | +0.01 | +0.01 | +0.01 | +0.01 | 1.4 / 0.0 | ' ment' 15%; ' youngest' 14%; ' aunt' 13%; ' hospital' 13%; ' Hospital' 13%; ' mother' 12% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | delta | 142 | 410 | 9 / 45 | 2 (40) | +0.12 | -0.01 | +0.08 | -0.02 | +0.02 | 1.2 / 0.0 | ' ment' 17%; ' role' 16%; 'role' 16%; 'Role' 14%; ' Role' 14%; ' practice' 11% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | clean | 142 | 29 | 30 / 58 | 1 (40) | +0.76 | -0.13 | +0.37 | -0.15 | +0.11 | 2.4 / 0.0 | ' bab' 30%; ' Станов' 20%; ' role' 18%; ' ment' 17%; 'role' 17%; 'Geplaatst' 17% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E003 | delta | 403 | 1889 | 2 / 17 | 5 (40) | +0.01 | +0.00 | +0.00 | +0.00 | +0.00 | 0.8 / 0.1 | ' busy' 12%; ' /******/' 11%; ' spare' 11%; 'bus' 7%; ' preparing' 7%; ' Bus' 6% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L23E000 | delta | 226 | 170 | 31 / 42 | 1 (40) | +0.27 | +0.00 | +0.14 | -0.02 | +0.05 | 1.5 / 0.0 | ' teacher' 14%; ' stronger' 12%; ' bur' 12%; ' strong' 12%; ' Strong' 12%; 'strong' 12% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L25E002 | delta | 419 | 6677 | 7 / 10 | 9 (40) | +0.03 | +0.02 | +0.02 | +0.01 | +0.01 | 0.6 / 0.0 | ' thin' 20%; ' /******/' 16%; ' slim' 11%; ' shell' 8%; ' ill' 8%; ' hor' 8% |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L27E005 | delta | 245 | 7275 | 26 / 38 | 14 (40) | +0.20 | +0.16 | +0.16 | +0.14 | +0.12 | 1.1 / 0.2 | ' strong' 22%; ' Strong' 19%; 'strong' 16%; ' STR' 16%; 'Str' 15%; ' sl' 15% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L14E007 | delta | 472 | 7440 | 1 / 5 | 11 (35) | -0.00 | -0.01 | -0.00 | -0.01 | -0.01 | 0.1 / 0.1 | ' /******/' 20%; 'hest' 7%; 'vscale' 7%; ' easier' 7%; 'TabIndex' 6%; ' kennis' 6% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L17E007 | delta | 340 | 4430 | 2 / 4 | 7 (35) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.2 / 0.0 | ' /******/' 23%; ' disabled' 15%; 'Disabled' 12%; 'disabled' 12%; ' greater' 8%; ' bigger' 6% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E006 | delta | 260 | 2615 | 13 / 22 | 5 (35) | -0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.4 / 0.0 | ' /******/' 16%; 'ército' 10%; ' better' 9%; ' restored' 8%; ':\r' 8%; ' alone' 8% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | delta | 34 | 5 | 56 / 68 | 1 (35) | +0.22 | -0.04 | +0.07 | -0.02 | +0.03 | 2.6 / 0.0 | ' /******/' 38%; ' impressed' 38%; ' impress' 38%; ' impression' 38%; ' struck' 38%; ' /***/' 35% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | clean | 34 | 22 | 41 / 71 | 1 (35) | +0.15 | -0.01 | +0.04 | +0.01 | -0.10 | 2.6 / 0.0 | ' /******/' 91%; ' /***/' 62%; ' impressed' 38%; ' impress' 38%; ' impression' 38%; ' struck' 38% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E004 | delta | 296 | 97 | 24 / 50 | 2 (35) | +0.03 | -0.00 | +0.02 | -0.00 | +0.00 | 1.3 / 0.0 | ' /******/' 22%; ' _' 12%; ' **' 10%; ' stronger' 9%; ' better' 8%; ' eerst' 7% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | delta | 449 | 928 | 24 / 34 | 3 (35) | +0.00 | +0.00 | -0.00 | +0.00 | +0.00 | 0.9 / 0.0 | ' /******/' 18%; '\ufeff' 14%; ' busy' 8%; ' expert' 8%; ' /***/' 7%; ' better' 7% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | clean | 449 | 137 | 24 / 47 | 1 (35) | +0.24 | +0.03 | +0.08 | +0.04 | +0.02 | 1.2 / 0.0 | ' /******/' 69%; ' /***/' 47%; ' Станов' 43%; '\ufeff' 19%; 'WEBPACK' 17%; ' stronger' 14% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | delta | 378 | 863 | 25 / 35 | 2 (35) | +0.02 | +0.00 | +0.02 | +0.00 | +0.00 | 1.2 / 0.0 | ' /******/' 9%; ' better' 8%; ' stronger' 8%; ' bigger' 7%; ' greater' 7%; ' faster' 6% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | clean | 378 | 49 | 29 / 59 | 1 (35) | +0.36 | +0.00 | +0.26 | -0.03 | +0.08 | 1.7 / 0.0 | ' Станов' 35%; ' /******/' 34%; ' small' 11%; ' money' 11%; ' financ' 10%; ' cash' 8% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E005 | delta | 252 | 114 | 27 / 48 | 2 (35) | +0.01 | +0.01 | +0.00 | +0.00 | +0.00 | 1.3 / 0.0 | ' /******/' 14%; ' aer' 8%; ' pup' 8%; ' prot' 8%; ' followers' 8%; 'prot' 8% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | delta | 130 | 88 | 25 / 52 | 1 (35) | +0.05 | +0.01 | +0.04 | -0.00 | -0.01 | 1.4 / 0.0 | ' ment' 15%; ' teachers' 15%; ' teacher' 15%; ' coach' 15%; ' coaches' 15%; ' role' 15% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | clean | 130 | 18 | 38 / 61 | 2 (35) | +0.64 | -0.02 | +0.32 | -0.08 | +0.15 | 2.8 / 0.0 | ' piano' 31%; ' teacher' 18%; ' ment' 18%; ' teachers' 17%; ' music' 17%; ' crim' 17% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E003 | delta | 365 | 1521 | 11 / 30 | 3 (35) | +0.00 | -0.00 | -0.00 | -0.00 | +0.00 | 1.0 / 0.0 | ' busy' 18%; ' spare' 17%; ' /******/' 8%; 'bus' 8%; ' bigger' 7%; ' injured' 7% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L23E000 | delta | 236 | 332 | 24 / 39 | 1 (35) | +0.15 | +0.00 | +0.10 | -0.01 | +0.04 | 1.1 / 0.0 | ' /******/' 11%; ' student' 10%; 'acci' 8%; 'ViewById' 8%; 'ania' 8%; 'fte' 8% |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L23E007 | delta | 313 | 539 | 10 / 35 | 2 (35) | +0.08 | +0.04 | +0.09 | +0.03 | +0.05 | 1.0 / 0.1 | ' /******/' 25%; ' influ' 10%; ' strength' 10%; ' mus' 9%; ' Stre' 9%; 'stre' 9% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L13E001 | delta | 88 | 7768 | 1 / 1 | 10 (32) | +0.00 | -0.00 | +0.00 | +0.00 | +0.00 | 0.0 / 0.0 | ' altogether' 47%; 'liferay' 44%; ' candle' 43%; ' uw' 42%; 'wig' 42%; 'klass' 42% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L14E007 | delta | 484 | 6558 | 0 / 1 | 9 (32) | +0.00 | -0.00 | -0.00 | -0.00 | -0.00 | 0.1 / 0.0 | ' /******/' 28%; 'endregion' 10%; ' franç' 9%; ' punch' 9%; ' ourselves' 8%; 'SEL' 8% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E006 | delta | 198 | 2858 | 15 / 33 | 6 (32) | -0.00 | -0.00 | -0.00 | +0.00 | -0.00 | 1.3 / 0.1 | ' miracle' 21%; ' tired' 21%; ' conserv' 20%; 'weak' 19%; ' simpl' 17%; ' higher' 17% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | delta | 18 | 28 | 17 / 78 | 1 (32) | +0.52 | +0.08 | +0.01 | +0.12 | -0.14 | 1.8 / 0.0 | ' /***/' 78%; ' unable' 61%; ' streng' 61%; ' listade' 61%; 'weak' 56%; ' PARTICULAR' 56% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | clean | 18 | 28 | 17 / 78 | 1 (32) | +0.52 | +0.08 | +0.01 | +0.12 | -0.14 | 1.8 / 0.0 | ' /***/' 78%; ' unable' 61%; ' streng' 61%; ' listade' 61%; 'weak' 56%; ' PARTICULAR' 56% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E004 | delta | 269 | 19 | 35 / 64 | 1 (32) | +0.02 | +0.03 | +0.03 | +0.03 | +0.04 | 2.1 / 0.0 | ' /******/' 32%; ' jobs' 16%; ' ment' 15%; ' teacher' 15%; ' someone' 15%; ' somebody' 14% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | delta | 399 | 2330 | 15 / 33 | 3 (32) | +0.01 | +0.01 | +0.00 | +0.00 | +0.00 | 1.0 / 0.2 | ' /******/' 30%; ' expert' 11%; ' demands' 10%; ' Станов' 10%; ' lazy' 10%; ' injured' 10% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | clean | 399 | 124 | 21 / 46 | 2 (32) | +0.30 | -0.01 | +0.09 | -0.00 | +0.02 | 1.4 / 0.0 | ' /******/' 67%; ' Станов' 45%; 'WEBPACK' 38%; ' /***/' 33%; ' favorite' 21%; ' kennis' 21% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | delta | 345 | 1786 | 16 / 31 | 4 (32) | +0.06 | +0.01 | +0.04 | +0.02 | +0.02 | 1.0 / 0.1 | ' alone' 12%; ' solo' 12%; 'alone' 12%; ' bigger' 12%; ' stronger' 12%; ' better' 12% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | clean | 345 | 121 | 17 / 48 | 2 (32) | +0.41 | -0.04 | +0.24 | -0.05 | +0.12 | 1.3 / 0.0 | ' /******/' 46%; ' Станов' 41%; ' money' 24%; ' extra' 23%; 'Extra' 23%; ' Extra' 22% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E005 | delta | 314 | 62 | 17 / 57 | 1 (32) | +0.01 | +0.00 | +0.00 | +0.00 | +0.00 | 1.4 / 0.0 | ' ment' 14%; ' id' 13%; ' prot' 13%; ' colle' 13%; ' inspir' 12%; ' forget' 12% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | delta | 186 | 76 | 7 / 52 | 1 (32) | +0.04 | +0.02 | +0.04 | +0.01 | +0.00 | 0.9 / 0.0 | ' role' 23%; 'role' 23%; ' ment' 23%; ' Role' 23%; 'Role' 23%; ' coaches' 22% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | clean | 186 | 55 | 6 / 56 | 1 (32) | +0.47 | +0.02 | +0.42 | -0.02 | +0.15 | 1.8 / 0.0 | ' piano' 38%; ' role' 28%; 'role' 24%; ' Role' 23%; 'Role' 23%; ' ment' 23% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E003 | delta | 340 | 308 | 8 / 39 | 2 (32) | -0.00 | +0.00 | +0.00 | +0.00 | +0.00 | 1.2 / 0.0 | ' busy' 13%; ' grand' 12%; 'grand' 12%; ' prize' 12%; ' recover' 12%; ' help' 12% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L23E000 | delta | 296 | 57 | 33 / 52 | 1 (32) | +0.13 | -0.02 | +0.06 | -0.02 | +0.03 | 1.4 / 0.0 | 'acci' 14%; ' pup' 14%; ' student' 14%; ' students' 14%; ' former' 14%; ' Former' 14% |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L23E007 | delta | 359 | 349 | 15 / 41 | 1 (32) | +0.08 | +0.04 | +0.05 | +0.02 | +0.04 | 0.8 / 0.0 | ' /******/' 28%; ' oppon' 20%; '\ufeff' 19%; ' Mus' 12%; 'Mus' 12%; ' sib' 12% |
+| Mixtral-8x7B (BOS) | cp_nat | L16E007 | delta | 1662 | 5891 | 4 / 10 | 39 (175) | +0.00 | -0.00 | +0.00 | -0.00 | -0.00 | 2.1 / 2.2 | ' /******/' 15%; ' holes' 5%; ' size' 5%; ' tall' 4%; ' bulk' 4%; ' barg' 4% |
+| Mixtral-8x7B (BOS) | cp_nat | L18E005 | delta | 1565 | 2278 | 12 / 23 | 22 (175) | +0.01 | -0.00 | +0.00 | -0.00 | -0.00 | 4.1 / 1.6 | ' /******/' 17%; ' packed' 12%; ' crowded' 10%; ' too' 8%; ' filled' 7%; ' longer' 7% |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | delta | 36 | 1008 | 8 / 31 | 8 (175) | +0.01 | -0.06 | -0.01 | +0.02 | -0.00 | 2.5 / 1.8 | ' listade' 28%; ' /***/' 25%; ' /******/' 22%; ' Станов' 19%; '?;' 14%; ' worried' 14% |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | clean | 36 | 92 | 22 / 53 | 4 (175) | +0.10 | -0.16 | +0.04 | +0.16 | -0.00 | 3.1 / 0.9 | ' Станов' 56%; ' listade' 53%; ' /******/' 42%; ' /***/' 28%; 'Geplaatst' 28%; 'ityEngine' 17% |
+| Mixtral-8x7B (BOS) | cp_nat | L19E006 | delta | 1695 | 730 | 17 / 31 | 11 (175) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 4.2 / 2.3 | ' /******/' 15%; ' too' 7%; ' wider' 6%; ' empty' 6%; ' faster' 5%; ' slow' 4% |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | delta | 1668 | 194 | 32 / 45 | 6 (175) | +0.00 | +0.00 | +0.00 | -0.00 | -0.00 | 5.9 / 2.4 | ' /******/' 16%; ' smaller' 13%; ' small' 12%; ' narrow' 10%; ' empty' 9%; ' empt' 9% |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | clean | 1668 | 6 | 61 / 85 | 2 (175) | +0.77 | -0.07 | +0.37 | +0.04 | +0.03 | 15.0 / 1.5 | ' large' 27%; ' crowded' 20%; ' small' 18%; ' big' 18%; ' tall' 14%; ' filled' 13% |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | delta | 38 | 576 | 18 / 42 | 6 (175) | +0.09 | +0.01 | +0.05 | -0.02 | +0.01 | 2.9 / 2.8 | ' /******/' 13%; ' missing' 10%; ' /***/' 10%; ' foster' 10%; ' kennis' 8%; ' Foster' 8% |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | clean | 38 | 18 | 34 / 63 | 2 (175) | +0.38 | +0.08 | +0.27 | +0.03 | +0.10 | 5.2 / 3.6 | ' rich' 16%; 'rich' 16%; ' sing' 10%; ' singing' 10%; 'sing' 10%; ' vocal' 10% |
+| Mixtral-8x7B (BOS) | cp_nat | L21E004 | delta | 1135 | 67 | 29 / 54 | 5 (175) | +0.04 | -0.01 | +0.02 | -0.01 | -0.00 | 7.3 / 1.9 | ' large' 16%; ' smaller' 15%; ' lower' 13%; ' bul' 12%; ' filled' 12%; ' /******/' 11% |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | delta | 1576 | 68 | 30 / 52 | 6 (175) | +0.00 | -0.00 | +0.00 | +0.00 | -0.00 | 8.0 / 1.6 | ' limited' 20%; ' smaller' 18%; ' empty' 17%; ' small' 16%; 'limited' 15%; ' empt' 14% |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | clean | 1576 | 4 | 65 / 83 | 2 (175) | +0.51 | -0.06 | +0.20 | -0.06 | -0.01 | 12.8 / 1.5 | ' small' 22%; ' empty' 19%; ' limited' 19%; ' full' 18%; 'small' 17%; 'empty' 17% |
+| Mixtral-8x7B (BOS) | cp_nat | L22E000 | delta | 1275 | 896 | 16 / 32 | 12 (175) | +0.02 | +0.01 | +0.02 | +0.00 | +0.01 | 4.4 / 2.4 | ' /******/' 14%; ' too' 6%; 'too' 5%; ' big' 5%; ' thin' 5%; ' decor' 5% |
+| Mixtral-8x7B (BOS) | cp_nat | L22E005 | delta | 657 | 75 | 37 / 51 | 3 (175) | +0.21 | +0.10 | +0.14 | +0.02 | +0.10 | 4.1 / 2.8 | ' empty' 24%; 'empty' 23%; ' vac' 23%; ' empt' 23%; 'Empty' 23%; 'EMPTY' 23% |
+| Mixtral-8x7B (BOS) | cp_nat | L24E002 | delta | 1435 | 131 | 32 / 49 | 6 (175) | +0.06 | +0.01 | +0.04 | +0.01 | +0.00 | 7.4 / 1.8 | ' small' 19%; 'small' 17%; ' smaller' 14%; ' Large' 14%; ' tiny' 14%; ' bulk' 14% |
+| Mixtral-8x7B (BOS) | cp_nat | L26E002 | delta | 1610 | 60 | 38 / 52 | 3 (175) | +0.01 | +0.00 | +0.01 | +0.01 | +0.00 | 5.2 / 1.7 | ' fat' 18%; ' Fat' 16%; ' small' 16%; 'Fat' 15%; ' Small' 14%; ' full' 13% |
+
+
+### Caveats
+
+- D freezes the final norm (Phase 4: single-expert exact / frozen 0.996-0.999; the exact-norm check is in `vec_rows.parquet` per vector).
+- T and D come from different passes (bf16 batch noise in T, Phase 4: per-row SD ≈ 0.1-0.3 logits); shares are ratios of sums over many cases.
+- A direct share above 1 means later layers partly undo the expert's write; a share near 0 marks a computer (acts through later layers).
+- Figures: `results/figures/ext13wr_layers_<proto>_<cond>.png`, `results/figures/ext13wr_overview.png`.
+
+
+## Direction 13f: Phase 5 task ladder
+
+**Summary.** The task ladder of P5-2 (agent p5-synth): every Phase-3 / Phase-5 level and both models on one attention–MoE axis, recomputed from the run rows with one code path (validation pairs; attention share = AUC+ of the single-layer final-position curves; A_direct = direct path of all attention outputs; all-MoE M = every final-position MoE output patched; heads among the first 10 picks of the mixed head + expert greedy; knockout F of the condition's own expert and of Phase 3's WinoGrande expert). Ordered by the attention share (mean within-model rank), the levels fall into two blocks rather than a continuous gradient: every entity → attribute level, with or without the answer in a copy prefix, sits at 0.16–0.31 (Qwen3) / 0.34–0.42 (Mixtral), CounterFact at 0.54 [0.51, 0.57] / 0.58 [0.55, 0.60], every attribute → entity level at 0.69–0.79 / 0.52–0.65, and IOI at 0.92 [0.90, 0.94] / 0.80 [0.79, 0.81]. The two models order the shared levels alike (Spearman 0.90 over 12 levels). On identical twins, switching the direction (dir_f1 − dir_opt) raises the attention share by +0.52 [+0.46, +0.56] (Qwen3) / +0.18 [+0.15, +0.20] (Mixtral), A_direct by +1.03 [+0.94, +1.13] / +0.55 [+0.46, +0.64] and lowers M by -0.70 [-0.77, -0.64] / -0.35 [-0.40, -0.29]; making the attribute copyable (copy prefix − Phase-3 option swap, same twins) moves the share by only +0.07 [+0.01, +0.11] / +0.04 [+0.02, +0.05], and the neutral verb does nothing measurable. Within levels, the association strata (≥ 20 pairs) shift the share by at most about 0.1, in opposite directions for the two task directions, and name items are more attention-heavy than object items in every level. The ladder confounds direction with the prompt wrapper, the answer type, prompt length and item composition (listed below); only the paired contrasts hold items fixed.
+
+### What was computed
+
+Levels (RESEARCH_PLAN.md P5-2 and the Phase 5 condition table): CounterFact STR (Phase 3 three-task table; donor-level ext6 runs), WinoGrande option swap (Phase 3 run `wino_<proto>_str`, main family; names / objects strata), the Phase-5 conditions `dir_opt`, `vt_e2a_orig`, `vt_e2a_neu`, `cp_vt_orig`, `cp_vt_neu`, `cp_nat`, `dir_f1`, `f1` (names / objects strata), `vt_a2e_orig` (Qwen3 only), `f2e` (when its base run is ready) and IOI S2 → IO (Phase 3 `ioi_<proto>_s2io`). Every pair-run level is recomputed from `str_sweep_rows` (attention / MoE single-layer curves), `direct_split` and `joint_rows` with `moetrace/ext13syn.py`; the values reproduce the p5-data section exactly (e.g. f1 Qwen3 0.76 [0.73, 0.77], A_direct 1.20, M 0.24) and Phase 3 (option swap 0.16 / 0.34, IOI 0.92 / 0.80). Heads among the first 10 picks come from p5-circuit's circuit state (per row, `scripts/ext13ci_analyze.row_table`), Phase 4 for the option swap; CounterFact and IOI give a point value from the Phase-4 reference. Knockout F: p5-expert's `ext13ko_targets` for Phase 5, Phase 4 (`ext9_knockout_summary.json`) for CounterFact (own = the Direction-6 STR selections L44E069 / L21E001), the option swap (own = WinoGrande expert, margin items) and IOI. CIs: cluster bootstrap over the condition's unit (seed template for templates, WinoGrande twin for the copy prefix on natural twins, else the pair; 5,000 resamples, seed 0). Order key: the attention share's percentile rank within each model, averaged over the models that have the level (so the Qwen3-only level is placed by its rank). Order: p3_opt < dir_opt < cp_nat < cp_vt_neu < vt_e2a_neu < cp_vt_orig < vt_e2a_orig < dir_f1 < cf < f1 < f2e < vt_a2e_orig < ioi.
+
+![Task ladder](../figures/ext13syn_ladder.png)
+
+**Task ladder (validation pairs; ordered by the attention share's within-model rank averaged over the two models; fractions of the drop; 95% cluster-bootstrap CIs; heads for CounterFact / IOI are Phase-4 point values)**
+
+| Rank | Level | Model | Pairs (units) | Attention share (AUC+) | A_direct / drop | All-MoE M / drop | Heads in first 10 mixed picks | Own expert: knockout F | WG expert: knockout F | Mean drop | T median | Names | Paired with (identical items) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | WinoGrande option swap (Phase 3) | Qwen3 | 128 (128) | 0.16 [0.13, 0.20] | 0.05 [0.02, 0.08] | 0.84 [0.83, 0.86] | 3.6 [3.4, 3.8] | L41E117 (A): +0.033 [+0.028, +0.037] | L41E117: +0.033 [+0.028, +0.037] | 8.14 | 18 | 0.08 | cp_nat (copy) |
+| 1 | WinoGrande option swap (Phase 3) | Mixtral | 128 (128) | 0.34 [0.33, 0.36] | 0.29 [0.27, 0.31] | 0.79 [0.76, 0.81] | 2.8 [2.6, 3.1] | L20E000 (A): +0.036 [+0.033, +0.040] | L20E000: +0.036 [+0.033, +0.040] | 7.69 | 19 | 0.08 | cp_nat (copy) |
+|  | WinoGrande option swap (Phase 3) · objects | Qwen3 | 118 (118) | 0.15 [0.12, 0.19] | 0.03 [0.00, 0.05] | 0.86 [0.84, 0.87] | 3.5 [3.3, 3.7] |  |  | 8.09 | 18 | 0.00 |  |
+|  | WinoGrande option swap (Phase 3) · objects | Mixtral | 118 (118) | 0.34 [0.32, 0.35] | 0.27 [0.25, 0.29] | 0.80 [0.78, 0.82] | 2.7 [2.5, 2.9] |  |  | 7.74 | 19 | 0.00 |  |
+|  | WinoGrande option swap (Phase 3) · names | Qwen3 | 10 (10) | 0.28 [0.23, 0.36] | 0.25 [0.18, 0.34] | 0.72 [0.65, 0.80] | 4.7 [3.9, 5.5] |  |  | 8.69 | 20 | 1.00 |  |
+|  | WinoGrande option swap (Phase 3) · names | Mixtral | 10 (10) | 0.44 [0.39, 0.51] | 0.52 [0.38, 0.69] | 0.61 [0.43, 0.76] | 4.4 [3.4, 5.5] |  |  | 6.98 | 22 | 1.00 |  |
+| 2 | dir_opt: option swap on the F1-margin twins | Qwen3 | 90 (90) | 0.19 [0.16, 0.24] | 0.05 [0.02, 0.08] | 0.81 [0.79, 0.83] | 3.6 [3.4, 3.9] | L41E117 (A): +0.025 [+0.011, +0.041] | L41E117: +0.025 [+0.011, +0.041] | 8.70 | 18 | 0.07 | dir_f1 (direction), cp_nat (copy) |
+| 2 | dir_opt: option swap on the F1-margin twins | Mixtral | 94 (94) | 0.35 [0.33, 0.36] | 0.31 [0.29, 0.33] | 0.75 [0.73, 0.78] | 2.6 [2.3, 2.9] | L20E000 (A): +0.025 [+0.016, +0.034] | L20E000: +0.025 [+0.016, +0.034] | 9.65 | 19 | 0.01 | dir_f1 (direction), cp_nat (copy) |
+|  | dir_opt: option swap on the F1-margin twins · objects | Qwen3 | 84 (84) | 0.18 [0.15, 0.23] | 0.03 [0.00, 0.07] | 0.82 [0.80, 0.83] | 3.6 [3.3, 3.8] |  |  | 8.81 | 18 | 0.00 |  |
+|  | dir_opt: option swap on the F1-margin twins · objects | Mixtral | 93 (93) | 0.35 [0.33, 0.36] | 0.31 [0.29, 0.33] | 0.76 [0.73, 0.78] | 2.6 [2.3, 2.8] |  |  | 9.67 | 19 | 0.00 |  |
+| 3 | cp_nat: + copy prefix, natural twins | Qwen3 | 140 (70) | 0.21 [0.20, 0.24] | -0.01 [-0.07, 0.04] | 0.79 [0.76, 0.81] | 4.3 [4.1, 4.6] | L41E117 (A): +0.027 [+0.019, +0.034] | L41E117: +0.027 [+0.019, +0.034] | 5.97 | 23 | 0.07 | dir_f1 (direction), p3_opt (copy), dir_opt (copy) |
+| 3 | cp_nat: + copy prefix, natural twins | Mixtral | 204 (102) | 0.37 [0.36, 0.39] | 0.38 [0.34, 0.41] | 0.73 [0.70, 0.76] | 2.9 [2.6, 3.2] | L21E006 (B): +0.023 [+0.019, +0.027] | L20E000: +0.045 [+0.039, +0.050] | 7.15 | 26 | 0.08 | dir_f1 (direction), p3_opt (copy), dir_opt (copy) |
+|  | cp_nat: + copy prefix, natural twins · objects | Qwen3 | 130 (65) | 0.21 [0.19, 0.23] | -0.04 [-0.09, 0.01] | 0.80 [0.77, 0.82] | 4.2 [4.0, 4.5] |  |  | 5.91 | 23 | 0.00 |  |
+|  | cp_nat: + copy prefix, natural twins · objects | Mixtral | 188 (94) | 0.36 [0.35, 0.37] | 0.35 [0.32, 0.38] | 0.75 [0.72, 0.78] | 2.7 [2.5, 2.9] |  |  | 7.10 | 26 | 0.00 |  |
+|  | cp_nat: + copy prefix, natural twins · names | Qwen3 | 10 (5) | 0.35 [0.29, 0.47] | 0.30 [0.08, 0.51] | 0.64 [0.62, 0.67] | 5.5 [4.8, 6.3] |  |  | 6.66 | 23 | 1.00 |  |
+|  | cp_nat: + copy prefix, natural twins · names | Mixtral | 16 (8) | 0.49 [0.44, 0.55] | 0.66 [0.53, 0.80] | 0.51 [0.35, 0.66] | 5.6 [4.5, 6.7] |  |  | 7.73 | 29 | 1.00 |  |
+| 4 | cp_vt_neu: + copy prefix, templates, neutral verb | Qwen3 | 128 (8) | 0.26 [0.23, 0.38] | 0.09 [-0.10, 0.27] | 0.74 [0.62, 0.83] | 4.5 [3.8, 5.2] | L42E123 (B): -0.007 [-0.021, +0.010] | L41E117: +0.000 [-0.009, +0.011] | 5.59 | 23 | 1.00 | vt_e2a_neu (copy), cp_vt_orig (verb) |
+| 4 | cp_vt_neu: + copy prefix, templates, neutral verb | Mixtral | 128 (8) | 0.38 [0.33, 0.42] | 0.43 [0.37, 0.52] | 0.46 [0.37, 0.63] | 3.3 [2.4, 4.8] | L19E006 (B): +0.035 [+0.012, +0.071] | L20E000: -0.001 [-0.017, +0.034] | 5.40 | 27 | 1.00 | vt_e2a_neu (copy), cp_vt_orig (verb) |
+| 5 | vt_e2a_neu: verb templates, neutral verb | Qwen3 | 128 (12) | 0.22 [0.17, 0.30] | 0.13 [0.05, 0.19] | 0.82 [0.77, 0.87] | 3.6 [2.9, 4.1] | L42E123 (A): +0.020 [-0.006, +0.046] | L41E117: +0.001 [-0.009, +0.012] | 6.08 | 17 | 1.00 | cp_vt_neu (copy), vt_e2a_orig (verb) |
+| 5 | vt_e2a_neu: verb templates, neutral verb | Mixtral | 128 (12) | 0.42 [0.37, 0.48] | 0.42 [0.32, 0.55] | 0.62 [0.48, 0.75] | 4.0 [3.3, 4.8] | L19E006 (A): +0.037 [+0.013, +0.064] | L20E000: +0.023 [-0.007, +0.056] | 5.81 | 18 | 1.00 | cp_vt_neu (copy), vt_e2a_orig (verb) |
+| 6 | cp_vt_orig: + copy prefix, templates, orig verb | Qwen3 | 128 (13) | 0.31 [0.26, 0.38] | 0.11 [-0.01, 0.28] | 0.69 [0.57, 0.79] | 4.5 [3.9, 5.0] | L39E001 (A): +0.008 [-0.017, +0.035] | L41E117: -0.001 [-0.009, +0.006] | 5.61 | 23 | 1.00 | vt_e2a_orig (copy), cp_vt_neu (verb) |
+| 6 | cp_vt_orig: + copy prefix, templates, orig verb | Mixtral | 128 (10) | 0.39 [0.33, 0.47] | 0.47 [0.39, 0.60] | 0.54 [0.38, 0.68] | 4.0 [3.2, 4.8] | L19E006 (A): +0.017 [-0.004, +0.036] | L20E000: +0.020 [-0.012, +0.062] | 5.26 | 26 | 1.00 | vt_e2a_orig (copy), cp_vt_neu (verb) |
+| 7 | vt_e2a_orig: verb templates, orig verb | Qwen3 | 128 (17) | 0.28 [0.20, 0.36] | 0.13 [0.08, 0.17] | 0.82 [0.79, 0.86] | 3.6 [3.0, 4.2] | L39E121 (A): +0.005 [-0.013, +0.030] | L41E117: +0.001 [-0.009, +0.013] | 6.50 | 17 | 1.00 | vt_a2e_orig (direction), cp_vt_orig (copy), vt_e2a_neu (verb) |
+| 7 | vt_e2a_orig: verb templates, orig verb | Mixtral | 128 (18) | 0.41 [0.36, 0.46] | 0.38 [0.31, 0.47] | 0.68 [0.58, 0.76] | 4.2 [3.5, 5.0] | L19E006 (A): +0.042 [+0.024, +0.061] | L20E000: +0.012 [-0.016, +0.040] | 6.51 | 18 | 1.00 | vt_a2e_orig (direction), cp_vt_orig (copy), vt_e2a_neu (verb) |
+| 8 | dir_f1: fill-in-the-blank on the same twins | Qwen3 | 90 (90) | 0.71 [0.68, 0.73] | 1.08 [1.00, 1.17] | 0.11 [0.05, 0.17] | 8.2 [7.9, 8.4] | L44E116 (A): +0.021 [+0.007, +0.036] | L41E117: +0.001 [-0.008, +0.011] | 5.23 | 27 | 0.07 | dir_opt (direction), cp_nat (direction) |
+| 8 | dir_f1: fill-in-the-blank on the same twins | Mixtral | 94 (94) | 0.52 [0.50, 0.54] | 0.86 [0.77, 0.95] | 0.41 [0.35, 0.46] | 5.9 [5.5, 6.2] | L20E001 (A): -0.005 [-0.021, +0.011] | L20E000: +0.002 [-0.004, +0.008] | 4.65 | 31 | 0.01 | dir_opt (direction), cp_nat (direction) |
+|  | dir_f1: fill-in-the-blank on the same twins · objects | Qwen3 | 84 (84) | 0.70 [0.67, 0.72] | 1.06 [0.97, 1.15] | 0.10 [0.03, 0.16] | 8.1 [7.9, 8.4] |  |  | 5.28 | 28 | 0.00 |  |
+|  | dir_f1: fill-in-the-blank on the same twins · objects | Mixtral | 93 (93) | 0.52 [0.50, 0.54] | 0.85 [0.77, 0.94] | 0.42 [0.37, 0.46] | 5.8 [5.5, 6.2] |  |  | 4.66 | 31 | 0.00 |  |
+| 9 | CounterFact STR (subject swap) | Qwen3 | 108 (108) | 0.54 [0.51, 0.57] | 0.50 [0.46, 0.54] | 0.53 [0.49, 0.57] | 6.2 | L44E069 (A): +0.033 [+0.026, +0.039] | L41E117: -0.001 [-0.002, +0.001] | 11.67 | n/a | 0.00 |  |
+| 9 | CounterFact STR (subject swap) | Mixtral | 106 (106) | 0.58 [0.55, 0.60] | 0.63 [0.60, 0.66] | 0.41 [0.37, 0.45] | 6.4 | L21E001 (A (tie L19-L21)): +0.004 [+0.001, +0.008] | L20E000: -0.001 [-0.003, +0.001] | 12.97 | n/a | 0.00 |  |
+| 10 | f1: fill-in-the-blank, probe-neutral pool | Qwen3 | 128 (128) | 0.76 [0.73, 0.77] | 1.20 [1.14, 1.26] | 0.24 [0.18, 0.30] | 8.1 [7.9, 8.3] | L37E032 (A): +0.042 [+0.029, +0.055] | L41E117: -0.004 [-0.009, +0.002] | 4.63 | 27 | 0.55 |  |
+| 10 | f1: fill-in-the-blank, probe-neutral pool | Mixtral | 101 (101) | 0.56 [0.53, 0.59] | 1.01 [0.91, 1.12] | 0.23 [0.13, 0.32] | 6.4 [6.1, 6.8] | L20E001 (B): +0.008 [-0.006, +0.022] | L20E000: +0.005 [-0.002, +0.012] | 4.34 | 32 | 0.12 |  |
+|  | f1: fill-in-the-blank, probe-neutral pool · objects | Qwen3 | 58 (58) | 0.71 [0.68, 0.74] | 1.10 [1.01, 1.21] | 0.15 [0.06, 0.23] | 8.0 [7.7, 8.4] |  |  | 5.25 | 28 | 0.00 |  |
+|  | f1: fill-in-the-blank, probe-neutral pool · objects | Mixtral | 89 (89) | 0.55 [0.52, 0.57] | 0.96 [0.85, 1.07] | 0.26 [0.17, 0.35] | 6.3 [5.9, 6.6] |  |  | 4.41 | 32 | 0.00 |  |
+|  | f1: fill-in-the-blank, probe-neutral pool · names | Qwen3 | 70 (70) | 0.78 [0.75, 0.81] | 1.29 [1.24, 1.34] | 0.34 [0.27, 0.41] | 8.2 [7.9, 8.5] |  |  | 4.12 | 26 | 1.00 |  |
+|  | f1: fill-in-the-blank, probe-neutral pool · names | Mixtral | 12 (12) | 0.68 [0.62, 0.75] | 1.43 [1.21, 1.61] | -0.09 [-0.36, 0.26] | 7.7 [7.2, 8.2] |  |  | 3.82 | 32 | 1.00 |  |
+| 11 | f2e: natural sentence, blank at the end | Qwen3 | 32 (32) | 0.69 [0.60, 0.75] | 0.99 [0.87, 1.12] | 0.21 [0.05, 0.35] | 7.4 [6.8, 7.8] | L43E036 (A): +0.015 [-0.004, +0.032] | L41E117: +0.004 [-0.009, +0.017] | 8.32 | 20 | 0.19 |  |
+| 11 | f2e: natural sentence, blank at the end | Mixtral | 18 (18) | 0.65 [0.59, 0.70] | 1.35 [1.16, 1.55] | -0.06 [-0.34, 0.19] | 6.8 [6.0, 7.6] | L19E004 (A): +0.030 [+0.005, +0.056] | L20E000: +0.000 [-0.007, +0.008] | 6.98 | 22 | 0.11 |  |
+| 12 | vt_a2e_orig: fill-in-the-blank on the templates | Qwen3 | 37 (5) | 0.79 [0.64, 0.80] | 1.47 [1.34, 1.55] | 0.21 [0.19, 0.53] | 9.0 [7.8, 9.1] | L37E032 (A): +0.034 [+0.024, +0.118] | L41E117: -0.009 [-0.031, -0.006] | 3.66 | 27 | 1.00 | vt_e2a_orig (direction) |
+| 13 | IOI (S2 -> IO) | Qwen3 | 128 (128) | 0.92 [0.90, 0.94] | 1.40 [1.38, 1.43] | -0.27 [-0.29, -0.25] | 9.9 | none (no expert pass) : n/a | L41E117: -0.000 [-0.002, +0.002] | 12.65 | 15 | 0.00 |  |
+| 13 | IOI (S2 -> IO) | Mixtral | 128 (128) | 0.80 [0.79, 0.81] | 1.17 [1.14, 1.19] | -0.02 [-0.05, -0.00] | n/a | none (no expert pass) : n/a | L20E000: +0.001 [-0.000, +0.002] | 11.28 | 16 | 0.00 |  |
+
+### Paired contrasts on identical items
+
+Each contrast restricts both conditions to the items they share (natural twins: twin id; templates: seed × name pair, both copy-prefix attribute orders pooled) and applies the same unit resamples to both, so the CI is that of the paired difference. 'validation' = the ladder's split; 'all' = discovery + validation (nothing is selected on these quantities, so the larger set is legitimate). Contrasts with fewer than 8 shared units are listed, but their percentile CIs are not reliable.
+
+**Direction.**
+
+- dir_f1 − dir_opt, Qwen3 (90 shared items, 90 units): share 0.71 vs 0.19, Δ +0.52 [+0.46, +0.56]; A_direct 1.08 vs 0.05, Δ +1.03 [+0.94, +1.13]; M 0.11 vs 0.81, Δ -0.70 [-0.77, -0.64]; heads in first 10 8.19 vs 3.63, Δ +4.56 [+4.19, +4.92]. All splits: share 0.70 vs 0.18, Δ +0.51 [+0.47, +0.54].
+- dir_f1 − dir_opt, Mixtral (94 shared items, 94 units): share 0.52 vs 0.35, Δ +0.18 [+0.15, +0.20]; A_direct 0.86 vs 0.31, Δ +0.55 [+0.46, +0.64]; M 0.41 vs 0.75, Δ -0.35 [-0.40, -0.29]; heads in first 10 5.87 vs 2.59, Δ +3.28 [+2.84, +3.70]. All splits: share 0.51 vs 0.34, Δ +0.17 [+0.15, +0.18].
+- dir_f1 − cp_nat, Qwen3 (10 shared items, 10 units): share 0.65 vs 0.23, Δ +0.41 [+0.32, +0.45]; A_direct 1.08 vs 0.00, Δ +1.08 [+0.71, +1.49]; M 0.11 vs 0.75, Δ -0.64 [-0.96, -0.36]; heads in first 10 7.40 vs 4.33, Δ +3.08 [+1.58, +4.42]. All splits: share 0.66 vs 0.22, Δ +0.44 [+0.38, +0.48].
+- dir_f1 − cp_nat, Mixtral (5 shared items, 5 units): share 0.49 vs 0.35, Δ +0.13 [+0.07, +0.23] (5 units: CI unreliable); A_direct 0.94 vs 0.35, Δ +0.59 [+0.35, +0.80] (5 units: CI unreliable); M 0.35 vs 0.76, Δ -0.41 [-0.65, -0.19] (5 units: CI unreliable); heads in first 10 5.40 vs 2.35, Δ +3.05 [+2.75, +3.30] (5 units: CI unreliable). All splits: share 0.51 vs 0.37, Δ +0.14 [+0.11, +0.17].
+- vt_a2e_orig − vt_e2a_orig, Qwen3 (7 shared items, 2 units): share 0.84 vs 0.41, Δ +0.43 [+0.30, +0.43] (2 units: CI unreliable); A_direct 1.54 vs 0.08, Δ +1.46 [+1.21, +1.49] (2 units: CI unreliable); M 0.23 vs 0.92, Δ -0.70 [-0.72, -0.57] (2 units: CI unreliable); heads in first 10 8.79 vs 4.00, Δ +4.79 [+4.67, +5.50] (2 units: CI unreliable). All splits: share 0.80 vs 0.39, Δ +0.42 [+0.26, +0.51] (5 units: CI unreliable).
+
+**Answer copyable (C2 − C1).**
+
+- cp_nat − p3_opt, Qwen3 (70 shared items, 70 units): share 0.21 vs 0.15, Δ +0.07 [+0.01, +0.11]; A_direct -0.01 vs 0.04, Δ -0.05 [-0.10, -0.01]; M 0.79 vs 0.86, Δ -0.07 [-0.09, -0.05]; heads in first 10 4.34 vs 3.53, Δ +0.81 [+0.52, +1.11]. All splits: share 0.20 vs 0.17, Δ +0.04 [+0.00, +0.07].
+- cp_nat − p3_opt, Mixtral (102 shared items, 102 units): share 0.37 vs 0.34, Δ +0.04 [+0.02, +0.05]; A_direct 0.38 vs 0.28, Δ +0.10 [+0.08, +0.12]; M 0.73 vs 0.79, Δ -0.06 [-0.08, -0.05]; heads in first 10 2.89 vs 2.71, Δ +0.19 [+0.00, +0.38]. All splits: share 0.38 vs 0.35, Δ +0.03 [+0.03, +0.04].
+- cp_nat − dir_opt, Qwen3 (10 shared items, 10 units): share 0.23 vs 0.18, Δ +0.05 [-0.06, +0.11]; A_direct 0.00 vs 0.08, Δ -0.08 [-0.20, +0.04]; M 0.75 vs 0.84, Δ -0.09 [-0.14, -0.04]; heads in first 10 4.33 vs 3.85, Δ +0.48 [-0.32, +1.25]. All splits: share 0.22 vs 0.16, Δ +0.05 [-0.01, +0.11].
+- cp_nat − dir_opt, Mixtral (5 shared items, 5 units): share 0.35 vs 0.33, Δ +0.02 [-0.01, +0.06] (5 units: CI unreliable); A_direct 0.35 vs 0.27, Δ +0.08 [+0.05, +0.12] (5 units: CI unreliable); M 0.76 vs 0.79, Δ -0.03 [-0.04, -0.02] (5 units: CI unreliable); heads in first 10 2.35 vs 2.00, Δ +0.35 [-0.35, +0.80] (5 units: CI unreliable). All splits: share 0.37 vs 0.34, Δ +0.03 [+0.02, +0.04].
+- cp_vt_orig − vt_e2a_orig, Qwen3 (28 shared items, 8 units): share 0.28 vs 0.24, Δ +0.04 [-0.04, +0.10]; A_direct 0.05 vs 0.14, Δ -0.09 [-0.18, +0.01]; M 0.75 vs 0.83, Δ -0.08 [-0.19, -0.03]; heads in first 10 3.92 vs 3.59, Δ +0.33 [-0.26, +1.11]. All splits: share 0.29 vs 0.26, Δ +0.02 [-0.00, +0.07].
+- cp_vt_orig − vt_e2a_orig, Mixtral (35 shared items, 8 units): share 0.36 vs 0.36, Δ +0.00 [-0.04, +0.05]; A_direct 0.42 vs 0.34, Δ +0.08 [+0.02, +0.16]; M 0.60 vs 0.69, Δ -0.09 [-0.17, -0.02]; heads in first 10 3.51 vs 3.74, Δ -0.23 [-0.89, +0.56]. All splits: share 0.39 vs 0.36, Δ +0.03 [-0.01, +0.06].
+- cp_vt_neu − vt_e2a_neu, Qwen3 (25 shared items, 4 units): share 0.23 vs 0.29, Δ -0.06 [-0.07, -0.01] (4 units: CI unreliable); A_direct 0.04 vs 0.19, Δ -0.15 [-0.51, +0.01] (4 units: CI unreliable); M 0.77 vs 0.82, Δ -0.05 [-0.14, -0.00] (4 units: CI unreliable); heads in first 10 3.96 vs 3.46, Δ +0.50 [+0.12, +1.70] (4 units: CI unreliable). All splits: share 0.23 vs 0.29, Δ -0.06 [-0.10, +0.01].
+- cp_vt_neu − vt_e2a_neu, Mixtral (31 shared items, 5 units): share 0.37 vs 0.36, Δ +0.01 [-0.04, +0.04] (5 units: CI unreliable); A_direct 0.45 vs 0.43, Δ +0.02 [-0.02, +0.12] (5 units: CI unreliable); M 0.44 vs 0.58, Δ -0.14 [-0.25, -0.06] (5 units: CI unreliable); heads in first 10 3.19 vs 3.61, Δ -0.42 [-1.19, +0.19] (5 units: CI unreliable). All splits: share 0.40 vs 0.36, Δ +0.04 [-0.00, +0.07] (7 units: CI unreliable).
+
+**Neutral verb.**
+
+- vt_e2a_neu − vt_e2a_orig, Qwen3 (70 shared items, 11 units): share 0.21 vs 0.20, Δ +0.01 [-0.04, +0.05]; A_direct 0.13 vs 0.12, Δ +0.00 [-0.02, +0.04]; M 0.83 vs 0.82, Δ +0.01 [-0.01, +0.02]; heads in first 10 3.39 vs 3.76, Δ -0.36 [-0.84, +0.05]. All splits: share 0.24 vs 0.23, Δ +0.00 [-0.02, +0.04].
+- vt_e2a_neu − vt_e2a_orig, Mixtral (54 shared items, 10 units): share 0.40 vs 0.39, Δ +0.01 [-0.01, +0.03]; A_direct 0.45 vs 0.44, Δ +0.01 [-0.03, +0.04]; M 0.59 vs 0.59, Δ -0.01 [-0.05, +0.03]; heads in first 10 4.03 vs 4.11, Δ -0.08 [-0.72, +0.54]. All splits: share 0.39 vs 0.40, Δ -0.01 [-0.03, +0.01].
+- cp_vt_neu − cp_vt_orig, Qwen3 (26 shared items, 6 units): share 0.29 vs 0.29, Δ -0.00 [-0.06, +0.06] (6 units: CI unreliable); A_direct 0.12 vs 0.14, Δ -0.02 [-0.18, +0.05] (6 units: CI unreliable); M 0.75 vs 0.78, Δ -0.03 [-0.09, +0.02] (6 units: CI unreliable); heads in first 10 4.71 vs 4.70, Δ +0.02 [-0.58, +0.39] (6 units: CI unreliable). All splits: share 0.29 vs 0.30, Δ -0.00 [-0.05, +0.04].
+- cp_vt_neu − cp_vt_orig, Mixtral (18 shared items, 3 units): share 0.37 vs 0.37, Δ +0.01 [+0.00, +0.02] (3 units: CI unreliable); A_direct 0.44 vs 0.42, Δ +0.01 [-0.00, +0.03] (3 units: CI unreliable); M 0.46 vs 0.47, Δ -0.01 [-0.05, +0.09] (3 units: CI unreliable); heads in first 10 3.08 vs 2.53, Δ +0.56 [+0.17, +1.40] (3 units: CI unreliable). All splits: share 0.41 vs 0.42, Δ -0.01 [-0.03, +0.01].
+
+![Paired contrasts](../figures/ext13syn_ladder_contrasts.png)
+
+**Paired contrasts on identical items (a − b; same unit resamples for both conditions; validation = the ladder's split, all = discovery + validation; * = fewer than 8 shared units, CI unreliable)**
+
+| Contrast (a − b) | Factor | Model | Split | Shared items (units) | Δ attention share | Δ A_direct | Δ all-MoE M | Δ heads in first 10 |
+|---|---|---|---|---|---|---|---|---|
+| dir_f1 − dir_opt | direction | Qwen3 | validation | 90 (90) | 0.71 vs 0.19: +0.52 [+0.46, +0.56] | 1.08 vs 0.05: +1.03 [+0.94, +1.13] | 0.11 vs 0.81: -0.70 [-0.77, -0.64] | 8.19 vs 3.63: +4.56 [+4.19, +4.92] |
+| dir_f1 − dir_opt | direction | Qwen3 | all | 180 (180) | 0.70 vs 0.18: +0.51 [+0.47, +0.54] | 1.05 vs 0.06: +0.99 [+0.92, +1.06] | 0.13 vs 0.81: -0.68 [-0.72, -0.64] |  |
+| dir_f1 − dir_opt | direction | Mixtral | validation | 94 (94) | 0.52 vs 0.35: +0.18 [+0.15, +0.20] | 0.86 vs 0.31: +0.55 [+0.46, +0.64] | 0.41 vs 0.75: -0.35 [-0.40, -0.29] | 5.87 vs 2.59: +3.28 [+2.84, +3.70] |
+| dir_f1 − dir_opt | direction | Mixtral | all | 188 (188) | 0.51 vs 0.34: +0.17 [+0.15, +0.18] | 0.83 vs 0.31: +0.53 [+0.46, +0.59] | 0.40 vs 0.76: -0.36 [-0.40, -0.32] |  |
+| dir_f1 − cp_nat | direction | Qwen3 | validation | 10 (10) | 0.65 vs 0.23: +0.41 [+0.32, +0.45] | 1.08 vs 0.00: +1.08 [+0.71, +1.49] | 0.11 vs 0.75: -0.64 [-0.96, -0.36] | 7.40 vs 4.33: +3.08 [+1.58, +4.42] |
+| dir_f1 − cp_nat | direction | Qwen3 | all | 32 (32) | 0.66 vs 0.22: +0.44 [+0.38, +0.48] | 1.04 vs -0.10: +1.13 [+0.93, +1.36] | 0.12 vs 0.77: -0.65 [-0.78, -0.53] |  |
+| dir_f1 − cp_nat | direction | Mixtral | validation | 5 (5) * | 0.49 vs 0.35: +0.13 [+0.07, +0.23] | 0.94 vs 0.35: +0.59 [+0.35, +0.80] | 0.35 vs 0.76: -0.41 [-0.65, -0.19] | 5.40 vs 2.35: +3.05 [+2.75, +3.30] |
+| dir_f1 − cp_nat | direction | Mixtral | all | 48 (48) | 0.51 vs 0.37: +0.14 [+0.11, +0.17] | 0.86 vs 0.37: +0.49 [+0.39, +0.58] | 0.39 vs 0.73: -0.34 [-0.43, -0.25] |  |
+| vt_a2e_orig − vt_e2a_orig | direction | Qwen3 | validation | 7 (2) * | 0.84 vs 0.41: +0.43 [+0.30, +0.43] | 1.54 vs 0.08: +1.46 [+1.21, +1.49] | 0.23 vs 0.92: -0.70 [-0.72, -0.57] | 8.79 vs 4.00: +4.79 [+4.67, +5.50] |
+| vt_a2e_orig − vt_e2a_orig | direction | Qwen3 | all | 11 (5) * | 0.80 vs 0.39: +0.42 [+0.26, +0.51] | 1.57 vs 0.07: +1.50 [+1.39, +1.69] | 0.22 vs 0.87: -0.65 [-0.72, -0.53] |  |
+| cp_nat − p3_opt | copy | Qwen3 | validation | 70 (70) | 0.21 vs 0.15: +0.07 [+0.01, +0.11] | -0.01 vs 0.04: -0.05 [-0.10, -0.01] | 0.79 vs 0.86: -0.07 [-0.09, -0.05] | 4.34 vs 3.53: +0.81 [+0.52, +1.11] |
+| cp_nat − p3_opt | copy | Qwen3 | all | 143 (143) | 0.20 vs 0.17: +0.04 [+0.00, +0.07] | -0.00 vs 0.06: -0.06 [-0.09, -0.03] | 0.77 vs 0.84: -0.07 [-0.08, -0.06] |  |
+| cp_nat − p3_opt | copy | Mixtral | validation | 102 (102) | 0.37 vs 0.34: +0.04 [+0.02, +0.05] | 0.38 vs 0.28: +0.10 [+0.08, +0.12] | 0.73 vs 0.79: -0.06 [-0.08, -0.05] | 2.89 vs 2.71: +0.19 [+0.00, +0.38] |
+| cp_nat − p3_opt | copy | Mixtral | all | 210 (210) | 0.38 vs 0.35: +0.03 [+0.03, +0.04] | 0.40 vs 0.30: +0.10 [+0.08, +0.11] | 0.71 vs 0.78: -0.06 [-0.08, -0.05] |  |
+| cp_nat − dir_opt | copy | Qwen3 | validation | 10 (10) | 0.23 vs 0.18: +0.05 [-0.06, +0.11] | 0.00 vs 0.08: -0.08 [-0.20, +0.04] | 0.75 vs 0.84: -0.09 [-0.14, -0.04] | 4.33 vs 3.85: +0.48 [-0.32, +1.25] |
+| cp_nat − dir_opt | copy | Qwen3 | all | 32 (32) | 0.22 vs 0.16: +0.05 [-0.01, +0.11] | -0.10 vs 0.04: -0.14 [-0.23, -0.06] | 0.77 vs 0.83: -0.06 [-0.09, -0.03] |  |
+| cp_nat − dir_opt | copy | Mixtral | validation | 5 (5) * | 0.35 vs 0.33: +0.02 [-0.01, +0.06] | 0.35 vs 0.27: +0.08 [+0.05, +0.12] | 0.76 vs 0.79: -0.03 [-0.04, -0.02] | 2.35 vs 2.00: +0.35 [-0.35, +0.80] |
+| cp_nat − dir_opt | copy | Mixtral | all | 48 (48) | 0.37 vs 0.34: +0.03 [+0.02, +0.04] | 0.37 vs 0.30: +0.07 [+0.05, +0.09] | 0.73 vs 0.77: -0.03 [-0.05, -0.02] |  |
+| cp_vt_orig − vt_e2a_orig | copy | Qwen3 | validation | 28 (8) | 0.28 vs 0.24: +0.04 [-0.04, +0.10] | 0.05 vs 0.14: -0.09 [-0.18, +0.01] | 0.75 vs 0.83: -0.08 [-0.19, -0.03] | 3.92 vs 3.59: +0.33 [-0.26, +1.11] |
+| cp_vt_orig − vt_e2a_orig | copy | Qwen3 | all | 61 (16) | 0.29 vs 0.26: +0.02 [-0.00, +0.07] | 0.04 vs 0.12: -0.08 [-0.17, +0.06] | 0.72 vs 0.83: -0.12 [-0.20, -0.06] |  |
+| cp_vt_orig − vt_e2a_orig | copy | Mixtral | validation | 35 (8) | 0.36 vs 0.36: +0.00 [-0.04, +0.05] | 0.42 vs 0.34: +0.08 [+0.02, +0.16] | 0.60 vs 0.69: -0.09 [-0.17, -0.02] | 3.51 vs 3.74: -0.23 [-0.89, +0.56] |
+| cp_vt_orig − vt_e2a_orig | copy | Mixtral | all | 66 (14) | 0.39 vs 0.36: +0.03 [-0.01, +0.06] | 0.47 vs 0.34: +0.12 [+0.04, +0.23] | 0.58 vs 0.70: -0.12 [-0.20, -0.06] |  |
+| cp_vt_neu − vt_e2a_neu | copy | Qwen3 | validation | 25 (4) * | 0.23 vs 0.29: -0.06 [-0.07, -0.01] | 0.04 vs 0.19: -0.15 [-0.51, +0.01] | 0.77 vs 0.82: -0.05 [-0.14, -0.00] | 3.96 vs 3.46: +0.50 [+0.12, +1.70] |
+| cp_vt_neu − vt_e2a_neu | copy | Qwen3 | all | 56 (11) | 0.23 vs 0.29: -0.06 [-0.10, +0.01] | 0.03 vs 0.13: -0.10 [-0.26, +0.06] | 0.72 vs 0.83: -0.11 [-0.19, -0.05] |  |
+| cp_vt_neu − vt_e2a_neu | copy | Mixtral | validation | 31 (5) * | 0.37 vs 0.36: +0.01 [-0.04, +0.04] | 0.45 vs 0.43: +0.02 [-0.02, +0.12] | 0.44 vs 0.58: -0.14 [-0.25, -0.06] | 3.19 vs 3.61: -0.42 [-1.19, +0.19] |
+| cp_vt_neu − vt_e2a_neu | copy | Mixtral | all | 71 (7) * | 0.40 vs 0.36: +0.04 [-0.00, +0.07] | 0.42 vs 0.38: +0.04 [-0.01, +0.10] | 0.57 vs 0.69: -0.12 [-0.19, -0.07] |  |
+| vt_e2a_neu − vt_e2a_orig | verb | Qwen3 | validation | 70 (11) | 0.21 vs 0.20: +0.01 [-0.04, +0.05] | 0.13 vs 0.12: +0.00 [-0.02, +0.04] | 0.83 vs 0.82: +0.01 [-0.01, +0.02] | 3.39 vs 3.76: -0.36 [-0.84, +0.05] |
+| vt_e2a_neu − vt_e2a_orig | verb | Qwen3 | all | 120 (21) | 0.24 vs 0.23: +0.00 [-0.02, +0.04] | 0.11 vs 0.10: +0.01 [-0.02, +0.03] | 0.83 vs 0.83: -0.00 [-0.02, +0.02] |  |
+| vt_e2a_neu − vt_e2a_orig | verb | Mixtral | validation | 54 (10) | 0.40 vs 0.39: +0.01 [-0.01, +0.03] | 0.45 vs 0.44: +0.01 [-0.03, +0.04] | 0.59 vs 0.59: -0.01 [-0.05, +0.03] | 4.03 vs 4.11: -0.08 [-0.72, +0.54] |
+| vt_e2a_neu − vt_e2a_orig | verb | Mixtral | all | 111 (18) | 0.39 vs 0.40: -0.01 [-0.03, +0.01] | 0.40 vs 0.39: +0.00 [-0.02, +0.04] | 0.66 vs 0.66: -0.01 [-0.05, +0.03] |  |
+| cp_vt_neu − cp_vt_orig | verb | Qwen3 | validation | 26 (6) * | 0.29 vs 0.29: -0.00 [-0.06, +0.06] | 0.12 vs 0.14: -0.02 [-0.18, +0.05] | 0.75 vs 0.78: -0.03 [-0.09, +0.02] | 4.71 vs 4.70: +0.02 [-0.58, +0.39] |
+| cp_vt_neu − cp_vt_orig | verb | Qwen3 | all | 59 (14) | 0.29 vs 0.30: -0.00 [-0.05, +0.04] | 0.13 vs 0.11: +0.02 [-0.07, +0.09] | 0.68 vs 0.71: -0.03 [-0.08, +0.01] |  |
+| cp_vt_neu − cp_vt_orig | verb | Mixtral | validation | 18 (3) * | 0.37 vs 0.37: +0.01 [+0.00, +0.02] | 0.44 vs 0.42: +0.01 [-0.00, +0.03] | 0.46 vs 0.47: -0.01 [-0.05, +0.09] | 3.08 vs 2.53: +0.56 [+0.17, +1.40] |
+| cp_vt_neu − cp_vt_orig | verb | Mixtral | all | 42 (8) | 0.41 vs 0.42: -0.01 [-0.03, +0.01] | 0.47 vs 0.47: -0.01 [-0.06, +0.02] | 0.52 vs 0.49: +0.03 [-0.02, +0.09] |  |
+
+### Within levels: association strata, names, probe score
+
+All splits and families of a level pooled (the strata are not used for any selection). Association strata follow p5-data's pre-registered rule (responding probes v1 + v2 in Qwen3, v2 in Mixtral; neutral = both triggers |probe| < 1); the main `f1` pool is neutral by construction, so the pre-neutral fill-in-the-blank runs `wino_ref_F1_<proto>` (same format, all strata; kept as a record by p5-data) carry the attribute → entity strata; the Phase-3 option swap has only the local-context flag `assoc` and its continuous baseline d_local. The probe regression uses the per-pair direct attention share (A_direct / drop of the pair) against the own-answer score s = mean over responding probes of (probe_a − probe_b) / 2 (s > 0: the trigger alone points to the clean answer).
+
+- Attribute → entity (pre-neutral F1 runs): one-sided / reverse pairs have a LOWER share than neutral pairs — Qwen3 -0.07 [-0.10, -0.04] / -0.05 [-0.08, -0.02], Mixtral -0.02 [-0.05, +0.01] / -0.02 [-0.05, +0.00]; A_direct -0.23 [-0.30, -0.15] / -0.16 [-0.27, -0.05] (one-sided). dir_f1 agrees (Qwen3 one-sided -0.10 [-0.14, -0.05], reverse -0.08 [-0.13, -0.03]; local assoc -0.09 [-0.13, -0.04] / -0.05 [-0.09, -0.02]).
+- Entity → attribute: association goes the other way — dir_opt associative +0.22 [+0.16, +0.29] (Qwen3, 10 pairs), one-sided +0.08 [+0.03, +0.15] / +0.02 [+0.00, +0.04], local assoc +0.07 [+0.03, +0.13] / +0.03 [+0.00, +0.06]; Phase-3 option swap local assoc +0.04 [+0.01, +0.09] / +0.02 [-0.02, +0.05]. The templates and the copy-prefix templates show no stratum effect (few non-neutral pairs).
+- Names vs objects (names minus objects): f1 +0.08 [+0.06, +0.10] / +0.14 [+0.09, +0.19], Phase-3 option swap +0.14 [+0.08, +0.22] / +0.09 [+0.05, +0.14], cp_nat +0.14 [+0.09, +0.21] / +0.11 [+0.06, +0.15] (Qwen3 / Mixtral). Names raise the share in every level and direction; Mixtral's f1 and dir_f1 have few name pairs.
+
+**Within-level strata (all splits and families pooled): association probe strata, Phase-3 local association, names / objects**
+
+| Level | Model | Strata | Stratum | Pairs (units) | Attention share | A_direct | All-MoE M | Δ share vs neutral | Δ A_direct vs ref | Δ share vs objects | Δ share vs not local assoc |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| f1pre | Qwen3 | assoc | associative | 11 (11) | 0.69 [0.62, 0.74] | 1.12 [0.87, 1.37] | 0.13 [-0.04, 0.27] | -0.09 [-0.15, -0.03] | -0.09 [-0.35, +0.15] |  |  |
+| f1pre | Qwen3 | assoc | neutral | 262 (262) | 0.77 [0.76, 0.79] | 1.22 [1.18, 1.25] | 0.16 [0.12, 0.20] | (reference) |  |  |  |
+| f1pre | Qwen3 | assoc | one-sided | 116 (116) | 0.70 [0.68, 0.72] | 0.99 [0.93, 1.06] | 0.20 [0.14, 0.26] | -0.07 [-0.10, -0.04] | -0.23 [-0.30, -0.15] |  |  |
+| f1pre | Qwen3 | assoc | reverse | 123 (123) | 0.72 [0.70, 0.74] | 1.07 [1.02, 1.13] | 0.20 [0.14, 0.25] | -0.05 [-0.08, -0.02] | -0.14 [-0.21, -0.08] |  |  |
+| f1pre | Qwen3 | names | names | 201 (201) | 0.80 [0.78, 0.81] | 1.27 [1.24, 1.30] | 0.27 [0.22, 0.31] |  | +0.22 [+0.17, +0.27] | +0.09 [+0.07, +0.12] |  |
+| f1pre | Qwen3 | names | objects | 311 (311) | 0.71 [0.69, 0.72] | 1.05 [1.01, 1.09] | 0.13 [0.10, 0.17] |  |  | (reference) |  |
+| p3_opt | Qwen3 | local | local assoc | 31 (31) | 0.21 [0.19, 0.26] | 0.08 [0.04, 0.12] | 0.85 [0.82, 0.88] |  | +0.03 [-0.02, +0.07] |  | +0.04 [+0.01, +0.09] |
+| p3_opt | Qwen3 | local | not local assoc | 225 (225) | 0.17 [0.15, 0.20] | 0.05 [0.03, 0.07] | 0.83 [0.82, 0.84] |  |  |  | (reference) |
+| p3_opt | Qwen3 | names | names | 23 (23) | 0.30 [0.26, 0.38] | 0.26 [0.20, 0.33] | 0.72 [0.65, 0.78] |  | +0.22 [+0.16, +0.29] | +0.14 [+0.08, +0.22] |  |
+| p3_opt | Qwen3 | names | objects | 233 (233) | 0.16 [0.14, 0.19] | 0.04 [0.02, 0.06] | 0.84 [0.83, 0.85] |  |  | (reference) |  |
+| dir_f1 | Qwen3 | assoc | associative | 10 (10) | 0.67 [0.61, 0.73] | 0.98 [0.75, 1.16] | 0.09 [-0.08, 0.29] | -0.06 [-0.13, +0.00] | -0.23 [-0.46, -0.03] |  |  |
+| dir_f1 | Qwen3 | assoc | neutral | 89 (89) | 0.74 [0.71, 0.76] | 1.20 [1.14, 1.27] | 0.06 [0.00, 0.11] | (reference) |  |  |  |
+| dir_f1 | Qwen3 | assoc | one-sided | 42 (42) | 0.64 [0.60, 0.67] | 0.90 [0.79, 1.03] | 0.20 [0.12, 0.28] | -0.10 [-0.14, -0.05] | -0.30 [-0.44, -0.16] |  |  |
+| dir_f1 | Qwen3 | assoc | reverse | 39 (39) | 0.66 [0.61, 0.70] | 0.89 [0.75, 1.03] | 0.23 [0.12, 0.33] | -0.08 [-0.13, -0.03] | -0.32 [-0.47, -0.16] |  |  |
+| dir_f1 | Qwen3 | local | local assoc | 28 (28) | 0.62 [0.58, 0.67] | 0.82 [0.67, 0.97] | 0.17 [0.05, 0.28] |  | -0.28 [-0.44, -0.12] |  | -0.09 [-0.13, -0.04] |
+| dir_f1 | Qwen3 | local | not local assoc | 152 (152) | 0.71 [0.69, 0.73] | 1.10 [1.04, 1.16] | 0.12 [0.08, 0.16] |  |  |  | (reference) |
+| dir_f1 | Qwen3 | names | names | 14 (14) | 0.84 [0.76, 0.87] | 1.38 [1.27, 1.50] | 0.24 [0.09, 0.42] |  | +0.36 [+0.23, +0.49] | +0.16 [+0.08, +0.19] |  |
+| dir_f1 | Qwen3 | names | objects | 166 (166) | 0.68 [0.66, 0.70] | 1.03 [0.97, 1.08] | 0.12 [0.08, 0.16] |  |  | (reference) |  |
+| dir_opt | Qwen3 | assoc | associative | 10 (10) | 0.37 [0.32, 0.44] | 0.22 [0.13, 0.33] | 0.73 [0.65, 0.80] | +0.22 [+0.16, +0.29] | +0.22 [+0.12, +0.33] |  |  |
+| dir_opt | Qwen3 | assoc | neutral | 89 (89) | 0.14 [0.12, 0.18] | 0.00 [-0.04, 0.04] | 0.80 [0.78, 0.82] | (reference) |  |  |  |
+| dir_opt | Qwen3 | assoc | one-sided | 42 (42) | 0.23 [0.19, 0.29] | 0.12 [0.08, 0.16] | 0.81 [0.78, 0.83] | +0.08 [+0.03, +0.15] | +0.11 [+0.06, +0.17] |  |  |
+| dir_opt | Qwen3 | assoc | reverse | 39 (39) | 0.21 [0.18, 0.27] | 0.07 [0.04, 0.11] | 0.84 [0.82, 0.87] | +0.07 [+0.02, +0.13] | +0.07 [+0.02, +0.13] |  |  |
+| dir_opt | Qwen3 | local | local assoc | 28 (28) | 0.25 [0.22, 0.30] | 0.14 [0.10, 0.18] | 0.80 [0.77, 0.83] |  | +0.10 [+0.05, +0.15] |  | +0.07 [+0.03, +0.13] |
+| dir_opt | Qwen3 | local | not local assoc | 152 (152) | 0.17 [0.15, 0.22] | 0.04 [0.01, 0.07] | 0.81 [0.79, 0.82] |  |  |  | (reference) |
+| dir_opt | Qwen3 | names | names | 14 (14) | 0.32 [0.27, 0.41] | 0.24 [0.17, 0.32] | 0.72 [0.66, 0.78] |  | +0.20 [+0.12, +0.28] | +0.14 [+0.08, +0.23] |  |
+| dir_opt | Qwen3 | names | objects | 166 (166) | 0.18 [0.16, 0.21] | 0.04 [0.02, 0.07] | 0.81 [0.80, 0.83] |  |  | (reference) |  |
+| cp_nat | Qwen3 | assoc | associative | 28 (14) | 0.28 [0.24, 0.34] | 0.03 [-0.07, 0.13] | 0.73 [0.67, 0.79] | +0.07 [+0.02, +0.14] | +0.11 [+0.00, +0.23] |  |  |
+| cp_nat | Qwen3 | assoc | neutral | 258 (129) | 0.21 [0.19, 0.24] | -0.09 [-0.14, -0.03] | 0.77 [0.75, 0.79] | (reference) |  |  |  |
+| cp_nat | Qwen3 | assoc | no_probe | 24 (12) | 0.32 [0.27, 0.38] | 0.14 [0.02, 0.26] | 0.77 [0.73, 0.82] | +0.11 [+0.05, +0.17] | +0.22 [+0.10, +0.36] |  |  |
+| cp_nat | Qwen3 | assoc | one-sided | 98 (49) | 0.23 [0.21, 0.28] | 0.03 [-0.04, 0.09] | 0.76 [0.73, 0.79] | +0.02 [-0.01, +0.07] | +0.11 [+0.03, +0.19] |  |  |
+| cp_nat | Qwen3 | assoc | reverse | 198 (99) | 0.22 [0.20, 0.25] | 0.01 [-0.03, 0.05] | 0.79 [0.77, 0.81] | +0.01 [-0.03, +0.05] | +0.09 [+0.03, +0.16] |  |  |
+| cp_nat | Qwen3 | local | local assoc | 78 (39) | 0.25 [0.22, 0.30] | -0.03 [-0.10, 0.03] | 0.77 [0.74, 0.81] |  | -0.01 [-0.09, +0.06] |  | +0.04 [+0.01, +0.10] |
+| cp_nat | Qwen3 | local | not local assoc | 528 (264) | 0.20 [0.19, 0.23] | -0.02 [-0.05, 0.02] | 0.77 [0.76, 0.79] |  |  |  | (reference) |
+| cp_nat | Qwen3 | names | names | 38 (19) | 0.34 [0.30, 0.41] | 0.23 [0.14, 0.33] | 0.67 [0.58, 0.75] |  | +0.27 [+0.17, +0.37] | +0.14 [+0.09, +0.21] |  |
+| cp_nat | Qwen3 | names | objects | 568 (284) | 0.20 [0.19, 0.22] | -0.04 [-0.07, -0.01] | 0.78 [0.77, 0.79] |  |  | (reference) |  |
+| f1 | Qwen3 | names | names | 259 (259) | 0.81 [0.79, 0.82] | 1.31 [1.28, 1.34] | 0.30 [0.26, 0.34] |  | +0.17 [+0.12, +0.22] | +0.08 [+0.06, +0.10] |  |
+| f1 | Qwen3 | names | objects | 253 (253) | 0.73 [0.72, 0.74] | 1.14 [1.09, 1.18] | 0.09 [0.05, 0.13] |  |  | (reference) |  |
+| vt_e2a_orig | Qwen3 | assoc | neutral | 211 (32) | 0.27 [0.22, 0.33] | 0.11 [0.08, 0.14] | 0.82 [0.79, 0.85] | (reference) |  |  |  |
+| vt_e2a_orig | Qwen3 | assoc | one-sided | 14 (12) | 0.32 [0.22, 0.39] | 0.09 [0.03, 0.16] | 0.84 [0.75, 0.91] | +0.05 [-0.03, +0.11] | -0.02 [-0.08, +0.03] |  |  |
+| vt_e2a_orig | Qwen3 | assoc | reverse | 31 (19) | 0.30 [0.22, 0.39] | 0.10 [0.06, 0.13] | 0.80 [0.74, 0.85] | +0.04 [-0.05, +0.11] | -0.01 [-0.05, +0.02] |  |  |
+| vt_e2a_neu | Qwen3 | assoc | neutral | 197 (27) | 0.24 [0.20, 0.30] | 0.11 [0.07, 0.15] | 0.82 [0.78, 0.85] | (reference) |  |  |  |
+| vt_e2a_neu | Qwen3 | assoc | one-sided | 19 (11) | 0.26 [0.18, 0.37] | 0.11 [0.03, 0.18] | 0.82 [0.73, 0.89] | +0.02 [-0.05, +0.11] | -0.00 [-0.06, +0.05] |  |  |
+| vt_e2a_neu | Qwen3 | assoc | reverse | 40 (21) | 0.28 [0.20, 0.37] | 0.14 [0.08, 0.19] | 0.80 [0.75, 0.85] | +0.04 [-0.03, +0.11] | +0.03 [-0.02, +0.07] |  |  |
+| cp_vt_orig | Qwen3 | assoc | neutral | 191 (25) | 0.29 [0.24, 0.35] | 0.09 [-0.01, 0.21] | 0.71 [0.62, 0.78] | (reference) |  |  |  |
+| cp_vt_orig | Qwen3 | assoc | one-sided | 22 (10) | 0.33 [0.26, 0.41] | 0.12 [-0.10, 0.39] | 0.69 [0.47, 0.84] | +0.05 [-0.03, +0.12] | +0.02 [-0.17, +0.26] |  |  |
+| cp_vt_orig | Qwen3 | assoc | reverse | 43 (14) | 0.29 [0.23, 0.36] | 0.14 [-0.02, 0.33] | 0.62 [0.42, 0.77] | +0.01 [-0.06, +0.06] | +0.05 [-0.11, +0.21] |  |  |
+| cp_vt_neu | Qwen3 | assoc | neutral | 186 (20) | 0.27 [0.23, 0.35] | 0.10 [-0.04, 0.25] | 0.68 [0.59, 0.76] | (reference) |  |  |  |
+| cp_vt_neu | Qwen3 | assoc | one-sided | 22 (7) | 0.32 [0.23, 0.43] | 0.18 [-0.11, 0.55] | 0.61 [0.34, 0.82] | +0.05 [-0.06, +0.14] | +0.08 [-0.18, +0.41] |  |  |
+| cp_vt_neu | Qwen3 | assoc | reverse | 48 (11) | 0.32 [0.27, 0.40] | 0.14 [-0.03, 0.36] | 0.68 [0.49, 0.81] | +0.05 [-0.01, +0.09] | +0.04 [-0.09, +0.19] |  |  |
+| vt_a2e_orig | Qwen3 | assoc | neutral | 77 (12) | 0.76 [0.71, 0.81] | 1.52 [1.45, 1.59] | 0.19 [0.16, 0.26] | (reference) |  |  |  |
+| vt_a2e_orig | Qwen3 | assoc | one-sided | 8 (4) | 0.75 [0.72, 0.82] | 1.44 [1.29, 1.53] | 0.24 [0.11, 0.56] | -0.00 [-0.07, +0.09] | -0.08 [-0.26, +0.05] |  |  |
+| vt_a2e_orig | Qwen3 | assoc | reverse | 12 (3) | 0.78 [0.70, 0.80] | 1.45 [1.32, 1.65] | 0.19 [0.13, 0.22] | +0.03 [-0.03, +0.08] | -0.07 [-0.16, +0.07] |  |  |
+| f2e | Qwen3 | names | names | 9 (9) | 0.69 [0.61, 0.72] | 1.38 [1.23, 1.57] | 0.65 [0.39, 0.80] |  | +0.45 [+0.26, +0.66] | +0.01 [-0.07, +0.09] |  |
+| f2e | Qwen3 | names | objects | 55 (55) | 0.67 [0.60, 0.72] | 0.93 [0.85, 1.02] | 0.08 [-0.01, 0.17] |  |  | (reference) |  |
+| f1pre | Mixtral | assoc | associative | 12 (12) | 0.55 [0.49, 0.62] | 0.84 [0.56, 1.18] | 0.17 [-0.09, 0.39] | +0.00 [-0.06, +0.07] | -0.15 [-0.43, +0.20] |  |  |
+| f1pre | Mixtral | assoc | neutral | 203 (203) | 0.55 [0.53, 0.57] | 0.99 [0.92, 1.06] | 0.26 [0.20, 0.32] | (reference) |  |  |  |
+| f1pre | Mixtral | assoc | one-sided | 105 (105) | 0.53 [0.51, 0.55] | 0.82 [0.74, 0.91] | 0.32 [0.25, 0.39] | -0.02 [-0.05, +0.01] | -0.16 [-0.27, -0.05] |  |  |
+| f1pre | Mixtral | assoc | reverse | 122 (122) | 0.53 [0.50, 0.55] | 0.84 [0.77, 0.92] | 0.35 [0.27, 0.41] | -0.02 [-0.05, +0.00] | -0.14 [-0.24, -0.05] |  |  |
+| f1pre | Mixtral | names | names | 27 (27) | 0.67 [0.63, 0.72] | 1.40 [1.21, 1.59] | -0.06 [-0.34, 0.23] |  | +0.53 [+0.33, +0.71] | +0.14 [+0.09, +0.18] |  |
+| f1pre | Mixtral | names | objects | 415 (415) | 0.53 [0.52, 0.54] | 0.88 [0.83, 0.92] | 0.32 [0.28, 0.35] |  |  | (reference) |  |
+| p3_opt | Mixtral | local | local assoc | 25 (25) | 0.36 [0.33, 0.39] | 0.31 [0.26, 0.37] | 0.76 [0.71, 0.81] |  | +0.01 [-0.04, +0.07] |  | +0.02 [-0.02, +0.05] |
+| p3_opt | Mixtral | local | not local assoc | 231 (231) | 0.35 [0.34, 0.36] | 0.30 [0.28, 0.32] | 0.78 [0.76, 0.79] |  |  |  | (reference) |
+| p3_opt | Mixtral | names | names | 23 (23) | 0.43 [0.39, 0.48] | 0.49 [0.38, 0.61] | 0.61 [0.47, 0.72] |  | +0.20 [+0.10, +0.32] | +0.09 [+0.05, +0.14] |  |
+| p3_opt | Mixtral | names | objects | 233 (233) | 0.34 [0.33, 0.35] | 0.28 [0.27, 0.30] | 0.79 [0.77, 0.80] |  |  | (reference) |  |
+| dir_f1 | Mixtral | assoc | neutral | 86 (86) | 0.51 [0.49, 0.53] | 0.92 [0.83, 1.01] | 0.39 [0.34, 0.44] | (reference) |  |  |  |
+| dir_f1 | Mixtral | assoc | one-sided | 41 (41) | 0.51 [0.47, 0.54] | 0.75 [0.62, 0.90] | 0.39 [0.29, 0.48] | -0.01 [-0.05, +0.03] | -0.16 [-0.32, +0.01] |  |  |
+| dir_f1 | Mixtral | assoc | reverse | 54 (54) | 0.51 [0.48, 0.53] | 0.77 [0.66, 0.88] | 0.45 [0.39, 0.51] | -0.01 [-0.04, +0.03] | -0.15 [-0.29, -0.01] |  |  |
+| dir_f1 | Mixtral | local | local assoc | 39 (39) | 0.47 [0.43, 0.50] | 0.53 [0.40, 0.67] | 0.47 [0.37, 0.55] |  | -0.39 [-0.53, -0.24] |  | -0.05 [-0.09, -0.02] |
+| dir_f1 | Mixtral | local | not local assoc | 149 (149) | 0.52 [0.50, 0.54] | 0.92 [0.86, 0.99] | 0.38 [0.34, 0.42] |  |  |  | (reference) |
+| dir_f1 | Mixtral | names | objects | 187 (187) | 0.51 [0.49, 0.52] | 0.83 [0.77, 0.89] | 0.41 [0.37, 0.44] |  |  | (reference) |  |
+| dir_opt | Mixtral | assoc | neutral | 86 (86) | 0.33 [0.32, 0.34] | 0.28 [0.26, 0.30] | 0.78 [0.76, 0.80] | (reference) |  |  |  |
+| dir_opt | Mixtral | assoc | one-sided | 41 (41) | 0.35 [0.33, 0.37] | 0.32 [0.29, 0.35] | 0.76 [0.73, 0.79] | +0.02 [+0.00, +0.04] | +0.04 [+0.00, +0.08] |  |  |
+| dir_opt | Mixtral | assoc | reverse | 54 (54) | 0.35 [0.33, 0.37] | 0.33 [0.30, 0.35] | 0.74 [0.71, 0.77] | +0.02 [-0.00, +0.04] | +0.05 [+0.01, +0.08] |  |  |
+| dir_opt | Mixtral | local | local assoc | 39 (39) | 0.37 [0.34, 0.39] | 0.36 [0.32, 0.41] | 0.72 [0.67, 0.76] |  | +0.07 [+0.02, +0.11] |  | +0.03 [+0.00, +0.06] |
+| dir_opt | Mixtral | local | not local assoc | 149 (149) | 0.34 [0.33, 0.35] | 0.29 [0.28, 0.31] | 0.77 [0.75, 0.78] |  |  |  | (reference) |
+| dir_opt | Mixtral | names | objects | 187 (187) | 0.34 [0.33, 0.35] | 0.31 [0.29, 0.32] | 0.76 [0.74, 0.77] |  |  | (reference) |  |
+| cp_nat | Mixtral | assoc | associative | 10 (5) | 0.39 [0.35, 0.46] | 0.46 [0.41, 0.55] | 0.62 [0.44, 0.73] | +0.02 [-0.03, +0.09] | +0.07 [+0.01, +0.16] |  |  |
+| cp_nat | Mixtral | assoc | neutral | 390 (195) | 0.37 [0.36, 0.39] | 0.39 [0.36, 0.42] | 0.72 [0.70, 0.74] | (reference) |  |  |  |
+| cp_nat | Mixtral | assoc | no_probe | 64 (32) | 0.44 [0.41, 0.48] | 0.51 [0.44, 0.58] | 0.61 [0.54, 0.68] | +0.07 [+0.03, +0.11] | +0.12 [+0.04, +0.20] |  |  |
+| cp_nat | Mixtral | assoc | one-sided | 150 (75) | 0.38 [0.36, 0.40] | 0.37 [0.34, 0.41] | 0.71 [0.68, 0.74] | +0.01 [-0.01, +0.03] | -0.02 [-0.06, +0.03] |  |  |
+| cp_nat | Mixtral | assoc | reverse | 242 (121) | 0.36 [0.35, 0.38] | 0.36 [0.33, 0.39] | 0.75 [0.72, 0.77] | -0.01 [-0.03, +0.01] | -0.03 [-0.07, +0.01] |  |  |
+| cp_nat | Mixtral | local | local assoc | 112 (56) | 0.36 [0.34, 0.39] | 0.36 [0.32, 0.40] | 0.70 [0.66, 0.74] |  | -0.03 [-0.08, +0.02] |  | -0.01 [-0.04, +0.01] |
+| cp_nat | Mixtral | local | not local assoc | 744 (372) | 0.38 [0.37, 0.39] | 0.39 [0.37, 0.41] | 0.72 [0.70, 0.73] |  |  |  | (reference) |
+| cp_nat | Mixtral | names | names | 66 (33) | 0.48 [0.43, 0.52] | 0.60 [0.51, 0.69] | 0.53 [0.43, 0.63] |  | +0.23 [+0.14, +0.32] | +0.11 [+0.06, +0.15] |  |
+| cp_nat | Mixtral | names | objects | 790 (395) | 0.37 [0.36, 0.38] | 0.37 [0.35, 0.39] | 0.73 [0.72, 0.74] |  |  | (reference) |  |
+| f1 | Mixtral | names | names | 23 (23) | 0.67 [0.63, 0.72] | 1.44 [1.25, 1.62] | -0.11 [-0.41, 0.20] |  | +0.50 [+0.30, +0.69] | +0.14 [+0.09, +0.19] |  |
+| f1 | Mixtral | names | objects | 179 (179) | 0.54 [0.52, 0.55] | 0.94 [0.87, 1.01] | 0.29 [0.23, 0.35] |  |  | (reference) |  |
+| vt_e2a_orig | Mixtral | assoc | neutral | 231 (31) | 0.39 [0.36, 0.42] | 0.35 [0.31, 0.40] | 0.72 [0.66, 0.77] | (reference) |  |  |  |
+| vt_e2a_orig | Mixtral | assoc | one-sided | 12 (10) | 0.35 [0.30, 0.43] | 0.35 [0.25, 0.50] | 0.69 [0.50, 0.81] | -0.04 [-0.08, +0.03] | -0.00 [-0.08, +0.12] |  |  |
+| vt_e2a_orig | Mixtral | assoc | reverse | 13 (11) | 0.40 [0.32, 0.48] | 0.42 [0.28, 0.60] | 0.63 [0.43, 0.80] | +0.01 [-0.06, +0.07] | +0.07 [-0.04, +0.22] |  |  |
+| vt_e2a_neu | Mixtral | assoc | neutral | 228 (21) | 0.40 [0.36, 0.45] | 0.38 [0.32, 0.44] | 0.69 [0.61, 0.76] | (reference) |  |  |  |
+| vt_e2a_neu | Mixtral | assoc | one-sided | 16 (10) | 0.41 [0.35, 0.48] | 0.48 [0.34, 0.64] | 0.54 [0.36, 0.71] | +0.01 [-0.05, +0.07] | +0.10 [-0.02, +0.25] |  |  |
+| vt_e2a_neu | Mixtral | assoc | reverse | 12 (9) | 0.41 [0.35, 0.48] | 0.49 [0.33, 0.70] | 0.56 [0.31, 0.77] | +0.01 [-0.05, +0.07] | +0.11 [-0.02, +0.29] |  |  |
+| cp_vt_orig | Mixtral | assoc | neutral | 218 (19) | 0.42 [0.37, 0.47] | 0.52 [0.43, 0.63] | 0.53 [0.42, 0.63] | (reference) |  |  |  |
+| cp_vt_orig | Mixtral | assoc | one-sided | 24 (9) | 0.45 [0.38, 0.54] | 0.65 [0.44, 0.89] | 0.48 [0.27, 0.63] | +0.03 [-0.03, +0.13] | +0.13 [-0.04, +0.35] |  |  |
+| cp_vt_orig | Mixtral | assoc | reverse | 14 (5) | 0.45 [0.37, 0.49] | 0.60 [0.24, 0.78] | 0.42 [0.26, 0.74] | +0.03 [-0.06, +0.09] | +0.08 [-0.25, +0.23] |  |  |
+| cp_vt_neu | Mixtral | assoc | neutral | 234 (15) | 0.41 [0.37, 0.44] | 0.46 [0.38, 0.56] | 0.52 [0.40, 0.64] | (reference) |  |  |  |
+| cp_vt_neu | Mixtral | assoc | one-sided | 10 (3) | 0.39 [0.34, 0.46] | 0.43 [0.33, 0.52] | 0.50 [0.39, 0.61] | -0.02 [-0.05, +0.04] | -0.02 [-0.14, +0.09] |  |  |
+| cp_vt_neu | Mixtral | assoc | reverse | 12 (5) | 0.45 [0.37, 0.51] | 0.59 [0.34, 0.83] | 0.37 [0.10, 0.64] | +0.04 [-0.03, +0.11] | +0.13 [-0.09, +0.31] |  |  |
+| f2e | Mixtral | names | objects | 31 (31) | 0.67 [0.63, 0.70] | 1.30 [1.19, 1.43] | -0.17 [-0.30, -0.06] |  |  | (reference) |  |
+
+**Per-pair direct attention share regressed on the own-answer association score s (positive = the trigger alone points to the clean answer)**
+
+| Level | Model | Score | Pairs (units) | Score SD | Share |s| ≥ 1 | Slope of A_direct share on s | r (signed) | Slope on |s| | r (|s|) |
+|---|---|---|---|---|---|---|---|---|---|
+| f1pre | Qwen3 | association probes v1+v2 | 512 (512) | 0.39 | 0.04 | -0.207 [-0.292, -0.129] | -0.24 [-0.32, -0.15] | -0.242 [-0.334, -0.150] | -0.22 [-0.31, -0.14] |
+| p3_opt | Qwen3 | Phase-3 local-context baseline (d_local) | 256 (256) | 1.53 | 0.44 | +0.012 [+0.001, +0.023] | +0.11 [+0.01, +0.20] | +0.008 [-0.008, +0.023] | +0.05 [-0.05, +0.16] |
+| dir_f1 | Qwen3 | association probes v1+v2 | 180 (180) | 0.53 | 0.08 | -0.079 [-0.194, +0.045] | -0.10 [-0.25, +0.05] | -0.194 [-0.345, -0.096] | -0.22 [-0.34, -0.11] |
+| dir_opt | Qwen3 | association probes v1+v2 | 180 (180) | 0.53 | 0.08 | +0.107 [+0.058, +0.156] | +0.30 [+0.16, +0.43] | +0.147 [+0.108, +0.206] | +0.36 [+0.25, +0.47] |
+| cp_nat | Qwen3 | association probes v1+v2 | 582 (291) | 0.41 | 0.03 | +0.071 [+0.014, +0.130] | +0.09 [+0.02, +0.15] | +0.183 [+0.105, +0.311] | +0.18 [+0.10, +0.25] |
+| f1 | Qwen3 | association probes v1+v2 | 512 (512) | 0.18 | 0.00 | -0.214 [-0.382, -0.046] | -0.12 [-0.21, -0.03] | -0.403 [-0.650, -0.148] | -0.14 [-0.23, -0.05] |
+| vt_e2a_orig | Qwen3 | association probes v1+v2 | 256 (33) | 0.16 | 0.00 | +0.050 [-0.026, +0.116] | +0.07 [-0.04, +0.17] | -0.082 [-0.229, +0.047] | -0.08 [-0.19, +0.05] |
+| vt_e2a_neu | Qwen3 | association probes v1+v2 | 256 (28) | 0.15 | 0.00 | +0.089 [-0.029, +0.206] | +0.10 [-0.04, +0.23] | +0.013 [-0.163, +0.198] | +0.01 [-0.11, +0.14] |
+| cp_vt_orig | Qwen3 | association probes v1+v2 | 256 (27) | 0.13 | 0.00 | +0.247 [-0.157, +0.602] | +0.09 [-0.06, +0.22] | +0.422 [-0.531, +1.294] | +0.10 [-0.11, +0.30] |
+| cp_vt_neu | Qwen3 | association probes v1+v2 | 256 (20) | 0.13 | 0.00 | +0.158 [-0.406, +0.723] | +0.05 [-0.13, +0.24] | +0.289 [-0.773, +1.349] | +0.06 [-0.22, +0.23] |
+| vt_a2e_orig | Qwen3 | association probes v1+v2 | 97 (13) | 0.14 | 0.00 | -0.372 [-0.685, -0.044] | -0.22 [-0.42, -0.03] | -0.176 [-0.643, +0.465] | -0.06 [-0.20, +0.19] |
+| f2e | Qwen3 | association probes v1+v2 | 64 (64) | 0.22 | 0.00 | -0.141 [-0.539, +0.278] | -0.09 [-0.32, +0.16] | -0.354 [-1.062, +0.341] | -0.13 [-0.38, +0.13] |
+| f1pre | Mixtral | association probes v2 | 442 (442) | 0.58 | 0.10 | -0.102 [-0.176, -0.032] | -0.12 [-0.20, -0.04] | -0.118 [-0.216, -0.026] | -0.11 [-0.19, -0.02] |
+| p3_opt | Mixtral | Phase-3 local-context baseline (d_local) | 256 (256) | 1.15 | 0.28 | +0.008 [-0.010, +0.023] | +0.05 [-0.07, +0.18] | +0.008 [-0.016, +0.027] | +0.05 [-0.09, +0.18] |
+| dir_f1 | Mixtral | association probes v2 | 188 (188) | 0.52 | 0.10 | -0.112 [-0.230, +0.009] | -0.13 [-0.27, +0.01] | -0.147 [-0.284, -0.001] | -0.14 [-0.26, -0.00] |
+| dir_opt | Mixtral | association probes v2 | 188 (188) | 0.52 | 0.10 | +0.050 [+0.014, +0.084] | +0.22 [+0.06, +0.37] | +0.076 [+0.038, +0.117] | +0.26 [+0.13, +0.39] |
+| cp_nat | Mixtral | association probes v2 | 792 (396) | 0.48 | 0.05 | +0.021 [-0.011, +0.053] | +0.05 [-0.02, +0.13] | +0.013 [-0.035, +0.056] | +0.02 [-0.05, +0.10] |
+| f1 | Mixtral | association probes v2 | 202 (202) | 0.27 | 0.00 | -0.289 [-0.531, -0.055] | -0.16 [-0.29, -0.03] | -0.183 [-0.538, +0.179] | -0.07 [-0.19, +0.06] |
+| vt_e2a_orig | Mixtral | association probes v2 | 256 (32) | 0.23 | 0.00 | -0.019 [-0.093, +0.041] | -0.03 [-0.12, +0.08] | -0.005 [-0.068, +0.080] | -0.00 [-0.08, +0.07] |
+| vt_e2a_neu | Mixtral | association probes v2 | 256 (23) | 0.22 | 0.00 | +0.073 [-0.009, +0.143] | +0.10 [-0.02, +0.17] | +0.210 [+0.027, +0.411] | +0.19 [+0.04, +0.30] |
+| cp_vt_orig | Mixtral | association probes v2 | 256 (19) | 0.24 | 0.00 | +0.089 [-0.137, +0.292] | +0.08 [-0.11, +0.28] | +0.082 [-0.336, +0.353] | +0.05 [-0.17, +0.24] |
+| cp_vt_neu | Mixtral | association probes v2 | 256 (16) | 0.23 | 0.00 | -0.058 [-0.231, +0.082] | -0.07 [-0.25, +0.11] | +0.025 [-0.178, +0.245] | +0.02 [-0.14, +0.19] |
+| f2e | Mixtral | association probes v2 | 36 (36) | 0.26 | 0.00 | +0.053 [-0.427, +0.851] | +0.04 [-0.34, +0.47] | -0.427 [-0.902, +0.653] | -0.21 [-0.51, +0.22] |
+
+### What the ladder confounds
+
+Between the entity → attribute block and the attribute → entity block several factors change together, so the ladder is descriptive; only the paired contrasts isolate factors, and none of them isolates the prompt wrapper yet.
+
+- **Direction and answer type.** Every attribute → entity level reads out an entity that is a token of the context (a noun or a name); every entity → attribute level generates an attribute word (adjective, verb, comparative) that is not in the sentence. CounterFact generates an object that is not in the context, IOI copies a name. dir_f1 − dir_opt changes direction and answer type at once.
+- **Prompt wrapper.** All attribute → entity levels traced so far use `Fill in the blank: … Answer:`; all entity → attribute levels are plain sentences (the copy prefix adds `Options: t1, t2.`). The wrapper's own effect is unmeasured until `f2e` (natural truncation, no wrapper) has a base run; IOI (no wrapper) is attention-heavy, so the wrapper is not necessary for a high share.
+- **Prompt length.** Median T is 17–19 tokens for the entity → attribute levels, 23–27 with the copy prefix and 27–32 for fill-in-the-blank. Across levels, the share's Spearman correlation with median T is +0.29 (Qwen3, 12 levels) / -0.04 (Mixtral); the copy prefix adds 5–9 tokens without moving the share, so length alone does not produce the jump, but it is collinear with the wrapper.
+- **Items and margins.** Natural twins vs semi-synthetic templates (names only, 48 IOI name pairs per seed, seed-clustered CIs with 8–18 units per split); each format and model keeps the items that pass its own margin, so the item sets differ across levels (Mixtral's f1 has 12 / 101 name pairs, Qwen3's 70 / 128). Names raise the share inside every level (above), and the names fraction differs by level. Mean drops differ (about 4.3–5.2 logits for fill-in-the-blank, 6–10 for the option swap): the share is a ratio of rescues, but harder items may route differently; across levels the share's Spearman correlation with the drop is -0.31 / -0.23.
+- **Final-token readout.** All numbers are final-position patches; in attribute → entity the final position copies a mention, so a high final-token attention share does not say where the decision is made (Phase 5 review, issue 5; p5-data's W3 grid).
+
+### Readings
+
+1. **Direction / answer type is the step, answer availability is not.** The paired direction contrasts are the only manipulations that move the share by more than 0.1, in both models and on identical items; adding the answer to the context as an option list leaves the entity → attribute levels where they were (copy prefix − option swap on the same twins: A_direct -0.05 [-0.10, -0.01] Qwen3, +0.10 [+0.08, +0.12] Mixtral). The share is highest when the answer is itself a context token that has to be retrieved by reference (attribute → entity, IOI), intermediate when the subject has to be moved but the answer is generated (CounterFact), and lowest when the answer is a generated attribute (entity → attribute), even when that attribute sits in an option list.
+2. **Heads, M and the share move together.** Heads among the first 10 mixed picks: entity → attribute 2.6–4.5, attribute → entity 5.9–9.0, IOI 9.9 (Qwen3); all-MoE M: entity → attribute 0.46–0.84, attribute → entity -0.06–0.41, IOI -0.27 [-0.29, -0.25] / -0.02 [-0.05, -0.00].
+3. **Experts.** The own selected expert's knockout costs 0.00–0.04 of the clean margin; its CI excludes zero in 15 level × model cells (cf Qwen3 L44E069, cf Mixtral L21E001, p3_opt Qwen3 L41E117, p3_opt Mixtral L20E000, dir_opt Qwen3 L41E117, dir_opt Mixtral L20E000, vt_e2a_orig Mixtral L19E006, vt_e2a_neu Mixtral L19E006, cp_vt_neu Mixtral L19E006, cp_nat Qwen3 L41E117, cp_nat Mixtral L21E006, dir_f1 Qwen3 L44E116, f1 Qwen3 L37E032, vt_a2e_orig Qwen3 L37E032, f2e Mixtral L19E004) and not in 8 (vt_e2a_orig Qwen3, vt_e2a_neu Qwen3, cp_vt_orig Qwen3, cp_vt_orig Mixtral, cp_vt_neu Qwen3, dir_f1 Mixtral, f1 Mixtral, f2e Qwen3). Phase 3's WinoGrande expert is necessary only in p3_opt Qwen3, p3_opt Mixtral, dir_opt Qwen3, dir_opt Mixtral, cp_nat Qwen3, cp_nat Mixtral: where the answer is a natural-twin attribute, not on the templates and not in attribute → entity, CounterFact or IOI.
+4. **Association modulates within a level, in a direction-specific way.** When the trigger alone points to an entity, attribute → entity uses less attention (and more MoE); when entity and attribute are associated, entity → attribute uses slightly more attention. Stratum differences with ≥ 20 pairs are at most 0.11 in absolute value, against a direction step of 0.52 / 0.18; names raise the share by 0.08–0.16 in every level that has ≥ 10 name pairs.
+
+Files: `moetrace/ext13syn.py`, `scripts/ext13syn_all.py` (one command for both syntheses), tables `results/tables/ext13syn_ladder{,_contrasts,_strata,_probe}.{md,csv}`, figures `results/figures/ext13syn_ladder{,_contrasts}.{png,pdf}`, numbers `results/ext13syn_summary.json` (keys ladder, contrasts, strata, confounds).
+
+
+## Direction 13g: Why the add-back curves differ
+
+**Summary.** Why the expert add-back curves have different shapes (P5-4; agent p5-synth; validation cases of every add-back run, Qwen3-30B-A3B-Base and Mixtral-8x7B with BOS, STR, final position). The overshoot of the oracle add-back curve over the all-MoE ceiling M is, condition by condition, the late-MoE term M(≤ L−5) − M: across the 23 main-family conditions of both models Pearson r = +0.98 [+0.93, +1.00] (slope 0.89), and inside every condition that overshoots by ≥ 0.15 the per-case overshoot tracks the per-case late term (r 0.88–1.00). Every task has experts with a negative single-expert effect, and the cross-fitted negative mass sits in the last four layers (last-four-layer over total negative mass: median 1.03 over the conditions with a clear negative mass; the earlier layers net to about zero), where it writes against the answer directly (DLA / total of the negative set in the last four layers 0.77–1.83). The option swap has such experts too (Mixtral −N in the last four layers +0.24 [+0.20, +0.27]), yet it does not overshoot (+0.03 [+0.01, +0.04]), so the negative experts alone do not decide the shape. What decides it is where the answer evidence they react to comes from: the late MoE writes against the answer in proportion to the evidence already in the residual (per-case regression of the last-four-layer MoE DLA: median coefficient -0.40 per logit of attention DLA, CI below zero in 14 of 21 conditions; -0.51 per logit of earlier-MoE DLA, CI below zero in 19 of 21; CounterFact excluded). An expert-only add-back restores the MoE-written evidence but not the attention-written evidence, so when attention writes much of the answer (attribute → entity, CounterFact) the ceiling M contains the late experts' clean reaction to evidence the patched run does not carry, and any subset that leaves the late negatives at their recomputed values overshoots M (f1 +0.28 [+0.23, +0.32] Qwen3, +0.40 [+0.33, +0.46] Mixtral); when the MoE writes the answer (option swap) the recomputed late experts react as in the clean run and nothing is gained (Qwen3 +0.00 [-0.01, +0.01]). Across conditions the overshoot also tracks the direct attention share (r +0.88 [+0.81, +0.96]). GPU check (Qwen3 f1): adding back every expert except the discovery-negative ones gives 0.492 [0.459, 0.525] vs M 0.238 [0.177, 0.296] (oracle maximum 0.512); excluding only the last-four-layer negatives gives 0.496 [0.462, 0.530], excluding only the earlier ones 0.229 [0.170, 0.287]; and the late MoE's mismatch (recomputed − clean) is +0.228 [+0.189, +0.269] when only the MoE upstream is restored but +0.018 [+0.011, +0.025] when attention and MoE upstream are restored. In the option swap (dir_opt) the same negative set patched alone costs -0.226 [-0.296, -0.158], yet leaving it out of the full expert patch changes nothing (-0.016 [-0.031, -0.003]): recomputed in a run whose earlier experts are clean, these experts produce their clean anti-answer output again.
+
+### What was computed
+
+Runs: every add-back run with a complete A0 / A1 set (`results/p5_<cond>_<proto>[_rep]_ab`, Phase 3 `results/{qwen3,mixtral_bos}_str_addback` (CounterFact) and `results/wino_{qwen3,mixtral_bos}_str_addback` (option swap)), their source runs' single-expert rows (`str_expert_rows`, all layers, discovery and validation), the add-back runs' expert DLA (`addback_dla`) and the source runs' per-layer DLA (`dla_rows`). Per condition, on the validation cases (ratios = sum over cases / sum of drops; unit-cluster bootstrap, 5,000 resamples, seed 0):
+
+- **overshoot**: max_k r_oracle(k) - M (population curve: sum of rescues / sum of drops; oracle = each case's own single-expert ranking).
+- **late**: M(<= L-5) - M: A0 'int_moe' minus 'all_moe'; > 0 = the last four MoE layers (at their clean values) work against the answer.
+- **N**: cross-fitted negative single-expert mass: validation sum of the singles of the (layer, expert) pairs whose discovery all-case population effect is < 0, / drop.
+- **D**: DLA of delta_e (final norm frozen at the corrupted run), same sets / bands, / drop.
+- **compensation**: per case OLS y = DLA(last-4 MoE outputs) ~ x_A = DLA(all attention outputs) + x_M = DLA(MoE outputs below L-4 + embedding), logits; base run dla_rows (exact); CounterFact: addback_direct + clean-active expert DLA (approximation).
+- Why cross-fitted: a single-expert rescue carries bf16 noise (SD ≈ 0.17 logits per single in Qwen3, ≈ 0.12 in Mixtral's early layers) and a Qwen3 row has 384 singles, so 'the sum of a row's negative singles' is mostly noise (the 'Nrow' column of the CSV: −1.7 to −4.6 of the drop in Qwen3). Fixing each (layer, expert)'s sign on the discovery cases and summing on the validation cases removes that selection bias; experts unseen in discovery (U) carry ≤ 0.02 of the drop.
+- GPU check (`scripts/ext13syn_gpucheck.py`, one queued job, Qwen3 f1 / dir_f1 / dir_opt validation rows, engine kind `multi` read-only): every expert := clean except the discovery-negative set (noneg), the same restricted to the last four or to the earlier layers, the negative set alone, the row's own negative singles, the last four MoE layers alone, and attention (+ MoE) restored below L−4 with or without the late MoE at clean values (reaction test). All values same pass.
+
+### 1. The overshoot is the late-MoE term
+
+**Add-back curve shape per condition (validation cases; fraction of the drop; unit-cluster bootstrap 95% CIs)**
+
+| Model | Condition | Cases (units) | All-MoE M | Oracle max r (k*) | Overshoot | Late MoE: M(≤L−5) − M | −N (cross-fitted neg. singles) | −N in last 4 layers | D/T of neg. set, last 4 | All experts, last 4: T / D | Σ singles (P+N+U) | A_direct | Attention share |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3 | cf | 108 (108) | 0.531 [0.489, 0.570] | 0.607 (320) | +0.076 [+0.058, +0.096] | -0.098 [-0.128, -0.072] | +0.082 [+0.020, +0.142] | +0.095 [+0.063, +0.126] | 1.36 | +0.136 / +0.114 | 0.59 | 0.50 [0.46, 0.54] | 0.54 [0.51, 0.57] |
+| Qwen3 | p3_opt | 256 (128) | 0.843 [0.827, 0.859] | 0.846 (320) | +0.003 [-0.006, +0.013] | -0.035 [-0.043, -0.027] | +0.130 [-0.057, +0.328] | +0.122 [+0.087, +0.159] | 1.20 | -0.022 / -0.004 | 1.09 | 0.05 [0.02, 0.08] | 0.16 [0.13, 0.20] |
+| Qwen3 | dir_opt | 180 (90) | 0.814 [0.797, 0.833] | 0.815 (320) | +0.000 [-0.009, +0.010] | -0.042 [-0.053, -0.031] | +0.139 [-0.059, +0.333] | +0.186 [+0.139, +0.235] | 1.30 | -0.050 / -0.023 | 1.05 | 0.05 [0.02, 0.08] | 0.19 [0.16, 0.24] |
+| Qwen3 | vt_e2a_orig | 256 (128) | 0.824 [0.811, 0.837] | 0.819 (320) | -0.005 [-0.016, +0.007] | -0.039 [-0.052, -0.026] | +0.082 [-0.061, +0.235] | +0.119 [+0.086, +0.155] | 1.12 | -0.029 / -0.068 | 0.88 | 0.13 [0.08, 0.17] | 0.28 [0.20, 0.36] |
+| Qwen3 | vt_e2a_neu | 256 (128) | 0.816 [0.800, 0.831] | 0.820 (320) | +0.004 [-0.006, +0.014] | -0.038 [-0.055, -0.022] | -0.107 [-0.250, +0.035] | +0.067 [+0.028, +0.109] | 1.51 | +0.006 / -0.030 | 1.46 | 0.13 [0.05, 0.19] | 0.22 [0.17, 0.30] |
+| Qwen3 | cp_nat | 280 (140) | 0.787 [0.768, 0.806] | 0.783 (384) | -0.004 [-0.013, +0.009] | -0.036 [-0.045, -0.027] | +0.058 [-0.056, +0.177] | +0.132 [+0.100, +0.167] | 1.34 | -0.011 / -0.009 | 1.21 | -0.01 [-0.07, 0.04] | 0.21 [0.20, 0.24] |
+| Qwen3 | cp_vt_orig | 256 (128) | 0.699 [0.664, 0.733] | 0.764 (320) | +0.065 [+0.045, +0.087] | +0.042 [+0.019, +0.066] | +0.161 [-0.009, +0.337] | +0.288 [+0.229, +0.347] | 1.00 | -0.269 / -0.309 | 0.75 | 0.11 [-0.01, 0.28] | 0.31 [0.26, 0.38] |
+| Qwen3 | cp_vt_neu | 256 (128) | 0.737 [0.706, 0.767] | 0.770 (320) | +0.033 [+0.017, +0.050] | +0.003 [-0.015, +0.022] | +0.139 [-0.017, +0.303] | +0.129 [+0.097, +0.161] | 0.77 | -0.099 / -0.065 | 0.72 | 0.09 [-0.10, 0.27] | 0.26 [0.23, 0.38] |
+| Qwen3 | dir_f1 | 180 (90) | 0.097 [0.032, 0.159] | 0.472 (320) | +0.375 [+0.331, +0.423] | +0.332 [+0.282, +0.384] | +0.544 [+0.429, +0.664] | +0.555 [+0.490, +0.622] | 1.21 | -0.465 / -0.510 | 0.15 | 1.08 [1.00, 1.17] | 0.71 [0.68, 0.73] |
+| Qwen3 | f1 | 256 (128) | 0.236 [0.174, 0.295] | 0.512 (320) | +0.276 [+0.235, +0.322] | +0.232 [+0.191, +0.275] | +0.434 [+0.253, +0.614] | +0.416 [+0.368, +0.464] | 1.20 | -0.365 / -0.393 | 0.09 | 1.20 [1.14, 1.26] | 0.76 [0.73, 0.77] |
+| Qwen3 | vt_a2e_orig | 74 (37) | 0.197 [0.151, 0.242] | 0.480 (320) | +0.283 [+0.243, +0.327] | +0.290 [+0.253, +0.332] | +0.511 [-0.309, +1.400] | +0.470 [+0.402, +0.542] | 1.14 | -0.441 / -0.526 | -0.19 | 1.47 [1.34, 1.55] | 0.79 [0.64, 0.80] |
+| Qwen3 | f2e | 64 (32) | 0.211 [0.051, 0.359] | 0.465 (192) | +0.254 [+0.157, +0.378] | +0.214 [+0.133, +0.316] | +0.408 [-0.066, +0.893] | +0.379 [+0.282, +0.498] | 1.10 | -0.320 / -0.324 | -0.10 | 0.99 [0.87, 1.12] | 0.69 [0.60, 0.75] |
+| Qwen3 | cp_nat [rep] | 316 (158) | 0.756 [0.736, 0.776] | 0.767 (320) | +0.011 [-0.002, +0.024] | -0.020 [-0.029, -0.010] | +0.186 [+0.081, +0.298] | +0.158 [+0.124, +0.192] | 1.31 | -0.066 / -0.047 | 0.79 | -0.02 [-0.08, 0.04] | 0.23 [0.21, 0.27] |
+| Qwen3 | f1 [rep] | 256 (128) | 0.170 [0.107, 0.230] | 0.475 (320) | +0.305 [+0.266, +0.349] | +0.268 [+0.230, +0.310] | +0.439 [+0.227, +0.636] | +0.442 [+0.399, +0.489] | 1.26 | -0.410 / -0.446 | -0.08 | 1.20 [1.14, 1.26] | 0.78 [0.75, 0.80] |
+| Mixtral | cf | 106 (106) | 0.409 [0.367, 0.451] | 0.517 (48) | +0.108 [+0.080, +0.136] | +0.099 [+0.073, +0.125] | +0.093 [+0.065, +0.121] | +0.093 [+0.065, +0.121] | 1.25 | -0.055 / -0.094 | 0.47 | 0.63 [0.60, 0.66] | 0.58 [0.55, 0.60] |
+| Mixtral | p3_opt | 256 (128) | 0.787 [0.764, 0.809] | 0.813 (48) | +0.026 [+0.015, +0.037] | +0.023 [+0.012, +0.035] | +0.234 [+0.195, +0.270] | +0.238 [+0.201, +0.273] | 1.23 | -0.211 / -0.277 | 1.08 | 0.29 [0.27, 0.31] | 0.34 [0.33, 0.36] |
+| Mixtral | dir_opt | 188 (94) | 0.755 [0.731, 0.777] | 0.788 (48) | +0.034 [+0.022, +0.047] | +0.035 [+0.021, +0.050] | +0.257 [+0.210, +0.302] | +0.266 [+0.220, +0.309] | 1.36 | -0.256 / -0.351 | 0.98 | 0.31 [0.29, 0.33] | 0.35 [0.33, 0.36] |
+| Mixtral | vt_e2a_orig | 256 (128) | 0.677 [0.643, 0.708] | 0.746 (48) | +0.069 [+0.046, +0.093] | +0.065 [+0.044, +0.088] | +0.212 [+0.177, +0.249] | +0.237 [+0.202, +0.273] | 1.28 | -0.196 / -0.279 | 1.06 | 0.38 [0.31, 0.47] | 0.41 [0.36, 0.46] |
+| Mixtral | vt_e2a_neu | 256 (128) | 0.626 [0.587, 0.664] | 0.730 (48) | +0.104 [+0.075, +0.134] | +0.102 [+0.075, +0.130] | +0.185 [+0.155, +0.218] | +0.240 [+0.204, +0.277] | 1.23 | -0.255 / -0.339 | 0.98 | 0.42 [0.32, 0.55] | 0.42 [0.37, 0.48] |
+| Mixtral | cp_nat | 408 (204) | 0.733 [0.710, 0.754] | 0.802 (48) | +0.069 [+0.057, +0.081] | +0.074 [+0.062, +0.087] | +0.380 [+0.355, +0.404] | +0.385 [+0.363, +0.406] | 1.33 | -0.372 / -0.502 | 0.92 | 0.38 [0.34, 0.41] | 0.37 [0.36, 0.39] |
+| Mixtral | cp_vt_orig | 256 (128) | 0.543 [0.496, 0.584] | 0.740 (48) | +0.197 [+0.167, +0.232] | +0.197 [+0.168, +0.231] | +0.236 [+0.192, +0.278] | +0.279 [+0.235, +0.323] | 1.72 | -0.294 / -0.535 | 1.02 | 0.47 [0.39, 0.60] | 0.39 [0.33, 0.47] |
+| Mixtral | cp_vt_neu | 256 (128) | 0.461 [0.436, 0.487] | 0.730 (48) | +0.269 [+0.251, +0.288] | +0.251 [+0.229, +0.272] | +0.257 [+0.218, +0.293] | +0.326 [+0.296, +0.355] | 1.83 | -0.328 / -0.617 | 0.98 | 0.43 [0.37, 0.52] | 0.38 [0.33, 0.42] |
+| Mixtral | dir_f1 | 188 (94) | 0.409 [0.356, 0.459] | 0.681 (48) | +0.272 [+0.234, +0.314] | +0.292 [+0.253, +0.336] | +0.585 [+0.524, +0.646] | +0.585 [+0.529, +0.640] | 1.45 | -0.588 / -0.853 | 0.54 | 0.86 [0.77, 0.95] | 0.52 [0.50, 0.54] |
+| Mixtral | f1 | 202 (101) | 0.229 [0.135, 0.322] | 0.627 (48) | +0.398 [+0.334, +0.465] | +0.412 [+0.349, +0.477] | +0.562 [+0.495, +0.629] | +0.598 [+0.542, +0.656] | 1.48 | -0.591 / -0.858 | 0.45 | 1.01 [0.91, 1.12] | 0.56 [0.53, 0.59] |
+| Mixtral | f2e | 36 (18) | -0.051 [-0.325, 0.198] | 0.506 (48) | +0.557 [+0.382, +0.767] | +0.576 [+0.405, +0.780] | +0.621 [+0.480, +0.783] | +0.675 [+0.562, +0.806] | 1.39 | -0.675 / -0.936 | 0.15 | 1.35 [1.16, 1.55] | 0.65 [0.59, 0.70] |
+| Mixtral | cp_nat [rep] | 444 (222) | 0.706 [0.688, 0.724] | 0.779 (48) | +0.072 [+0.062, +0.083] | +0.080 [+0.070, +0.090] | +0.364 [+0.340, +0.388] | +0.377 [+0.355, +0.400] | 1.31 | -0.378 / -0.506 | 0.89 | 0.41 [0.38, 0.43] | 0.38 [0.37, 0.40] |
+
+![overshoot vs predictors](../figures/ext13syn_curves_overshoot.png)
+
+- both models (23 conditions): -N r +0.86 [+0.74, +0.93]; -N_late r +0.89 [+0.77, +0.95]; late r +0.98 [+0.93, +1.00]; -T_late r +0.85 [+0.70, +0.94]; -DT_late r +0.84 [+0.67, +0.93]; A_direct r +0.88 [+0.81, +0.96]; share r +0.78 [+0.67, +0.90]; M r -0.95 [-0.98, -0.89].
+- Qwen3 (12 conditions): -N r +0.94 [+0.82, +0.99]; -N_late r +0.95 [+0.80, +0.99]; late r +0.96 [+0.82, +1.00]; -T_late r +0.88 [+0.64, +0.99]; -DT_late r +0.88 [+0.68, +0.99]; A_direct r +0.94 [+0.90, +0.99]; share r +0.94 [+0.87, +1.00]; M r -0.99 [-1.00, -0.96].
+- Mixtral (11 conditions): -N r +0.78 [+0.22, +0.93]; -N_late r +0.83 [+0.42, +0.95]; late r +1.00 [+0.99, +1.00]; -T_late r +0.84 [+0.42, +0.96]; -DT_late r +0.87 [+0.67, +0.98]; A_direct r +0.92 [+0.55, +0.99]; share r +0.76 [+0.12, +0.98]; M r -0.95 [-1.00, -0.74].
+
+Reading. M is the all-MoE ceiling and the oracle maximum sits at k* = 320 of 384 (Qwen3) or 48 of 64 (Mixtral), i.e. just before the most negative singles of the row enter. M(≤ L−5) − M compares the same expert patch with and without the last four MoE layers forced to their clean values; it is the overshoot's counterpart in a single joint patch. The two agree within about 0.05 everywhere except Qwen3 CounterFact, where the last four layers also hold the positive factual expert L44E069 (late term -0.10 [-0.13, -0.07], but the negative experts inside that band still give −N +0.10 [+0.06, +0.13] and the overshoot +0.08 [+0.06, +0.10]).
+
+### 2. Where the negative experts are, and how they write
+
+**Cross-fitted negative (N) / positive (P) single-expert mass and all experts (T) by depth band, with their direct parts (D)**
+
+| Model | Condition | Band | N / drop | DN / drop | P / drop | T (all) / drop | DT (all) / drop |
+|---|---|---|---|---|---|---|---|
+| Qwen3 | cf | first half | +0.005 | -0.003 | +0.015 | +0.022 | -0.002 |
+| Qwen3 | cf | L/2..L-9 | +0.009 | +0.006 | +0.115 | +0.126 | +0.072 |
+| Qwen3 | cf | L-8..L-5 | -0.001 | +0.000 | +0.303 | +0.303 | +0.288 |
+| Qwen3 | cf | last 4 | -0.095 | -0.130 | +0.230 | +0.136 | +0.114 |
+| Qwen3 | p3_opt | first half | -0.059 | +0.012 | +0.049 | -0.009 | +0.025 |
+| Qwen3 | p3_opt | L/2..L-9 | +0.051 | +0.029 | +0.545 | +0.597 | +0.337 |
+| Qwen3 | p3_opt | L-8..L-5 | -0.000 | +0.001 | +0.522 | +0.524 | +0.575 |
+| Qwen3 | p3_opt | last 4 | -0.122 | -0.146 | +0.100 | -0.022 | -0.004 |
+| Qwen3 | dir_opt | first half | +0.059 | +0.016 | +0.076 | +0.131 | +0.049 |
+| Qwen3 | dir_opt | L/2..L-9 | -0.013 | +0.002 | +0.477 | +0.463 | +0.322 |
+| Qwen3 | dir_opt | L-8..L-5 | +0.002 | +0.003 | +0.496 | +0.503 | +0.585 |
+| Qwen3 | dir_opt | last 4 | -0.186 | -0.243 | +0.136 | -0.050 | -0.023 |
+| Qwen3 | vt_e2a_orig | first half | -0.002 | +0.009 | -0.039 | -0.048 | +0.027 |
+| Qwen3 | vt_e2a_orig | L/2..L-9 | +0.004 | +0.071 | +0.416 | +0.420 | +0.324 |
+| Qwen3 | vt_e2a_orig | L-8..L-5 | +0.035 | +0.024 | +0.492 | +0.533 | +0.573 |
+| Qwen3 | vt_e2a_orig | last 4 | -0.119 | -0.133 | +0.083 | -0.029 | -0.068 |
+| Qwen3 | vt_e2a_neu | first half | +0.055 | +0.001 | +0.127 | +0.189 | +0.030 |
+| Qwen3 | vt_e2a_neu | L/2..L-9 | +0.109 | +0.037 | +0.660 | +0.781 | +0.349 |
+| Qwen3 | vt_e2a_neu | L-8..L-5 | +0.010 | +0.006 | +0.480 | +0.484 | +0.507 |
+| Qwen3 | vt_e2a_neu | last 4 | -0.067 | -0.102 | +0.035 | +0.006 | -0.030 |
+| Qwen3 | cp_nat | first half | +0.065 | +0.014 | +0.063 | +0.129 | +0.031 |
+| Qwen3 | cp_nat | L/2..L-9 | +0.008 | +0.060 | +0.617 | +0.637 | +0.400 |
+| Qwen3 | cp_nat | L-8..L-5 | +0.001 | -0.006 | +0.454 | +0.459 | +0.559 |
+| Qwen3 | cp_nat | last 4 | -0.132 | -0.177 | +0.120 | -0.011 | -0.009 |
+| Qwen3 | cp_vt_orig | first half | -0.012 | +0.017 | -0.052 | -0.069 | +0.059 |
+| Qwen3 | cp_vt_orig | L/2..L-9 | +0.148 | +0.048 | +0.469 | +0.645 | +0.347 |
+| Qwen3 | cp_vt_orig | L-8..L-5 | -0.009 | +0.026 | +0.439 | +0.440 | +0.765 |
+| Qwen3 | cp_vt_orig | last 4 | -0.288 | -0.287 | +0.024 | -0.269 | -0.309 |
+| Qwen3 | cp_vt_neu | first half | -0.054 | +0.006 | -0.017 | -0.064 | +0.050 |
+| Qwen3 | cp_vt_neu | L/2..L-9 | +0.028 | +0.050 | +0.386 | +0.407 | +0.286 |
+| Qwen3 | cp_vt_neu | L-8..L-5 | +0.016 | +0.017 | +0.436 | +0.477 | +0.623 |
+| Qwen3 | cp_vt_neu | last 4 | -0.129 | -0.099 | +0.031 | -0.099 | -0.065 |
+| Qwen3 | dir_f1 | first half | +0.020 | +0.000 | +0.140 | +0.158 | -0.001 |
+| Qwen3 | dir_f1 | L/2..L-9 | -0.013 | -0.000 | +0.218 | +0.214 | +0.041 |
+| Qwen3 | dir_f1 | L-8..L-5 | +0.005 | +0.005 | +0.233 | +0.247 | +0.374 |
+| Qwen3 | dir_f1 | last 4 | -0.555 | -0.675 | +0.091 | -0.465 | -0.510 |
+| Qwen3 | f1 | first half | +0.021 | +0.000 | -0.015 | +0.011 | +0.001 |
+| Qwen3 | f1 | L/2..L-9 | -0.050 | +0.002 | +0.319 | +0.280 | +0.013 |
+| Qwen3 | f1 | L-8..L-5 | +0.010 | +0.010 | +0.155 | +0.167 | +0.182 |
+| Qwen3 | f1 | last 4 | -0.416 | -0.499 | +0.049 | -0.365 | -0.393 |
+| Qwen3 | vt_a2e_orig | first half | -0.030 | -0.004 | -0.010 | -0.041 | -0.002 |
+| Qwen3 | vt_a2e_orig | L/2..L-9 | -0.011 | +0.008 | +0.223 | +0.227 | +0.011 |
+| Qwen3 | vt_a2e_orig | L-8..L-5 | +0.000 | +0.001 | +0.068 | +0.062 | +0.022 |
+| Qwen3 | vt_a2e_orig | last 4 | -0.470 | -0.536 | +0.035 | -0.441 | -0.526 |
+| Qwen3 | f2e | first half | -0.040 | -0.000 | -0.035 | -0.086 | +0.001 |
+| Qwen3 | f2e | L/2..L-9 | +0.001 | +0.030 | +0.133 | +0.108 | +0.055 |
+| Qwen3 | f2e | L-8..L-5 | +0.010 | +0.007 | +0.178 | +0.198 | +0.252 |
+| Qwen3 | f2e | last 4 | -0.379 | -0.418 | +0.065 | -0.320 | -0.324 |
+| Qwen3 | cp_nat [rep] | first half | -0.023 | +0.014 | +0.009 | -0.019 | +0.044 |
+| Qwen3 | cp_nat [rep] | L/2..L-9 | -0.015 | +0.041 | +0.498 | +0.482 | +0.427 |
+| Qwen3 | cp_nat [rep] | L-8..L-5 | +0.009 | +0.007 | +0.380 | +0.390 | +0.554 |
+| Qwen3 | cp_nat [rep] | last 4 | -0.158 | -0.207 | +0.090 | -0.066 | -0.047 |
+| Qwen3 | f1 [rep] | first half | +0.002 | -0.001 | -0.046 | -0.044 | +0.000 |
+| Qwen3 | f1 [rep] | L/2..L-9 | +0.005 | +0.002 | +0.258 | +0.262 | +0.018 |
+| Qwen3 | f1 [rep] | L-8..L-5 | -0.003 | +0.018 | +0.109 | +0.112 | +0.222 |
+| Qwen3 | f1 [rep] | last 4 | -0.442 | -0.557 | +0.033 | -0.410 | -0.446 |
+| Mixtral | cf | first half | +0.000 | +0.001 | +0.022 | +0.023 | +0.010 |
+| Mixtral | cf | L/2..L-9 | -0.000 | +0.000 | +0.376 | +0.375 | +0.300 |
+| Mixtral | cf | L-8..L-5 | +0.000 | +0.000 | +0.123 | +0.123 | +0.105 |
+| Mixtral | cf | last 4 | -0.093 | -0.116 | +0.037 | -0.055 | -0.094 |
+| Mixtral | p3_opt | first half | +0.004 | +0.001 | +0.109 | +0.112 | +0.029 |
+| Mixtral | p3_opt | L/2..L-9 | +0.000 | +0.000 | +0.831 | +0.832 | +0.492 |
+| Mixtral | p3_opt | L-8..L-5 | -0.000 | -0.001 | +0.353 | +0.352 | +0.433 |
+| Mixtral | p3_opt | last 4 | -0.238 | -0.293 | +0.028 | -0.211 | -0.277 |
+| Mixtral | dir_opt | first half | +0.008 | +0.001 | +0.143 | +0.153 | +0.059 |
+| Mixtral | dir_opt | L/2..L-9 | +0.000 | +0.000 | +0.766 | +0.767 | +0.542 |
+| Mixtral | dir_opt | L-8..L-5 | +0.000 | +0.000 | +0.318 | +0.317 | +0.405 |
+| Mixtral | dir_opt | last 4 | -0.266 | -0.360 | +0.011 | -0.256 | -0.351 |
+| Mixtral | vt_e2a_orig | first half | +0.014 | +0.001 | +0.215 | +0.240 | +0.039 |
+| Mixtral | vt_e2a_orig | L/2..L-9 | +0.000 | +0.000 | +0.819 | +0.850 | +0.617 |
+| Mixtral | vt_e2a_orig | L-8..L-5 | +0.011 | +0.011 | +0.151 | +0.169 | +0.211 |
+| Mixtral | vt_e2a_orig | last 4 | -0.237 | -0.304 | +0.047 | -0.196 | -0.279 |
+| Mixtral | vt_e2a_neu | first half | +0.005 | +0.005 | +0.145 | +0.152 | +0.041 |
+| Mixtral | vt_e2a_neu | L/2..L-9 | +0.040 | +0.052 | +0.838 | +0.907 | +0.627 |
+| Mixtral | vt_e2a_neu | L-8..L-5 | +0.011 | +0.012 | +0.154 | +0.175 | +0.230 |
+| Mixtral | vt_e2a_neu | last 4 | -0.240 | -0.296 | +0.001 | -0.255 | -0.339 |
+| Mixtral | cp_nat | first half | +0.004 | +0.002 | +0.121 | +0.126 | +0.033 |
+| Mixtral | cp_nat | L/2..L-9 | +0.000 | +0.000 | +0.846 | +0.847 | +0.584 |
+| Mixtral | cp_nat | L-8..L-5 | +0.000 | +0.000 | +0.321 | +0.321 | +0.479 |
+| Mixtral | cp_nat | last 4 | -0.385 | -0.510 | +0.013 | -0.372 | -0.502 |
+| Mixtral | cp_vt_orig | first half | +0.012 | +0.002 | +0.225 | +0.239 | +0.046 |
+| Mixtral | cp_vt_orig | L/2..L-9 | +0.001 | +0.002 | +0.891 | +0.933 | +0.815 |
+| Mixtral | cp_vt_orig | L-8..L-5 | +0.030 | +0.043 | +0.113 | +0.147 | +0.168 |
+| Mixtral | cp_vt_orig | last 4 | -0.279 | -0.480 | -0.002 | -0.294 | -0.535 |
+| Mixtral | cp_vt_neu | first half | +0.000 | +0.003 | +0.190 | +0.197 | +0.061 |
+| Mixtral | cp_vt_neu | L/2..L-9 | +0.003 | +0.003 | +0.968 | +1.017 | +0.930 |
+| Mixtral | cp_vt_neu | L-8..L-5 | +0.066 | +0.080 | +0.025 | +0.096 | +0.166 |
+| Mixtral | cp_vt_neu | last 4 | -0.326 | -0.597 | -0.002 | -0.328 | -0.617 |
+| Mixtral | dir_f1 | first half | -0.004 | -0.000 | +0.109 | +0.102 | +0.006 |
+| Mixtral | dir_f1 | L/2..L-9 | +0.002 | +0.000 | +0.830 | +0.836 | +0.618 |
+| Mixtral | dir_f1 | L-8..L-5 | +0.001 | +0.003 | +0.184 | +0.185 | +0.345 |
+| Mixtral | dir_f1 | last 4 | -0.585 | -0.847 | +0.005 | -0.588 | -0.853 |
+| Mixtral | f1 | first half | +0.034 | +0.000 | +0.145 | +0.178 | +0.010 |
+| Mixtral | f1 | L/2..L-9 | +0.001 | +0.001 | +0.727 | +0.728 | +0.499 |
+| Mixtral | f1 | L-8..L-5 | +0.000 | +0.001 | +0.136 | +0.137 | +0.313 |
+| Mixtral | f1 | last 4 | -0.598 | -0.888 | +0.007 | -0.591 | -0.858 |
+| Mixtral | f2e | first half | +0.045 | +0.001 | +0.191 | +0.239 | +0.007 |
+| Mixtral | f2e | L/2..L-9 | +0.005 | +0.003 | +0.510 | +0.522 | +0.471 |
+| Mixtral | f2e | L-8..L-5 | +0.004 | +0.015 | +0.048 | +0.059 | +0.120 |
+| Mixtral | f2e | last 4 | -0.675 | -0.936 | +0.001 | -0.675 | -0.936 |
+| Mixtral | cp_nat [rep] | first half | +0.013 | +0.002 | +0.139 | +0.152 | +0.038 |
+| Mixtral | cp_nat [rep] | L/2..L-9 | +0.000 | +0.000 | +0.821 | +0.823 | +0.592 |
+| Mixtral | cp_nat [rep] | L-8..L-5 | +0.000 | +0.000 | +0.292 | +0.293 | +0.435 |
+| Mixtral | cp_nat [rep] | last 4 | -0.377 | -0.495 | -0.000 | -0.378 | -0.506 |
+
+![layer profiles](../figures/ext13syn_curves_layers.png)
+
+The cross-fitted negative mass is concentrated in the last four layers in every condition and model (Qwen3 L44–L47, Mixtral L28–L31); earlier bands net to about zero once noise is not selected. Its DLA is about as large as or larger than its total effect (D/T 0.77–1.83), so these experts write against the answer directly at the final position, and the layers after them do not add to it (if anything they undo a part). The same experts are present in the option swap: Mixtral's last four layers write -0.21 of the drop (all experts; DLA -0.28) in the option swap and -0.59 (DLA -0.86) in f1. This matches the writer section's depth bands (`ext13_writer.md`: the last four layers' summed writes are negative with D/T ≈ 1–1.7 wherever their net write is clearly negative) and Phase 3's observation of a small negative last-layer MoE in every task (ext7_controls reading 2).
+
+### 3. Per case
+
+**Per-case relations within each condition (Pearson r, unit bootstrap 95% CI)**
+
+| Model | Condition | Cases | SD of case overshoot at k* | r(overshoot, −N) | r(overshoot, −N late) | r(overshoot, late) | r(late, −N late) | r(late, −T late) | r(overshoot, A_direct) | r(late, A_direct) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3 | cf | 108 | 0.113 | +0.19 [+0.01, +0.38] | +0.45 [+0.23, +0.64] | +0.56 [+0.39, +0.71] | +0.47 [+0.20, +0.67] | +0.46 [+0.26, +0.63] | +0.62 [+0.50, +0.74] | +0.52 [+0.40, +0.63] |
+| Qwen3 | p3_opt | 256 | 0.078 | +0.18 [+0.01, +0.35] | +0.15 [+0.01, +0.28] | +0.39 [+0.28, +0.51] | +0.16 [+0.03, +0.29] | +0.19 [+0.03, +0.33] | +0.16 [+0.03, +0.28] | +0.21 [+0.05, +0.37] |
+| Qwen3 | dir_opt | 180 | 0.073 | +0.08 [-0.07, +0.24] | +0.22 [+0.09, +0.36] | +0.37 [+0.19, +0.55] | +0.29 [+0.09, +0.46] | +0.29 [+0.11, +0.43] | +0.08 [-0.09, +0.24] | -0.12 [-0.32, +0.11] |
+| Qwen3 | vt_e2a_orig | 256 | 0.086 | -0.07 [-0.21, +0.08] | +0.15 [+0.04, +0.25] | +0.43 [+0.32, +0.53] | +0.39 [+0.28, +0.49] | +0.42 [+0.31, +0.52] | +0.08 [-0.01, +0.17] | -0.12 [-0.26, +0.04] |
+| Qwen3 | vt_e2a_neu | 256 | 0.082 | +0.08 [-0.05, +0.20] | +0.12 [-0.02, +0.26] | +0.35 [+0.23, +0.47] | +0.41 [+0.32, +0.51] | +0.43 [+0.33, +0.53] | +0.16 [+0.05, +0.28] | +0.13 [-0.02, +0.28] |
+| Qwen3 | cp_nat | 280 | 0.078 | -0.11 [-0.30, +0.10] | +0.13 [-0.05, +0.32] | -0.00 [-0.17, +0.17] | +0.18 [+0.02, +0.35] | +0.27 [+0.13, +0.39] | -0.26 [-0.44, -0.06] | +0.43 [+0.24, +0.56] |
+| Qwen3 | cp_vt_orig | 256 | 0.163 | -0.09 [-0.21, +0.04] | +0.03 [-0.10, +0.17] | +0.81 [+0.74, +0.86] | -0.02 [-0.15, +0.13] | +0.04 [-0.08, +0.17] | +0.26 [+0.11, +0.41] | +0.36 [+0.21, +0.51] |
+| Qwen3 | cp_vt_neu | 256 | 0.165 | -0.20 [-0.33, -0.04] | +0.10 [-0.06, +0.26] | +0.79 [+0.67, +0.87] | +0.01 [-0.14, +0.17] | +0.15 [-0.00, +0.30] | +0.16 [+0.05, +0.28] | +0.22 [+0.10, +0.35] |
+| Qwen3 | dir_f1 | 180 | 0.237 | +0.07 [-0.11, +0.28] | +0.39 [+0.24, +0.53] | +0.95 [+0.93, +0.96] | +0.41 [+0.26, +0.55] | +0.32 [+0.17, +0.47] | +0.55 [+0.40, +0.67] | +0.67 [+0.54, +0.76] |
+| Qwen3 | f1 | 256 | 0.250 | +0.08 [-0.04, +0.20] | +0.48 [+0.38, +0.57] | +0.88 [+0.82, +0.92] | +0.53 [+0.42, +0.63] | +0.47 [+0.35, +0.57] | +0.45 [+0.30, +0.58] | +0.60 [+0.45, +0.71] |
+| Qwen3 | vt_a2e_orig | 74 | 0.156 | -0.10 [-0.40, +0.28] | +0.30 [+0.01, +0.56] | +0.94 [+0.87, +0.97] | +0.35 [+0.08, +0.60] | +0.25 [+0.02, +0.50] | +0.57 [+0.31, +0.72] | +0.64 [+0.40, +0.77] |
+| Qwen3 | f2e | 64 | 0.442 | +0.02 [-0.18, +0.30] | +0.74 [+0.38, +0.86] | +0.94 [+0.83, +0.97] | +0.81 [+0.58, +0.87] | +0.75 [+0.48, +0.84] | +0.28 [-0.04, +0.54] | +0.42 [+0.18, +0.65] |
+| Qwen3 | cp_nat [rep] | 316 | 0.115 | +0.07 [-0.12, +0.24] | +0.12 [+0.01, +0.23] | +0.45 [+0.37, +0.53] | +0.33 [+0.19, +0.46] | +0.41 [+0.29, +0.52] | +0.04 [-0.08, +0.15] | +0.15 [+0.01, +0.29] |
+| Qwen3 | f1 [rep] | 256 | 0.278 | +0.16 [+0.05, +0.27] | +0.49 [+0.37, +0.59] | +0.93 [+0.89, +0.95] | +0.50 [+0.39, +0.60] | +0.41 [+0.29, +0.52] | +0.58 [+0.42, +0.69] | +0.66 [+0.52, +0.75] |
+| Mixtral | cf | 106 | 0.158 | +0.62 [+0.45, +0.74] | +0.69 [+0.57, +0.78] | +0.91 [+0.83, +0.95] | +0.77 [+0.69, +0.86] | +0.80 [+0.70, +0.87] | +0.75 [+0.64, +0.82] | +0.71 [+0.60, +0.80] |
+| Mixtral | p3_opt | 256 | 0.089 | +0.40 [+0.27, +0.52] | +0.35 [+0.22, +0.47] | +0.88 [+0.80, +0.93] | +0.46 [+0.34, +0.57] | +0.48 [+0.37, +0.58] | +0.63 [+0.44, +0.75] | +0.72 [+0.57, +0.81] |
+| Mixtral | dir_opt | 188 | 0.080 | +0.40 [+0.21, +0.54] | +0.43 [+0.25, +0.57] | +0.89 [+0.83, +0.94] | +0.61 [+0.49, +0.70] | +0.61 [+0.49, +0.71] | +0.50 [+0.32, +0.63] | +0.53 [+0.38, +0.65] |
+| Mixtral | vt_e2a_orig | 256 | 0.139 | +0.45 [+0.34, +0.55] | +0.54 [+0.45, +0.63] | +0.94 [+0.90, +0.96] | +0.64 [+0.58, +0.71] | +0.58 [+0.51, +0.65] | +0.75 [+0.61, +0.83] | +0.78 [+0.66, +0.84] |
+| Mixtral | vt_e2a_neu | 256 | 0.168 | +0.09 [+0.00, +0.18] | +0.50 [+0.39, +0.62] | +0.97 [+0.95, +0.98] | +0.55 [+0.45, +0.65] | +0.53 [+0.43, +0.62] | +0.81 [+0.70, +0.87] | +0.82 [+0.71, +0.87] |
+| Mixtral | cp_nat | 408 | 0.097 | +0.27 [+0.16, +0.37] | +0.42 [+0.32, +0.52] | +0.94 [+0.93, +0.96] | +0.45 [+0.34, +0.55] | +0.51 [+0.42, +0.59] | +0.59 [+0.50, +0.68] | +0.68 [+0.61, +0.75] |
+| Mixtral | cp_vt_orig | 256 | 0.231 | +0.33 [+0.21, +0.45] | +0.39 [+0.27, +0.51] | +0.97 [+0.96, +0.98] | +0.41 [+0.29, +0.52] | +0.41 [+0.29, +0.52] | +0.68 [+0.55, +0.78] | +0.72 [+0.60, +0.81] |
+| Mixtral | cp_vt_neu | 256 | 0.152 | +0.57 [+0.50, +0.64] | +0.58 [+0.51, +0.65] | +0.94 [+0.92, +0.95] | +0.74 [+0.69, +0.80] | +0.74 [+0.69, +0.80] | +0.34 [+0.09, +0.53] | +0.41 [+0.17, +0.58] |
+| Mixtral | dir_f1 | 188 | 0.256 | +0.40 [+0.27, +0.53] | +0.31 [+0.16, +0.47] | +0.98 [+0.96, +0.99] | +0.33 [+0.17, +0.49] | +0.36 [+0.21, +0.52] | +0.54 [+0.40, +0.66] | +0.56 [+0.43, +0.67] |
+| Mixtral | f1 | 202 | 0.339 | +0.07 [-0.11, +0.24] | +0.19 [+0.00, +0.39] | +0.98 [+0.97, +0.99] | +0.22 [+0.03, +0.42] | +0.20 [+0.01, +0.41] | +0.52 [+0.38, +0.64] | +0.54 [+0.40, +0.65] |
+| Mixtral | f2e | 36 | 0.458 | +0.65 [+0.37, +0.87] | +0.66 [+0.41, +0.85] | +1.00 [+0.99, +1.00] | +0.65 [+0.38, +0.85] | +0.65 [+0.38, +0.85] | +0.69 [+0.33, +0.91] | +0.70 [+0.34, +0.90] |
+| Mixtral | cp_nat [rep] | 444 | 0.098 | +0.33 [+0.22, +0.44] | +0.38 [+0.26, +0.49] | +0.93 [+0.91, +0.95] | +0.41 [+0.29, +0.52] | +0.45 [+0.33, +0.56] | +0.49 [+0.40, +0.57] | +0.56 [+0.47, +0.63] |
+
+Within a condition, the case-level overshoot at k* is almost the case-level late term (r 0.56–1.00 in the 15 conditions that overshoot by ≥ 0.05), and both correlate only moderately with the case's own cross-fitted late negative mass (r 0.03–0.74): which experts react varies across cases, but the late band as a whole carries the overshoot. The case-level direct attention share predicts the case-level overshoot (CI above zero) in 19 of 23 conditions; the exceptions are Qwen3 entity → attribute conditions with almost no attention write (A_direct ≤ 0.13): dir_opt Qwen3 (+0.08 [-0.09, +0.24]); f2e Qwen3 (+0.28 [-0.04, +0.54]); vt_e2a_orig Qwen3 (+0.08 [-0.01, +0.17]); cp_nat Qwen3 (-0.26 [-0.44, -0.06]).
+
+### 4. Do the late experts react to the answer evidence? (compensation regression)
+
+**Compensation regression per case: DLA of the last-4 MoE outputs on the DLA of all attention outputs and of the earlier MoE outputs (logits; clean minus corrupted)**
+
+| Model | Condition | Source | Cases | Mean late-MoE DLA (logits) | Mean attention DLA | Mean early-MoE DLA | b(attention) | b(early MoE) | clean-only b(attention) / b(early MoE) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3 | cf | addback DLA (approximation) | 108 | +1.33 | +5.83 | +4.58 | -0.082 [-0.224, +0.055] | +0.299 [+0.063, +0.470] | n/a |
+| Qwen3 | p3_opt | dla_rows (exact) | 256 | +0.05 | +0.34 | +7.79 | -0.211 [-0.506, +0.064] | -0.154 [-0.262, -0.057] | n/a |
+| Qwen3 | dir_opt | dla_rows (exact) | 180 | -0.20 | +0.35 | +8.50 | +0.050 [-0.227, +0.370] | -0.243 [-0.361, -0.131] | n/a |
+| Qwen3 | vt_e2a_orig | dla_rows (exact) | 256 | -0.52 | +0.86 | +6.16 | +0.478 [+0.211, +0.729] | -0.513 [-0.580, -0.422] | n/a |
+| Qwen3 | vt_e2a_neu | dla_rows (exact) | 256 | -0.25 | +0.93 | +5.42 | +0.437 [+0.262, +0.622] | -0.459 [-0.530, -0.399] | n/a |
+| Qwen3 | cp_nat | dla_rows (exact) | 280 | +0.00 | -0.11 | +6.09 | -0.318 [-0.496, -0.148] | -0.436 [-0.548, -0.329] | n/a |
+| Qwen3 | cp_vt_orig | dla_rows (exact) | 256 | -1.77 | +0.70 | +6.64 | -0.693 [-0.834, -0.583] | -0.634 [-0.696, -0.576] | n/a |
+| Qwen3 | cp_vt_neu | dla_rows (exact) | 256 | -0.42 | +0.53 | +5.48 | -0.526 [-0.645, -0.435] | -0.188 [-0.350, -0.010] | n/a |
+| Qwen3 | dir_f1 | dla_rows (exact) | 180 | -2.64 | +5.60 | +2.25 | -0.470 [-0.573, -0.362] | -0.297 [-0.466, -0.112] | n/a |
+| Qwen3 | f1 | dla_rows (exact) | 256 | -1.84 | +5.47 | +0.98 | -0.433 [-0.548, -0.300] | -0.575 [-0.701, -0.425] | n/a |
+| Qwen3 | vt_a2e_orig | dla_rows (exact) | 74 | -1.93 | +5.42 | +0.16 | -0.475 [-0.618, -0.365] | -0.366 [-0.876, +0.082] | n/a |
+| Qwen3 | f2e | dla_rows (exact) | 64 | -2.73 | +8.35 | +2.65 | -0.274 [-0.429, -0.014] | -0.253 [-0.601, +0.265] | n/a |
+| Qwen3 | cp_nat [rep] | dla_rows (exact) | 316 | -0.23 | -0.13 | +6.26 | -0.377 [-0.483, -0.248] | -0.436 [-0.531, -0.324] | n/a |
+| Qwen3 | f1 [rep] | dla_rows (exact) | 256 | -2.14 | +5.70 | +1.19 | -0.438 [-0.505, -0.363] | -0.501 [-0.627, -0.366] | n/a |
+| Mixtral | cf | addback DLA (approximation) | 106 | -1.23 | +8.18 | +5.97 | -0.096 [-0.245, +0.067] | -0.085 [-0.241, +0.033] | n/a |
+| Mixtral | p3_opt | dla_rows (exact) | 256 | -2.15 | +2.23 | +7.60 | -0.462 [-0.708, -0.167] | -0.483 [-0.545, -0.406] | n/a |
+| Mixtral | dir_opt | dla_rows (exact) | 188 | -3.42 | +2.98 | +10.11 | -0.177 [-0.468, +0.170] | -0.679 [-0.753, -0.609] | n/a |
+| Mixtral | vt_e2a_orig | dla_rows (exact) | 256 | -1.81 | +2.50 | +5.83 | -0.303 [-0.525, +0.025] | -0.547 [-0.650, -0.443] | n/a |
+| Mixtral | vt_e2a_neu | dla_rows (exact) | 256 | -1.98 | +2.47 | +5.33 | -0.402 [-0.602, -0.143] | -0.573 [-0.677, -0.456] | n/a |
+| Mixtral | cp_nat | dla_rows (exact) | 408 | -3.61 | +2.70 | +8.07 | -0.488 [-0.583, -0.379] | -0.606 [-0.656, -0.553] | n/a |
+| Mixtral | cp_vt_orig | dla_rows (exact) | 256 | -2.76 | +2.39 | +5.63 | -0.225 [-0.384, -0.034] | -0.516 [-0.626, -0.428] | n/a |
+| Mixtral | cp_vt_neu | dla_rows (exact) | 256 | -3.30 | +2.28 | +6.42 | -0.144 [-0.318, +0.044] | -0.790 [-0.908, -0.692] | n/a |
+| Mixtral | dir_f1 | dla_rows (exact) | 188 | -4.13 | +3.99 | +4.79 | -0.585 [-0.674, -0.488] | -0.483 [-0.627, -0.343] | n/a |
+| Mixtral | f1 | dla_rows (exact) | 202 | -3.84 | +4.42 | +3.74 | -0.580 [-0.673, -0.491] | -0.565 [-0.694, -0.440] | n/a |
+| Mixtral | f2e | dla_rows (exact) | 36 | -6.59 | +9.31 | +4.19 | -0.523 [-0.815, -0.354] | -0.600 [-0.909, -0.322] | n/a |
+| Mixtral | cp_nat [rep] | dla_rows (exact) | 444 | -3.95 | +3.11 | +8.56 | -0.349 [-0.448, -0.259] | -0.665 [-0.712, -0.616] | n/a |
+
+![compensation](../figures/ext13syn_curves_compensation.png)
+
+Per case (logits, clean minus corrupted): the last-four-layer MoE DLA falls with both the attention DLA and the earlier-MoE DLA (both CIs below zero) in 12 of 23 conditions — the late band suppresses the answer in proportion to how much evidence for it is already in the residual, whichever sublayer wrote it (a confidence-regulation / anti-overconfidence pattern; compare the late 'erasure' MLPs of McGrath et al. 2023, arXiv:2307.15771, the suppression neurons of the final layers in Gurnee et al. 2024, arXiv:2401.12181, and Stolfo et al. 2024, arXiv:2406.16254). Coefficients whose CI reaches zero or above: cf Qwen3 b(attention) -0.08 [-0.22, +0.05]; cf Qwen3 b(earlier MoE) +0.30 [+0.06, +0.47]; cf Mixtral b(attention) -0.10 [-0.25, +0.07]; cf Mixtral b(earlier MoE) -0.09 [-0.24, +0.03]; p3_opt Qwen3 b(attention) -0.21 [-0.51, +0.06]; dir_opt Qwen3 b(attention) +0.05 [-0.23, +0.37]; dir_opt Mixtral b(attention) -0.18 [-0.47, +0.17]; f2e Qwen3 b(earlier MoE) -0.25 [-0.60, +0.27]; vt_e2a_orig Qwen3 b(attention) +0.48 [+0.21, +0.73]; vt_e2a_orig Mixtral b(attention) -0.30 [-0.52, +0.02]; vt_e2a_neu Qwen3 b(attention) +0.44 [+0.26, +0.62]; vt_a2e_orig Qwen3 b(earlier MoE) -0.37 [-0.88, +0.08]; cp_vt_neu Mixtral b(attention) -0.14 [-0.32, +0.04]. The entity → attribute conditions of Qwen3 have a small attention DLA range (A_direct ≈ 0.05–0.13), and Qwen3 CounterFact's band contains the positive factual writer L44E069 (CounterFact rows use the add-back DLA approximation). This is correlational: items with stronger evidence could differ in other ways; the GPU check below tests the reaction directly.
+
+### 5. GPU check
+
+**GPU check (Qwen3, validation rows; same-pass values): add back all experts except the cross-fitted negative ones; late-MoE reaction test**
+
+| Condition | Row | Value / drop | Kind |
+|---|---|---|---|
+| dir_opt_qwen3 | all_moe | +0.813 [+0.796, +0.831] | variant |
+| dir_opt_qwen3 | int_moe | +0.769 [+0.748, +0.791] | variant |
+| dir_opt_qwen3 | intattn | +0.957 [+0.949, +0.965] | variant |
+| dir_opt_qwen3 | intattn_latemoe | +0.949 [+0.940, +0.958] | variant |
+| dir_opt_qwen3 | intblock | +0.962 [+0.955, +0.968] | variant |
+| dir_opt_qwen3 | intblock_latemoe | +0.954 [+0.946, +0.962] | variant |
+| dir_opt_qwen3 | lateonly | -0.041 [-0.086, +0.004] | variant |
+| dir_opt_qwen3 | negonly | -0.226 [-0.296, -0.158] | variant |
+| dir_opt_qwen3 | noneg | +0.797 [+0.776, +0.817] | variant |
+| dir_opt_qwen3 | noneg_early | +0.796 [+0.777, +0.815] | variant |
+| dir_opt_qwen3 | noneg_late | +0.815 [+0.796, +0.834] | variant |
+| dir_opt_qwen3 | noneg_row | +0.822 [+0.807, +0.838] | variant |
+| dir_opt_qwen3 | noneg - all_moe | -0.016 [-0.031, -0.003] | difference |
+| dir_opt_qwen3 | noneg_late - all_moe | +0.002 [-0.010, +0.014] | difference |
+| dir_opt_qwen3 | noneg_early - all_moe | -0.017 [-0.022, -0.013] | difference |
+| dir_opt_qwen3 | noneg_row - all_moe | +0.010 [+0.001, +0.020] | difference |
+| dir_opt_qwen3 | late mismatch | MoE upstream (int_moe - all_moe) | -0.044 [-0.056, -0.032] | difference |
+| dir_opt_qwen3 | late mismatch | attention upstream (intattn - intattn_latemoe) | +0.008 [+0.004, +0.013] | difference |
+| dir_opt_qwen3 | late mismatch | both upstream (intblock - intblock_latemoe) | +0.008 [+0.004, +0.012] | difference |
+| dir_opt_qwen3 | negonly + noneg - all_moe (additivity) | -0.242 [-0.302, -0.183] | difference |
+| dir_opt_qwen3 | oracle overshoot (add-back run) | +0.000 [-0.009, +0.010] | reference |
+| dir_f1_qwen3 | all_moe | +0.104 [+0.041, +0.165] | variant |
+| dir_f1_qwen3 | int_moe | +0.428 [+0.405, +0.452] | variant |
+| dir_f1_qwen3 | intattn | +0.922 [+0.910, +0.932] | variant |
+| dir_f1_qwen3 | intattn_latemoe | +0.895 [+0.879, +0.911] | variant |
+| dir_f1_qwen3 | intblock | +0.928 [+0.917, +0.938] | variant |
+| dir_f1_qwen3 | intblock_latemoe | +0.895 [+0.880, +0.909] | variant |
+| dir_f1_qwen3 | lateonly | -0.540 [-0.609, -0.476] | variant |
+| dir_f1_qwen3 | negonly | -0.693 [-0.764, -0.625] | variant |
+| dir_f1_qwen3 | noneg | +0.470 [+0.449, +0.492] | variant |
+| dir_f1_qwen3 | noneg_early | +0.094 [+0.032, +0.153] | variant |
+| dir_f1_qwen3 | noneg_late | +0.476 [+0.453, +0.499] | variant |
+| dir_f1_qwen3 | noneg_row | +0.491 [+0.467, +0.514] | variant |
+| dir_f1_qwen3 | noneg - all_moe | +0.366 [+0.319, +0.416] | difference |
+| dir_f1_qwen3 | noneg_late - all_moe | +0.371 [+0.326, +0.420] | difference |
+| dir_f1_qwen3 | noneg_early - all_moe | -0.011 [-0.019, -0.002] | difference |
+| dir_f1_qwen3 | noneg_row - all_moe | +0.386 [+0.343, +0.432] | difference |
+| dir_f1_qwen3 | late mismatch | MoE upstream (int_moe - all_moe) | +0.324 [+0.275, +0.375] | difference |
+| dir_f1_qwen3 | late mismatch | attention upstream (intattn - intattn_latemoe) | +0.027 [+0.020, +0.034] | difference |
+| dir_f1_qwen3 | late mismatch | both upstream (intblock - intblock_latemoe) | +0.033 [+0.026, +0.039] | difference |
+| dir_f1_qwen3 | negonly + noneg - all_moe (additivity) | -0.328 [-0.364, -0.290] | difference |
+| dir_f1_qwen3 | oracle overshoot (add-back run) | +0.375 [+0.331, +0.423] | reference |
+| f1_qwen3 | all_moe | +0.238 [+0.177, +0.296] | variant |
+| f1_qwen3 | int_moe | +0.466 [+0.432, +0.501] | variant |
+| f1_qwen3 | intattn | +0.960 [+0.952, +0.969] | variant |
+| f1_qwen3 | intattn_latemoe | +0.946 [+0.931, +0.960] | variant |
+| f1_qwen3 | intblock | +0.959 [+0.950, +0.967] | variant |
+| f1_qwen3 | intblock_latemoe | +0.941 [+0.927, +0.954] | variant |
+| f1_qwen3 | lateonly | -0.398 [-0.460, -0.339] | variant |
+| f1_qwen3 | negonly | -0.515 [-0.575, -0.460] | variant |
+| f1_qwen3 | noneg | +0.492 [+0.459, +0.525] | variant |
+| f1_qwen3 | noneg_early | +0.229 [+0.170, +0.287] | variant |
+| f1_qwen3 | noneg_late | +0.496 [+0.462, +0.530] | variant |
+| f1_qwen3 | noneg_row | +0.517 [+0.487, +0.548] | variant |
+| f1_qwen3 | noneg - all_moe | +0.254 [+0.217, +0.294] | difference |
+| f1_qwen3 | noneg_late - all_moe | +0.258 [+0.222, +0.297] | difference |
+| f1_qwen3 | noneg_early - all_moe | -0.009 [-0.021, +0.003] | difference |
+| f1_qwen3 | noneg_row - all_moe | +0.279 [+0.242, +0.319] | difference |
+| f1_qwen3 | late mismatch | MoE upstream (int_moe - all_moe) | +0.228 [+0.189, +0.269] | difference |
+| f1_qwen3 | late mismatch | attention upstream (intattn - intattn_latemoe) | +0.014 [+0.007, +0.023] | difference |
+| f1_qwen3 | late mismatch | both upstream (intblock - intblock_latemoe) | +0.018 [+0.011, +0.025] | difference |
+| f1_qwen3 | negonly + noneg - all_moe (additivity) | -0.261 [-0.302, -0.225] | difference |
+| f1_qwen3 | oracle overshoot (add-back run) | +0.276 [+0.235, +0.322] | reference |
+
+![gpu check](../figures/ext13syn_curves_gpucheck.png)
+
+- **f1_qwen3** (256 validation cases; oracle maximum of the add-back run 0.512, overshoot +0.276 [+0.235, +0.322]): M 0.238 [0.177, 0.296]; all but the negatives 0.492 [0.459, 0.525] (gain +0.254 [+0.217, +0.294]), late negatives only excluded +0.258 [+0.222, +0.297], earlier ones only -0.009 [-0.021, +0.003], the row's own negatives excluded +0.279 [+0.242, +0.319]; negatives alone -0.515 [-0.575, -0.460]; last four MoE layers alone -0.398 [-0.460, -0.339]. Late-MoE mismatch (recomputed − clean): MoE upstream restored +0.228 [+0.189, +0.269], attention upstream +0.014 [+0.007, +0.023], both +0.018 [+0.011, +0.025]; additivity negonly + noneg − M -0.261 [-0.302, -0.225].
+- **dir_f1_qwen3** (180 validation cases; oracle maximum of the add-back run 0.472, overshoot +0.375 [+0.331, +0.423]): M 0.104 [0.041, 0.165]; all but the negatives 0.470 [0.449, 0.492] (gain +0.366 [+0.319, +0.416]), late negatives only excluded +0.371 [+0.326, +0.420], earlier ones only -0.011 [-0.019, -0.002], the row's own negatives excluded +0.386 [+0.343, +0.432]; negatives alone -0.693 [-0.764, -0.625]; last four MoE layers alone -0.540 [-0.609, -0.476]. Late-MoE mismatch (recomputed − clean): MoE upstream restored +0.324 [+0.275, +0.375], attention upstream +0.027 [+0.020, +0.034], both +0.033 [+0.026, +0.039]; additivity negonly + noneg − M -0.328 [-0.364, -0.290].
+- **dir_opt_qwen3** (180 validation cases; oracle maximum of the add-back run 0.815, overshoot +0.000 [-0.009, +0.010]): M 0.813 [0.796, 0.831]; all but the negatives 0.797 [0.776, 0.817] (gain -0.016 [-0.031, -0.003]), late negatives only excluded +0.002 [-0.010, +0.014], earlier ones only -0.017 [-0.022, -0.013], the row's own negatives excluded +0.010 [+0.001, +0.020]; negatives alone -0.226 [-0.296, -0.158]; last four MoE layers alone -0.041 [-0.086, +0.004]. Late-MoE mismatch (recomputed − clean): MoE upstream restored -0.044 [-0.056, -0.032], attention upstream +0.008 [+0.004, +0.013], both +0.008 [+0.004, +0.012]; additivity negonly + noneg − M -0.242 [-0.302, -0.183].
+
+Reading. Leaving out the discovery-negative experts reproduces the oracle maximum, and all of the gain comes from the last four layers. The effects are not additive: patched alone into the corrupted run the negatives cost about twice what leaving them out gains in attribute → entity, and in the option swap leaving them out gains nothing although alone they cost about a quarter of the drop — recomputed in a run whose earlier experts are clean, they write part (attribute → entity) or all (option swap) of their clean anti-answer output again. The reaction test separates the sources: with only the MoE upstream restored, the recomputed late MoE falls short of its clean anti-answer write by about a quarter to a third of the drop in attribute → entity but not in the option swap. With the attention upstream restored the late MoE matches its clean values; that part is close to guaranteed, because at the final position restoring every attention output below L−4 also restores the earlier MoE outputs exactly (the MoE is per-token), so the late MoE inputs differ from the clean ones only through the recomputed late attention. The informative contrast is therefore the MoE-only one: the late experts' clean anti-answer write depends on the part of the residual that attention writes, and the add-back ceiling M contains that write although the expert-only patch does not restore its input.
+
+### Readings
+
+1. **Two shapes, one mechanism.** The rise-to-ceiling shape (option swap) and the overshoot-and-fall shape (CounterFact, attribute → entity, Mixtral's copy-prefix templates) differ in the late-MoE term, not in whether answer-opposing experts exist. The fall at the end of the curve is the last four layers' experts entering at their clean values.
+2. **The hypothesis holds, with a refinement.** Overshoot appears when the answer is written by attention (across conditions r with A_direct +0.88 [+0.81, +0.96]; per case in 19 of 23 conditions). The late experts do not counter attention specifically: they also counter MoE-written evidence (regression; in dir_opt the recomputed negatives reproduce their clean output in a MoE-restored run), but only attention-written evidence is missing from an expert-only add-back, so only then is their clean reaction mismatched. When experts write the answer (option swap), the same late experts push back in the patched run as in the clean run and the curve saturates at M.
+3. **Consequences for reading add-back curves.** The all-MoE ceiling understates what the early and middle experts deliver whenever attention writes part of the answer; 'k for 80 % of M' then counts experts toward a depressed target. The ≤ L−5 ceiling (or the oracle maximum) is the better reference for attention-written tasks, and the late band is better read as a regulator of confidence than as part of the circuit that computes the answer.
+
+### Caveats
+
+- Correlations across conditions use ~20 condition points (two models, overlapping item pools); the bootstrap over conditions treats them as independent.
+- The negative set is defined by population sign on the discovery split; experts that help some cases and hurt others are assigned by their net effect. Template conditions have 8–18 seed clusters per split.
+- CounterFact's compensation regression uses the add-back run's expert DLA for the late band (clean-active experts only; experts routed only in the corrupted run are missing) because the ext6 runs have no per-layer DLA.
+- The GPU check covers three Qwen3 conditions; Mixtral is inferred from the CPU analyses (its oracle maximum at k* = 48 of 64 already excludes the late band's two most negative experts per layer).
+- f2e and any later condition enter when their add-back runs are complete (`python scripts/ext13syn_all.py`).
+
+Files: `moetrace/ext13syn_curves.py`, `scripts/ext13syn_curves_report.py`, `scripts/ext13syn_gpucheck.py`, tables `results/tables/ext13syn_curves_{summary,bands,rows,compensation,across,gpucheck}.{md,csv}`, figures `results/figures/ext13syn_curves_{overshoot,layers,compensation,gpucheck}.{png,pdf}`, GPU rows `results/ext13syn_gpucheck/`, numbers `results/ext13syn_summary.json` (key curves).
+
+
+## Direction 13h: Attribution patching pilot (OLMoE)
+
+### Direction 13-AtP (Phase 5, P5-5): attribution patching against activation patching on OLMoE
+
+**Summary.** On OLMoE-1B-7B-0125 (bf16), for two STR tasks (WinoGrande option swap and IOI, 64 + 64 pairs = 256 directed
+cases each), the gradient estimate AtP of single final-position patches agrees with the engine's activation patching
+(pooled r) at 0.96 / 0.97 for experts,
+0.96 / 0.99 for MoE layers,
+0.83 / 0.95 for heads and
+0.86 / 0.98 for attention layers
+(WinoGrande / IOI). A second exact patch with other bf16 numerics (transformers instead of the engine) reaches
+0.97 / 0.96 (experts) and
+0.92 / 0.94 (heads), so on IOI AtP is as good
+as the noise floor for experts, heads and MoE layers, and on WinoGrande it falls short, most for heads and attention layers. The failures are systematic, not
+random: AtP is nearly exact in the last quarter of the network (r 0.95-1.00, slope 0.85-1.01) and underestimates effects
+that pass through several later layers (slope 0.01-0.32 in L0-3, 0.11-0.63 in L4-7); the strongest WinoGrande head, L6H4 (+0.93 logits per row), is only
+AtP's rank 6. Routing switches are the MoE-specific part of the error: 0.34 / 0.32
+of single-expert patches change at least one downstream top-k slot, and freezing the downstream routing removes
+0.48 / 0.44 of AtP's squared error for experts
+(0.32 / 0.30 for heads). AtP* (the next
+attention softmax and the next router computed exactly) helps little; EAP-IG is worse than AtP for single patches. As a
+static add-back ordering AtP equals the oracle (each row's own single-patch ranking): expert AUC(k ≤ 16)
+0.669 vs 0.670 (WinoGrande), 0.198 vs 0.184 (IOI); heads + experts 0.742 vs 0.764,
+0.852 vs 0.855. bf16 is not a limitation (AtP bf16 vs fp32 r ≥ 0.998).
+**Recommendation: do not build reverse layer streaming for the final-position sweeps** (activation patching there is
+cheap in the engine and exact); build it only if the project needs attribution at every position or for edges, or 10×
+larger case sets, and then use AtP as a screen for experts and late components with activation patching as the check.
+
+#### What was run
+
+- **Model and protocol.** OLMoE-1B-7B-0125 (16 layers, 16 heads, 64 experts, top-8 without renormalisation), bf16,
+  tokenizer defaults (no BOS), STR pairs (moetrace/ext7_pairs.py contract), denoising at the final position: one component
+  of the corrupted run is set to its clean value, Δ = logit(true) − logit(foil), rescue = Δ_patched − Δ_corrupt.
+- **Tasks** (competence ≥ 64 / 64 pairs with margin ≥ 1 in both directions):
+  - WinoGrande option swap in the Phase-3 format: 1325 / 3809 OLMoE margin pairs
+    (results/wino_olmoe); 64 discovery + 64 validation pairs drawn from the Phase-3 discovery / validation pairs (Phase-3
+    split kept, random.Random(13)); mean drop 8.05 logits.
+  - IOI with the S2 → IO corruption: the 1,600 Phase-3 items re-tokenised for OLMoE (all pass the build rules),
+    1571 / 1600 margin pairs; 64 + 64 pairs from the Phase-3 IOI discovery / validation pairs; mean drop 8.87.
+  - Data: results/p5_atp_data/ (pairs_ioi_s2io_olmoe.parquet, scan_ioi_olmoe.parquet, case_sets_{wino,ioi}.json).
+- **Components per directed case** (all at the final position): every expert routed in the clean or the corrupted run at
+  each layer (about 140 per row; others have a zero write), all 256 heads, 16 attention-sublayer outputs, 16 MoE outputs.
+- **Truth.** Engine activation patching, kinds expert, attn_head, attn_layer, layer (scripts/ext13atp_engine.py truth;
+  110k / 108k spawn rows per task). A second exact patch in transformers with an fp32 read-out of Δ from the final-norm output
+  (no bf16 logit rounding) serves as the noise ceiling: two exact computations that differ only in bf16 numerics.
+- **Estimates** (scripts/ext13atp_grad.py, moetrace/ext13atp.py; transformers, eager attention and experts, bf16 weights,
+  gradients w.r.t. activations only): with δ_n = a_n(clean) − a_n(corrupt) the node's write into the residual stream,
+  - AtP = δ_n · ∂Δ/∂h at the corrupted run (h = residual after the attention sublayer for heads / attention layers, after the
+    MoE sublayer for experts / MoE layers);
+  - EAP-IG = δ_n · mean over α = k/8 (k = 1..8) of the gradient on the straight line between the corrupted and the clean input
+    embeddings (Hanna et al. 2024); m = 16 and the midpoint rule were also computed (tables);
+  - AtP*: Kramár et al.'s QK fix computes the attention softmax that a query / key node feeds exactly and linearises after
+    it. Our nodes are sublayer outputs; the softmaxes they feed are the next attention sublayer's at the final position and,
+    in an MoE, the next router (softmax + top-k). AtP* here = the node's write propagated exactly through the next
+    attention sublayer and the next router / MoE (QK + router fix), linearised after that; the full curve over the number of
+    exactly computed sublayers is reported (cut curve). GradDrop was not run.
+  - DLA = δ_n · γ ⊙ (W_U[true] − W_U[foil]) / rms(h_final, corrupt) (direct path only).
+- **Routing.** Every node was also patched in transformers with the final position's top-k recorded at every layer; a node
+  "switches" when any downstream top-k set differs from the unpatched corrupted row of the same batch. Switching nodes were
+  re-patched with the downstream top-k frozen to the corrupted run's (weights recomputed from the router softmax), so
+  exact − AtP = (exact − frozen) [routing switch, invisible to a gradient] + (frozen − AtP) [smooth non-linearity].
+- **Numerics.** fp32 check on CPU with the checkpoint's native fp32 weights: gradients and estimates for 16 validation cases
+  per task, fp32 activation patches for 8.
+- **Add-back** (scripts/ext13atp_engine.py addback): validation rows, engine `multi` spawns, static orderings oracle (the
+  row's own engine single-patch rescue), AtP, AtP*, EAP-IG, DLA, pop (discovery mean truth) and 3 random permutations;
+  pools = clean-active experts (ext8 convention, 128 per row) and heads + clean-active experts (Direction 10, 384 per row);
+  k = 1..64; r(k) = rescue / drop; AUC = mean r(k) over k = 1..16 (linear interpolation between grid points).
+
+Checks: engine vs transformers Δ mean absolute difference 0.081 / 0.114 logits (WinoGrande /
+IOI); Σ expert AtP of a layer = MoE-layer AtP (r 1.00000), Σ head AtP = attention-layer AtP
+(r 1.00000); the patched run's first cut equals the gradient AtP (r 0.9997).
+
+#### 1. Agreement per component type
+
+Pooled over all (row, component) pairs (WinoGrande 256 rows, IOI 256); truth = engine activation patching; ceiling = the
+transformers activation patch scored against the engine; slope = OLS slope of AtP on the truth; top-k overlap and recovery
+(Σ truth over AtP's top k / Σ truth over the truth's top k) per row, k = 10 for experts / heads and 3 for layers; population
+= mean over the 256 rows per component (table results/tables/ext13atp_agreement_main.md; per-row Kendall, Spearman CIs and
+all estimator variants in ext13atp_agreement_rows.md, ext13atp_agreement_pooled.md, ext13atp_agreement_population.md).
+
+| Task | Component | Ceiling r (2nd exact patch) | AtP r / slope | AtP* r | EAP-IG r | DLA r | AtP per-row Spearman (ceiling) | AtP top-k overlap / recovery | AtP pop. Spearman / top-k |
+|---|---|---|---|---|---|---|---|---|---|
+| WinoGrande | experts | 0.973 | 0.956 / 0.87 | 0.961 | 0.917 | 0.819 | 0.79 (0.80) | top-10 0.86 / 0.98 | 0.77 / 0.90 |
+| WinoGrande | heads | 0.921 | 0.833 / 0.55 | 0.857 | 0.786 | 0.351 | 0.58 (0.56) | top-10 0.79 / 0.93 | 0.82 / 1.00 |
+| WinoGrande | attention layers | 0.992 | 0.856 / 0.56 | 0.908 | 0.825 | 0.283 | 0.89 (0.97) | top-3 0.71 / 0.89 | 0.95 / 0.67 |
+| WinoGrande | MoE layers | 0.997 | 0.958 / 0.88 | 0.970 | 0.942 | 0.814 | 0.93 (0.98) | top-3 0.89 / 0.98 | 0.98 / 1.00 |
+| IOI | experts | 0.957 | 0.970 / 0.95 | 0.970 | 0.951 | 0.918 | 0.57 (0.47) | top-10 0.60 / 0.85 | 0.50 / 1.00 |
+| IOI | heads | 0.937 | 0.946 / 0.86 | 0.945 | 0.931 | 0.782 | 0.49 (0.40) | top-10 0.93 / 0.99 | 0.76 / 1.00 |
+| IOI | attention layers | 0.997 | 0.978 / 0.94 | 0.980 | 0.983 | 0.879 | 0.90 (0.92) | top-3 0.92 / 0.99 | 0.89 / 1.00 |
+| IOI | MoE layers | 0.992 | 0.990 / 0.99 | 0.992 | 0.971 | 0.930 | 0.89 (0.89) | top-3 0.86 / 0.96 | 0.80 / 1.00 |
+
+- Per-row Spearman over all 140 experts or 256 heads is low for every method, the ceiling included (heads
+  0.56 / 0.40): most components have
+  effects at the bf16 resolution of the logits (40 % of the engine's WinoGrande head truths are exactly 0). The informative
+  metrics are top-k overlap, recovery and the pooled r; on all of them AtP is within a few points of the ceiling on IOI and
+  for WinoGrande experts / MoE layers.
+- Per-row top-1: AtP's best expert is the truth's best in 0.86 / 0.88 of rows and
+  in its top 3 in 1.00 / 0.96; best head
+  0.61 / 0.90 (top 3: 0.93 /
+  1.00); the second exact patch reaches 0.94 / 0.98
+  for heads (results/tables/ext13atp_top1_hits.md).
+- AtP underestimates large effects (slope 0.55 for WinoGrande heads,
+  0.56 for attention layers; scatter results/figures/ext13atp_scatter_atp.png).
+
+#### 2. Where AtP fails: distance from the read-out
+
+Pooled r / slope of AtP against the engine truth by layer band (results/tables/ext13atp_by_layer.md):
+
+| Task | Component | L0-3 r / slope | L4-7 r / slope | L8-11 r / slope | L12-15 r / slope | mean abs truth L0-3 / L12-15 |
+|---|---|---|---|---|---|---|
+| WinoGrande | experts | 0.28 / 0.08 | 0.65 / 0.44 | 0.94 / 0.75 | 0.98 / 0.95 | 0.050 / 0.274 |
+| WinoGrande | heads | 0.24 / 0.06 | 0.66 / 0.31 | 0.91 / 0.63 | 0.95 / 0.85 | 0.045 / 0.065 |
+| WinoGrande | attention layers | 0.56 / 0.32 | 0.72 / 0.41 | 0.84 / 0.55 | 0.97 / 0.89 | 0.093 / 0.517 |
+| WinoGrande | MoE layers | 0.54 / 0.27 | 0.74 / 0.63 | 0.92 / 0.75 | 0.97 / 0.94 | 0.092 / 1.862 |
+| IOI | experts | 0.14 / 0.02 | 0.44 / 0.21 | 0.85 / 0.71 | 1.00 / 1.01 | 0.069 / 0.182 |
+| IOI | heads | 0.09 / 0.01 | 0.32 / 0.11 | 0.93 / 0.75 | 0.99 / 0.97 | 0.068 / 0.186 |
+| IOI | attention layers | 0.36 / 0.11 | 0.61 / 0.39 | 0.94 / 0.70 | 0.99 / 0.98 | 0.091 / 2.105 |
+| IOI | MoE layers | 0.29 / 0.11 | 0.74 / 0.55 | 0.94 / 0.87 | 1.00 / 1.01 | 0.092 / 1.200 |
+
+- AtP is close to exact in the last four layers and degrades with every layer between the component and the read-out.
+- Early-layer single-component effects are small and partly below the bf16 noise of activation patching itself: in the
+  fp32 patches (8 cases per task) the L0-3 expert / head effects are 0.01-0.02 logits on average, the bf16 truth correlates
+  with the fp32 truth at only 0.07-0.50 there, and fp32 AtP still underestimates them (slope 0.1-0.3). Neither method
+  resolves them in bf16.
+- Mid-layer components with large indirect effects are the costly case. WinoGrande population heads (mean truth per row):
+  L6H4 0.93 (AtP 0.28, rank 6; EAP-IG 0.60, rank 2); L11H6 0.92 (AtP 0.62, rank 1; EAP-IG 0.72, rank 1); L8H2 0.72 (AtP 0.36, rank 5; EAP-IG 0.56, rank 3); L9H7 0.68 (AtP 0.37, rank 4; EAP-IG 0.51, rank 5). AtP's population top 5 misses the top head; EAP-IG ranks it 2nd
+  (results/tables/ext13atp_population_top.md). Experts: the WinoGrande top-3 experts (L12E11, L13E40, L11E42) and the IOI
+  top-5 keep their ranks under AtP; L9E10 drops from rank 4 to 9.
+
+#### 3. Routing switches (the MoE caveat)
+
+Transformers patches (bf16), all 256 rows; "large switch effect" = |exact − frozen| > max(0.1, 0.25 |exact|) (results/tables/ext13atp_routing.md):
+
+| Task | Component | Nodes that switch ≥ 1 downstream top-k slot | Slots switched per switching node | r(AtP, exact) all / no switch / switch | r(AtP, frozen-routing patch) | Share of AtP's squared error removed by freezing | Switching nodes with a large switch effect |
+|---|---|---|---|---|---|---|---|
+| WinoGrande | experts | 0.34 | 1.6 | 0.958 / 0.985 / 0.933 | 0.978 | 0.48 | 0.27 |
+| WinoGrande | heads | 0.25 | 1.7 | 0.843 / 0.923 / 0.809 | 0.884 | 0.32 | 0.26 |
+| WinoGrande | attention layers | 0.68 | 2.6 | 0.856 / 0.871 / 0.860 | 0.866 | 0.11 | 0.23 |
+| WinoGrande | MoE layers | 0.71 | 2.2 | 0.958 / 0.978 / 0.950 | 0.963 | 0.15 | 0.23 |
+| IOI | experts | 0.32 | 1.6 | 0.977 / 0.988 / 0.961 | 0.987 | 0.44 | 0.35 |
+| IOI | heads | 0.27 | 1.6 | 0.955 / 0.970 / 0.942 | 0.968 | 0.30 | 0.33 |
+| IOI | attention layers | 0.62 | 2.0 | 0.979 / 0.989 / 0.976 | 0.980 | 0.07 | 0.32 |
+| IOI | MoE layers | 0.62 | 1.9 | 0.992 / 0.997 / 0.987 | 0.995 | 0.37 | 0.36 |
+
+- A third of single-expert and a quarter of single-head patches switch downstream routing (1.6 slots on average among the
+  switching nodes); layer-sized patches switch in 62-71 % of rows. Switch rates fall with depth (WinoGrande experts: 0.47 at L0 to 0.10 at L14), since
+  fewer routers lie downstream.
+- Freezing the downstream top-k removes 29-49 % of AtP's squared error on experts and heads (38-65 % among the switching
+  nodes); for whole layers the smooth non-linearity dominates (7-37 % removed).
+- Part of the switching is bf16 noise amplification: in fp32 fewer nodes switch (see section 6). A gradient sees routing
+  weights but not set changes; the frozen-routing patch is what AtP approximates.
+
+#### 4. AtP* and the cut curve
+
+Pooled r with the transformers patch after s exactly computed sublayers (s = 0 AtP, s = 2 AtP*, s = 8):
+WinoGrande experts 0.96 → 0.96 → 0.99, heads 0.84 → 0.88 → 0.95, attention layers 0.86 → 0.91 → 0.98, MoE layers 0.96 → 0.97 → 0.99; IOI experts 0.98 → 0.98 → 0.99, heads 0.96 → 0.96 → 0.98, attention layers 0.98 → 0.98 → 1.00, MoE layers 0.99 → 1.00 → 1.00 (results/figures/ext13atp_cut_curve.png). The QK + router fix gains
+0.00-0.05 in r; the non-linearity is spread over many downstream layers, so a local fix cannot remove it. AtP* per-row top-1
+for WinoGrande heads 0.69 (AtP 0.61).
+
+#### 5. EAP-IG
+
+EAP-IG (input-embedding interpolation, m = 8) agrees less with single activation patches than AtP for every component type
+except IOI attention layers (e.g. WinoGrande experts r 0.92 vs 0.96;
+IOI MoE layers per-row Spearman 0.66 vs 0.89). Its gradients
+are taken in increasingly clean contexts, whereas a single patch keeps the corrupted context downstream; the gradient at the
+clean run (AtP at α = 1) is worst of all (WinoGrande experts r 0.79).
+EAP-IG does better on large mid-layer components (WinoGrande L6H4) and as an add-back ordering (section 7), i.e. for joint
+patches.
+
+#### 6. Numerics (bf16 vs fp32)
+
+- WinoGrande: AtP bf16 vs fp32 r 0.9983 (relative L2 0.056), EAP-IG r 0.9989, gradient cosine at the corrupted run median 0.9996 (min 0.9968); fp32 patches (8 cases): r(AtP, exact) fp32 / bf16 experts 0.979 / 0.977, heads 0.833 / 0.834; engine vs fp32 truth r experts 0.983, heads 0.952; switching nodes fp32 / bf16 experts 0.25 / 0.29, heads 0.15 / 0.23.
+- IOI: AtP bf16 vs fp32 r 0.9994 (relative L2 0.033), EAP-IG r 0.9996, gradient cosine at the corrupted run median 0.9983 (min 0.9953); fp32 patches (8 cases): r(AtP, exact) fp32 / bf16 experts 0.986 / 0.960, heads 0.984 / 0.944; engine vs fp32 truth r experts 0.969, heads 0.967; switching nodes fp32 / bf16 experts 0.22 / 0.35, heads 0.11 / 0.29.
+
+bf16 gradients are accurate; agreement with the truth is limited by the method (WinoGrande heads 0.83 in both precisions),
+and the bf16 noise of the truth itself (IOI: AtP fp32 agrees with the fp32 truth at 0.98, better than the bf16 engine does).
+
+#### 7. AtP as an add-back ordering
+
+AUC = mean restored fraction r(k) over k = 1..16 on the validation rows, pair-bootstrap CI (results/tables/ext13atp_addback_auc.md,
+results/figures/ext13atp_addback.png):
+
+| Task | Pool | oracle | AtP | AtP* | EAP-IG | DLA | pop (discovery truth) | random (3 perms) |
+|---|---|---|---|---|---|---|---|---|
+| WinoGrande | experts | 0.670 [0.645, 0.694] | 0.669 [0.644, 0.693] | 0.670 [0.645, 0.693] | 0.677 [0.650, 0.702] | 0.659 [0.633, 0.684] | 0.544 [0.502, 0.582] | 0.084 |
+| WinoGrande | heads + experts | 0.764 [0.748, 0.778] | 0.742 [0.726, 0.757] | 0.748 [0.733, 0.763] | 0.758 [0.744, 0.773] | 0.703 [0.686, 0.720] | 0.648 [0.610, 0.683] | 0.045 |
+| IOI | experts | 0.184 [0.171, 0.196] | 0.198 [0.187, 0.210] | 0.195 [0.184, 0.206] | 0.187 [0.174, 0.200] | 0.085 [0.072, 0.097] | 0.162 [0.149, 0.175] | -0.010 |
+| IOI | heads + experts | 0.855 [0.833, 0.878] | 0.852 [0.830, 0.877] | 0.852 [0.830, 0.876] | 0.866 [0.844, 0.891] | 0.789 [0.775, 0.803] | 0.813 [0.801, 0.826] | 0.024 |
+
+- AtP, AtP* and EAP-IG orderings are at the oracle (AUC differences within ±0.022, CIs overlapping); DLA is 0.01-0.07 below
+  the oracle except for IOI experts (half the oracle), which act indirectly; the discovery-population ordering is below the
+  row-wise orderings.
+- At k = 10: WinoGrande heads + experts oracle 0.86, AtP 0.84,
+  EAP-IG 0.86; IOI 0.99 / 0.98 /
+  0.99. All-MoE ceiling WinoGrande 0.89,
+  IOI -0.12 (patching every MoE output at the final position hurts IOI).
+
+#### 8. Recommendation on reverse layer streaming for Qwen3 / Mixtral
+
+- **What AtP would buy at the final position.** Our engine already runs every single-component patch at the final
+  position cheaply: on OLMoE 110,072 truth spawns took 18-104 s per task. On Qwen3 the same sweep costs ≈ 5 GPU-min per
+  256 rows (Phase 5 logs: all-layer single experts, 631,536 spawns for 1,024 rows, ≈ 11 min; all 1,536 single heads for 256
+  rows, 2 passes, ≈ 2 min), about what a forward plus a reverse stream (two checkpoint reads) would cost (estimate). AtP would replace these with one forward and one reverse
+  stream, but is less accurate exactly where the open questions are (mid-layer heads and attention, components far from the
+  read-out) and blind to routing switches (a third of single-expert patches). Not worth several days of engine work for
+  this use.
+- **Where it would pay.** Attribution at every position (T × components; the F4 / 6b grids are T-fold more expensive by
+  activation patching), edge-level attribution (EAP; infeasible by activation patching), or case sets of thousands. Then:
+  - experts and MoE / attention layers late in the network: AtP is reliable in the last quarter (r ≥ 0.95, slope ≥ 0.85) and
+    usable in the third (r 0.84-0.94, slope 0.55-0.87); its best expert per row is within the truth's top 3 in
+    1.00 / 0.96 of rows; use it as the ranking and verify the top N with activation patching;
+  - heads: reliable in the last quarter only; mid-layer heads are underestimated 2-3× (WinoGrande L6H4); screen with AtP
+    or EAP-IG and keep activation patching for the final claim;
+  - early layers (first quarter): no method resolves single components in bf16; use layer-level or joint patches.
+- **Add-back orderings.** No reverse streaming is needed: the engine's single-patch oracle is as cheap, and DLA (already in
+  the engine) is a reasonable gradient-free substitute where the components write directly (WinoGrande); AtP would only
+  matter if per-row single patches became unaffordable.
+- **Scaling caveat.** OLMoE has 16 layers; Qwen3 (48) and Mixtral (32) put more layers between mid-depth components and the
+  read-out, and AtP degrades with that distance, so the pilot's numbers are an upper bound for mid-layer components there.
+
+#### Caveats
+
+- One model, two tasks, final position only; components are single-node patches (no AtP for edges or positions).
+- The truth is bf16 activation patching with bf16 logits (0.03-0.06 logit resolution); the transformers patch with an fp32
+  read-out is the noise ceiling, an fp32 truth exists for 8 cases per task only.
+- "Routing switch" is measured in transformers bf16 batches against the same-batch unpatched row; near-tie routers make it
+  partly a numerics effect (fp32 switch rates are lower).
+- AtP* here is an adaptation (sublayer-output nodes; QK fix applied at the next attention's final-position query / key, plus
+  an analogous router fix), not Kramár et al.'s per-query / per-key node set; GradDrop was not run.
+- GPU time 28 min of queue jobs (engine scan, truth and add-back ≈ 5 min including a failed first attempt;
+  transformers estimates and patches ≈ 23 min); fp32 checks ≈ 30 CPU-min. The transformers patches dominate; the gradients alone are
+  ≈ 10 % of that time (CPU timing ratio).
+
+#### Files
+
+moetrace/ext13atp.py (tasks, transformers hooks, gradient / IG / patched passes), moetrace/ext13atp_analysis.py (joined table,
+metrics); scripts/ext13atp_build.py, ext13atp_engine.py (scan, truth, add-back), ext13atp_grad.py (transformers stage, fp32
+check), ext13atp_analyze.py, ext13atp_text.py, ext13atp_chain.sh; run dirs results/p5_atp_wino, results/p5_atp_ioi
+(truth_rows / truth_cases, hf_nodes / hf_cases, hf_fp32*_nodes, addback_rows, run_meta.json), results/p5_atp_data;
+results/ext13atp_summary.json; tables results/tables/ext13atp_*; figures results/figures/ext13atp_{scatter_atp,cut_curve,addback}.png.

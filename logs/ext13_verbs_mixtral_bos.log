@@ -1,0 +1,23 @@
+2026-10-11T02:35:31Z START ext13-verbs-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos --verbs
+02:35:39 verbs ent2attr: 7920 pairs, 15840 rows, 3 passes
+02:35:51   layer   0: load-wait 9.32s compute 2.40s  wf_rows=0
+02:36:14   layer   8: load-wait 0.99s compute 1.87s  wf_rows=0
+02:36:37   layer  16: load-wait 1.03s compute 1.87s  wf_rows=0
+02:37:00   layer  24: load-wait 1.09s compute 1.87s  wf_rows=0
+02:37:20   layer  31: load-wait 0.99s compute 1.87s  wf_rows=0
+02:37:20   pass done: 7872 prefill rows (T=17), 0 spawn rows, 101.0s
+02:37:20   pass 1/3 done (101s)
+[W1011 02:37:23.582060752 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2294284288 bytes (free: 1807155200, total: 23686938624).
+02:38:48   pass 2/3 done (87s)
+02:40:00   pass 3/3 done (72s)
+02:40:02 ent2attr {"neutral": {"pairs": 2640, "correct_both": 1028, "margin": 542, "mean_drop": 3.909777462121212, "median_drop": 3.625, "seeds_with_margin": 23}, "orig": {"pairs": 2640, "correct_both": 1357, "margin": 858, "mean_drop": 4.707433712121212, "median_drop": 4.25, "seeds_with_margin": 32}, "unrelated": {"pairs": 2640, "correct_both": 215, "margin": 46, "mean_drop": 0.004545454545454545, "median_drop": 0.125, "seeds_with_margin": 4}}
+02:40:02 verbs attr2ent: 1872 pairs, 3744 rows, 1 passes
+02:40:05   layer   0: load-wait 1.38s compute 0.74s  wf_rows=0
+02:40:24   layer   8: load-wait 1.91s compute 0.74s  wf_rows=0
+02:40:46   layer  16: load-wait 1.94s compute 0.74s  wf_rows=0
+02:41:07   layer  24: load-wait 1.77s compute 0.74s  wf_rows=0
+02:41:23   layer  31: load-wait 1.22s compute 0.74s  wf_rows=0
+02:41:23   pass done: 3744 prefill rows (T=14), 0 spawn rows, 80.9s
+02:41:23   pass 1/1 done (81s)
+02:41:24 attr2ent {"neutral": {"pairs": 624, "correct_both": 34, "margin": 0, "mean_drop": -0.0811298076923077, "median_drop": 0.0, "seeds_with_margin": 0}, "orig": {"pairs": 624, "correct_both": 32, "margin": 0, "mean_drop": -0.05128205128205128, "median_drop": -0.125, "seeds_with_margin": 0}, "unrelated": {"pairs": 624, "correct_both": 50, "margin": 0, "mean_drop": 0.002003205128205128, "median_drop": 0.0, "seeds_with_margin": 0}}
+2026-10-11T02:41:31Z END   ext13-verbs-mixtral_bos rc=0 (360s)

@@ -31,6 +31,11 @@ BOS for Phase 3. Headlines in section 2b.**
 expert knockout (necessity), head + expert add-back to full repair, writer vs computer experts, completeness checks (replication,
 role vs option swap on identical items, Mixtral no BOS on WinoGrande). Engine E4 (route masks, head steps in `multi`,
 contribution vectors). Headlines in section 2b.**
+**Phase 5 COMPLETE (2026-10-12, committed and pushed 2026-10-12; plan in RESEARCH_PLAN.md "Phase 5" … "Phase 5 execution plan"; synthesis
+`results/sections/ext13_synthesis.md`, sections `ext13_{base,addback,circuit,knockout,writer,ladder,curves,atp}.md`, assembled as
+Directions 13 / 13a–13h; team page `docs/team_brief_phase5.md`): the team meeting's critique of the WinoGrande option swap —
+WinoGrande in its original attribute → entity direction, association-neutral sets, verb and memorisation controls, copy vs
+generate, the task ladder, why the add-back curves differ, attribution-patching pilot (OLMoE). ≈ 25 GPU-h. Headlines in 2b.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -223,6 +228,27 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     differences' CIs contain 0); Mixtral without BOS re-selects L20E000 (Spec +0.95) with unchanged attention/MoE balance;
     **revised Phase-3 claim**: on identical name items role swap = option swap (attention share Qwen3 0.304 vs 0.306); the
     Phase-3 role > option gap was names vs objects (role-swapped prompt = option-swapped prompt with names exchanged).
+- **Phase 5 (2026-10-12, ≈ 25 GPU-h; Qwen3 and Mixtral BOS; STR; 11 conditions × 2 models, full Phase-3/4 output set;
+  agents p5-data / p5-addback / p5-circuit / p5-expert / p5-synth / p5-atp; condition registry `data/wino_ref/p5_conditions.json`)**:
+  - *Direction decides the split*: on identical twins, attribute → entity (fill-in-the-blank) vs the Phase-3 option swap raises the
+    attention share +0.52 / +0.18 (0.71 vs 0.19, 0.52 vs 0.35), direct attention +1.03 / +0.55, lowers all-MoE M −0.70 / −0.35,
+    heads among the first 10 head+expert picks +4.6 / +3.3. f2e (no wrapper) 0.69 / 0.65 → the wrapper is not the cause.
+  - *Copyability and verbs matter little*: `Options: t1, t2.` prefix +0.07 / +0.04 (natural twins), ≈ 0 (templates); neutral verb
+    +0.01; unrelated verb kills the effect (models read the verb); original names = new names (no memorisation). A first
+    "Of X and Y, one … the other …" prefix allowed positional mapping (Mixtral 0.43 vs 0.00 with an unrelated verb) — replaced.
+  - *Ladder = two blocks*: entity → attribute 0.16–0.31 / 0.34–0.42 < CounterFact 0.54 / 0.58 < attribute → entity 0.69–0.79 /
+    0.52–0.65 < IOI 0.92 / 0.80 (Spearman 0.90 between models); names +0.08–0.16 within levels; association strata ≤ 0.11.
+  - *Experts*: Qwen3 L37E032 = attribute → entity expert (f1 Spec +0.47, replicated; knockout F 0.042; also selected on the name
+    templates), indirect (direct share 0.01) → computes, heads L40H2 / L42H10 move the entity. Phase-3 WinoGrande experts necessary
+    only for entity → attribute on object items (also with the copy prefix: L41E117 0.027, L20E000 0.045); unused on attribute →
+    entity and on name templates (Mixtral uses L19E006 there).
+  - *Add-back curve shapes*: overshoot = late-MoE term M(≤L−5) − M (r 0.98, 23 conditions); late experts write against the answer in
+    proportion to the residual evidence; expert-only add-back lacks attention-written evidence → overshoot when attention writes
+    the answer (f1 +0.28 / +0.40; option swap 0.00). GPU check Qwen3 f1: all but the negative experts 0.49 vs M 0.24.
+  - *AtP pilot (OLMoE)*: experts / MoE layers r 0.96–0.99 (= noise ceiling), heads 0.83 / 0.95, early components underestimated,
+    ~1/3 of expert patches switch downstream routing; no reverse layer streaming needed for final-position work.
+  - Behaviour: base models mostly fail attribute → entity on the name templates (3.7 % / 0.1 % margin) and the restated format (9 %).
+  - Fixes during the run: `scripts/ext13_p5_analyze.py` copy_attention indexing (coordinator); two Mixtral OOMs (smaller row budgets).
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -246,8 +272,11 @@ Extensions:
 - Phase 4 not done (ext9_synthesis.md caveats): path patching (split "indirect" into later attention vs MoE); Mixtral IOI circuit
   run (≈ 25 GPU-min); a route mask that spares position 0 (BOS-sink confound for Mixtral sets with L19E006); a second WinoGrande
   corruption site on object items; two-site add-back (subject + final position). Phase-4 results committed 2026-10-06.
-- WinoGrande original direction (property → entity) not run: twins whose only difference precedes the blank, truncated at the
-  blank, predicting the option (1,912 twins; single-token options + equal length: Qwen3 1,162, Mixtral 578 before margin).
+- Phase 5 not done (ext13_synthesis.md caveats): letter A/B format and synonym averaging (user decision); scale series and MIB
+  (discussion only); restated-format tracing (38 / 16 pairs) and Mixtral template attribute → entity (margin failure); curve-shape
+  GPU check on Mixtral; small samples in f2e (32 / 18 pairs) and vt_a2e_orig (5 validation templates); expert- / head-level patches at
+  non-final positions (trigger, blank, mentions) for the attribute → entity conditions (only the layer-level grid exists). Phase-5 results
+  committed 2026-10-12 (≈ 1.4 GB).
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
   grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
@@ -280,7 +309,7 @@ Extensions:
   (fp32 shards), OLMoE-1B-7B-0125-Instruct 13 G. NVMe free ≈ 49 GB; `/opt/dlami/nvme/offload` (65 GB, transformers
   offload scratch from the reference checks) is reclaimable. The NVMe is **ephemeral**: an instance stop wipes it;
   re-download with `scripts/download_models.sh` (base three) and `scripts/ext2_zoo_download.sh` (zoo four).
-- Root disk holds code and results: `results/` is 380 MB on disk, ~110 MB tracked (gitignored: `codefact_*/
+- Root disk holds code and results: `results/` is 2.4 GB on disk (2026-10-12; was 380 MB before Phases 3–5) (gitignored: `codefact_*/
   scan_routing.parquet`, `codefact_*/expert_parts/`, `codefact_smoke/`); `.git` is 240 MB. Never write weights or
   offload folders to the root disk.
 - Before launching GPU work: `pgrep -af "run_sweep|run_expert|run_filter|hf_reference|chain|ext[1-4]_|gpu_queue"`
@@ -346,6 +375,10 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   orderings), `ext11_writer.py` (direct / indirect split, routing contexts, vocabulary projections), `ext12_complete.py` (task
   registry for the multi-task add-back driver). Engine E4 (ext9, additive): `PrefillSpec.route_mask` / `route_mask_pos` /
   `route_mask_mode`, `multi` steps `attn_head` / `heads_experts`, `DiagSpec.contrib_final_vectors` (`logs/ext9_engine_api.md`).
+- Phase 5: `ext13_wino_ref.py` (attribute → entity pair builders F1 / F2 / F2R, probes), `ext13_templates.py` (verb templates ×
+  IOI names), `ext13_p5.py` (p5-data: builds, copy prefixes, case sets), `ext13ab.py` (add-back registry), `ext13ci.py` (heads +
+  experts), `ext13ko.py` / `ext13wr.py` (knockout, writers), `ext13syn.py` / `ext13syn_curves.py` (ladder, curve shapes),
+  `ext13atp.py` / `ext13atp_analysis.py` (AtP pilot, transformers autograd on OLMoE). No engine change.
 - Direction 6: `ext6_str.py` (STR donors: `donor_index`, `candidates` = same relation, true object == case foil, same template,
   identical token positions and continuation ids; `select` (margin 1.0, K = 5, `random.Random(2000 + case_id)`);
   `model_data(run, donors='mean'|'first')` → `analysis.ModelData` with donor-aggregated rows so every `analysis.py`
@@ -393,6 +426,11 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `ext8_plot_simple.py` (add-back figure with greedy / oracle / random only, deletion figure with oracle / random:
   `results/figures/ext8_a{1,3}_curves_simple.png`); `ext7_wg_cf_routing_overlap.py` (final-position routing overlap
   WinoGrande vs CounterFact → `results/tables/ext7_wg_cf_routing_overlap.md`). Team one-pager: `docs/team_brief_winogrande_str.md`.
+- Phase 5: `ext13_p5_{build,scan,casesets,jobs,analyze,behaviour,text}.py` + `ext13_p5_chain_{scan,base,resume}.sh`
+  (data, base runners via the Phase-3 generic runners, per-condition analysis); `ext13_p5_fix_cpnat_mixtral.sh` (OOM rerun);
+  `ext13ab_{run,analyze,plot,ready}.py` + `ext13ab_chain.sh`; `ext13ci_{heads_run,circuit_run,analyze,text}.py` + `ext13ci_chain.py`;
+  `ext13ko_run.py`, `ext13wr_*` + `ext13ko_chain.sh`; `ext13syn_all.py` (ladder + curves, re-runnable); `ext13atp_*`.
+  Earlier Phase-5 tools: `ext13_{build,scan,casesets,positions,verbs}.py`.
 - Direction 6b: `ext6_str_grid.py <model> --out <str run> [--window 1|5] [--no-special-tokens]` (layer × position grid,
   units packed by suffix length), `ext6_str_grid_verify.py`, `ext6_str_grid_analyze.py` (heatmaps, peaks, last/middle
   ratio, sliding vs adding, GN comparison with the F4 `*_subject` runs), `ext6_str_grid_text.py`, `ext6_str_grid_chain.sh`.
@@ -424,7 +462,10 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   plans), `{qwen3_str,mixtral_bos_str,wino_qwen3_str,wino_mixtral_bos_str,ioi_qwen3_s2io}_circuit` (head singles, head DLA),
   `{qwen3,mixtral}_circuit` (mixed greedy / static rows), `{qwen3,mixtral_bos}_writer_{routing,vocab}`,
   `wino_*_str_addback_rep`, `*_str_addback_fold_rep`, `wino_mixtral_nobos_str[_addback]`, `wino_roleitems_*`.
-Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`, `ext7_*`, `ext8_*`, `ext9_*`–`ext12_*`;
+- Phase 5: `p5_<cond>_<proto>` (base runs), `p5_<cond>_<proto>[_rep]_ab` (add-back), `p5_<cond>_<proto>_ci` / `p5_<proto>_ci`
+  (heads + experts), `p5_<proto>_ko*` / `p5_<proto>_wr*` (knockout, writers), `p5_atp_*`, `ext13syn_gpucheck`, `wino_ref_<proto>`
+  (scans), `wino_ref_F1_<proto>` (pre-neutral record). Data in `data/wino_ref/`.
+Tables: `results/tables/table_01..16` (base), `ext{1,2,2_attn,2_zoo,3,4}_*`, `ext5_{subject,rank,heads,metrics}_*`, `ext6_str_*`, `ext7_*`, `ext8_*`, `ext9_*`–`ext12_*`, `ext13*`;
 figures likewise; sections in `results/sections/`; analysed numbers in `results/{summary,ext1_summary,
 ext2_attn_summary,ext2_zoo_summary,ext3_numbers,ext4_summary,mixtral_compare,ext5_subject_summary,ext5_rank_summary,
 ext5_subsets_summary,ext5_heads_summary,ext5_metrics_summary,ext6_str_summary,ext6_str_grid_summary,ext7_wino_summary,

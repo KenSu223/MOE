@@ -1,0 +1,29 @@
+2026-10-11T09:21:05Z START ext13-p5-cpopt-scan-qwen3 (waited 1583s): python scripts/ext13_p5_scan.py qwen3 --part conds --conds cp_vt,cp_nat --meta-key p5_scan_conds_cp_options
+09:21:13 cp_vt: 15840 pairs, 31680 rows
+09:21:18   layer   0: load-wait 3.00s compute 1.05s  wf_rows=0
+09:21:27   layer   8: load-wait 0.67s compute 0.57s  wf_rows=0
+09:21:37   layer  16: load-wait 0.67s compute 0.57s  wf_rows=0
+09:21:47   layer  24: load-wait 0.71s compute 0.57s  wf_rows=0
+09:21:57   layer  32: load-wait 0.67s compute 0.57s  wf_rows=0
+09:22:06   layer  40: load-wait 0.67s compute 0.57s  wf_rows=0
+09:22:16   layer  47: load-wait 1.04s compute 0.57s  wf_rows=0
+09:22:16   pass done: 6720 prefill rows (T=20), 0 spawn rows, 62.2s
+09:22:16   pass 1/6 (6720 rows, 62s)
+09:23:12   pass 2/6 (6363 rows, 56s)
+09:24:03   pass 3/6 (6363 rows, 51s)
+09:24:57   pass 4/6 (5833 rows, 53s)
+09:25:48   pass 5/6 (5185 rows, 51s)
+09:26:37   pass 6/6 (1216 rows, 49s)
+09:26:37 cp_vt {"pairs": 15840, "margin": 2921, "passes": 6, "rates": {"margin": {"neutral": 0.217, "orig": 0.31, "unrelated": 0.026}, "correct_both": {"neutral": 0.466, "orig": 0.533, "unrelated": 0.085}, "top1_both": {"neutral": 0.075, "orig": 0.089, "unrelated": 0.025}}}
+09:26:37 cp_nat: 1552 pairs, 3104 rows
+09:26:39   layer   0: load-wait 1.04s compute 0.50s  wf_rows=0
+09:26:47   layer   8: load-wait 0.39s compute 0.50s  wf_rows=0
+09:26:55   layer  16: load-wait 1.24s compute 0.50s  wf_rows=0
+09:27:03   layer  24: load-wait 0.58s compute 0.50s  wf_rows=0
+09:27:11   layer  32: load-wait 0.49s compute 0.50s  wf_rows=0
+09:27:18   layer  40: load-wait 0.31s compute 0.50s  wf_rows=0
+09:27:25   layer  47: load-wait 0.55s compute 0.50s  wf_rows=0
+09:27:25   pass done: 3104 prefill rows (T=37), 0 spawn rows, 48.1s
+09:27:25   pass 1/1 (3104 rows, 48s)
+09:27:26 cp_nat {"pairs": 1552, "margin": 1147, "passes": 1, "rates": {"margin": 0.739, "correct_both": 0.926, "top1_both": 0.088}}
+2026-10-11T09:27:33Z END   ext13-p5-cpopt-scan-qwen3 rc=0 (388s)

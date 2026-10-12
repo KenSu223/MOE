@@ -1,0 +1,236 @@
+{
+"phase": "cross",
+"cond": "f2e",
+"proto": "mixtral_bos",
+"targets": {
+"selected": "L19E004",
+"wg": "L20E000",
+"cf": [
+"L19E002",
+"L21E001",
+"L18E001"
+],
+"main": [
+"L19E004",
+"L20E000"
+],
+"all": [
+"L19E004",
+"L20E000",
+"L19E002",
+"L21E001",
+"L18E001"
+]
+},
+"conditions": [
+{
+"cid": "cross:L20E001",
+"mask": [
+[
+20,
+1
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "f1"
+},
+"sig": "L20E001|all|reroute"
+},
+{
+"cid": "cross:L19E006",
+"mask": [
+[
+19,
+6
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "vt_e2a_orig"
+},
+"sig": "L19E006|all|reroute"
+},
+{
+"cid": "cross:L21E006",
+"mask": [
+[
+21,
+6
+]
+],
+"scope": "sub",
+"phase": "cross",
+"pos": "all",
+"mode": "reroute",
+"group": "ctl",
+"meta": {
+"kind": "cross",
+"from_cond": "cp_nat"
+},
+"sig": "L21E006|all|reroute"
+}
+],
+"passes": [
+{
+"name": "ctl_p000",
+"group": "ctl",
+"rows": [
+[
+"L21E006|all|reroute",
+56
+],
+[
+"L21E006|all|reroute",
+57
+],
+[
+"L21E006|all|reroute",
+8
+],
+[
+"L21E006|all|reroute",
+9
+],
+[
+"L21E006|all|reroute",
+68
+],
+[
+"L21E006|all|reroute",
+69
+],
+[
+"L21E006|all|reroute",
+48
+],
+[
+"L21E006|all|reroute",
+49
+],
+[
+"L21E006|all|reroute",
+18
+],
+[
+"L21E006|all|reroute",
+19
+],
+[
+"L21E006|all|reroute",
+40
+],
+[
+"L21E006|all|reroute",
+41
+],
+[
+"L21E006|all|reroute",
+50
+],
+[
+"L21E006|all|reroute",
+51
+],
+[
+"L21E006|all|reroute",
+4
+],
+[
+"L21E006|all|reroute",
+5
+],
+[
+"L21E006|all|reroute",
+22
+],
+[
+"L21E006|all|reroute",
+23
+],
+[
+"L21E006|all|reroute",
+52
+],
+[
+"L21E006|all|reroute",
+53
+],
+[
+"L21E006|all|reroute",
+24
+],
+[
+"L21E006|all|reroute",
+25
+],
+[
+"L21E006|all|reroute",
+60
+],
+[
+"L21E006|all|reroute",
+61
+],
+[
+"L21E006|all|reroute",
+30
+],
+[
+"L21E006|all|reroute",
+31
+],
+[
+"L21E006|all|reroute",
+32
+],
+[
+"L21E006|all|reroute",
+33
+],
+[
+"L21E006|all|reroute",
+62
+],
+[
+"L21E006|all|reroute",
+63
+],
+[
+"L21E006|all|reroute",
+12
+],
+[
+"L21E006|all|reroute",
+13
+],
+[
+"L21E006|all|reroute",
+36
+],
+[
+"L21E006|all|reroute",
+37
+],
+[
+"L21E006|all|reroute",
+64
+],
+[
+"L21E006|all|reroute",
+65
+]
+]
+}
+]
+}

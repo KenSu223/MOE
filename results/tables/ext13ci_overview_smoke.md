@@ -1,0 +1,6 @@
+| Condition | Qwen3-30B-A3B-Base: heads in first 10 / r(20) [CI] / k80 / all-MoE | Mixtral-8x7B (BOS): heads in first 10 / r(20) [CI] / k80 / all-MoE |
+|---|---|---|
+| P4 CounterFact | 6.2 / 0.97 [0.95, 1.00] / 8 / 0.53 | 6.4 / 1.00 [0.98, 1.03] / 9 / 0.41 |
+| P4 WinoGrande | 3.6 / 0.93 [0.91, 0.96] / 10 / 0.86 | 2.8 / 0.94 [0.93, 0.95] / 10 / 0.79 |
+| P4 IOI | 9.9 / 0.94 [0.93, 0.96] / 11 / -0.27 |  |
+| F1pre (F1 pre-neutral (smoke)) | 2.8 / 0.58 [0.42, 0.81] / never / -0.04 |  |

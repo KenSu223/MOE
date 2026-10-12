@@ -1,0 +1,11 @@
+2026-10-11T03:30:43Z START ext13-scan-f2r-mixtral_bos (waited 115s): python scripts/ext13_scan.py mixtral_bos --formats F2R
+03:30:51 F2R: 291 pairs, 1746 rows, 1 passes
+03:31:00   layer   0: load-wait 6.52s compute 1.82s  wf_rows=0
+03:31:19   layer   8: load-wait 1.34s compute 1.30s  wf_rows=0
+03:31:43   layer  16: load-wait 1.43s compute 1.30s  wf_rows=0
+03:32:02   layer  24: load-wait 0.96s compute 1.30s  wf_rows=0
+03:32:22   layer  31: load-wait 1.38s compute 1.30s  wf_rows=0
+03:32:22   pass done: 1746 prefill rows (T=53), 0 spawn rows, 90.4s
+03:32:22   pass 1/1 done (90s)
+03:32:22 F2R {"pairs": 291, "main": 181, "correct_both": 103, "margin": 20, "margin_main": 16, "margin_main_names": 14, "margin_main_objects": 2, "margin_connective": 4, "margin_main_associative": 0, "margin_main_half": 0, "margin_main_hard": 16, "balanced": 16, "balanced_names": 14, "balanced_objects": 2, "hard": 16, "margin_main_top1_both": 13, "mean_drop_margin_main": 3.671875, "probe_drop_over_drop_margin_main": 0.00425531914893617, "n_passes": 1}
+2026-10-11T03:32:28Z END   ext13-scan-f2r-mixtral_bos rc=0 (105s)

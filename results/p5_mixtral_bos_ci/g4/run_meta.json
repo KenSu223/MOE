@@ -1,0 +1,394 @@
+{
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "group": "g4",
+ "tasks": [
+  "f2e/mixtral_bos"
+ ],
+ "budget": 95000,
+ "greedy_steps": 20,
+ "head_pool": 32,
+ "expert_pool": 64,
+ "k_grid": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  12,
+  16,
+  24,
+  32,
+  48,
+  64,
+  96,
+  128
+ ],
+ "static_orders": [
+  "mix_oracle",
+  "mix_dla",
+  "head_oracle",
+  "head_dla"
+ ],
+ "init": {
+  "tasks": [
+   "f2e/mixtral_bos"
+  ],
+  "rows": {
+   "f2e/mixtral_bos": 36
+  },
+  "budget": 95000,
+  "queue_groups": 212,
+  "queue_items": 4748,
+  "pool_sizes": {
+   "f2e/mixtral_bos": {
+    "mix": 96,
+    "head": 32
+   }
+  },
+  "n_proxy": {
+   "f2e/mixtral_bos": 0
+  }
+ },
+ "agent": "p5-circuit",
+ "step1_dirs": {
+  "f2e/mixtral_bos": "/home/ubuntu/MOE/results/p5_f2e_mixtral_bos_ci"
+ },
+ "command": "python scripts/ext13ci_circuit_run.py mixtral_bos --group g4 --conds f2e --max-passes 10",
+ "created_utc": "2026-10-12T04:51:22Z",
+ "complete": true,
+ "passes": 19,
+ "pass_notes": [
+  {
+   "tasks": [
+    "f2e/mixtral_bos"
+   ],
+   "rows": {
+    "f2e/mixtral_bos": 36
+   },
+   "budget": 95000,
+   "queue_groups": 212,
+   "queue_items": 4748,
+   "pool_sizes": {
+    "f2e/mixtral_bos": {
+     "mix": 96,
+     "head": 32
+    }
+   },
+   "n_proxy": {
+    "f2e/mixtral_bos": 0
+   }
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 9356,
+   "adaptive": 4608,
+   "static_groups": 212,
+   "pass_s": 94.44549202919006,
+   "peak_GB": 6.508560657501221,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": 0.125,
+   "median_r_greedy": {
+    "mix": 0.3042929292929293,
+    "head": 0.30457637600494747
+   },
+   "utc": "2026-10-12T04:52:59Z"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 4464,
+   "adaptive": 4464,
+   "static_groups": 0,
+   "pass_s": 90.81575202941895,
+   "peak_GB": 6.237140655517578,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.40300179211469533,
+    "head": 0.3775
+   },
+   "utc": "2026-10-12T04:54:31Z"
+  },
+  {
+   "pass": 2,
+   "spawn_rows": 4392,
+   "adaptive": 4392,
+   "static_groups": 0,
+   "pass_s": 88.34054064750671,
+   "peak_GB": 6.234111309051514,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.44494047619047616,
+    "head": 0.41833333333333333
+   },
+   "utc": "2026-10-12T04:56:01Z"
+  },
+  {
+   "pass": 3,
+   "spawn_rows": 4320,
+   "adaptive": 4320,
+   "static_groups": 0,
+   "pass_s": 85.06573677062988,
+   "peak_GB": 6.246926307678223,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.4884559884559885,
+    "head": 0.4693147590361446
+   },
+   "utc": "2026-10-12T04:57:27Z"
+  },
+  {
+   "pass": 4,
+   "spawn_rows": 4248,
+   "adaptive": 4248,
+   "static_groups": 0,
+   "pass_s": 89.21286296844482,
+   "peak_GB": 6.2463603019714355,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.5303308823529411,
+    "head": 0.5128968253968254
+   },
+   "utc": "2026-10-12T04:58:58Z"
+  },
+  {
+   "pass": 5,
+   "spawn_rows": 4176,
+   "adaptive": 4176,
+   "static_groups": 0,
+   "pass_s": 91.84240889549255,
+   "peak_GB": 6.247319221496582,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.5811403508771931,
+    "head": 0.5382926829268293
+   },
+   "utc": "2026-10-12T05:00:31Z"
+  },
+  {
+   "pass": 6,
+   "spawn_rows": 4104,
+   "adaptive": 4104,
+   "static_groups": 0,
+   "pass_s": 91.93053603172302,
+   "peak_GB": 6.253430366516113,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.5944940476190477,
+    "head": 0.5611928104575163
+   },
+   "utc": "2026-10-12T05:02:04Z"
+  },
+  {
+   "pass": 7,
+   "spawn_rows": 4032,
+   "adaptive": 4032,
+   "static_groups": 0,
+   "pass_s": 91.54117059707642,
+   "peak_GB": 6.248779773712158,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.6262254901960784,
+    "head": 0.6055555555555556
+   },
+   "utc": "2026-10-12T05:03:37Z"
+  },
+  {
+   "pass": 8,
+   "spawn_rows": 3960,
+   "adaptive": 3960,
+   "static_groups": 0,
+   "pass_s": 91.92940354347229,
+   "peak_GB": 6.245821952819824,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.6485294117647059,
+    "head": 0.6225
+   },
+   "utc": "2026-10-12T05:05:11Z"
+  },
+  {
+   "pass": 9,
+   "spawn_rows": 3888,
+   "adaptive": 3888,
+   "static_groups": 0,
+   "pass_s": 91.46894192695618,
+   "peak_GB": 6.243681907653809,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.6666666666666666,
+    "head": 0.6545138888888888
+   },
+   "utc": "2026-10-12T05:06:45Z"
+  },
+  {
+   "pass": 10,
+   "spawn_rows": 3816,
+   "adaptive": 3816,
+   "static_groups": 0,
+   "pass_s": 94.93103742599487,
+   "peak_GB": 6.242856502532959,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.6857366771159874,
+    "head": 0.6609195402298851
+   },
+   "utc": "2026-10-12T05:23:00Z"
+  },
+  {
+   "pass": 11,
+   "spawn_rows": 3744,
+   "adaptive": 3744,
+   "static_groups": 0,
+   "pass_s": 92.08416485786438,
+   "peak_GB": 6.238058090209961,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.7142857142857143,
+    "head": 0.6695402298850575
+   },
+   "utc": "2026-10-12T05:24:33Z"
+  },
+  {
+   "pass": 12,
+   "spawn_rows": 3672,
+   "adaptive": 3672,
+   "static_groups": 0,
+   "pass_s": 91.21673202514648,
+   "peak_GB": 6.235732555389404,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.7346445824706693,
+    "head": 0.682648401826484
+   },
+   "utc": "2026-10-12T05:26:05Z"
+  },
+  {
+   "pass": 13,
+   "spawn_rows": 3600,
+   "adaptive": 3600,
+   "static_groups": 0,
+   "pass_s": 91.5724151134491,
+   "peak_GB": 6.232662200927734,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.7482394366197183,
+    "head": 0.6926957223567394
+   },
+   "utc": "2026-10-12T05:27:38Z"
+  },
+  {
+   "pass": 14,
+   "spawn_rows": 3528,
+   "adaptive": 3528,
+   "static_groups": 0,
+   "pass_s": 91.17852592468262,
+   "peak_GB": 6.227815628051758,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.761549395877754,
+    "head": 0.7245305164319249
+   },
+   "utc": "2026-10-12T05:29:10Z"
+  },
+  {
+   "pass": 15,
+   "spawn_rows": 3456,
+   "adaptive": 3456,
+   "static_groups": 0,
+   "pass_s": 90.92371010780334,
+   "peak_GB": 6.226297378540039,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.781304347826087,
+    "head": 0.7353813559322033
+   },
+   "utc": "2026-10-12T05:30:43Z"
+  },
+  {
+   "pass": 16,
+   "spawn_rows": 3384,
+   "adaptive": 3384,
+   "static_groups": 0,
+   "pass_s": 91.68496918678284,
+   "peak_GB": 6.226113319396973,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.8,
+    "head": 0.736517719568567
+   },
+   "utc": "2026-10-12T05:32:18Z"
+  },
+  {
+   "pass": 17,
+   "spawn_rows": 3312,
+   "adaptive": 3312,
+   "static_groups": 0,
+   "pass_s": 92.1702721118927,
+   "peak_GB": 6.221168518066406,
+   "greedy_left": 72,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.8,
+    "head": 0.7469574036511156
+   },
+   "utc": "2026-10-12T05:33:51Z"
+  },
+  {
+   "pass": 18,
+   "spawn_rows": 3240,
+   "adaptive": 3240,
+   "static_groups": 0,
+   "pass_s": 91.89017653465271,
+   "peak_GB": 6.218447685241699,
+   "greedy_left": 0,
+   "queue": "212/212",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.8092186854071931,
+    "head": 0.7549098735539413
+   },
+   "utc": "2026-10-12T05:35:25Z"
+  }
+ ],
+ "completed_utc": "2026-10-12T05:35:25Z"
+}

@@ -1,0 +1,74 @@
+{
+ "cond": "f1",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "src_run": "p5_f1_mixtral_bos",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_p5_f1_mixtral_bos.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_p5_f1_mixtral_bos.json",
+ "family": "main",
+ "cluster": "twin (q_a HIT id)",
+ "special_tokens": true,
+ "n_val_rows": 202,
+ "n_val_units": 101,
+ "prompt_tokens_median": 32.0,
+ "single_expert_coverage": {
+  "rows": 404,
+  "rows_full": 404,
+  "entries": 25856,
+  "entries_needed": 25856
+ },
+ "attn_classes": [
+  "str",
+  "mention_clean",
+  "mention_corr",
+  "blank",
+  "pos0",
+  "final"
+ ],
+ "rows_per_pass": 110,
+ "n_chunks": 2,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA + attention mass",
+ "agent": "p5-circuit",
+ "command": "python scripts/ext13ci_heads_run.py f1 mixtral_bos --max-passes 4",
+ "created_utc": "2026-10-11T09:17:39Z",
+ "complete": true,
+ "completed_utc": "2026-10-11T09:20:59Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 101,
+   "prefill": 202,
+   "spawn_rows": 106656,
+   "pass_s": 99.56157350540161,
+   "peak_GB": 13.401703834533691,
+   "mean_drop": 4.7289605140686035,
+   "r_sum_heads_vs_attn_layer": 0.33476684656604383,
+   "head_dla_sum_mean": 4.337449073791504,
+   "candidates_not_routed_clean": 47,
+   "attn_row_sum_minmax": [
+    0.9996089935302734,
+    1.0003819465637207
+   ],
+   "utc": "2026-10-11T09:19:23Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 101,
+   "prefill": 202,
+   "spawn_rows": 106656,
+   "pass_s": 93.40334677696228,
+   "peak_GB": 13.553347110748291,
+   "mean_drop": 4.0037126541137695,
+   "r_sum_heads_vs_attn_layer": 0.3500561574121693,
+   "head_dla_sum_mean": 4.550457000732422,
+   "candidates_not_routed_clean": 89,
+   "attn_row_sum_minmax": [
+    0.9996250867843628,
+    1.0003793239593506
+   ],
+   "utc": "2026-10-11T09:20:59Z"
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+2026-10-11T08:22:33Z START ext13-p5-f1-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+08:22:45 mixtral -> p5_f1_mixtral_bos: 404 directed cases, families ['main'], layers 0..31 (32), pairs layers [20], only_scaled=False, 67722 spawn rows in 2 passes
+08:22:45 pass 1/2: layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 808 prefill rows, 39099 spawn rows
+08:22:53   layer   0: load-wait 6.14s compute 1.07s  wf_rows=2020
+08:23:16   layer   8: load-wait 2.15s compute 0.88s  wf_rows=18412
+08:23:39   layer  16: load-wait 1.72s compute 1.21s  wf_rows=35035
+08:24:04   layer  24: load-wait 1.57s compute 1.31s  wf_rows=39099
+08:24:24   layer  31: load-wait 1.57s compute 1.31s  wf_rows=39099
+08:24:24   pass done: 808 prefill rows (T=47), 39099 spawn rows, 98.6s
+08:24:24   L0: 2 recurrent (>= 101/202); best E002 all-case -0.007 active 178
+08:24:24   L1: 2 recurrent (>= 101/202); best E007 all-case -0.004 active 141
+08:24:24   L2: 2 recurrent (>= 101/202); best E003 all-case +0.001 active 176
+08:24:24   L3: 2 recurrent (>= 101/202); best E007 all-case +0.000 active 178
+08:24:24   L4: 2 recurrent (>= 101/202); best E003 all-case -0.002 active 165
+08:24:24   L5: 2 recurrent (>= 101/202); best E006 all-case -0.001 active 202
+08:24:24   L6: 1 recurrent (>= 101/202); best E000 all-case +0.010 active 175
+08:24:24   L7: 2 recurrent (>= 101/202); best E005 all-case +0.004 active 195
+08:24:24   L8: 1 recurrent (>= 101/202); best E005 all-case +0.000 active 179
+08:24:24   L9: 2 recurrent (>= 101/202); best E000 all-case -0.006 active 132
+08:24:24   L10: 1 recurrent (>= 101/202); best E004 all-case -0.018 active 202
+08:24:24   L11: 2 recurrent (>= 101/202); best E001 all-case +0.002 active 202
+08:24:24   L12: 2 recurrent (>= 101/202); best E006 all-case +0.051 active 202
+08:24:24   L13: 2 recurrent (>= 101/202); best E000 all-case +0.061 active 200
+08:24:24   L14: 2 recurrent (>= 101/202); best E007 all-case +0.027 active 198
+08:24:24   L15: 2 recurrent (>= 101/202); best E006 all-case +0.252 active 202
+08:24:24   L16: 2 recurrent (>= 101/202); best E007 all-case +0.167 active 184
+08:24:24   L17: 2 recurrent (>= 101/202); best E005 all-case +0.223 active 176
+08:24:24   L18: 2 recurrent (>= 101/202); best E002 all-case +0.198 active 178
+08:24:24 pass 1: 99s; /home/ubuntu/MOE/results/p5_f1_mixtral_bos/str_expert_rows.parquet now 39099 rows
+08:24:24 pass 2/2: layers [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 808 prefill rows, 28623 spawn rows
+08:25:58   L19: 2 recurrent (>= 101/202); best E004 all-case +0.329 active 184
+08:25:58   L20: 2 recurrent (>= 101/202); best E001 all-case +0.258 active 140
+08:25:58   L21: 1 recurrent (>= 101/202); best E000 all-case +0.214 active 179
+08:25:58   L22: 1 recurrent (>= 101/202); best E000 all-case +0.111 active 152
+08:25:58   L23: 3 recurrent (>= 101/202); best E000 all-case +0.146 active 130
+08:25:58   L24: 2 recurrent (>= 101/202); best E002 all-case +0.189 active 152
+08:25:58   L25: 2 recurrent (>= 101/202); best E001 all-case +0.046 active 130
+08:25:58   L26: 2 recurrent (>= 101/202); best E003 all-case +0.077 active 180
+08:25:58   L27: 2 recurrent (>= 101/202); best E005 all-case +0.044 active 161
+08:25:58   L28: 2 recurrent (>= 101/202); best E002 all-case +0.027 active 126
+08:25:58   L29: 2 recurrent (>= 101/202); best E007 all-case -0.101 active 106
+08:25:58   L30: 2 recurrent (>= 101/202); best E007 all-case -0.164 active 163
+08:25:58   L31: 2 recurrent (>= 101/202); best E005 all-case -0.570 active 172
+08:25:58 pass 2: 93s; /home/ubuntu/MOE/results/p5_f1_mixtral_bos/str_expert_rows.parquet now 67722 rows
+2026-10-11T08:26:05Z END   ext13-p5-f1-mixtral_bos-expert rc=0 (212s)

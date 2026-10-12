@@ -1,0 +1,51 @@
+2026-10-11T21:13:24Z START ext13-p5-vt_e2a_orig-qwen3-grid (waited 1266s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+21:13:26 qwen3 -> p5_vt_e2a_orig_qwen3: window 1, kinds ['layer', 'attn_layer', 'resid'], 512 directed cases, 1644 units, 236736 suffix rows, 5 passes; units per category {'last STR token': 512, 'last token': 512, 'further tokens': 326, 'first subsequent token': 294}
+21:13:33 pass 1/5: 416 units (S 1..1), 832 prefill rows, 59904 suffix rows
+21:13:37   layer   0: load-wait 2.90s compute 0.72s  wf_rows=1248 wf_tokens=416
+21:13:45   layer   8: load-wait 1.10s compute 0.16s  wf_rows=11232 wf_tokens=10400
+21:13:55   layer  16: load-wait 1.01s compute 0.22s  wf_rows=21216 wf_tokens=20384
+21:14:05   layer  24: load-wait 0.97s compute 0.28s  wf_rows=31200 wf_tokens=30368
+21:14:15   layer  32: load-wait 0.91s compute 0.34s  wf_rows=41184 wf_tokens=40352
+21:14:25   layer  40: load-wait 0.98s compute 0.40s  wf_rows=51168 wf_tokens=50336
+[W1011 21:14:34.087932953 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 962592768 bytes (free: 320274432, total: 23686938624).
+21:14:35   layer  47: load-wait 0.45s compute 0.54s  wf_rows=59904 wf_tokens=59072
+21:14:36   pass done: 832 prefill rows (T=20), 59904 suffix rows (Smax=1, 59904 tokens), 63.1s
+21:14:37 pass 1: 63.1s; 59904 rows saved
+21:14:37 pass 2/5: 416 units (S 1..2), 832 prefill rows, 59904 suffix rows
+[W1011 21:15:10.490254419 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1145044992 bytes (free: 796327936, total: 23686938624).
+[W1011 21:15:18.277478870 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1432354816 bytes (free: 471269376, total: 23686938624).
+[W1011 21:15:25.534288117 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1635778560 bytes (free: 1112997888, total: 23686938624).
+[W1011 21:15:30.002670779 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1841299456 bytes (free: 534183936, total: 23686938624).
+21:15:37 pass 2: 58.0s; 119808 rows saved
+21:15:37 pass 3/5: 416 units (S 2..3), 832 prefill rows, 59904 suffix rows
+[W1011 21:16:06.835190602 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1289748480 bytes (free: 804716544, total: 23686938624).
+[W1011 21:16:13.807234754 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1656750080 bytes (free: 1033306112, total: 23686938624).
+[W1011 21:16:18.270510104 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1902116864 bytes (free: 1159135232, total: 23686938624).
+[W1011 21:16:25.557226731 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2147483648 bytes (free: 1098317824, total: 23686938624).
+[W1011 21:16:28.326778375 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2332033024 bytes (free: 1660354560, total: 23686938624).
+[W1011 21:16:33.469976972 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2516582400 bytes (free: 1691811840, total: 23686938624).
+[W1011 21:16:37.200430195 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2699034624 bytes (free: 399966208, total: 23686938624).
+[W1011 21:16:41.627823087 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2822766592 bytes (free: 1935081472, total: 23686938624).
+21:16:50 pass 3: 68.1s; 179712 rows saved
+21:16:50 pass 4/5: 277 units (S 3..5), 554 prefill rows, 39888 suffix rows
+[W1011 21:17:15.985585871 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1293942784 bytes (free: 1243021312, total: 23686938624).
+[W1011 21:17:23.926410314 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1702887424 bytes (free: 651624448, total: 23686938624).
+[W1011 21:17:29.861201227 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1975517184 bytes (free: 1329004544, total: 23686938624).
+[W1011 21:17:33.055317222 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2178940928 bytes (free: 1597440000, total: 23686938624).
+[W1011 21:17:37.372519255 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2384461824 bytes (free: 1104609280, total: 23686938624).
+[W1011 21:17:41.391554308 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2587885568 bytes (free: 800522240, total: 23686938624).
+[W1011 21:17:44.447141499 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2724200448 bytes (free: 2304180224, total: 23686938624).
+[W1011 21:17:46.789240675 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2860515328 bytes (free: 1624702976, total: 23686938624).
+[W1011 21:17:49.448974790 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2996830208 bytes (free: 943128576, total: 23686938624).
+[W1011 21:17:52.622322982 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3133145088 bytes (free: 261554176, total: 23686938624).
+21:17:59 pass 4: 65.3s; 219600 rows saved
+21:17:59 pass 5/5: 119 units (S 5..9), 238 prefill rows, 17136 suffix rows
+[W1011 21:18:29.767386734 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1264582656 bytes (free: 378994688, total: 23686938624).
+[W1011 21:18:37.591202497 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 366411776, total: 23686938624).
+[W1011 21:18:43.072845285 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1843396608 bytes (free: 1375141888, total: 23686938624).
+[W1011 21:18:48.179995161 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2053111808 bytes (free: 1681326080, total: 23686938624).
+[W1011 21:18:52.331144232 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2212495360 bytes (free: 1941372928, total: 23686938624).
+[W1011 21:18:55.317157747 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2369781760 bytes (free: 1431764992, total: 23686938624).
+21:19:01 pass 5: 59.8s; 236736 rows saved
+21:19:01 done
+2026-10-11T21:19:08Z END   ext13-p5-vt_e2a_orig-qwen3-grid rc=0 (344s)

@@ -1,0 +1,3 @@
+Model,Family,Rule,Layer,Layer rescue (val),Layer / drop,Selected expert,Disc. active,Val rescue,Spec,Clean top-k coalition,Pattern,Equal-norm Spec
+Qwen3-30B-A3B-Base,main,two_stage,L37,"+0.294 [+0.240, +0.350]","0.080 [0.067, 0.095]",L37E032,120 (≥ 60),"+0.177 [+0.132, +0.225]","+0.167 [+0.128, +0.207]","+0.252 [+0.193, +0.309]",A,"+0.025 [-0.008, +0.057]"
+Qwen3-30B-A3B-Base,main,interior,L37,"+0.294 [+0.240, +0.350]","0.080 [0.067, 0.095]",L37E032,120 (≥ 60),"+0.177 [+0.132, +0.225]","+0.167 [+0.128, +0.207]","+0.252 [+0.193, +0.309]",A,"+0.025 [-0.008, +0.057]"

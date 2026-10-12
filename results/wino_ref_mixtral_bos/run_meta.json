@@ -1,0 +1,224 @@
+{
+ "scan": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "n_pairs": {
+   "F2": 426,
+   "F1": 3187
+  },
+  "f1_sample": 3000,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py mixtral_bos",
+  "created_utc": "2026-10-11T02:24:18Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T02:31:42Z"
+ },
+ "scan_verbs": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "mode": "verbs",
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py mixtral_bos --verbs",
+  "created_utc": "2026-10-11T02:35:32Z",
+  "completed_utc": "2026-10-11T02:41:24Z"
+ },
+ "scan_F1": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "n_pairs": {
+   "F1": 5070
+  },
+  "f1_sample": 0,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py mixtral_bos --formats F1 --f1-sample 0",
+  "created_utc": "2026-10-11T03:11:00Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T03:19:35Z"
+ },
+ "scan_F2R": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "n_pairs": {
+   "F2R": 291
+  },
+  "f1_sample": 3000,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py mixtral_bos --formats F2R",
+  "created_utc": "2026-10-11T03:30:44Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T03:32:22Z"
+ },
+ "scan_verbs_attr2ent": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "mode": "verbs",
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py mixtral_bos --verbs --verb-dirs attr2ent",
+  "created_utc": "2026-10-11T03:35:36Z",
+  "completed_utc": "2026-10-11T03:38:24Z"
+ },
+ "p5_scan_probes": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py mixtral_bos --part probes",
+  "created_utc": "2026-10-11T06:45:43Z",
+  "complete": true,
+  "n_rows": 40688,
+  "n_keys": 7624,
+  "n_passes": 7,
+  "completed_utc": "2026-10-11T06:56:52Z"
+ },
+ "p5_scan_conds": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "part": "conds",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py mixtral_bos --part conds",
+  "created_utc": "2026-10-11T06:58:26Z",
+  "complete": true,
+  "conds": {
+   "vt_a2e": {
+    "pairs": 7920,
+    "margin": 6,
+    "passes": 4,
+    "rates": {
+     "margin": {
+      "neutral": 0.002,
+      "orig": 0.001,
+      "unrelated": 0.0
+     },
+     "correct_both": {
+      "neutral": 0.197,
+      "orig": 0.232,
+      "unrelated": 0.06
+     },
+     "top1_both": {
+      "neutral": 0.145,
+      "orig": 0.151,
+      "unrelated": 0.042
+     }
+    }
+   },
+   "cp_vt": {
+    "pairs": 13536,
+    "margin": 4480,
+    "passes": 7,
+    "rates": {
+     "margin": {
+      "neutral": 0.382,
+      "orig": 0.392,
+      "unrelated": 0.219
+     },
+     "correct_both": {
+      "neutral": 0.529,
+      "orig": 0.567,
+      "unrelated": 0.355
+     },
+     "top1_both": {
+      "neutral": 0.351,
+      "orig": 0.351,
+      "unrelated": 0.238
+     }
+    }
+   },
+   "cp_nat": {
+    "pairs": 1386,
+    "margin": 1075,
+    "passes": 2,
+    "rates": {
+     "margin": 0.776,
+     "correct_both": 0.864,
+     "top1_both": 0.683
+    }
+   },
+   "mem": {
+    "pairs": 87,
+    "margin": 16,
+    "passes": 1,
+    "rates": {
+     "margin": {
+      "neutral": 0.207,
+      "orig": 0.31,
+      "unrelated": 0.034
+     },
+     "correct_both": {
+      "neutral": 0.31,
+      "orig": 0.448,
+      "unrelated": 0.103
+     },
+     "top1_both": {
+      "neutral": 0.103,
+      "orig": 0.103,
+      "unrelated": 0.0
+     }
+    }
+   }
+  },
+  "completed_utc": "2026-10-11T07:19:55Z"
+ },
+ "p5_scan_conds_cp_options": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "proto": "mixtral_bos",
+  "special_tokens": true,
+  "part": "conds",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py mixtral_bos --part conds --conds cp_vt,cp_nat --meta-key p5_scan_conds_cp_options",
+  "created_utc": "2026-10-11T09:30:40Z",
+  "complete": true,
+  "conds": {
+   "cp_vt": {
+    "pairs": 15840,
+    "margin": 2647,
+    "passes": 7,
+    "rates": {
+     "margin": {
+      "neutral": 0.186,
+      "orig": 0.291,
+      "unrelated": 0.024
+     },
+     "correct_both": {
+      "neutral": 0.432,
+      "orig": 0.483,
+      "unrelated": 0.076
+     },
+     "top1_both": {
+      "neutral": 0.199,
+      "orig": 0.297,
+      "unrelated": 0.021
+     }
+    }
+   },
+   "cp_nat": {
+    "pairs": 1552,
+    "margin": 1391,
+    "passes": 1,
+    "rates": {
+     "margin": 0.896,
+     "correct_both": 0.977,
+     "top1_both": 0.542
+    }
+   }
+  },
+  "completed_utc": "2026-10-11T09:42:59Z"
+ }
+}

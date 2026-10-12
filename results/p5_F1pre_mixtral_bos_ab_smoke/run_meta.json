@@ -1,0 +1,83 @@
+{
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "task": "wino",
+ "p5_task": "F1pre_mixtral_bos_smoke",
+ "cond": "F1pre",
+ "proto": "mixtral_bos",
+ "family": "main",
+ "src_run": "wino_ref_F1_mixtral_bos",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_F1_mixtral_bos.json",
+ "special_tokens": true,
+ "pool": 64,
+ "noise_rows": 8,
+ "limit": [
+  16,
+  16
+ ],
+ "greedy_steps": 2,
+ "cluster_col": null,
+ "budget": 50000,
+ "n_cases": 32,
+ "n_rows": 32,
+ "n_eval_rows": 16,
+ "init": {
+  "eval_rows": 16,
+  "noise_rows": 8,
+  "pool": 64,
+  "queue_groups": 282,
+  "queue_items": 4464
+ },
+ "agent": "p5-addback",
+ "driver": "scripts/ext13ab_run.py (multi-task; ext8 machinery)",
+ "work": "A0 (both directions, all rows), A1 static orderings + all_active, greedy 15 steps, noising singles, A3 deletion curves (pop/oracle/layerwise/rand0-1/dla/noise_oracle) + all_active; no beam / exact / Shapley",
+ "note": "family main: population ranking from its discovery split, curves on its validation split; prefill rows of later passes = validation cases only (first pass: all)",
+ "command": "python scripts/ext13ab_run.py mixtral --smoke --greedy-steps 2 --max-passes 5 --budget 50000",
+ "created_utc": "2026-10-11T06:07:28Z",
+ "complete": true,
+ "passes": 2,
+ "pass_notes": [
+  {
+   "eval_rows": 16,
+   "noise_rows": 8,
+   "pool": 64,
+   "queue_groups": 282,
+   "queue_items": 4464
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 20
+  },
+  {
+   "pass": 0,
+   "group_pass": 0,
+   "spawn_rows": 5488,
+   "adaptive": 1024,
+   "static_groups": 282,
+   "prefill_rows": 64,
+   "pass_s": 97.45512700080872,
+   "peak_GB": 7.291141033172607,
+   "pass_spawn_rows_total": 5488,
+   "pass_prefill_rows_total": 64,
+   "greedy_left": 0,
+   "queue": "282/322",
+   "utc": "2026-10-11T06:09:07Z"
+  },
+  {
+   "pass": 1,
+   "group_pass": 1,
+   "spawn_rows": 600,
+   "adaptive": 0,
+   "static_groups": 40,
+   "prefill_rows": 32,
+   "pass_s": 91.91974806785583,
+   "peak_GB": 5.985047340393066,
+   "pass_spawn_rows_total": 600,
+   "pass_prefill_rows_total": 32,
+   "greedy_left": 0,
+   "queue": "322/322",
+   "utc": "2026-10-11T06:10:39Z"
+  }
+ ],
+ "completed_utc": "2026-10-11T06:10:39Z"
+}

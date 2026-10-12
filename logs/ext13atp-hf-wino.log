@@ -1,0 +1,18 @@
+2026-10-11T14:48:35Z START p5atp-hf-wino (waited 598s): python scripts/ext13atp_grad.py --task wino --time-budget 780
+14:48:43 wino: 256 cases, 58 done, 198 to do
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:24,  7.04it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:23,  6.97it/s]Loading weights:  15%|█▍        | 26/179 [00:03<00:22,  6.91it/s]Loading weights:  21%|██        | 37/179 [00:05<00:20,  6.92it/s]Loading weights:  27%|██▋       | 48/179 [00:06<00:19,  6.88it/s]Loading weights:  33%|███▎      | 59/179 [00:08<00:17,  6.87it/s]Loading weights:  39%|███▉      | 70/179 [00:10<00:15,  6.88it/s]Loading weights:  45%|████▌     | 81/179 [00:11<00:14,  6.86it/s]Loading weights:  51%|█████▏    | 92/179 [00:13<00:12,  6.86it/s]Loading weights:  58%|█████▊    | 103/179 [00:14<00:11,  6.85it/s]Loading weights:  64%|██████▎   | 114/179 [00:16<00:09,  6.82it/s]Loading weights:  70%|██████▉   | 125/179 [00:18<00:07,  6.85it/s]Loading weights:  76%|███████▌  | 136/179 [00:19<00:06,  6.85it/s]Loading weights:  82%|████████▏ | 147/179 [00:21<00:04,  6.81it/s]Loading weights:  88%|████████▊ | 158/179 [00:23<00:03,  6.85it/s]Loading weights:  94%|█████████▍| 169/179 [00:24<00:01,  6.85it/s]Loading weights: 100%|██████████| 179/179 [00:24<00:00,  7.26it/s]
+14:49:18 model loaded (36s)
+14:50:06 16 cases this run, 3.02s/case, peak mem 14.2 GiB
+14:50:50 32 cases this run, 2.87s/case, peak mem 14.2 GiB
+14:51:31 48 cases this run, 2.77s/case, peak mem 14.2 GiB
+14:52:16 64 cases this run, 2.78s/case, peak mem 14.2 GiB
+14:52:58 80 cases this run, 2.74s/case, peak mem 14.2 GiB
+14:53:44 96 cases this run, 2.77s/case, peak mem 14.2 GiB
+14:54:29 112 cases this run, 2.77s/case, peak mem 14.2 GiB
+14:55:13 128 cases this run, 2.77s/case, peak mem 14.2 GiB
+14:55:58 144 cases this run, 2.77s/case, peak mem 14.2 GiB
+14:56:39 160 cases this run, 2.75s/case, peak mem 14.2 GiB
+14:57:23 176 cases this run, 2.75s/case, peak mem 14.2 GiB
+14:58:09 192 cases this run, 2.76s/case, peak mem 14.2 GiB
+14:58:25 wino: COMPLETE; 256/256 cases; run 583s
+2026-10-11T14:58:30Z END   p5atp-hf-wino rc=0 (595s)

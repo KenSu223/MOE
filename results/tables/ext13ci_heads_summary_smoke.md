@@ -1,0 +1,3 @@
+| Run | Rows / units | Mean drop | Heads Z8 + / − (both halves) | Σ single heads / drop (all; positive) | Pop. heads for 50/80/90 % (additive) | Best head / best expert per row (median) | Rows best head > best expert | Heads in joint top-32 | DLA vs single heads: pop. r / top-1 agree | experts: row r (DLA vs single) | Σ head DLA vs direct split (r, ratio) | Σ heads vs attn_layer (row-layer r) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | 6 / 3 | 3.96 | 31 / 24 (24) | -0.42, 8.63 | 2/5/5 | 0.367 / 0.120 | 1.00 | 26 [24, 28] | 0.55 / 0.33 | 0.47 | 0.996, 1.026 | 0.33 |

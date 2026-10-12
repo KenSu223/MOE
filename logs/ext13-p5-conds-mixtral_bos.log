@@ -1,0 +1,48 @@
+2026-10-11T06:58:26Z START ext13-p5-conds-mixtral_bos (waited 87s): python scripts/ext13_p5_scan.py mixtral_bos --part conds
+06:58:32 vt_a2e: 7920 pairs, 15840 rows
+06:58:42   layer   0: load-wait 7.17s compute 2.46s  wf_rows=0
+06:59:05   layer   8: load-wait 0.47s compute 1.96s  wf_rows=0
+06:59:29   layer  16: load-wait 0.93s compute 1.96s  wf_rows=0
+06:59:52   layer  24: load-wait 0.93s compute 1.96s  wf_rows=0
+07:00:12   layer  31: load-wait 0.89s compute 1.96s  wf_rows=0
+07:00:12   pass done: 5184 prefill rows (T=27), 0 spawn rows, 99.4s
+07:00:12   pass 1/4 (5184 rows, 99s)
+07:01:45   pass 2/4 (4827 rows, 92s)
+07:03:18   pass 3/4 (4375 rows, 94s)
+07:04:50   pass 4/4 (1454 rows, 92s)
+07:04:50 vt_a2e {"pairs": 7920, "margin": 6, "passes": 4, "rates": {"margin": {"neutral": 0.002, "orig": 0.001, "unrelated": 0.0}, "correct_both": {"neutral": 0.197, "orig": 0.232, "unrelated": 0.06}, "top1_both": {"neutral": 0.145, "orig": 0.151, "unrelated": 0.042}}}
+07:04:52 cp_vt: 13536 pairs, 27072 rows
+07:04:56   layer   0: load-wait 2.10s compute 1.96s  wf_rows=0
+07:05:18   layer   8: load-wait 0.25s compute 1.96s  wf_rows=0
+07:05:40   layer  16: load-wait 0.71s compute 1.96s  wf_rows=0
+07:06:02   layer  24: load-wait 0.76s compute 1.96s  wf_rows=0
+07:06:21   layer  31: load-wait 0.72s compute 1.96s  wf_rows=0
+07:06:21   pass done: 4516 prefill rows (T=31), 0 spawn rows, 88.9s
+07:06:21   pass 1/7 (4516 rows, 89s)
+07:07:43   pass 2/7 (4375 rows, 82s)
+07:09:15   pass 3/7 (4165 rows, 92s)
+07:10:49   pass 4/7 (4117 rows, 94s)
+07:12:22   pass 5/7 (3888 rows, 93s)
+07:13:52   pass 6/7 (3684 rows, 89s)
+07:15:19   pass 7/7 (2327 rows, 87s)
+07:15:19 cp_vt {"pairs": 13536, "margin": 4480, "passes": 7, "rates": {"margin": {"neutral": 0.382, "orig": 0.392, "unrelated": 0.219}, "correct_both": {"neutral": 0.529, "orig": 0.567, "unrelated": 0.355}, "top1_both": {"neutral": 0.351, "orig": 0.351, "unrelated": 0.238}}}
+07:15:21 cp_nat: 1386 pairs, 2772 rows
+07:15:25   layer   0: load-wait 1.83s compute 1.93s  wf_rows=0
+07:15:45   layer   8: load-wait 0.77s compute 1.94s  wf_rows=0
+07:16:07   layer  16: load-wait 0.78s compute 1.93s  wf_rows=0
+07:16:30   layer  24: load-wait 0.96s compute 1.94s  wf_rows=0
+07:16:51   layer  31: load-wait 0.97s compute 1.94s  wf_rows=0
+07:16:51   pass done: 2748 prefill rows (T=50), 0 spawn rows, 89.5s
+07:16:51   pass 1/2 (2748 rows, 90s)
+07:18:23   pass 2/2 (24 rows, 92s)
+07:18:23 cp_nat {"pairs": 1386, "margin": 1075, "passes": 2, "rates": {"margin": 0.776, "correct_both": 0.864, "top1_both": 0.683}}
+07:18:23 mem: 87 pairs, 174 rows
+07:18:25   layer   0: load-wait 2.35s compute 0.08s  wf_rows=0
+07:18:49   layer   8: load-wait 2.80s compute 0.07s  wf_rows=0
+07:19:12   layer  16: load-wait 2.82s compute 0.07s  wf_rows=0
+07:19:35   layer  24: load-wait 2.68s compute 0.07s  wf_rows=0
+07:19:55   layer  31: load-wait 2.82s compute 0.07s  wf_rows=0
+07:19:55   pass done: 174 prefill rows (T=25), 0 spawn rows, 91.9s
+07:19:55   pass 1/1 (174 rows, 92s)
+07:19:55 mem {"pairs": 87, "margin": 16, "passes": 1, "rates": {"margin": {"neutral": 0.207, "orig": 0.31, "unrelated": 0.034}, "correct_both": {"neutral": 0.31, "orig": 0.448, "unrelated": 0.103}, "top1_both": {"neutral": 0.103, "orig": 0.103, "unrelated": 0.0}}}
+2026-10-11T07:20:02Z END   ext13-p5-conds-mixtral_bos rc=0 (1296s)

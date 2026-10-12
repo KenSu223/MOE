@@ -1,0 +1,12 @@
+Run,Head,Rank,Rescue / drop [95% CI],Rescue (logits),z (all / halves),Z8 both halves,DLA / drop,Row top-5 / top-1 share,Attention (clean run)
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L40H2,1,"+0.274 [+0.217, +0.340]",+1.08,"+12.0 / +11.9, +8.8",yes,+0.019,1.00 / 0.67,self (final token)
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L42H10,2,"+0.242 [+0.120, +0.360]",+0.96,"+10.6 / +9.3, +10.0",yes,+0.489,1.00 / 0.33,"mover (mention, clean side)"
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L36H28,3,"+0.142 [+0.098, +0.250]",+0.56,"+6.2 / +4.8, +7.1",yes,+0.013,0.33 / 0.00,other context tokens
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L40H0,4,"+0.132 [+0.042, +0.220]",+0.52,"+5.8 / +7.4, +1.3",no,+0.015,0.50 / 0.00,other context tokens
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L41H20,5,"+0.132 [+0.080, +0.250]",+0.52,"+5.8 / +4.1, +7.1",yes,+0.060,0.50 / 0.00,"mover (mention, clean side)"
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L43H24,6,"+0.121 [+0.087, +0.160]",+0.48,"+5.3 / +5.1, +4.2",yes,+0.147,0.17 / 0.00,sink (pos0)
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L39H29,7,"+0.116 [+0.060, +0.167]",+0.46,"+5.1 / +4.5, +4.8",yes,+0.016,0.17 / 0.00,other context tokens
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L38H20,8,"+0.111 [+0.065, +0.167]",+0.44,"+4.8 / +4.1, +4.8",yes,+0.002,0.17 / 0.00,other context tokens
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L44H15,1536,"-0.289 [-0.521, -0.160]",-1.15,"-12.7 / -9.8, -14.3",yes,-0.174,0.00 / 0.00,"mover (mention, clean side)"
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L44H31,1535,"-0.137 [-0.152, -0.100]",-0.54,"-6.0 / -6.2, -3.9",yes,-0.110,0.00 / 0.00,"mover (mention, clean side)"
+"Qwen3-30B-A3B-Base, F1 pre-neutral (smoke)",L36H31,1534,"-0.132 [-0.250, -0.087]",-0.52,"-5.7 / -4.3, -6.8",yes,-0.009,0.00 / 0.00,other context tokens

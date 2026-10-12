@@ -1,0 +1,44 @@
+2026-10-11T06:05:39Z START ext13ab-smoke (waited 0s): bash -c python scripts/ext13ab_run.py qwen3 --smoke --greedy-steps 3 --max-passes 6 && python scripts/ext13ab_run.py mixtral --smoke --greedy-steps 2 --max-passes 5 --budget 50000
+06:05:43 F1pre_qwen3_smoke: initialised {'eval_rows': 16, 'noise_rows': 8, 'pool': 32, 'queue_groups': 282, 'queue_items': 8464}
+06:05:43 F1pre_qwen3_smoke: 32 cases, 32 rows (16 validation), K=384; passes done 0, queue 0/282, greedy left 16
+06:05:44 pass 0: tasks ['F1pre_qwen3_smoke'], 64 prefill rows (T max 40), 8976 spawn rows (adaptive [512], static groups [282])
+06:05:48   layer   0: load-wait 3.00s compute 0.69s  wf_rows=2198
+06:05:54   layer   8: load-wait 0.76s compute 0.09s  wf_rows=4360
+[W1011 06:06:00.449510024 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1721761792 bytes (free: 1297547264, total: 23686938624).
+06:06:01   layer  16: load-wait 0.68s compute 0.10s  wf_rows=5382
+06:06:07   layer  24: load-wait 0.86s compute 0.11s  wf_rows=6139
+[W1011 06:06:08.928200094 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2063597568 bytes (free: 196542464, total: 23686938624).
+06:06:15   layer  32: load-wait 0.90s compute 0.11s  wf_rows=6851
+[W1011 06:06:16.897117588 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2302672896 bytes (free: 366411776, total: 23686938624).
+[W1011 06:06:23.986485609 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2751463424 bytes (free: 318177280, total: 23686938624).
+06:06:23   layer  40: load-wait 0.84s compute 0.38s  wf_rows=8362
+06:06:31   layer  47: load-wait 0.89s compute 0.11s  wf_rows=8976
+06:06:31   pass done: 64 prefill rows (T=40), 8976 spawn rows, 46.9s (metrics 0.3s)
+06:06:31 F1pre_qwen3_smoke first pass: ceilings for 32 rows (mean all-MoE rescue +0.266); DLA rows 12288 (332 candidate pairs not routed in this pass's clean run)
+06:06:31 F1pre_qwen3_smoke: noise_oracle groups added for 8 rows
+06:06:31 F1pre_qwen3_smoke pass 0 done: greedy left 16 (median step 2, median rescue/ceiling 0.52); queue 282/322
+06:06:31 group pass 0 done in 47s, peak 6.9 GB
+06:06:32 pass 1: tasks ['F1pre_qwen3_smoke'], 32 prefill rows (T max 35), 1320 spawn rows (adaptive [480], static groups [40])
+06:07:19 F1pre_qwen3_smoke pass 1 done: greedy left 0 (median step 3, median rescue/ceiling 0.58); queue 322/322
+06:07:19 F1pre_qwen3_smoke: ALL PASSES COMPLETE
+06:07:19 group pass 1 done in 48s, peak 3.6 GB
+06:07:19 nothing left to run
+06:07:28 F1pre_mixtral_bos_smoke: initialised {'eval_rows': 16, 'noise_rows': 8, 'pool': 64, 'queue_groups': 282, 'queue_items': 4464}
+06:07:28 F1pre_mixtral_bos_smoke: 32 cases, 32 rows (16 validation), K=64; passes done 0, queue 0/282, greedy left 16
+06:07:29 pass 0: tasks ['F1pre_mixtral_bos_smoke'], 64 prefill rows (T max 41), 5488 spawn rows (adaptive [1024], static groups [282])
+06:07:38   layer   0: load-wait 7.55s compute 1.10s  wf_rows=1172
+06:08:00   layer   8: load-wait 2.71s compute 0.10s  wf_rows=2812
+06:08:23   layer  16: load-wait 2.76s compute 0.13s  wf_rows=4313
+06:08:46   layer  24: load-wait 2.74s compute 0.15s  wf_rows=5262
+06:09:06   layer  31: load-wait 2.75s compute 0.16s  wf_rows=5488
+06:09:06   pass done: 64 prefill rows (T=41), 5488 spawn rows, 97.5s (metrics 0.1s)
+06:09:07 F1pre_mixtral_bos_smoke first pass: ceilings for 32 rows (mean all-MoE rescue +1.594); DLA rows 2048 (20 candidate pairs not routed in this pass's clean run)
+06:09:07 F1pre_mixtral_bos_smoke: noise_oracle groups added for 8 rows
+06:09:07 F1pre_mixtral_bos_smoke pass 0 done: greedy left 0 (median step 2, median rescue/ceiling 0.43); queue 282/322
+06:09:07 group pass 0 done in 97s, peak 7.3 GB
+06:09:07 pass 1: tasks ['F1pre_mixtral_bos_smoke'], 32 prefill rows (T max 37), 600 spawn rows (adaptive [0], static groups [40])
+06:10:39 F1pre_mixtral_bos_smoke pass 1 done: greedy left 0 (median step 2, median rescue/ceiling 0.43); queue 322/322
+06:10:39 F1pre_mixtral_bos_smoke: ALL PASSES COMPLETE
+06:10:39 group pass 1 done in 92s, peak 6.0 GB
+06:10:39 nothing left to run
+2026-10-11T06:10:42Z END   ext13ab-smoke rc=0 (303s)

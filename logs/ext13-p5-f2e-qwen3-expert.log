@@ -1,0 +1,66 @@
+2026-10-12T03:16:01Z START ext13-p5-f2e-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+03:16:06 qwen3 -> p5_f2e_qwen3: 128 directed cases, families ['main'], layers 0..47 (48), pairs layers [43], only_scaled=False, 83170 spawn rows in 2 passes
+03:16:08 pass 1/2: layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], 256 prefill rows, 59110 spawn rows
+03:16:14   layer   0: load-wait 4.34s compute 1.36s  wf_rows=1460
+03:16:23   layer   8: load-wait 0.58s compute 0.14s  wf_rows=13762
+03:16:30   layer  16: load-wait 0.64s compute 0.23s  wf_rows=26380
+03:16:37   layer  24: load-wait 0.71s compute 0.40s  wf_rows=39492
+03:16:46   layer  32: load-wait 0.52s compute 0.43s  wf_rows=52450
+[W1012 03:16:52.914950334 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 941621248 bytes (free: 607584256, total: 23686938624).
+03:16:58   layer  40: load-wait 0.69s compute 0.47s  wf_rows=59110
+03:17:06   layer  47: load-wait 0.30s compute 0.46s  wf_rows=59110
+03:17:06   pass done: 256 prefill rows (T=30), 59110 spawn rows, 58.2s
+03:17:07   L0: 7 recurrent (>= 32/64); best E106 all-case +0.035 active 58
+03:17:07   L1: 5 recurrent (>= 32/64); best E048 all-case +0.031 active 58
+03:17:07   L2: 5 recurrent (>= 32/64); best E122 all-case +0.043 active 54
+03:17:07   L3: 4 recurrent (>= 32/64); best E010 all-case +0.021 active 52
+03:17:07   L4: 6 recurrent (>= 32/64); best E102 all-case +0.002 active 42
+03:17:07   L5: 4 recurrent (>= 32/64); best E105 all-case +0.012 active 58
+03:17:07   L6: 4 recurrent (>= 32/64); best E086 all-case +0.039 active 37
+03:17:07   L7: 5 recurrent (>= 32/64); best E073 all-case +0.043 active 32
+03:17:07   L8: 3 recurrent (>= 32/64); best E008 all-case -0.004 active 34
+03:17:07   L9: 6 recurrent (>= 32/64); best E048 all-case +0.043 active 58
+03:17:07   L10: 4 recurrent (>= 32/64); best E123 all-case +0.043 active 62
+03:17:07   L11: 5 recurrent (>= 32/64); best E013 all-case +0.055 active 49
+03:17:07   L12: 5 recurrent (>= 32/64); best E069 all-case +0.027 active 48
+03:17:07   L13: 7 recurrent (>= 32/64); best E101 all-case +0.043 active 54
+03:17:07   L14: 4 recurrent (>= 32/64); best E110 all-case +0.031 active 48
+03:17:07   L15: 4 recurrent (>= 32/64); best E082 all-case +0.041 active 44
+03:17:07   L16: 5 recurrent (>= 32/64); best E119 all-case +0.014 active 58
+03:17:07   L17: 4 recurrent (>= 32/64); best E121 all-case +0.014 active 37
+03:17:07   L18: 3 recurrent (>= 32/64); best E007 all-case +0.020 active 46
+03:17:07   L19: 2 recurrent (>= 32/64); best E072 all-case +0.033 active 33
+03:17:07   L20: 3 recurrent (>= 32/64); best E028 all-case +0.004 active 57
+03:17:07   L21: 4 recurrent (>= 32/64); best E043 all-case +0.031 active 36
+03:17:07   L22: 4 recurrent (>= 32/64); best E076 all-case +0.010 active 34
+03:17:07   L23: 5 recurrent (>= 32/64); best E109 all-case +0.008 active 42
+03:17:07   L24: 5 recurrent (>= 32/64); best E074 all-case +0.059 active 39
+03:17:07   L25: 6 recurrent (>= 32/64); best E055 all-case +0.059 active 58
+03:17:07   L26: 6 recurrent (>= 32/64); best E101 all-case +0.031 active 38
+03:17:07   L27: 5 recurrent (>= 32/64); best E082 all-case +0.049 active 47
+03:17:07   L28: 4 recurrent (>= 32/64); best E117 all-case +0.045 active 46
+03:17:07   L29: 5 recurrent (>= 32/64); best E002 all-case +0.045 active 58
+03:17:07   L30: 5 recurrent (>= 32/64); best E052 all-case +0.018 active 38
+03:17:07   L31: 2 recurrent (>= 32/64); best E045 all-case +0.023 active 53
+03:17:07   L32: 5 recurrent (>= 32/64); best E056 all-case +0.031 active 33
+03:17:07   L33: 6 recurrent (>= 32/64); best E105 all-case +0.027 active 34
+03:17:07   L34: 5 recurrent (>= 32/64); best E003 all-case +0.039 active 42
+03:17:07   L35: 5 recurrent (>= 32/64); best E122 all-case +0.096 active 45
+03:17:07   L36: 6 recurrent (>= 32/64); best E120 all-case +0.125 active 58
+03:17:07 pass 1: 58s; /home/ubuntu/MOE/results/p5_f2e_qwen3/str_expert_rows.parquet now 59110 rows
+03:17:07 pass 2/2: layers [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47], 256 prefill rows, 24060 spawn rows
+03:18:01   L37: 7 recurrent (>= 32/64); best E107 all-case +0.242 active 59
+03:18:01   L38: 7 recurrent (>= 32/64); best E044 all-case +0.051 active 39
+03:18:01   L39: 6 recurrent (>= 32/64); best E003 all-case +0.059 active 55
+03:18:01   L40: 6 recurrent (>= 32/64); best E079 all-case +0.053 active 41
+03:18:01   L41: 6 recurrent (>= 32/64); best E121 all-case +0.111 active 41
+03:18:01   L42: 8 recurrent (>= 32/64); best E055 all-case +0.148 active 53
+03:18:01   L43: 6 recurrent (>= 32/64); best E036 all-case +0.219 active 64
+03:18:01   L44: 6 recurrent (>= 32/64); best E116 all-case +0.223 active 49
+03:18:01   L45: 5 recurrent (>= 32/64); best E087 all-case +0.020 active 37
+03:18:01   L46: 7 recurrent (>= 32/64); best E068 all-case -0.020 active 35
+03:18:01   L47: 8 recurrent (>= 32/64); best E071 all-case +0.008 active 40
+03:18:01 pass 2: 52s; /home/ubuntu/MOE/results/p5_f2e_qwen3/str_expert_rows.parquet now 83170 rows
+2026-10-12T03:18:08Z END   ext13-p5-f2e-qwen3-expert rc=0 (127s)

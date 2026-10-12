@@ -1,0 +1,46 @@
+2026-10-11T19:15:10Z START ext13-p5-cp_nat-mixtral_bos-expert_lo (waited 2094s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --layers 0-15 --pairs-layers auto --max-spawn 40000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+19:15:25 mixtral -> p5_cp_nat_mixtral_bos: 1712 directed cases, families ['main', 'rep'], layers 0..15 (16), pairs layers [21], only_scaled=False, 142645 spawn rows in 4 passes
+19:15:25 pass 1/4: layers [0, 1, 2, 3], 3424 prefill rows, 35380 spawn rows
+19:15:34   layer   0: load-wait 5.88s compute 2.68s  wf_rows=8918
+[W1011 19:15:48.339940442 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+19:15:57   layer   8: load-wait 0.23s compute 2.59s  wf_rows=35380
+19:16:20   layer  16: load-wait 0.25s compute 2.59s  wf_rows=35380
+[W1011 19:16:33.486665655 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+19:16:45   layer  24: load-wait 0.32s compute 2.59s  wf_rows=35380
+[W1011 19:16:57.717537346 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1011 19:17:03.576876147 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+19:17:06   layer  31: load-wait 0.64s compute 2.92s  wf_rows=35380
+19:17:06   pass done: 3424 prefill rows (T=40), 35380 spawn rows, 100.3s
+19:17:06   L0: 1 recurrent (>= 216/432); best E006 all-case -0.001 active 220
+19:17:06   L1: 2 recurrent (>= 216/432); best E002 all-case -0.000 active 273
+19:17:06   L2: 2 recurrent (>= 216/432); best E004 all-case +0.000 active 220
+19:17:06   L3: 1 recurrent (>= 216/432); best E001 all-case -0.005 active 380
+19:17:06 pass 1: 100s; /home/ubuntu/MOE/results/p5_cp_nat_mixtral_bos/str_expert_rows.parquet now 35380 rows
+19:17:07 pass 2/4: layers [4, 5, 6, 7], 3424 prefill rows, 35044 spawn rows
+[W1011 19:18:30.410761978 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+19:18:47   L4: 2 recurrent (>= 216/432); best E001 all-case -0.001 active 216
+19:18:47   L5: 2 recurrent (>= 216/432); best E000 all-case +0.000 active 236
+19:18:47   L6: 2 recurrent (>= 216/432); best E001 all-case +0.008 active 370
+19:18:47   L7: 2 recurrent (>= 216/432); best E007 all-case -0.004 active 315
+19:18:47 pass 2: 94s; /home/ubuntu/MOE/results/p5_cp_nat_mixtral_bos/str_expert_rows.parquet now 70424 rows
+19:18:47 pass 3/4: layers [8, 9, 10, 11], 3424 prefill rows, 36551 spawn rows
+[W1011 19:19:27.729506327 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1011 19:19:35.071339321 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1011 19:19:39.056479086 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1011 19:19:53.219138547 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1011 19:20:06.106664834 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+19:20:26   L8: 1 recurrent (>= 216/432); best E001 all-case -0.001 active 304
+19:20:26   L9: 1 recurrent (>= 216/432); best E002 all-case +0.001 active 266
+19:20:26   L10: 2 recurrent (>= 216/432); best E005 all-case +0.010 active 324
+19:20:26   L11: 1 recurrent (>= 216/432); best E006 all-case -0.012 active 414
+19:20:26 pass 3: 96s; /home/ubuntu/MOE/results/p5_cp_nat_mixtral_bos/str_expert_rows.parquet now 106975 rows
+19:20:27 pass 4/4: layers [12, 13, 14, 15], 3424 prefill rows, 35670 spawn rows
+[W1011 19:21:48.968818250 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+19:21:57   L12: 1 recurrent (>= 216/432); best E006 all-case +0.020 active 416
+19:21:57   L13: 2 recurrent (>= 216/432); best E005 all-case +0.195 active 421
+19:21:57   L14: 2 recurrent (>= 216/432); best E007 all-case +0.147 active 425
+19:21:57   L15: 2 recurrent (>= 216/432); best E002 all-case +0.230 active 422
+19:21:57 pass 4: 89s; /home/ubuntu/MOE/results/p5_cp_nat_mixtral_bos/str_expert_rows.parquet now 142645 rows
+2026-10-11T19:22:04Z END   ext13-p5-cp_nat-mixtral_bos-expert_lo rc=0 (414s)

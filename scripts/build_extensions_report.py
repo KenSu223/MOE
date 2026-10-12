@@ -72,6 +72,26 @@ SECTIONS = [
     ("12", "Completeness checks", "results/sections/ext12_complete.md",
      "Do the add-back results replicate on held-out splits, is the role/option-swap difference an item effect, and does "
      "Mixtral without BOS change the WinoGrande picture?"),
+    ("13", "Phase 5 synthesis: WinoGrande in its original direction, copy vs generate, the task ladder", "results/sections/ext13_synthesis.md",
+     "Does the attention / MoE split follow the direction of the question (attribute → entity vs entity → attribute), the "
+     "copyability of the answer, the verb or the association; why do the add-back curves differ; is attribution patching enough?"),
+    ("13a", "Phase 5 data, association probes and base analyses", "results/sections/ext13_base.md",
+     "Attribute → entity pairs, probe-neutral main sets, verb templates and copy prefixes; layer curves, all-MoE / direct split, "
+     "grid, heads and experts per condition."),
+    ("13b", "Phase 5 expert add-back and deletion curves", "results/sections/ext13_addback.md",
+     "Greedy / oracle / random add-back and deletion per condition; ceilings and overshoot."),
+    ("13c", "Phase 5 head + expert add-back", "results/sections/ext13_circuit.md",
+     "How many heads vs experts restore the answer in each condition?"),
+    ("13d", "Phase 5 expert knockout", "results/sections/ext13_knockout.md",
+     "Are the conditions' own experts and Phase 3's WinoGrande experts necessary, including when the answer is copyable?"),
+    ("13e", "Phase 5 writer vs computer experts", "results/sections/ext13_writer.md",
+     "Do the selected experts write the answer or compute it?"),
+    ("13f", "Phase 5 task ladder", "results/sections/ext13_ladder.md",
+     "All tasks on one attention–MoE axis, with paired contrasts on identical items."),
+    ("13g", "Why the add-back curves differ", "results/sections/ext13_curves.md",
+     "Overshoot of the all-MoE ceiling explained by late experts reacting to attention-written evidence."),
+    ("13h", "Attribution patching pilot (OLMoE)", "results/sections/ext13_atp.md",
+     "Do gradient-based estimates (AtP, AtP*, EAP-IG) reproduce activation patching for experts, heads and layers?"),
 ]
 
 

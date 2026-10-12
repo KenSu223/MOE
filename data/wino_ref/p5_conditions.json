@@ -1,0 +1,2591 @@
+{
+ "note": "Phase-5 condition registry (agent p5-data; scripts/ext13_p5_casesets.py). Per cond and proto: pair file, case-set file, run dir results/p5_<cond>_<proto>, families, split sizes, strata, status {cases, base}, selected_expert, pop_top10.",
+ "conditions": {
+  "f1": {
+   "qwen3": {
+    "task": 1,
+    "format": "fill-in-the-blank (entity readout)",
+    "direction": "attr2ent",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_f1_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_f1_qwen3.json",
+    "run_dir": "results/p5_f1_qwen3",
+    "families": [
+     "main",
+     "rep"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128,
+     "rep_discovery": 128,
+     "rep_validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 62,
+      "objects": 66,
+      "assoc_neutral": 128
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 70,
+      "objects": 58,
+      "assoc_neutral": 128
+     },
+     "rep_discovery": {
+      "pairs": 128,
+      "names": 67,
+      "objects": 61,
+      "assoc_neutral": 128
+     },
+     "rep_validation": {
+      "pairs": 128,
+      "names": 60,
+      "objects": 68,
+      "assoc_neutral": 128
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 37,
+     "expert": 32,
+     "name": "L37E032",
+     "pattern": "A",
+     "spec": [
+      0.4695638020833333,
+      0.3893229166666667,
+      0.5558390299479165
+     ],
+     "rescue": [
+      0.49462890625,
+      0.41455078125,
+      0.58154296875
+     ],
+     "spec_norm": [
+      0.10138815673871024,
+      0.08370747053044658,
+      0.12072827006029517
+     ],
+     "val_active": 250,
+     "rep": {
+      "layer": 37,
+      "expert": 32,
+      "spec": [
+       0.452392578125,
+       0.37294514973958337,
+       0.5371968587239582
+      ]
+     }
+    },
+    "pop_top10": [
+     [
+      37,
+      32,
+      0.3882
+     ],
+     [
+      44,
+      116,
+      0.106
+     ],
+     [
+      39,
+      103,
+      0.0957
+     ],
+     [
+      32,
+      61,
+      0.0679
+     ],
+     [
+      43,
+      70,
+      0.0557
+     ],
+     [
+      44,
+      22,
+      0.0498
+     ],
+     [
+      36,
+      9,
+      0.0459
+     ],
+     [
+      33,
+      122,
+      0.0435
+     ],
+     [
+      42,
+      102,
+      0.0415
+     ],
+     [
+      35,
+      90,
+      0.0415
+     ]
+    ],
+    "base_summary": "results/p5_f1_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 1,
+    "format": "fill-in-the-blank (entity readout)",
+    "direction": "attr2ent",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_f1_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_f1_mixtral_bos.json",
+    "run_dir": "results/p5_f1_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 101,
+     "validation": 101
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 101,
+      "names": 11,
+      "objects": 90,
+      "assoc_neutral": 101
+     },
+     "validation": {
+      "pairs": 101,
+      "names": 12,
+      "objects": 89,
+      "assoc_neutral": 101
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 20,
+     "expert": 1,
+     "name": "L20E001",
+     "pattern": "B",
+     "spec": [
+      -0.01051980198019802,
+      -0.07797029702970297,
+      0.05754950495049505
+     ],
+     "rescue": [
+      0.2271039603960396,
+      0.17698019801980197,
+      0.27848081683168296
+     ],
+     "spec_norm": [
+      -0.0024226877583012683,
+      -0.017938508576068202,
+      0.01332020609009641
+     ],
+     "val_active": 149
+    },
+    "pop_top10": [
+     [
+      19,
+      4,
+      0.3289
+     ],
+     [
+      20,
+      1,
+      0.2584
+     ],
+     [
+      20,
+      5,
+      0.2525
+     ],
+     [
+      15,
+      6,
+      0.2522
+     ],
+     [
+      17,
+      5,
+      0.2231
+     ],
+     [
+      17,
+      7,
+      0.2147
+     ],
+     [
+      21,
+      0,
+      0.2141
+     ],
+     [
+      18,
+      2,
+      0.1977
+     ],
+     [
+      24,
+      2,
+      0.1887
+     ],
+     [
+      18,
+      0,
+      0.1764
+     ]
+    ],
+    "base_summary": "results/p5_f1_mixtral_bos/base_summary.json"
+   }
+  },
+  "dir_f1": {
+   "qwen3": {
+    "task": 2,
+    "format": "fill-in-the-blank (entity readout)",
+    "direction": "attr2ent",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_dir_f1_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_dir_f1_qwen3.json",
+    "run_dir": "results/p5_dir_f1_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 90,
+     "validation": 90
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 90,
+      "names": 8,
+      "objects": 82,
+      "assoc_neutral": 39,
+      "assoc_one-sided": 26,
+      "assoc_reverse": 19,
+      "assoc_associative": 6,
+      "local_assoc": 21
+     },
+     "validation": {
+      "pairs": 90,
+      "names": 6,
+      "objects": 84,
+      "assoc_neutral": 50,
+      "assoc_reverse": 20,
+      "assoc_one-sided": 16,
+      "assoc_associative": 4,
+      "local_assoc": 7
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 44,
+     "expert": 116,
+     "name": "L44E116",
+     "pattern": "A",
+     "spec": [
+      0.17199074074074072,
+      0.10763310185185186,
+      0.2384374999999998
+     ],
+     "rescue": [
+      0.21180555555555555,
+      0.15414930555555556,
+      0.2743055555555556
+     ],
+     "spec_norm": [
+      0.03287319706220688,
+      0.020351089882339884,
+      0.04558127684887807
+     ],
+     "val_active": 153
+    },
+    "pop_top10": [
+     [
+      44,
+      116,
+      0.2625
+     ],
+     [
+      37,
+      32,
+      0.1875
+     ],
+     [
+      43,
+      70,
+      0.1292
+     ],
+     [
+      40,
+      37,
+      0.125
+     ],
+     [
+      43,
+      114,
+      0.1076
+     ],
+     [
+      41,
+      62,
+      0.0889
+     ],
+     [
+      42,
+      18,
+      0.0854
+     ],
+     [
+      42,
+      102,
+      0.0833
+     ],
+     [
+      44,
+      22,
+      0.0694
+     ],
+     [
+      31,
+      124,
+      0.066
+     ]
+    ],
+    "base_summary": "results/p5_dir_f1_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 2,
+    "format": "fill-in-the-blank (entity readout)",
+    "direction": "attr2ent",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json",
+    "run_dir": "results/p5_dir_f1_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 94,
+     "validation": 94
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 94,
+      "names": 0,
+      "objects": 94,
+      "assoc_neutral": 41,
+      "assoc_reverse": 27,
+      "assoc_one-sided": 21,
+      "assoc_associative": 5,
+      "local_assoc": 19
+     },
+     "validation": {
+      "pairs": 94,
+      "names": 1,
+      "objects": 93,
+      "assoc_neutral": 45,
+      "assoc_reverse": 27,
+      "assoc_one-sided": 20,
+      "assoc_associative": 2,
+      "local_assoc": 20
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 20,
+     "expert": 1,
+     "name": "L20E001",
+     "pattern": "A",
+     "spec": [
+      0.10904255319148937,
+      0.018617021276595744,
+      0.20212765957446807
+     ],
+     "rescue": [
+      0.39228723404255317,
+      0.31913231382978724,
+      0.46476063829787234
+     ],
+     "spec_norm": [
+      0.023431918845549366,
+      0.004040642680096166,
+      0.04315352440119071
+     ],
+     "val_active": 165
+    },
+    "pop_top10": [
+     [
+      19,
+      4,
+      0.4388
+     ],
+     [
+      20,
+      1,
+      0.3989
+     ],
+     [
+      23,
+      0,
+      0.2985
+     ],
+     [
+      20,
+      5,
+      0.2726
+     ],
+     [
+      16,
+      7,
+      0.2713
+     ],
+     [
+      24,
+      2,
+      0.2606
+     ],
+     [
+      21,
+      0,
+      0.2593
+     ],
+     [
+      18,
+      0,
+      0.2447
+     ],
+     [
+      17,
+      5,
+      0.2194
+     ],
+     [
+      15,
+      6,
+      0.2154
+     ]
+    ],
+    "base_summary": "results/p5_dir_f1_mixtral_bos/base_summary.json"
+   }
+  },
+  "dir_opt": {
+   "qwen3": {
+    "task": 2,
+    "format": "Phase-3 option swap (fill the blank, predict the trigger)",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_dir_opt_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_dir_opt_qwen3.json",
+    "run_dir": "results/p5_dir_opt_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 90,
+     "validation": 90
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 90,
+      "names": 8,
+      "objects": 82,
+      "assoc_neutral": 39,
+      "assoc_one-sided": 26,
+      "assoc_reverse": 19,
+      "assoc_associative": 6,
+      "local_assoc": 21
+     },
+     "validation": {
+      "pairs": 90,
+      "names": 6,
+      "objects": 84,
+      "assoc_neutral": 50,
+      "assoc_reverse": 20,
+      "assoc_one-sided": 16,
+      "assoc_associative": 4,
+      "local_assoc": 7
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 41,
+     "expert": 117,
+     "name": "L41E117",
+     "pattern": "A",
+     "spec": [
+      0.4649305555555556,
+      0.29014178240740746,
+      0.6615740740740741
+     ],
+     "rescue": [
+      0.5840277777777778,
+      0.41354166666666664,
+      0.7791666666666667
+     ],
+     "spec_norm": [
+      0.05344242666134504,
+      0.033911840362219885,
+      0.0750512242786557
+     ],
+     "val_active": 141
+    },
+    "pop_top10": [
+     [
+      43,
+      81,
+      0.5778
+     ],
+     [
+      41,
+      117,
+      0.5667
+     ],
+     [
+      31,
+      124,
+      0.4694
+     ],
+     [
+      44,
+      122,
+      0.4628
+     ],
+     [
+      41,
+      53,
+      0.4062
+     ],
+     [
+      43,
+      114,
+      0.3576
+     ],
+     [
+      40,
+      40,
+      0.2965
+     ],
+     [
+      39,
+      71,
+      0.2861
+     ],
+     [
+      42,
+      123,
+      0.2823
+     ],
+     [
+      41,
+      62,
+      0.2819
+     ]
+    ],
+    "base_summary": "results/p5_dir_opt_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 2,
+    "format": "Phase-3 option swap (fill the blank, predict the trigger)",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json",
+    "run_dir": "results/p5_dir_opt_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 94,
+     "validation": 94
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 94,
+      "names": 0,
+      "objects": 94,
+      "assoc_neutral": 41,
+      "assoc_reverse": 27,
+      "assoc_one-sided": 21,
+      "assoc_associative": 5,
+      "local_assoc": 19
+     },
+     "validation": {
+      "pairs": 94,
+      "names": 1,
+      "objects": 93,
+      "assoc_neutral": 45,
+      "assoc_reverse": 27,
+      "assoc_one-sided": 20,
+      "assoc_associative": 2,
+      "local_assoc": 20
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 20,
+     "expert": 0,
+     "name": "L20E000",
+     "pattern": "A",
+     "spec": [
+      0.9029255319148937,
+      0.7925531914893617,
+      1.0179521276595744
+     ],
+     "rescue": [
+      1.1296542553191489,
+      1.0299202127659575,
+      1.2313996010638295
+     ],
+     "spec_norm": [
+      0.09358417752050169,
+      0.08173294960820295,
+      0.1056706342255245
+     ],
+     "val_active": 185
+    },
+    "pop_top10": [
+     [
+      20,
+      0,
+      1.3401
+     ],
+     [
+      19,
+      6,
+      1.0695
+     ],
+     [
+      21,
+      6,
+      0.989
+     ],
+     [
+      26,
+      2,
+      0.9415
+     ],
+     [
+      18,
+      5,
+      0.7098
+     ],
+     [
+      22,
+      5,
+      0.6975
+     ],
+     [
+      13,
+      5,
+      0.4395
+     ],
+     [
+      24,
+      2,
+      0.4302
+     ],
+     [
+      21,
+      4,
+      0.3557
+     ],
+     [
+      16,
+      7,
+      0.3517
+     ]
+    ],
+    "base_summary": "results/p5_dir_opt_mixtral_bos/base_summary.json"
+   }
+  },
+  "f2e": {
+   "qwen3": {
+    "task": 3,
+    "format": "natural truncation, blank at the sentence end",
+    "direction": "attr2ent",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_f2e_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_f2e_qwen3.json",
+    "run_dir": "results/p5_f2e_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 32,
+     "validation": 32
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 32,
+      "names": 3,
+      "objects": 29,
+      "assoc_neutral": 32
+     },
+     "validation": {
+      "pairs": 32,
+      "names": 6,
+      "objects": 26,
+      "assoc_neutral": 32
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 43,
+     "expert": 36,
+     "name": "L43E036",
+     "pattern": "A",
+     "spec": [
+      0.154296875,
+      0.06770833333333334,
+      0.25
+     ],
+     "rescue": [
+      0.2021484375,
+      0.10837402343750001,
+      0.30568847656249964
+     ],
+     "spec_norm": [
+      0.018544600938967135,
+      0.008853160762157334,
+      0.02870607932412493
+     ],
+     "val_active": 63
+    },
+    "pop_top10": [
+     [
+      37,
+      107,
+      0.2422
+     ],
+     [
+      44,
+      116,
+      0.2227
+     ],
+     [
+      43,
+      36,
+      0.2188
+     ],
+     [
+      42,
+      55,
+      0.1484
+     ],
+     [
+      36,
+      120,
+      0.125
+     ],
+     [
+      42,
+      102,
+      0.1211
+     ],
+     [
+      44,
+      22,
+      0.1152
+     ],
+     [
+      37,
+      55,
+      0.1152
+     ],
+     [
+      41,
+      121,
+      0.1113
+     ],
+     [
+      44,
+      98,
+      0.1094
+     ]
+    ],
+    "base_summary": "results/p5_f2e_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 3,
+    "format": "natural truncation, blank at the sentence end",
+    "direction": "attr2ent",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_f2e_mixtral_bos.json",
+    "run_dir": "results/p5_f2e_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 18,
+     "validation": 18
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 18,
+      "names": 3,
+      "objects": 15,
+      "assoc_neutral": 18
+     },
+     "validation": {
+      "pairs": 18,
+      "names": 2,
+      "objects": 16,
+      "assoc_neutral": 18
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 19,
+     "expert": 4,
+     "name": "L19E004",
+     "pattern": "A",
+     "spec": [
+      0.3506944444444444,
+      0.16319444444444445,
+      0.5486111111111112
+     ],
+     "rescue": [
+      0.4861111111111111,
+      0.2986111111111111,
+      0.6909722222222222
+     ],
+     "spec_norm": [
+      0.05024875621890547,
+      0.02456126601770885,
+      0.07335400984721531
+     ],
+     "val_active": 36
+    },
+    "pop_top10": [
+     [
+      19,
+      4,
+      0.5347
+     ],
+     [
+      17,
+      5,
+      0.3542
+     ],
+     [
+      20,
+      5,
+      0.3299
+     ],
+     [
+      21,
+      0,
+      0.2431
+     ],
+     [
+      20,
+      1,
+      0.1944
+     ],
+     [
+      23,
+      7,
+      0.1944
+     ],
+     [
+      18,
+      2,
+      0.1632
+     ],
+     [
+      24,
+      2,
+      0.1493
+     ],
+     [
+      22,
+      0,
+      0.1493
+     ],
+     [
+      17,
+      1,
+      0.1424
+     ]
+    ],
+    "base_summary": "results/p5_f2e_mixtral_bos/base_summary.json"
+   }
+  },
+  "vt_e2a_orig": {
+   "qwen3": {
+    "task": 4,
+    "format": "Phase-3 option swap on verb templates",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json",
+    "run_dir": "results/p5_vt_e2a_orig_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 102,
+      "assoc_reverse": 19,
+      "assoc_one-sided": 7,
+      "seeds": 16,
+      "order1": 128
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 109,
+      "assoc_reverse": 12,
+      "assoc_one-sided": 7,
+      "seeds": 17,
+      "order1": 128
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 39,
+     "expert": 121,
+     "name": "L39E121",
+     "pattern": "A",
+     "spec": [
+      0.2413736979166667,
+      0.13834228515625002,
+      0.35897216796875
+     ],
+     "rescue": [
+      0.324462890625,
+      0.220941162109375,
+      0.441162109375
+     ],
+     "spec_norm": [
+      0.037107933290795585,
+      0.021397129944233394,
+      0.055034721205927374
+     ],
+     "val_active": 185
+    },
+    "pop_top10": [
+     [
+      42,
+      123,
+      0.3511
+     ],
+     [
+      39,
+      121,
+      0.3503
+     ],
+     [
+      45,
+      92,
+      0.2976
+     ],
+     [
+      41,
+      106,
+      0.2856
+     ],
+     [
+      41,
+      17,
+      0.2371
+     ],
+     [
+      37,
+      101,
+      0.22
+     ],
+     [
+      22,
+      35,
+      0.2163
+     ],
+     [
+      39,
+      1,
+      0.1897
+     ],
+     [
+      36,
+      87,
+      0.1541
+     ],
+     [
+      43,
+      42,
+      0.1521
+     ]
+    ],
+    "base_summary": "results/p5_vt_e2a_orig_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 4,
+    "format": "Phase-3 option swap on verb templates",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json",
+    "run_dir": "results/p5_vt_e2a_orig_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 114,
+      "assoc_one-sided": 8,
+      "assoc_reverse": 6,
+      "seeds": 14,
+      "order1": 128
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 117,
+      "assoc_reverse": 7,
+      "assoc_one-sided": 4,
+      "seeds": 18,
+      "order1": 128
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 19,
+     "expert": 6,
+     "name": "L19E006",
+     "pattern": "A",
+     "spec": [
+      0.61962890625,
+      0.4970703125,
+      0.7436645507812498
+     ],
+     "rescue": [
+      0.8798828125,
+      0.75877685546875,
+      1.0019775390624996
+     ],
+     "spec_norm": [
+      0.09518451845184518,
+      0.07794145529981698,
+      0.11178589779623173
+     ],
+     "val_active": 240
+    },
+    "pop_top10": [
+     [
+      19,
+      6,
+      0.8257
+     ],
+     [
+      20,
+      0,
+      0.6343
+     ],
+     [
+      21,
+      3,
+      0.5215
+     ],
+     [
+      25,
+      2,
+      0.4805
+     ],
+     [
+      17,
+      7,
+      0.3462
+     ],
+     [
+      14,
+      7,
+      0.2974
+     ],
+     [
+      18,
+      6,
+      0.2788
+     ],
+     [
+      24,
+      4,
+      0.2642
+     ],
+     [
+      22,
+      0,
+      0.2559
+     ],
+     [
+      23,
+      0,
+      0.231
+     ]
+    ],
+    "base_summary": "results/p5_vt_e2a_orig_mixtral_bos/base_summary.json"
+   }
+  },
+  "vt_e2a_neu": {
+   "qwen3": {
+    "task": 4,
+    "format": "Phase-3 option swap on verb templates (neutral verb)",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json",
+    "run_dir": "results/p5_vt_e2a_neu_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 97,
+      "assoc_reverse": 22,
+      "assoc_one-sided": 9,
+      "seeds": 16,
+      "order1": 128
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 100,
+      "assoc_reverse": 18,
+      "assoc_one-sided": 10,
+      "seeds": 12,
+      "order1": 128
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 42,
+     "expert": 123,
+     "name": "L42E123",
+     "pattern": "A",
+     "spec": [
+      0.22509765625,
+      0.1562459309895833,
+      0.29850667317708324
+     ],
+     "rescue": [
+      0.288330078125,
+      0.216790771484375,
+      0.36328125
+     ],
+     "spec_norm": [
+      0.037041500944116346,
+      0.026062583384950967,
+      0.04851912186001372
+     ],
+     "val_active": 256
+    },
+    "pop_top10": [
+     [
+      42,
+      123,
+      0.4763
+     ],
+     [
+      39,
+      121,
+      0.3284
+     ],
+     [
+      45,
+      92,
+      0.2185
+     ],
+     [
+      44,
+      44,
+      0.1985
+     ],
+     [
+      37,
+      101,
+      0.1982
+     ],
+     [
+      22,
+      35,
+      0.1936
+     ],
+     [
+      23,
+      105,
+      0.1836
+     ],
+     [
+      39,
+      1,
+      0.1506
+     ],
+     [
+      43,
+      97,
+      0.1465
+     ],
+     [
+      42,
+      74,
+      0.1455
+     ]
+    ],
+    "base_summary": "results/p5_vt_e2a_neu_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 4,
+    "format": "Phase-3 option swap on verb templates (neutral verb)",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json",
+    "run_dir": "results/p5_vt_e2a_neu_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 117,
+      "assoc_one-sided": 7,
+      "assoc_reverse": 4,
+      "seeds": 11,
+      "order1": 128
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 111,
+      "assoc_one-sided": 9,
+      "assoc_reverse": 8,
+      "seeds": 12,
+      "order1": 128
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 19,
+     "expert": 6,
+     "name": "L19E006",
+     "pattern": "A",
+     "spec": [
+      0.28955078125,
+      0.18991699218750002,
+      0.3896484375
+     ],
+     "rescue": [
+      0.60888671875,
+      0.5234375,
+      0.69482421875
+     ],
+     "spec_norm": [
+      0.049798454820288884,
+      0.03221117128494901,
+      0.06790068936507632
+     ],
+     "val_active": 232
+    },
+    "pop_top10": [
+     [
+      19,
+      6,
+      0.7456
+     ],
+     [
+      21,
+      3,
+      0.4395
+     ],
+     [
+      20,
+      0,
+      0.4199
+     ],
+     [
+      23,
+      0,
+      0.3223
+     ],
+     [
+      25,
+      2,
+      0.2974
+     ],
+     [
+      14,
+      7,
+      0.2676
+     ],
+     [
+      18,
+      6,
+      0.2349
+     ],
+     [
+      17,
+      7,
+      0.2222
+     ],
+     [
+      27,
+      5,
+      0.2153
+     ],
+     [
+      20,
+      5,
+      0.2144
+     ]
+    ],
+    "base_summary": "results/p5_vt_e2a_neu_mixtral_bos/base_summary.json"
+   }
+  },
+  "vt_a2e_orig": {
+   "qwen3": {
+    "task": 5,
+    "format": "fill-in-the-blank on verb templates",
+    "direction": "attr2ent",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json",
+    "run_dir": "results/p5_vt_a2e_orig_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 60,
+     "validation": 37
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 60,
+      "names": 60,
+      "objects": 0,
+      "assoc_neutral": 51,
+      "assoc_reverse": 5,
+      "assoc_one-sided": 4,
+      "seeds": 8,
+      "order1": 60
+     },
+     "validation": {
+      "pairs": 37,
+      "names": 37,
+      "objects": 0,
+      "assoc_neutral": 26,
+      "assoc_reverse": 7,
+      "assoc_one-sided": 4,
+      "seeds": 5,
+      "order1": 37
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 37,
+     "expert": 32,
+     "name": "L37E032",
+     "pattern": "A",
+     "spec": [
+      0.16666666666666669,
+      0.12781531531531531,
+      0.20664414414414412
+     ],
+     "rescue": [
+      0.17736486486486486,
+      0.13175675675675674,
+      0.22466216216216217
+     ],
+     "spec_norm": [
+      0.04555247768544168,
+      0.035555190230155,
+      0.055431234714210534
+     ],
+     "val_active": 74
+    },
+    "pop_top10": [
+     [
+      37,
+      32,
+      0.2604
+     ],
+     [
+      32,
+      61,
+      0.1552
+     ],
+     [
+      39,
+      103,
+      0.1552
+     ],
+     [
+      42,
+      31,
+      0.1187
+     ],
+     [
+      34,
+      85,
+      0.1042
+     ],
+     [
+      38,
+      115,
+      0.0833
+     ],
+     [
+      35,
+      90,
+      0.0563
+     ],
+     [
+      40,
+      115,
+      0.0552
+     ],
+     [
+      36,
+      65,
+      0.0531
+     ],
+     [
+      41,
+      112,
+      0.0406
+     ]
+    ],
+    "base_summary": "results/p5_vt_a2e_orig_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 5,
+    "format": "fill-in-the-blank on verb templates",
+    "direction": "attr2ent",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_vt_a2e_orig_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_a2e_orig_mixtral_bos.json",
+    "run_dir": "results/p5_vt_a2e_orig_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 0,
+     "validation": 2
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 0,
+      "names": 0,
+      "objects": 0,
+      "seeds": 0,
+      "order1": 0
+     },
+     "validation": {
+      "pairs": 2,
+      "names": 2,
+      "objects": 0,
+      "assoc_neutral": 2,
+      "seeds": 1,
+      "order1": 2
+     }
+    },
+    "behaviour_only": true,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": false,
+     "base": false
+    },
+    "selected_expert": null,
+    "pop_top10": null
+   }
+  },
+  "vt_a2e_neu": {
+   "qwen3": {
+    "task": 5,
+    "format": "fill-in-the-blank on verb templates (neutral verb)",
+    "direction": "attr2ent",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_vt_a2e_neu_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_a2e_neu_qwen3.json",
+    "run_dir": "results/p5_vt_a2e_neu_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 45,
+     "validation": 5
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 45,
+      "names": 45,
+      "objects": 0,
+      "assoc_neutral": 38,
+      "assoc_reverse": 7,
+      "seeds": 5,
+      "order1": 45
+     },
+     "validation": {
+      "pairs": 5,
+      "names": 5,
+      "objects": 0,
+      "assoc_reverse": 2,
+      "assoc_neutral": 2,
+      "assoc_one-sided": 1,
+      "seeds": 3,
+      "order1": 5
+     }
+    },
+    "behaviour_only": true,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": false,
+     "base": false
+    },
+    "selected_expert": null,
+    "pop_top10": null
+   },
+   "mixtral_bos": {
+    "task": 5,
+    "format": "fill-in-the-blank on verb templates (neutral verb)",
+    "direction": "attr2ent",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_vt_a2e_neu_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_vt_a2e_neu_mixtral_bos.json",
+    "run_dir": "results/p5_vt_a2e_neu_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 2,
+     "validation": 2
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 2,
+      "names": 2,
+      "objects": 0,
+      "assoc_neutral": 2,
+      "seeds": 1,
+      "order1": 2
+     },
+     "validation": {
+      "pairs": 2,
+      "names": 2,
+      "objects": 0,
+      "assoc_neutral": 2,
+      "seeds": 2,
+      "order1": 2
+     }
+    },
+    "behaviour_only": true,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": false,
+     "base": false
+    },
+    "selected_expert": null,
+    "pop_top10": null
+   }
+  },
+  "cp_vt_orig": {
+   "qwen3": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on verb templates",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json",
+    "run_dir": "results/p5_cp_vt_orig_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 90,
+      "assoc_reverse": 24,
+      "assoc_one-sided": 14,
+      "seeds": 14,
+      "order1": 65
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 101,
+      "assoc_reverse": 19,
+      "assoc_one-sided": 8,
+      "seeds": 13,
+      "order1": 66
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 39,
+     "expert": 1,
+     "name": "L39E001",
+     "pattern": "A",
+     "spec": [
+      0.12060546875,
+      0.07438151041666666,
+      0.16813151041666666
+     ],
+     "rescue": [
+      0.169921875,
+      0.1279296875,
+      0.21484375
+     ],
+     "spec_norm": [
+      0.021504440188055023,
+      0.013582009291474786,
+      0.029487965585985598
+     ],
+     "val_active": 180
+    },
+    "pop_top10": [
+     [
+      42,
+      123,
+      0.5149
+     ],
+     [
+      39,
+      1,
+      0.3735
+     ],
+     [
+      39,
+      121,
+      0.3574
+     ],
+     [
+      37,
+      101,
+      0.2795
+     ],
+     [
+      22,
+      35,
+      0.2527
+     ],
+     [
+      41,
+      106,
+      0.2141
+     ],
+     [
+      45,
+      92,
+      0.2043
+     ],
+     [
+      40,
+      75,
+      0.1821
+     ],
+     [
+      44,
+      122,
+      0.1697
+     ],
+     [
+      37,
+      2,
+      0.1589
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_vt_orig_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on verb templates",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json",
+    "run_dir": "results/p5_cp_vt_orig_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 102,
+      "assoc_one-sided": 16,
+      "assoc_reverse": 10,
+      "seeds": 9,
+      "order1": 64
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 116,
+      "assoc_one-sided": 8,
+      "assoc_reverse": 4,
+      "seeds": 10,
+      "order1": 65
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 19,
+     "expert": 6,
+     "name": "L19E006",
+     "pattern": "A",
+     "spec": [
+      0.50537109375,
+      0.39158935546875,
+      0.6171875
+     ],
+     "rescue": [
+      0.740234375,
+      0.63134765625,
+      0.8462036132812498
+     ],
+     "spec_norm": [
+      0.0960200389646535,
+      0.07630351208343043,
+      0.1139949684332804
+     ],
+     "val_active": 228
+    },
+    "pop_top10": [
+     [
+      19,
+      6,
+      0.5137
+     ],
+     [
+      21,
+      3,
+      0.3647
+     ],
+     [
+      14,
+      7,
+      0.3237
+     ],
+     [
+      20,
+      0,
+      0.3188
+     ],
+     [
+      18,
+      6,
+      0.2671
+     ],
+     [
+      23,
+      7,
+      0.2578
+     ],
+     [
+      19,
+      4,
+      0.2456
+     ],
+     [
+      20,
+      5,
+      0.2378
+     ],
+     [
+      17,
+      7,
+      0.2339
+     ],
+     [
+      23,
+      0,
+      0.229
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_vt_orig_mixtral_bos/base_summary.json"
+   }
+  },
+  "cp_vt_neu": {
+   "qwen3": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on verb templates (neutral verb)",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json",
+    "run_dir": "results/p5_cp_vt_neu_qwen3",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 94,
+      "assoc_reverse": 20,
+      "assoc_one-sided": 14,
+      "seeds": 12,
+      "order1": 66
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 92,
+      "assoc_reverse": 28,
+      "assoc_one-sided": 8,
+      "seeds": 8,
+      "order1": 66
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 42,
+     "expert": 123,
+     "name": "L42E123",
+     "pattern": "B",
+     "spec": [
+      -0.0019531249999999978,
+      -0.036299641927083334,
+      0.0341796875
+     ],
+     "rescue": [
+      0.07958984375,
+      0.04833984375,
+      0.11134033203124982
+     ],
+     "spec_norm": [
+      -0.00034910106475824715,
+      -0.006507140766574577,
+      0.006092533767868313
+     ],
+     "val_active": 256
+    },
+    "pop_top10": [
+     [
+      42,
+      123,
+      0.3188
+     ],
+     [
+      39,
+      121,
+      0.3164
+     ],
+     [
+      37,
+      101,
+      0.2417
+     ],
+     [
+      41,
+      106,
+      0.2202
+     ],
+     [
+      39,
+      1,
+      0.2158
+     ],
+     [
+      45,
+      92,
+      0.2007
+     ],
+     [
+      22,
+      35,
+      0.1826
+     ],
+     [
+      41,
+      112,
+      0.1807
+     ],
+     [
+      25,
+      2,
+      0.1807
+     ],
+     [
+      42,
+      16,
+      0.1792
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_vt_neu_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on verb templates (neutral verb)",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json",
+    "run_dir": "results/p5_cp_vt_neu_mixtral_bos",
+    "families": [
+     "main"
+    ],
+    "split_sizes": {
+     "discovery": 128,
+     "validation": 128
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 120,
+      "assoc_reverse": 6,
+      "assoc_one-sided": 2,
+      "seeds": 8,
+      "order1": 64
+     },
+     "validation": {
+      "pairs": 128,
+      "names": 128,
+      "objects": 0,
+      "assoc_neutral": 114,
+      "assoc_one-sided": 8,
+      "assoc_reverse": 6,
+      "seeds": 8,
+      "order1": 65
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 19,
+     "expert": 6,
+     "name": "L19E006",
+     "pattern": "B",
+     "spec": [
+      0.04638671875,
+      -0.02685546875,
+      0.12548828125
+     ],
+     "rescue": [
+      0.39013671875,
+      0.33056640625,
+      0.45068359375
+     ],
+     "spec_norm": [
+      0.008584078792807445,
+      -0.004899562258297918,
+      0.02360956629551225
+     ],
+     "val_active": 178
+    },
+    "pop_top10": [
+     [
+      21,
+      3,
+      0.5015
+     ],
+     [
+      19,
+      6,
+      0.4966
+     ],
+     [
+      20,
+      5,
+      0.4248
+     ],
+     [
+      14,
+      7,
+      0.4043
+     ],
+     [
+      23,
+      0,
+      0.3799
+     ],
+     [
+      19,
+      4,
+      0.3418
+     ],
+     [
+      13,
+      1,
+      0.2988
+     ],
+     [
+      23,
+      7,
+      0.2764
+     ],
+     [
+      20,
+      0,
+      0.2715
+     ],
+     [
+      18,
+      6,
+      0.2559
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_vt_neu_mixtral_bos/base_summary.json"
+   }
+  },
+  "cp_nat": {
+   "qwen3": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on the 776 Phase-3 twins",
+    "direction": "ent2attr",
+    "model": "qwen3",
+    "proto": "qwen3",
+    "pair_file": "data/wino_ref/pairs_p5_cp_nat_qwen3.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_nat_qwen3.json",
+    "run_dir": "results/p5_cp_nat_qwen3",
+    "families": [
+     "main",
+     "rep"
+    ],
+    "split_sizes": {
+     "discovery": 146,
+     "validation": 140,
+     "rep_discovery": 162,
+     "rep_validation": 158
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 146,
+      "names": 12,
+      "objects": 134,
+      "assoc_neutral": 64,
+      "assoc_reverse": 34,
+      "assoc_one-sided": 26,
+      "assoc_associative": 14,
+      "assoc_no_probe": 8,
+      "local_assoc": 22,
+      "order1": 73
+     },
+     "validation": {
+      "pairs": 140,
+      "names": 10,
+      "objects": 130,
+      "assoc_neutral": 60,
+      "assoc_reverse": 56,
+      "assoc_one-sided": 14,
+      "assoc_associative": 8,
+      "assoc_no_probe": 2,
+      "local_assoc": 12,
+      "order1": 70
+     },
+     "rep_discovery": {
+      "pairs": 162,
+      "names": 2,
+      "objects": 160,
+      "assoc_neutral": 70,
+      "assoc_reverse": 48,
+      "assoc_one-sided": 32,
+      "assoc_no_probe": 10,
+      "assoc_associative": 2,
+      "local_assoc": 20,
+      "order1": 81
+     },
+     "rep_validation": {
+      "pairs": 158,
+      "names": 14,
+      "objects": 144,
+      "assoc_neutral": 64,
+      "assoc_reverse": 60,
+      "assoc_one-sided": 26,
+      "assoc_no_probe": 4,
+      "assoc_associative": 4,
+      "local_assoc": 24,
+      "order1": 79
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v1",
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 41,
+     "expert": 117,
+     "name": "L41E117",
+     "pattern": "A",
+     "spec": [
+      0.4177083333333333,
+      0.3514880952380952,
+      0.4863095238095238
+     ],
+     "rescue": [
+      0.484375,
+      0.41785714285714287,
+      0.553125
+     ],
+     "spec_norm": [
+      0.07001920726383795,
+      0.05940358048344471,
+      0.08090476305557212
+     ],
+     "val_active": 253,
+     "rep": {
+      "layer": 43,
+      "expert": 81,
+      "spec": [
+       0.4200949367088608,
+       0.34638383438818565,
+       0.4967134757383965
+      ]
+     }
+    },
+    "pop_top10": [
+     [
+      43,
+      81,
+      0.5321
+     ],
+     [
+      41,
+      117,
+      0.4469
+     ],
+     [
+      34,
+      119,
+      0.2755
+     ],
+     [
+      44,
+      122,
+      0.2053
+     ],
+     [
+      41,
+      53,
+      0.2031
+     ],
+     [
+      42,
+      73,
+      0.1929
+     ],
+     [
+      38,
+      21,
+      0.1871
+     ],
+     [
+      42,
+      123,
+      0.137
+     ],
+     [
+      39,
+      7,
+      0.1355
+     ],
+     [
+      39,
+      71,
+      0.1301
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_nat_qwen3/base_summary.json"
+   },
+   "mixtral_bos": {
+    "task": 6,
+    "format": "Phase-3 + copy prefix on the 776 Phase-3 twins",
+    "direction": "ent2attr",
+    "model": "mixtral",
+    "proto": "mixtral_bos",
+    "pair_file": "data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet",
+    "case_sets": "data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json",
+    "run_dir": "results/p5_cp_nat_mixtral_bos",
+    "families": [
+     "main",
+     "rep"
+    ],
+    "split_sizes": {
+     "discovery": 216,
+     "validation": 204,
+     "rep_discovery": 214,
+     "rep_validation": 222
+    },
+    "strata_counts": {
+     "discovery": {
+      "pairs": 216,
+      "names": 20,
+      "objects": 196,
+      "assoc_neutral": 94,
+      "assoc_reverse": 54,
+      "assoc_one-sided": 48,
+      "assoc_no_probe": 20,
+      "local_assoc": 22,
+      "order1": 108
+     },
+     "validation": {
+      "pairs": 204,
+      "names": 16,
+      "objects": 188,
+      "assoc_neutral": 78,
+      "assoc_reverse": 70,
+      "assoc_one-sided": 36,
+      "assoc_no_probe": 14,
+      "assoc_associative": 6,
+      "local_assoc": 22,
+      "order1": 102
+     },
+     "rep_discovery": {
+      "pairs": 214,
+      "names": 10,
+      "objects": 204,
+      "assoc_neutral": 112,
+      "assoc_reverse": 50,
+      "assoc_one-sided": 32,
+      "assoc_no_probe": 20,
+      "local_assoc": 30,
+      "order1": 107
+     },
+     "rep_validation": {
+      "pairs": 222,
+      "names": 20,
+      "objects": 202,
+      "assoc_neutral": 106,
+      "assoc_reverse": 68,
+      "assoc_one-sided": 34,
+      "assoc_no_probe": 10,
+      "assoc_associative": 4,
+      "local_assoc": 38,
+      "order1": 111
+     }
+    },
+    "behaviour_only": false,
+    "probe_R": [
+     "v2"
+    ],
+    "probe_flag_none_responds": false,
+    "status": {
+     "cases": true,
+     "base": true
+    },
+    "selected_expert": {
+     "layer": 21,
+     "expert": 6,
+     "name": "L21E006",
+     "pattern": "B",
+     "spec": [
+      0.06678921568627451,
+      -0.015939031862745093,
+      0.149517463235294
+     ],
+     "rescue": [
+      0.5658700980392157,
+      0.5147058823529411,
+      0.6170572916666663
+     ],
+     "spec_norm": [
+      0.009338588074023303,
+      -0.0022452663053894083,
+      0.020848317506383947
+     ],
+     "val_active": 370,
+     "rep": {
+      "layer": 20,
+      "expert": 0,
+      "spec": [
+       0.8353040540540541,
+       0.7688555743243243,
+       0.9014780405405404
+      ]
+     }
+    },
+    "pop_top10": [
+     [
+      20,
+      0,
+      0.9042
+     ],
+     [
+      19,
+      6,
+      0.8487
+     ],
+     [
+      21,
+      6,
+      0.6424
+     ],
+     [
+      26,
+      2,
+      0.4537
+     ],
+     [
+      16,
+      7,
+      0.3929
+     ],
+     [
+      18,
+      5,
+      0.3773
+     ],
+     [
+      24,
+      2,
+      0.3492
+     ],
+     [
+      21,
+      4,
+      0.3223
+     ],
+     [
+      22,
+      5,
+      0.281
+     ],
+     [
+      22,
+      0,
+      0.2477
+     ]
+    ],
+    "note": "copy prefix style: options ('Options: t1, t2.' + newline before the Phase-3 prompt; coordinator decision 2026-10-11; the 'Of X and Y, one .. and the other ..' sets are void, kept as behaviour in data/wino_ref/void_cp_respectively/)",
+    "base_summary": "results/p5_cp_nat_mixtral_bos/base_summary.json"
+   }
+  }
+ }
+}

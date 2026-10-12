@@ -512,3 +512,545 @@
 2026-10-05T10:27:34Z END   ext9-ko-qwen3-final rc=0 (235s)
 2026-10-05T10:27:34Z START ext9-ko-mixtral-final (waited 0s): python scripts/ext9_knockout_run.py mixtral --phase final
 2026-10-05T10:34:44Z END   ext9-ko-mixtral-final rc=0 (430s)
+2026-10-11T02:04:51Z START ext13-scan-smoke-olmoe (waited 0s): python -
+2026-10-11T02:04:51Z END   ext13-scan-smoke-olmoe rc=0 (0s)
+2026-10-11T02:16:53Z START ext13-scan-smoke (waited 0s): python scripts/ext13_scan.py qwen3 --limit 8
+2026-10-11T02:18:58Z END   ext13-scan-smoke rc=0 (125s)
+2026-10-11T02:19:21Z START ext13-scan-qwen3 (waited 0s): python scripts/ext13_scan.py qwen3
+2026-10-11T02:24:17Z END   ext13-scan-qwen3 rc=0 (296s)
+2026-10-11T02:24:17Z START ext13-scan-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos
+2026-10-11T02:31:50Z END   ext13-scan-mixtral_bos rc=0 (453s)
+2026-10-11T02:31:50Z START ext13-verbs-qwen3 (waited 104s): python scripts/ext13_scan.py qwen3 --verbs
+2026-10-11T02:35:31Z END   ext13-verbs-qwen3 rc=0 (221s)
+2026-10-11T02:35:31Z START ext13-verbs-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos --verbs
+2026-10-11T02:41:31Z END   ext13-verbs-mixtral_bos rc=0 (360s)
+2026-10-11T03:03:02Z START ext13-f1full-qwen3 (waited 0s): python scripts/ext13_scan.py qwen3 --formats F1 --f1-sample 0
+2026-10-11T03:10:59Z END   ext13-f1full-qwen3 rc=0 (477s)
+2026-10-11T03:10:59Z START ext13-f1full-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos --formats F1 --f1-sample 0
+2026-10-11T03:19:43Z END   ext13-f1full-mixtral_bos rc=0 (524s)
+2026-10-11T03:19:43Z START ext13-scan-f2r-qwen3 (waited 404s): python scripts/ext13_scan.py qwen3 --formats F2R
+2026-10-11T03:21:51Z END   ext13-scan-f2r-qwen3 rc=0 (128s)
+2026-10-11T03:21:51Z START ext13-f1-sweep-mixtral (waited 109s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --max-rows 40000
+2026-10-11T03:26:34Z END   ext13-f1-sweep-mixtral rc=0 (283s)
+2026-10-11T03:26:34Z START ext13-verbs-a2e-qwen3 (waited 283s): python scripts/ext13_scan.py qwen3 --verbs --verb-dirs attr2ent
+2026-10-11T03:28:48Z END   ext13-verbs-a2e-qwen3 rc=0 (134s)
+2026-10-11T03:28:48Z START ext13-f1-joint-mixtral (waited 134s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main,rep --max-rows 30000
+2026-10-11T03:30:43Z END   ext13-f1-joint-mixtral rc=0 (115s)
+2026-10-11T03:30:43Z START ext13-scan-f2r-mixtral_bos (waited 115s): python scripts/ext13_scan.py mixtral_bos --formats F2R
+2026-10-11T03:32:28Z END   ext13-scan-f2r-mixtral_bos rc=0 (105s)
+2026-10-11T03:32:28Z START ext13-f1-dla-mixtral (waited 105s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main,rep --chunk 512
+2026-10-11T03:35:35Z END   ext13-f1-dla-mixtral rc=0 (187s)
+2026-10-11T03:35:35Z START ext13-verbs-a2e-mixtral_bos (waited 187s): python scripts/ext13_scan.py mixtral_bos --verbs --verb-dirs attr2ent
+2026-10-11T03:38:32Z END   ext13-verbs-a2e-mixtral_bos rc=0 (177s)
+2026-10-11T03:38:32Z START ext13-f1-direct-mixtral (waited 177s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T03:40:04Z END   ext13-f1-direct-mixtral rc=0 (92s)
+2026-10-11T03:40:04Z START ext13-f1-sweep-qwen3 (waited 92s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --max-rows 60000
+2026-10-11T03:43:08Z END   ext13-f1-sweep-qwen3 rc=0 (184s)
+2026-10-11T03:43:08Z START ext13-f1-expert-mixtral (waited 184s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main,rep --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T03:49:12Z END   ext13-f1-expert-mixtral rc=0 (364s)
+2026-10-11T03:49:12Z START ext13-f1-joint-qwen3 (waited 363s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --families main,rep --max-rows 30000
+2026-10-11T03:50:31Z END   ext13-f1-joint-qwen3 rc=0 (79s)
+2026-10-11T03:50:31Z START ext13-f1-heads-mixtral (waited 79s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main --layers auto --max-rows 50000
+2026-10-11T03:55:08Z END   ext13-f1-heads-mixtral rc=0 (277s)
+2026-10-11T03:55:08Z START ext13-f1-dla-qwen3 (waited 277s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --families main,rep --chunk 512
+2026-10-11T03:57:22Z END   ext13-f1-dla-qwen3 rc=0 (134s)
+2026-10-11T03:57:22Z START ext13-f1-grid-mixtral (waited 134s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T04:18:04Z END   ext13-f1-grid-mixtral rc=0 (1242s)
+2026-10-11T04:18:04Z START ext13-f1-direct-qwen3 (waited 1242s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T04:19:23Z END   ext13-f1-direct-qwen3 rc=0 (79s)
+2026-10-11T04:19:24Z START ext13-f1-expert-qwen3 (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --families main,rep --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T04:29:19Z END   ext13-f1-expert-qwen3 rc=0 (595s)
+2026-10-11T04:29:19Z START ext13-f1-heads-qwen3 (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --families main --layers auto --max-rows 50000
+2026-10-11T04:31:53Z END   ext13-f1-heads-qwen3 rc=0 (154s)
+2026-10-11T04:31:53Z START ext13-f1-grid-qwen3 (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_F1_train_xl_qwen3.parquet --case-sets data/wino_ref/case_sets_F1_qwen3.json --out wino_ref_F1_qwen3 --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T04:42:29Z END   ext13-f1-grid-qwen3 rc=0 (636s)
+2026-10-11T06:05:39Z START ext13ab-smoke (waited 0s): bash -c python scripts/ext13ab_run.py qwen3 --smoke --greedy-steps 3 --max-passes 6 && python scripts/ext13ab_run.py mixtral --smoke --greedy-steps 2 --max-passes 5 --budget 50000
+2026-10-11T06:10:42Z END   ext13ab-smoke rc=0 (303s)
+2026-10-11T06:10:42Z START ext13ci-smoke (waited 290s): bash -c python scripts/ext13ci_heads_run.py F1pre qwen3 --limit 6 --out-suffix _smoke && python scripts/ext13ci_circuit_run.py qwen3 --group gsmoke --conds F1pre --limit 6 --out-suffix _smoke --max-passes 2
+2026-10-11T06:13:48Z END   ext13ci-smoke rc=0 (186s)
+2026-10-11T06:13:48Z START ext13ko-smoke (waited 377s): python scripts/ext13ko_run.py qwen3 --conds f1pre --suffix _smoke --limit 4 --with-wr --time-budget 900
+2026-10-11T06:16:42Z END   ext13ko-smoke rc=0 (174s)
+2026-10-11T06:16:42Z START ext13-p5-probes-qwen3 (waited 295s): python scripts/ext13_p5_scan.py qwen3 --part probes
+2026-10-11T06:23:49Z END   ext13-p5-probes-qwen3 rc=0 (427s)
+2026-10-11T06:23:49Z START ext13-p5-conds-qwen3 (waited 0s): python scripts/ext13_p5_scan.py qwen3 --part conds
+2026-10-11T06:41:49Z END   ext13-p5-conds-qwen3 rc=0 (1080s)
+2026-10-11T06:41:49Z START ext13-p5-f1-qwen3-sweep (waited 829s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T06:45:42Z END   ext13-p5-f1-qwen3-sweep rc=0 (233s)
+2026-10-11T06:45:42Z START ext13-p5-probes-mixtral_bos (waited 233s): python scripts/ext13_p5_scan.py mixtral_bos --part probes
+2026-10-11T06:56:59Z END   ext13-p5-probes-mixtral_bos rc=0 (677s)
+2026-10-11T06:56:59Z START ext13-p5-f1-qwen3-joint (waited 677s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --families main,rep --max-rows 30000
+2026-10-11T06:58:26Z END   ext13-p5-f1-qwen3-joint rc=0 (87s)
+2026-10-11T06:58:26Z START ext13-p5-conds-mixtral_bos (waited 87s): python scripts/ext13_p5_scan.py mixtral_bos --part conds
+2026-10-11T07:20:02Z END   ext13-p5-conds-mixtral_bos rc=0 (1296s)
+2026-10-11T07:20:02Z START ext13-p5-f1-qwen3-dla (waited 1296s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --families main,rep --chunk 512
+2026-10-11T07:22:34Z END   ext13-p5-f1-qwen3-dla rc=0 (152s)
+2026-10-11T07:22:34Z START ext13-p5-f1-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T07:22:36Z END   ext13-p5-f1-qwen3-direct rc=2 (2s)
+2026-10-11T07:22:36Z START ext13-p5-f1-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T07:24:32Z END   ext13-p5-f1-mixtral_bos-sweep rc=0 (116s)
+2026-10-11T07:24:32Z START ext13-p5-f1-mixtral_bos-joint (waited 0s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T07:26:23Z END   ext13-p5-f1-mixtral_bos-joint rc=0 (111s)
+2026-10-11T07:26:28Z START ext13-p5-f1-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T07:27:45Z END   ext13-p5-f1-qwen3-direct rc=0 (77s)
+2026-10-11T07:27:45Z START ext13-p5-f1-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --families main,rep --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T07:38:51Z END   ext13-p5-f1-qwen3-expert rc=0 (666s)
+2026-10-11T07:38:51Z START ext13-p5-f1-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T07:41:42Z END   ext13-p5-f1-qwen3-heads rc=0 (171s)
+2026-10-11T07:41:42Z START ext13-p5-f1-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f1_qwen3.json --out p5_f1_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T07:55:28Z END   ext13-p5-f1-qwen3-grid rc=0 (826s)
+2026-10-11T07:56:30Z START ext13-p5-f1-mixtral_bos-dla (waited 0s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T07:58:19Z END   ext13-p5-f1-mixtral_bos-dla rc=0 (109s)
+2026-10-11T07:58:19Z START ext13ab-qwen3-1 (waited 77s): python scripts/ext13ab_run.py qwen3 --tasks f1_qwen3,f1_qwen3_rep --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T08:12:31Z END   ext13ab-qwen3-1 rc=0 (852s)
+2026-10-11T08:12:31Z START ext13ci-s1-f1-qwen3 (waited 921s): python scripts/ext13ci_heads_run.py f1 qwen3 --max-passes 6
+2026-10-11T08:15:08Z END   ext13ci-s1-f1-qwen3 rc=0 (157s)
+2026-10-11T08:15:08Z START ext13ko-qwen3 (waited 1046s): python scripts/ext13ko_run.py qwen3 --conds f1 --with-wr --time-budget 1320
+2026-10-11T08:20:39Z END   ext13ko-qwen3 rc=0 (331s)
+2026-10-11T08:20:39Z START ext13-p5-f1-mixtral_bos-direct (waited 1340s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --splits discovery,validation
+2026-10-11T08:22:33Z END   ext13-p5-f1-mixtral_bos-direct rc=0 (114s)
+2026-10-11T08:22:33Z START ext13-p5-f1-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T08:26:05Z END   ext13-p5-f1-mixtral_bos-expert rc=0 (212s)
+2026-10-11T08:26:05Z START ext13-p5-f1-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T08:29:23Z END   ext13-p5-f1-mixtral_bos-heads rc=0 (198s)
+2026-10-11T08:29:23Z START ext13-p5-f1-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f1_mixtral_bos.json --out p5_f1_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T08:47:05Z END   ext13-p5-f1-mixtral_bos-grid rc=0 (1062s)
+2026-10-11T08:47:50Z START ext13-p5-dir_f1-qwen3-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T08:49:03Z END   ext13-p5-dir_f1-qwen3-sweep rc=0 (73s)
+2026-10-11T08:49:03Z START ext13ko-mixtral_bos (waited 54s): python scripts/ext13ko_run.py mixtral_bos --conds f1 --with-wr --time-budget 1320
+2026-10-11T08:55:50Z END   ext13ko-mixtral_bos rc=0 (407s)
+2026-10-11T08:55:50Z START ext13ab-mixtral-1 (waited 434s): python scripts/ext13ab_run.py mixtral --tasks f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T09:16:08Z END   ext13ab-mixtral-1 rc=0 (1218s)
+2026-10-11T09:16:08Z START ext13-p5-dir_f1-qwen3-joint (waited 1625s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T09:17:37Z END   ext13-p5-dir_f1-qwen3-joint rc=0 (89s)
+2026-10-11T09:17:37Z START ext13ci-s1-f1-mixtral_bos (waited 1707s): python scripts/ext13ci_heads_run.py f1 mixtral_bos --max-passes 4
+2026-10-11T09:21:05Z END   ext13ci-s1-f1-mixtral_bos rc=0 (208s)
+2026-10-11T09:21:05Z START ext13-p5-cpopt-scan-qwen3 (waited 1583s): python scripts/ext13_p5_scan.py qwen3 --part conds --conds cp_vt,cp_nat --meta-key p5_scan_conds_cp_options
+2026-10-11T09:27:33Z END   ext13-p5-cpopt-scan-qwen3 rc=0 (388s)
+2026-10-11T09:27:33Z START ext13-p5-dir_f1-qwen3-dla (waited 596s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T09:28:46Z END   ext13-p5-dir_f1-qwen3-dla rc=0 (73s)
+2026-10-11T09:28:46Z START ext13ab-mixtral-2 (waited 654s): python scripts/ext13ab_run.py mixtral --tasks f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T09:30:40Z END   ext13ab-mixtral-2 rc=0 (114s)
+2026-10-11T09:30:40Z START ext13-p5-cpopt-scan-mixtral_bos (waited 187s): python scripts/ext13_p5_scan.py mixtral_bos --part conds --conds cp_vt,cp_nat --meta-key p5_scan_conds_cp_options
+2026-10-11T09:43:06Z END   ext13-p5-cpopt-scan-mixtral_bos rc=0 (746s)
+2026-10-11T09:43:06Z START ext13-p5-dir_f1-qwen3-direct (waited 860s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --splits discovery,validation
+2026-10-11T09:44:27Z END   ext13-p5-dir_f1-qwen3-direct rc=0 (81s)
+2026-10-11T09:44:27Z START ext13-p5-dir_f1-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T09:48:19Z END   ext13-p5-dir_f1-qwen3-expert rc=0 (232s)
+2026-10-11T09:48:19Z START ext13-p5-dir_f1-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T09:50:23Z END   ext13-p5-dir_f1-qwen3-heads rc=0 (124s)
+2026-10-11T09:50:24Z START ext13-p5-dir_f1-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T09:56:01Z END   ext13-p5-dir_f1-qwen3-grid rc=0 (337s)
+2026-10-11T09:56:54Z START ext13-p5-dir_f1-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T09:58:40Z END   ext13-p5-dir_f1-mixtral_bos-sweep rc=0 (106s)
+2026-10-11T09:58:40Z START ext13ci-s1-dir_f1-qwen3 (waited 85s): python scripts/ext13ci_heads_run.py dir_f1 qwen3 --max-passes 6
+2026-10-11T10:01:00Z END   ext13ci-s1-dir_f1-qwen3 rc=0 (140s)
+2026-10-11T10:01:00Z START ext13ab-qwen3-2 (waited 220s): python scripts/ext13ab_run.py qwen3 --tasks dir_f1_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T10:13:23Z END   ext13ab-qwen3-2 rc=0 (743s)
+2026-10-11T10:13:23Z START ext13ko-qwen3 (waited 900s): python scripts/ext13ko_run.py qwen3 --conds dir_f1 --with-wr --time-budget 1320
+2026-10-11T10:17:43Z END   ext13ko-qwen3 rc=0 (260s)
+2026-10-11T10:17:43Z START ext13-p5-dir_f1-mixtral_bos-joint (waited 1143s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T10:19:37Z END   ext13-p5-dir_f1-mixtral_bos-joint rc=0 (114s)
+2026-10-11T10:19:38Z START ext13-p5-dir_f1-mixtral_bos-dla (waited 0s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T10:21:31Z END   ext13-p5-dir_f1-mixtral_bos-dla rc=0 (113s)
+2026-10-11T10:21:31Z START ext13-p5-dir_f1-mixtral_bos-direct (waited 0s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --splits discovery,validation
+2026-10-11T10:23:23Z END   ext13-p5-dir_f1-mixtral_bos-direct rc=0 (112s)
+2026-10-11T10:23:23Z START ext13-p5-dir_f1-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T10:26:51Z END   ext13-p5-dir_f1-mixtral_bos-expert rc=0 (208s)
+2026-10-11T10:26:51Z START ext13-p5-dir_f1-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T10:30:23Z END   ext13-p5-dir_f1-mixtral_bos-heads rc=0 (212s)
+2026-10-11T10:30:23Z START ext13-p5-dir_f1-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T10:42:09Z END   ext13-p5-dir_f1-mixtral_bos-grid rc=0 (706s)
+2026-10-11T10:43:01Z START ext13-p5-dir_opt-qwen3-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T10:44:16Z END   ext13-p5-dir_opt-qwen3-sweep rc=0 (75s)
+2026-10-11T10:44:16Z START ext13ci-s1-dir_f1-mixtral_bos (waited 64s): python scripts/ext13ci_heads_run.py dir_f1 mixtral_bos --max-passes 4
+2026-10-11T10:47:51Z END   ext13ci-s1-dir_f1-mixtral_bos rc=0 (215s)
+2026-10-11T10:47:51Z START ext13-p5-dir_opt-qwen3-joint (waited 215s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T10:49:09Z END   ext13-p5-dir_opt-qwen3-joint rc=0 (78s)
+2026-10-11T10:49:09Z START ext13ko-mixtral_bos (waited 285s): python scripts/ext13ko_run.py mixtral_bos --conds dir_f1 --with-wr --time-budget 1320
+2026-10-11T10:55:40Z END   ext13ko-mixtral_bos rc=0 (391s)
+2026-10-11T10:55:40Z START ext13ab-mixtral-3 (waited 621s): python scripts/ext13ab_run.py mixtral --tasks dir_f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T11:15:49Z END   ext13ab-mixtral-3 rc=0 (1209s)
+2026-10-11T11:15:49Z START ext13-p5-dir_opt-qwen3-dla (waited 1600s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T11:17:16Z END   ext13-p5-dir_opt-qwen3-dla rc=0 (87s)
+2026-10-11T11:17:16Z START ext13-p5-dir_opt-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --splits discovery,validation
+2026-10-11T11:18:25Z END   ext13-p5-dir_opt-qwen3-direct rc=0 (69s)
+2026-10-11T11:18:25Z START ext13ab-mixtral-4 (waited 37s): python scripts/ext13ab_run.py mixtral --tasks dir_f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T11:20:16Z END   ext13ab-mixtral-4 rc=0 (111s)
+2026-10-11T11:20:16Z START ext13-p5-dir_opt-qwen3-expert (waited 111s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T11:24:26Z END   ext13-p5-dir_opt-qwen3-expert rc=0 (250s)
+2026-10-11T11:24:26Z START ext13-p5-dir_opt-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T11:26:25Z END   ext13-p5-dir_opt-qwen3-heads rc=0 (119s)
+2026-10-11T11:26:25Z START ext13-p5-dir_opt-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T11:29:23Z END   ext13-p5-dir_opt-qwen3-grid rc=0 (178s)
+2026-10-11T11:29:59Z START ext13-p5-dir_opt-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T11:31:55Z END   ext13-p5-dir_opt-mixtral_bos-sweep rc=0 (116s)
+2026-10-11T11:31:55Z START ext13ko-qwen3 (waited 70s): python scripts/ext13ko_run.py qwen3 --conds dir_opt --with-wr --time-budget 1320
+2026-10-11T11:36:00Z END   ext13ko-qwen3 rc=0 (245s)
+2026-10-11T11:36:00Z START ext13ci-s1-dir_opt-qwen3 (waited 292s): python scripts/ext13ci_heads_run.py dir_opt qwen3 --max-passes 6
+2026-10-11T11:38:13Z END   ext13ci-s1-dir_opt-qwen3 rc=0 (133s)
+2026-10-11T11:38:13Z START ext13-p5-dir_opt-mixtral_bos-joint (waited 378s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T11:40:08Z END   ext13-p5-dir_opt-mixtral_bos-joint rc=0 (115s)
+2026-10-11T11:40:08Z START ext13ab-qwen3-3 (waited 469s): python scripts/ext13ab_run.py qwen3 --tasks dir_opt_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T11:53:34Z END   ext13ab-qwen3-3 rc=0 (806s)
+2026-10-11T11:53:34Z START ext13ci-s2-g1-qwen3 (waited 912s): python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+2026-10-11T12:07:59Z END   ext13ci-s2-g1-qwen3 rc=0 (865s)
+2026-10-11T12:07:59Z START ext13-p5-dir_opt-mixtral_bos-dla (waited 1671s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T12:09:53Z END   ext13-p5-dir_opt-mixtral_bos-dla rc=0 (114s)
+2026-10-11T12:09:53Z START ext13ci-s2-g1-qwen3 (waited 114s): python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+2026-10-11T12:17:59Z END   ext13ci-s2-g1-qwen3 rc=0 (486s)
+2026-10-11T12:17:59Z START ext13-p5-dir_opt-mixtral_bos-direct (waited 486s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --splits discovery,validation
+2026-10-11T12:19:51Z END   ext13-p5-dir_opt-mixtral_bos-direct rc=0 (112s)
+2026-10-11T12:19:51Z START ext13-p5-dir_opt-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T12:23:21Z END   ext13-p5-dir_opt-mixtral_bos-expert rc=0 (210s)
+2026-10-11T12:23:21Z START ext13-p5-dir_opt-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T12:26:44Z END   ext13-p5-dir_opt-mixtral_bos-heads rc=0 (203s)
+2026-10-11T12:26:44Z START ext13-p5-dir_opt-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_opt_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_mixtral_bos.json --out p5_dir_opt_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T12:31:34Z END   ext13-p5-dir_opt-mixtral_bos-grid rc=0 (290s)
+2026-10-11T12:31:58Z START ext13ci-s1-dir_opt-mixtral_bos (waited 0s): python scripts/ext13ci_heads_run.py dir_opt mixtral_bos --max-passes 4
+2026-10-11T12:35:25Z END   ext13ci-s1-dir_opt-mixtral_bos rc=0 (207s)
+2026-10-11T12:35:25Z START ext13-p5-cp_nat-qwen3-sweep (waited 194s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T12:38:48Z END   ext13-p5-cp_nat-qwen3-sweep rc=0 (203s)
+2026-10-11T12:38:48Z START ext13ab-mixtral-5 (waited 353s): python scripts/ext13ab_run.py mixtral --tasks dir_opt_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T12:59:46Z END   ext13ab-mixtral-5 rc=0 (1258s)
+2026-10-11T12:59:46Z START ext13ko-mixtral_bos (waited 1573s): python scripts/ext13ko_run.py mixtral_bos --conds dir_opt --with-wr --time-budget 1320
+2026-10-11T13:06:20Z END   ext13ko-mixtral_bos rc=0 (394s)
+2026-10-11T13:06:20Z START ext13ci-s2-g1-mixtral_bos (waited 1848s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g1 --conds f1,dir_f1,dir_opt --max-passes 10
+2026-10-11T13:25:05Z END   ext13ci-s2-g1-mixtral_bos rc=0 (1125s)
+2026-10-11T13:25:05Z START ext13-p5-cp_nat-qwen3-joint (waited 2777s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --families main,rep --max-rows 30000
+2026-10-11T13:26:21Z END   ext13-p5-cp_nat-qwen3-joint rc=0 (76s)
+2026-10-11T13:26:21Z START ext13ab-mixtral-6 (waited 1416s): python scripts/ext13ab_run.py mixtral --tasks dir_opt_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T13:28:15Z END   ext13ab-mixtral-6 rc=0 (114s)
+2026-10-11T13:28:15Z START ext13ci-s2-g1-mixtral_bos (waited 190s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g1 --conds f1,dir_f1,dir_opt --max-passes 10
+2026-10-11T13:44:48Z END   ext13ci-s2-g1-mixtral_bos rc=0 (993s)
+2026-10-11T13:44:48Z START ext13-p5-cp_nat-qwen3-dla (waited 1107s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --families main,rep --chunk 512
+2026-10-11T13:48:00Z END   ext13-p5-cp_nat-qwen3-dla rc=0 (192s)
+2026-10-11T13:48:00Z START ext13-p5-cp_nat-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T13:49:10Z END   ext13-p5-cp_nat-qwen3-direct rc=0 (70s)
+2026-10-11T13:49:10Z START ext13-p5-cp_nat-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --families main,rep --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T14:04:32Z END   ext13-p5-cp_nat-qwen3-expert rc=0 (922s)
+2026-10-11T14:04:32Z START ext13-p5-cp_nat-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T14:07:24Z END   ext13-p5-cp_nat-qwen3-heads rc=0 (172s)
+2026-10-11T14:07:24Z START ext13-p5-cp_nat-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_nat_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_qwen3.json --out p5_cp_nat_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T14:12:57Z END   ext13-p5-cp_nat-qwen3-grid rc=0 (333s)
+2026-10-11T14:13:35Z START ext13-p5-cp_nat-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T14:14:18Z END   ext13-p5-cp_nat-mixtral_bos-sweep rc=1 (43s)
+2026-10-11T14:14:18Z START ext13-p5-cp_vt_orig-qwen3-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T14:16:36Z END   ext13-p5-cp_vt_orig-qwen3-sweep rc=0 (138s)
+2026-10-11T14:16:37Z START ext13-p5-cp_vt_orig-qwen3-joint (waited 0s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T14:17:50Z END   ext13-p5-cp_vt_orig-qwen3-joint rc=0 (73s)
+2026-10-11T14:17:50Z START ext13-p5-cp_vt_orig-qwen3-dla (waited 0s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T14:19:08Z END   ext13-p5-cp_vt_orig-qwen3-dla rc=0 (78s)
+2026-10-11T14:19:08Z START ext13-p5-cp_vt_orig-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --splits discovery,validation
+2026-10-11T14:20:29Z END   ext13-p5-cp_vt_orig-qwen3-direct rc=0 (81s)
+2026-10-11T14:20:29Z START ext13-p5-cp_vt_orig-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T14:27:05Z END   ext13-p5-cp_vt_orig-qwen3-expert rc=0 (396s)
+2026-10-11T14:27:05Z START p5atp-engine-truth (waited 67s): bash -c 
+    set -e
+    [ -f results/p5_atp_data/case_sets_ioi.json ] || python scripts/ext13atp_engine.py scan-ioi
+    [ -f results/p5_atp_wino/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task wino
+    [ -f results/p5_atp_ioi/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task ioi
+    python scripts/ext13atp_grad.py --task wino --time-budget 150
+  
+2026-10-11T14:28:18Z END   p5atp-engine-truth rc=1 (73s)
+2026-10-11T14:28:18Z START ext13-p5-cp_vt_orig-qwen3-heads (waited 73s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T14:33:38Z END   ext13-p5-cp_vt_orig-qwen3-heads rc=0 (320s)
+2026-10-11T14:33:38Z START p5atp-engine-truth (waited 308s): bash -c 
+    set -e
+    [ -f results/p5_atp_data/case_sets_ioi.json ] || python scripts/ext13atp_engine.py scan-ioi
+    [ -f results/p5_atp_wino/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task wino
+    [ -f results/p5_atp_ioi/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task ioi
+    python scripts/ext13atp_grad.py --task wino --time-budget 150
+  
+2026-10-11T14:38:37Z END   p5atp-engine-truth rc=0 (299s)
+2026-10-11T14:38:37Z START ext13-p5-cp_vt_orig-qwen3-grid (waited 299s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_qwen3.json --out p5_cp_vt_orig_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T14:48:35Z END   ext13-p5-cp_vt_orig-qwen3-grid rc=0 (598s)
+2026-10-11T14:48:35Z START p5atp-hf-wino (waited 598s): python scripts/ext13atp_grad.py --task wino --time-budget 780
+2026-10-11T14:58:30Z END   p5atp-hf-wino rc=0 (595s)
+2026-10-11T14:58:30Z START ext13-p5-cp_vt_orig-mixtral_bos-sweep (waited 560s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T15:02:17Z END   ext13-p5-cp_vt_orig-mixtral_bos-sweep rc=0 (227s)
+2026-10-11T15:02:17Z START p5atp-hf-ioi (waited 227s): python scripts/ext13atp_grad.py --task ioi --time-budget 780
+2026-10-11T15:12:55Z END   p5atp-hf-ioi rc=0 (638s)
+2026-10-11T15:12:55Z START ext13-p5-cp_vt_orig-mixtral_bos-joint (waited 638s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T15:14:45Z END   ext13-p5-cp_vt_orig-mixtral_bos-joint rc=0 (110s)
+2026-10-11T15:14:45Z START p5atp-engine-addback (waited 89s): bash -c 
+    set -e
+    [ -f results/p5_atp_wino/addback_rows.parquet ] || python scripts/ext13atp_engine.py addback --task wino
+    [ -f results/p5_atp_ioi/addback_rows.parquet ] || python scripts/ext13atp_engine.py addback --task ioi
+  
+2026-10-11T15:15:49Z END   p5atp-engine-addback rc=0 (64s)
+2026-10-11T15:15:50Z START ext13-p5-cp_vt_orig-mixtral_bos-dla (waited 65s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T15:17:38Z END   ext13-p5-cp_vt_orig-mixtral_bos-dla rc=0 (108s)
+2026-10-11T15:17:38Z START ext13-p5-cp_vt_orig-mixtral_bos-direct (waited 0s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --splits discovery,validation
+2026-10-11T15:19:29Z END   ext13-p5-cp_vt_orig-mixtral_bos-direct rc=0 (111s)
+2026-10-11T15:19:29Z START ext13-p5-cp_vt_orig-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T15:24:24Z END   ext13-p5-cp_vt_orig-mixtral_bos-expert rc=0 (295s)
+2026-10-11T15:24:25Z START ext13-p5-cp_vt_orig-mixtral_bos-heads (waited 1s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T15:29:28Z END   ext13-p5-cp_vt_orig-mixtral_bos-heads rc=0 (303s)
+2026-10-11T15:29:28Z START ext13-p5-cp_vt_orig-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json --out p5_cp_vt_orig_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T15:36:01Z END   ext13-p5-cp_vt_orig-mixtral_bos-grid rc=0 (393s)
+2026-10-11T15:36:21Z START ext13-p5-cp_vt_neu-qwen3-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T15:38:40Z END   ext13-p5-cp_vt_neu-qwen3-sweep rc=0 (139s)
+2026-10-11T15:38:40Z START ext13-p5-cp_vt_neu-qwen3-joint (waited 0s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T15:39:53Z END   ext13-p5-cp_vt_neu-qwen3-joint rc=0 (73s)
+2026-10-11T15:39:53Z START ext13-p5-cp_vt_neu-qwen3-dla (waited 0s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T15:41:07Z END   ext13-p5-cp_vt_neu-qwen3-dla rc=0 (74s)
+2026-10-11T15:41:07Z START ext13-p5-cp_vt_neu-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --splits discovery,validation
+2026-10-11T15:42:13Z END   ext13-p5-cp_vt_neu-qwen3-direct rc=0 (66s)
+2026-10-11T15:42:13Z START ext13-p5-cp_vt_neu-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T15:48:41Z END   ext13-p5-cp_vt_neu-qwen3-expert rc=0 (388s)
+2026-10-11T15:48:41Z START ext13-p5-cp_vt_neu-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T15:51:45Z END   ext13-p5-cp_vt_neu-qwen3-heads rc=0 (184s)
+2026-10-11T15:51:45Z START ext13-p5-cp_vt_neu-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_cp_vt_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_qwen3.json --out p5_cp_vt_neu_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T15:55:52Z END   ext13-p5-cp_vt_neu-qwen3-grid rc=0 (247s)
+2026-10-11T15:56:17Z START ext13-p5-cp_vt_neu-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T15:59:52Z END   ext13-p5-cp_vt_neu-mixtral_bos-sweep rc=0 (215s)
+2026-10-11T15:59:52Z START ext13-p5-cp_vt_neu-mixtral_bos-joint (waited 0s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T16:01:40Z END   ext13-p5-cp_vt_neu-mixtral_bos-joint rc=0 (108s)
+2026-10-11T16:01:40Z START ext13-p5-cp_vt_neu-mixtral_bos-dla (waited 0s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T16:03:29Z END   ext13-p5-cp_vt_neu-mixtral_bos-dla rc=0 (109s)
+2026-10-11T16:03:29Z START ext13ci-s1-cp_nat-qwen3 (waited 64s): python scripts/ext13ci_heads_run.py cp_nat qwen3 --max-passes 6
+2026-10-11T16:06:12Z END   ext13ci-s1-cp_nat-qwen3 rc=0 (163s)
+2026-10-11T16:06:12Z START ext13ab-qwen3-4 (waited 216s): python scripts/ext13ab_run.py qwen3 --tasks cp_vt_orig_qwen3,cp_nat_qwen3,cp_nat_qwen3_rep --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T16:24:15Z END   ext13ab-qwen3-4 rc=0 (1083s)
+2026-10-11T16:24:15Z START ext13ko-qwen3 (waited 1285s): python scripts/ext13ko_run.py qwen3 --conds cp_nat,cp_vt_orig --with-wr --time-budget 1320
+2026-10-11T16:35:59Z END   ext13ko-qwen3 rc=0 (704s)
+2026-10-11T16:35:59Z START ext13-p5-cp_vt_neu-mixtral_bos-direct (waited 1950s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --splits discovery,validation
+2026-10-11T16:37:50Z END   ext13-p5-cp_vt_neu-mixtral_bos-direct rc=0 (111s)
+2026-10-11T16:37:50Z START ext13ko-mixtral_bos (waited 1976s): python scripts/ext13ko_run.py mixtral_bos --conds cp_vt_orig --with-wr --time-budget 1320
+2026-10-11T16:44:40Z END   ext13ko-mixtral_bos rc=0 (410s)
+2026-10-11T16:44:40Z START ext13ci-s1-cp_vt_orig-mixtral_bos (waited 2373s): python scripts/ext13ci_heads_run.py cp_vt_orig mixtral_bos --max-passes 4
+2026-10-11T16:49:47Z END   ext13ci-s1-cp_vt_orig-mixtral_bos rc=0 (307s)
+2026-10-11T16:49:47Z START ext13ci-s1-cp_vt_orig-qwen3 (waited 2609s): python scripts/ext13ci_heads_run.py cp_vt_orig qwen3 --max-passes 6
+2026-10-11T16:52:15Z END   ext13ci-s1-cp_vt_orig-qwen3 rc=0 (148s)
+2026-10-11T16:52:15Z START ext13ab-mixtral-7 (waited 2754s): python scripts/ext13ab_run.py mixtral --tasks cp_vt_orig_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T17:13:01Z END   ext13ab-mixtral-7 rc=0 (1246s)
+2026-10-11T17:13:01Z START ext13-p5-cp_nat-mixtral_bos-sweep (waited 3992s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --max-rows 25000
+2026-10-11T17:26:20Z END   ext13-p5-cp_nat-mixtral_bos-sweep rc=0 (799s)
+2026-10-11T17:26:20Z START ext13ab-qwen3-5 (waited 3339s): python scripts/ext13ab_run.py qwen3 --tasks cp_vt_neu_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T17:39:37Z END   ext13ab-qwen3-5 rc=0 (797s)
+2026-10-11T17:39:37Z START ext13-p5-cp_vt_neu-mixtral_bos-expert (waited 3707s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T17:44:49Z END   ext13-p5-cp_vt_neu-mixtral_bos-expert rc=0 (312s)
+2026-10-11T17:44:49Z START ext13ko-qwen3 (waited 3962s): python scripts/ext13ko_run.py qwen3 --conds cp_vt_neu --with-wr --time-budget 1320
+2026-10-11T17:50:15Z END   ext13ko-qwen3 rc=0 (326s)
+2026-10-11T17:50:15Z START ext13ci-s1-cp_vt_neu-qwen3 (waited 3473s): python scripts/ext13ci_heads_run.py cp_vt_neu qwen3 --max-passes 6
+2026-10-11T17:52:47Z END   ext13ci-s1-cp_vt_neu-qwen3 rc=0 (152s)
+2026-10-11T17:52:47Z START ext13ab-mixtral-8 (waited 2071s): python scripts/ext13ab_run.py mixtral --tasks cp_vt_orig_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T17:54:39Z END   ext13ab-mixtral-8 rc=0 (112s)
+2026-10-11T17:54:39Z START ext13-p5-cp_nat-mixtral_bos-joint (waited 1699s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --max-rows 30000
+2026-10-11T17:56:37Z END   ext13-p5-cp_nat-mixtral_bos-joint rc=0 (118s)
+2026-10-11T17:56:37Z START ext13-p5-cp_vt_neu-mixtral_bos-heads (waited 708s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T18:01:33Z END   ext13-p5-cp_vt_neu-mixtral_bos-heads rc=0 (296s)
+2026-10-11T18:01:33Z START ext13ci-s2-g2-qwen3 (waited 516s): python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+2026-10-11T18:16:19Z END   ext13ci-s2-g2-qwen3 rc=0 (886s)
+2026-10-11T18:16:19Z START ext13-p5-cp_nat-mixtral_bos-dla (waited 1182s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --chunk 512
+2026-10-11T18:23:10Z END   ext13-p5-cp_nat-mixtral_bos-dla rc=0 (411s)
+2026-10-11T18:23:10Z START ext13-p5-cp_vt_neu-mixtral_bos-grid (waited 1297s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T18:29:53Z END   ext13-p5-cp_vt_neu-mixtral_bos-grid rc=0 (403s)
+2026-10-11T18:29:53Z START ext13ci-s2-g2-qwen3 (waited 813s): python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+2026-10-11T18:38:22Z END   ext13ci-s2-g2-qwen3 rc=0 (509s)
+2026-10-11T18:38:22Z START ext13-p5-cp_nat-mixtral_bos-direct (waited 912s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --splits discovery,validation,rep_discovery,rep_validation
+2026-10-11T18:40:16Z END   ext13-p5-cp_nat-mixtral_bos-direct rc=0 (114s)
+2026-10-11T18:40:16Z START ext13-p5-vt_e2a_orig-qwen3-sweep (waited 549s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T18:42:35Z END   ext13-p5-vt_e2a_orig-qwen3-sweep rc=0 (139s)
+2026-10-11T18:42:35Z START ext13ab-mixtral-9 (waited 688s): python scripts/ext13ab_run.py mixtral --tasks cp_vt_neu_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T19:03:20Z END   ext13ab-mixtral-9 rc=0 (1245s)
+2026-10-11T19:03:20Z START ext13ko-mixtral_bos (waited 1907s): python scripts/ext13ko_run.py mixtral_bos --conds cp_vt_neu --with-wr --time-budget 1320
+2026-10-11T19:10:01Z END   ext13ko-mixtral_bos rc=0 (401s)
+2026-10-11T19:10:01Z START ext13ci-s1-cp_vt_neu-mixtral_bos (waited 2287s): python scripts/ext13ci_heads_run.py cp_vt_neu mixtral_bos --max-passes 4
+2026-10-11T19:15:10Z END   ext13ci-s1-cp_vt_neu-mixtral_bos rc=0 (309s)
+2026-10-11T19:15:10Z START ext13-p5-cp_nat-mixtral_bos-expert_lo (waited 2094s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --layers 0-15 --pairs-layers auto --max-spawn 40000
+2026-10-11T19:22:04Z END   ext13-p5-cp_nat-mixtral_bos-expert_lo rc=0 (414s)
+2026-10-11T19:22:04Z START ext13-p5-vt_e2a_orig-qwen3-joint (waited 2369s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T19:23:20Z END   ext13-p5-vt_e2a_orig-qwen3-joint rc=0 (76s)
+2026-10-11T19:23:20Z START ext13ab-mixtral-10 (waited 822s): python scripts/ext13ab_run.py mixtral --tasks cp_vt_neu_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T19:25:16Z END   ext13ab-mixtral-10 rc=0 (116s)
+2026-10-11T19:25:16Z START ext13-p5-cp_nat-mixtral_bos-expert_hi (waited 192s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --layers 16-31 --pairs-layers auto --max-spawn 40000
+2026-10-11T19:33:54Z END   ext13-p5-cp_nat-mixtral_bos-expert_hi rc=0 (518s)
+2026-10-11T19:33:54Z START ext13-p5-vt_e2a_orig-qwen3-dla (waited 634s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T19:35:12Z END   ext13-p5-vt_e2a_orig-qwen3-dla rc=0 (78s)
+2026-10-11T19:35:12Z START ext13-p5-cp_nat-mixtral_bos-heads (waited 78s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main --layers auto --max-rows 25000
+2026-10-11T19:43:24Z END   ext13-p5-cp_nat-mixtral_bos-heads rc=0 (492s)
+2026-10-11T19:43:24Z START ext13-p5-vt_e2a_orig-qwen3-direct (waited 492s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --splits discovery,validation
+2026-10-11T19:44:39Z END   ext13-p5-vt_e2a_orig-qwen3-direct rc=0 (75s)
+2026-10-11T19:44:39Z START ext13-p5-cp_nat-mixtral_bos-grid (waited 75s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 25000 --token-budget 120000
+2026-10-11T20:01:07Z END   ext13-p5-cp_nat-mixtral_bos-grid rc=0 (988s)
+2026-10-11T20:01:07Z START ext13-p5-vt_e2a_orig-qwen3-expert (waited 988s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-11T20:07:21Z END   ext13-p5-vt_e2a_orig-qwen3-expert rc=0 (374s)
+2026-10-11T20:07:21Z START ext13ci-s1-cp_nat-mixtral_bos (waited 125s): python scripts/ext13ci_heads_run.py cp_nat mixtral_bos --max-passes 4
+2026-10-11T20:14:19Z END   ext13ci-s1-cp_nat-mixtral_bos rc=0 (418s)
+2026-10-11T20:14:19Z START ext13ab-mixtral-11 (waited 508s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos,cp_nat_mixtral_bos_rep --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T20:35:47Z END   ext13ab-mixtral-11 rc=0 (1288s)
+2026-10-11T20:35:47Z START ext13ko-mixtral_bos (waited 1773s): python scripts/ext13ko_run.py mixtral_bos --conds cp_nat --with-wr --time-budget 1320
+2026-10-11T20:48:55Z END   ext13ko-mixtral_bos rc=0 (788s)
+2026-10-11T20:48:55Z START ext13-p5-vt_e2a_orig-qwen3-heads (waited 2494s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T20:52:18Z END   ext13-p5-vt_e2a_orig-qwen3-heads rc=0 (203s)
+2026-10-11T20:52:18Z START ext13ci-s2-g2a-mixtral_bos (waited 2269s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g2a --conds cp_nat --max-passes 10
+2026-10-11T21:10:13Z END   ext13ci-s2-g2a-mixtral_bos rc=0 (1075s)
+2026-10-11T21:10:13Z START ext13ab-mixtral-12 (waited 1662s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos,cp_nat_mixtral_bos_rep --max-passes 13 --budget 50000 --max-tasks 2
+2026-10-11T21:13:24Z END   ext13ab-mixtral-12 rc=1 (191s)
+2026-10-11T21:13:24Z START ext13-p5-vt_e2a_orig-qwen3-grid (waited 1266s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_qwen3.json --out p5_vt_e2a_orig_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T21:19:08Z END   ext13-p5-vt_e2a_orig-qwen3-grid rc=0 (344s)
+2026-10-11T21:19:08Z START ext13ci-s2-g2a-mixtral_bos (waited 535s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g2a --conds cp_nat --max-passes 10
+2026-10-11T21:35:17Z END   ext13ci-s2-g2a-mixtral_bos rc=0 (969s)
+2026-10-11T21:35:17Z START ext13ab-qwen3-6 (waited 883s): python scripts/ext13ab_run.py qwen3 --tasks vt_e2a_orig_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-11T21:49:07Z END   ext13ab-qwen3-6 rc=0 (830s)
+2026-10-11T21:49:07Z START ext13ko-qwen3 (waited 1712s): python scripts/ext13ko_run.py qwen3 --conds vt_e2a_orig --with-wr --time-budget 1320
+2026-10-11T21:54:46Z END   ext13ko-qwen3 rc=0 (339s)
+2026-10-11T21:54:46Z START ext13-p5-vt_e2a_orig-mixtral_bos-sweep (waited 2049s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-11T21:58:18Z END   ext13-p5-vt_e2a_orig-mixtral_bos-sweep rc=0 (212s)
+2026-10-11T21:58:18Z START ext13ci-s1-vt_e2a_orig-qwen3 (waited 2243s): python scripts/ext13ci_heads_run.py vt_e2a_orig qwen3 --max-passes 6
+2026-10-11T22:00:46Z END   ext13ci-s1-vt_e2a_orig-qwen3 rc=0 (148s)
+2026-10-11T22:00:46Z START ext13ab-mixtral-13 (waited 2314s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos_rep --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-11T22:22:21Z END   ext13ab-mixtral-13 rc=0 (1295s)
+2026-10-11T22:22:21Z START ext13ci-s2-g2b-mixtral_bos (waited 2801s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g2b --conds cp_vt_orig,cp_vt_neu --max-passes 10
+2026-10-11T22:40:54Z END   ext13ci-s2-g2b-mixtral_bos rc=0 (1113s)
+2026-10-11T22:40:54Z START ext13-p5-vt_e2a_orig-mixtral_bos-joint (waited 2556s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-11T22:42:39Z END   ext13-p5-vt_e2a_orig-mixtral_bos-joint rc=0 (105s)
+2026-10-11T22:42:39Z START ext13ab-mixtral-14 (waited 748s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos_rep --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-11T22:44:27Z END   ext13ab-mixtral-14 rc=0 (108s)
+2026-10-11T22:44:27Z START ext13ci-s2-g2b-mixtral_bos (waited 213s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g2b --conds cp_vt_orig,cp_vt_neu --max-passes 10
+2026-10-11T23:00:46Z END   ext13ci-s2-g2b-mixtral_bos rc=0 (979s)
+2026-10-11T23:00:46Z START ext13-p5-vt_e2a_orig-mixtral_bos-dla (waited 1087s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-11T23:02:33Z END   ext13-p5-vt_e2a_orig-mixtral_bos-dla rc=0 (107s)
+2026-10-11T23:02:33Z START ext13-p5-vt_e2a_orig-mixtral_bos-direct (waited 0s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --splits discovery,validation
+2026-10-11T23:04:12Z END   ext13-p5-vt_e2a_orig-mixtral_bos-direct rc=0 (99s)
+2026-10-11T23:04:12Z START ext13-p5-vt_e2a_orig-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-11T23:09:16Z END   ext13-p5-vt_e2a_orig-mixtral_bos-expert rc=0 (304s)
+2026-10-11T23:09:16Z START ext13-p5-vt_e2a_orig-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-11T23:14:06Z END   ext13-p5-vt_e2a_orig-mixtral_bos-heads rc=0 (290s)
+2026-10-11T23:14:06Z START ext13-p5-vt_e2a_orig-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_orig_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_orig_mixtral_bos.json --out p5_vt_e2a_orig_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-11T23:20:35Z END   ext13-p5-vt_e2a_orig-mixtral_bos-grid rc=0 (389s)
+2026-10-11T23:21:10Z START ext13ci-s1-vt_e2a_orig-mixtral_bos (waited 0s): python scripts/ext13ci_heads_run.py vt_e2a_orig mixtral_bos --max-passes 4
+2026-10-11T23:26:18Z END   ext13ci-s1-vt_e2a_orig-mixtral_bos rc=0 (308s)
+2026-10-11T23:26:18Z START ext13-p5-vt_e2a_neu-qwen3-sweep (waited 305s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --max-rows 60000
+2026-10-11T23:28:39Z END   ext13-p5-vt_e2a_neu-qwen3-sweep rc=0 (141s)
+2026-10-11T23:28:39Z START ext13ko-mixtral_bos (waited 347s): python scripts/ext13ko_run.py mixtral_bos --conds vt_e2a_orig --with-wr --time-budget 1320
+2026-10-11T23:35:31Z END   ext13ko-mixtral_bos rc=0 (412s)
+2026-10-11T23:35:31Z START ext13ab-mixtral-15 (waited 739s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_orig_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-11T23:56:18Z END   ext13ab-mixtral-15 rc=0 (1247s)
+2026-10-11T23:56:18Z START ext13-p5-vt_e2a_neu-qwen3-joint (waited 1659s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-11T23:57:38Z END   ext13-p5-vt_e2a_neu-qwen3-joint rc=0 (80s)
+2026-10-11T23:57:38Z START ext13-p5-vt_e2a_neu-qwen3-dla (waited 0s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --families main --chunk 512
+2026-10-11T23:59:02Z END   ext13-p5-vt_e2a_neu-qwen3-dla rc=0 (84s)
+2026-10-11T23:59:02Z START ext13-p5-vt_e2a_neu-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --splits discovery,validation
+2026-10-12T00:00:21Z END   ext13-p5-vt_e2a_neu-qwen3-direct rc=0 (79s)
+2026-10-12T00:00:21Z START ext13-p5-vt_e2a_neu-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-12T00:07:36Z END   ext13-p5-vt_e2a_neu-qwen3-expert rc=0 (435s)
+2026-10-12T00:07:36Z START ext13ab-mixtral-16 (waited 93s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_orig_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-12T00:09:31Z END   ext13ab-mixtral-16 rc=0 (115s)
+2026-10-12T00:09:32Z START ext13-p5-vt_e2a_neu-qwen3-heads (waited 116s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-12T00:12:59Z END   ext13-p5-vt_e2a_neu-qwen3-heads rc=0 (207s)
+2026-10-12T00:12:59Z START ext13-p5-vt_e2a_neu-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-12T00:19:44Z END   ext13-p5-vt_e2a_neu-qwen3-grid rc=0 (405s)
+2026-10-12T00:20:24Z START ext13-p5-vt_e2a_neu-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-12T00:23:51Z END   ext13-p5-vt_e2a_neu-mixtral_bos-sweep rc=0 (207s)
+2026-10-12T00:23:52Z START ext13ko-qwen3 (waited 199s): python scripts/ext13ko_run.py qwen3 --conds vt_e2a_neu --with-wr --time-budget 1320
+2026-10-12T00:29:09Z END   ext13ko-qwen3 rc=0 (317s)
+2026-10-12T00:29:09Z START ext13ci-s1-vt_e2a_neu-qwen3 (waited 495s): python scripts/ext13ci_heads_run.py vt_e2a_neu qwen3 --max-passes 6
+2026-10-12T00:31:42Z END   ext13ci-s1-vt_e2a_neu-qwen3 rc=0 (153s)
+2026-10-12T00:31:42Z START ext13ab-qwen3-7 (waited 518s): python scripts/ext13ab_run.py qwen3 --tasks vt_e2a_neu_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-12T00:44:58Z END   ext13ab-qwen3-7 rc=0 (796s)
+2026-10-12T00:44:58Z START ext13-p5-vt_e2a_neu-mixtral_bos-joint (waited 1266s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-12T00:46:52Z END   ext13-p5-vt_e2a_neu-mixtral_bos-joint rc=0 (114s)
+2026-10-12T00:46:52Z START ext13-p5-vt_e2a_neu-mixtral_bos-dla (waited 0s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-12T00:48:46Z END   ext13-p5-vt_e2a_neu-mixtral_bos-dla rc=0 (114s)
+2026-10-12T00:48:46Z START ext13-p5-vt_e2a_neu-mixtral_bos-direct (waited 0s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --splits discovery,validation
+2026-10-12T00:50:39Z END   ext13-p5-vt_e2a_neu-mixtral_bos-direct rc=0 (113s)
+2026-10-12T00:50:39Z START ext13-p5-vt_e2a_neu-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-12T00:55:39Z END   ext13-p5-vt_e2a_neu-mixtral_bos-expert rc=0 (300s)
+2026-10-12T00:55:39Z START ext13-p5-vt_e2a_neu-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-12T01:00:34Z END   ext13-p5-vt_e2a_neu-mixtral_bos-heads rc=0 (295s)
+2026-10-12T01:00:35Z START ext13-p5-vt_e2a_neu-mixtral_bos-grid (waited 1s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-12T01:07:21Z END   ext13-p5-vt_e2a_neu-mixtral_bos-grid rc=0 (406s)
+2026-10-12T01:07:59Z START ext13ko-mixtral_bos (waited 0s): python scripts/ext13ko_run.py mixtral_bos --conds vt_e2a_neu --with-wr --time-budget 1320
+2026-10-12T01:14:54Z END   ext13ko-mixtral_bos rc=0 (415s)
+2026-10-12T01:14:54Z START ext13-p5-vt_a2e_orig-qwen3-sweep (waited 412s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --max-rows 60000
+2026-10-12T01:16:16Z END   ext13-p5-vt_a2e_orig-qwen3-sweep rc=0 (82s)
+2026-10-12T01:16:16Z START ext13ab-mixtral-17 (waited 477s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_neu_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-12T01:37:04Z END   ext13ab-mixtral-17 rc=0 (1248s)
+2026-10-12T01:37:04Z START ext13ci-s1-vt_e2a_neu-mixtral_bos (waited 1720s): python scripts/ext13ci_heads_run.py vt_e2a_neu mixtral_bos --max-passes 4
+2026-10-12T01:42:09Z END   ext13ci-s1-vt_e2a_neu-mixtral_bos rc=0 (305s)
+2026-10-12T01:42:09Z START ext13-p5-vt_a2e_orig-qwen3-joint (waited 1553s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-12T01:43:29Z END   ext13-p5-vt_a2e_orig-qwen3-joint rc=0 (80s)
+2026-10-12T01:43:29Z START ext13ci-s2-g3-mixtral_bos (waited 72s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g3 --conds vt_e2a_orig,vt_e2a_neu --max-passes 10
+2026-10-12T02:01:50Z END   ext13ci-s2-g3-mixtral_bos rc=0 (1101s)
+2026-10-12T02:01:50Z START ext13-p5-vt_a2e_orig-qwen3-dla (waited 1100s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --chunk 512
+2026-10-12T02:03:08Z END   ext13-p5-vt_a2e_orig-qwen3-dla rc=0 (78s)
+2026-10-12T02:03:08Z START ext13ab-mixtral-18 (waited 1049s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_neu_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-12T02:05:04Z END   ext13ab-mixtral-18 rc=0 (116s)
+2026-10-12T02:05:04Z START ext13ci-s2-g3-mixtral_bos (waited 194s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g3 --conds vt_e2a_orig,vt_e2a_neu --max-passes 10
+2026-10-12T02:21:22Z END   ext13ci-s2-g3-mixtral_bos rc=0 (978s)
+2026-10-12T02:21:22Z START ext13-p5-vt_a2e_orig-qwen3-direct (waited 1094s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --splits discovery,validation
+2026-10-12T02:22:37Z END   ext13-p5-vt_a2e_orig-qwen3-direct rc=0 (75s)
+2026-10-12T02:22:37Z START ext13-p5-vt_a2e_orig-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-12T02:24:47Z END   ext13-p5-vt_a2e_orig-qwen3-expert rc=0 (130s)
+2026-10-12T02:24:48Z START ext13-p5-vt_a2e_orig-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-12T02:26:01Z END   ext13-p5-vt_a2e_orig-qwen3-heads rc=0 (73s)
+2026-10-12T02:26:01Z START ext13-p5-vt_a2e_orig-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-12T02:29:15Z END   ext13-p5-vt_a2e_orig-qwen3-grid rc=0 (194s)
+2026-10-12T02:29:50Z START ext13ci-s1-vt_a2e_orig-qwen3 (waited 0s): python scripts/ext13ci_heads_run.py vt_a2e_orig qwen3 --max-passes 6
+2026-10-12T02:31:03Z END   ext13ci-s1-vt_a2e_orig-qwen3 rc=0 (73s)
+2026-10-12T02:31:03Z START ext13ko-qwen3 (waited 56s): python scripts/ext13ko_run.py qwen3 --conds vt_a2e_orig --with-wr --time-budget 1320
+2026-10-12T02:34:14Z END   ext13ko-qwen3 rc=0 (191s)
+2026-10-12T02:34:14Z START ext13-p5-f2e-qwen3-sweep (waited 239s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --max-rows 60000
+2026-10-12T02:35:35Z END   ext13-p5-f2e-qwen3-sweep rc=0 (81s)
+2026-10-12T02:35:35Z START ext13ci-s2-g3-qwen3 (waited 265s): python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+2026-10-12T02:49:08Z END   ext13ci-s2-g3-qwen3 rc=0 (813s)
+2026-10-12T02:49:08Z START ext13ab-qwen3-8 (waited 1031s): python scripts/ext13ab_run.py qwen3 --tasks vt_a2e_orig_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-12T03:00:32Z END   ext13ab-qwen3-8 rc=0 (684s)
+2026-10-12T03:00:32Z START ext13-p5-f2e-qwen3-joint (waited 1497s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --max-rows 30000
+2026-10-12T03:01:42Z END   ext13-p5-f2e-qwen3-joint rc=0 (70s)
+2026-10-12T03:01:42Z START ext13ci-s2-g3-qwen3 (waited 754s): python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+2026-10-12T03:11:06Z END   ext13ci-s2-g3-qwen3 rc=0 (564s)
+2026-10-12T03:11:06Z START ext13syn-gpucheck (waited 655s): python scripts/ext13syn_gpucheck.py
+2026-10-12T03:13:55Z END   ext13syn-gpucheck rc=0 (169s)
+2026-10-12T03:13:55Z START ext13-p5-f2e-qwen3-dla (waited 733s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --chunk 512
+2026-10-12T03:15:00Z END   ext13-p5-f2e-qwen3-dla rc=0 (65s)
+2026-10-12T03:15:00Z START ext13-p5-f2e-qwen3-direct (waited 0s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --splits discovery,validation
+2026-10-12T03:16:00Z END   ext13-p5-f2e-qwen3-direct rc=0 (60s)
+2026-10-12T03:16:01Z START ext13-p5-f2e-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-12T03:18:08Z END   ext13-p5-f2e-qwen3-expert rc=0 (127s)
+2026-10-12T03:18:09Z START ext13-p5-f2e-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-12T03:19:12Z END   ext13-p5-f2e-qwen3-heads rc=0 (63s)
+2026-10-12T03:19:12Z START ext13-p5-f2e-qwen3-grid (waited 0s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-12T03:22:04Z END   ext13-p5-f2e-qwen3-grid rc=0 (172s)
+2026-10-12T03:22:38Z START ext13-p5-f2e-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --max-rows 40000
+2026-10-12T03:24:27Z END   ext13-p5-f2e-mixtral_bos-sweep rc=0 (109s)
+2026-10-12T03:24:27Z START ext13ko-qwen3 (waited 72s): python scripts/ext13ko_run.py qwen3 --conds f2e --with-wr --time-budget 1320
+2026-10-12T03:27:45Z END   ext13ko-qwen3 rc=0 (198s)
+2026-10-12T03:27:45Z START ext13ci-s1-f2e-qwen3 (waited 224s): python scripts/ext13ci_heads_run.py f2e qwen3 --max-passes 6
+2026-10-12T03:29:00Z END   ext13ci-s1-f2e-qwen3 rc=0 (75s)
+2026-10-12T03:29:00Z START ext13ab-qwen3-9 (waited 289s): python scripts/ext13ab_run.py qwen3 --tasks f2e_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+2026-10-12T03:42:26Z END   ext13ab-qwen3-9 rc=0 (806s)
+2026-10-12T03:42:26Z START ext13-p5-f2e-mixtral_bos-joint (waited 1079s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --families main --max-rows 30000
+2026-10-12T03:44:18Z END   ext13-p5-f2e-mixtral_bos-joint rc=0 (112s)
+2026-10-12T03:44:18Z START ext13ci-s2-g4-qwen3 (waited 912s): python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+2026-10-12T03:56:40Z END   ext13ci-s2-g4-qwen3 rc=0 (742s)
+2026-10-12T03:56:40Z START ext13ko-cross-qwen3 (waited 1549s): python scripts/ext13ko_run.py qwen3 --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,vt_a2e_orig,f2e --phase cross --time-budget 1320
+2026-10-12T04:06:05Z END   ext13ko-cross-qwen3 rc=0 (565s)
+2026-10-12T04:06:05Z START ext13-p5-f2e-mixtral_bos-dla (waited 1307s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --families main --chunk 512
+2026-10-12T04:08:02Z END   ext13-p5-f2e-mixtral_bos-dla rc=0 (117s)
+2026-10-12T04:08:02Z START ext13ci-s2-g4-qwen3 (waited 682s): python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+2026-10-12T04:15:11Z END   ext13ci-s2-g4-qwen3 rc=0 (429s)
+2026-10-12T04:15:11Z START ext13-p5-f2e-mixtral_bos-direct (waited 429s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --splits discovery,validation
+2026-10-12T04:17:03Z END   ext13-p5-f2e-mixtral_bos-direct rc=0 (112s)
+2026-10-12T04:17:03Z START ext13-p5-f2e-mixtral_bos-expert (waited 0s): python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-12T04:18:54Z END   ext13-p5-f2e-mixtral_bos-expert rc=0 (111s)
+2026-10-12T04:18:54Z START ext13-p5-f2e-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+2026-10-12T04:20:44Z END   ext13-p5-f2e-mixtral_bos-heads rc=0 (110s)
+2026-10-12T04:20:44Z START ext13-p5-f2e-mixtral_bos-grid (waited 0s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_f2e_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_f2e_mixtral_bos.json --out p5_f2e_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-12T04:24:10Z END   ext13-p5-f2e-mixtral_bos-grid rc=0 (206s)
+2026-10-12T04:24:44Z START ext13ko-mixtral_bos (waited 0s): python scripts/ext13ko_run.py mixtral_bos --conds f2e --with-wr --time-budget 1320
+2026-10-12T04:29:31Z END   ext13ko-mixtral_bos rc=0 (287s)
+2026-10-12T04:29:31Z START ext13ci-s1-f2e-mixtral_bos (waited 210s): python scripts/ext13ci_heads_run.py f2e mixtral_bos --max-passes 4
+2026-10-12T04:31:22Z END   ext13ci-s1-f2e-mixtral_bos rc=0 (111s)
+2026-10-12T04:31:22Z START ext13ab-mixtral-19 (waited 273s): python scripts/ext13ab_run.py mixtral --tasks f2e_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-12T04:51:14Z END   ext13ab-mixtral-19 rc=0 (1192s)
+2026-10-12T04:51:14Z START ext13ci-s2-g4-mixtral_bos (waited 1186s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g4 --conds f2e --max-passes 10
+2026-10-12T05:06:52Z END   ext13ci-s2-g4-mixtral_bos rc=0 (938s)
+2026-10-12T05:06:52Z START ext13ko-cross-mixtral_bos (waited 2109s): python scripts/ext13ko_run.py mixtral_bos --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,f2e --phase cross --time-budget 1320
+2026-10-12T05:19:26Z END   ext13ko-cross-mixtral_bos rc=0 (754s)
+2026-10-12T05:19:26Z START ext13ab-mixtral-20 (waited 1080s): python scripts/ext13ab_run.py mixtral --tasks f2e_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+2026-10-12T05:21:14Z END   ext13ab-mixtral-20 rc=0 (108s)
+2026-10-12T05:21:14Z START ext13ci-s2-g4-mixtral_bos (waited 862s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g4 --conds f2e --max-passes 10
+2026-10-12T05:35:32Z END   ext13ci-s2-g4-mixtral_bos rc=0 (858s)

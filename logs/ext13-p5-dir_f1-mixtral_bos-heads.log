@@ -1,0 +1,15 @@
+2026-10-11T10:26:51Z START ext13-p5-dir_f1-mixtral_bos-heads (waited 0s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+10:26:53 mixtral -> p5_dir_f1_mixtral_bos: 376 directed cases, layers [15, 16, 19, 21, 22] (null layer 22), 32 heads, 2 passes, 65800 spawn rows; mentions: pair columns mention_a_pos / mention_b_pos
+10:26:59 pass 1/2: layers [15, 16, 19], 752 prefill rows, 39480 spawn rows
+10:27:07   layer   0: load-wait 6.11s compute 0.90s  wf_rows=0
+10:27:29   layer   8: load-wait 2.27s compute 0.47s  wf_rows=0
+10:27:54   layer  16: load-wait 0.37s compute 0.96s  wf_rows=26320
+10:28:21   layer  24: load-wait 0.78s compute 1.23s  wf_rows=39480
+10:28:46   layer  31: load-wait 1.66s compute 1.23s  wf_rows=39480
+10:28:46   pass done: 752 prefill rows (T=44), 39480 spawn rows, 106.1s
+10:28:46 pass 1: 106s; 39480 rows
+10:28:46 pass 2/2: layers [21, 22], 752 prefill rows, 26320 spawn rows
+10:30:16 pass 2: 89s; 65800 rows
+2026-10-11T10:30:23Z END   ext13-p5-dir_f1-mixtral_bos-heads rc=0 (212s)

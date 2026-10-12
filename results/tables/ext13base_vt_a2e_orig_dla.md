@@ -1,0 +1,5 @@
+**vt_a2e_orig W4 DLA: direct logit attribution of the final-position sublayer outputs (main family)**
+
+| Model | DLA attention / drop | DLA MoE / drop | Attention share of DLA | Top attention layers | Top MoE layers |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 1.525 [1.480, 1.570] | -0.523 [-0.568, -0.478] | 1.52 [1.48, 1.57] | L45 +0.822, L42 +0.525, L43 +0.324 | L44 +0.028, L42 +0.016, L43 +0.015 |

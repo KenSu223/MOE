@@ -1,0 +1,18 @@
+2026-10-11T10:47:51Z START ext13-p5-dir_opt-qwen3-joint (waited 215s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_opt_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_opt_qwen3.json --out p5_dir_opt_qwen3 --agent p5-data --families main --max-rows 30000
+10:47:53 qwen3 -> p5_dir_opt_qwen3: 360 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+10:47:59 pass 1/1: 720 prefill rows, 2160 multi rows
+10:48:03   layer   0: load-wait 2.92s compute 0.71s  wf_rows=2160
+10:48:12   layer   8: load-wait 1.11s compute 0.13s  wf_rows=2160
+10:48:22   layer  16: load-wait 1.12s compute 0.13s  wf_rows=2160
+10:48:32   layer  24: load-wait 1.11s compute 0.13s  wf_rows=2160
+10:48:42   layer  32: load-wait 1.11s compute 0.13s  wf_rows=2160
+10:48:52   layer  40: load-wait 1.31s compute 0.16s  wf_rows=2160
+10:49:02   layer  47: load-wait 1.12s compute 0.12s  wf_rows=2160
+10:49:02   pass done: 720 prefill rows (T=29), 2160 spawn rows, 63.0s
+10:49:03 denoise  all_attn  all     : effect/drop +0.999 (mean effect +8.98, drop 8.98)
+10:49:03 denoise  all_block all     : effect/drop +1.000 (mean effect +8.98, drop 8.98)
+10:49:03 denoise  all_moe   all     : effect/drop +0.808 (mean effect +7.25, drop 8.98)
+10:49:03 noise    all_attn  all     : effect/drop +0.999 (mean effect +8.97, drop 8.98)
+10:49:03 noise    all_block all     : effect/drop +1.000 (mean effect +8.98, drop 8.98)
+10:49:03 noise    all_moe   all     : effect/drop +0.809 (mean effect +7.26, drop 8.98)
+2026-10-11T10:49:09Z END   ext13-p5-dir_opt-qwen3-joint rc=0 (78s)

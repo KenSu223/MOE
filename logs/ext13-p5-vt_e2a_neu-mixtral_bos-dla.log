@@ -1,0 +1,11 @@
+2026-10-12T00:46:52Z START ext13-p5-vt_e2a_neu-mixtral_bos-dla (waited 0s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --families main --chunk 512
+00:46:53 mixtral -> p5_vt_e2a_neu_mixtral_bos: 512 directed cases, families ['main'], 1 prefill-only passes
+00:47:08   layer   0: load-wait 6.20s compute 0.78s  wf_rows=0
+00:47:30   layer   8: load-wait 2.34s compute 0.35s  wf_rows=0
+00:47:55   layer  16: load-wait 2.93s compute 0.36s  wf_rows=0
+00:48:18   layer  24: load-wait 2.42s compute 0.35s  wf_rows=0
+00:48:37   layer  31: load-wait 2.55s compute 0.35s  wf_rows=0
+00:48:37   pass done: 1024 prefill rows (T=23), 0 spawn rows, 96.2s
+00:48:38 pass 1/1: 96s; DLA total - drop: max |.| 0.209
+00:48:39 direct effect / drop: attention +0.392, MoE +0.608, embedding +0.000
+2026-10-12T00:48:46Z END   ext13-p5-vt_e2a_neu-mixtral_bos-dla rc=0 (114s)

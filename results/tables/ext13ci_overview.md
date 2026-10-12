@@ -1,0 +1,15 @@
+| Condition | Qwen3-30B-A3B-Base: heads in first 10 / r(20) [CI] / k80 / all-MoE | Mixtral-8x7B (BOS): heads in first 10 / r(20) [CI] / k80 / all-MoE |
+|---|---|---|
+| P4 CounterFact | 6.2 / 0.97 [0.95, 1.00] / 8 / 0.53 | 6.4 / 1.00 [0.98, 1.03] / 9 / 0.41 |
+| P4 WinoGrande | 3.6 / 0.93 [0.91, 0.96] / 10 / 0.86 | 2.8 / 0.94 [0.93, 0.95] / 10 / 0.79 |
+| P4 IOI | 9.9 / 0.94 [0.93, 0.96] / 11 / -0.27 |  |
+| f1 (F1 attr→entity) | 8.1 / 0.97 [0.94, 1.00] / 7 / 0.24 | 6.4 / 1.03 [1.00, 1.07] / 8 / 0.23 |
+| dir_f1 (dir: F1 on Phase-3 pairs) | 8.2 / 0.87 [0.84, 0.89] / 13 / 0.11 | 5.9 / 1.00 [0.97, 1.04] / 9 / 0.41 |
+| dir_opt (dir: option swap on the same pairs) | 3.6 / 0.88 [0.86, 0.92] / 13 / 0.81 | 2.6 / 0.89 [0.88, 0.90] / 14 / 0.76 |
+| cp_nat (copy prefix, natural Phase-3 pairs) | 4.3 / 0.87 [0.84, 0.89] / 14 / 0.79 | 2.9 / 0.92 [0.91, 0.94] / 11 / 0.73 |
+| cp_vt_orig (copy prefix, templates orig) | 4.5 / 0.94 [0.86, 1.04] / 11 / 0.70 | 4.0 / 0.94 [0.90, 0.97] / 10 / 0.54 |
+| cp_vt_neu (copy prefix, templates neutral) | 4.5 / 0.93 [0.84, 1.06] / 11 / 0.74 | 3.3 / 0.89 [0.83, 0.97] / 13 / 0.46 |
+| vt_e2a_orig (verb templates e→a, orig verb) | 3.6 / 0.96 [0.89, 1.07] / 10 / 0.82 | 4.2 / 0.93 [0.90, 0.98] / 11 / 0.68 |
+| vt_e2a_neu (verb templates e→a, neutral verb) | 3.6 / 0.92 [0.88, 0.97] / 10 / 0.81 | 4.0 / 0.89 [0.85, 0.94] / 12 / 0.62 |
+| vt_a2e_orig (verb templates a→e, orig verb) | 9.0 / 1.03 [0.90, 1.07] / 6 / 0.21 |  |
+| f2e (F2E natural, blank at end) | 7.4 / 1.02 [0.95, 1.09] / 8 / 0.23 | 6.8 / 0.83 [0.77, 0.90] / 17 / -0.06 |

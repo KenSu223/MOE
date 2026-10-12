@@ -1,0 +1,6 @@
+**vt_e2a_orig: pair sets (directed cases pooled; pair means)**
+
+| Model | Family | Pairs | Units | Mean Δ clean | Drop [95% CI] | Clean top-1 | Names | Probe strata neutral / assoc. / one-sided / reverse | Local assoc | Median T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | 256 | 33 seeds | +3.36 | +6.73 [+6.45, +7.02] | 0.22 | 1.00 | 0.82 / 0.00 / 0.05 / 0.12 | nan | 16 |
+| Mixtral-8x7B, BOS | main | 256 | 32 seeds | +3.18 | +6.36 [+6.12, +6.61] | 0.25 | 1.00 | 0.90 / 0.00 / 0.05 / 0.05 | nan | 18 |

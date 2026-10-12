@@ -1,0 +1,15 @@
+2026-10-12T02:24:48Z START ext13-p5-vt_a2e_orig-qwen3-heads (waited 0s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --families main --layers auto --max-rows 50000
+/home/ubuntu/MOE/scripts/ext7_wino_heads.py:38: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  md = R.loc[fam[f]["discovery"]].mean(0)
+02:24:49 qwen3 -> p5_vt_a2e_orig_qwen3: 194 directed cases, layers [39, 42, 43, 45, 47] (null layer 47), 32 heads, 1 passes, 33950 spawn rows; mentions: pair columns mention_a_pos / mention_b_pos
+02:24:56 pass 1/1: layers [39, 42, 43, 45, 47], 388 prefill rows, 33950 spawn rows
+02:25:00   layer   0: load-wait 3.34s compute 0.61s  wf_rows=0
+02:25:08   layer   8: load-wait 1.09s compute 0.06s  wf_rows=0
+02:25:17   layer  16: load-wait 0.88s compute 0.07s  wf_rows=0
+02:25:24   layer  24: load-wait 1.14s compute 0.06s  wf_rows=0
+02:25:35   layer  32: load-wait 1.91s compute 0.46s  wf_rows=0
+02:25:47   layer  40: load-wait 1.14s compute 0.13s  wf_rows=6790
+02:25:55   layer  47: load-wait 0.90s compute 0.32s  wf_rows=33950
+02:25:55   pass done: 388 prefill rows (T=31), 33950 spawn rows, 59.3s
+02:25:55 pass 1: 59s; 33950 rows
+2026-10-12T02:26:01Z END   ext13-p5-vt_a2e_orig-qwen3-heads rc=0 (73s)

@@ -1,0 +1,33 @@
+2026-10-11T21:10:13Z START ext13ab-mixtral-12 (waited 1662s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos,cp_nat_mixtral_bos_rep --max-passes 13 --budget 50000 --max-tasks 2
+21:10:23 cp_nat_mixtral_bos: 840 cases, 840 rows (408 validation), K=64; passes done 13, queue 8594/8594, greedy left 408
+21:10:23 cp_nat_mixtral_bos_rep: 872 cases, 872 rows (444 validation), K=64; passes done 0, queue 0/7978, greedy left 444
+21:10:25 pass 0: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 20400 spawn rows (adaptive [20400], static groups [0])
+21:10:33   layer   0: load-wait 6.03s compute 1.05s  wf_rows=1296
+21:10:56   layer   8: load-wait 2.66s compute 0.62s  wf_rows=9296
+21:11:19   layer  16: load-wait 1.92s compute 1.03s  wf_rows=20272
+21:11:42   layer  24: load-wait 2.17s compute 0.90s  wf_rows=20400
+21:12:02   layer  31: load-wait 2.03s compute 0.85s  wf_rows=20400
+21:12:02   pass done: 816 prefill rows (T=39), 20400 spawn rows, 96.8s (metrics 0.2s)
+21:12:03 cp_nat_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.03); queue 8594/8594
+21:12:03 cp_nat_mixtral_bos: ALL PASSES COMPLETE
+21:12:03 group pass 0 done in 97s, peak 12.1 GB
+21:12:07 pass 1: tasks ['cp_nat_mixtral_bos_rep'], 1744 prefill rows (T max 40), 49991 spawn rows (adaptive [28416], static groups [1729])
+[W1011 21:13:11.668062569 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2751463424 bytes (free: 1236729856, total: 23686938624).
+[W1011 21:13:17.516730488 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2751463424 bytes (free: 932642816, total: 23686938624).
+[W1011 21:13:17.754666888 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2751463424 bytes (free: 936837120, total: 23686938624).
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext13ab_run.py", line 327, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext13ab_run.py", line 244, in main
+    res = eng.run(pre, spawns, record_routing=any_first, log=log if n_run == 0 else None, diag=diag, metrics=True)
+  File "/home/ubuntu/MOE/.venv/lib/python3.14/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ubuntu/MOE/moetrace/engine.py", line 886, in run
+    ow_h = attn_wavefront(qw, kw, vw, k_att, v_att, wf_parent[:n_wf], pos, scale, chunk=wf_chunk,
+                          sink_valid=has_sink_t if use_sink else None)  # per-head, before o_proj
+  File "/home/ubuntu/MOE/moetrace/engine.py", line 238, in attn_wavefront
+    scores = torch.matmul(qg, kk[:, :, None].transpose(-1, -2)) * scale  # [w, nkv, rep, 1, T(+1)+1]
+             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.56 GiB. GPU 0 has a total capacity of 22.06 GiB of which 893.44 MiB is free. Including non-PyTorch memory, this process has 21.17 GiB memory in use. Of the allocated memory 13.50 GiB is allocated by PyTorch, and 7.37 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+2026-10-11T21:13:24Z END   ext13ab-mixtral-12 rc=1 (191s)

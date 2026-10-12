@@ -1,0 +1,14 @@
+2026-10-11T17:52:47Z START ext13ab-mixtral-8 (waited 2071s): python scripts/ext13ab_run.py mixtral --tasks cp_vt_orig_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+17:52:52 cp_vt_orig_mixtral_bos: 512 cases, 512 rows (256 validation), K=64; passes done 13, queue 5378/5378, greedy left 256
+17:52:53 pass 0: tasks ['cp_vt_orig_mixtral_bos'], 512 prefill rows (T max 31), 12800 spawn rows (adaptive [12800], static groups [0])
+17:53:02   layer   0: load-wait 7.42s compute 1.26s  wf_rows=1568
+17:53:24   layer   8: load-wait 2.54s compute 0.36s  wf_rows=7328
+17:53:48   layer  16: load-wait 2.39s compute 0.50s  wf_rows=12752
+17:54:11   layer  24: load-wait 2.39s compute 0.53s  wf_rows=12800
+17:54:31   layer  31: load-wait 2.44s compute 0.47s  wf_rows=12800
+17:54:31   pass done: 512 prefill rows (T=31), 12800 spawn rows, 97.6s (metrics 0.2s)
+17:54:32 cp_vt_orig_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.20); queue 5378/5378
+17:54:32 cp_vt_orig_mixtral_bos: ALL PASSES COMPLETE
+17:54:32 group pass 0 done in 98s, peak 9.4 GB
+17:54:32 nothing left to run
+2026-10-11T17:54:39Z END   ext13ab-mixtral-8 rc=0 (112s)

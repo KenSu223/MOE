@@ -1,0 +1,62 @@
+2026-10-11T08:55:50Z START ext13ab-mixtral-1 (waited 434s): python scripts/ext13ab_run.py mixtral --tasks f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+08:55:57 f1_mixtral_bos: initialised {'eval_rows': 202, 'noise_rows': 202, 'pool': 64, 'queue_groups': 3638, 'queue_items': 62822}
+08:55:58 f1_mixtral_bos: 404 cases, 404 rows (202 validation), K=64; passes done 0, queue 0/3638, greedy left 202
+08:56:00 pass 0: tasks ['f1_mixtral_bos'], 808 prefill rows (T max 47), 49976 spawn rows (adaptive [12928], static groups [2462])
+08:56:12   layer   0: load-wait 7.55s compute 1.70s  wf_rows=11640
+08:56:34   layer   8: load-wait 1.79s compute 1.12s  wf_rows=27125
+08:56:57   layer  16: load-wait 1.62s compute 1.37s  wf_rows=38976
+08:57:20   layer  24: load-wait 0.92s compute 1.62s  wf_rows=48009
+08:57:40   layer  31: load-wait 1.31s compute 1.60s  wf_rows=49976
+08:57:41   pass done: 808 prefill rows (T=47), 49976 spawn rows, 98.1s (metrics 0.5s)
+08:57:42 f1_mixtral_bos first pass: ceilings for 404 rows (mean all-MoE rescue +1.109); DLA rows 25856 (145 candidate pairs not routed in this pass's clean run)
+08:57:43 f1_mixtral_bos pass 0 done: greedy left 202 (median step 2, median rescue/ceiling 0.69); queue 2462/4042
+08:57:43 group pass 0 done in 98s, peak 15.1 GB
+08:57:46 pass 1: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 44358 spawn rows (adaptive [12524], static groups [1580])
+08:59:14 f1_mixtral_bos: noise_oracle groups added for 202 rows
+08:59:14 f1_mixtral_bos pass 1 done: greedy left 202 (median step 3, median rescue/ceiling 0.89); queue 4042/4244
+08:59:14 group pass 1 done in 87s, peak 13.1 GB
+08:59:15 pass 2: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 15352 spawn rows (adaptive [12322], static groups [202])
+[W1011 08:59:53.971245258 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2984247296 bytes (free: 2293694464, total: 23686938624).
+09:00:41 f1_mixtral_bos pass 2 done: greedy left 202 (median step 4, median rescue/ceiling 1.00); queue 4244/4244
+09:00:41 group pass 2 done in 85s, peak 11.3 GB
+09:00:42 pass 3: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 12120 spawn rows (adaptive [12120], static groups [0])
+[W1011 09:01:30.992081551 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3087007744 bytes (free: 1039597568, total: 23686938624).
+09:02:13 f1_mixtral_bos pass 3 done: greedy left 202 (median step 5, median rescue/ceiling 1.12); queue 4244/4244
+09:02:13 group pass 3 done in 90s, peak 11.0 GB
+09:02:14 pass 4: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 11918 spawn rows (adaptive [11918], static groups [0])
+[W1011 09:02:57.993897952 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2938109952 bytes (free: 2817982464, total: 23686938624).
+09:03:44 f1_mixtral_bos pass 4 done: greedy left 202 (median step 6, median rescue/ceiling 1.20); queue 4244/4244
+09:03:44 group pass 4 done in 89s, peak 11.1 GB
+09:03:45 pass 5: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 11716 spawn rows (adaptive [11716], static groups [0])
+[W1011 09:04:30.663129323 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3087007744 bytes (free: 1335296000, total: 23686938624).
+09:05:13 f1_mixtral_bos pass 5 done: greedy left 202 (median step 7, median rescue/ceiling 1.29); queue 4244/4244
+09:05:13 group pass 5 done in 88s, peak 11.1 GB
+09:05:14 pass 6: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 11514 spawn rows (adaptive [11514], static groups [0])
+[W1011 09:05:57.540771104 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3087007744 bytes (free: 1891041280, total: 23686938624).
+09:06:47 f1_mixtral_bos pass 6 done: greedy left 202 (median step 8, median rescue/ceiling 1.36); queue 4244/4244
+09:06:47 group pass 6 done in 92s, peak 11.1 GB
+09:06:48 pass 7: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 11312 spawn rows (adaptive [11312], static groups [0])
+[W1011 09:07:28.801532388 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3076521984 bytes (free: 1893138432, total: 23686938624).
+09:08:21 f1_mixtral_bos pass 7 done: greedy left 202 (median step 9, median rescue/ceiling 1.36); queue 4244/4244
+09:08:21 group pass 7 done in 92s, peak 11.1 GB
+09:08:22 pass 8: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 11110 spawn rows (adaptive [11110], static groups [0])
+[W1011 09:09:02.813358409 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3087007744 bytes (free: 1165426688, total: 23686938624).
+09:09:55 f1_mixtral_bos pass 8 done: greedy left 202 (median step 10, median rescue/ceiling 1.42); queue 4244/4244
+09:09:55 group pass 8 done in 92s, peak 11.1 GB
+09:09:56 pass 9: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 10908 spawn rows (adaptive [10908], static groups [0])
+[W1011 09:10:31.427896982 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2820669440 bytes (free: 1903624192, total: 23686938624).
+09:11:28 f1_mixtral_bos pass 9 done: greedy left 202 (median step 11, median rescue/ceiling 1.49); queue 4244/4244
+09:11:28 group pass 9 done in 91s, peak 11.1 GB
+09:11:29 pass 10: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 10706 spawn rows (adaptive [10706], static groups [0])
+[W1011 09:11:58.351368866 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2743074816 bytes (free: 2123825152, total: 23686938624).
+09:13:00 f1_mixtral_bos pass 10 done: greedy left 202 (median step 12, median rescue/ceiling 1.50); queue 4244/4244
+09:13:00 group pass 10 done in 91s, peak 11.0 GB
+09:13:01 pass 11: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 10504 spawn rows (adaptive [10504], static groups [0])
+[W1011 09:13:32.203396902 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2814377984 bytes (free: 1727463424, total: 23686938624).
+09:14:29 f1_mixtral_bos pass 11 done: greedy left 202 (median step 13, median rescue/ceiling 1.50); queue 4244/4244
+09:14:29 group pass 11 done in 87s, peak 11.0 GB
+09:14:30 pass 12: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 10302 spawn rows (adaptive [10302], static groups [0])
+[W1011 09:15:01.054765189 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2902458368 bytes (free: 1291255808, total: 23686938624).
+09:16:01 f1_mixtral_bos pass 12 done: greedy left 202 (median step 14, median rescue/ceiling 1.56); queue 4244/4244
+09:16:01 group pass 12 done in 90s, peak 11.0 GB
+2026-10-11T09:16:08Z END   ext13ab-mixtral-1 rc=0 (1218s)

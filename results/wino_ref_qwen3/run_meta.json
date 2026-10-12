@@ -1,0 +1,224 @@
+{
+ "scan": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "n_pairs": {
+   "F2": 840,
+   "F1": 3446
+  },
+  "f1_sample": 3000,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py qwen3",
+  "created_utc": "2026-10-11T02:19:21Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T02:24:10Z"
+ },
+ "scan_verbs": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "mode": "verbs",
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py qwen3 --verbs",
+  "created_utc": "2026-10-11T02:31:51Z",
+  "completed_utc": "2026-10-11T02:35:23Z"
+ },
+ "scan_F1": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "n_pairs": {
+   "F1": 10682
+  },
+  "f1_sample": 0,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py qwen3 --formats F1 --f1-sample 0",
+  "created_utc": "2026-10-11T03:03:02Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T03:10:52Z"
+ },
+ "scan_F2R": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "n_pairs": {
+   "F2R": 646
+  },
+  "f1_sample": 3000,
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py qwen3 --formats F2R",
+  "created_utc": "2026-10-11T03:19:45Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T03:21:44Z"
+ },
+ "scan_verbs_attr2ent": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "mode": "verbs",
+  "margin": 1.0,
+  "max_tokens": 140000,
+  "command": "python scripts/ext13_scan.py qwen3 --verbs --verb-dirs attr2ent",
+  "created_utc": "2026-10-11T03:26:36Z",
+  "completed_utc": "2026-10-11T03:28:41Z"
+ },
+ "p5_scan_probes": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py qwen3 --part probes",
+  "created_utc": "2026-10-11T06:16:43Z",
+  "complete": true,
+  "n_rows": 62904,
+  "n_keys": 13147,
+  "n_passes": 9,
+  "completed_utc": "2026-10-11T06:23:42Z"
+ },
+ "p5_scan_conds": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "part": "conds",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py qwen3 --part conds",
+  "created_utc": "2026-10-11T06:23:49Z",
+  "complete": true,
+  "conds": {
+   "vt_a2e": {
+    "pairs": 7920,
+    "margin": 148,
+    "passes": 4,
+    "rates": {
+     "margin": {
+      "neutral": 0.019,
+      "orig": 0.037,
+      "unrelated": 0.0
+     },
+     "correct_both": {
+      "neutral": 0.216,
+      "orig": 0.268,
+      "unrelated": 0.055
+     },
+     "top1_both": {
+      "neutral": 0.167,
+      "orig": 0.2,
+      "unrelated": 0.051
+     }
+    }
+   },
+   "cp_vt": {
+    "pairs": 13536,
+    "margin": 2360,
+    "passes": 7,
+    "rates": {
+     "margin": {
+      "neutral": 0.219,
+      "orig": 0.266,
+      "unrelated": 0.038
+     },
+     "correct_both": {
+      "neutral": 0.492,
+      "orig": 0.546,
+      "unrelated": 0.203
+     },
+     "top1_both": {
+      "neutral": 0.375,
+      "orig": 0.371,
+      "unrelated": 0.155
+     }
+    }
+   },
+   "cp_nat": {
+    "pairs": 1386,
+    "margin": 1064,
+    "passes": 2,
+    "rates": {
+     "margin": 0.768,
+     "correct_both": 0.905,
+     "top1_both": 0.68
+    }
+   },
+   "mem": {
+    "pairs": 144,
+    "margin": 28,
+    "passes": 1,
+    "rates": {
+     "margin": {
+      "neutral": 0.229,
+      "orig": 0.312,
+      "unrelated": 0.042
+     },
+     "correct_both": {
+      "neutral": 0.417,
+      "orig": 0.5,
+      "unrelated": 0.125
+     },
+     "top1_both": {
+      "neutral": 0.021,
+      "orig": 0.062,
+      "unrelated": 0.0
+     }
+    }
+   }
+  },
+  "completed_utc": "2026-10-11T06:41:42Z"
+ },
+ "p5_scan_conds_cp_options": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "special_tokens": true,
+  "part": "conds",
+  "agent": "p5-data",
+  "command": "python scripts/ext13_p5_scan.py qwen3 --part conds --conds cp_vt,cp_nat --meta-key p5_scan_conds_cp_options",
+  "created_utc": "2026-10-11T09:21:06Z",
+  "complete": true,
+  "conds": {
+   "cp_vt": {
+    "pairs": 15840,
+    "margin": 2921,
+    "passes": 6,
+    "rates": {
+     "margin": {
+      "neutral": 0.217,
+      "orig": 0.31,
+      "unrelated": 0.026
+     },
+     "correct_both": {
+      "neutral": 0.466,
+      "orig": 0.533,
+      "unrelated": 0.085
+     },
+     "top1_both": {
+      "neutral": 0.075,
+      "orig": 0.089,
+      "unrelated": 0.025
+     }
+    }
+   },
+   "cp_nat": {
+    "pairs": 1552,
+    "margin": 1147,
+    "passes": 1,
+    "rates": {
+     "margin": 0.739,
+     "correct_both": 0.926,
+     "top1_both": 0.088
+    }
+   }
+  },
+  "completed_utc": "2026-10-11T09:27:26Z"
+ }
+}

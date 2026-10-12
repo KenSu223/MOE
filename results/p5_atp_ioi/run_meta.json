@@ -1,0 +1,106 @@
+{
+ "fp32_check": {
+  "cases": [
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135,
+   136,
+   137,
+   138,
+   139,
+   140,
+   141,
+   142,
+   143
+  ],
+  "cpu_s": 201.09280610084534,
+  "completed_utc": "2026-10-11T14:35:04Z"
+ },
+ "truth": {
+  "n_cases": 256,
+  "n_spawns": 107999,
+  "chunks": 3,
+  "max_spawn": 45000,
+  "command": "python scripts/ext13atp_engine.py truth --task ioi",
+  "created_utc": "2026-10-11T14:35:48Z",
+  "complete": true,
+  "pass_times_s": [
+   5.100562810897827,
+   4.903374910354614,
+   4.318981647491455,
+   3.1534745693206787
+  ],
+  "gpu_s": 18.325895309448242,
+  "completed_utc": "2026-10-11T14:36:01Z"
+ },
+ "hf": {
+  "command": "python scripts/ext13atp_grad.py --task ioi --time-budget 780",
+  "bs": 256,
+  "ig_m": 16,
+  "complete": true,
+  "started_utc": "2026-10-11T15:02:25Z",
+  "gpu_s_total": 628.5837502479553,
+  "mean_case_s": 2.3051194921135902,
+  "peak_mem_gib": 13.807182788848877,
+  "last_run_utc": "2026-10-11T15:12:54Z"
+ },
+ "fp32_check_patch": {
+  "cases": [
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135
+  ],
+  "cpu_s": 679.8069250583649,
+  "completed_utc": "2026-10-11T15:03:51Z"
+ },
+ "addback": {
+  "n_rows": 128,
+  "n_spawns": 34816,
+  "orders": [
+   "oracle",
+   "atp",
+   "atpstar",
+   "ig8",
+   "dla",
+   "pop",
+   "rand0",
+   "rand1",
+   "rand2"
+  ],
+  "k_grid": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   10,
+   12,
+   16,
+   20,
+   24,
+   32,
+   48,
+   64
+  ],
+  "command": "python scripts/ext13atp_engine.py addback --task ioi",
+  "created_utc": "2026-10-11T15:15:38Z",
+  "complete": true,
+  "pass_times_s": [
+   7.778683423995972
+  ],
+  "gpu_s": 9.432339668273926,
+  "completed_utc": "2026-10-11T15:15:47Z"
+ }
+}

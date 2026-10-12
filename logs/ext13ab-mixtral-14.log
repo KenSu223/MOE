@@ -1,0 +1,14 @@
+2026-10-11T22:42:39Z START ext13ab-mixtral-14 (waited 748s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos_rep --max-passes 13 --budget 37500 --max-tasks 2
+22:42:48 cp_nat_mixtral_bos_rep: 872 cases, 872 rows (444 validation), K=64; passes done 13, queue 9297/9310, greedy left 444
+22:42:50 pass 0: tasks ['cp_nat_mixtral_bos_rep'], 888 prefill rows (T max 39), 22395 spawn rows (adaptive [22200], static groups [13])
+22:42:57   layer   0: load-wait 5.75s compute 1.12s  wf_rows=1255
+22:43:15   layer   8: load-wait 2.20s compute 0.68s  wf_rows=10390
+22:43:37   layer  16: load-wait 1.89s compute 1.06s  wf_rows=22161
+22:43:59   layer  24: load-wait 1.32s compute 0.98s  wf_rows=22395
+22:44:19   layer  31: load-wait 1.95s compute 0.93s  wf_rows=22395
+22:44:19   pass done: 888 prefill rows (T=39), 22395 spawn rows, 89.1s (metrics 0.3s)
+22:44:20 cp_nat_mixtral_bos_rep pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.04); queue 9310/9310
+22:44:20 cp_nat_mixtral_bos_rep: ALL PASSES COMPLETE
+22:44:20 group pass 0 done in 89s, peak 12.4 GB
+22:44:20 nothing left to run
+2026-10-11T22:44:27Z END   ext13ab-mixtral-14 rc=0 (108s)

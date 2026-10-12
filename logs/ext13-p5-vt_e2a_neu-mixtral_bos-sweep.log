@@ -1,0 +1,15 @@
+2026-10-12T00:20:24Z START ext13-p5-vt_e2a_neu-mixtral_bos-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_vt_e2a_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_mixtral_bos.json --out p5_vt_e2a_neu_mixtral_bos --agent p5-data --max-rows 40000
+00:20:25 mixtral -> p5_vt_e2a_neu_mixtral_bos: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 2 passes (49152 spawn rows), T max 23
+00:20:32 pass 1/2: layers 0..25, 1024 prefill rows, 39936 spawn rows
+00:20:40   layer   0: load-wait 7.45s compute 1.15s  wf_rows=1536
+00:21:03   layer   8: load-wait 2.36s compute 0.56s  wf_rows=13824
+00:21:26   layer  16: load-wait 2.13s compute 0.76s  wf_rows=26112
+00:21:50   layer  24: load-wait 1.96s compute 0.97s  wf_rows=38400
+00:22:10   layer  31: load-wait 1.89s compute 1.01s  wf_rows=39936
+00:22:10   pass done: 1024 prefill rows (T=23), 39936 spawn rows, 98.6s (metrics 0.5s)
+00:22:11 pass 2/2: layers 26..31, 1024 prefill rows, 9216 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+00:23:45 family main: layer disc L19; attn_layer disc L19; block disc L19
+00:23:45 Δclean +2.85 Δcorrupt -2.85 drop +5.70; {"layer_discovery_argmax": 19, "layer_discovery_max": 1.02, "layer_discovery_top5": [[19, 1.02], [20, 0.837], [23, 0.609], [27, 0.607], [21, 0.59]], "layer_validation_argmax": 19, "layer_validation_max": 1.014, "layer_validation_top5": [[19, 1.014], [20, 0.962], [22, 0.767], [21, 0.677], [18, 0.56]], "attn_layer_discovery_argmax": 19, "attn_layer_discovery_max": 0.891, "attn_layer_discovery_top5": [[19, 0.891], [13, 0.59], [25, 0.367], [16, 0.276], [8, 0.25]], "attn_layer_validation_argmax": 19, "attn_layer_validation_max": 0.84, "attn_layer_validation_top5": [[19, 0.84], [13, 0.723], [15, 0.5
+2026-10-12T00:23:51Z END   ext13-p5-vt_e2a_neu-mixtral_bos-sweep rc=0 (207s)

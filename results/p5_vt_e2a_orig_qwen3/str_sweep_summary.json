@@ -1,0 +1,158 @@
+{
+ "n_cases": 512,
+ "pass_times_s": [
+  63.582536458969116,
+  58.14609384536743
+ ],
+ "mean_delta_clean": 3.3568115234375,
+ "mean_delta_corrupt": -3.373779296875,
+ "mean_drop": 6.7305908203125,
+ "families": {
+  "main": {
+   "layer_discovery_argmax": 39,
+   "layer_discovery_max": 1.056,
+   "layer_discovery_top5": [
+    [
+     39,
+     1.056
+    ],
+    [
+     42,
+     1.019
+    ],
+    [
+     41,
+     0.874
+    ],
+    [
+     43,
+     0.823
+    ],
+    [
+     44,
+     0.533
+    ]
+   ],
+   "layer_validation_argmax": 43,
+   "layer_validation_max": 1.095,
+   "layer_validation_top5": [
+    [
+     43,
+     1.095
+    ],
+    [
+     41,
+     0.963
+    ],
+    [
+     42,
+     0.903
+    ],
+    [
+     39,
+     0.805
+    ],
+    [
+     38,
+     0.604
+    ]
+   ],
+   "attn_layer_discovery_argmax": 42,
+   "attn_layer_discovery_max": 0.43,
+   "attn_layer_discovery_top5": [
+    [
+     42,
+     0.43
+    ],
+    [
+     7,
+     0.402
+    ],
+    [
+     38,
+     0.395
+    ],
+    [
+     41,
+     0.384
+    ],
+    [
+     40,
+     0.333
+    ]
+   ],
+   "attn_layer_validation_argmax": 42,
+   "attn_layer_validation_max": 0.319,
+   "attn_layer_validation_top5": [
+    [
+     42,
+     0.319
+    ],
+    [
+     41,
+     0.296
+    ],
+    [
+     43,
+     0.259
+    ],
+    [
+     26,
+     0.232
+    ],
+    [
+     40,
+     0.176
+    ]
+   ],
+   "block_discovery_argmax": 42,
+   "block_discovery_max": 1.384,
+   "block_discovery_top5": [
+    [
+     42,
+     1.384
+    ],
+    [
+     41,
+     1.17
+    ],
+    [
+     39,
+     1.144
+    ],
+    [
+     43,
+     1.001
+    ],
+    [
+     40,
+     0.735
+    ]
+   ],
+   "block_validation_argmax": 43,
+   "block_validation_max": 1.291,
+   "block_validation_top5": [
+    [
+     43,
+     1.291
+    ],
+    [
+     41,
+     1.248
+    ],
+    [
+     42,
+     1.19
+    ],
+    [
+     39,
+     0.905
+    ],
+    [
+     38,
+     0.724
+    ]
+   ]
+  }
+ }
+}

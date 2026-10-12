@@ -1,0 +1,16 @@
+2026-10-12T02:34:14Z START ext13-p5-f2e-qwen3-sweep (waited 239s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --max-rows 60000
+02:34:15 qwen3 -> p5_f2e_qwen3: 128 directed cases (64 pairs), families {'main': {'discovery': 64, 'validation': 64}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (18432 spawn rows), T max 30
+02:34:21 pass 1/1: layers 0..47, 256 prefill rows, 18432 spawn rows
+02:34:26   layer   0: load-wait 3.98s compute 0.75s  wf_rows=384
+02:34:34   layer   8: load-wait 1.07s compute 0.12s  wf_rows=3456
+02:34:43   layer  16: load-wait 0.96s compute 0.10s  wf_rows=6528
+02:34:52   layer  24: load-wait 1.07s compute 0.12s  wf_rows=9600
+02:35:02   layer  32: load-wait 1.48s compute 0.16s  wf_rows=12672
+02:35:11   layer  40: load-wait 1.02s compute 0.19s  wf_rows=15744
+02:35:27   layer  47: load-wait 0.82s compute 0.20s  wf_rows=18432
+02:35:27   pass done: 256 prefill rows (T=30), 18432 spawn rows, 65.9s (metrics 0.7s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+02:35:29 family main: layer disc L43; attn_layer disc L42; block disc L42
+02:35:29 Δclean +4.11 Δcorrupt -4.11 drop +8.22; {"layer_discovery_argmax": 43, "layer_discovery_max": 0.635, "layer_discovery_top5": [[43, 0.635], [44, 0.578], [37, 0.48], [42, 0.322], [36, 0.307]], "layer_validation_argmax": 37, "layer_validation_max": 0.598, "layer_validation_top5": [[37, 0.598], [43, 0.538], [44, 0.504], [42, 0.37], [38, 0.357]], "attn_layer_discovery_argmax": 42, "attn_layer_discovery_max": 1.637, "attn_layer_discovery_top5": [[42, 1.637], [45, 1.512], [43, 1.42], [39, 1.041], [41, 0.521]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 1.736, "attn_layer_validation_top5": [[42, 1.736], [45, 1.705], [4
+2026-10-12T02:35:35Z END   ext13-p5-f2e-qwen3-sweep rc=0 (81s)

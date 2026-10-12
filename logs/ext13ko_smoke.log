@@ -1,0 +1,18 @@
+2026-10-11T06:13:48Z START ext13ko-smoke (waited 377s): python scripts/ext13ko_run.py qwen3 --conds f1pre --suffix _smoke --limit 4 --with-wr --time-budget 900
+06:13:52 f1pre/qwen3 main: 2 of 2 passes to run
+06:13:57   layer   0: load-wait 3.37s compute 0.67s  wf_rows=0
+06:14:05   layer   8: load-wait 1.40s compute 0.10s  wf_rows=0
+06:14:13   layer  16: load-wait 0.99s compute 0.10s  wf_rows=0
+06:14:23   layer  24: load-wait 1.13s compute 0.10s  wf_rows=0
+06:14:32   layer  32: load-wait 1.12s compute 0.10s  wf_rows=0
+06:14:42   layer  40: load-wait 1.13s compute 0.10s  wf_rows=0
+06:14:51   layer  47: load-wait 1.14s compute 0.10s  wf_rows=0
+06:14:51   pass done: 600 prefill rows (T=34), 0 spawn rows, 57.8s (metrics 0.0s)
+06:14:51 f1pre pass main_p000: 600 rows, T=34, padded 20400, 58.1s, peak 3.9 GB
+06:15:39 f1pre pass null_p000: 24 rows, T=34, padded 816, 48.5s, peak 3.5 GB
+06:15:39 f1pre/qwen3 main complete
+06:15:42 f1pre/qwen3 writer pass: 32 prompts, T <= 36, layers [37, 39, 41, 42, 43, 44]
+06:16:25 f1pre writer pass done in 43s, peak 3.5 GB
+06:16:35 f1pre writer projections: 390 vectors
+06:16:35 exit: 2 passes run, 164s, out_of_time=False
+2026-10-11T06:16:42Z END   ext13ko-smoke rc=0 (174s)

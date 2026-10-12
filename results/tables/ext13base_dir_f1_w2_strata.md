@@ -1,0 +1,36 @@
+**dir_f1 W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 14 | 4.53 | 0.021 [0.004, 0.038] | 0.306 [0.276, 0.337] | 0.84 [0.76, 0.87] |
+| Qwen3-30B-A3B-Base | person-name options | False | 166 | 5.25 | 0.094 [0.081, 0.105] | 0.206 [0.196, 0.217] | 0.68 [0.66, 0.70] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 89 | 5.12 | 0.088 [0.074, 0.102] | 0.240 [0.227, 0.253] | 0.74 [0.71, 0.75] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 91 | 5.28 | 0.090 [0.073, 0.107] | 0.188 [0.174, 0.202] | 0.65 [0.62, 0.68] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 10 | 5.68 | 0.036 [0.018, 0.060] | 0.195 [0.138, 0.252] | 0.67 [0.61, 0.73] |
+| Qwen3-30B-A3B-Base | probe-associative | False | 170 | 5.17 | 0.092 [0.081, 0.104] | 0.214 [0.203, 0.225] | 0.70 [0.67, 0.71] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 42 | 5.42 | 0.110 [0.085, 0.135] | 0.188 [0.170, 0.207] | 0.64 [0.60, 0.67] |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 138 | 5.13 | 0.082 [0.070, 0.095] | 0.221 [0.209, 0.233] | 0.71 [0.69, 0.73] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 39 | 5.02 | 0.081 [0.056, 0.109] | 0.185 [0.163, 0.209] | 0.66 [0.61, 0.70] |
+| Qwen3-30B-A3B-Base | probe reverse | False | 141 | 5.25 | 0.091 [0.079, 0.103] | 0.220 [0.209, 0.232] | 0.71 [0.68, 0.72] |
+| Qwen3-30B-A3B-Base | Phase-3 local-context assoc | True | 28 | 5.66 | 0.097 [0.072, 0.125] | 0.164 [0.136, 0.191] | 0.62 [0.58, 0.67] |
+| Qwen3-30B-A3B-Base | Phase-3 local-context assoc | False | 152 | 5.11 | 0.087 [0.075, 0.099] | 0.223 [0.212, 0.234] | 0.71 [0.69, 0.73] |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | True | 11 | 4.53 | 0.020 [-0.028, 0.067] | 0.159 [0.121, 0.200] | 0.62 [0.52, 0.69] |
+| Qwen3-30B-A3B-Base | AfLite survivor (train_debiased) | False | 169 | 5.24 | 0.093 [0.081, 0.104] | 0.216 [0.205, 0.227] | 0.70 [0.68, 0.72] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 117 | 5.19 | 0.090 [0.077, 0.103] | 0.228 [0.217, 0.240] | 0.71 [0.68, 0.73] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 63 | 5.21 | 0.087 [0.066, 0.108] | 0.185 [0.165, 0.206] | 0.66 [0.63, 0.69] |
+| Mixtral-8x7B, BOS | person-name options | True | 1 |  |  |  |  |
+| Mixtral-8x7B, BOS | person-name options | False | 187 | 4.62 | 0.157 [0.146, 0.168] | 0.267 [0.254, 0.281] | 0.51 [0.49, 0.52] |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | True | 86 | 4.40 | 0.164 [0.146, 0.181] | 0.279 [0.259, 0.299] | 0.51 [0.49, 0.53] |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | False | 102 | 4.81 | 0.150 [0.137, 0.164] | 0.260 [0.242, 0.277] | 0.51 [0.49, 0.53] |
+| Mixtral-8x7B, BOS | probe-associative | True | 7 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-associative | False | 181 | 4.61 | 0.158 [0.147, 0.169] | 0.271 [0.258, 0.284] | 0.51 [0.49, 0.52] |
+| Mixtral-8x7B, BOS | probe one-sided | True | 41 | 4.66 | 0.157 [0.136, 0.179] | 0.263 [0.236, 0.293] | 0.51 [0.47, 0.54] |
+| Mixtral-8x7B, BOS | probe one-sided | False | 147 | 4.61 | 0.156 [0.144, 0.169] | 0.270 [0.255, 0.284] | 0.51 [0.49, 0.53] |
+| Mixtral-8x7B, BOS | probe reverse | True | 54 | 4.91 | 0.150 [0.132, 0.169] | 0.265 [0.244, 0.285] | 0.51 [0.48, 0.53] |
+| Mixtral-8x7B, BOS | probe reverse | False | 134 | 4.51 | 0.159 [0.146, 0.173] | 0.269 [0.253, 0.286] | 0.51 [0.49, 0.53] |
+| Mixtral-8x7B, BOS | Phase-3 local-context assoc | True | 39 | 5.00 | 0.170 [0.148, 0.193] | 0.242 [0.214, 0.271] | 0.47 [0.43, 0.49] |
+| Mixtral-8x7B, BOS | Phase-3 local-context assoc | False | 149 | 4.52 | 0.152 [0.141, 0.165] | 0.275 [0.262, 0.290] | 0.52 [0.50, 0.54] |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | True | 11 | 4.49 | 0.168 [0.132, 0.217] | 0.196 [0.154, 0.237] | 0.44 [0.40, 0.47] |
+| Mixtral-8x7B, BOS | AfLite survivor (train_debiased) | False | 177 | 4.63 | 0.155 [0.144, 0.167] | 0.272 [0.259, 0.286] | 0.51 [0.50, 0.53] |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 101 | 4.68 | 0.150 [0.136, 0.165] | 0.283 [0.267, 0.300] | 0.52 [0.50, 0.54] |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 87 | 4.55 | 0.164 [0.147, 0.180] | 0.250 [0.230, 0.271] | 0.49 [0.47, 0.51] |

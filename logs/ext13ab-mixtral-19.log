@@ -1,0 +1,51 @@
+2026-10-12T04:31:22Z START ext13ab-mixtral-19 (waited 273s): python scripts/ext13ab_run.py mixtral --tasks f2e_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+04:31:26 f2e_mixtral_bos: initialised {'eval_rows': 36, 'noise_rows': 36, 'pool': 64, 'queue_groups': 650, 'queue_items': 11196}
+04:31:26 f2e_mixtral_bos: 72 cases, 72 rows (36 validation), K=64; passes done 0, queue 0/650, greedy left 36
+04:31:27 pass 0: tasks ['f2e_mixtral_bos'], 144 prefill rows (T max 28), 13500 spawn rows (adaptive [2304], static groups [650])
+04:31:35   layer   0: load-wait 6.18s compute 0.72s  wf_rows=2848
+04:31:55   layer   8: load-wait 2.04s compute 0.18s  wf_rows=6516
+04:32:18   layer  16: load-wait 2.65s compute 0.25s  wf_rows=9355
+04:32:40   layer  24: load-wait 2.62s compute 0.31s  wf_rows=12696
+04:33:00   layer  31: load-wait 2.60s compute 0.31s  wf_rows=13500
+04:33:00   pass done: 144 prefill rows (T=28), 13500 spawn rows, 92.8s (metrics 0.2s)
+04:33:01 f2e_mixtral_bos first pass: ceilings for 72 rows (mean all-MoE rescue -0.495); DLA rows 4608 (31 candidate pairs not routed in this pass's clean run)
+04:33:01 f2e_mixtral_bos: noise_oracle groups added for 36 rows
+04:33:01 f2e_mixtral_bos pass 0 done: greedy left 36 (median step 2, median rescue/ceiling 0.90); queue 650/758
+04:33:01 group pass 0 done in 93s, peak 8.1 GB
+04:33:01 pass 1: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 3852 spawn rows (adaptive [2232], static groups [108])
+04:34:25 f2e_mixtral_bos pass 1 done: greedy left 36 (median step 3, median rescue/ceiling 1.15); queue 758/758
+04:34:25 group pass 1 done in 84s, peak 6.2 GB
+04:34:26 pass 2: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2196 spawn rows (adaptive [2196], static groups [0])
+04:35:55 f2e_mixtral_bos pass 2 done: greedy left 36 (median step 4, median rescue/ceiling 1.20); queue 758/758
+04:35:55 group pass 2 done in 89s, peak 6.1 GB
+04:35:56 pass 3: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2160 spawn rows (adaptive [2160], static groups [0])
+04:37:28 f2e_mixtral_bos pass 3 done: greedy left 36 (median step 5, median rescue/ceiling 1.35); queue 758/758
+04:37:28 group pass 3 done in 92s, peak 6.1 GB
+04:37:28 pass 4: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2124 spawn rows (adaptive [2124], static groups [0])
+04:39:00 f2e_mixtral_bos pass 4 done: greedy left 36 (median step 6, median rescue/ceiling 1.50); queue 758/758
+04:39:00 group pass 4 done in 92s, peak 6.1 GB
+04:39:00 pass 5: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2088 spawn rows (adaptive [2088], static groups [0])
+04:40:28 f2e_mixtral_bos pass 5 done: greedy left 36 (median step 7, median rescue/ceiling 1.56); queue 758/758
+04:40:28 group pass 5 done in 87s, peak 6.1 GB
+04:40:28 pass 6: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2052 spawn rows (adaptive [2052], static groups [0])
+04:42:00 f2e_mixtral_bos pass 6 done: greedy left 36 (median step 8, median rescue/ceiling 1.65); queue 758/758
+04:42:00 group pass 6 done in 91s, peak 6.1 GB
+04:42:00 pass 7: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 2016 spawn rows (adaptive [2016], static groups [0])
+04:43:28 f2e_mixtral_bos pass 7 done: greedy left 36 (median step 9, median rescue/ceiling 1.65); queue 758/758
+04:43:28 group pass 7 done in 88s, peak 6.1 GB
+04:43:28 pass 8: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 1980 spawn rows (adaptive [1980], static groups [0])
+04:45:00 f2e_mixtral_bos pass 8 done: greedy left 36 (median step 10, median rescue/ceiling 1.70); queue 758/758
+04:45:00 group pass 8 done in 92s, peak 6.1 GB
+04:45:01 pass 9: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 1944 spawn rows (adaptive [1944], static groups [0])
+04:46:33 f2e_mixtral_bos pass 9 done: greedy left 36 (median step 11, median rescue/ceiling 1.75); queue 758/758
+04:46:33 group pass 9 done in 92s, peak 6.1 GB
+04:46:33 pass 10: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 1908 spawn rows (adaptive [1908], static groups [0])
+04:48:05 f2e_mixtral_bos pass 10 done: greedy left 36 (median step 12, median rescue/ceiling 1.75); queue 758/758
+04:48:05 group pass 10 done in 91s, peak 6.1 GB
+04:48:05 pass 11: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 1872 spawn rows (adaptive [1872], static groups [0])
+04:49:35 f2e_mixtral_bos pass 11 done: greedy left 36 (median step 13, median rescue/ceiling 1.75); queue 758/758
+04:49:35 group pass 11 done in 89s, peak 6.1 GB
+04:49:35 pass 12: tasks ['f2e_mixtral_bos'], 72 prefill rows (T max 28), 1836 spawn rows (adaptive [1836], static groups [0])
+04:51:07 f2e_mixtral_bos pass 12 done: greedy left 36 (median step 14, median rescue/ceiling 1.75); queue 758/758
+04:51:07 group pass 12 done in 92s, peak 6.1 GB
+2026-10-12T04:51:14Z END   ext13ab-mixtral-19 rc=0 (1192s)

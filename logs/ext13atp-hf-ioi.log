@@ -1,0 +1,22 @@
+2026-10-11T15:02:17Z START p5atp-hf-ioi (waited 227s): python scripts/ext13atp_grad.py --task ioi --time-budget 780
+15:02:25 ioi: 256 cases, 0 done, 256 to do
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:36,  4.82it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:25,  6.31it/s]Loading weights:  15%|█▍        | 26/179 [00:04<00:23,  6.63it/s]Loading weights:  21%|██        | 37/179 [00:05<00:21,  6.74it/s]Loading weights:  21%|██        | 38/179 [00:05<00:20,  6.82it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:19,  6.75it/s]Loading weights:  33%|███▎      | 59/179 [00:08<00:17,  6.78it/s]Loading weights:  39%|███▉      | 70/179 [00:10<00:16,  6.71it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:14,  6.75it/s]Loading weights:  51%|█████▏    | 92/179 [00:13<00:12,  6.73it/s]Loading weights:  58%|█████▊    | 103/179 [00:15<00:11,  6.76it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.76it/s]Loading weights:  70%|██████▉   | 125/179 [00:18<00:08,  6.75it/s]Loading weights:  76%|███████▌  | 136/179 [00:20<00:06,  6.72it/s]Loading weights:  82%|████████▏ | 147/179 [00:21<00:04,  6.64it/s]Loading weights:  88%|████████▊ | 158/179 [00:23<00:03,  6.65it/s]Loading weights:  94%|█████████▍| 169/179 [00:25<00:01,  6.60it/s]Loading weights: 100%|██████████| 179/179 [00:25<00:00,  7.04it/s]
+15:03:03 model loaded (37s)
+15:03:52 16 cases this run, 3.05s/case, peak mem 13.8 GiB
+15:04:28 32 cases this run, 2.65s/case, peak mem 13.8 GiB
+15:05:04 48 cases this run, 2.53s/case, peak mem 13.8 GiB
+15:05:41 64 cases this run, 2.47s/case, peak mem 13.8 GiB
+15:06:16 80 cases this run, 2.42s/case, peak mem 13.8 GiB
+15:06:52 96 cases this run, 2.38s/case, peak mem 13.8 GiB
+15:07:29 112 cases this run, 2.38s/case, peak mem 13.8 GiB
+15:08:06 128 cases this run, 2.37s/case, peak mem 13.8 GiB
+15:08:42 144 cases this run, 2.36s/case, peak mem 13.8 GiB
+15:09:18 160 cases this run, 2.34s/case, peak mem 13.8 GiB
+15:09:54 176 cases this run, 2.33s/case, peak mem 13.8 GiB
+15:10:30 192 cases this run, 2.33s/case, peak mem 13.8 GiB
+15:11:05 208 cases this run, 2.32s/case, peak mem 13.8 GiB
+15:11:41 224 cases this run, 2.31s/case, peak mem 13.8 GiB
+15:12:17 240 cases this run, 2.31s/case, peak mem 13.8 GiB
+15:12:53 256 cases this run, 2.31s/case, peak mem 13.8 GiB
+15:12:54 ioi: COMPLETE; 256/256 cases; run 629s
+2026-10-11T15:12:55Z END   p5atp-hf-ioi rc=0 (638s)

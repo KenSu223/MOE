@@ -1,0 +1,21 @@
+2026-10-11T06:16:42Z START ext13-p5-probes-qwen3 (waited 295s): python scripts/ext13_p5_scan.py qwen3 --part probes
+06:16:51 probes: 62904 rows, 13120 keys
+06:16:56   layer   0: load-wait 3.92s compute 1.13s  wf_rows=0
+06:17:04   layer   8: load-wait 0.51s compute 0.59s  wf_rows=0
+06:17:12   layer  16: load-wait 0.23s compute 0.59s  wf_rows=0
+06:17:21   layer  24: load-wait 0.51s compute 0.59s  wf_rows=0
+06:17:30   layer  32: load-wait 0.43s compute 0.59s  wf_rows=0
+06:17:42   layer  40: load-wait 0.98s compute 0.59s  wf_rows=0
+06:17:49   layer  47: load-wait 0.83s compute 0.59s  wf_rows=0
+06:17:49   pass done: 10000 prefill rows (T=14), 0 spawn rows, 58.5s
+06:17:49   pass 1/9 (10000 rows, 58s)
+06:18:38   pass 2/9 (7777 rows, 48s)
+06:19:26   pass 3/9 (7557 rows, 48s)
+06:20:09   pass 4/9 (7368 rows, 43s)
+06:20:55   pass 5/9 (7224 rows, 45s)
+06:21:37   pass 6/9 (6363 rows, 42s)
+06:22:18   pass 7/9 (6363 rows, 42s)
+06:22:58   pass 8/9 (6086 rows, 40s)
+06:23:41   pass 9/9 (4166 rows, 42s)
+06:23:42 probe values written {'v1_a': {'count': 13120.0, 'mean': 0.051, 'std': 0.785, 'min': -5.5, '25%': -0.438, '50%': 0.0, '75%': 0.5, 'max': 5.562}, 'v1_b': {'count': 13120.0, 'mean': -0.058, 'std': 0.777, 'min': -5.562, '25%': -0.5, '50%': -0.062, '75%': 0.438, 'max': 4.562}, 'v2_a': {'count': 13120.0, 'mean': 0.055, 'std': 0.796, 'min': -5.312, '25%': -0.438, '50%': 0.062, '75%': 0.5, 'max': 7.438}, 'v2_b': {'count': 13120.0, 'mean': -0.034, 'std': 0.792, 'min': -6.25, '25%': -0.5, '50%': 0.0, '75%': 0.438, 'max': 4.625}}
+2026-10-11T06:23:49Z END   ext13-p5-probes-qwen3 rc=0 (427s)

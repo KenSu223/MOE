@@ -1,0 +1,8 @@
+**Population top-k sets vs 5 frequency-matched random sets (validation pairs; F)**
+
+| model | condition | set | members | population set F | random mean | random max | rank |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1pre | top-1 | L37E032 | 0.0055 | -0.0155 | -0.011 | 1/6 |
+| Qwen3-30B-A3B-Base | f1pre | top-3 | L37E032 L44E116 L43E070 | 0.011 | -0.0243 | -0.0166 | 1/6 |
+| Qwen3-30B-A3B-Base | f1pre | top-5 | L37E032 L44E116 L43E070 L44E022 L37E107 | 0.0221 | -0.0243 | 0.0166 | 1/6 |
+| Qwen3-30B-A3B-Base | f1pre | top-10 | L37E032 L44E116 L43E070 L44E022 L37E107 L39E103 L43E036 L39E004 L43E114 L43E087 | 0.0497 | -0.0409 | 0.0 | 1/6 |

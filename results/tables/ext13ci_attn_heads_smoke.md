@@ -1,0 +1,12 @@
+| Run | Head | Rescue / drop | Label | str | mention (answer side / other) | blank | pos0 | final | rest |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L40H2 | +0.274 | self (final token) | 0.00 | 0.00 / 0.00 | 0.00 | 0.06 | 0.57 | 0.36 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L42H10 | +0.242 | mover (mention, clean side) | 0.00 | 0.70 / 0.15 | 0.01 | 0.08 | 0.01 | 0.06 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L36H28 | +0.142 | other context tokens | 0.06 | 0.22 / 0.09 | 0.09 | 0.11 | 0.02 | 0.41 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L40H0 | +0.132 | other context tokens | 0.09 | 0.00 / 0.00 | 0.01 | 0.35 | 0.06 | 0.47 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L41H20 | +0.132 | mover (mention, clean side) | 0.00 | 0.39 / 0.13 | 0.01 | 0.30 | 0.00 | 0.17 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L43H24 | +0.121 | sink (pos0) | 0.01 | 0.00 / 0.00 | 0.02 | 0.46 | 0.36 | 0.15 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L39H29 | +0.116 | other context tokens | 0.01 | 0.21 / 0.13 | 0.09 | 0.12 | 0.04 | 0.41 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L38H20 | +0.111 | other context tokens | 0.02 | 0.00 / 0.00 | 0.02 | 0.14 | 0.37 | 0.44 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L44H15 | -0.289 | mover (mention, clean side) | 0.00 | 0.45 / 0.14 | 0.00 | 0.23 | 0.03 | 0.15 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | L44H31 | -0.137 | mover (mention, clean side) | 0.00 | 0.41 / 0.09 | 0.02 | 0.20 | 0.04 | 0.24 |

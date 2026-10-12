@@ -1,0 +1,16 @@
+2026-10-11T10:17:43Z START ext13-p5-dir_f1-mixtral_bos-joint (waited 1143s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_dir_f1_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_mixtral_bos.json --out p5_dir_f1_mixtral_bos --agent p5-data --families main --max-rows 30000
+10:17:44 mixtral -> p5_dir_f1_mixtral_bos: 376 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+10:17:50 pass 1/1: 752 prefill rows, 2256 multi rows
+10:18:00   layer   0: load-wait 7.97s compute 1.26s  wf_rows=2256
+10:18:24   layer   8: load-wait 2.08s compute 0.53s  wf_rows=2256
+10:18:47   layer  16: load-wait 2.37s compute 0.53s  wf_rows=2256
+10:19:10   layer  24: load-wait 2.27s compute 0.52s  wf_rows=2256
+10:19:31   layer  31: load-wait 2.40s compute 0.52s  wf_rows=2256
+10:19:31   pass done: 752 prefill rows (T=44), 2256 spawn rows, 100.4s
+10:19:31 denoise  all_attn  all     : effect/drop +1.000 (mean effect +4.62, drop 4.62)
+10:19:31 denoise  all_block all     : effect/drop +1.000 (mean effect +4.62, drop 4.62)
+10:19:31 denoise  all_moe   all     : effect/drop +0.402 (mean effect +1.86, drop 4.62)
+10:19:31 noise    all_attn  all     : effect/drop +1.000 (mean effect +4.62, drop 4.62)
+10:19:31 noise    all_block all     : effect/drop +1.000 (mean effect +4.62, drop 4.62)
+10:19:31 noise    all_moe   all     : effect/drop +0.401 (mean effect +1.85, drop 4.62)
+2026-10-11T10:19:37Z END   ext13-p5-dir_f1-mixtral_bos-joint rc=0 (114s)

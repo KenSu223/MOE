@@ -1,0 +1,37 @@
+2026-10-11T06:10:42Z START ext13ci-smoke (waited 290s): bash -c python scripts/ext13ci_heads_run.py F1pre qwen3 --limit 6 --out-suffix _smoke && python scripts/ext13ci_circuit_run.py qwen3 --group gsmoke --conds F1pre --limit 6 --out-suffix _smoke --max-passes 2
+06:10:51 resuming: 0/1 chunks done
+06:10:51 F1pre/qwen3: 6 validation rows, 1 chunks (1 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'blank', 'pos0', 'final']
+06:10:52 pass (chunk 0): 12 prefill rows (6 clean), 9504 spawn rows
+06:10:56   layer   0: load-wait 2.96s compute 0.78s  wf_rows=198
+06:11:05   layer   8: load-wait 1.26s compute 0.06s  wf_rows=1782
+06:11:14   layer  16: load-wait 1.18s compute 0.07s  wf_rows=3366
+06:11:24   layer  24: load-wait 1.16s compute 0.06s  wf_rows=4950
+06:11:34   layer  32: load-wait 1.16s compute 0.09s  wf_rows=6534
+06:11:44   layer  40: load-wait 1.16s compute 0.10s  wf_rows=8118
+06:11:53   layer  47: load-wait 1.14s compute 0.09s  wf_rows=9504
+06:11:53   pass done: 12 prefill rows (T=28), 9504 spawn rows, 60.8s
+06:11:53 chunk 0 done: {'chunk': 0, 'rows': 6, 'prefill': 12, 'spawn_rows': 9504, 'pass_s': 60.84938645362854, 'peak_GB': 3.799330711364746, 'mean_drop': 3.9583332538604736, 'r_sum_heads_vs_attn_layer': 0.32737401313861925, 'head_dla_sum_mean': 4.957344055175781, 'candidates_not_routed_clean': 57, 'attn_row_sum_minmax': [0.9996649622917175, 1.0003637075424194], 'utc': '2026-10-11T06:11:53Z'}
+06:11:53 ALL CHUNKS COMPLETE
+06:12:00 F1pre/qwen3: 6 rows, 6 cases, prefill offset 0, single-expert entries proxied by DLA 0
+06:12:00 initialised: {'tasks': ['F1pre/qwen3'], 'rows': {'F1pre/qwen3': 6}, 'budget': 100000, 'queue_groups': 36, 'queue_items': 1026, 'pool_sizes': {'F1pre/qwen3': {'mix': 64, 'head': 32}}, 'n_proxy': {'F1pre/qwen3': 0}}
+06:12:00 pass 0: 12 prefill rows, 1602 spawn rows (576 adaptive, 36 static groups; queue 36/36)
+06:12:05   layer   0: load-wait 3.23s compute 0.72s  wf_rows=121
+06:12:13   layer   8: load-wait 1.16s compute 0.06s  wf_rows=370
+06:12:23   layer  16: load-wait 1.16s compute 0.07s  wf_rows=547
+06:12:33   layer  24: load-wait 1.16s compute 0.06s  wf_rows=675
+06:12:43   layer  32: load-wait 1.18s compute 0.07s  wf_rows=870
+06:12:55   layer  40: load-wait 1.11s compute 0.07s  wf_rows=1336
+06:13:05   layer  47: load-wait 1.46s compute 0.07s  wf_rows=1602
+06:13:05   pass done: 12 prefill rows (T=28), 1602 spawn rows, 64.0s (metrics 0.1s)
+06:13:05 pass 0 done in 64s, peak 3.6 GB; greedy left 12; median r: {'mix': 0.6025641025641025, 'head': 0.6025641025641025}; all-heads |Δ - Δ_clean| max 0.250; queue 36/36
+06:13:05 pass 1: 12 prefill rows, 552 spawn rows (552 adaptive, 0 static groups; queue 36/36)
+06:13:06   layer   0: load-wait 0.48s compute 0.06s  wf_rows=26
+06:13:11   layer   8: load-wait 0.81s compute 0.05s  wf_rows=155
+06:13:16   layer  16: load-wait 0.71s compute 0.04s  wf_rows=223
+06:13:22   layer  24: load-wait 0.55s compute 0.03s  wf_rows=248
+06:13:28   layer  32: load-wait 0.65s compute 0.04s  wf_rows=333
+06:13:36   layer  40: load-wait 0.91s compute 0.05s  wf_rows=552
+06:13:41   layer  47: load-wait 0.77s compute 0.02s  wf_rows=552
+06:13:41   pass done: 12 prefill rows (T=28), 552 spawn rows, 36.0s (metrics 0.0s)
+06:13:41 pass 1 done in 36s, peak 3.5 GB; greedy left 12; median r: {'mix': 0.72, 'head': 0.7}; all-heads |Δ - Δ_clean| max nan; queue 36/36
+2026-10-11T06:13:48Z END   ext13ci-smoke rc=0 (186s)

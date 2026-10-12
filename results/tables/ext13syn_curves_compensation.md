@@ -1,0 +1,30 @@
+**Compensation regression per case: DLA of the last-4 MoE outputs on the DLA of all attention outputs and of the earlier MoE outputs (logits; clean minus corrupted)**
+
+| Model | Condition | Source | Cases | Mean late-MoE DLA (logits) | Mean attention DLA | Mean early-MoE DLA | b(attention) | b(early MoE) | clean-only b(attention) / b(early MoE) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3 | cf | addback DLA (approximation) | 108 | +1.33 | +5.83 | +4.58 | -0.082 [-0.224, +0.055] | +0.299 [+0.063, +0.470] | n/a |
+| Qwen3 | p3_opt | dla_rows (exact) | 256 | +0.05 | +0.34 | +7.79 | -0.211 [-0.506, +0.064] | -0.154 [-0.262, -0.057] | n/a |
+| Qwen3 | dir_opt | dla_rows (exact) | 180 | -0.20 | +0.35 | +8.50 | +0.050 [-0.227, +0.370] | -0.243 [-0.361, -0.131] | n/a |
+| Qwen3 | vt_e2a_orig | dla_rows (exact) | 256 | -0.52 | +0.86 | +6.16 | +0.478 [+0.211, +0.729] | -0.513 [-0.580, -0.422] | n/a |
+| Qwen3 | vt_e2a_neu | dla_rows (exact) | 256 | -0.25 | +0.93 | +5.42 | +0.437 [+0.262, +0.622] | -0.459 [-0.530, -0.399] | n/a |
+| Qwen3 | cp_nat | dla_rows (exact) | 280 | +0.00 | -0.11 | +6.09 | -0.318 [-0.496, -0.148] | -0.436 [-0.548, -0.329] | n/a |
+| Qwen3 | cp_vt_orig | dla_rows (exact) | 256 | -1.77 | +0.70 | +6.64 | -0.693 [-0.834, -0.583] | -0.634 [-0.696, -0.576] | n/a |
+| Qwen3 | cp_vt_neu | dla_rows (exact) | 256 | -0.42 | +0.53 | +5.48 | -0.526 [-0.645, -0.435] | -0.188 [-0.350, -0.010] | n/a |
+| Qwen3 | dir_f1 | dla_rows (exact) | 180 | -2.64 | +5.60 | +2.25 | -0.470 [-0.573, -0.362] | -0.297 [-0.466, -0.112] | n/a |
+| Qwen3 | f1 | dla_rows (exact) | 256 | -1.84 | +5.47 | +0.98 | -0.433 [-0.548, -0.300] | -0.575 [-0.701, -0.425] | n/a |
+| Qwen3 | vt_a2e_orig | dla_rows (exact) | 74 | -1.93 | +5.42 | +0.16 | -0.475 [-0.618, -0.365] | -0.366 [-0.876, +0.082] | n/a |
+| Qwen3 | f2e | dla_rows (exact) | 64 | -2.73 | +8.35 | +2.65 | -0.274 [-0.429, -0.014] | -0.253 [-0.601, +0.265] | n/a |
+| Qwen3 | cp_nat [rep] | dla_rows (exact) | 316 | -0.23 | -0.13 | +6.26 | -0.377 [-0.483, -0.248] | -0.436 [-0.531, -0.324] | n/a |
+| Qwen3 | f1 [rep] | dla_rows (exact) | 256 | -2.14 | +5.70 | +1.19 | -0.438 [-0.505, -0.363] | -0.501 [-0.627, -0.366] | n/a |
+| Mixtral | cf | addback DLA (approximation) | 106 | -1.23 | +8.18 | +5.97 | -0.096 [-0.245, +0.067] | -0.085 [-0.241, +0.033] | n/a |
+| Mixtral | p3_opt | dla_rows (exact) | 256 | -2.15 | +2.23 | +7.60 | -0.462 [-0.708, -0.167] | -0.483 [-0.545, -0.406] | n/a |
+| Mixtral | dir_opt | dla_rows (exact) | 188 | -3.42 | +2.98 | +10.11 | -0.177 [-0.468, +0.170] | -0.679 [-0.753, -0.609] | n/a |
+| Mixtral | vt_e2a_orig | dla_rows (exact) | 256 | -1.81 | +2.50 | +5.83 | -0.303 [-0.525, +0.025] | -0.547 [-0.650, -0.443] | n/a |
+| Mixtral | vt_e2a_neu | dla_rows (exact) | 256 | -1.98 | +2.47 | +5.33 | -0.402 [-0.602, -0.143] | -0.573 [-0.677, -0.456] | n/a |
+| Mixtral | cp_nat | dla_rows (exact) | 408 | -3.61 | +2.70 | +8.07 | -0.488 [-0.583, -0.379] | -0.606 [-0.656, -0.553] | n/a |
+| Mixtral | cp_vt_orig | dla_rows (exact) | 256 | -2.76 | +2.39 | +5.63 | -0.225 [-0.384, -0.034] | -0.516 [-0.626, -0.428] | n/a |
+| Mixtral | cp_vt_neu | dla_rows (exact) | 256 | -3.30 | +2.28 | +6.42 | -0.144 [-0.318, +0.044] | -0.790 [-0.908, -0.692] | n/a |
+| Mixtral | dir_f1 | dla_rows (exact) | 188 | -4.13 | +3.99 | +4.79 | -0.585 [-0.674, -0.488] | -0.483 [-0.627, -0.343] | n/a |
+| Mixtral | f1 | dla_rows (exact) | 202 | -3.84 | +4.42 | +3.74 | -0.580 [-0.673, -0.491] | -0.565 [-0.694, -0.440] | n/a |
+| Mixtral | f2e | dla_rows (exact) | 36 | -6.59 | +9.31 | +4.19 | -0.523 [-0.815, -0.354] | -0.600 [-0.909, -0.322] | n/a |
+| Mixtral | cp_nat [rep] | dla_rows (exact) | 444 | -3.95 | +3.11 | +8.56 | -0.349 [-0.448, -0.259] | -0.665 [-0.712, -0.616] | n/a |

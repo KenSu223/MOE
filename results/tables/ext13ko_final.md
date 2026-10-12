@@ -1,0 +1,105 @@
+**All-position vs final-position-only route masks (reroute; validation pairs; F)**
+
+| model | condition | knockout | all positions | final position only | final / all |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1 | L37E032 | 0.0484 | 0.0334 | 0.69 |
+| Qwen3-30B-A3B-Base | f1 | L41E117 | -0.0055 | 0.0097 | -1.7692 |
+| Qwen3-30B-A3B-Base | f1 | L44E069 | 0.0019 | -0.0002 | -0.1111 |
+| Qwen3-30B-A3B-Base | f1 | L42E115 | -0.008 | -0.0013 | 0.1579 |
+| Qwen3-30B-A3B-Base | f1 | pop:k10 | 0.1948 | 0.1643 | 0.8436 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E116 | 0.0213 | 0.02 | 0.9375 |
+| Qwen3-30B-A3B-Base | dir_f1 | L41E117 | 0.0011 | -0.004 | -3.75 |
+| Qwen3-30B-A3B-Base | dir_f1 | L44E069 | -0.0013 | -0.0013 | 1.0 |
+| Qwen3-30B-A3B-Base | dir_f1 | L42E115 | -0.0061 | -0.0048 | 0.7826 |
+| Qwen3-30B-A3B-Base | dir_f1 | pop:k10 | 0.1818 | 0.1106 | 0.6085 |
+| Qwen3-30B-A3B-Base | dir_opt | L41E117 | 0.0254 | 0.0353 | 1.3863 |
+| Qwen3-30B-A3B-Base | dir_opt | L44E069 | -0.0025 | 0.0111 | -4.375 |
+| Qwen3-30B-A3B-Base | dir_opt | L42E115 | 0.0005 | 0.0101 | 21.3333 |
+| Qwen3-30B-A3B-Base | dir_opt | pop:k10 | 0.1849 | 0.1612 | 0.8718 |
+| Qwen3-30B-A3B-Base | f2e | L43E036 | 0.0146 | -0.0187 | -1.2787 |
+| Qwen3-30B-A3B-Base | f2e | L41E117 | 0.0041 | -0.0316 | -7.7647 |
+| Qwen3-30B-A3B-Base | f2e | L44E069 | 0.0007 | -0.0319 | -44.3333 |
+| Qwen3-30B-A3B-Base | f2e | L42E115 | 0.0084 | -0.0201 | -2.4 |
+| Qwen3-30B-A3B-Base | f2e | pop:k10 | 0.0295 | -0.0323 | -1.0976 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L39E121 | 0.005 | 0.0132 | 2.6418 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L41E117 | 0.0014 | -0.0055 | -3.8421 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L44E069 | 0.0101 | 0.0089 | 0.8815 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | L42E115 | -0.0008 | -0.0046 | 5.6364 |
+| Qwen3-30B-A3B-Base | vt_e2a_orig | pop:k10 | 0.056 | 0.0587 | 1.0481 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E123 | 0.0201 | 0.0061 | 0.3012 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L41E117 | 0.0011 | 0.0013 | 1.1429 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L44E069 | 0.009 | 0.0054 | 0.6036 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | L42E115 | -0.0023 | -0.0088 | 3.8929 |
+| Qwen3-30B-A3B-Base | vt_e2a_neu | pop:k10 | 0.1613 | 0.0756 | 0.4686 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L37E032 | 0.0335 | 0.0446 | 1.3333 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L41E117 | -0.0093 | -0.0009 | 0.1 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L44E069 | -0.0009 | -0.0112 | 12.0 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | L42E115 | 0.0028 | -0.0019 | -0.6667 |
+| Qwen3-30B-A3B-Base | vt_a2e_orig | pop:k10 | 0.2881 | 0.0446 | 0.1548 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L39E001 | 0.0084 | 0.0239 | 2.8542 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L41E117 | -0.0013 | 0.0035 | -2.6667 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L44E069 | 0.0047 | 0.011 | 2.3333 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | L42E115 | 0.0017 | 0.0077 | 4.4 |
+| Qwen3-30B-A3B-Base | cp_vt_orig | pop:k10 | 0.0969 | 0.0875 | 0.9029 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E123 | -0.0067 | -0.0237 | 3.5526 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L41E117 | 0.0002 | -0.0061 | -35.0 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L44E069 | -0.0002 | -0.0118 | 67.0 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | L42E115 | -0.0042 | -0.0137 | 3.25 |
+| Qwen3-30B-A3B-Base | cp_vt_neu | pop:k10 | 0.0583 | 0.0409 | 0.7018 |
+| Qwen3-30B-A3B-Base | cp_nat | L41E117 | 0.0344 | 0.0176 | 0.5109 |
+| Qwen3-30B-A3B-Base | cp_nat | L44E069 | -0.0026 | -0.0069 | 2.6286 |
+| Qwen3-30B-A3B-Base | cp_nat | L42E115 | -0.0074 | -0.0063 | 0.8571 |
+| Qwen3-30B-A3B-Base | cp_nat | pop:k10 | 0.2393 | 0.1781 | 0.744 |
+| Mixtral-8x7B (BOS) | f1 | L20E001 | 0.0079 | 0.0128 | 1.6071 |
+| Mixtral-8x7B (BOS) | f1 | L20E000 | 0.0051 | 0.0006 | 0.1111 |
+| Mixtral-8x7B (BOS) | f1 | L19E002 | 0.0026 | -0.0014 | -0.5556 |
+| Mixtral-8x7B (BOS) | f1 | L21E001 | 0.0082 | 0.0006 | 0.069 |
+| Mixtral-8x7B (BOS) | f1 | L18E001 | 0.0028 | -0.0003 | -0.1 |
+| Mixtral-8x7B (BOS) | f1 | pop:k10 | 0.2288 | 0.2189 | 0.9566 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E001 | -0.0046 | 0.006 | -1.3125 |
+| Mixtral-8x7B (BOS) | dir_f1 | L20E000 | 0.002 | -0.0051 | -2.5714 |
+| Mixtral-8x7B (BOS) | dir_f1 | L19E002 | 0.0011 | -0.0034 | -3.0 |
+| Mixtral-8x7B (BOS) | dir_f1 | L21E001 | -0.0014 | -0.0037 | 2.6 |
+| Mixtral-8x7B (BOS) | dir_f1 | L18E001 | 0.0 | -0.0049 |  |
+| Mixtral-8x7B (BOS) | dir_f1 | pop:k10 | 0.243 | 0.2541 | 1.0459 |
+| Mixtral-8x7B (BOS) | dir_opt | L20E000 | 0.0251 | 0.0231 | 0.9231 |
+| Mixtral-8x7B (BOS) | dir_opt | L19E002 | -0.0011 | -0.0017 | 1.5 |
+| Mixtral-8x7B (BOS) | dir_opt | L21E001 | 0.0004 | -0.0015 | -3.6667 |
+| Mixtral-8x7B (BOS) | dir_opt | L18E001 | -0.0003 | -0.0011 | 4.0 |
+| Mixtral-8x7B (BOS) | dir_opt | pop:k10 | 0.1711 | 0.1478 | 0.8639 |
+| Mixtral-8x7B (BOS) | f2e | L19E004 | 0.03 | 0.018 | 0.6 |
+| Mixtral-8x7B (BOS) | f2e | L20E000 | 0.0 | 0.009 |  |
+| Mixtral-8x7B (BOS) | f2e | L19E002 | -0.001 | 0.006 | -6.0 |
+| Mixtral-8x7B (BOS) | f2e | L21E001 | 0.01 | 0.009 | 0.9 |
+| Mixtral-8x7B (BOS) | f2e | L18E001 | -0.008 | 0.004 | -0.5 |
+| Mixtral-8x7B (BOS) | f2e | pop:k10 | 0.017 | 0.003 | 0.1765 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E006 | 0.0422 | 0.0297 | 0.7046 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L20E000 | 0.0117 | 0.0096 | 0.8205 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L19E002 | -0.0065 | -0.0084 | 1.3023 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L21E001 | 0.0009 | 0.0006 | 0.6667 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | L18E001 | 0.0015 | -0.0033 | -2.2 |
+| Mixtral-8x7B (BOS) | vt_e2a_orig | pop:k10 | 0.0753 | 0.0516 | 0.6853 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E006 | 0.0368 | 0.0248 | 0.6727 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L20E000 | 0.0231 | 0.0226 | 0.9783 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L19E002 | 0.0037 | 0.0038 | 1.0455 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L21E001 | 0.004 | 0.0055 | 1.375 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | L18E001 | 0.001 | 0.0017 | 1.6667 |
+| Mixtral-8x7B (BOS) | vt_e2a_neu | pop:k10 | 0.0581 | 0.0356 | 0.6138 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E006 | 0.0167 | 0.0122 | 0.7333 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L20E000 | 0.0202 | 0.0191 | 0.945 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L19E002 | -0.0019 | -0.0048 | 2.6 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L21E001 | 0.0032 | 0.0013 | 0.4118 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | L18E001 | 0.0052 | -0.0013 | -0.25 |
+| Mixtral-8x7B (BOS) | cp_vt_orig | pop:k10 | 0.0871 | 0.0849 | 0.9745 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E006 | 0.0345 | 0.0258 | 0.7487 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L20E000 | -0.0009 | 0.0045 | -5.0 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L19E002 | 0.0023 | -0.0011 | -0.4615 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L21E001 | 0.0128 | 0.0083 | 0.6479 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | L18E001 | 0.0031 | 0.0004 | 0.1176 |
+| Mixtral-8x7B (BOS) | cp_vt_neu | pop:k10 | 0.0448 | 0.0163 | 0.3629 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E006 | 0.0258 | 0.0182 | 0.7076 |
+| Mixtral-8x7B (BOS) | cp_nat | L20E000 | 0.0542 | 0.0493 | 0.91 |
+| Mixtral-8x7B (BOS) | cp_nat | L19E002 | -0.0001 | -0.0001 | 1.0 |
+| Mixtral-8x7B (BOS) | cp_nat | L21E001 | 0.0006 | -0.0009 | -1.5714 |
+| Mixtral-8x7B (BOS) | cp_nat | L18E001 | 0.0022 | -0.0009 | -0.3846 |
+| Mixtral-8x7B (BOS) | cp_nat | pop:k10 | 0.2138 | 0.1786 | 0.8353 |

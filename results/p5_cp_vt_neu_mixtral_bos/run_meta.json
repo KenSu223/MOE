@@ -1,0 +1,324 @@
+{
+ "sweep": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "pairs": "data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 40000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "metrics": true,
+  "agent": "p5-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --max-rows 40000",
+  "created_utc": "2026-10-11T15:56:24Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T15:59:45Z",
+  "pass_times_s": [
+   98.92424440383911,
+   92.23279476165771
+  ],
+  "n_rows": 50176
+ },
+ "joint": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    31
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --max-rows 30000",
+  "created_utc": "2026-10-11T16:00:00Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T16:01:34Z",
+  "pass_times_s": [
+   93.31356048583984
+  ],
+  "n_rows": 3072
+ },
+ "dla": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --chunk 512",
+  "created_utc": "2026-10-11T16:01:47Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T16:03:23Z",
+  "pass_times_s": [
+   92.79114055633545
+  ]
+ },
+ "direct_split": {
+  "model": "mixtral",
+  "pairs": "data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 104.27465319633484,
+  "command": "python -m moetrace.ext7_controls direct --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --splits discovery,validation",
+  "completed_utc": "2026-10-11T16:37:44Z"
+ },
+ "expert": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "pairs_layers": [
+   19
+  ],
+  "only_scaled": false,
+  "corrupt_only": true,
+  "max_spawn": 40000,
+  "chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   [
+    29,
+    30,
+    31
+   ]
+  ],
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_expert.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 40000",
+  "created_utc": "2026-10-11T17:39:49Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T17:44:42Z",
+  "pass_times_s": [
+   100.34713387489319,
+   92.93732810020447,
+   92.286691904068
+  ]
+ },
+ "heads": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "layers": [
+   8,
+   13,
+   16,
+   19,
+   30
+  ],
+  "null_layer": 30,
+  "n_heads": 32,
+  "n_cases": 512,
+  "chunks": [
+   [
+    8,
+    13
+   ],
+   [
+    16,
+    19
+   ],
+   [
+    30
+   ]
+  ],
+  "mentions": "pair columns mention_a_pos / mention_b_pos",
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_heads.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --layers auto --max-rows 50000",
+  "created_utc": "2026-10-11T17:56:44Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T18:01:27Z",
+  "pass_times_s": [
+   94.91151714324951,
+   92.58138585090637,
+   92.17803597450256
+  ],
+  "n_rows": 89600
+ },
+ "grid_w1": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "resid"
+  ],
+  "window": 1,
+  "window_half": 0,
+  "n_cases": 512,
+  "n_units": 1774,
+  "n_suffix_rows": 170304,
+  "n_passes": 4,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_vt_neu_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_vt_neu_mixtral_bos.json --out p5_cp_vt_neu_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000",
+  "created_utc": "2026-10-11T18:23:17Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T18:29:46Z",
+  "pass_times_s": [
+   99.11385083198547,
+   96.51050734519958,
+   94.19085335731506,
+   89.04299235343933
+  ],
+  "n_rows": 170304
+ }
+}

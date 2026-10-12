@@ -1,0 +1,258 @@
+note: own pop ranking ['L37E032', 'L44E116', 'L39E103', 'L32E061', 'L43E070', 'L44E022', 'L36E009', 'L33E122', 'L35E090', 'L42E031'] differs from p5-data's ['L37E032', 'L44E116', 'L39E103', 'L32E061', 'L43E070', 'L44E022', 'L36E009', 'L33E122', 'L42E102', 'L35E090']; using p5-data's
+07:57:38 f1: plan main written: 66 conditions, 5 passes, 19968 rows
+07:57:38 exit: 0 passes run, 6s, out_of_time=False
+2026-10-11T08:15:08Z START ext13ko-qwen3 (waited 1046s): python scripts/ext13ko_run.py qwen3 --conds f1 --with-wr --time-budget 1320
+08:15:14 f1/qwen3 main: 5 of 5 passes to run
+08:15:21   layer   0: load-wait 3.29s compute 1.05s  wf_rows=0
+08:15:28   layer   8: load-wait 0.59s compute 0.49s  wf_rows=0
+08:15:36   layer  16: load-wait 0.66s compute 0.49s  wf_rows=0
+08:15:43   layer  24: load-wait 0.56s compute 0.49s  wf_rows=0
+08:15:53   layer  32: load-wait 0.80s compute 0.49s  wf_rows=0
+08:16:03   layer  40: load-wait 0.49s compute 0.49s  wf_rows=0
+08:16:12   layer  47: load-wait 0.39s compute 0.48s  wf_rows=0
+08:16:12   pass done: 3706 prefill rows (T=29), 0 spawn rows, 55.7s (metrics 0.2s)
+08:16:12 f1 pass full_p000: 3706 rows, T=29, padded 107474, 56.2s, peak 9.0 GB
+08:17:02 f1 pass full_p001: 2438 rows, T=44, padded 107272, 48.6s, peak 8.9 GB
+08:17:51 f1 pass ctl_p000: 5578 rows, T=27, padded 150606, 47.7s, peak 11.7 GB
+08:18:40 f1 pass ctl_p001: 4858 rows, T=31, padded 150598, 46.8s, peak 11.7 GB
+08:19:29 f1 pass ctl_p002: 3388 rows, T=44, padded 149072, 47.7s, peak 11.4 GB
+08:19:29 f1/qwen3 main complete
+08:19:33 f1/qwen3 writer pass: 1024 prompts, T <= 44, layers [32, 33, 35, 36, 37, 39, 41, 42, 43, 44]
+08:20:15 f1 writer pass done in 42s, peak 5.1 GB
+08:20:32 f1 writer projections: 14534 vectors
+08:20:32 exit: 5 passes run, 318s, out_of_time=False
+2026-10-11T08:20:39Z END   ext13ko-qwen3 rc=0 (331s)
+09:58:20 dir_f1: plan main written: 66 conditions, 3 passes, 10800 rows
+09:58:20 exit: 0 passes run, 4s, out_of_time=False
+2026-10-11T10:13:23Z START ext13ko-qwen3 (waited 900s): python scripts/ext13ko_run.py qwen3 --conds dir_f1 --with-wr --time-budget 1320
+10:13:29 dir_f1/qwen3 main: 3 of 3 passes to run
+10:13:35   layer   0: load-wait 3.14s compute 0.90s  wf_rows=0
+10:13:43   layer   8: load-wait 0.50s compute 0.26s  wf_rows=0
+10:13:52   layer  16: load-wait 0.35s compute 0.26s  wf_rows=0
+10:14:01   layer  24: load-wait 0.91s compute 0.26s  wf_rows=0
+10:14:11   layer  32: load-wait 1.36s compute 0.26s  wf_rows=0
+10:14:24   layer  40: load-wait 1.94s compute 0.26s  wf_rows=0
+10:14:33   layer  47: load-wait 1.38s compute 0.25s  wf_rows=0
+10:14:33   pass done: 1440 prefill rows (T=38), 0 spawn rows, 61.6s (metrics 0.1s)
+10:14:33 dir_f1 pass full_p000: 1440 rows, T=38, padded 54720, 62.0s, peak 5.7 GB
+10:15:42 dir_f1 pass ctl_p000: 5412 rows, T=28, padded 151536, 66.1s, peak 11.8 GB
+10:16:39 dir_f1 pass ctl_p001: 3948 rows, T=38, padded 150024, 56.1s, peak 11.5 GB
+10:16:39 dir_f1/qwen3 main complete
+10:16:41 dir_f1/qwen3 writer pass: 360 prompts, T <= 39, layers [31, 37, 40, 41, 42, 43, 44]
+10:17:24 dir_f1 writer pass done in 43s, peak 3.7 GB
+10:17:36 dir_f1 writer projections: 5452 vectors
+10:17:36 exit: 3 passes run, 246s, out_of_time=False
+2026-10-11T10:17:43Z END   ext13ko-qwen3 rc=0 (260s)
+11:30:41 dir_opt: plan main written: 49 conditions, 3 passes, 8100 rows
+11:30:41 exit: 0 passes run, 4s, out_of_time=False
+2026-10-11T11:31:55Z START ext13ko-qwen3 (waited 70s): python scripts/ext13ko_run.py qwen3 --conds dir_opt --with-wr --time-budget 1320
+11:32:02 dir_opt/qwen3 main: 3 of 3 passes to run
+11:32:07   layer   0: load-wait 3.15s compute 0.81s  wf_rows=0
+11:32:16   layer   8: load-wait 1.05s compute 0.19s  wf_rows=0
+11:32:26   layer  16: load-wait 1.05s compute 0.19s  wf_rows=0
+11:32:36   layer  24: load-wait 1.53s compute 0.19s  wf_rows=0
+11:32:46   layer  32: load-wait 1.05s compute 0.19s  wf_rows=0
+11:32:56   layer  40: load-wait 1.05s compute 0.19s  wf_rows=0
+11:33:04   layer  47: load-wait 1.05s compute 0.19s  wf_rows=0
+11:33:04   pass done: 1440 prefill rows (T=28), 0 spawn rows, 61.1s (metrics 0.1s)
+11:33:04 dir_opt pass full_p000: 1440 rows, T=28, padded 40320, 61.4s, peak 4.8 GB
+11:33:59 dir_opt pass ctl_p000: 4070 rows, T=18, padded 73260, 53.2s, peak 7.0 GB
+11:34:51 dir_opt pass ctl_p001: 2590 rows, T=28, padded 72520, 50.6s, peak 6.8 GB
+11:34:51 dir_opt/qwen3 main complete
+11:34:51 dir_opt/qwen3 writer pass: 360 prompts, T <= 29, layers [31, 39, 40, 41, 42, 43, 44]
+11:35:41 dir_opt writer pass done in 50s, peak 3.7 GB
+11:35:53 dir_opt writer projections: 6024 vectors
+11:35:53 exit: 3 passes run, 232s, out_of_time=False
+2026-10-11T11:36:00Z END   ext13ko-qwen3 rc=0 (245s)
+16:02:41 cp_nat: plan main written: 49 conditions, 5 passes, 18360 rows
+16:02:47 cp_vt_orig: plan main written: 67 conditions, 4 passes, 16128 rows
+16:02:47 exit: 0 passes run, 13s, out_of_time=False
+2026-10-11T16:24:15Z START ext13ko-qwen3 (waited 1285s): python scripts/ext13ko_run.py qwen3 --conds cp_nat,cp_vt_orig --with-wr --time-budget 1320
+16:24:22 cp_nat/qwen3 main: 5 of 5 passes to run
+16:24:30   layer   0: load-wait 4.60s compute 1.07s  wf_rows=0
+16:24:38   layer   8: load-wait 1.09s compute 0.50s  wf_rows=0
+16:24:46   layer  16: load-wait 0.14s compute 0.48s  wf_rows=0
+16:24:53   layer  24: load-wait 0.48s compute 0.48s  wf_rows=0
+16:25:05   layer  32: load-wait 2.03s compute 0.48s  wf_rows=0
+16:25:17   layer  40: load-wait 1.14s compute 0.48s  wf_rows=0
+16:25:26   layer  47: load-wait 1.12s compute 0.48s  wf_rows=0
+16:25:26   pass done: 4401 prefill rows (T=24), 0 spawn rows, 62.3s (metrics 0.2s)
+16:25:27 cp_nat pass full_p000: 4401 rows, T=24, padded 105624, 62.7s, peak 9.0 GB
+16:26:34 cp_nat pass full_p001: 2959 rows, T=35, padded 103565, 65.5s, peak 8.7 GB
+16:27:40 cp_nat pass ctl_p000: 4348 rows, T=22, padded 95656, 65.1s, peak 8.4 GB
+16:28:39 cp_nat pass ctl_p001: 3846 rows, T=26, padded 99996, 57.6s, peak 8.6 GB
+16:29:40 cp_nat pass ctl_p002: 2806 rows, T=35, padded 98210, 59.3s, peak 8.4 GB
+16:29:40 cp_nat/qwen3 main complete
+16:29:43 cp_nat/qwen3 writer pass: 1212 prompts, T <= 35, layers [34, 38, 39, 41, 42, 43, 44]
+16:30:43 cp_nat writer pass done in 60s, peak 4.9 GB
+16:31:05 cp_nat writer projections: 21214 vectors
+16:31:06 cp_vt_orig/qwen3 main: 4 of 4 passes to run
+16:31:58 cp_vt_orig pass full_p000: 2304 rows, T=27, padded 62208, 52.0s, peak 6.2 GB
+16:32:57 cp_vt_orig pass ctl_p000: 5099 rows, T=22, padded 112178, 56.5s, peak 9.4 GB
+16:33:52 cp_vt_orig pass ctl_p001: 4674 rows, T=24, padded 112176, 53.4s, peak 9.4 GB
+16:34:49 cp_vt_orig pass ctl_p002: 4051 rows, T=27, padded 109377, 55.3s, peak 9.1 GB
+16:34:49 cp_vt_orig/qwen3 main complete
+16:34:51 cp_vt_orig/qwen3 writer pass: 512 prompts, T <= 28, layers [22, 37, 39, 40, 41, 42, 44, 45]
+16:35:45 cp_vt_orig writer pass done in 53s, peak 3.7 GB
+16:35:52 cp_vt_orig writer projections: 9134 vectors
+16:35:52 exit: 9 passes run, 691s, out_of_time=False
+2026-10-11T16:35:59Z END   ext13ko-qwen3 rc=0 (704s)
+note: own pop ranking ['L42E123', 'L39E121', 'L37E101', 'L41E106', 'L39E001', 'L45E092', 'L22E035', 'L25E002', 'L41E112', 'L42E016'] differs from p5-data's ['L42E123', 'L39E121', 'L37E101', 'L41E106', 'L39E001', 'L45E092', 'L22E035', 'L41E112', 'L25E002', 'L42E016']; using p5-data's
+16:38:43 cp_vt_neu: plan main written: 66 conditions, 4 passes, 15360 rows
+16:38:43 exit: 0 passes run, 2s, out_of_time=False
+2026-10-11T17:44:49Z START ext13ko-qwen3 (waited 3962s): python scripts/ext13ko_run.py qwen3 --conds cp_vt_neu --with-wr --time-budget 1320
+17:44:57 cp_vt_neu/qwen3 main: 4 of 4 passes to run
+17:45:02   layer   0: load-wait 2.91s compute 0.79s  wf_rows=0
+17:45:11   layer   8: load-wait 0.91s compute 0.26s  wf_rows=0
+17:45:25   layer  16: load-wait 0.98s compute 0.26s  wf_rows=0
+17:45:35   layer  24: load-wait 0.98s compute 0.26s  wf_rows=0
+17:45:45   layer  32: load-wait 0.98s compute 0.26s  wf_rows=0
+17:45:55   layer  40: load-wait 1.04s compute 0.26s  wf_rows=0
+17:46:03   layer  47: load-wait 0.98s compute 0.26s  wf_rows=0
+17:46:03   pass done: 2048 prefill rows (T=28), 0 spawn rows, 64.5s (metrics 0.1s)
+17:46:04 cp_vt_neu pass full_p000: 2048 rows, T=28, padded 57344, 65.0s, peak 5.9 GB
+17:47:05 cp_vt_neu pass ctl_p000: 4928 rows, T=22, padded 108416, 59.2s, peak 9.2 GB
+17:48:02 cp_vt_neu pass ctl_p001: 4518 rows, T=24, padded 108432, 55.6s, peak 9.1 GB
+17:48:59 cp_vt_neu pass ctl_p002: 3866 rows, T=28, padded 108248, 55.0s, peak 9.1 GB
+17:48:59 cp_vt_neu/qwen3 main complete
+17:49:03 cp_vt_neu/qwen3 writer pass: 512 prompts, T <= 28, layers [22, 25, 37, 39, 41, 42, 44, 45]
+17:49:55 cp_vt_neu writer pass done in 52s, peak 3.7 GB
+17:50:08 cp_vt_neu writer projections: 9224 vectors
+17:50:08 exit: 4 passes run, 312s, out_of_time=False
+2026-10-11T17:50:15Z END   ext13ko-qwen3 rc=0 (326s)
+21:20:32 vt_e2a_orig: plan main written: 67 conditions, 4 passes, 16128 rows
+21:20:32 exit: 0 passes run, 5s, out_of_time=False
+2026-10-11T21:49:07Z START ext13ko-qwen3 (waited 1712s): python scripts/ext13ko_run.py qwen3 --conds vt_e2a_orig --with-wr --time-budget 1320
+21:49:14 vt_e2a_orig/qwen3 main: 4 of 4 passes to run
+21:49:20   layer   0: load-wait 3.10s compute 1.02s  wf_rows=0
+21:49:27   layer   8: load-wait 0.56s compute 0.22s  wf_rows=0
+21:49:37   layer  16: load-wait 0.67s compute 0.22s  wf_rows=0
+21:49:46   layer  24: load-wait 0.81s compute 0.22s  wf_rows=0
+21:49:56   layer  32: load-wait 0.99s compute 0.23s  wf_rows=0
+21:50:07   layer  40: load-wait 1.47s compute 0.22s  wf_rows=0
+21:50:17   layer  47: load-wait 1.74s compute 0.22s  wf_rows=0
+21:50:17   pass done: 2304 prefill rows (T=21), 0 spawn rows, 61.3s (metrics 0.1s)
+21:50:18 vt_e2a_orig pass full_p000: 2304 rows, T=21, padded 48384, 61.8s, peak 5.4 GB
+21:51:20 vt_e2a_orig pass ctl_p000: 5253 rows, T=16, padded 84048, 59.2s, peak 7.7 GB
+21:52:26 vt_e2a_orig pass ctl_p001: 4670 rows, T=18, padded 84060, 64.6s, peak 7.7 GB
+21:53:23 vt_e2a_orig pass ctl_p002: 3901 rows, T=21, padded 81921, 56.1s, peak 7.5 GB
+21:53:23 vt_e2a_orig/qwen3 main complete
+21:53:24 vt_e2a_orig/qwen3 writer pass: 512 prompts, T <= 21, layers [22, 36, 37, 39, 41, 42, 43, 44, 45]
+21:54:23 vt_e2a_orig writer pass done in 59s, peak 3.7 GB
+21:54:39 vt_e2a_orig writer projections: 9048 vectors
+21:54:39 exit: 4 passes run, 325s, out_of_time=False
+2026-10-11T21:54:46Z END   ext13ko-qwen3 rc=0 (339s)
+00:20:33 vt_e2a_neu: plan main written: 66 conditions, 4 passes, 15360 rows
+00:20:33 exit: 0 passes run, 2s, out_of_time=False
+2026-10-12T00:23:52Z START ext13ko-qwen3 (waited 199s): python scripts/ext13ko_run.py qwen3 --conds vt_e2a_neu --with-wr --time-budget 1320
+00:23:58 vt_e2a_neu/qwen3 main: 4 of 4 passes to run
+00:24:03   layer   0: load-wait 2.91s compute 0.75s  wf_rows=0
+00:24:12   layer   8: load-wait 1.03s compute 0.21s  wf_rows=0
+00:24:22   layer  16: load-wait 1.07s compute 0.21s  wf_rows=0
+00:24:32   layer  24: load-wait 1.03s compute 0.21s  wf_rows=0
+00:24:41   layer  32: load-wait 1.03s compute 0.21s  wf_rows=0
+00:24:51   layer  40: load-wait 1.03s compute 0.21s  wf_rows=0
+00:25:02   layer  47: load-wait 1.51s compute 0.21s  wf_rows=0
+00:25:02   pass done: 2048 prefill rows (T=22), 0 spawn rows, 63.3s (metrics 0.1s)
+00:25:03 vt_e2a_neu pass full_p000: 2048 rows, T=22, padded 45056, 63.6s, peak 5.2 GB
+00:26:05 vt_e2a_neu pass ctl_p000: 4944 rows, T=17, padded 84048, 60.8s, peak 7.7 GB
+00:26:57 vt_e2a_neu pass ctl_p001: 4670 rows, T=18, padded 84060, 49.9s, peak 7.7 GB
+00:27:52 vt_e2a_neu pass ctl_p002: 3698 rows, T=22, padded 81356, 54.0s, peak 7.5 GB
+00:27:52 vt_e2a_neu/qwen3 main complete
+00:27:55 vt_e2a_neu/qwen3 writer pass: 512 prompts, T <= 22, layers [22, 23, 37, 39, 41, 42, 43, 44, 45]
+00:28:46 vt_e2a_neu writer pass done in 50s, peak 3.7 GB
+00:29:02 vt_e2a_neu writer projections: 9026 vectors
+00:29:02 exit: 4 passes run, 304s, out_of_time=False
+2026-10-12T00:29:09Z END   ext13ko-qwen3 rc=0 (317s)
+02:30:07 vt_a2e_orig: plan main written: 66 conditions, 2 passes, 4440 rows
+02:30:07 exit: 0 passes run, 8s, out_of_time=False
+2026-10-12T02:31:03Z START ext13ko-qwen3 (waited 56s): python scripts/ext13ko_run.py qwen3 --conds vt_a2e_orig --with-wr --time-budget 1320
+02:31:06 vt_a2e_orig/qwen3 main: 2 of 2 passes to run
+02:31:11   layer   0: load-wait 3.32s compute 0.62s  wf_rows=0
+02:31:16   layer   8: load-wait 0.72s compute 0.08s  wf_rows=0
+02:31:24   layer  16: load-wait 0.97s compute 0.08s  wf_rows=0
+02:31:32   layer  24: load-wait 1.09s compute 0.08s  wf_rows=0
+02:31:42   layer  32: load-wait 1.01s compute 0.12s  wf_rows=0
+02:31:53   layer  40: load-wait 1.38s compute 0.10s  wf_rows=0
+02:32:01   layer  47: load-wait 0.74s compute 0.08s  wf_rows=0
+02:32:01   pass done: 592 prefill rows (T=27), 0 spawn rows, 54.6s (metrics 0.0s)
+02:32:04 vt_a2e_orig pass full_p000: 592 rows, T=27, padded 15984, 54.8s, peak 3.8 GB
+02:32:59 vt_a2e_orig pass ctl_p000: 3848 rows, T=27, padded 103896, 53.7s, peak 8.8 GB
+02:32:59 vt_a2e_orig/qwen3 main complete
+02:33:00 vt_a2e_orig/qwen3 writer pass: 194 prompts, T <= 31, layers [32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44]
+02:33:56 vt_a2e_orig writer pass done in 56s, peak 3.6 GB
+02:34:07 vt_a2e_orig writer projections: 3848 vectors
+02:34:07 exit: 2 passes run, 182s, out_of_time=False
+2026-10-12T02:34:14Z END   ext13ko-qwen3 rc=0 (191s)
+note: own pop ranking ['L37E107', 'L44E116', 'L43E036', 'L42E055', 'L36E120', 'L42E102', 'L37E055', 'L44E022', 'L41E121', 'L44E098'] differs from p5-data's ['L37E107', 'L44E116', 'L43E036', 'L42E055', 'L36E120', 'L42E102', 'L44E022', 'L37E055', 'L41E121', 'L44E098']; using p5-data's
+03:23:12 f2e: plan main written: 67 conditions, 2 passes, 4032 rows
+03:23:12 exit: 0 passes run, 1s, out_of_time=False
+2026-10-12T03:24:27Z START ext13ko-qwen3 (waited 72s): python scripts/ext13ko_run.py qwen3 --conds f2e --with-wr --time-budget 1320
+03:24:34 f2e/qwen3 main: 2 of 2 passes to run
+03:24:39   layer   0: load-wait 3.09s compute 0.79s  wf_rows=0
+03:24:48   layer   8: load-wait 1.15s compute 0.09s  wf_rows=0
+03:24:58   layer  16: load-wait 1.16s compute 0.09s  wf_rows=0
+03:25:08   layer  24: load-wait 1.16s compute 0.09s  wf_rows=0
+03:25:18   layer  32: load-wait 1.15s compute 0.09s  wf_rows=0
+03:25:31   layer  40: load-wait 1.54s compute 0.09s  wf_rows=0
+03:25:41   layer  47: load-wait 0.99s compute 0.08s  wf_rows=0
+03:25:42   pass done: 576 prefill rows (T=29), 0 spawn rows, 66.2s (metrics 0.0s)
+03:25:42 f2e pass full_p000: 576 rows, T=29, padded 16704, 66.4s, peak 3.8 GB
+03:26:39 f2e pass ctl_p000: 3456 rows, T=29, padded 100224, 56.8s, peak 8.6 GB
+03:26:39 f2e/qwen3 main complete
+03:26:40 f2e/qwen3 writer pass: 128 prompts, T <= 30, layers [36, 37, 41, 42, 43, 44]
+03:27:29 f2e writer pass done in 49s, peak 3.6 GB
+03:27:39 f2e writer projections: 2192 vectors
+03:27:39 exit: 2 passes run, 184s, out_of_time=False
+2026-10-12T03:27:45Z END   ext13ko-qwen3 rc=0 (198s)
+2026-10-12T03:56:40Z START ext13ko-cross-qwen3 (waited 1549s): python scripts/ext13ko_run.py qwen3 --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,vt_a2e_orig,f2e --phase cross --time-budget 1320
+03:56:47 f1: plan cross written: 5 conditions, 1 passes, 1280 rows
+03:56:47 f1/qwen3 cross: 1 of 1 passes to run
+03:56:53   layer   0: load-wait 3.62s compute 0.84s  wf_rows=0
+03:57:00   layer   8: load-wait 0.81s compute 0.24s  wf_rows=0
+03:57:09   layer  16: load-wait 0.75s compute 0.24s  wf_rows=0
+03:57:17   layer  24: load-wait 0.87s compute 0.25s  wf_rows=0
+03:57:26   layer  32: load-wait 0.94s compute 0.24s  wf_rows=0
+03:57:35   layer  40: load-wait 0.91s compute 0.24s  wf_rows=0
+03:57:43   layer  47: load-wait 0.97s compute 0.24s  wf_rows=0
+03:57:43   pass done: 1280 prefill rows (T=40), 0 spawn rows, 54.6s (metrics 0.1s)
+03:57:44 f1 pass ctl_p000: 1280 rows, T=40, padded 51200, 54.8s, peak 5.5 GB
+03:57:44 f1/qwen3 cross complete
+03:57:46 dir_f1: plan cross written: 5 conditions, 1 passes, 900 rows
+03:57:46 dir_f1/qwen3 cross: 1 of 1 passes to run
+03:58:40 dir_f1 pass ctl_p000: 900 rows, T=38, padded 34200, 53.5s, peak 4.4 GB
+03:58:40 dir_f1/qwen3 cross complete
+03:58:40 dir_opt: plan cross written: 6 conditions, 1 passes, 1080 rows
+03:58:40 dir_opt/qwen3 cross: 1 of 1 passes to run
+03:59:32 dir_opt pass ctl_p000: 1080 rows, T=28, padded 30240, 52.4s, peak 4.2 GB
+03:59:32 dir_opt/qwen3 cross complete
+03:59:33 cp_nat: plan cross written: 6 conditions, 1 passes, 1680 rows
+03:59:33 cp_nat/qwen3 cross: 1 of 1 passes to run
+04:00:26 cp_nat pass ctl_p000: 1680 rows, T=33, padded 55440, 52.8s, peak 5.8 GB
+04:00:26 cp_nat/qwen3 cross complete
+04:00:26 cp_vt_orig: plan cross written: 5 conditions, 1 passes, 768 rows
+04:00:26 cp_vt_orig/qwen3 cross: 1 of 1 passes to run
+04:01:20 cp_vt_orig pass ctl_p000: 768 rows, T=27, padded 20736, 53.7s, peak 3.9 GB
+04:01:20 cp_vt_orig/qwen3 cross complete
+04:01:21 cp_vt_neu: plan cross written: 5 conditions, 1 passes, 1280 rows
+04:01:21 cp_vt_neu/qwen3 cross: 1 of 1 passes to run
+04:02:18 cp_vt_neu pass ctl_p000: 1280 rows, T=28, padded 35840, 56.7s, peak 4.6 GB
+04:02:18 cp_vt_neu/qwen3 cross complete
+04:02:18 vt_e2a_orig: plan cross written: 5 conditions, 1 passes, 768 rows
+04:02:18 vt_e2a_orig/qwen3 cross: 1 of 1 passes to run
+04:03:13 vt_e2a_orig pass ctl_p000: 768 rows, T=21, padded 16128, 54.0s, peak 3.8 GB
+04:03:13 vt_e2a_orig/qwen3 cross complete
+04:03:13 vt_e2a_neu: plan cross written: 5 conditions, 1 passes, 1280 rows
+04:03:13 vt_e2a_neu/qwen3 cross: 1 of 1 passes to run
+04:04:08 vt_e2a_neu pass ctl_p000: 1280 rows, T=22, padded 28160, 55.2s, peak 4.1 GB
+04:04:08 vt_e2a_neu/qwen3 cross complete
+04:04:08 vt_a2e_orig: plan cross written: 5 conditions, 1 passes, 370 rows
+04:04:08 vt_a2e_orig/qwen3 cross: 1 of 1 passes to run
+04:05:03 vt_a2e_orig pass ctl_p000: 370 rows, T=27, padded 9990, 54.6s, peak 3.7 GB
+04:05:03 vt_a2e_orig/qwen3 cross complete
+04:05:04 f2e: plan cross written: 5 conditions, 1 passes, 320 rows
+04:05:04 f2e/qwen3 cross: 1 of 1 passes to run
+04:05:59 f2e pass ctl_p000: 320 rows, T=29, padded 9280, 55.0s, peak 3.7 GB
+04:05:59 f2e/qwen3 cross complete
+04:05:59 exit: 10 passes run, 552s, out_of_time=False
+2026-10-12T04:06:05Z END   ext13ko-cross-qwen3 rc=0 (565s)

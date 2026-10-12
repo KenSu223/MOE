@@ -1,0 +1,33 @@
+2026-10-12T03:11:06Z START ext13syn-gpucheck (waited 655s): python scripts/ext13syn_gpucheck.py
+03:11:09 f1_qwen3: 256 cases, 256 rows, 3072 spawns; Neg 690 pairs (64 in the last 4 layers), Pos 762
+03:11:22   layer   0: load-wait 6.36s compute 1.43s  wf_rows=2816
+03:11:30   layer   8: load-wait 0.66s compute 0.15s  wf_rows=2816
+03:11:38   layer  16: load-wait 0.78s compute 0.15s  wf_rows=2816
+03:11:46   layer  24: load-wait 0.88s compute 0.15s  wf_rows=2816
+03:11:56   layer  32: load-wait 1.09s compute 0.17s  wf_rows=2816
+03:12:04   layer  40: load-wait 0.77s compute 0.15s  wf_rows=2816
+03:12:11   layer  47: load-wait 0.84s compute 0.15s  wf_rows=3072
+03:12:11   pass done: 512 prefill rows (T=40), 3072 spawn rows, 57.3s
+03:12:11 f1_qwen3: done in 59s; all_moe +0.238, int_moe +0.466, intattn +0.960, intattn_latemoe +0.946, intblock +0.959, intblock_latemoe +0.941, lateonly -0.398, negonly -0.515, noneg +0.492, noneg_early +0.229, noneg_late +0.496, noneg_row +0.517
+03:12:12 dir_f1_qwen3: 180 cases, 180 rows, 2160 spawns; Neg 426 pairs (62 in the last 4 layers), Pos 861
+03:12:13   layer   0: load-wait 0.74s compute 0.09s  wf_rows=1980
+03:12:20   layer   8: load-wait 0.73s compute 0.11s  wf_rows=1980
+03:12:28   layer  16: load-wait 0.81s compute 0.13s  wf_rows=1980
+03:12:35   layer  24: load-wait 0.77s compute 0.11s  wf_rows=1980
+03:12:43   layer  32: load-wait 0.85s compute 0.11s  wf_rows=1980
+03:12:55   layer  40: load-wait 1.17s compute 0.11s  wf_rows=1980
+03:13:01   layer  47: load-wait 0.66s compute 0.10s  wf_rows=2160
+03:13:01   pass done: 360 prefill rows (T=38), 2160 spawn rows, 48.9s
+03:13:01 dir_f1_qwen3: done in 49s; all_moe +0.104, int_moe +0.428, intattn +0.922, intattn_latemoe +0.895, intblock +0.928, intblock_latemoe +0.895, lateonly -0.540, negonly -0.693, noneg +0.470, noneg_early +0.094, noneg_late +0.476, noneg_row +0.491
+03:13:02 dir_opt_qwen3: 180 cases, 180 rows, 2160 spawns; Neg 778 pairs (56 in the last 4 layers), Pos 1113
+03:13:03   layer   0: load-wait 0.80s compute 0.09s  wf_rows=1980
+03:13:10   layer   8: load-wait 0.83s compute 0.11s  wf_rows=1980
+03:13:18   layer  16: load-wait 0.80s compute 0.11s  wf_rows=1980
+03:13:25   layer  24: load-wait 0.82s compute 0.09s  wf_rows=1980
+03:13:32   layer  32: load-wait 0.90s compute 0.11s  wf_rows=1980
+03:13:43   layer  40: load-wait 0.64s compute 0.11s  wf_rows=1980
+03:13:49   layer  47: load-wait 0.82s compute 0.09s  wf_rows=2160
+03:13:49   pass done: 360 prefill rows (T=28), 2160 spawn rows, 46.8s
+03:13:49 dir_opt_qwen3: done in 47s; all_moe +0.813, int_moe +0.769, intattn +0.957, intattn_latemoe +0.949, intblock +0.962, intblock_latemoe +0.954, lateonly -0.041, negonly -0.226, noneg +0.797, noneg_early +0.796, noneg_late +0.815, noneg_row +0.822
+03:13:49 done
+2026-10-12T03:13:55Z END   ext13syn-gpucheck rc=0 (169s)

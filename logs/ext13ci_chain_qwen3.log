@@ -1,0 +1,1297 @@
+2026-10-11T06:17:10Z chain qwen3 started (pid 1326568)
+2026-10-11T06:17:10Z waiting (BASE READY seen: []; not finished: ['f1', 'dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'vt_a2e_neu', 'f2e'])
+2026-10-11T06:47:10Z waiting (BASE READY seen: []; not finished: ['f1', 'dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T07:17:10Z waiting (BASE READY seen: []; not finished: ['f1', 'dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T07:47:10Z waiting (BASE READY seen: []; not finished: ['f1', 'dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T07:57:10Z submit ext13ci-s1-f1-qwen3: python scripts/ext13ci_heads_run.py f1 qwen3 --max-passes 6
+2026-10-11T08:12:31Z START ext13ci-s1-f1-qwen3 (waited 921s): python scripts/ext13ci_heads_run.py f1 qwen3 --max-passes 6
+08:12:40 f1/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'blank', 'pos0', 'final']
+08:12:41 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+08:12:46   layer   0: load-wait 3.51s compute 0.86s  wf_rows=4224
+08:12:56   layer   8: load-wait 0.41s compute 0.64s  wf_rows=38016
+08:13:05   layer  16: load-wait 0.27s compute 0.68s  wf_rows=71808
+08:13:14   layer  24: load-wait 0.58s compute 0.96s  wf_rows=105600
+08:13:27   layer  32: load-wait 0.55s compute 1.25s  wf_rows=139392
+08:13:42   layer  40: load-wait 0.24s compute 1.54s  wf_rows=173184
+08:13:54   layer  47: load-wait 0.13s compute 1.77s  wf_rows=202752
+08:13:54   pass done: 256 prefill rows (T=39), 202752 spawn rows, 72.4s
+08:13:58 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 72.36417984962463, 'peak_GB': 17.167076587677002, 'mean_drop': 4.564453125, 'r_sum_heads_vs_attn_layer': 0.33486942376370965, 'head_dla_sum_mean': 5.331920146942139, 'candidates_not_routed_clean': 1086, 'attn_row_sum_minmax': [0.9996264576911926, 1.000398874282837], 'utc': '2026-10-11T08:13:58Z'}
+08:13:58 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+08:13:59   layer   0: load-wait 0.49s compute 0.11s  wf_rows=4224
+08:14:06   layer   8: load-wait 0.63s compute 0.39s  wf_rows=38016
+08:14:13   layer  16: load-wait 0.18s compute 0.87s  wf_rows=71808
+08:14:22   layer  24: load-wait 0.12s compute 0.97s  wf_rows=105600
+08:14:32   layer  32: load-wait 0.12s compute 1.24s  wf_rows=139392
+08:14:44   layer  40: load-wait 0.24s compute 1.52s  wf_rows=173184
+08:14:58   layer  47: load-wait 0.11s compute 1.76s  wf_rows=202752
+08:14:58   pass done: 256 prefill rows (T=40), 202752 spawn rows, 59.8s
+08:15:01 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 59.81207799911499, 'peak_GB': 17.17541217803955, 'mean_drop': 4.64453125, 'r_sum_heads_vs_attn_layer': 0.3387120135086457, 'head_dla_sum_mean': 5.616311073303223, 'candidates_not_routed_clean': 1208, 'attn_row_sum_minmax': [0.9996085166931152, 1.0003798007965088], 'utc': '2026-10-11T08:15:01Z'}
+08:15:01 ALL CHUNKS COMPLETE
+2026-10-11T08:15:08Z END   ext13ci-s1-f1-qwen3 rc=0 (157s)
+2026-10-11T08:15:08Z ext13ci-s1-f1-qwen3 rc=0 (1078s incl. queue wait)
+2026-10-11T08:15:08Z cpu: scripts/ext13ci_analyze.py --step 1 --keys f1/qwen3
+08:15:09 step 1: f1/qwen3
+08:15:14 step-1 figures written
+08:15:14 wrote ext13ci_heads_top (11 rows)
+08:15:14 wrote ext13ci_heads_summary (1 rows)
+08:15:14 wrote ext13ci_heads_layers (6 rows)
+08:15:14 wrote ext13ci_attn_heads (10 rows)
+08:15:14 wrote ext13ci_attn_population (5 rows)
+08:15:14 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T08:15:15Z cpu rc=0
+2026-10-11T08:17:15Z waiting (BASE READY seen: ['f1']; not finished: ['dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T08:47:15Z waiting (BASE READY seen: ['f1']; not finished: ['dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T09:17:15Z waiting (BASE READY seen: ['f1']; not finished: ['dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T09:47:15Z waiting (BASE READY seen: ['f1']; not finished: ['dir_f1', 'dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T09:57:15Z submit ext13ci-s1-dir_f1-qwen3: python scripts/ext13ci_heads_run.py dir_f1 qwen3 --max-passes 6
+2026-10-11T09:58:40Z START ext13ci-s1-dir_f1-qwen3 (waited 85s): python scripts/ext13ci_heads_run.py dir_f1 qwen3 --max-passes 6
+09:58:47 dir_f1/qwen3: 180 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'blank', 'pos0', 'final']
+09:58:47 pass (chunk 0): 180 prefill rows (90 clean), 142560 spawn rows
+09:58:52   layer   0: load-wait 3.17s compute 0.80s  wf_rows=2970
+09:59:01   layer   8: load-wait 1.00s compute 0.27s  wf_rows=26730
+09:59:11   layer  16: load-wait 0.81s compute 0.46s  wf_rows=50490
+09:59:21   layer  24: load-wait 0.61s compute 0.65s  wf_rows=74250
+09:59:31   layer  32: load-wait 0.42s compute 0.85s  wf_rows=98010
+09:59:41   layer  40: load-wait 0.22s compute 1.05s  wf_rows=121770
+09:59:50   layer  47: load-wait 0.11s compute 1.20s  wf_rows=142560
+09:59:50   pass done: 180 prefill rows (T=37), 142560 spawn rows, 62.3s
+09:59:52 chunk 0 done: {'chunk': 0, 'rows': 90, 'prefill': 180, 'spawn_rows': 142560, 'pass_s': 62.32494401931763, 'peak_GB': 12.749974250793457, 'mean_drop': 5.119444370269775, 'r_sum_heads_vs_attn_layer': 0.3490286472879096, 'head_dla_sum_mean': 5.660295486450195, 'candidates_not_routed_clean': 1130, 'attn_row_sum_minmax': [0.9995822906494141, 1.0003637075424194], 'utc': '2026-10-11T09:59:52Z'}
+09:59:52 pass (chunk 1): 180 prefill rows (90 clean), 142560 spawn rows
+09:59:54   layer   0: load-wait 1.05s compute 0.10s  wf_rows=2970
+10:00:03   layer   8: load-wait 1.53s compute 0.27s  wf_rows=26730
+10:00:15   layer  16: load-wait 0.92s compute 0.47s  wf_rows=50490
+10:00:24   layer  24: load-wait 0.10s compute 0.67s  wf_rows=74250
+10:00:32   layer  32: load-wait 0.34s compute 0.85s  wf_rows=98010
+10:00:42   layer  40: load-wait 0.14s compute 1.05s  wf_rows=121770
+10:00:50   layer  47: load-wait 0.11s compute 1.22s  wf_rows=142560
+10:00:50   pass done: 180 prefill rows (T=38), 142560 spawn rows, 58.1s
+10:00:53 chunk 1 done: {'chunk': 1, 'rows': 90, 'prefill': 180, 'spawn_rows': 142560, 'pass_s': 58.061392307281494, 'peak_GB': 12.755836486816406, 'mean_drop': 5.344444274902344, 'r_sum_heads_vs_attn_layer': 0.312999515345282, 'head_dla_sum_mean': 5.504568099975586, 'candidates_not_routed_clean': 1142, 'attn_row_sum_minmax': [0.999615490436554, 1.0003957748413086], 'utc': '2026-10-11T10:00:53Z'}
+10:00:53 ALL CHUNKS COMPLETE
+2026-10-11T10:01:00Z END   ext13ci-s1-dir_f1-qwen3 rc=0 (140s)
+2026-10-11T10:01:00Z ext13ci-s1-dir_f1-qwen3 rc=0 (224s incl. queue wait)
+2026-10-11T10:01:00Z cpu: scripts/ext13ci_analyze.py --step 1 --keys dir_f1/qwen3
+10:01:02 step 1: dir_f1/qwen3
+10:01:06 step-1 figures written
+10:01:06 wrote ext13ci_heads_top (33 rows)
+10:01:06 wrote ext13ci_heads_summary (3 rows)
+10:01:06 wrote ext13ci_heads_layers (18 rows)
+10:01:06 wrote ext13ci_attn_heads (30 rows)
+10:01:06 wrote ext13ci_attn_population (15 rows)
+10:01:06 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T10:01:07Z cpu rc=0
+2026-10-11T10:19:07Z waiting (BASE READY seen: ['dir_f1', 'f1']; not finished: ['dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T10:49:07Z waiting (BASE READY seen: ['dir_f1', 'f1']; not finished: ['dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T11:19:07Z waiting (BASE READY seen: ['dir_f1', 'f1']; not finished: ['dir_opt', 'cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T11:31:08Z submit ext13ci-s1-dir_opt-qwen3: python scripts/ext13ci_heads_run.py dir_opt qwen3 --max-passes 6
+2026-10-11T11:36:00Z START ext13ci-s1-dir_opt-qwen3 (waited 292s): python scripts/ext13ci_heads_run.py dir_opt qwen3 --max-passes 6
+11:36:07 dir_opt/qwen3: 180 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'pos0', 'final']
+11:36:08 pass (chunk 0): 180 prefill rows (90 clean), 142560 spawn rows
+11:36:13   layer   0: load-wait 3.10s compute 0.73s  wf_rows=2970
+11:36:20   layer   8: load-wait 0.69s compute 0.24s  wf_rows=26730
+11:36:33   layer  16: load-wait 2.33s compute 0.41s  wf_rows=50490
+11:36:41   layer  24: load-wait 0.35s compute 0.57s  wf_rows=74250
+11:36:50   layer  32: load-wait 0.46s compute 0.75s  wf_rows=98010
+11:36:59   layer  40: load-wait 0.33s compute 0.91s  wf_rows=121770
+11:37:09   layer  47: load-wait 0.38s compute 1.05s  wf_rows=142560
+11:37:09   pass done: 180 prefill rows (T=27), 142560 spawn rows, 59.9s
+11:37:11 chunk 0 done: {'chunk': 0, 'rows': 90, 'prefill': 180, 'spawn_rows': 142560, 'pass_s': 59.8835928440094, 'peak_GB': 12.69141435623169, 'mean_drop': 8.737500190734863, 'r_sum_heads_vs_attn_layer': 0.3855000663492271, 'head_dla_sum_mean': 0.6763885021209717, 'candidates_not_routed_clean': 614, 'attn_row_sum_minmax': [0.9996160268783569, 1.0003838539123535], 'utc': '2026-10-11T11:37:11Z'}
+11:37:11 pass (chunk 1): 180 prefill rows (90 clean), 142560 spawn rows
+11:37:12   layer   0: load-wait 0.51s compute 0.09s  wf_rows=2970
+11:37:18   layer   8: load-wait 0.76s compute 0.24s  wf_rows=26730
+11:37:26   layer  16: load-wait 0.72s compute 0.41s  wf_rows=50490
+11:37:35   layer  24: load-wait 0.53s compute 0.58s  wf_rows=74250
+11:37:44   layer  32: load-wait 0.40s compute 0.74s  wf_rows=98010
+11:37:53   layer  40: load-wait 0.22s compute 0.91s  wf_rows=121770
+11:38:02   layer  47: load-wait 0.26s compute 1.05s  wf_rows=142560
+11:38:02   pass done: 180 prefill rows (T=28), 142560 spawn rows, 50.8s
+11:38:06 chunk 1 done: {'chunk': 1, 'rows': 90, 'prefill': 180, 'spawn_rows': 142560, 'pass_s': 50.770137548446655, 'peak_GB': 12.697277069091797, 'mean_drop': 8.715277671813965, 'r_sum_heads_vs_attn_layer': 0.35975320922639, 'head_dla_sum_mean': 0.11652811616659164, 'candidates_not_routed_clean': 611, 'attn_row_sum_minmax': [0.999629020690918, 1.0003724098205566], 'utc': '2026-10-11T11:38:06Z'}
+11:38:06 ALL CHUNKS COMPLETE
+2026-10-11T11:38:13Z END   ext13ci-s1-dir_opt-qwen3 rc=0 (133s)
+2026-10-11T11:38:13Z ext13ci-s1-dir_opt-qwen3 rc=0 (426s incl. queue wait)
+2026-10-11T11:38:13Z cpu: scripts/ext13ci_analyze.py --step 1 --keys dir_opt/qwen3
+11:38:16 step 1: dir_opt/qwen3
+11:38:19 step-1 figures written
+11:38:20 wrote ext13ci_heads_top (55 rows)
+11:38:20 wrote ext13ci_heads_summary (5 rows)
+11:38:20 wrote ext13ci_heads_layers (30 rows)
+11:38:20 wrote ext13ci_attn_heads (50 rows)
+11:38:20 wrote ext13ci_attn_population (25 rows)
+11:38:20 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T11:38:20Z cpu rc=0
+2026-10-11T11:38:22Z group g1: subgroups {'g1': ['f1', 'dir_f1', 'dir_opt']} (rows {'f1': 256, 'dir_f1': 180, 'dir_opt': 180})
+2026-10-11T11:38:22Z submit ext13ci-s2-g1-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+2026-10-11T11:53:34Z START ext13ci-s2-g1-qwen3 (waited 912s): python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+11:53:43 f1/qwen3: 256 rows, 256 cases, prefill offset 0, single-expert entries proxied by DLA 0
+11:53:43 dir_f1/qwen3: 180 rows, 180 cases, prefill offset 512, single-expert entries proxied by DLA 0
+11:53:44 dir_opt/qwen3: 180 rows, 180 cases, prefill offset 872, single-expert entries proxied by DLA 0
+11:53:47 initialised: {'tasks': ['f1/qwen3', 'dir_f1/qwen3', 'dir_opt/qwen3'], 'rows': {'f1/qwen3': 256, 'dir_f1/qwen3': 180, 'dir_opt/qwen3': 180}, 'budget': 100000, 'queue_groups': 3176, 'queue_items': 55416, 'pool_sizes': {'f1/qwen3': {'mix': 64, 'head': 32}, 'dir_f1/qwen3': {'mix': 64, 'head': 32}, 'dir_opt/qwen3': {'mix': 64, 'head': 32}}, 'n_proxy': {'f1/qwen3': 0, 'dir_f1/qwen3': 0, 'dir_opt/qwen3': 0}}
+11:53:55 pass 0: 1232 prefill rows, 101592 spawn rows (59136 adaptive, 2456 static groups; queue 2456/3176)
+11:54:02   layer   0: load-wait 3.82s compute 1.09s  wf_rows=10092
+11:54:10   layer   8: load-wait 0.24s compute 0.52s  wf_rows=28283
+11:54:19   layer  16: load-wait 1.04s compute 0.61s  wf_rows=38086
+11:54:28   layer  24: load-wait 0.63s compute 0.66s  wf_rows=45398
+11:54:39   layer  32: load-wait 0.11s compute 0.79s  wf_rows=57358
+11:54:52   layer  40: load-wait 0.34s compute 1.24s  wf_rows=87542
+11:55:03   layer  47: load-wait 0.11s compute 1.25s  wf_rows=101592
+11:55:07   pass done: 1232 prefill rows (T=40), 101592 spawn rows, 69.7s (metrics 3.7s)
+11:55:20 pass 0 done in 70s, peak 11.9 GB; greedy left 1232; median r: {'mix': 0.4, 'head': 0.35714285714285715}; all-heads |Δ - Δ_clean| max 3.500; queue 2456/3176
+11:55:24 pass 1: 1232 prefill rows, 69632 spawn rows (56672 adaptive, 720 static groups; queue 3176/3176)
+11:55:27   layer   0: load-wait 1.01s compute 0.29s  wf_rows=5445
+11:55:35   layer   8: load-wait 0.42s compute 0.44s  wf_rows=21270
+11:55:44   layer  16: load-wait 0.52s compute 0.53s  wf_rows=29895
+11:55:55   layer  24: load-wait 1.67s compute 0.60s  wf_rows=36281
+11:56:04   layer  32: load-wait 0.13s compute 0.67s  wf_rows=46062
+11:56:14   layer  40: load-wait 0.59s compute 1.00s  wf_rows=67029
+11:56:22   layer  47: load-wait 0.28s compute 0.90s  wf_rows=69632
+11:56:24   pass done: 1232 prefill rows (T=40), 69632 spawn rows, 58.8s (metrics 2.6s)
+11:56:33 pass 1 done in 59s, peak 9.7 GB; greedy left 1232; median r: {'mix': 0.49230769230769234, 'head': 0.44912747707778766}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+11:56:37 pass 2: 1232 prefill rows, 55440 spawn rows (55440 adaptive, 0 static groups; queue 3176/3176)
+11:56:39   layer   0: load-wait 0.73s compute 0.27s  wf_rows=3710
+11:56:47   layer   8: load-wait 0.75s compute 0.40s  wf_rows=18115
+11:56:56   layer  16: load-wait 0.61s compute 0.46s  wf_rows=25249
+11:57:05   layer  24: load-wait 0.68s compute 0.51s  wf_rows=30441
+11:57:15   layer  32: load-wait 0.53s compute 0.58s  wf_rows=38221
+11:57:24   layer  40: load-wait 0.96s compute 0.88s  wf_rows=54916
+11:57:33   layer  47: load-wait 0.29s compute 0.71s  wf_rows=55440
+11:57:35   pass done: 1232 prefill rows (T=40), 55440 spawn rows, 56.6s (metrics 2.1s)
+11:57:41 pass 2 done in 57s, peak 8.4 GB; greedy left 1232; median r: {'mix': 0.563301282051282, 'head': 0.5254529767040552}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+11:57:45 pass 3: 1232 prefill rows, 54208 spawn rows (54208 adaptive, 0 static groups; queue 3176/3176)
+11:57:47   layer   0: load-wait 0.72s compute 0.28s  wf_rows=3873
+11:57:55   layer   8: load-wait 0.78s compute 0.42s  wf_rows=18659
+11:58:04   layer  16: load-wait 0.68s compute 0.48s  wf_rows=25804
+11:58:13   layer  24: load-wait 0.48s compute 0.52s  wf_rows=31005
+11:58:22   layer  32: load-wait 0.75s compute 0.59s  wf_rows=39373
+11:58:32   layer  40: load-wait 0.55s compute 0.88s  wf_rows=53927
+11:58:40   layer  47: load-wait 0.37s compute 0.70s  wf_rows=54208
+11:58:42   pass done: 1232 prefill rows (T=40), 54208 spawn rows, 56.4s (metrics 2.0s)
+11:58:49 pass 3 done in 56s, peak 8.4 GB; greedy left 1232; median r: {'mix': 0.6290322580645161, 'head': 0.574468085106383}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+11:58:52 pass 4: 1232 prefill rows, 52976 spawn rows (52976 adaptive, 0 static groups; queue 3176/3176)
+11:58:54   layer   0: load-wait 0.73s compute 0.28s  wf_rows=4302
+11:59:03   layer   8: load-wait 0.44s compute 0.43s  wf_rows=19428
+11:59:12   layer  16: load-wait 0.60s compute 0.48s  wf_rows=26511
+11:59:21   layer  24: load-wait 0.49s compute 0.52s  wf_rows=31698
+11:59:30   layer  32: load-wait 0.50s compute 0.61s  wf_rows=40135
+11:59:40   layer  40: load-wait 0.69s compute 0.87s  wf_rows=52814
+11:59:48   layer  47: load-wait 0.83s compute 0.70s  wf_rows=52976
+11:59:50   pass done: 1232 prefill rows (T=40), 52976 spawn rows, 56.6s (metrics 2.0s)
+11:59:57 pass 4 done in 57s, peak 8.4 GB; greedy left 1232; median r: {'mix': 0.6666666666666666, 'head': 0.625}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+11:59:59 pass 5: 1232 prefill rows, 51744 spawn rows (51744 adaptive, 0 static groups; queue 3176/3176)
+12:00:02   layer   0: load-wait 0.81s compute 0.28s  wf_rows=4610
+12:00:11   layer   8: load-wait 0.77s compute 0.43s  wf_rows=20277
+12:00:20   layer  16: load-wait 0.57s compute 0.49s  wf_rows=27278
+12:00:28   layer  24: load-wait 0.45s compute 0.54s  wf_rows=32260
+12:00:38   layer  32: load-wait 0.40s compute 0.60s  wf_rows=40582
+12:00:48   layer  40: load-wait 0.27s compute 0.85s  wf_rows=51677
+12:00:55   layer  47: load-wait 0.37s compute 0.69s  wf_rows=51744
+12:00:57   pass done: 1232 prefill rows (T=40), 51744 spawn rows, 56.8s (metrics 1.9s)
+12:01:04 pass 5 done in 57s, peak 8.4 GB; greedy left 1232; median r: {'mix': 0.715633423180593, 'head': 0.6557377049180327}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:01:08 pass 6: 1232 prefill rows, 50512 spawn rows (50512 adaptive, 0 static groups; queue 3176/3176)
+12:01:11   layer   0: load-wait 0.76s compute 0.29s  wf_rows=5140
+12:01:19   layer   8: load-wait 0.72s compute 0.44s  wf_rows=21550
+12:01:29   layer  16: load-wait 0.96s compute 0.49s  wf_rows=28231
+12:01:38   layer  24: load-wait 0.48s compute 0.54s  wf_rows=32919
+12:01:47   layer  32: load-wait 0.49s compute 0.61s  wf_rows=41009
+12:01:56   layer  40: load-wait 0.19s compute 1.04s  wf_rows=50463
+12:02:05   layer  47: load-wait 0.21s compute 0.68s  wf_rows=50512
+12:02:06   pass done: 1232 prefill rows (T=40), 50512 spawn rows, 57.0s (metrics 1.9s)
+12:02:14 pass 6 done in 57s, peak 8.3 GB; greedy left 1232; median r: {'mix': 0.7423404255319148, 'head': 0.6904761904761905}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:02:17 pass 7: 1232 prefill rows, 49280 spawn rows (49280 adaptive, 0 static groups; queue 3176/3176)
+12:02:20   layer   0: load-wait 0.82s compute 0.29s  wf_rows=5979
+12:02:29   layer   8: load-wait 0.55s compute 0.45s  wf_rows=22542
+12:02:38   layer  16: load-wait 0.69s compute 0.51s  wf_rows=29314
+12:02:47   layer  24: load-wait 0.55s compute 0.55s  wf_rows=33887
+12:02:56   layer  32: load-wait 0.47s compute 0.61s  wf_rows=41208
+12:03:06   layer  40: load-wait 0.38s compute 0.86s  wf_rows=49250
+12:03:14   layer  47: load-wait 0.40s compute 0.67s  wf_rows=49280
+12:03:16   pass done: 1232 prefill rows (T=40), 49280 spawn rows, 57.4s (metrics 1.8s)
+12:03:22 pass 7 done in 57s, peak 8.2 GB; greedy left 1232; median r: {'mix': 0.7754310344827586, 'head': 0.719375}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:03:25 pass 8: 1232 prefill rows, 48048 spawn rows (48048 adaptive, 0 static groups; queue 3176/3176)
+12:03:27   layer   0: load-wait 0.60s compute 0.29s  wf_rows=6623
+12:03:36   layer   8: load-wait 0.75s compute 0.47s  wf_rows=23677
+12:03:44   layer  16: load-wait 0.52s compute 0.51s  wf_rows=30325
+12:03:54   layer  24: load-wait 0.72s compute 0.56s  wf_rows=34559
+12:04:02   layer  32: load-wait 0.43s compute 0.61s  wf_rows=41116
+12:04:12   layer  40: load-wait 0.40s compute 0.83s  wf_rows=48035
+12:04:20   layer  47: load-wait 0.63s compute 0.67s  wf_rows=48048
+12:04:22   pass done: 1232 prefill rows (T=40), 48048 spawn rows, 55.5s (metrics 1.8s)
+12:04:28 pass 8 done in 56s, peak 8.2 GB; greedy left 1232; median r: {'mix': 0.8, 'head': 0.7419354838709677}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:04:32 pass 9: 1232 prefill rows, 46816 spawn rows (46816 adaptive, 0 static groups; queue 3176/3176)
+12:04:34   layer   0: load-wait 0.77s compute 0.30s  wf_rows=7401
+12:04:44   layer   8: load-wait 0.62s compute 0.48s  wf_rows=24867
+12:04:53   layer  16: load-wait 0.54s compute 0.53s  wf_rows=30997
+12:05:02   layer  24: load-wait 0.59s compute 0.56s  wf_rows=34879
+12:05:11   layer  32: load-wait 0.61s compute 0.61s  wf_rows=40947
+12:05:21   layer  40: load-wait 0.30s compute 0.84s  wf_rows=46816
+12:05:29   layer  47: load-wait 0.47s compute 0.66s  wf_rows=46816
+12:05:30   pass done: 1232 prefill rows (T=40), 46816 spawn rows, 57.0s (metrics 1.7s)
+12:05:37 pass 9 done in 57s, peak 8.1 GB; greedy left 1232; median r: {'mix': 0.8162280701754385, 'head': 0.7700320512820513}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:05:41 pass 10: 1232 prefill rows, 45584 spawn rows (45584 adaptive, 0 static groups; queue 3176/3176)
+12:05:44   layer   0: load-wait 1.16s compute 0.31s  wf_rows=7925
+12:05:54   layer   8: load-wait 0.53s compute 0.49s  wf_rows=26125
+12:06:02   layer  16: load-wait 0.46s compute 0.53s  wf_rows=31837
+12:06:12   layer  24: load-wait 0.55s compute 0.57s  wf_rows=35456
+12:06:20   layer  32: load-wait 0.52s compute 0.61s  wf_rows=40778
+12:06:31   layer  40: load-wait 0.13s compute 0.84s  wf_rows=45584
+12:06:39   layer  47: load-wait 0.56s compute 0.65s  wf_rows=45584
+12:06:40   pass done: 1232 prefill rows (T=40), 45584 spawn rows, 58.1s (metrics 1.7s)
+12:06:47 pass 10 done in 58s, peak 8.0 GB; greedy left 1232; median r: {'mix': 0.8260869565217391, 'head': 0.7818918918918919}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:06:50 pass 11: 1232 prefill rows, 44352 spawn rows (44352 adaptive, 0 static groups; queue 3176/3176)
+12:06:52   layer   0: load-wait 0.76s compute 0.31s  wf_rows=8941
+12:07:00   layer   8: load-wait 0.28s compute 0.51s  wf_rows=26996
+12:07:08   layer  16: load-wait 0.74s compute 0.55s  wf_rows=32745
+12:07:17   layer  24: load-wait 0.59s compute 0.58s  wf_rows=36013
+12:07:26   layer  32: load-wait 0.51s compute 0.61s  wf_rows=40583
+12:07:35   layer  40: load-wait 0.29s compute 0.80s  wf_rows=44352
+12:07:43   layer  47: load-wait 0.59s compute 0.65s  wf_rows=44352
+12:07:45   pass done: 1232 prefill rows (T=40), 44352 spawn rows, 53.6s (metrics 1.7s)
+12:07:51 pass 11 done in 54s, peak 7.9 GB; greedy left 1232; median r: {'mix': 0.8495283018867925, 'head': 0.7933771209633278}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+2026-10-11T12:07:59Z END   ext13ci-s2-g1-qwen3 rc=0 (865s)
+2026-10-11T12:07:59Z ext13ci-s2-g1-qwen3 rc=0 (1776s incl. queue wait)
+2026-10-11T12:07:59Z submit ext13ci-s2-g1-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+2026-10-11T12:09:53Z START ext13ci-s2-g1-qwen3 (waited 114s): python scripts/ext13ci_circuit_run.py qwen3 --group g1 --conds f1,dir_f1,dir_opt --max-passes 12
+12:10:01 f1/qwen3: 256 rows, 256 cases, prefill offset 0, single-expert entries proxied by DLA 0
+12:10:02 dir_f1/qwen3: 180 rows, 180 cases, prefill offset 512, single-expert entries proxied by DLA 0
+12:10:03 dir_opt/qwen3: 180 rows, 180 cases, prefill offset 872, single-expert entries proxied by DLA 0
+12:10:05 resuming after 12 passes (queue 3176/3176)
+12:10:09 pass 12: 1232 prefill rows, 43120 spawn rows (43120 adaptive, 0 static groups; queue 3176/3176)
+12:10:14   layer   0: load-wait 2.92s compute 0.99s  wf_rows=9781
+12:10:23   layer   8: load-wait 0.75s compute 0.50s  wf_rows=27759
+12:10:33   layer  16: load-wait 0.70s compute 0.54s  wf_rows=32994
+12:10:43   layer  24: load-wait 0.68s compute 0.57s  wf_rows=35941
+12:10:53   layer  32: load-wait 0.61s compute 0.60s  wf_rows=40080
+12:11:03   layer  40: load-wait 0.47s compute 0.78s  wf_rows=43120
+12:11:11   layer  47: load-wait 0.61s compute 0.64s  wf_rows=43120
+12:11:13   pass done: 1232 prefill rows (T=40), 43120 spawn rows, 62.8s (metrics 1.6s)
+12:11:18 pass 12 done in 63s, peak 7.9 GB; greedy left 1232; median r: {'mix': 0.8571428571428571, 'head': 0.8060035842293907}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:11:20 pass 13: 1232 prefill rows, 41888 spawn rows (41888 adaptive, 0 static groups; queue 3176/3176)
+12:11:23   layer   0: load-wait 1.21s compute 0.33s  wf_rows=10407
+12:11:34   layer   8: load-wait 0.86s compute 0.50s  wf_rows=28092
+12:11:44   layer  16: load-wait 0.63s compute 0.55s  wf_rows=33210
+12:11:53   layer  24: load-wait 0.62s compute 0.57s  wf_rows=35893
+12:12:03   layer  32: load-wait 0.53s compute 0.60s  wf_rows=39333
+12:12:13   layer  40: load-wait 0.26s compute 0.80s  wf_rows=41888
+12:12:21   layer  47: load-wait 0.48s compute 0.65s  wf_rows=41888
+12:12:23   pass done: 1232 prefill rows (T=40), 41888 spawn rows, 61.1s (metrics 1.6s)
+12:12:29 pass 13 done in 61s, peak 7.8 GB; greedy left 1232; median r: {'mix': 0.8736020646429887, 'head': 0.8075396825396826}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:12:31 pass 14: 1232 prefill rows, 40656 spawn rows (40656 adaptive, 0 static groups; queue 3176/3176)
+12:12:34   layer   0: load-wait 0.74s compute 0.32s  wf_rows=11270
+12:12:43   layer   8: load-wait 0.65s compute 0.52s  wf_rows=28287
+12:12:50   layer  16: load-wait 0.26s compute 0.55s  wf_rows=32852
+12:12:58   layer  24: load-wait 0.57s compute 0.57s  wf_rows=35393
+12:13:08   layer  32: load-wait 0.43s compute 0.59s  wf_rows=38608
+12:13:16   layer  40: load-wait 0.11s compute 0.83s  wf_rows=40656
+12:13:21   layer  47: load-wait 0.11s compute 0.62s  wf_rows=40656
+12:13:23   pass done: 1232 prefill rows (T=40), 40656 spawn rows, 50.3s (metrics 1.5s)
+12:13:28 pass 14 done in 50s, peak 7.7 GB; greedy left 1232; median r: {'mix': 0.8809523809523809, 'head': 0.8166139695314746}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:13:31 pass 15: 1232 prefill rows, 39424 spawn rows (39424 adaptive, 0 static groups; queue 3176/3176)
+12:13:33   layer   0: load-wait 0.62s compute 0.33s  wf_rows=12260
+12:13:43   layer   8: load-wait 0.81s compute 0.52s  wf_rows=28630
+12:13:51   layer  16: load-wait 0.54s compute 0.55s  wf_rows=32849
+12:14:00   layer  24: load-wait 0.56s compute 0.57s  wf_rows=34957
+12:14:09   layer  32: load-wait 0.47s compute 0.58s  wf_rows=37671
+12:14:18   layer  40: load-wait 0.45s compute 0.77s  wf_rows=39424
+12:14:27   layer  47: load-wait 0.36s compute 0.61s  wf_rows=39424
+12:14:29   pass done: 1232 prefill rows (T=40), 39424 spawn rows, 56.3s (metrics 1.5s)
+12:14:36 pass 15 done in 56s, peak 7.6 GB; greedy left 1232; median r: {'mix': 0.8888888888888888, 'head': 0.8289198606271777}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:14:38 pass 16: 1232 prefill rows, 38192 spawn rows (38192 adaptive, 0 static groups; queue 3176/3176)
+12:14:41   layer   0: load-wait 1.04s compute 0.33s  wf_rows=12893
+12:14:49   layer   8: load-wait 0.69s compute 0.52s  wf_rows=28557
+12:14:59   layer  16: load-wait 0.48s compute 0.55s  wf_rows=32516
+12:15:08   layer  24: load-wait 0.55s compute 0.56s  wf_rows=34440
+12:15:17   layer  32: load-wait 1.04s compute 0.58s  wf_rows=36854
+12:15:27   layer  40: load-wait 0.60s compute 0.85s  wf_rows=38192
+12:15:35   layer  47: load-wait 0.27s compute 0.60s  wf_rows=38192
+12:15:37   pass done: 1232 prefill rows (T=40), 38192 spawn rows, 57.3s (metrics 1.4s)
+12:15:43 pass 16 done in 57s, peak 7.5 GB; greedy left 1232; median r: {'mix': 0.8947368421052632, 'head': 0.8333333333333334}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:15:45 pass 17: 1232 prefill rows, 36960 spawn rows (36960 adaptive, 0 static groups; queue 3176/3176)
+12:15:48   layer   0: load-wait 0.96s compute 0.33s  wf_rows=13105
+12:15:57   layer   8: load-wait 0.55s compute 0.52s  wf_rows=28510
+12:16:06   layer  16: load-wait 0.58s compute 0.54s  wf_rows=32204
+12:16:14   layer  24: load-wait 0.51s compute 0.56s  wf_rows=33955
+12:16:24   layer  32: load-wait 0.54s compute 0.57s  wf_rows=36002
+12:16:34   layer  40: load-wait 0.40s compute 0.75s  wf_rows=36960
+12:16:41   layer  47: load-wait 0.49s compute 0.59s  wf_rows=36960
+12:16:43   pass done: 1232 prefill rows (T=40), 36960 spawn rows, 56.4s (metrics 1.4s)
+12:16:48 pass 17 done in 56s, peak 7.4 GB; greedy left 1232; median r: {'mix': 0.9035359801488834, 'head': 0.8367346938775511}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:16:51 pass 18: 1232 prefill rows, 35728 spawn rows (35728 adaptive, 0 static groups; queue 3176/3176)
+12:16:53   layer   0: load-wait 0.75s compute 0.35s  wf_rows=13287
+12:17:02   layer   8: load-wait 0.46s compute 0.52s  wf_rows=28274
+12:17:11   layer  16: load-wait 0.54s compute 0.54s  wf_rows=31744
+12:17:20   layer  24: load-wait 0.59s compute 0.55s  wf_rows=33251
+12:17:30   layer  32: load-wait 0.58s compute 0.56s  wf_rows=35004
+12:17:39   layer  40: load-wait 0.48s compute 0.72s  wf_rows=35728
+12:17:46   layer  47: load-wait 0.39s compute 0.58s  wf_rows=35728
+12:17:48   pass done: 1232 prefill rows (T=40), 35728 spawn rows, 55.6s (metrics 1.3s)
+12:17:52 pass 18 done in 56s, peak 7.3 GB; greedy left 0; median r: {'mix': 0.9047619047619048, 'head': 0.84}; all-heads |Δ - Δ_clean| max nan; queue 3176/3176
+12:17:52 ALL PASSES COMPLETE
+2026-10-11T12:17:59Z END   ext13ci-s2-g1-qwen3 rc=0 (486s)
+2026-10-11T12:17:59Z ext13ci-s2-g1-qwen3 rc=0 (601s incl. queue wait)
+2026-10-11T12:17:59Z cpu: scripts/ext13ci_analyze.py --step 2 --groups qwen3/g1
+12:18:01 analysing f1/qwen3 (g1)
+12:18:04 analysing dir_f1/qwen3 (g1)
+12:18:06 analysing dir_opt/qwen3 (g1)
+12:18:09 step-2 figures written
+12:18:09 wrote ext13ci_circuit_curves (21 rows)
+12:18:09 wrote ext13ci_circuit_greedy (6 rows)
+12:18:09 wrote ext13ci_circuit_sanity (3 rows)
+12:18:09 wrote ext13ci_overview (6 rows)
+12:18:10 overview written
+12:18:23 wrote ext13ci_contrasts (2 rows)
+12:18:23 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T12:18:23Z cpu rc=0
+2026-10-11T12:18:23Z cpu: scripts/ext13ci_text.py
+wrote /home/ubuntu/MOE/results/sections/ext13_circuit.md
+2026-10-11T12:18:24Z cpu rc=0
+2026-10-11T12:18:24Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T12:48:24Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T13:18:24Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T13:48:24Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T14:18:24Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T14:48:25Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T15:18:25Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T15:48:25Z waiting (BASE READY seen: ['dir_f1', 'dir_opt', 'f1']; not finished: ['cp_nat', 'cp_vt_orig', 'cp_vt_neu', 'vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T16:02:25Z submit ext13ci-s1-cp_nat-qwen3: python scripts/ext13ci_heads_run.py cp_nat qwen3 --max-passes 6
+2026-10-11T16:03:29Z START ext13ci-s1-cp_nat-qwen3 (waited 64s): python scripts/ext13ci_heads_run.py cp_nat qwen3 --max-passes 6
+16:03:37 cp_nat/qwen3: 280 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'attr_clean', 'attr_corr', 'mention_clean', 'mention_corr', 'prefix_ment_clean', 'prefix_ment_corr', 'pos0', 'final']
+16:03:38 pass (chunk 0): 280 prefill rows (140 clean), 221760 spawn rows
+16:03:44   layer   0: load-wait 4.38s compute 1.37s  wf_rows=4620
+16:03:55   layer   8: load-wait 1.25s compute 0.41s  wf_rows=41580
+16:04:06   layer  16: load-wait 0.16s compute 0.67s  wf_rows=78540
+16:04:16   layer  24: load-wait 0.14s compute 0.96s  wf_rows=115500
+16:04:26   layer  32: load-wait 0.11s compute 1.24s  wf_rows=152460
+16:04:39   layer  40: load-wait 0.13s compute 1.51s  wf_rows=189420
+[W1011 16:04:46.890486647 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1011 16:04:48.942966951 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+16:04:52   layer  47: load-wait 0.11s compute 1.76s  wf_rows=221760
+16:04:52   pass done: 280 prefill rows (T=33), 221760 spawn rows, 73.8s
+16:04:56 chunk 0 done: {'chunk': 0, 'rows': 140, 'prefill': 280, 'spawn_rows': 221760, 'pass_s': 73.76453590393066, 'peak_GB': 18.503604888916016, 'mean_drop': 6.1964287757873535, 'r_sum_heads_vs_attn_layer': 0.373884886389133, 'head_dla_sum_mean': 0.07172030955553055, 'candidates_not_routed_clean': 922, 'attn_row_sum_minmax': [0.9995947480201721, 1.0004132986068726], 'utc': '2026-10-11T16:04:56Z'}
+16:04:56 pass (chunk 1): 280 prefill rows (140 clean), 221760 spawn rows
+16:04:57   layer   0: load-wait 0.74s compute 0.11s  wf_rows=4620
+16:05:06   layer   8: load-wait 0.87s compute 0.39s  wf_rows=41580
+16:05:16   layer  16: load-wait 0.54s compute 0.66s  wf_rows=78540
+16:05:25   layer  24: load-wait 0.28s compute 0.95s  wf_rows=115500
+16:05:36   layer  32: load-wait 0.12s compute 1.23s  wf_rows=152460
+16:05:48   layer  40: load-wait 0.13s compute 1.51s  wf_rows=189420
+[W1011 16:05:51.079785011 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1011 16:05:57.638119317 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+16:06:01   layer  47: load-wait 0.47s compute 1.76s  wf_rows=221760
+16:06:01   pass done: 280 prefill rows (T=31), 221760 spawn rows, 64.8s
+16:06:05 chunk 1 done: {'chunk': 1, 'rows': 140, 'prefill': 280, 'spawn_rows': 221760, 'pass_s': 64.80170941352844, 'peak_GB': 18.485393524169922, 'mean_drop': 5.7928571701049805, 'r_sum_heads_vs_attn_layer': 0.36354748169289824, 'head_dla_sum_mean': -0.2201044261455536, 'candidates_not_routed_clean': 1017, 'attn_row_sum_minmax': [0.9996253848075867, 1.0003724098205566], 'utc': '2026-10-11T16:06:05Z'}
+16:06:05 ALL CHUNKS COMPLETE
+2026-10-11T16:06:12Z END   ext13ci-s1-cp_nat-qwen3 rc=0 (163s)
+2026-10-11T16:06:12Z ext13ci-s1-cp_nat-qwen3 rc=0 (227s incl. queue wait)
+2026-10-11T16:06:12Z cpu: scripts/ext13ci_analyze.py --step 1 --keys cp_nat/qwen3
+16:06:13 step 1: cp_nat/qwen3
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:241: RuntimeWarning: Mean of empty slice
+  mean_clean = np.nanmean(Mc[:, 0], axis=0).reshape(NC, -1)  # [NC, C]
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:242: RuntimeWarning: Mean of empty slice
+  mean_corr = np.nanmean(Mc[:, 1], axis=0).reshape(NC, -1)
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:313: RuntimeWarning: Mean of empty slice
+  allh = {c: float(np.nanmean(amass["clean"][:, k])) for k, c in enumerate(cls)}
+16:06:18 step-1 figures written
+16:06:18 wrote ext13ci_heads_top (77 rows)
+16:06:18 wrote ext13ci_heads_summary (7 rows)
+16:06:18 wrote ext13ci_heads_layers (42 rows)
+16:06:18 wrote ext13ci_attn_heads (70 rows)
+16:06:18 wrote ext13ci_attn_population (35 rows)
+16:06:18 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T16:06:18Z cpu rc=0
+2026-10-11T16:06:18Z submit ext13ci-s1-cp_vt_orig-qwen3: python scripts/ext13ci_heads_run.py cp_vt_orig qwen3 --max-passes 6
+2026-10-11T16:49:47Z START ext13ci-s1-cp_vt_orig-qwen3 (waited 2609s): python scripts/ext13ci_heads_run.py cp_vt_orig qwen3 --max-passes 6
+16:49:55 cp_vt_orig/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'attr_clean', 'attr_corr', 'mention_clean', 'mention_corr', 'prefix_ment_clean', 'prefix_ment_corr', 'pos0', 'final']
+16:49:56 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+16:50:00   layer   0: load-wait 3.04s compute 0.82s  wf_rows=4224
+16:50:09   layer   8: load-wait 0.94s compute 0.32s  wf_rows=38016
+16:50:19   layer  16: load-wait 0.71s compute 0.56s  wf_rows=71808
+16:50:29   layer  24: load-wait 0.48s compute 0.81s  wf_rows=105600
+16:50:39   layer  32: load-wait 0.23s compute 1.04s  wf_rows=139392
+16:50:50   layer  40: load-wait 0.11s compute 1.28s  wf_rows=173184
+[W1011 16:50:59.117697935 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+16:51:01   layer  47: load-wait 0.34s compute 1.73s  wf_rows=202752
+16:51:01   pass done: 256 prefill rows (T=27), 202752 spawn rows, 64.9s
+16:51:05 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 64.90682196617126, 'peak_GB': 17.067137718200684, 'mean_drop': 5.63671875, 'r_sum_heads_vs_attn_layer': 0.3816657713616065, 'head_dla_sum_mean': 1.0303187370300293, 'candidates_not_routed_clean': 826, 'attn_row_sum_minmax': [0.9996124505996704, 1.0003948211669922], 'utc': '2026-10-11T16:51:05Z'}
+16:51:05 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+16:51:06   layer   0: load-wait 0.73s compute 0.09s  wf_rows=4224
+16:51:15   layer   8: load-wait 0.89s compute 0.33s  wf_rows=38016
+16:51:25   layer  16: load-wait 0.68s compute 0.56s  wf_rows=71808
+16:51:35   layer  24: load-wait 0.37s compute 0.80s  wf_rows=105600
+16:51:45   layer  32: load-wait 0.21s compute 1.04s  wf_rows=139392
+16:51:55   layer  40: load-wait 0.12s compute 1.28s  wf_rows=173184
+16:52:06   layer  47: load-wait 0.12s compute 1.49s  wf_rows=202752
+16:52:06   pass done: 256 prefill rows (T=27), 202752 spawn rows, 60.6s
+16:52:09 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 60.58472204208374, 'peak_GB': 17.067145347595215, 'mean_drop': 5.4921875, 'r_sum_heads_vs_attn_layer': 0.35869128253123717, 'head_dla_sum_mean': 0.34535565972328186, 'candidates_not_routed_clean': 810, 'attn_row_sum_minmax': [0.9996079206466675, 1.0003794431686401], 'utc': '2026-10-11T16:52:09Z'}
+16:52:09 ALL CHUNKS COMPLETE
+2026-10-11T16:52:15Z END   ext13ci-s1-cp_vt_orig-qwen3 rc=0 (148s)
+2026-10-11T16:52:15Z ext13ci-s1-cp_vt_orig-qwen3 rc=0 (2757s incl. queue wait)
+2026-10-11T16:52:15Z cpu: scripts/ext13ci_analyze.py --step 1 --keys cp_vt_orig/qwen3
+16:52:17 step 1: cp_vt_orig/qwen3
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:241: RuntimeWarning: Mean of empty slice
+  mean_clean = np.nanmean(Mc[:, 0], axis=0).reshape(NC, -1)  # [NC, C]
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:242: RuntimeWarning: Mean of empty slice
+  mean_corr = np.nanmean(Mc[:, 1], axis=0).reshape(NC, -1)
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:313: RuntimeWarning: Mean of empty slice
+  allh = {c: float(np.nanmean(amass["clean"][:, k])) for k, c in enumerate(cls)}
+16:52:22 step-1 figures written
+16:52:22 wrote ext13ci_heads_top (99 rows)
+16:52:22 wrote ext13ci_heads_summary (9 rows)
+16:52:22 wrote ext13ci_heads_layers (54 rows)
+16:52:22 wrote ext13ci_attn_heads (90 rows)
+16:52:22 wrote ext13ci_attn_population (45 rows)
+16:52:22 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T16:52:22Z cpu rc=0
+2026-10-11T16:52:22Z submit ext13ci-s1-cp_vt_neu-qwen3: python scripts/ext13ci_heads_run.py cp_vt_neu qwen3 --max-passes 6
+2026-10-11T17:50:15Z START ext13ci-s1-cp_vt_neu-qwen3 (waited 3473s): python scripts/ext13ci_heads_run.py cp_vt_neu qwen3 --max-passes 6
+17:50:23 cp_vt_neu/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'attr_clean', 'attr_corr', 'mention_clean', 'mention_corr', 'prefix_ment_clean', 'prefix_ment_corr', 'pos0', 'final']
+17:50:24 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+17:50:28   layer   0: load-wait 3.06s compute 0.74s  wf_rows=4224
+17:50:36   layer   8: load-wait 0.76s compute 0.33s  wf_rows=38016
+17:50:46   layer  16: load-wait 2.25s compute 0.59s  wf_rows=71808
+17:51:00   layer  24: load-wait 0.82s compute 0.80s  wf_rows=105600
+17:51:10   layer  32: load-wait 0.13s compute 1.05s  wf_rows=139392
+17:51:21   layer  40: load-wait 0.12s compute 1.28s  wf_rows=173184
+17:51:36   layer  47: load-wait 0.12s compute 1.49s  wf_rows=202752
+17:51:36   pass done: 256 prefill rows (T=28), 202752 spawn rows, 71.6s
+17:51:39 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 71.61067724227905, 'peak_GB': 17.075465202331543, 'mean_drop': 5.845703125, 'r_sum_heads_vs_attn_layer': 0.3647534804313912, 'head_dla_sum_mean': 0.8537502288818359, 'candidates_not_routed_clean': 786, 'attn_row_sum_minmax': [0.9996004104614258, 1.0003752708435059], 'utc': '2026-10-11T17:51:39Z'}
+17:51:39 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+17:51:40   layer   0: load-wait 0.69s compute 0.11s  wf_rows=4224
+17:51:48   layer   8: load-wait 0.72s compute 0.32s  wf_rows=38016
+17:51:57   layer  16: load-wait 0.46s compute 0.57s  wf_rows=71808
+17:52:06   layer  24: load-wait 0.43s compute 0.80s  wf_rows=105600
+17:52:16   layer  32: load-wait 0.13s compute 1.04s  wf_rows=139392
+17:52:27   layer  40: load-wait 0.12s compute 1.28s  wf_rows=173184
+17:52:38   layer  47: load-wait 0.12s compute 1.48s  wf_rows=202752
+17:52:38   pass done: 256 prefill rows (T=28), 202752 spawn rows, 58.4s
+17:52:41 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 58.39549779891968, 'peak_GB': 17.075472831726074, 'mean_drop': 5.416015625, 'r_sum_heads_vs_attn_layer': 0.36575889129757033, 'head_dla_sum_mean': 0.21321538090705872, 'candidates_not_routed_clean': 877, 'attn_row_sum_minmax': [0.9996059536933899, 1.0003728866577148], 'utc': '2026-10-11T17:52:41Z'}
+17:52:41 ALL CHUNKS COMPLETE
+2026-10-11T17:52:47Z END   ext13ci-s1-cp_vt_neu-qwen3 rc=0 (152s)
+2026-10-11T17:52:47Z ext13ci-s1-cp_vt_neu-qwen3 rc=0 (3625s incl. queue wait)
+2026-10-11T17:52:47Z cpu: scripts/ext13ci_analyze.py --step 1 --keys cp_vt_neu/qwen3
+17:52:48 step 1: cp_vt_neu/qwen3
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:241: RuntimeWarning: Mean of empty slice
+  mean_clean = np.nanmean(Mc[:, 0], axis=0).reshape(NC, -1)  # [NC, C]
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:242: RuntimeWarning: Mean of empty slice
+  mean_corr = np.nanmean(Mc[:, 1], axis=0).reshape(NC, -1)
+/home/ubuntu/MOE/scripts/ext13ci_analyze.py:313: RuntimeWarning: Mean of empty slice
+  allh = {c: float(np.nanmean(amass["clean"][:, k])) for k, c in enumerate(cls)}
+17:52:53 step-1 figures written
+17:52:53 wrote ext13ci_heads_top (110 rows)
+17:52:53 wrote ext13ci_heads_summary (10 rows)
+17:52:53 wrote ext13ci_heads_layers (60 rows)
+17:52:53 wrote ext13ci_attn_heads (100 rows)
+17:52:53 wrote ext13ci_attn_population (50 rows)
+17:52:53 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T17:52:53Z cpu rc=0
+2026-10-11T17:52:57Z group g2: subgroups {'g2': ['cp_nat', 'cp_vt_orig', 'cp_vt_neu']} (rows {'cp_nat': 280, 'cp_vt_orig': 256, 'cp_vt_neu': 256})
+2026-10-11T17:52:57Z submit ext13ci-s2-g2-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+2026-10-11T18:01:33Z START ext13ci-s2-g2-qwen3 (waited 516s): python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+18:01:41 cp_nat/qwen3: 280 rows, 280 cases, prefill offset 0, single-expert entries proxied by DLA 0
+18:01:42 cp_vt_orig/qwen3: 256 rows, 256 cases, prefill offset 560, single-expert entries proxied by DLA 0
+18:01:44 cp_vt_neu/qwen3: 256 rows, 256 cases, prefill offset 1072, single-expert entries proxied by DLA 0
+18:01:47 initialised: {'tasks': ['cp_nat/qwen3', 'cp_vt_orig/qwen3', 'cp_vt_neu/qwen3'], 'rows': {'cp_nat/qwen3': 280, 'cp_vt_orig/qwen3': 256, 'cp_vt_neu/qwen3': 256}, 'budget': 100000, 'queue_groups': 4056, 'queue_items': 68616, 'pool_sizes': {'cp_nat/qwen3': {'mix': 64, 'head': 32}, 'cp_vt_orig/qwen3': {'mix': 64, 'head': 32}, 'cp_vt_neu/qwen3': {'mix': 64, 'head': 32}}, 'n_proxy': {'cp_nat/qwen3': 0, 'cp_vt_orig/qwen3': 0, 'cp_vt_neu/qwen3': 0}}
+18:01:53 pass 0: 1584 prefill rows, 99996 spawn rows (76032 adaptive, 1426 static groups; queue 1426/4056)
+18:01:58   layer   0: load-wait 2.90s compute 0.97s  wf_rows=8799
+18:02:07   layer   8: load-wait 0.73s compute 0.52s  wf_rows=30596
+18:02:17   layer  16: load-wait 0.27s compute 0.62s  wf_rows=44151
+18:02:27   layer  24: load-wait 0.47s compute 0.74s  wf_rows=57160
+18:02:37   layer  32: load-wait 0.35s compute 0.87s  wf_rows=75028
+18:02:47   layer  40: load-wait 0.20s compute 1.03s  wf_rows=91099
+18:02:57   layer  47: load-wait 0.34s compute 1.12s  wf_rows=99996
+18:03:00   pass done: 1584 prefill rows (T=33), 99996 spawn rows, 65.7s (metrics 3.7s)
+18:03:10 pass 0 done in 66s, peak 12.2 GB; greedy left 1584; median r: {'mix': 0.35135135135135137, 'head': 0.28}; all-heads |Δ - Δ_clean| max 1.375; queue 1426/4056
+18:03:15 pass 1: 1584 prefill rows, 99984 spawn rows (72864 adaptive, 1656 static groups; queue 3082/4056)
+18:03:19   layer   0: load-wait 1.22s compute 0.33s  wf_rows=9323
+18:03:29   layer   8: load-wait 1.08s compute 0.68s  wf_rows=31536
+18:03:39   layer  16: load-wait 0.43s compute 0.65s  wf_rows=46092
+18:03:48   layer  24: load-wait 0.49s compute 0.78s  wf_rows=60776
+18:03:58   layer  32: load-wait 0.15s compute 0.93s  wf_rows=79352
+18:04:08   layer  40: load-wait 0.41s compute 1.12s  wf_rows=94007
+18:04:17   layer  47: load-wait 0.13s compute 1.08s  wf_rows=99984
+18:04:21   pass done: 1584 prefill rows (T=33), 99984 spawn rows, 63.7s (metrics 3.7s)
+18:04:31 pass 1 done in 64s, peak 12.4 GB; greedy left 1584; median r: {'mix': 0.44948979591836735, 'head': 0.3673469387755102}; all-heads |Δ - Δ_clean| max 4.125; queue 3082/4056
+18:04:35 pass 2: 1584 prefill rows, 88812 spawn rows (71280 adaptive, 974 static groups; queue 4056/4056)
+18:04:39   layer   0: load-wait 1.10s compute 0.32s  wf_rows=7588
+18:04:47   layer   8: load-wait 0.67s compute 0.51s  wf_rows=29189
+18:04:57   layer  16: load-wait 0.54s compute 0.61s  wf_rows=42706
+18:05:06   layer  24: load-wait 0.40s compute 0.73s  wf_rows=56436
+18:05:16   layer  32: load-wait 0.27s compute 0.89s  wf_rows=73592
+18:05:26   layer  40: load-wait 0.11s compute 1.01s  wf_rows=85184
+18:05:34   layer  47: load-wait 0.16s compute 0.97s  wf_rows=88812
+18:05:38   pass done: 1584 prefill rows (T=33), 88812 spawn rows, 60.6s (metrics 3.3s)
+18:05:49 pass 2 done in 61s, peak 11.7 GB; greedy left 1584; median r: {'mix': 0.5245901639344263, 'head': 0.42340286831812257}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:05:53 pass 3: 1584 prefill rows, 69696 spawn rows (69696 adaptive, 0 static groups; queue 4056/4056)
+18:05:55   layer   0: load-wait 0.85s compute 0.30s  wf_rows=5207
+18:06:04   layer   8: load-wait 0.80s compute 0.47s  wf_rows=24960
+18:06:13   layer  16: load-wait 0.63s compute 0.56s  wf_rows=36710
+18:06:22   layer  24: load-wait 0.49s compute 0.66s  wf_rows=49187
+18:06:32   layer  32: load-wait 0.36s compute 0.78s  wf_rows=62161
+18:06:42   layer  40: load-wait 0.12s compute 0.86s  wf_rows=69135
+18:06:49   layer  47: load-wait 0.11s compute 0.80s  wf_rows=69696
+18:06:52   pass done: 1584 prefill rows (T=33), 69696 spawn rows, 58.3s (metrics 2.6s)
+18:07:01 pass 3 done in 58s, peak 10.3 GB; greedy left 1584; median r: {'mix': 0.5899537620849096, 'head': 0.47320574162679424}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:07:04 pass 4: 1584 prefill rows, 68112 spawn rows (68112 adaptive, 0 static groups; queue 4056/4056)
+18:07:07   layer   0: load-wait 0.93s compute 0.33s  wf_rows=5560
+18:07:15   layer   8: load-wait 0.65s compute 0.48s  wf_rows=25967
+18:07:25   layer  16: load-wait 0.55s compute 0.56s  wf_rows=37786
+18:07:34   layer  24: load-wait 0.46s compute 0.68s  wf_rows=50288
+18:07:43   layer  32: load-wait 0.27s compute 0.78s  wf_rows=62471
+18:07:52   layer  40: load-wait 0.29s compute 0.86s  wf_rows=67858
+18:08:00   layer  47: load-wait 0.11s compute 0.78s  wf_rows=68112
+18:08:03   pass done: 1584 prefill rows (T=33), 68112 spawn rows, 57.3s (metrics 2.5s)
+18:08:10 pass 4 done in 57s, peak 10.3 GB; greedy left 1584; median r: {'mix': 0.6421832884097035, 'head': 0.5138996138996139}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:08:13 pass 5: 1584 prefill rows, 66528 spawn rows (66528 adaptive, 0 static groups; queue 4056/4056)
+18:08:16   layer   0: load-wait 0.99s compute 0.31s  wf_rows=6249
+18:08:24   layer   8: load-wait 0.61s compute 0.50s  wf_rows=27167
+18:08:34   layer  16: load-wait 0.53s compute 0.58s  wf_rows=38826
+18:08:43   layer  24: load-wait 0.48s compute 0.70s  wf_rows=51366
+18:08:52   layer  32: load-wait 0.12s compute 0.79s  wf_rows=62161
+18:09:01   layer  40: load-wait 0.23s compute 0.87s  wf_rows=66358
+18:09:09   layer  47: load-wait 0.12s compute 0.77s  wf_rows=66528
+18:09:12   pass done: 1584 prefill rows (T=33), 66528 spawn rows, 57.1s (metrics 2.5s)
+18:09:21 pass 5 done in 57s, peak 10.3 GB; greedy left 1584; median r: {'mix': 0.689272030651341, 'head': 0.5365853658536586}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:09:25 pass 6: 1584 prefill rows, 64944 spawn rows (64944 adaptive, 0 static groups; queue 4056/4056)
+18:09:28   layer   0: load-wait 0.84s compute 0.32s  wf_rows=6871
+18:09:37   layer   8: load-wait 0.68s compute 0.50s  wf_rows=28648
+18:09:46   layer  16: load-wait 0.70s compute 0.59s  wf_rows=40537
+18:09:54   layer  24: load-wait 0.35s compute 0.71s  wf_rows=52177
+18:10:04   layer  32: load-wait 0.50s compute 0.79s  wf_rows=61815
+18:10:13   layer  40: load-wait 0.11s compute 0.86s  wf_rows=64847
+18:10:22   layer  47: load-wait 0.11s compute 0.79s  wf_rows=64944
+18:10:24   pass done: 1584 prefill rows (T=33), 64944 spawn rows, 56.8s (metrics 2.4s)
+18:10:32 pass 6 done in 57s, peak 10.2 GB; greedy left 1584; median r: {'mix': 0.7237710931768159, 'head': 0.5604878048780488}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:10:36 pass 7: 1584 prefill rows, 63360 spawn rows (63360 adaptive, 0 static groups; queue 4056/4056)
+18:10:38   layer   0: load-wait 0.81s compute 0.42s  wf_rows=7373
+18:10:47   layer   8: load-wait 0.87s compute 0.51s  wf_rows=29444
+18:10:55   layer  16: load-wait 0.36s compute 0.60s  wf_rows=41243
+18:11:04   layer  24: load-wait 0.31s compute 0.71s  wf_rows=52440
+18:11:13   layer  32: load-wait 0.18s compute 0.79s  wf_rows=60931
+18:11:22   layer  40: load-wait 0.24s compute 0.84s  wf_rows=63306
+18:11:29   layer  47: load-wait 0.22s compute 0.75s  wf_rows=63360
+18:11:32   pass done: 1584 prefill rows (T=33), 63360 spawn rows, 54.6s (metrics 2.4s)
+18:11:42 pass 7 done in 55s, peak 10.2 GB; greedy left 1584; median r: {'mix': 0.7586206896551724, 'head': 0.5789473684210527}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:11:46 pass 8: 1584 prefill rows, 61776 spawn rows (61776 adaptive, 0 static groups; queue 4056/4056)
+18:11:49   layer   0: load-wait 0.73s compute 0.32s  wf_rows=8486
+18:11:56   layer   8: load-wait 0.47s compute 0.52s  wf_rows=31337
+18:12:05   layer  16: load-wait 0.38s compute 0.61s  wf_rows=42672
+18:12:14   layer  24: load-wait 0.65s compute 0.72s  wf_rows=53114
+18:12:25   layer  32: load-wait 0.36s compute 0.79s  wf_rows=60007
+18:12:33   layer  40: load-wait 0.14s compute 0.84s  wf_rows=61750
+18:12:41   layer  47: load-wait 0.14s compute 0.74s  wf_rows=61776
+18:12:43   pass done: 1584 prefill rows (T=33), 61776 spawn rows, 55.4s (metrics 2.3s)
+18:12:53 pass 8 done in 55s, peak 10.1 GB; greedy left 1584; median r: {'mix': 0.7843137254901961, 'head': 0.5897435897435898}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:12:56 pass 9: 1584 prefill rows, 60192 spawn rows (60192 adaptive, 0 static groups; queue 4056/4056)
+18:12:59   layer   0: load-wait 0.75s compute 0.37s  wf_rows=9553
+18:13:07   layer   8: load-wait 0.55s compute 0.54s  wf_rows=32910
+18:13:16   layer  16: load-wait 0.58s compute 0.62s  wf_rows=43779
+18:13:25   layer  24: load-wait 0.34s compute 0.74s  wf_rows=53264
+18:13:33   layer  32: load-wait 0.22s compute 0.79s  wf_rows=58875
+18:13:42   layer  40: load-wait 0.18s compute 0.83s  wf_rows=60169
+18:13:49   layer  47: load-wait 0.36s compute 0.73s  wf_rows=60192
+18:13:51   pass done: 1584 prefill rows (T=33), 60192 spawn rows, 53.5s (metrics 2.3s)
+18:13:59 pass 9 done in 53s, peak 10.0 GB; greedy left 1584; median r: {'mix': 0.8031544957774466, 'head': 0.5963225371120108}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:14:03 pass 10: 1584 prefill rows, 58608 spawn rows (58608 adaptive, 0 static groups; queue 4056/4056)
+18:14:06   layer   0: load-wait 1.26s compute 0.34s  wf_rows=10538
+18:14:16   layer   8: load-wait 0.35s compute 0.56s  wf_rows=33898
+18:14:24   layer  16: load-wait 0.46s compute 0.63s  wf_rows=44594
+18:14:32   layer  24: load-wait 0.26s compute 0.73s  wf_rows=53204
+18:14:43   layer  32: load-wait 0.22s compute 0.77s  wf_rows=57540
+18:14:51   layer  40: load-wait 0.17s compute 0.90s  wf_rows=58588
+18:14:59   layer  47: load-wait 0.38s compute 0.72s  wf_rows=58608
+18:15:01   pass done: 1584 prefill rows (T=33), 58608 spawn rows, 56.2s (metrics 2.2s)
+18:15:08 pass 10 done in 56s, peak 9.9 GB; greedy left 1584; median r: {'mix': 0.8205128205128205, 'head': 0.6176470588235294}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:15:12 pass 11: 1584 prefill rows, 57024 spawn rows (57024 adaptive, 0 static groups; queue 4056/4056)
+18:15:15   layer   0: load-wait 0.77s compute 0.35s  wf_rows=11344
+18:15:22   layer   8: load-wait 0.26s compute 0.56s  wf_rows=34958
+18:15:30   layer  16: load-wait 0.43s compute 0.64s  wf_rows=45270
+18:15:39   layer  24: load-wait 0.16s compute 0.74s  wf_rows=52831
+18:15:47   layer  32: load-wait 0.29s compute 0.79s  wf_rows=56246
+18:15:55   layer  40: load-wait 0.15s compute 1.05s  wf_rows=57011
+18:16:03   layer  47: load-wait 0.12s compute 0.71s  wf_rows=57024
+18:16:05   pass done: 1584 prefill rows (T=33), 57024 spawn rows, 51.4s (metrics 2.1s)
+18:16:12 pass 11 done in 51s, peak 9.8 GB; greedy left 1584; median r: {'mix': 0.8367346938775511, 'head': 0.6202039825157843}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+2026-10-11T18:16:19Z END   ext13ci-s2-g2-qwen3 rc=0 (886s)
+2026-10-11T18:16:19Z ext13ci-s2-g2-qwen3 rc=0 (1403s incl. queue wait)
+2026-10-11T18:16:19Z submit ext13ci-s2-g2-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+2026-10-11T18:29:53Z START ext13ci-s2-g2-qwen3 (waited 813s): python scripts/ext13ci_circuit_run.py qwen3 --group g2 --conds cp_nat,cp_vt_orig,cp_vt_neu --max-passes 12
+18:30:01 cp_nat/qwen3: 280 rows, 280 cases, prefill offset 0, single-expert entries proxied by DLA 0
+18:30:02 cp_vt_orig/qwen3: 256 rows, 256 cases, prefill offset 560, single-expert entries proxied by DLA 0
+18:30:04 cp_vt_neu/qwen3: 256 rows, 256 cases, prefill offset 1072, single-expert entries proxied by DLA 0
+18:30:06 resuming after 12 passes (queue 4056/4056)
+18:30:10 pass 12: 1584 prefill rows, 55440 spawn rows (55440 adaptive, 0 static groups; queue 4056/4056)
+18:30:17   layer   0: load-wait 2.93s compute 1.02s  wf_rows=12201
+18:30:26   layer   8: load-wait 0.22s compute 0.60s  wf_rows=36177
+18:30:36   layer  16: load-wait 0.47s compute 0.64s  wf_rows=45464
+18:30:46   layer  24: load-wait 0.15s compute 0.73s  wf_rows=51882
+18:30:57   layer  32: load-wait 0.79s compute 0.77s  wf_rows=54864
+18:31:07   layer  40: load-wait 0.53s compute 0.81s  wf_rows=55431
+18:31:16   layer  47: load-wait 0.38s compute 0.70s  wf_rows=55440
+18:31:18   pass done: 1584 prefill rows (T=33), 55440 spawn rows, 65.0s (metrics 2.1s)
+18:31:25 pass 12 done in 65s, peak 9.7 GB; greedy left 1584; median r: {'mix': 0.8481554677206851, 'head': 0.6180340557275542}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:31:30 pass 13: 1584 prefill rows, 53856 spawn rows (53856 adaptive, 0 static groups; queue 4056/4056)
+18:31:33   layer   0: load-wait 0.98s compute 0.36s  wf_rows=12970
+18:31:43   layer   8: load-wait 0.61s compute 0.58s  wf_rows=36573
+18:31:52   layer  16: load-wait 0.55s compute 0.65s  wf_rows=45527
+18:32:02   layer  24: load-wait 0.48s compute 0.75s  wf_rows=51102
+18:32:11   layer  32: load-wait 0.37s compute 0.74s  wf_rows=53410
+18:32:21   layer  40: load-wait 0.34s compute 0.79s  wf_rows=53848
+18:32:29   layer  47: load-wait 0.40s compute 0.68s  wf_rows=53856
+18:32:31   pass done: 1584 prefill rows (T=33), 53856 spawn rows, 59.1s (metrics 2.0s)
+18:32:39 pass 13 done in 59s, peak 9.6 GB; greedy left 1584; median r: {'mix': 0.8699677938808373, 'head': 0.6347680097680097}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:32:42 pass 14: 1584 prefill rows, 52272 spawn rows (52272 adaptive, 0 static groups; queue 4056/4056)
+18:32:45   layer   0: load-wait 0.84s compute 0.36s  wf_rows=13601
+18:32:54   layer   8: load-wait 0.57s compute 0.58s  wf_rows=37092
+18:33:04   layer  16: load-wait 0.47s compute 0.65s  wf_rows=45305
+18:33:13   layer  24: load-wait 0.49s compute 0.72s  wf_rows=50036
+18:33:23   layer  32: load-wait 0.39s compute 0.74s  wf_rows=51948
+18:33:32   layer  40: load-wait 0.28s compute 0.78s  wf_rows=52265
+18:33:40   layer  47: load-wait 0.47s compute 0.67s  wf_rows=52272
+18:33:42   pass done: 1584 prefill rows (T=33), 52272 spawn rows, 58.4s (metrics 2.0s)
+18:33:51 pass 14 done in 58s, peak 9.5 GB; greedy left 1584; median r: {'mix': 0.8716540837336995, 'head': 0.6288018433179723}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:33:54 pass 15: 1584 prefill rows, 50688 spawn rows (50688 adaptive, 0 static groups; queue 4056/4056)
+18:33:57   layer   0: load-wait 0.91s compute 0.36s  wf_rows=13872
+18:34:06   layer   8: load-wait 0.58s compute 0.59s  wf_rows=36726
+18:34:15   layer  16: load-wait 0.53s compute 0.64s  wf_rows=44787
+18:34:24   layer  24: load-wait 0.43s compute 0.71s  wf_rows=48972
+18:34:34   layer  32: load-wait 0.64s compute 0.72s  wf_rows=50435
+18:34:43   layer  40: load-wait 0.24s compute 0.78s  wf_rows=50688
+18:34:50   layer  47: load-wait 0.39s compute 0.66s  wf_rows=50688
+18:34:52   pass done: 1584 prefill rows (T=33), 50688 spawn rows, 56.5s (metrics 1.9s)
+18:35:00 pass 15 done in 57s, peak 9.4 GB; greedy left 1584; median r: {'mix': 0.885480093676815, 'head': 0.6444984533804684}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:35:04 pass 16: 1584 prefill rows, 49104 spawn rows (49104 adaptive, 0 static groups; queue 4056/4056)
+18:35:08   layer   0: load-wait 0.76s compute 0.38s  wf_rows=14240
+18:35:16   layer   8: load-wait 0.60s compute 0.59s  wf_rows=36457
+18:35:25   layer  16: load-wait 0.40s compute 0.64s  wf_rows=44262
+18:35:34   layer  24: load-wait 0.40s compute 0.71s  wf_rows=47740
+18:35:44   layer  32: load-wait 0.40s compute 0.72s  wf_rows=48899
+18:35:52   layer  40: load-wait 0.12s compute 0.99s  wf_rows=49104
+18:35:59   layer  47: load-wait 0.33s compute 0.65s  wf_rows=49104
+18:36:01   pass done: 1584 prefill rows (T=33), 49104 spawn rows, 54.7s (metrics 1.8s)
+18:36:07 pass 16 done in 55s, peak 9.3 GB; greedy left 1584; median r: {'mix': 0.8928571428571429, 'head': 0.64}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:36:10 pass 17: 1584 prefill rows, 47520 spawn rows (47520 adaptive, 0 static groups; queue 4056/4056)
+18:36:13   layer   0: load-wait 0.78s compute 0.38s  wf_rows=14785
+18:36:22   layer   8: load-wait 0.65s compute 0.59s  wf_rows=36310
+18:36:30   layer  16: load-wait 0.41s compute 0.63s  wf_rows=43528
+18:36:39   layer  24: load-wait 0.42s compute 0.69s  wf_rows=46380
+18:36:48   layer  32: load-wait 0.80s compute 0.71s  wf_rows=47363
+18:36:56   layer  40: load-wait 0.17s compute 0.78s  wf_rows=47520
+18:37:03   layer  47: load-wait 0.28s compute 0.64s  wf_rows=47520
+18:37:05   pass done: 1584 prefill rows (T=33), 47520 spawn rows, 53.3s (metrics 1.8s)
+18:37:12 pass 17 done in 53s, peak 9.2 GB; greedy left 1584; median r: {'mix': 0.9, 'head': 0.6428571428571429}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:37:15 pass 18: 1584 prefill rows, 45936 spawn rows (45936 adaptive, 0 static groups; queue 4056/4056)
+18:37:18   layer   0: load-wait 0.76s compute 0.36s  wf_rows=14918
+18:37:26   layer   8: load-wait 0.44s compute 0.59s  wf_rows=36089
+18:37:34   layer  16: load-wait 0.39s compute 0.62s  wf_rows=42720
+18:37:43   layer  24: load-wait 0.70s compute 0.70s  wf_rows=45047
+18:37:51   layer  32: load-wait 0.52s compute 0.70s  wf_rows=45789
+18:37:59   layer  40: load-wait 0.25s compute 0.74s  wf_rows=45936
+18:38:07   layer  47: load-wait 0.32s compute 0.65s  wf_rows=45936
+18:38:09   pass done: 1584 prefill rows (T=33), 45936 spawn rows, 52.1s (metrics 1.7s)
+18:38:15 pass 18 done in 52s, peak 9.1 GB; greedy left 0; median r: {'mix': 0.911437908496732, 'head': 0.6436507936507937}; all-heads |Δ - Δ_clean| max nan; queue 4056/4056
+18:38:16 ALL PASSES COMPLETE
+2026-10-11T18:38:22Z END   ext13ci-s2-g2-qwen3 rc=0 (509s)
+2026-10-11T18:38:22Z ext13ci-s2-g2-qwen3 rc=0 (1323s incl. queue wait)
+2026-10-11T18:38:22Z cpu: scripts/ext13ci_analyze.py --step 2 --groups qwen3/g2
+18:38:24 analysing cp_nat/qwen3 (g2)
+18:38:27 analysing cp_vt_orig/qwen3 (g2)
+18:38:29 analysing cp_vt_neu/qwen3 (g2)
+18:38:33 step-2 figures written
+18:38:33 wrote ext13ci_circuit_curves (63 rows)
+18:38:33 wrote ext13ci_circuit_greedy (18 rows)
+18:38:33 wrote ext13ci_circuit_sanity (9 rows)
+18:38:33 wrote ext13ci_overview (9 rows)
+18:38:33 overview written
+18:38:52 wrote ext13ci_contrasts (6 rows)
+18:38:52 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T18:38:52Z cpu rc=0
+2026-10-11T18:38:52Z cpu: scripts/ext13ci_text.py
+wrote /home/ubuntu/MOE/results/sections/ext13_circuit.md
+2026-10-11T18:38:54Z cpu rc=0
+2026-10-11T18:38:54Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T19:08:54Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T19:38:54Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T20:08:54Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T20:38:55Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T21:08:55Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1']; not finished: ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T21:20:55Z submit ext13ci-s1-vt_e2a_orig-qwen3: python scripts/ext13ci_heads_run.py vt_e2a_orig qwen3 --max-passes 6
+2026-10-11T21:58:18Z START ext13ci-s1-vt_e2a_orig-qwen3 (waited 2243s): python scripts/ext13ci_heads_run.py vt_e2a_orig qwen3 --max-passes 6
+21:58:25 vt_e2a_orig/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'pos0', 'final']
+21:58:26 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+21:58:31   layer   0: load-wait 3.16s compute 0.83s  wf_rows=4224
+21:58:40   layer   8: load-wait 0.98s compute 0.29s  wf_rows=38016
+21:58:50   layer  16: load-wait 0.77s compute 0.50s  wf_rows=71808
+21:59:00   layer  24: load-wait 0.55s compute 0.71s  wf_rows=105600
+21:59:10   layer  32: load-wait 0.34s compute 0.93s  wf_rows=139392
+21:59:20   layer  40: load-wait 0.12s compute 1.15s  wf_rows=173184
+[W1011 21:59:24.997775632 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 11993088, total: 23686938624).
+[W1011 21:59:28.439836792 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+[W1011 21:59:32.592209566 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+21:59:33   layer  47: load-wait 0.78s compute 1.70s  wf_rows=202752
+21:59:34   pass done: 256 prefill rows (T=21), 202752 spawn rows, 66.5s
+21:59:37 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 66.5458595752716, 'peak_GB': 17.017168045043945, 'mean_drop': 6.4248046875, 'r_sum_heads_vs_attn_layer': 0.3741321546123529, 'head_dla_sum_mean': 0.8723015785217285, 'candidates_not_routed_clean': 808, 'attn_row_sum_minmax': [0.9996061325073242, 1.000370740890503], 'utc': '2026-10-11T21:59:37Z'}
+21:59:37 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+21:59:38   layer   0: load-wait 0.75s compute 0.11s  wf_rows=4224
+21:59:48   layer   8: load-wait 0.56s compute 0.29s  wf_rows=38016
+21:59:58   layer  16: load-wait 0.69s compute 0.50s  wf_rows=71808
+22:00:07   layer  24: load-wait 0.47s compute 0.72s  wf_rows=105600
+22:00:17   layer  32: load-wait 0.30s compute 0.93s  wf_rows=139392
+22:00:28   layer  40: load-wait 0.11s compute 1.14s  wf_rows=173184
+22:00:37   layer  47: load-wait 0.11s compute 1.32s  wf_rows=202752
+22:00:37   pass done: 256 prefill rows (T=21), 202752 spawn rows, 60.0s
+22:00:40 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 59.98686671257019, 'peak_GB': 17.017175674438477, 'mean_drop': 6.515625, 'r_sum_heads_vs_attn_layer': 0.4147423468152081, 'head_dla_sum_mean': 0.7385163307189941, 'candidates_not_routed_clean': 798, 'attn_row_sum_minmax': [0.9996156692504883, 1.0003890991210938], 'utc': '2026-10-11T22:00:40Z'}
+22:00:40 ALL CHUNKS COMPLETE
+2026-10-11T22:00:46Z END   ext13ci-s1-vt_e2a_orig-qwen3 rc=0 (148s)
+2026-10-11T22:00:46Z ext13ci-s1-vt_e2a_orig-qwen3 rc=0 (2391s incl. queue wait)
+2026-10-11T22:00:46Z cpu: scripts/ext13ci_analyze.py --step 1 --keys vt_e2a_orig/qwen3
+22:00:48 step 1: vt_e2a_orig/qwen3
+22:00:52 step-1 figures written
+22:00:52 wrote ext13ci_heads_top (143 rows)
+22:00:52 wrote ext13ci_heads_summary (13 rows)
+22:00:52 wrote ext13ci_heads_layers (78 rows)
+22:00:52 wrote ext13ci_attn_heads (130 rows)
+22:00:52 wrote ext13ci_attn_population (65 rows)
+22:00:52 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-11T22:00:53Z cpu rc=0
+2026-10-11T22:00:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_orig']; not finished: ['vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T22:30:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_orig']; not finished: ['vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T23:00:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_orig']; not finished: ['vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-11T23:30:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_orig']; not finished: ['vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-12T00:00:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_orig']; not finished: ['vt_e2a_neu', 'vt_a2e_orig', 'f2e'])
+2026-10-12T00:20:54Z submit ext13ci-s1-vt_e2a_neu-qwen3: python scripts/ext13ci_heads_run.py vt_e2a_neu qwen3 --max-passes 6
+2026-10-12T00:29:09Z START ext13ci-s1-vt_e2a_neu-qwen3 (waited 495s): python scripts/ext13ci_heads_run.py vt_e2a_neu qwen3 --max-passes 6
+00:29:16 vt_e2a_neu/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'pos0', 'final']
+00:29:17 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+00:29:23   layer   0: load-wait 4.65s compute 0.84s  wf_rows=4224
+00:29:31   layer   8: load-wait 0.80s compute 0.30s  wf_rows=38016
+00:29:40   layer  16: load-wait 0.64s compute 0.50s  wf_rows=71808
+00:29:48   layer  24: load-wait 0.13s compute 0.72s  wf_rows=105600
+00:29:58   layer  32: load-wait 0.28s compute 0.96s  wf_rows=139392
+00:30:14   layer  40: load-wait 1.74s compute 1.19s  wf_rows=173184
+00:30:26   layer  47: load-wait 0.11s compute 1.36s  wf_rows=202752
+00:30:26   pass done: 256 prefill rows (T=22), 202752 spawn rows, 67.9s
+00:30:28 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 67.87316536903381, 'peak_GB': 17.025495529174805, 'mean_drop': 5.8896484375, 'r_sum_heads_vs_attn_layer': 0.4222317747776414, 'head_dla_sum_mean': 0.7618212103843689, 'candidates_not_routed_clean': 781, 'attn_row_sum_minmax': [0.9996097087860107, 1.00038743019104], 'utc': '2026-10-12T00:30:28Z'}
+00:30:29 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+00:30:30   layer   0: load-wait 0.70s compute 0.09s  wf_rows=4224
+00:30:38   layer   8: load-wait 0.66s compute 0.29s  wf_rows=38016
+00:30:48   layer  16: load-wait 0.55s compute 0.51s  wf_rows=71808
+00:30:57   layer  24: load-wait 0.51s compute 0.73s  wf_rows=105600
+00:31:11   layer  32: load-wait 0.12s compute 0.97s  wf_rows=139392
+00:31:22   layer  40: load-wait 0.11s compute 1.16s  wf_rows=173184
+00:31:32   layer  47: load-wait 0.11s compute 1.34s  wf_rows=202752
+00:31:32   pass done: 256 prefill rows (T=22), 202752 spawn rows, 63.2s
+00:31:36 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 63.205724000930786, 'peak_GB': 17.025503158569336, 'mean_drop': 6.23046875, 'r_sum_heads_vs_attn_layer': 0.4338969865111399, 'head_dla_sum_mean': 0.8010703325271606, 'candidates_not_routed_clean': 767, 'attn_row_sum_minmax': [0.9996216893196106, 1.0003635883331299], 'utc': '2026-10-12T00:31:36Z'}
+00:31:36 ALL CHUNKS COMPLETE
+2026-10-12T00:31:42Z END   ext13ci-s1-vt_e2a_neu-qwen3 rc=0 (153s)
+2026-10-12T00:31:42Z ext13ci-s1-vt_e2a_neu-qwen3 rc=0 (649s incl. queue wait)
+2026-10-12T00:31:42Z cpu: scripts/ext13ci_analyze.py --step 1 --keys vt_e2a_neu/qwen3
+00:31:44 step 1: vt_e2a_neu/qwen3
+00:31:48 step-1 figures written
+00:31:49 wrote ext13ci_heads_top (165 rows)
+00:31:49 wrote ext13ci_heads_summary (15 rows)
+00:31:49 wrote ext13ci_heads_layers (90 rows)
+00:31:49 wrote ext13ci_attn_heads (150 rows)
+00:31:49 wrote ext13ci_attn_population (75 rows)
+00:31:49 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-12T00:31:49Z cpu rc=0
+2026-10-12T00:31:49Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: ['vt_a2e_orig', 'f2e'])
+2026-10-12T01:01:49Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: ['vt_a2e_orig', 'f2e'])
+2026-10-12T01:31:49Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: ['vt_a2e_orig', 'f2e'])
+2026-10-12T02:01:50Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: ['vt_a2e_orig', 'f2e'])
+2026-10-12T02:29:50Z submit ext13ci-s1-vt_a2e_orig-qwen3: python scripts/ext13ci_heads_run.py vt_a2e_orig qwen3 --max-passes 6
+2026-10-12T02:29:50Z START ext13ci-s1-vt_a2e_orig-qwen3 (waited 0s): python scripts/ext13ci_heads_run.py vt_a2e_orig qwen3 --max-passes 6
+02:29:54 vt_a2e_orig/qwen3: 74 validation rows, 1 chunks (1 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'blank', 'pos0', 'final']
+02:29:56 pass (chunk 0): 148 prefill rows (74 clean), 117216 spawn rows
+02:30:01   layer   0: load-wait 3.78s compute 1.02s  wf_rows=2442
+02:30:08   layer   8: load-wait 0.90s compute 0.21s  wf_rows=21978
+02:30:17   layer  16: load-wait 0.79s compute 0.33s  wf_rows=41514
+02:30:26   layer  24: load-wait 0.59s compute 0.47s  wf_rows=61050
+02:30:36   layer  32: load-wait 0.86s compute 0.61s  wf_rows=80586
+02:30:46   layer  40: load-wait 0.56s compute 0.76s  wf_rows=100122
+02:30:55   layer  47: load-wait 0.22s compute 0.87s  wf_rows=117216
+02:30:55   pass done: 148 prefill rows (T=27), 117216 spawn rows, 58.8s
+02:30:57 chunk 0 done: {'chunk': 0, 'rows': 74, 'prefill': 148, 'spawn_rows': 117216, 'pass_s': 58.76838803291321, 'peak_GB': 10.849005222320557, 'mean_drop': 3.6621620655059814, 'r_sum_heads_vs_attn_layer': 0.3385513803468638, 'head_dla_sum_mean': 5.38212251663208, 'candidates_not_routed_clean': 390, 'attn_row_sum_minmax': [0.9996337294578552, 1.000377893447876], 'utc': '2026-10-12T02:30:57Z'}
+02:30:57 ALL CHUNKS COMPLETE
+2026-10-12T02:31:03Z END   ext13ci-s1-vt_a2e_orig-qwen3 rc=0 (73s)
+2026-10-12T02:31:03Z ext13ci-s1-vt_a2e_orig-qwen3 rc=0 (73s incl. queue wait)
+2026-10-12T02:31:03Z cpu: scripts/ext13ci_analyze.py --step 1 --keys vt_a2e_orig/qwen3
+02:31:04 step 1: vt_a2e_orig/qwen3
+02:31:08 step-1 figures written
+02:31:08 wrote ext13ci_heads_top (187 rows)
+02:31:08 wrote ext13ci_heads_summary (17 rows)
+02:31:08 wrote ext13ci_heads_layers (102 rows)
+02:31:08 wrote ext13ci_attn_heads (170 rows)
+02:31:08 wrote ext13ci_attn_population (85 rows)
+02:31:08 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-12T02:31:08Z cpu rc=0
+2026-10-12T02:31:10Z group g3: subgroups {'g3': ['vt_e2a_orig', 'vt_e2a_neu', 'vt_a2e_orig']} (rows {'vt_e2a_orig': 256, 'vt_e2a_neu': 256, 'vt_a2e_orig': 74})
+2026-10-12T02:31:10Z submit ext13ci-s2-g3-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+2026-10-12T02:35:35Z START ext13ci-s2-g3-qwen3 (waited 265s): python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+02:35:44 vt_e2a_orig/qwen3: 256 rows, 256 cases, prefill offset 0, single-expert entries proxied by DLA 0
+02:35:45 vt_e2a_neu/qwen3: 256 rows, 256 cases, prefill offset 512, single-expert entries proxied by DLA 0
+02:35:45 vt_a2e_orig/qwen3: 74 rows, 74 cases, prefill offset 1024, single-expert entries proxied by DLA 0
+02:35:48 initialised: {'tasks': ['vt_e2a_orig/qwen3', 'vt_e2a_neu/qwen3', 'vt_a2e_orig/qwen3'], 'rows': {'vt_e2a_orig/qwen3': 256, 'vt_e2a_neu/qwen3': 256, 'vt_a2e_orig/qwen3': 74}, 'budget': 100000, 'queue_groups': 3026, 'queue_items': 53166, 'pool_sizes': {'vt_e2a_orig/qwen3': {'mix': 64, 'head': 32}, 'vt_e2a_neu/qwen3': {'mix': 64, 'head': 32}, 'vt_a2e_orig/qwen3': {'mix': 64, 'head': 32}}, 'n_proxy': {'vt_e2a_orig/qwen3': 0, 'vt_e2a_neu/qwen3': 0, 'vt_a2e_orig/qwen3': 0}}
+02:35:54 pass 0: 1172 prefill rows, 99990 spawn rows (56256 adaptive, 2579 static groups; queue 2579/3026)
+02:36:01   layer   0: load-wait 3.29s compute 1.03s  wf_rows=11446
+02:36:09   layer   8: load-wait 0.71s compute 0.42s  wf_rows=31120
+02:36:21   layer  16: load-wait 0.26s compute 0.51s  wf_rows=43609
+02:36:30   layer  24: load-wait 0.39s compute 0.67s  wf_rows=59365
+02:36:41   layer  32: load-wait 1.24s compute 0.77s  wf_rows=74527
+02:36:52   layer  40: load-wait 0.99s compute 1.00s  wf_rows=91615
+02:37:01   layer  47: load-wait 0.11s compute 0.97s  wf_rows=99990
+02:37:05   pass done: 1172 prefill rows (T=27), 99990 spawn rows, 67.7s (metrics 3.7s)
+02:37:13 pass 0 done in 68s, peak 11.8 GB; greedy left 1172; median r: {'mix': 0.39185237869448397, 'head': 0.26220238095238096}; all-heads |Δ - Δ_clean| max 4.250; queue 2579/3026
+02:37:17 pass 1: 1172 prefill rows, 63344 spawn rows (53912 adaptive, 447 static groups; queue 3026/3026)
+02:37:18   layer   0: load-wait 0.71s compute 0.22s  wf_rows=5160
+02:37:27   layer   8: load-wait 0.83s compute 0.33s  wf_rows=20560
+02:37:36   layer  16: load-wait 0.77s compute 0.39s  wf_rows=29268
+02:37:46   layer  24: load-wait 0.75s compute 0.47s  wf_rows=39074
+02:37:55   layer  32: load-wait 0.30s compute 0.53s  wf_rows=48423
+02:38:05   layer  40: load-wait 0.16s compute 0.67s  wf_rows=59612
+02:38:14   layer  47: load-wait 0.36s compute 0.65s  wf_rows=63344
+02:38:16   pass done: 1172 prefill rows (T=27), 63344 spawn rows, 58.5s (metrics 2.3s)
+02:38:24 pass 1 done in 58s, peak 8.6 GB; greedy left 1172; median r: {'mix': 0.4891252955082742, 'head': 0.3398556231003039}; all-heads |Δ - Δ_clean| max 0.500; queue 3026/3026
+02:38:27 pass 2: 1172 prefill rows, 52740 spawn rows (52740 adaptive, 0 static groups; queue 3026/3026)
+02:38:29   layer   0: load-wait 0.73s compute 0.20s  wf_rows=4246
+02:38:37   layer   8: load-wait 0.81s compute 0.32s  wf_rows=18855
+02:38:47   layer  16: load-wait 0.80s compute 0.36s  wf_rows=26984
+02:38:56   layer  24: load-wait 0.60s compute 0.44s  wf_rows=36078
+02:39:05   layer  32: load-wait 0.71s compute 0.49s  wf_rows=44387
+02:39:15   layer  40: load-wait 0.94s compute 0.58s  wf_rows=52249
+02:39:23   layer  47: load-wait 0.57s compute 0.53s  wf_rows=52740
+02:39:25   pass done: 1172 prefill rows (T=27), 52740 spawn rows, 56.7s (metrics 2.0s)
+02:39:30 pass 2 done in 57s, peak 8.1 GB; greedy left 1172; median r: {'mix': 0.5742710795902286, 'head': 0.4}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:39:33 pass 3: 1172 prefill rows, 51568 spawn rows (51568 adaptive, 0 static groups; queue 3026/3026)
+02:39:35   layer   0: load-wait 0.77s compute 0.21s  wf_rows=4562
+02:39:43   layer   8: load-wait 0.93s compute 0.31s  wf_rows=19212
+02:39:52   layer  16: load-wait 0.40s compute 0.37s  wf_rows=27512
+02:40:02   layer  24: load-wait 0.37s compute 0.45s  wf_rows=36780
+02:40:11   layer  32: load-wait 0.61s compute 0.52s  wf_rows=44880
+02:40:20   layer  40: load-wait 0.73s compute 0.59s  wf_rows=51377
+02:40:28   layer  47: load-wait 0.73s compute 0.52s  wf_rows=51568
+02:40:30   pass done: 1172 prefill rows (T=27), 51568 spawn rows, 55.6s (metrics 1.9s)
+02:40:37 pass 3 done in 56s, peak 8.1 GB; greedy left 1172; median r: {'mix': 0.6363636363636364, 'head': 0.4508064516129032}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:40:40 pass 4: 1172 prefill rows, 50396 spawn rows (50396 adaptive, 0 static groups; queue 3026/3026)
+02:40:42   layer   0: load-wait 0.89s compute 0.21s  wf_rows=4829
+02:40:49   layer   8: load-wait 0.87s compute 0.32s  wf_rows=19856
+02:40:59   layer  16: load-wait 1.06s compute 0.38s  wf_rows=28338
+02:41:07   layer  24: load-wait 0.65s compute 0.47s  wf_rows=37313
+02:41:16   layer  32: load-wait 0.54s compute 0.50s  wf_rows=45095
+02:41:26   layer  40: load-wait 0.25s compute 0.62s  wf_rows=50323
+02:41:34   layer  47: load-wait 0.78s compute 0.51s  wf_rows=50396
+02:41:36   pass done: 1172 prefill rows (T=27), 50396 spawn rows, 55.2s (metrics 1.9s)
+02:41:44 pass 4 done in 55s, peak 8.1 GB; greedy left 1172; median r: {'mix': 0.6904761904761905, 'head': 0.5}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:41:47 pass 5: 1172 prefill rows, 49224 spawn rows (49224 adaptive, 0 static groups; queue 3026/3026)
+02:41:49   layer   0: load-wait 0.73s compute 0.21s  wf_rows=5109
+02:41:59   layer   8: load-wait 0.42s compute 0.33s  wf_rows=20595
+02:42:06   layer  16: load-wait 0.70s compute 0.38s  wf_rows=29103
+02:42:15   layer  24: load-wait 0.48s compute 0.46s  wf_rows=37653
+02:42:25   layer  32: load-wait 1.17s compute 0.50s  wf_rows=45172
+02:42:35   layer  40: load-wait 0.46s compute 0.79s  wf_rows=49224
+02:42:43   layer  47: load-wait 0.19s compute 0.51s  wf_rows=49224
+02:42:45   pass done: 1172 prefill rows (T=27), 49224 spawn rows, 56.2s (metrics 1.8s)
+02:42:51 pass 5 done in 56s, peak 8.0 GB; greedy left 1172; median r: {'mix': 0.7333333333333333, 'head': 0.5373467112597548}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:42:53 pass 6: 1172 prefill rows, 48052 spawn rows (48052 adaptive, 0 static groups; queue 3026/3026)
+02:42:55   layer   0: load-wait 0.84s compute 0.21s  wf_rows=5749
+02:43:04   layer   8: load-wait 0.75s compute 0.34s  wf_rows=21378
+02:43:12   layer  16: load-wait 0.69s compute 0.39s  wf_rows=29760
+02:43:20   layer  24: load-wait 0.54s compute 0.48s  wf_rows=37970
+02:43:28   layer  32: load-wait 0.38s compute 0.53s  wf_rows=44779
+02:43:37   layer  40: load-wait 0.28s compute 0.58s  wf_rows=48052
+02:43:44   layer  47: load-wait 0.30s compute 0.50s  wf_rows=48052
+02:43:46   pass done: 1172 prefill rows (T=27), 48052 spawn rows, 52.0s (metrics 1.8s)
+02:43:53 pass 6 done in 52s, peak 8.0 GB; greedy left 1172; median r: {'mix': 0.7608695652173914, 'head': 0.5491935483870968}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:43:56 pass 7: 1172 prefill rows, 46880 spawn rows (46880 adaptive, 0 static groups; queue 3026/3026)
+02:43:58   layer   0: load-wait 0.83s compute 0.21s  wf_rows=6347
+02:44:06   layer   8: load-wait 0.62s compute 0.35s  wf_rows=22112
+02:44:14   layer  16: load-wait 0.64s compute 0.40s  wf_rows=30285
+02:44:22   layer  24: load-wait 0.46s compute 0.48s  wf_rows=38246
+02:44:30   layer  32: load-wait 0.74s compute 0.51s  wf_rows=44480
+02:44:40   layer  40: load-wait 0.65s compute 0.59s  wf_rows=46880
+02:44:47   layer  47: load-wait 0.31s compute 0.50s  wf_rows=46880
+02:44:49   pass done: 1172 prefill rows (T=27), 46880 spawn rows, 52.3s (metrics 1.8s)
+02:44:55 pass 7 done in 52s, peak 7.9 GB; greedy left 1172; median r: {'mix': 0.7954545454545454, 'head': 0.5751712328767122}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:44:58 pass 8: 1172 prefill rows, 45708 spawn rows (45708 adaptive, 0 static groups; queue 3026/3026)
+02:45:00   layer   0: load-wait 0.74s compute 0.22s  wf_rows=7128
+02:45:08   layer   8: load-wait 0.48s compute 0.35s  wf_rows=23022
+02:45:15   layer  16: load-wait 0.62s compute 0.40s  wf_rows=31142
+02:45:23   layer  24: load-wait 0.58s compute 0.49s  wf_rows=38496
+02:45:31   layer  32: load-wait 0.35s compute 0.53s  wf_rows=43864
+02:45:40   layer  40: load-wait 0.21s compute 0.59s  wf_rows=45708
+02:45:47   layer  47: load-wait 0.31s compute 0.49s  wf_rows=45708
+02:45:49   pass done: 1172 prefill rows (T=27), 45708 spawn rows, 49.9s (metrics 1.7s)
+02:45:55 pass 8 done in 50s, peak 7.9 GB; greedy left 1172; median r: {'mix': 0.8148148148148148, 'head': 0.589572192513369}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:45:57 pass 9: 1172 prefill rows, 44536 spawn rows (44536 adaptive, 0 static groups; queue 3026/3026)
+02:46:00   layer   0: load-wait 0.81s compute 0.23s  wf_rows=7840
+02:46:07   layer   8: load-wait 0.49s compute 0.36s  wf_rows=23596
+02:46:15   layer  16: load-wait 0.60s compute 0.40s  wf_rows=31543
+02:46:23   layer  24: load-wait 0.51s compute 0.49s  wf_rows=38423
+02:46:31   layer  32: load-wait 0.97s compute 0.53s  wf_rows=43141
+02:46:42   layer  40: load-wait 0.29s compute 0.63s  wf_rows=44536
+02:46:49   layer  47: load-wait 0.58s compute 0.50s  wf_rows=44536
+02:46:51   pass done: 1172 prefill rows (T=27), 44536 spawn rows, 52.0s (metrics 1.7s)
+02:47:00 pass 9 done in 52s, peak 7.8 GB; greedy left 1172; median r: {'mix': 0.8452991452991453, 'head': 0.6030061892130858}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:47:04 pass 10: 1172 prefill rows, 43364 spawn rows (43364 adaptive, 0 static groups; queue 3026/3026)
+02:47:06   layer   0: load-wait 0.72s compute 0.24s  wf_rows=8659
+02:47:14   layer   8: load-wait 0.46s compute 0.51s  wf_rows=24434
+02:47:22   layer  16: load-wait 0.45s compute 0.43s  wf_rows=31952
+02:47:29   layer  24: load-wait 0.53s compute 0.49s  wf_rows=38255
+02:47:37   layer  32: load-wait 0.41s compute 0.52s  wf_rows=42329
+02:47:47   layer  40: load-wait 0.37s compute 0.58s  wf_rows=43364
+02:47:53   layer  47: load-wait 0.27s compute 0.48s  wf_rows=43364
+02:47:55   pass done: 1172 prefill rows (T=27), 43364 spawn rows, 49.5s (metrics 1.6s)
+02:48:01 pass 10 done in 50s, peak 7.8 GB; greedy left 1172; median r: {'mix': 0.8541666666666666, 'head': 0.6092258748674444}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+02:48:04 pass 11: 1172 prefill rows, 42192 spawn rows (42192 adaptive, 0 static groups; queue 3026/3026)
+02:48:08   layer   0: load-wait 0.75s compute 0.25s  wf_rows=9288
+02:48:15   layer   8: load-wait 0.46s compute 0.36s  wf_rows=24717
+02:48:23   layer  16: load-wait 0.48s compute 0.43s  wf_rows=32174
+02:48:30   layer  24: load-wait 0.48s compute 0.50s  wf_rows=37974
+02:48:38   layer  32: load-wait 0.75s compute 0.70s  wf_rows=41421
+02:48:48   layer  40: load-wait 0.29s compute 0.62s  wf_rows=42192
+02:48:55   layer  47: load-wait 0.30s compute 0.48s  wf_rows=42192
+02:48:57   pass done: 1172 prefill rows (T=27), 42192 spawn rows, 50.3s (metrics 1.6s)
+02:49:01 pass 11 done in 50s, peak 7.8 GB; greedy left 1172; median r: {'mix': 0.8784183296378418, 'head': 0.613835725677831}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+2026-10-12T02:49:08Z END   ext13ci-s2-g3-qwen3 rc=0 (813s)
+2026-10-12T02:49:08Z ext13ci-s2-g3-qwen3 rc=0 (1078s incl. queue wait)
+2026-10-12T02:49:08Z submit ext13ci-s2-g3-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+2026-10-12T03:01:42Z START ext13ci-s2-g3-qwen3 (waited 754s): python scripts/ext13ci_circuit_run.py qwen3 --group g3 --conds vt_e2a_orig,vt_e2a_neu,vt_a2e_orig --max-passes 12
+03:01:51 vt_e2a_orig/qwen3: 256 rows, 256 cases, prefill offset 0, single-expert entries proxied by DLA 0
+03:01:53 vt_e2a_neu/qwen3: 256 rows, 256 cases, prefill offset 512, single-expert entries proxied by DLA 0
+03:01:54 vt_a2e_orig/qwen3: 74 rows, 74 cases, prefill offset 1024, single-expert entries proxied by DLA 0
+03:01:56 resuming after 12 passes (queue 3026/3026)
+03:02:00 pass 12: 1172 prefill rows, 41020 spawn rows (41020 adaptive, 0 static groups; queue 3026/3026)
+03:02:07   layer   0: load-wait 4.47s compute 1.37s  wf_rows=9808
+03:02:18   layer   8: load-wait 0.39s compute 0.39s  wf_rows=25339
+03:02:28   layer  16: load-wait 0.84s compute 0.43s  wf_rows=32409
+03:02:38   layer  24: load-wait 0.75s compute 0.49s  wf_rows=37552
+03:02:50   layer  32: load-wait 1.45s compute 0.56s  wf_rows=40425
+03:03:05   layer  40: load-wait 1.13s compute 0.72s  wf_rows=41020
+03:03:14   layer  47: load-wait 0.73s compute 0.48s  wf_rows=41020
+03:03:16   pass done: 1172 prefill rows (T=27), 41020 spawn rows, 74.6s (metrics 1.6s)
+03:03:25 pass 12 done in 75s, peak 7.7 GB; greedy left 1172; median r: {'mix': 0.8878406708595388, 'head': 0.6203346203346203}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:03:29 pass 13: 1172 prefill rows, 39848 spawn rows (39848 adaptive, 0 static groups; queue 3026/3026)
+03:03:32   layer   0: load-wait 0.73s compute 0.25s  wf_rows=10248
+03:03:43   layer   8: load-wait 0.66s compute 0.42s  wf_rows=25782
+03:03:53   layer  16: load-wait 0.56s compute 0.44s  wf_rows=32308
+03:04:06   layer  24: load-wait 0.39s compute 0.52s  wf_rows=36872
+03:04:18   layer  32: load-wait 1.34s compute 0.50s  wf_rows=39438
+03:04:30   layer  40: load-wait 0.33s compute 0.58s  wf_rows=39848
+03:04:37   layer  47: load-wait 0.42s compute 0.45s  wf_rows=39848
+03:04:38   pass done: 1172 prefill rows (T=27), 39848 spawn rows, 67.2s (metrics 1.5s)
+03:04:44 pass 13 done in 67s, peak 7.6 GB; greedy left 1172; median r: {'mix': 0.8989795918367347, 'head': 0.6276789785681715}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:04:47 pass 14: 1172 prefill rows, 38676 spawn rows (38676 adaptive, 0 static groups; queue 3026/3026)
+03:04:50   layer   0: load-wait 0.79s compute 0.25s  wf_rows=10674
+03:05:02   layer   8: load-wait 0.57s compute 0.39s  wf_rows=26104
+03:05:12   layer  16: load-wait 0.73s compute 0.41s  wf_rows=32354
+03:05:22   layer  24: load-wait 0.38s compute 0.49s  wf_rows=36258
+03:05:33   layer  32: load-wait 0.98s compute 0.55s  wf_rows=38387
+03:05:46   layer  40: load-wait 1.79s compute 0.68s  wf_rows=38676
+03:05:54   layer  47: load-wait 0.74s compute 0.45s  wf_rows=38676
+03:05:56   pass done: 1172 prefill rows (T=27), 38676 spawn rows, 66.9s (metrics 1.4s)
+03:06:00 pass 14 done in 67s, peak 7.6 GB; greedy left 1172; median r: {'mix': 0.9154761904761904, 'head': 0.6391165755919854}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:06:03 pass 15: 1172 prefill rows, 37504 spawn rows (37504 adaptive, 0 static groups; queue 3026/3026)
+03:06:07   layer   0: load-wait 1.78s compute 0.26s  wf_rows=11132
+03:06:17   layer   8: load-wait 0.95s compute 0.39s  wf_rows=26107
+03:06:26   layer  16: load-wait 1.09s compute 0.42s  wf_rows=32165
+03:06:35   layer  24: load-wait 1.01s compute 0.48s  wf_rows=35590
+03:06:47   layer  32: load-wait 2.04s compute 0.52s  wf_rows=37303
+03:06:56   layer  40: load-wait 0.36s compute 0.58s  wf_rows=37504
+03:07:05   layer  47: load-wait 0.31s compute 0.44s  wf_rows=37504
+03:07:06   pass done: 1172 prefill rows (T=27), 37504 spawn rows, 60.9s (metrics 1.4s)
+03:07:11 pass 15 done in 61s, peak 7.5 GB; greedy left 1172; median r: {'mix': 0.9223227752639518, 'head': 0.6321160042964554}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:07:13 pass 16: 1172 prefill rows, 36332 spawn rows (36332 adaptive, 0 static groups; queue 3026/3026)
+03:07:17   layer   0: load-wait 1.02s compute 0.29s  wf_rows=11361
+03:07:31   layer   8: load-wait 0.72s compute 0.38s  wf_rows=25994
+03:07:42   layer  16: load-wait 0.74s compute 0.43s  wf_rows=31681
+03:07:55   layer  24: load-wait 1.38s compute 0.50s  wf_rows=34779
+03:08:05   layer  32: load-wait 0.99s compute 0.52s  wf_rows=36158
+03:08:17   layer  40: load-wait 1.16s compute 0.60s  wf_rows=36332
+03:08:25   layer  47: load-wait 1.13s compute 0.46s  wf_rows=36332
+03:08:27   pass done: 1172 prefill rows (T=27), 36332 spawn rows, 71.3s (metrics 1.4s)
+03:08:35 pass 16 done in 71s, peak 7.5 GB; greedy left 1172; median r: {'mix': 0.9285714285714286, 'head': 0.637330754352031}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:08:38 pass 17: 1172 prefill rows, 35160 spawn rows (35160 adaptive, 0 static groups; queue 3026/3026)
+03:08:41   layer   0: load-wait 0.74s compute 0.25s  wf_rows=11887
+03:08:51   layer   8: load-wait 1.21s compute 0.40s  wf_rows=25924
+03:09:02   layer  16: load-wait 1.36s compute 0.42s  wf_rows=31388
+03:09:14   layer  24: load-wait 1.09s compute 0.48s  wf_rows=33935
+03:09:25   layer  32: load-wait 1.21s compute 0.55s  wf_rows=35047
+03:09:35   layer  40: load-wait 0.43s compute 0.54s  wf_rows=35160
+03:09:47   layer  47: load-wait 2.25s compute 0.43s  wf_rows=35160
+03:09:48   pass done: 1172 prefill rows (T=27), 35160 spawn rows, 68.5s (metrics 1.3s)
+03:09:54 pass 17 done in 69s, peak 7.4 GB; greedy left 1172; median r: {'mix': 0.9390847247990106, 'head': 0.6363636363636364}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:09:56 pass 18: 1172 prefill rows, 33988 spawn rows (33988 adaptive, 0 static groups; queue 3026/3026)
+03:09:59   layer   0: load-wait 1.14s compute 0.29s  wf_rows=12275
+03:10:07   layer   8: load-wait 0.89s compute 0.38s  wf_rows=25915
+03:10:16   layer  16: load-wait 0.45s compute 0.42s  wf_rows=30909
+03:10:25   layer  24: load-wait 0.48s compute 0.74s  wf_rows=32920
+03:10:36   layer  32: load-wait 0.93s compute 0.50s  wf_rows=33882
+03:10:45   layer  40: load-wait 0.33s compute 0.60s  wf_rows=33988
+03:10:52   layer  47: load-wait 0.31s compute 0.42s  wf_rows=33988
+03:10:54   pass done: 1172 prefill rows (T=27), 33988 spawn rows, 56.3s (metrics 1.3s)
+03:10:59 pass 18 done in 56s, peak 7.3 GB; greedy left 0; median r: {'mix': 0.9459415584415585, 'head': 0.6384099616858238}; all-heads |Δ - Δ_clean| max nan; queue 3026/3026
+03:11:00 ALL PASSES COMPLETE
+2026-10-12T03:11:06Z END   ext13ci-s2-g3-qwen3 rc=0 (564s)
+2026-10-12T03:11:06Z ext13ci-s2-g3-qwen3 rc=0 (1318s incl. queue wait)
+2026-10-12T03:11:06Z cpu: scripts/ext13ci_analyze.py --step 2 --groups qwen3/g3
+03:11:09 analysing vt_e2a_orig/qwen3 (g3)
+03:11:12 analysing vt_e2a_neu/qwen3 (g3)
+03:11:15 analysing vt_a2e_orig/qwen3 (g3)
+03:11:19 step-2 figures written
+03:11:19 wrote ext13ci_circuit_curves (119 rows)
+03:11:19 wrote ext13ci_circuit_greedy (34 rows)
+03:11:19 wrote ext13ci_circuit_sanity (17 rows)
+03:11:19 wrote ext13ci_overview (12 rows)
+03:11:20 overview written
+03:12:00 wrote ext13ci_contrasts (14 rows)
+03:12:00 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-12T03:12:00Z cpu rc=0
+2026-10-12T03:12:00Z cpu: scripts/ext13ci_text.py
+wrote /home/ubuntu/MOE/results/sections/ext13_circuit.md
+2026-10-12T03:12:01Z cpu rc=0
+2026-10-12T03:12:01Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'vt_a2e_orig', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: ['f2e'])
+2026-10-12T03:24:01Z submit ext13ci-s1-f2e-qwen3: python scripts/ext13ci_heads_run.py f2e qwen3 --max-passes 6
+2026-10-12T03:27:45Z START ext13ci-s1-f2e-qwen3 (waited 224s): python scripts/ext13ci_heads_run.py f2e qwen3 --max-passes 6
+03:27:52 f2e/qwen3: 64 validation rows, 1 chunks (1 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'mention_clean', 'mention_corr', 'pos0', 'final']
+03:27:53 pass (chunk 0): 128 prefill rows (64 clean), 101376 spawn rows
+03:27:59   layer   0: load-wait 3.65s compute 2.24s  wf_rows=2112
+03:28:06   layer   8: load-wait 0.93s compute 0.20s  wf_rows=19008
+03:28:15   layer  16: load-wait 0.79s compute 0.30s  wf_rows=35904
+03:28:24   layer  24: load-wait 0.69s compute 0.42s  wf_rows=52800
+03:28:33   layer  32: load-wait 0.66s compute 0.54s  wf_rows=69696
+03:28:43   layer  40: load-wait 0.59s compute 0.66s  wf_rows=86592
+03:28:52   layer  47: load-wait 0.49s compute 0.77s  wf_rows=101376
+03:28:52   pass done: 128 prefill rows (T=29), 101376 spawn rows, 59.1s
+03:28:54 chunk 0 done: {'chunk': 0, 'rows': 64, 'prefill': 128, 'spawn_rows': 101376, 'pass_s': 59.137179136276245, 'peak_GB': 9.70582103729248, 'mean_drop': 8.384765625, 'r_sum_heads_vs_attn_layer': 0.3835450501067273, 'head_dla_sum_mean': 8.486191749572754, 'candidates_not_routed_clean': 612, 'attn_row_sum_minmax': [0.9996286034584045, 1.0003838539123535], 'utc': '2026-10-12T03:28:54Z'}
+03:28:54 ALL CHUNKS COMPLETE
+2026-10-12T03:29:00Z END   ext13ci-s1-f2e-qwen3 rc=0 (75s)
+2026-10-12T03:29:00Z ext13ci-s1-f2e-qwen3 rc=0 (299s incl. queue wait)
+2026-10-12T03:29:00Z cpu: scripts/ext13ci_analyze.py --step 1 --keys f2e/qwen3
+03:29:02 step 1: f2e/qwen3
+03:29:06 step-1 figures written
+03:29:06 wrote ext13ci_heads_top (198 rows)
+03:29:06 wrote ext13ci_heads_summary (18 rows)
+03:29:06 wrote ext13ci_heads_layers (108 rows)
+03:29:06 wrote ext13ci_attn_heads (180 rows)
+03:29:06 wrote ext13ci_attn_population (90 rows)
+03:29:06 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-12T03:29:06Z cpu rc=0
+2026-10-12T03:29:06Z group g4: subgroups {'g4': ['f2e']} (rows {'f2e': 64})
+2026-10-12T03:29:06Z submit ext13ci-s2-g4-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+2026-10-12T03:44:18Z START ext13ci-s2-g4-qwen3 (waited 912s): python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+03:44:26 f2e/qwen3: 64 rows, 64 cases, prefill offset 0, single-expert entries proxied by DLA 0
+03:44:26 initialised: {'tasks': ['f2e/qwen3'], 'rows': {'f2e/qwen3': 64}, 'budget': 100000, 'queue_groups': 352, 'queue_items': 7872, 'pool_sizes': {'f2e/qwen3': {'mix': 64, 'head': 32}}, 'n_proxy': {'f2e/qwen3': 0}}
+03:44:28 pass 0: 128 prefill rows, 14016 spawn rows (6144 adaptive, 352 static groups; queue 352/352)
+03:44:33   layer   0: load-wait 3.51s compute 0.80s  wf_rows=1144
+03:44:43   layer   8: load-wait 1.62s compute 0.10s  wf_rows=3367
+03:44:55   layer  16: load-wait 1.65s compute 0.12s  wf_rows=4904
+03:45:04   layer  24: load-wait 0.64s compute 0.12s  wf_rows=6236
+03:45:14   layer  32: load-wait 1.13s compute 0.14s  wf_rows=7884
+03:45:24   layer  40: load-wait 1.09s compute 0.21s  wf_rows=12326
+03:45:34   layer  47: load-wait 1.58s compute 0.17s  wf_rows=14016
+03:45:35   pass done: 128 prefill rows (T=29), 14016 spawn rows, 65.9s (metrics 0.5s)
+03:45:37 pass 0 done in 66s, peak 4.1 GB; greedy left 128; median r: {'mix': 0.4140394088669951, 'head': 0.38673020527859236}; all-heads |Δ - Δ_clean| max 4.375; queue 352/352
+03:45:37 pass 1: 128 prefill rows, 5888 spawn rows (5888 adaptive, 0 static groups; queue 352/352)
+03:45:39   layer   0: load-wait 1.36s compute 0.11s  wf_rows=272
+03:45:51   layer   8: load-wait 1.07s compute 0.06s  wf_rows=1595
+03:46:01   layer  16: load-wait 0.76s compute 0.11s  wf_rows=2368
+03:46:10   layer  24: load-wait 1.31s compute 0.08s  wf_rows=2911
+03:46:21   layer  32: load-wait 1.78s compute 0.12s  wf_rows=3599
+03:46:30   layer  40: load-wait 1.19s compute 0.15s  wf_rows=5835
+03:46:39   layer  47: load-wait 1.60s compute 0.07s  wf_rows=5888
+03:46:39   pass done: 128 prefill rows (T=29), 5888 spawn rows, 62.1s (metrics 0.2s)
+03:46:40 pass 1 done in 62s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.4976190476190476, 'head': 0.48557558945908463}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:46:40 pass 2: 128 prefill rows, 5760 spawn rows (5760 adaptive, 0 static groups; queue 352/352)
+03:46:41   layer   0: load-wait 0.74s compute 0.09s  wf_rows=272
+03:46:53   layer   8: load-wait 1.44s compute 0.08s  wf_rows=1695
+03:47:02   layer  16: load-wait 1.04s compute 0.07s  wf_rows=2566
+03:47:13   layer  24: load-wait 0.98s compute 0.11s  wf_rows=3055
+03:47:23   layer  32: load-wait 0.98s compute 0.11s  wf_rows=3830
+03:47:32   layer  40: load-wait 1.40s compute 0.12s  wf_rows=5742
+03:47:43   layer  47: load-wait 0.79s compute 0.08s  wf_rows=5760
+03:47:43   pass done: 128 prefill rows (T=29), 5760 spawn rows, 62.5s (metrics 0.2s)
+03:47:44 pass 2 done in 63s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.5873379099923723, 'head': 0.5472370766488414}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:47:44 pass 3: 128 prefill rows, 5632 spawn rows (5632 adaptive, 0 static groups; queue 352/352)
+03:47:45   layer   0: load-wait 1.08s compute 0.09s  wf_rows=330
+03:47:55   layer   8: load-wait 1.88s compute 0.08s  wf_rows=1912
+03:48:04   layer  16: load-wait 1.56s compute 0.09s  wf_rows=2794
+03:48:15   layer  24: load-wait 1.17s compute 0.10s  wf_rows=3231
+03:48:26   layer  32: load-wait 0.74s compute 0.09s  wf_rows=4000
+03:48:36   layer  40: load-wait 2.12s compute 0.21s  wf_rows=5628
+03:48:47   layer  47: load-wait 2.14s compute 0.10s  wf_rows=5632
+03:48:47   pass done: 128 prefill rows (T=29), 5632 spawn rows, 63.0s (metrics 0.2s)
+03:48:48 pass 3 done in 63s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.6432230102442869, 'head': 0.6252742430890741}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:48:48 pass 4: 128 prefill rows, 5504 spawn rows (5504 adaptive, 0 static groups; queue 352/352)
+03:48:51   layer   0: load-wait 1.87s compute 0.11s  wf_rows=349
+03:48:59   layer   8: load-wait 1.01s compute 0.07s  wf_rows=2050
+03:49:09   layer  16: load-wait 0.75s compute 0.12s  wf_rows=2932
+03:49:19   layer  24: load-wait 1.17s compute 0.09s  wf_rows=3355
+03:49:30   layer  32: load-wait 1.77s compute 0.12s  wf_rows=4156
+03:49:41   layer  40: load-wait 0.96s compute 0.14s  wf_rows=5501
+03:49:50   layer  47: load-wait 0.73s compute 0.08s  wf_rows=5504
+03:49:50   pass done: 128 prefill rows (T=29), 5504 spawn rows, 61.4s (metrics 0.2s)
+03:49:51 pass 4 done in 61s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.6854497354497355, 'head': 0.6607970923674646}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:49:51 pass 5: 128 prefill rows, 5376 spawn rows (5376 adaptive, 0 static groups; queue 352/352)
+03:49:53   layer   0: load-wait 1.11s compute 0.12s  wf_rows=347
+03:50:02   layer   8: load-wait 1.05s compute 0.12s  wf_rows=2135
+03:50:13   layer  16: load-wait 1.63s compute 0.12s  wf_rows=3049
+03:50:22   layer  24: load-wait 1.51s compute 0.09s  wf_rows=3497
+03:50:31   layer  32: load-wait 0.70s compute 0.10s  wf_rows=4159
+03:50:41   layer  40: load-wait 0.81s compute 0.13s  wf_rows=5374
+03:50:50   layer  47: load-wait 1.36s compute 0.07s  wf_rows=5376
+03:50:50   pass done: 128 prefill rows (T=29), 5376 spawn rows, 58.6s (metrics 0.2s)
+03:50:51 pass 5 done in 59s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.7350866336633664, 'head': 0.7104166666666667}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:50:51 pass 6: 128 prefill rows, 5248 spawn rows (5248 adaptive, 0 static groups; queue 352/352)
+03:50:53   layer   0: load-wait 0.76s compute 0.11s  wf_rows=391
+03:51:03   layer   8: load-wait 1.16s compute 0.08s  wf_rows=2360
+03:51:11   layer  16: load-wait 1.23s compute 0.10s  wf_rows=3170
+03:51:20   layer  24: load-wait 1.02s compute 0.08s  wf_rows=3577
+03:51:29   layer  32: load-wait 0.86s compute 0.10s  wf_rows=4262
+03:51:37   layer  40: load-wait 0.98s compute 0.13s  wf_rows=5248
+03:51:45   layer  47: load-wait 1.13s compute 0.07s  wf_rows=5248
+03:51:46   pass done: 128 prefill rows (T=29), 5248 spawn rows, 53.9s (metrics 0.2s)
+03:51:46 pass 6 done in 54s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.7727732793522267, 'head': 0.7175367405132704}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:51:47 pass 7: 128 prefill rows, 5120 spawn rows (5120 adaptive, 0 static groups; queue 352/352)
+03:51:48   layer   0: load-wait 0.78s compute 0.09s  wf_rows=402
+03:51:59   layer   8: load-wait 1.25s compute 0.11s  wf_rows=2434
+03:52:08   layer  16: load-wait 0.70s compute 0.10s  wf_rows=3175
+03:52:18   layer  24: load-wait 1.23s compute 0.09s  wf_rows=3626
+03:52:27   layer  32: load-wait 1.41s compute 0.10s  wf_rows=4261
+03:52:35   layer  40: load-wait 0.81s compute 0.13s  wf_rows=5120
+03:52:43   layer  47: load-wait 1.13s compute 0.08s  wf_rows=5120
+03:52:44   pass done: 128 prefill rows (T=29), 5120 spawn rows, 56.7s (metrics 0.2s)
+03:52:45 pass 7 done in 57s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.8253968253968254, 'head': 0.795734597156398}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:52:45 pass 8: 128 prefill rows, 4992 spawn rows (4992 adaptive, 0 static groups; queue 352/352)
+03:52:46   layer   0: load-wait 0.80s compute 0.09s  wf_rows=498
+03:52:54   layer   8: load-wait 1.13s compute 0.08s  wf_rows=2491
+03:53:06   layer  16: load-wait 3.13s compute 0.08s  wf_rows=3270
+03:53:23   layer  24: load-wait 1.11s compute 0.08s  wf_rows=3664
+03:53:31   layer  32: load-wait 1.04s compute 0.09s  wf_rows=4276
+03:53:40   layer  40: load-wait 0.73s compute 0.13s  wf_rows=4992
+03:53:48   layer  47: load-wait 1.31s compute 0.08s  wf_rows=4992
+03:53:48   pass done: 128 prefill rows (T=29), 4992 spawn rows, 62.6s (metrics 0.2s)
+03:53:49 pass 8 done in 63s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.8343137254901961, 'head': 0.8196215986394557}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:53:49 pass 9: 128 prefill rows, 4864 spawn rows (4864 adaptive, 0 static groups; queue 352/352)
+03:53:50   layer   0: load-wait 0.95s compute 0.08s  wf_rows=593
+03:53:58   layer   8: load-wait 0.98s compute 0.11s  wf_rows=2641
+03:54:07   layer  16: load-wait 1.03s compute 0.08s  wf_rows=3356
+03:54:16   layer  24: load-wait 1.10s compute 0.10s  wf_rows=3756
+03:54:25   layer  32: load-wait 1.14s compute 0.10s  wf_rows=4255
+03:54:34   layer  40: load-wait 1.02s compute 0.12s  wf_rows=4864
+03:54:42   layer  47: load-wait 1.01s compute 0.07s  wf_rows=4864
+03:54:42   pass done: 128 prefill rows (T=29), 4864 spawn rows, 52.7s (metrics 0.2s)
+03:54:43 pass 9 done in 53s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.8758609556607835, 'head': 0.8119017894298792}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:54:43 pass 10: 128 prefill rows, 4736 spawn rows (4736 adaptive, 0 static groups; queue 352/352)
+03:54:44   layer   0: load-wait 0.82s compute 0.07s  wf_rows=618
+03:54:54   layer   8: load-wait 1.13s compute 0.08s  wf_rows=2738
+03:55:02   layer  16: load-wait 0.91s compute 0.10s  wf_rows=3365
+03:55:10   layer  24: load-wait 1.23s compute 0.09s  wf_rows=3758
+03:55:20   layer  32: load-wait 1.20s compute 0.10s  wf_rows=4185
+03:55:29   layer  40: load-wait 0.70s compute 0.12s  wf_rows=4736
+03:55:37   layer  47: load-wait 1.00s compute 0.07s  wf_rows=4736
+03:55:37   pass done: 128 prefill rows (T=29), 4736 spawn rows, 53.4s (metrics 0.2s)
+03:55:38 pass 10 done in 53s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.8722943722943723, 'head': 0.8189340210616807}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+03:55:38 pass 11: 128 prefill rows, 4608 spawn rows (4608 adaptive, 0 static groups; queue 352/352)
+03:55:39   layer   0: load-wait 1.17s compute 0.09s  wf_rows=742
+03:55:48   layer   8: load-wait 0.84s compute 0.10s  wf_rows=2853
+03:55:56   layer  16: load-wait 0.90s compute 0.09s  wf_rows=3390
+03:56:05   layer  24: load-wait 1.10s compute 0.10s  wf_rows=3823
+03:56:14   layer  32: load-wait 1.13s compute 0.10s  wf_rows=4185
+03:56:23   layer  40: load-wait 1.72s compute 0.11s  wf_rows=4608
+03:56:31   layer  47: load-wait 0.77s compute 0.08s  wf_rows=4608
+03:56:32   pass done: 128 prefill rows (T=29), 4608 spawn rows, 53.3s (metrics 0.2s)
+03:56:32 pass 11 done in 53s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.8961925287356323, 'head': 0.8235697940503433}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+2026-10-12T03:56:40Z END   ext13ci-s2-g4-qwen3 rc=0 (742s)
+2026-10-12T03:56:40Z ext13ci-s2-g4-qwen3 rc=0 (1653s incl. queue wait)
+2026-10-12T03:56:40Z submit ext13ci-s2-g4-qwen3: python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+2026-10-12T04:08:02Z START ext13ci-s2-g4-qwen3 (waited 682s): python scripts/ext13ci_circuit_run.py qwen3 --group g4 --conds f2e --max-passes 12
+04:08:09 f2e/qwen3: 64 rows, 64 cases, prefill offset 0, single-expert entries proxied by DLA 0
+04:08:09 resuming after 12 passes (queue 352/352)
+04:08:10 pass 12: 128 prefill rows, 4480 spawn rows (4480 adaptive, 0 static groups; queue 352/352)
+04:08:14   layer   0: load-wait 2.91s compute 0.83s  wf_rows=808
+04:08:28   layer   8: load-wait 1.34s compute 0.08s  wf_rows=2875
+04:08:37   layer  16: load-wait 1.15s compute 0.09s  wf_rows=3312
+04:08:47   layer  24: load-wait 1.16s compute 0.09s  wf_rows=3741
+04:08:57   layer  32: load-wait 1.13s compute 0.12s  wf_rows=4092
+04:09:13   layer  40: load-wait 1.02s compute 0.14s  wf_rows=4480
+04:09:21   layer  47: load-wait 1.26s compute 0.07s  wf_rows=4480
+04:09:21   pass done: 128 prefill rows (T=29), 4480 spawn rows, 70.7s (metrics 0.2s)
+04:09:22 pass 12 done in 71s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.9198717948717949, 'head': 0.8339869281045751}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:09:22 pass 13: 128 prefill rows, 4352 spawn rows (4352 adaptive, 0 static groups; queue 352/352)
+04:09:23   layer   0: load-wait 1.02s compute 0.09s  wf_rows=787
+04:09:33   layer   8: load-wait 1.21s compute 0.11s  wf_rows=2872
+04:09:47   layer  16: load-wait 1.06s compute 0.09s  wf_rows=3309
+04:09:56   layer  24: load-wait 1.08s compute 0.09s  wf_rows=3715
+04:10:06   layer  32: load-wait 1.09s compute 0.10s  wf_rows=4063
+04:10:15   layer  40: load-wait 0.98s compute 0.11s  wf_rows=4352
+04:10:24   layer  47: load-wait 1.14s compute 0.07s  wf_rows=4352
+04:10:24   pass done: 128 prefill rows (T=29), 4352 spawn rows, 61.7s (metrics 0.2s)
+04:10:24 pass 13 done in 62s, peak 3.8 GB; greedy left 128; median r: {'mix': 0.9285714285714286, 'head': 0.8497961264016309}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:10:25 pass 14: 128 prefill rows, 4224 spawn rows (4224 adaptive, 0 static groups; queue 352/352)
+04:10:26   layer   0: load-wait 0.86s compute 0.09s  wf_rows=858
+04:10:35   layer   8: load-wait 1.11s compute 0.08s  wf_rows=2799
+04:10:44   layer  16: load-wait 1.12s compute 0.09s  wf_rows=3225
+04:10:54   layer  24: load-wait 1.06s compute 0.09s  wf_rows=3624
+04:11:03   layer  32: load-wait 1.22s compute 0.09s  wf_rows=3991
+04:11:13   layer  40: load-wait 0.99s compute 0.11s  wf_rows=4224
+04:11:21   layer  47: load-wait 1.03s compute 0.09s  wf_rows=4224
+04:11:21   pass done: 128 prefill rows (T=29), 4224 spawn rows, 55.7s (metrics 0.2s)
+04:11:22 pass 14 done in 56s, peak 3.7 GB; greedy left 128; median r: {'mix': 0.9492268990060131, 'head': 0.8500602167804094}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:11:22 pass 15: 128 prefill rows, 4096 spawn rows (4096 adaptive, 0 static groups; queue 352/352)
+04:11:23   layer   0: load-wait 0.80s compute 0.08s  wf_rows=862
+04:11:32   layer   8: load-wait 0.73s compute 0.11s  wf_rows=2766
+04:11:41   layer  16: load-wait 0.99s compute 0.08s  wf_rows=3199
+04:11:50   layer  24: load-wait 1.15s compute 0.08s  wf_rows=3575
+04:12:00   layer  32: load-wait 1.41s compute 0.10s  wf_rows=3907
+04:12:08   layer  40: load-wait 0.96s compute 0.13s  wf_rows=4096
+04:12:16   layer  47: load-wait 0.93s compute 0.07s  wf_rows=4096
+04:12:17   pass done: 128 prefill rows (T=29), 4096 spawn rows, 54.1s (metrics 0.2s)
+04:12:17 pass 15 done in 54s, peak 3.7 GB; greedy left 128; median r: {'mix': 0.9673969744392279, 'head': 0.8691337719298247}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:12:18 pass 16: 128 prefill rows, 3968 spawn rows (3968 adaptive, 0 static groups; queue 352/352)
+04:12:19   layer   0: load-wait 0.85s compute 0.08s  wf_rows=978
+04:12:28   layer   8: load-wait 0.89s compute 0.09s  wf_rows=2786
+04:12:37   layer  16: load-wait 0.96s compute 0.09s  wf_rows=3196
+04:12:46   layer  24: load-wait 1.14s compute 0.10s  wf_rows=3509
+04:12:55   layer  32: load-wait 1.03s compute 0.10s  wf_rows=3801
+04:13:04   layer  40: load-wait 1.02s compute 0.10s  wf_rows=3968
+04:13:12   layer  47: load-wait 1.04s compute 0.07s  wf_rows=3968
+04:13:13   pass done: 128 prefill rows (T=29), 3968 spawn rows, 54.7s (metrics 0.2s)
+04:13:13 pass 16 done in 55s, peak 3.7 GB; greedy left 128; median r: {'mix': 0.9666020403452892, 'head': 0.8667157584683358}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:13:14 pass 17: 128 prefill rows, 3840 spawn rows (3840 adaptive, 0 static groups; queue 352/352)
+04:13:15   layer   0: load-wait 0.91s compute 0.09s  wf_rows=1001
+04:13:23   layer   8: load-wait 1.07s compute 0.09s  wf_rows=2771
+04:13:32   layer  16: load-wait 1.12s compute 0.08s  wf_rows=3203
+04:13:42   layer  24: load-wait 1.01s compute 0.09s  wf_rows=3438
+04:13:51   layer  32: load-wait 1.03s compute 0.09s  wf_rows=3694
+04:14:00   layer  40: load-wait 1.19s compute 0.10s  wf_rows=3840
+04:14:08   layer  47: load-wait 0.72s compute 0.08s  wf_rows=3840
+04:14:08   pass done: 128 prefill rows (T=29), 3840 spawn rows, 53.6s (metrics 0.2s)
+04:14:08 pass 17 done in 54s, peak 3.7 GB; greedy left 128; median r: {'mix': 0.9735206078747409, 'head': 0.8994340004042854}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:14:09 pass 18: 128 prefill rows, 3712 spawn rows (3712 adaptive, 0 static groups; queue 352/352)
+04:14:10   layer   0: load-wait 0.82s compute 0.22s  wf_rows=1099
+04:14:19   layer   8: load-wait 1.07s compute 0.10s  wf_rows=2873
+04:14:28   layer  16: load-wait 1.22s compute 0.11s  wf_rows=3215
+04:14:37   layer  24: load-wait 0.69s compute 0.10s  wf_rows=3426
+04:14:46   layer  32: load-wait 1.10s compute 0.10s  wf_rows=3640
+04:14:55   layer  40: load-wait 0.95s compute 0.11s  wf_rows=3712
+04:15:03   layer  47: load-wait 1.16s compute 0.08s  wf_rows=3712
+04:15:03   pass done: 128 prefill rows (T=29), 3712 spawn rows, 54.0s (metrics 0.2s)
+04:15:04 pass 18 done in 54s, peak 3.7 GB; greedy left 0; median r: {'mix': 1.0, 'head': 0.8704850361197111}; all-heads |Δ - Δ_clean| max nan; queue 352/352
+04:15:04 ALL PASSES COMPLETE
+2026-10-12T04:15:11Z END   ext13ci-s2-g4-qwen3 rc=0 (429s)
+2026-10-12T04:15:11Z ext13ci-s2-g4-qwen3 rc=0 (1111s incl. queue wait)
+2026-10-12T04:15:11Z cpu: scripts/ext13ci_analyze.py --step 2 --groups qwen3/g4
+04:15:13 analysing f2e/qwen3 (g4)
+04:15:14 step-2 figures written
+04:15:14 wrote ext13ci_circuit_curves (126 rows)
+04:15:14 wrote ext13ci_circuit_greedy (36 rows)
+04:15:14 wrote ext13ci_circuit_sanity (18 rows)
+04:15:14 wrote ext13ci_overview (13 rows)
+04:15:15 overview written
+04:15:51 wrote ext13ci_contrasts (14 rows)
+04:15:51 wrote /home/ubuntu/MOE/results/ext13ci_summary.json
+2026-10-12T04:15:52Z cpu rc=0
+2026-10-12T04:15:52Z cpu: scripts/ext13ci_text.py
+wrote /home/ubuntu/MOE/results/sections/ext13_circuit.md
+2026-10-12T04:15:53Z cpu rc=0
+2026-10-12T04:15:53Z waiting (BASE READY seen: ['cp_nat', 'cp_vt_neu', 'cp_vt_orig', 'dir_f1', 'dir_opt', 'f1', 'f2e', 'vt_a2e_orig', 'vt_e2a_neu', 'vt_e2a_orig']; not finished: [])
+2026-10-12T04:17:53Z all groups done
+2026-10-12T04:17:53Z cpu: scripts/ext13ci_text.py
+wrote /home/ubuntu/MOE/results/sections/ext13_circuit.md
+2026-10-12T04:17:54Z cpu rc=0

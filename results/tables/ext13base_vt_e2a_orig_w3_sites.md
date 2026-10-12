@@ -1,0 +1,22 @@
+**vt_e2a_orig W3: position × layer grid by site (main family, window 1; site mean over its positions)**
+
+| Model | Patched quantity | Site | Pairs | Positions / case | Peak layer | Peak rescue / drop [95% CI] |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | attn_layer | STR | 256 | 1.0 | L6 | +0.299 [+0.267, +0.332] |
+| Qwen3-30B-A3B-Base | attn_layer | other | 147 | 2.1 | L7 | +0.008 [+0.003, +0.013] |
+| Qwen3-30B-A3B-Base | attn_layer | final | 256 | 1.0 | L42 | +0.055 [+0.048, +0.062] |
+| Qwen3-30B-A3B-Base | layer | STR | 256 | 1.0 | L13 | +0.045 [+0.035, +0.055] |
+| Qwen3-30B-A3B-Base | layer | other | 147 | 2.1 | L39 | +0.014 [+0.011, +0.017] |
+| Qwen3-30B-A3B-Base | layer | final | 256 | 1.0 | L42 | +0.142 [+0.130, +0.154] |
+| Qwen3-30B-A3B-Base | resid | STR | 256 | 1.0 | L2 | +1.002 [+0.995, +1.009] |
+| Qwen3-30B-A3B-Base | resid | other | 147 | 2.1 | L35 | +0.103 [+0.092, +0.115] |
+| Qwen3-30B-A3B-Base | resid | final | 256 | 1.0 | L47 | +0.999 [+0.992, +1.006] |
+| Mixtral-8x7B, BOS | attn_layer | STR | 256 | 1.0 | L7 | +0.413 [+0.380, +0.446] |
+| Mixtral-8x7B, BOS | attn_layer | other | 138 | 1.9 | L8 | +0.046 [+0.035, +0.058] |
+| Mixtral-8x7B, BOS | attn_layer | final | 256 | 1.0 | L19 | +0.151 [+0.142, +0.160] |
+| Mixtral-8x7B, BOS | layer | STR | 256 | 1.0 | L0 | +0.985 [+0.977, +0.991] |
+| Mixtral-8x7B, BOS | layer | other | 138 | 1.9 | L16 | +0.029 [+0.024, +0.034] |
+| Mixtral-8x7B, BOS | layer | final | 256 | 1.0 | L19 | +0.189 [+0.180, +0.198] |
+| Mixtral-8x7B, BOS | resid | STR | 256 | 1.0 | L0 | +1.001 [+0.998, +1.003] |
+| Mixtral-8x7B, BOS | resid | other | 138 | 1.9 | L13 | +0.194 [+0.175, +0.213] |
+| Mixtral-8x7B, BOS | resid | final | 256 | 1.0 | L31 | +1.001 [+0.998, +1.004] |

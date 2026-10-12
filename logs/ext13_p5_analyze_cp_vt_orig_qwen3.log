@@ -1,0 +1,28 @@
+14:48:36 cp_vt_orig qwen3 W2
+14:48:40 cluster bootstrap
+14:48:41 W6
+14:48:52 W3
+14:49:02 W5
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 665, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 635, in main
+    s = analyse(a.cond, a.proto, ent)
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 367, in analyse
+    s["w5_copy"] = copy_attention(run, pairs, s["w5"], cfg)
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 312, in copy_attention
+    **{f"clean_{k}": float(mc[k][h]) for k in classes}, **{f"corrupt_{k}": float(mn[k][h]) for k in classes}})
+                           ~~~~~^^^
+IndexError: index 31 is out of bounds for axis 0 with size 1
+16:01:26 cp_vt_orig qwen3 W2
+16:01:36 cluster bootstrap
+16:01:37 W6
+16:01:47 W3
+16:01:49 W5
+16:01:55 W4
+16:01:58 registry updated {"selected_expert": {"layer": 39, "expert": 1, "name": "L39E001", "pattern": "A", "spec": [0.12060546875, 0.07438151041666666, 0.16813151041666666], "rescue": [0.169921875, 0.1279296875, 0.21484375], "spec_norm": [0.021504440188055023, 0.013582009291474786, 0.029487965585985598], "val_active": 180}, "pop_top10": [[42, 123, 0.5149], [39, 1, 0.3735], [39, 121, 0.3574], [37, 101, 0.2795], [22, 35, 0.2527], [41, 106, 0.2141], [45, 92, 0.2043], [40, 75, 0.1821], [44, 122, 0.1697], [37, 2, 0.1589]], "status": {"cases": true, "base": true}}
+16:02:00 tables / figures written for cp_vt_orig
+16:02:58 ext13_p5_behaviour.py rc 0 
+16:02:59 ext13_p5_text.py rc 0 

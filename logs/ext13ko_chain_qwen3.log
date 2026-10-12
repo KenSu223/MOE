@@ -1,0 +1,32 @@
+2026-10-11T06:19:12Z chain start qwen3: f1 dir_f1 dir_opt cp_nat cp_vt_orig cp_vt_neu vt_e2a_orig vt_e2a_neu vt_a2e_orig vt_a2e_neu f2e
+2026-10-11T07:57:42Z queue job for f1
+2026-10-11T08:20:39Z job rc=0
+2026-10-11T08:21:17Z announced f1
+2026-10-11T09:58:23Z queue job for dir_f1
+2026-10-11T10:17:43Z job rc=0
+2026-10-11T10:18:53Z announced dir_f1
+2026-10-11T11:30:45Z queue job for dir_opt
+2026-10-11T11:36:00Z job rc=0
+2026-10-11T11:36:57Z announced dir_opt
+2026-10-11T16:02:50Z queue job for cp_nat,cp_vt_orig
+2026-10-11T16:35:59Z job rc=0
+2026-10-11T16:37:19Z announced cp_nat
+2026-10-11T16:38:35Z announced cp_vt_orig
+2026-10-11T16:38:47Z queue job for cp_vt_neu
+2026-10-11T17:50:15Z job rc=0
+2026-10-11T17:51:51Z announced cp_vt_neu
+2026-10-11T21:20:35Z queue job for vt_e2a_orig
+2026-10-11T21:54:46Z job rc=0
+2026-10-11T21:57:25Z announced vt_e2a_orig
+2026-10-12T00:20:33Z queue job for vt_e2a_neu
+2026-10-12T00:29:09Z job rc=0
+2026-10-12T00:31:46Z announced vt_e2a_neu
+2026-10-12T02:30:07Z queue job for vt_a2e_orig
+2026-10-12T02:34:14Z job rc=0
+2026-10-12T02:36:29Z announced vt_a2e_orig
+2026-10-12T03:23:15Z queue job for f2e
+2026-10-12T03:27:45Z job rc=0
+2026-10-12T03:30:40Z announced f2e
+2026-10-12T03:30:51Z queue cross job for f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,vt_a2e_orig,f2e
+2026-10-12T04:06:05Z cross job rc=0
+2026-10-12T04:09:55Z chain done

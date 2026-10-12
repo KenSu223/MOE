@@ -1,0 +1,14 @@
+2026-10-11T03:19:43Z START ext13-scan-f2r-qwen3 (waited 404s): python scripts/ext13_scan.py qwen3 --formats F2R
+03:19:52 F2R: 646 pairs, 3876 rows, 2 passes
+03:19:57   layer   0: load-wait 2.97s compute 1.09s  wf_rows=0
+03:20:06   layer   8: load-wait 0.63s compute 0.61s  wf_rows=0
+03:20:16   layer  16: load-wait 0.64s compute 0.61s  wf_rows=0
+03:20:25   layer  24: load-wait 0.63s compute 0.61s  wf_rows=0
+03:20:35   layer  32: load-wait 0.64s compute 0.61s  wf_rows=0
+03:20:45   layer  40: load-wait 0.64s compute 0.61s  wf_rows=0
+03:20:54   layer  47: load-wait 0.64s compute 0.61s  wf_rows=0
+03:20:54   pass done: 3783 prefill rows (T=37), 0 spawn rows, 61.5s
+03:20:54   pass 1/2 done (61s)
+03:21:43   pass 2/2 done (49s)
+03:21:44 F2R {"pairs": 646, "main": 405, "correct_both": 162, "margin": 43, "margin_main": 38, "margin_main_names": 33, "margin_main_objects": 5, "margin_connective": 5, "margin_main_associative": 0, "margin_main_half": 8, "margin_main_hard": 30, "balanced": 38, "balanced_names": 33, "balanced_objects": 5, "hard": 30, "margin_main_top1_both": 18, "mean_drop_margin_main": 3.986842105263158, "probe_drop_over_drop_margin_main": 0.005775577557755775, "n_passes": 2}
+2026-10-11T03:21:51Z END   ext13-scan-f2r-qwen3 rc=0 (128s)

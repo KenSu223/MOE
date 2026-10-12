@@ -1,0 +1,78 @@
+2026-10-11T10:01:00Z START ext13ab-qwen3-2 (waited 220s): python scripts/ext13ab_run.py qwen3 --tasks dir_f1_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+10:01:08 dir_f1_qwen3: initialised {'eval_rows': 180, 'noise_rows': 128, 'pool': 32, 'queue_groups': 3190, 'queue_items': 109812}
+10:01:09 dir_f1_qwen3: 360 cases, 360 rows (180 validation), K=384; passes done 0, queue 0/3190, greedy left 180
+10:01:12 pass 0: tasks ['dir_f1_qwen3'], 720 prefill rows (T max 39), 44997 spawn rows (adaptive [5760], static groups [2057])
+10:01:18   layer   0: load-wait 3.18s compute 0.85s  wf_rows=17875
+10:01:26   layer   8: load-wait 0.67s compute 0.46s  wf_rows=28998
+10:01:34   layer  16: load-wait 0.46s compute 0.51s  wf_rows=33155
+10:01:43   layer  24: load-wait 0.69s compute 0.54s  wf_rows=34772
+10:01:52   layer  32: load-wait 0.63s compute 0.53s  wf_rows=36443
+10:02:03   layer  40: load-wait 0.56s compute 0.60s  wf_rows=40278
+10:02:13   layer  47: load-wait 0.45s compute 0.59s  wf_rows=44997
+10:02:14   pass done: 720 prefill rows (T=39), 44997 spawn rows, 60.4s (metrics 1.7s)
+10:02:20 dir_f1_qwen3 first pass: ceilings for 360 rows (mean all-MoE rescue +0.614); DLA rows 138240 (4121 candidate pairs not routed in this pass's clean run)
+10:02:21 dir_f1_qwen3 pass 0 done: greedy left 180 (median step 2, median rescue/ceiling 0.75); queue 2057/3550
+10:02:21 group pass 0 done in 60s, peak 10.3 GB
+10:02:23 pass 1: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 44787 spawn rows (adaptive [5400], static groups [201])
+10:03:20 dir_f1_qwen3 pass 1 done: greedy left 180 (median step 3, median rescue/ceiling 0.86); queue 2258/3550
+10:03:20 group pass 1 done in 53s, peak 8.5 GB
+10:03:22 pass 2: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 43968 spawn rows (adaptive [5220], static groups [1292])
+10:04:16 dir_f1_qwen3: noise_oracle groups added for 128 rows
+10:04:16 dir_f1_qwen3 pass 2 done: greedy left 180 (median step 4, median rescue/ceiling 0.91); queue 3550/3678
+10:04:16 group pass 2 done in 49s, peak 9.5 GB
+10:04:16 pass 3: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 7728 spawn rows (adaptive [5040], static groups [128])
+[W1011 10:04:27.008779017 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1790967808 bytes (free: 955711488, total: 23686938624).
+[W1011 10:04:35.507595822 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2139095040 bytes (free: 1830223872, total: 23686938624).
+[W1011 10:04:44.449770009 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2212495360 bytes (free: 339148800, total: 23686938624).
+[W1011 10:04:51.153767015 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2319450112 bytes (free: 2098659328, total: 23686938624).
+[W1011 10:04:56.021743276 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2447376384 bytes (free: 1429667840, total: 23686938624).
+10:05:01 dir_f1_qwen3 pass 3 done: greedy left 180 (median step 5, median rescue/ceiling 1.05); queue 3678/3678
+10:05:01 group pass 3 done in 44s, peak 6.9 GB
+10:05:01 pass 4: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 4860 spawn rows (adaptive [4860], static groups [0])
+[W1011 10:05:23.047689909 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1371537408 bytes (free: 420937728, total: 23686938624).
+[W1011 10:05:33.768905024 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1491075072 bytes (free: 752287744, total: 23686938624).
+10:05:49 dir_f1_qwen3 pass 4 done: greedy left 180 (median step 6, median rescue/ceiling 1.10); queue 3678/3678
+10:05:49 group pass 4 done in 48s, peak 5.4 GB
+10:05:50 pass 5: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 4680 spawn rows (adaptive [4680], static groups [0])
+[W1011 10:06:08.714513419 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1342177280 bytes (free: 605487104, total: 23686938624).
+[W1011 10:06:22.927699598 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1455423488 bytes (free: 355926016, total: 23686938624).
+10:06:36 dir_f1_qwen3 pass 5 done: greedy left 180 (median step 7, median rescue/ceiling 1.15); queue 3678/3678
+10:06:36 group pass 5 done in 46s, peak 5.3 GB
+10:06:36 pass 6: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 4500 spawn rows (adaptive [4500], static groups [0])
+[W1011 10:06:56.774722510 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1323302912 bytes (free: 603389952, total: 23686938624).
+[W1011 10:07:09.459311412 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1413480448 bytes (free: 773259264, total: 23686938624).
+10:07:23 dir_f1_qwen3 pass 6 done: greedy left 180 (median step 8, median rescue/ceiling 1.16); queue 3678/3678
+10:07:23 group pass 6 done in 47s, peak 5.2 GB
+10:07:24 pass 7: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 4320 spawn rows (adaptive [4320], static groups [0])
+[W1011 10:07:42.243101722 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1285554176 bytes (free: 62324736, total: 23686938624).
+[W1011 10:07:57.179472986 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1358954496 bytes (free: 1268187136, total: 23686938624).
+10:08:11 dir_f1_qwen3 pass 7 done: greedy left 180 (median step 9, median rescue/ceiling 1.17); queue 3678/3678
+10:08:11 group pass 7 done in 47s, peak 5.1 GB
+10:08:12 pass 8: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 4140 spawn rows (adaptive [4140], static groups [0])
+[W1011 10:08:34.865379859 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1243611136 bytes (free: 599195648, total: 23686938624).
+10:09:04 dir_f1_qwen3 pass 8 done: greedy left 180 (median step 10, median rescue/ceiling 1.25); queue 3678/3678
+10:09:04 group pass 8 done in 52s, peak 5.0 GB
+10:09:04 pass 9: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 3960 spawn rows (adaptive [3960], static groups [0])
+[W1011 10:09:24.306807156 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1199570944 bytes (free: 991363072, total: 23686938624).
+[W1011 10:09:47.518277477 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1266679808 bytes (free: 1209466880, total: 23686938624).
+10:09:52 dir_f1_qwen3 pass 9 done: greedy left 180 (median step 11, median rescue/ceiling 1.21); queue 3678/3678
+10:09:52 group pass 9 done in 47s, peak 4.9 GB
+10:09:53 pass 10: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 3780 spawn rows (adaptive [3780], static groups [0])
+[W1011 10:10:12.182740128 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1159725056 bytes (free: 1050083328, total: 23686938624).
+10:10:39 dir_f1_qwen3 pass 10 done: greedy left 180 (median step 12, median rescue/ceiling 1.13); queue 3678/3678
+10:10:39 group pass 10 done in 46s, peak 4.8 GB
+10:10:39 pass 11: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 3600 spawn rows (adaptive [3600], static groups [0])
+[W1011 10:11:07.287813151 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1111490560 bytes (free: 628555776, total: 23686938624).
+10:11:30 dir_f1_qwen3 pass 11 done: greedy left 180 (median step 13, median rescue/ceiling 1.25); queue 3678/3678
+10:11:30 group pass 11 done in 51s, peak 4.7 GB
+10:11:31 pass 12: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 3420 spawn rows (adaptive [3420], static groups [0])
+[W1011 10:12:04.592977691 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1084227584 bytes (free: 49741824, total: 23686938624).
+10:12:22 dir_f1_qwen3 pass 12 done: greedy left 180 (median step 14, median rescue/ceiling 1.29); queue 3678/3678
+10:12:22 group pass 12 done in 51s, peak 4.6 GB
+10:12:23 pass 13: tasks ['dir_f1_qwen3'], 360 prefill rows (T max 38), 3240 spawn rows (adaptive [3240], static groups [0])
+[W1011 10:13:00.162541178 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1029701632 bytes (free: 613875712, total: 23686938624).
+10:13:15 dir_f1_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.20); queue 3678/3678
+10:13:15 dir_f1_qwen3: ALL PASSES COMPLETE
+10:13:15 group pass 13 done in 52s, peak 4.5 GB
+10:13:15 nothing left to run
+2026-10-11T10:13:23Z END   ext13ab-qwen3-2 rc=0 (743s)

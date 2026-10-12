@@ -1,0 +1,14 @@
+2026-10-11T03:26:34Z START ext13-verbs-a2e-qwen3 (waited 283s): python scripts/ext13_scan.py qwen3 --verbs --verb-dirs attr2ent
+03:26:43 verbs attr2ent: 1872 pairs, 3744 rows, 2 passes
+03:26:47   layer   0: load-wait 2.89s compute 1.10s  wf_rows=0
+03:26:56   layer   8: load-wait 0.64s compute 0.60s  wf_rows=0
+03:27:06   layer  16: load-wait 0.64s compute 0.60s  wf_rows=0
+03:27:16   layer  24: load-wait 0.64s compute 0.60s  wf_rows=0
+03:27:28   layer  32: load-wait 0.14s compute 0.60s  wf_rows=0
+03:27:37   layer  40: load-wait 0.64s compute 0.60s  wf_rows=0
+03:27:46   layer  47: load-wait 0.64s compute 0.60s  wf_rows=0
+03:27:46   pass done: 3684 prefill rows (T=38), 0 spawn rows, 63.4s
+03:27:46   pass 1/2 done (63s)
+03:28:40   pass 2/2 done (54s)
+03:28:41 attr2ent {"neutral": {"pairs": 624, "correct_both": 164, "margin": 32, "mean_drop": 1.0120192307692308, "median_drop": 0.875, "seeds_with_margin": 6}, "orig": {"pairs": 624, "correct_both": 107, "margin": 16, "mean_drop": 0.8792067307692307, "median_drop": 0.75, "seeds_with_margin": 6}, "unrelated": {"pairs": 624, "correct_both": 107, "margin": 4, "mean_drop": 0.4238782051282051, "median_drop": 0.375, "seeds_with_margin": 2}}
+2026-10-11T03:28:48Z END   ext13-verbs-a2e-qwen3 rc=0 (134s)

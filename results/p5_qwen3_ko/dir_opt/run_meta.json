@@ -1,0 +1,67 @@
+{
+ "cond": "dir_opt",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "agent": "p5-expert",
+ "experiment": "ext13ko expert knockout (route masks on clean prompts), Phase 5 / Direction 9 per condition",
+ "source": {
+  "pairs": "data/wino_ref/pairs_p5_dir_opt_qwen3.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_dir_opt_qwen3.json",
+  "run": "p5_dir_opt_qwen3"
+ },
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "main": {
+   "created_utc": "2026-10-11T11:33:04Z",
+   "passes": [
+    {
+     "pass": "full_p000",
+     "rows": 1440,
+     "T": 28,
+     "pass_s": 61.4,
+     "peak_GB": 4.84
+    },
+    {
+     "pass": "ctl_p000",
+     "rows": 4070,
+     "T": 18,
+     "pass_s": 53.2,
+     "peak_GB": 7.0
+    },
+    {
+     "pass": "ctl_p001",
+     "rows": 2590,
+     "T": 28,
+     "pass_s": 50.6,
+     "peak_GB": 6.84
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py qwen3 --conds dir_opt --with-wr --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-11T11:34:51Z",
+   "n_passes": 3,
+   "n_conditions": 49,
+   "n_rows": 8100
+  },
+  "cross": {
+   "created_utc": "2026-10-12T03:59:32Z",
+   "passes": [
+    {
+     "pass": "ctl_p000",
+     "rows": 1080,
+     "T": 28,
+     "pass_s": 52.4,
+     "peak_GB": 4.21
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py qwen3 --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,vt_a2e_orig,f2e --phase cross --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-12T03:59:32Z",
+   "n_passes": 1,
+   "n_conditions": 6,
+   "n_rows": 1080
+  }
+ }
+}

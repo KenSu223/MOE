@@ -1,0 +1,371 @@
+{
+ "sweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "pairs": "data/wino_ref/pairs_p5_dir_f1_qwen3.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_dir_f1_qwen3.json",
+  "families": {
+   "main": {
+    "discovery": 180,
+    "validation": 180
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 360,
+  "max_rows": 60000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "metrics": true,
+  "agent": "p5-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --max-rows 60000",
+  "created_utc": "2026-10-11T08:47:52Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T08:48:57Z",
+  "pass_times_s": [
+   63.064608335494995
+  ],
+  "n_rows": 52560
+ },
+ "joint": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 360,
+  "spans": {
+   "all": [
+    0,
+    47
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_joint.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --max-rows 30000",
+  "created_utc": "2026-10-11T09:16:15Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T09:17:31Z",
+  "pass_times_s": [
+   74.23802042007446
+  ],
+  "n_rows": 2160
+ },
+ "dla": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 360,
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --chunk 512",
+  "created_utc": "2026-10-11T09:27:40Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T09:28:40Z",
+  "pass_times_s": [
+   57.44935441017151
+  ]
+ },
+ "direct_split": {
+  "model": "qwen3",
+  "pairs": "data/wino_ref/pairs_p5_dir_f1_qwen3.parquet",
+  "case_sets": "data/wino_ref/case_sets_p5_dir_f1_qwen3.json",
+  "splits": "discovery,validation",
+  "n_rows": 360,
+  "seconds": 78.98770380020142,
+  "command": "python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --splits discovery,validation",
+  "completed_utc": "2026-10-11T09:44:25Z"
+ },
+ "expert": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 360,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47
+  ],
+  "pairs_layers": [
+   44
+  ],
+  "only_scaled": false,
+  "corrupt_only": true,
+  "max_spawn": 60000,
+  "chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+   ],
+   [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+   ],
+   [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000",
+  "created_utc": "2026-10-11T09:44:35Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T09:48:13Z",
+  "pass_times_s": [
+   61.871055126190186,
+   43.96026921272278,
+   52.908029079437256,
+   48.45935583114624
+  ]
+ },
+ "heads": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "layers": [
+   33,
+   38,
+   39,
+   42,
+   43
+  ],
+  "null_layer": 33,
+  "n_heads": 32,
+  "n_cases": 360,
+  "chunks": [
+   [
+    33,
+    38,
+    39
+   ],
+   [
+    42,
+    43
+   ]
+  ],
+  "mentions": "pair columns mention_a_pos / mention_b_pos",
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_heads.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --layers auto --max-rows 50000",
+  "created_utc": "2026-10-11T09:48:26Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T09:50:16Z",
+  "pass_times_s": [
+   56.4257071018219,
+   52.48838472366333
+  ],
+  "n_rows": 63000
+ },
+ "grid_w1": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "resid"
+  ],
+  "window": 1,
+  "window_half": 0,
+  "n_cases": 360,
+  "n_units": 1774,
+  "n_suffix_rows": 255456,
+  "n_passes": 6,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "agent": "p5-data",
+  "command": "python scripts/ext7_wino_grid.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000",
+  "created_utc": "2026-10-11T09:50:31Z",
+  "complete": true,
+  "completed_utc": "2026-10-11T09:55:54Z",
+  "pass_times_s": [
+   53.52562856674194,
+   52.556957483291626,
+   51.84222054481506,
+   49.842925786972046,
+   52.657087326049805,
+   45.05946350097656
+  ],
+  "n_rows": 255456
+ }
+}

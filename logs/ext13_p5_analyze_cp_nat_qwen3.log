@@ -1,0 +1,30 @@
+14:12:58 cp_nat qwen3 W2
+14:13:03 cluster bootstrap
+14:13:03 W6
+14:13:25 W3
+14:13:29 W5
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 665, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 635, in main
+    s = analyse(a.cond, a.proto, ent)
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 367, in analyse
+    s["w5_copy"] = copy_attention(run, pairs, s["w5"], cfg)
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext13_p5_analyze.py", line 305, in copy_attention
+    mc = {k: np.mean(np.stack(v), 0) for k, v in res_c.items()}
+                     ~~~~~~~~^^^
+  File "/home/ubuntu/MOE/.venv/lib/python3.14/site-packages/numpy/_core/shape_base.py", line 458, in stack
+    raise ValueError('all input arrays must have the same shape')
+ValueError: all input arrays must have the same shape
+15:59:02 cp_nat qwen3 W2
+15:59:52 cluster bootstrap
+15:59:52 W6
+16:00:17 W3
+16:00:24 W5
+16:00:30 W4
+16:00:35 registry updated {"selected_expert": {"layer": 41, "expert": 117, "name": "L41E117", "pattern": "A", "spec": [0.4177083333333333, 0.3514880952380952, 0.4863095238095238], "rescue": [0.484375, 0.41785714285714287, 0.553125], "spec_norm": [0.07001920726383795, 0.05940358048344471, 0.08090476305557212], "val_active": 253, "rep": {"layer": 43, "expert": 81, "spec": [0.4200949367088608, 0.34638383438818565, 0.4967134757383965]}}, "pop_top10": [[43, 81, 0.5321], [41, 117, 0.4469], [34, 119, 0.2755], [44, 122, 0.2053], [41, 53, 0.2031], [42, 73, 0.1929], [38, 21, 0.1871], [42, 123, 0.137], [39, 7, 0.1355], [39, 71, 0.1301]], "status": {"cases": true, "base": true}}
+16:00:38 tables / figures written for cp_nat
+16:01:23 ext13_p5_behaviour.py rc 0 
+16:01:24 ext13_p5_text.py rc 0 

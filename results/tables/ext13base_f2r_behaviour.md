@@ -1,0 +1,10 @@
+**Restated format (F2R; behaviour only): whole sentence with the blank → 'one of them', the predicate restated, entity readout (95% bootstrap CIs over pairs)**
+
+| Model | Items | Pairs (content swaps) | Correct per prompt | Correct in both twins | Margin ≥ 1 both ways | Mean Δ toward the answer (logits) | First-mentioned candidate predicted |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | names | 370 | 0.61 [0.59, 0.64] | 0.28 [0.24, 0.33] | 0.09 [0.06, 0.12] | 0.64 [0.55, 0.74] | 0.64 [0.60, 0.68] |
+| Qwen3-30B-A3B-Base | objects | 34 | 0.68 [0.60, 0.76] | 0.35 [0.21, 0.53] | 0.15 [0.03, 0.26] | 0.67 [0.42, 0.93] | 0.46 [0.32, 0.59] |
+| Qwen3-30B-A3B-Base | all | 404 | 0.62 [0.59, 0.65] | 0.29 [0.25, 0.33] | 0.09 [0.07, 0.12] | 0.65 [0.56, 0.74] | 0.63 [0.59, 0.66] |
+| Mixtral-8x7B, BOS | names | 160 | 0.69 [0.65, 0.73] | 0.39 [0.31, 0.46] | 0.09 [0.04, 0.13] | 0.58 [0.49, 0.67] | 0.58 [0.53, 0.64] |
+| Mixtral-8x7B, BOS | objects | 21 | 0.71 [0.62, 0.83] | 0.43 [0.24, 0.67] | 0.10 [0.00, 0.24] | 0.63 [0.37, 0.94] | 0.33 [0.19, 0.48] |
+| Mixtral-8x7B, BOS | all | 181 | 0.69 [0.65, 0.73] | 0.39 [0.33, 0.46] | 0.09 [0.05, 0.13] | 0.58 [0.50, 0.68] | 0.55 [0.50, 0.60] |

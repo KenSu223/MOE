@@ -1,0 +1,26 @@
+2026-10-11T17:13:01Z START ext13-p5-cp_nat-mixtral_bos-sweep (waited 3992s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --max-rows 25000
+17:13:03 mixtral -> p5_cp_nat_mixtral_bos: 1712 directed cases (856 pairs), families {'main': {'discovery': 432, 'validation': 408}, 'rep': {'discovery': 428, 'validation': 444}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 8 passes (164352 spawn rows), T max 40
+17:13:09 pass 1/8: layers 0..3, 3424 prefill rows, 20544 spawn rows
+17:13:19   layer   0: load-wait 7.07s compute 2.60s  wf_rows=5136
+[W1011 17:13:26.445775169 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+17:13:42   layer   8: load-wait 0.56s compute 2.33s  wf_rows=20544
+17:14:05   layer  16: load-wait 0.56s compute 2.33s  wf_rows=20544
+[W1011 17:14:18.484351920 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+17:14:29   layer  24: load-wait 0.42s compute 2.33s  wf_rows=20544
+[W1011 17:14:41.627469274 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+17:14:49   layer  31: load-wait 0.30s compute 2.33s  wf_rows=20544
+17:14:49   pass done: 3424 prefill rows (T=40), 20544 spawn rows, 99.4s (metrics 0.3s)
+17:14:50 pass 2/8: layers 4..7, 3424 prefill rows, 20544 spawn rows
+[W1011 17:15:56.471960200 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 14090240, total: 23686938624).
+17:16:25 pass 3/8: layers 8..11, 3424 prefill rows, 20544 spawn rows
+17:18:02 pass 4/8: layers 12..15, 3424 prefill rows, 20544 spawn rows
+17:19:42 pass 5/8: layers 16..19, 3424 prefill rows, 20544 spawn rows
+17:21:17 pass 6/8: layers 20..23, 3424 prefill rows, 20544 spawn rows
+17:22:52 pass 7/8: layers 24..27, 3424 prefill rows, 20544 spawn rows
+17:24:28 pass 8/8: layers 28..31, 3424 prefill rows, 20544 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+17:26:13 family main: layer disc L21; attn_layer disc L13; block disc L19
+17:26:13 family rep: layer disc L20; attn_layer disc L13; block disc L19
+17:26:13 Δclean +3.64 Δcorrupt -3.64 drop +7.28; {"layer_discovery_argmax": 21, "layer_discovery_max": 1.095, "layer_discovery_top5": [[21, 1.095], [20, 1.066], [19, 0.99], [18, 0.78], [22, 0.74]], "layer_validation_argmax": 20, "layer_validation_max": 1.197, "layer_validation_top5": [[20, 1.197], [21, 1.148], [19, 0.972], [26, 0.841], [18, 0.723]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 1.148, "attn_layer_discovery_top5": [[13, 1.148], [19, 0.92], [25, 0.56], [15, 0.519], [16, 0.334]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.097, "attn_layer_validation_top5": [[13, 1.097], [19, 0.999], [25,
+2026-10-11T17:26:20Z END   ext13-p5-cp_nat-mixtral_bos-sweep rc=0 (799s)

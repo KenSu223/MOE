@@ -1,0 +1,77 @@
+{
+ "cond": "cp_nat",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "src_run": "p5_cp_nat_qwen3",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_p5_cp_nat_qwen3.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_p5_cp_nat_qwen3.json",
+ "family": "main",
+ "cluster": "twin (q_a HIT id)",
+ "special_tokens": false,
+ "n_val_rows": 280,
+ "n_val_units": 70,
+ "prompt_tokens_median": 24.0,
+ "single_expert_coverage": {
+  "rows": 572,
+  "rows_full": 572,
+  "entries": 219648,
+  "entries_needed": 219648
+ },
+ "attn_classes": [
+  "str",
+  "attr_clean",
+  "attr_corr",
+  "mention_clean",
+  "mention_corr",
+  "prefix_ment_clean",
+  "prefix_ment_corr",
+  "pos0",
+  "final"
+ ],
+ "rows_per_pass": 160,
+ "n_chunks": 2,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA + attention mass",
+ "agent": "p5-circuit",
+ "command": "python scripts/ext13ci_heads_run.py cp_nat qwen3 --max-passes 6",
+ "created_utc": "2026-10-11T16:03:37Z",
+ "complete": true,
+ "completed_utc": "2026-10-11T16:06:05Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 140,
+   "prefill": 280,
+   "spawn_rows": 221760,
+   "pass_s": 73.76453590393066,
+   "peak_GB": 18.503604888916016,
+   "mean_drop": 6.1964287757873535,
+   "r_sum_heads_vs_attn_layer": 0.373884886389133,
+   "head_dla_sum_mean": 0.07172030955553055,
+   "candidates_not_routed_clean": 922,
+   "attn_row_sum_minmax": [
+    0.9995947480201721,
+    1.0004132986068726
+   ],
+   "utc": "2026-10-11T16:04:56Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 140,
+   "prefill": 280,
+   "spawn_rows": 221760,
+   "pass_s": 64.80170941352844,
+   "peak_GB": 18.485393524169922,
+   "mean_drop": 5.7928571701049805,
+   "r_sum_heads_vs_attn_layer": 0.36354748169289824,
+   "head_dla_sum_mean": -0.2201044261455536,
+   "candidates_not_routed_clean": 1017,
+   "attn_row_sum_minmax": [
+    0.9996253848075867,
+    1.0003724098205566
+   ],
+   "utc": "2026-10-11T16:06:05Z"
+  }
+ ]
+}

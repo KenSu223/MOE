@@ -1,0 +1,49 @@
+{
+ "fail": {},
+ "subgroups": {
+  "g1": {
+   "g1": [
+    "f1",
+    "dir_f1",
+    "dir_opt"
+   ]
+  },
+  "g2": {
+   "g2": [
+    "cp_nat",
+    "cp_vt_orig",
+    "cp_vt_neu"
+   ]
+  },
+  "g3": {
+   "g3": [
+    "vt_e2a_orig",
+    "vt_e2a_neu",
+    "vt_a2e_orig"
+   ]
+  },
+  "g4": {
+   "g4": [
+    "f2e"
+   ]
+  }
+ },
+ "done_groups": [
+  "g1",
+  "g2",
+  "g3",
+  "g4"
+ ],
+ "rows": {
+  "f1": 256,
+  "dir_f1": 180,
+  "dir_opt": 180,
+  "cp_nat": 280,
+  "cp_vt_orig": 256,
+  "cp_vt_neu": 256,
+  "vt_e2a_orig": 256,
+  "vt_e2a_neu": 256,
+  "vt_a2e_orig": 74,
+  "f2e": 64
+ }
+}

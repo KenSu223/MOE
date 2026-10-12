@@ -1,0 +1,22 @@
+| task | ctype | est | top1_hit | top1_in_truth_top3 |
+|---|---|---|---|---|
+| wino | expert | atp | 0.863 | 1.000 |
+| wino | expert | atpstar | 0.887 | 1.000 |
+| wino | expert | ig8 | 0.809 | 0.973 |
+| wino | expert | dla | 0.766 | 0.945 |
+| wino | expert | truth_hf | 0.953 | 1.000 |
+| wino | head | atp | 0.609 | 0.930 |
+| wino | head | atpstar | 0.688 | 0.961 |
+| wino | head | ig8 | 0.621 | 0.945 |
+| wino | head | dla | 0.137 | 0.332 |
+| wino | head | truth_hf | 0.938 | 1.000 |
+| ioi | expert | atp | 0.879 | 0.965 |
+| ioi | expert | atpstar | 0.855 | 0.965 |
+| ioi | expert | ig8 | 0.656 | 0.879 |
+| ioi | expert | dla | 0.121 | 0.273 |
+| ioi | expert | truth_hf | 0.824 | 0.949 |
+| ioi | head | atp | 0.898 | 1.000 |
+| ioi | head | atpstar | 0.906 | 1.000 |
+| ioi | head | ig8 | 0.914 | 1.000 |
+| ioi | head | dla | 0.840 | 0.988 |
+| ioi | head | truth_hf | 0.984 | 1.000 |

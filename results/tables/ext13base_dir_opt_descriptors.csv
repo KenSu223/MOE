@@ -1,0 +1,3 @@
+Model,Family,Pairs,Units,Mean Δ clean,Drop [95% CI],Clean top-1,Names,Probe strata neutral / assoc. / one-sided / reverse,Local assoc,Median T
+Qwen3-30B-A3B-Base,main,180,180 pairs,+4.47,"+8.96 [+8.54, +9.40]",0.46,0.08,0.49 / 0.06 / 0.23 / 0.22,0.16,17
+"Mixtral-8x7B, BOS",main,188,188 pairs,+4.91,"+9.80 [+9.46, +10.15]",0.62,0.01,0.46 / 0.04 / 0.22 / 0.29,0.21,19

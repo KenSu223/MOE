@@ -1,0 +1,87 @@
+05:21:16 analysing f1_qwen3
+05:21:44 analysing f1_qwen3_rep
+05:22:11 analysing f1_mixtral_bos
+05:22:29 analysing dir_f1_qwen3
+05:22:49 analysing dir_f1_mixtral_bos
+05:23:05 analysing dir_opt_qwen3
+05:23:28 analysing dir_opt_mixtral_bos
+05:23:45 analysing f2e_qwen3
+05:23:52 analysing f2e_mixtral_bos
+05:23:55 analysing vt_e2a_orig_qwen3
+05:24:19 analysing vt_e2a_orig_mixtral_bos
+05:24:41 analysing vt_e2a_neu_qwen3
+05:25:11 analysing vt_e2a_neu_mixtral_bos
+05:25:33 analysing vt_a2e_orig_qwen3
+05:25:44 analysing cp_vt_orig_qwen3
+05:26:11 analysing cp_vt_orig_mixtral_bos
+05:26:34 analysing cp_vt_neu_qwen3
+05:27:01 analysing cp_vt_neu_mixtral_bos
+05:27:22 analysing cp_nat_qwen3
+05:27:50 analysing cp_nat_qwen3_rep
+05:28:20 analysing cp_nat_mixtral_bos
+05:28:53 analysing cp_nat_mixtral_bos_rep
+05:29:28 Phase-3 reference wino_qwen3
+05:29:39 Phase-3 reference wino_mixtral
+05:29:41 Phase-3 reference cf_qwen3
+05:30:00 Phase-3 reference cf_mixtral
+05:30:03 contrast cp_nat_mixtral_bos - wino_mixtral
+05:30:04 contrast cp_vt_orig_mixtral_bos - vt_e2a_orig_mixtral_bos
+05:30:04 contrast cp_vt_neu_mixtral_bos - vt_e2a_neu_mixtral_bos
+05:30:05 contrast dir_f1_mixtral_bos - cp_nat_mixtral_bos
+05:30:06 contrast dir_f1_mixtral_bos - dir_opt_mixtral_bos
+05:30:07 contrast dir_opt_mixtral_bos - wino_mixtral
+05:30:08 contrast vt_e2a_neu_mixtral_bos - vt_e2a_orig_mixtral_bos
+05:30:08 contrast f1_mixtral_bos - wino_mixtral
+05:30:09 contrast f2e_mixtral_bos - f1_mixtral_bos
+05:30:09 contrast cp_nat_qwen3 - wino_qwen3
+05:30:11 contrast cp_vt_orig_qwen3 - vt_e2a_orig_qwen3
+05:30:11 contrast cp_vt_neu_qwen3 - vt_e2a_neu_qwen3
+05:30:12 contrast dir_f1_qwen3 - cp_nat_qwen3
+05:30:13 contrast vt_a2e_orig_qwen3 - cp_vt_orig_qwen3
+05:30:13 contrast dir_f1_qwen3 - dir_opt_qwen3
+05:30:14 contrast vt_a2e_orig_qwen3 - vt_e2a_orig_qwen3
+05:30:15 contrast dir_opt_qwen3 - wino_qwen3
+05:30:16 contrast vt_e2a_neu_qwen3 - vt_e2a_orig_qwen3
+05:30:17 contrast f1_qwen3 - wino_qwen3
+05:30:18 contrast f2e_qwen3 - f1_qwen3
+05:30:19 wrote /home/ubuntu/MOE/results/ext13ab_summary.json
+written ext13ab_f1_addback
+written ext13ab_f1_deletion
+written ext13ab_f1_split
+written ext13ab_f1_rep_addback
+written ext13ab_f1_rep_deletion
+written ext13ab_f1_rep_split
+written ext13ab_dir_f1_addback
+written ext13ab_dir_f1_deletion
+written ext13ab_dir_f1_split
+written ext13ab_dir_opt_addback
+written ext13ab_dir_opt_deletion
+written ext13ab_dir_opt_split
+written ext13ab_f2e_addback
+written ext13ab_f2e_deletion
+written ext13ab_f2e_split
+written ext13ab_vt_e2a_orig_addback
+written ext13ab_vt_e2a_orig_deletion
+written ext13ab_vt_e2a_orig_split
+written ext13ab_vt_e2a_neu_addback
+written ext13ab_vt_e2a_neu_deletion
+written ext13ab_vt_e2a_neu_split
+written ext13ab_vt_a2e_orig_addback
+written ext13ab_vt_a2e_orig_deletion
+written ext13ab_vt_a2e_orig_split
+written ext13ab_cp_vt_orig_addback
+written ext13ab_cp_vt_orig_deletion
+written ext13ab_cp_vt_orig_split
+written ext13ab_cp_vt_neu_addback
+written ext13ab_cp_vt_neu_deletion
+written ext13ab_cp_vt_neu_split
+written ext13ab_cp_nat_addback
+written ext13ab_cp_nat_deletion
+written ext13ab_cp_nat_split
+written ext13ab_cp_nat_rep_addback
+written ext13ab_cp_nat_rep_deletion
+written ext13ab_cp_nat_rep_split
+written ext13ab_overview
+written ext13ab_split_all_qwen3
+written ext13ab_split_all_mixtral
+wrote /home/ubuntu/MOE/results/sections/ext13_addback.md

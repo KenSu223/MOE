@@ -1,0 +1,54 @@
+2026-10-11T20:14:19Z START ext13ab-mixtral-11 (waited 508s): python scripts/ext13ab_run.py mixtral --tasks cp_nat_mixtral_bos,cp_nat_mixtral_bos_rep --max-passes 13 --budget 50000 --max-tasks 2
+20:14:28 cp_nat_mixtral_bos: initialised {'eval_rows': 408, 'noise_rows': 408, 'pool': 64, 'queue_groups': 7370, 'queue_items': 127128}
+20:14:30 cp_nat_mixtral_bos_rep: initialised {'eval_rows': 444, 'noise_rows': 444, 'pool': 64, 'queue_groups': 7978, 'queue_items': 137924}
+20:14:30 cp_nat_mixtral_bos: 840 cases, 840 rows (408 validation), K=64; passes done 0, queue 0/7370, greedy left 408
+20:14:30 cp_nat_mixtral_bos_rep: 872 cases, 872 rows (444 validation), K=64; passes done 0, queue 0/7978, greedy left 444
+20:14:33 pass 0: tasks ['cp_nat_mixtral_bos'], 1680 prefill rows (T max 39), 49992 spawn rows (adaptive [26112], static groups [1872])
+20:14:42   layer   0: load-wait 6.42s compute 1.61s  wf_rows=12823
+20:15:05   layer   8: load-wait 1.49s compute 1.42s  wf_rows=24446
+20:15:28   layer  16: load-wait 1.30s compute 1.62s  wf_rows=35344
+[W1011 20:15:47.733849314 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2684354560 bytes (free: 829882368, total: 23686938624).
+20:15:52   layer  24: load-wait 1.17s compute 1.92s  wf_rows=48743
+20:16:12   layer  31: load-wait 0.97s compute 1.92s  wf_rows=49992
+20:16:12   pass done: 1680 prefill rows (T=39), 49992 spawn rows, 98.5s (metrics 0.6s)
+20:16:15 cp_nat_mixtral_bos first pass: ceilings for 840 rows (mean all-MoE rescue +5.074); DLA rows 53760 (89 candidate pairs not routed in this pass's clean run)
+20:16:16 cp_nat_mixtral_bos pass 0 done: greedy left 408 (median step 2, median rescue/ceiling 0.43); queue 1872/8186
+20:16:16 group pass 0 done in 98s, peak 15.9 GB
+20:16:19 pass 1: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 49986 spawn rows (adaptive [25296], static groups [1646])
+20:17:53 cp_nat_mixtral_bos pass 1 done: greedy left 408 (median step 3, median rescue/ceiling 0.57); queue 3518/8186
+20:17:53 group pass 1 done in 92s, peak 14.0 GB
+20:17:57 pass 2: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 49998 spawn rows (adaptive [24888], static groups [1455])
+20:19:28 cp_nat_mixtral_bos pass 2 done: greedy left 408 (median step 4, median rescue/ceiling 0.67); queue 4973/8186
+20:19:28 group pass 2 done in 90s, peak 14.1 GB
+20:19:32 pass 3: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 49998 spawn rows (adaptive [24480], static groups [535])
+20:21:07 cp_nat_mixtral_bos: noise_oracle groups added for 408 rows
+20:21:07 cp_nat_mixtral_bos pass 3 done: greedy left 408 (median step 5, median rescue/ceiling 0.74); queue 5508/8594
+20:21:07 group pass 3 done in 93s, peak 13.5 GB
+20:21:10 pass 4: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 49992 spawn rows (adaptive [24072], static groups [1728])
+20:22:49 cp_nat_mixtral_bos pass 4 done: greedy left 408 (median step 6, median rescue/ceiling 0.79); queue 7236/8594
+20:22:49 group pass 4 done in 94s, peak 14.4 GB
+20:22:52 pass 5: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 44034 spawn rows (adaptive [23664], static groups [1358])
+20:24:28 cp_nat_mixtral_bos pass 5 done: greedy left 408 (median step 7, median rescue/ceiling 0.84); queue 8594/8594
+20:24:28 group pass 5 done in 94s, peak 13.9 GB
+20:24:29 pass 6: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 23256 spawn rows (adaptive [23256], static groups [0])
+20:26:04 cp_nat_mixtral_bos pass 6 done: greedy left 408 (median step 8, median rescue/ceiling 0.89); queue 8594/8594
+20:26:04 group pass 6 done in 93s, peak 12.3 GB
+20:26:06 pass 7: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 22848 spawn rows (adaptive [22848], static groups [0])
+20:27:40 cp_nat_mixtral_bos pass 7 done: greedy left 408 (median step 9, median rescue/ceiling 0.92); queue 8594/8594
+20:27:40 group pass 7 done in 93s, peak 12.3 GB
+20:27:42 pass 8: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 22440 spawn rows (adaptive [22440], static groups [0])
+20:29:17 cp_nat_mixtral_bos pass 8 done: greedy left 408 (median step 10, median rescue/ceiling 0.94); queue 8594/8594
+20:29:17 group pass 8 done in 93s, peak 12.2 GB
+20:29:18 pass 9: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 22032 spawn rows (adaptive [22032], static groups [0])
+20:30:53 cp_nat_mixtral_bos pass 9 done: greedy left 408 (median step 11, median rescue/ceiling 0.97); queue 8594/8594
+20:30:53 group pass 9 done in 93s, peak 12.2 GB
+20:30:55 pass 10: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 21624 spawn rows (adaptive [21624], static groups [0])
+20:32:29 cp_nat_mixtral_bos pass 10 done: greedy left 408 (median step 12, median rescue/ceiling 0.98); queue 8594/8594
+20:32:29 group pass 10 done in 93s, peak 12.2 GB
+20:32:31 pass 11: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 21216 spawn rows (adaptive [21216], static groups [0])
+20:34:08 cp_nat_mixtral_bos pass 11 done: greedy left 408 (median step 13, median rescue/ceiling 1.00); queue 8594/8594
+20:34:08 group pass 11 done in 93s, peak 12.2 GB
+20:34:10 pass 12: tasks ['cp_nat_mixtral_bos'], 816 prefill rows (T max 39), 20808 spawn rows (adaptive [20808], static groups [0])
+20:35:40 cp_nat_mixtral_bos pass 12 done: greedy left 408 (median step 14, median rescue/ceiling 1.00); queue 8594/8594
+20:35:40 group pass 12 done in 88s, peak 12.1 GB
+2026-10-11T20:35:47Z END   ext13ab-mixtral-11 rc=0 (1288s)

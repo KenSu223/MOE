@@ -1,0 +1,102 @@
+{
+ "qwen3": {
+  "probes": {
+   "keys": 13147,
+   "rows": 62904,
+   "fail": {
+    "v1": 27,
+    "v2": 27
+   },
+   "v1_known": 10514,
+   "v1_new": 2606,
+   "by_src": {
+    "F1": 8774,
+    "templates": 2606,
+    "F1,phase3": 687,
+    "F1,F2,F2R": 423,
+    "F1,F2": 414,
+    "F1,F2R": 210,
+    "phase3": 27,
+    "F2R": 4,
+    "F1,templates": 1,
+    "F2": 1
+   }
+  },
+  "vt_a2e": {
+   "neutral:ok": 2640,
+   "orig:ok": 2640,
+   "unrelated:ok": 2640,
+   "kept": 7920
+  },
+  "cp_vt": {
+   "neutral:ok": 5280,
+   "orig:ok": 5280,
+   "unrelated:ok": 5280,
+   "kept": 15840
+  },
+  "cp_nat": {
+   "ok": 1552,
+   "kept": 1552,
+   "twins": 776
+  },
+  "mem": {
+   "neutral:W4_length_mismatch": 7,
+   "neutral:ok": 48,
+   "orig:W4_length_mismatch": 7,
+   "orig:ok": 48,
+   "unrelated:W4_length_mismatch": 7,
+   "unrelated:ok": 48,
+   "kept": 144
+  }
+ },
+ "mixtral_bos": {
+  "probes": {
+   "keys": 7624,
+   "rows": 40688,
+   "fail": {
+    "v1": 58,
+    "v2": 58
+   },
+   "v1_known": 4960,
+   "v1_new": 2606,
+   "by_src": {
+    "F1": 3784,
+    "templates": 2606,
+    "F1,phase3": 656,
+    "F1,F2": 231,
+    "F1,F2,F2R": 194,
+    "F1,F2R": 92,
+    "phase3": 58,
+    "F1,templates": 1,
+    "F2R": 1,
+    "F2": 1
+   }
+  },
+  "vt_a2e": {
+   "neutral:ok": 2640,
+   "orig:ok": 2640,
+   "unrelated:ok": 2640,
+   "kept": 7920
+  },
+  "cp_vt": {
+   "neutral:ok": 5280,
+   "orig:ok": 5280,
+   "unrelated:ok": 5280,
+   "kept": 15840
+  },
+  "cp_nat": {
+   "ok": 1552,
+   "kept": 1552,
+   "twins": 776
+  },
+  "mem": {
+   "neutral:W4_length_mismatch": 26,
+   "neutral:ok": 29,
+   "orig:W4_length_mismatch": 26,
+   "orig:ok": 29,
+   "unrelated:W4_length_mismatch": 26,
+   "unrelated:ok": 29,
+   "kept": 87
+  }
+ }
+}

@@ -1,0 +1,21 @@
+Model,Stratum,Value,Pairs,Mean drop,MoE at L*_MoE / drop,Attention at L*_attn / drop,Attention share
+Qwen3-30B-A3B-Base,person-name options,True,256,6.73,"0.138 [0.124, 0.154]","0.056 [0.049, 0.063]","0.27 [0.25, 0.30]"
+Qwen3-30B-A3B-Base,person-name options,False,0,,,,
+Qwen3-30B-A3B-Base,probe-neutral (both triggers |probe| < 1),True,211,6.64,"0.139 [0.123, 0.155]","0.052 [0.045, 0.059]","0.27 [0.24, 0.29]"
+Qwen3-30B-A3B-Base,probe-neutral (both triggers |probe| < 1),False,45,7.13,"0.135 [0.103, 0.170]","0.072 [0.053, 0.089]","0.30 [0.25, 0.36]"
+Qwen3-30B-A3B-Base,probe-associative,True,0,,,,
+Qwen3-30B-A3B-Base,probe-associative,False,256,6.73,"0.138 [0.124, 0.154]","0.056 [0.049, 0.063]","0.27 [0.25, 0.30]"
+Qwen3-30B-A3B-Base,probe one-sided,True,14,8.42,"0.145 [0.088, 0.207]","0.072 [0.035, 0.106]","0.32 [0.24, 0.40]"
+Qwen3-30B-A3B-Base,probe one-sided,False,242,6.63,"0.138 [0.123, 0.153]","0.054 [0.048, 0.061]","0.27 [0.25, 0.29]"
+Qwen3-30B-A3B-Base,probe reverse,True,31,6.55,"0.130 [0.093, 0.169]","0.072 [0.051, 0.091]","0.30 [0.24, 0.38]"
+Qwen3-30B-A3B-Base,probe reverse,False,225,6.76,"0.139 [0.124, 0.155]","0.053 [0.046, 0.061]","0.27 [0.25, 0.30]"
+"Mixtral-8x7B, BOS",person-name options,True,256,6.36,"0.189 [0.180, 0.198]","0.150 [0.141, 0.159]","0.39 [0.38, 0.40]"
+"Mixtral-8x7B, BOS",person-name options,False,0,,,,
+"Mixtral-8x7B, BOS",probe-neutral (both triggers |probe| < 1),True,231,6.40,"0.189 [0.180, 0.198]","0.151 [0.141, 0.161]","0.39 [0.38, 0.40]"
+"Mixtral-8x7B, BOS",probe-neutral (both triggers |probe| < 1),False,25,6.03,"0.182 [0.149, 0.213]","0.140 [0.115, 0.167]","0.38 [0.33, 0.43]"
+"Mixtral-8x7B, BOS",probe-associative,True,0,,,,
+"Mixtral-8x7B, BOS",probe-associative,False,256,6.36,"0.189 [0.180, 0.198]","0.150 [0.141, 0.159]","0.39 [0.38, 0.40]"
+"Mixtral-8x7B, BOS",probe one-sided,True,12,6.07,"0.182 [0.136, 0.222]","0.141 [0.096, 0.188]","0.35 [0.30, 0.42]"
+"Mixtral-8x7B, BOS",probe one-sided,False,244,6.38,"0.189 [0.180, 0.198]","0.150 [0.141, 0.160]","0.39 [0.38, 0.40]"
+"Mixtral-8x7B, BOS",probe reverse,True,13,6.00,"0.181 [0.133, 0.228]","0.139 [0.111, 0.166]","0.40 [0.33, 0.47]"
+"Mixtral-8x7B, BOS",probe reverse,False,243,6.38,"0.189 [0.180, 0.198]","0.151 [0.141, 0.160]","0.39 [0.38, 0.40]"

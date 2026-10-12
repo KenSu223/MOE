@@ -1,0 +1,19 @@
+2026-10-11T17:54:39Z START ext13-p5-cp_nat-mixtral_bos-joint (waited 1699s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main,rep --max-rows 30000
+17:54:41 mixtral -> p5_cp_nat_mixtral_bos: 1712 directed cases, families ['main', 'rep'], 6 multi rows per case (1 layer spans), 1 passes
+17:54:48 pass 1/1: 3424 prefill rows, 10272 multi rows
+17:54:58   layer   0: load-wait 6.28s compute 2.65s  wf_rows=10272
+17:55:20   layer   8: load-wait 0.55s compute 2.16s  wf_rows=10272
+[W1011 17:55:27.233182320 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+17:55:44   layer  16: load-wait 0.72s compute 2.16s  wf_rows=10272
+[W1011 17:55:59.097714313 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+17:56:07   layer  24: load-wait 0.79s compute 2.17s  wf_rows=10272
+[W1011 17:56:22.779729846 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+17:56:27   layer  31: load-wait 0.41s compute 2.17s  wf_rows=10272
+17:56:27   pass done: 3424 prefill rows (T=40), 10272 spawn rows, 98.2s
+17:56:30 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.28, drop 7.28)
+17:56:30 denoise  all_block all     : effect/drop +1.000 (mean effect +7.28, drop 7.28)
+17:56:30 denoise  all_moe   all     : effect/drop +0.717 (mean effect +5.22, drop 7.28)
+17:56:30 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.29, drop 7.28)
+17:56:30 noise    all_block all     : effect/drop +1.000 (mean effect +7.28, drop 7.28)
+17:56:30 noise    all_moe   all     : effect/drop +0.717 (mean effect +5.22, drop 7.28)
+2026-10-11T17:56:37Z END   ext13-p5-cp_nat-mixtral_bos-joint rc=0 (118s)

@@ -1,0 +1,16 @@
+09:43:16 qwen3 probe outcome {"frac_ge1": {"v1": 0.23008285532186107, "v2": 0.22721478648820906}, "responding": ["v1", "v2"], "R": ["v1", "v2"], "margin_strata": {"neutral": 790, "reverse": 394, "one-sided": 299, "associative": 86}, "templates_frac_ge1": {"v1": 0.07249712313003452, "v2": 0.09301879555044112}}
+09:43:17 qwen3 cp_nat splits {'discovery': 146, 'validation': 140, 'rep_discovery': 162, 'rep_validation': 158} families ['main', 'rep']  {"pairs": 140, "names": 10, "objects": 130, "assoc_neutral": 60, "assoc_reverse": 56, "assoc_one-sided": 14, "assoc_associative": 8, "assoc_no_probe": 2, "local_assoc": 12, "order1": 70}
+09:43:18 qwen3 cp_vt_orig splits {'discovery': 128, 'validation': 128} families ['main']  {"pairs": 128, "names": 128, "objects": 0, "assoc_neutral": 101, "assoc_reverse": 19, "assoc_one-sided": 8, "seeds": 13, "order1": 66}
+09:43:19 qwen3 cp_vt_neu splits {'discovery': 128, 'validation': 128} families ['main']  {"pairs": 128, "names": 128, "objects": 0, "assoc_neutral": 92, "assoc_reverse": 28, "assoc_one-sided": 8, "seeds": 8, "order1": 66}
+09:43:19 mixtral_bos probe outcome {"frac_ge1": {"v1": 0.02028397565922921, "v2": 0.37322515212981744}, "responding": ["v2"], "R": ["v2"], "margin_strata": {"neutral": 235, "reverse": 135, "one-sided": 111, "associative": 12}, "templates_frac_ge1": {"v1": 0.007863444572305332, "v2": 0.056194859992328344}}
+09:43:20 mixtral_bos cp_nat splits {'discovery': 216, 'validation': 204, 'rep_discovery': 214, 'rep_validation': 222} families ['main', 'rep']  {"pairs": 204, "names": 16, "objects": 188, "assoc_neutral": 78, "assoc_reverse": 70, "assoc_one-sided": 36, "assoc_no_probe": 14, "assoc_associative": 6, "local_assoc": 22, "order1": 102}
+09:43:21 mixtral_bos cp_vt_orig splits {'discovery': 128, 'validation': 128} families ['main']  {"pairs": 128, "names": 128, "objects": 0, "assoc_neutral": 116, "assoc_one-sided": 8, "assoc_reverse": 4, "seeds": 10, "order1": 65}
+09:43:21 mixtral_bos cp_vt_neu splits {'discovery': 128, 'validation': 128} families ['main']  {"pairs": 128, "names": 128, "objects": 0, "assoc_neutral": 114, "assoc_one-sided": 8, "assoc_reverse": 6, "seeds": 8, "order1": 65}
+qwen3 cp_nat {'main': {'discovery': 292, 'validation': 280}, 'rep': {'discovery': 324, 'validation': 316}} contract ok
+qwen3 cp_vt_orig {'main': {'discovery': 256, 'validation': 256}} contract ok
+qwen3 cp_vt_neu {'main': {'discovery': 256, 'validation': 256}} contract ok
+mixtral_bos cp_nat {'main': {'discovery': 432, 'validation': 408}, 'rep': {'discovery': 428, 'validation': 444}} contract ok
+mixtral_bos cp_vt_orig {'main': {'discovery': 256, 'validation': 256}} contract ok
+mixtral_bos cp_vt_neu {'main': {'discovery': 256, 'validation': 256}} contract ok
+behaviour tables written
+wrote /home/ubuntu/MOE/results/sections/ext13_base.md (2 ready, 17 pending)

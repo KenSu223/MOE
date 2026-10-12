@@ -1,0 +1,16 @@
+2026-10-11T08:47:50Z START ext13-p5-dir_f1-qwen3-sweep (waited 0s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --max-rows 60000
+08:47:51 qwen3 -> p5_dir_f1_qwen3: 360 directed cases (180 pairs), families {'main': {'discovery': 180, 'validation': 180}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (51840 spawn rows), T max 39
+08:47:52 pass 1/1: layers 0..47, 720 prefill rows, 51840 spawn rows
+08:47:56   layer   0: load-wait 2.92s compute 0.70s  wf_rows=1080
+08:48:05   layer   8: load-wait 1.03s compute 0.22s  wf_rows=9720
+08:48:15   layer  16: load-wait 0.96s compute 0.29s  wf_rows=18360
+08:48:25   layer  24: load-wait 0.84s compute 0.37s  wf_rows=27000
+08:48:35   layer  32: load-wait 0.81s compute 0.45s  wf_rows=35640
+08:48:45   layer  40: load-wait 0.73s compute 0.51s  wf_rows=44280
+08:48:54   layer  47: load-wait 0.68s compute 0.57s  wf_rows=51840
+08:48:56   pass done: 720 prefill rows (T=39), 51840 spawn rows, 63.1s (metrics 1.9s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+08:48:57 family main: layer disc L44; attn_layer disc L43; block disc L43
+08:48:57 Δclean +2.60 Δcorrupt -2.60 drop +5.20; {"layer_discovery_argmax": 44, "layer_discovery_max": 0.478, "layer_discovery_top5": [[44, 0.478], [43, 0.465], [42, 0.354], [37, 0.301], [39, 0.294]], "layer_validation_argmax": 43, "layer_validation_max": 0.452, "layer_validation_top5": [[43, 0.452], [44, 0.444], [42, 0.315], [39, 0.285], [37, 0.277]], "attn_layer_discovery_argmax": 43, "attn_layer_discovery_max": 1.099, "attn_layer_discovery_top5": [[43, 1.099], [39, 0.971], [38, 0.936], [42, 0.87], [45, 0.716]], "attn_layer_validation_argmax": 43, "attn_layer_validation_max": 1.115, "attn_layer_validation_top5": [[43, 1.115], [39, 1.058], 
+2026-10-11T08:49:03Z END   ext13-p5-dir_f1-qwen3-sweep rc=0 (73s)

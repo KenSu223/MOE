@@ -1,0 +1,15 @@
+2026-10-11T09:28:46Z START ext13ab-mixtral-2 (waited 654s): python scripts/ext13ab_run.py mixtral --tasks f1_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+09:28:53 f1_mixtral_bos: 404 cases, 404 rows (202 validation), K=64; passes done 13, queue 4244/4244, greedy left 202
+09:28:54 pass 0: tasks ['f1_mixtral_bos'], 404 prefill rows (T max 45), 10100 spawn rows (adaptive [10100], static groups [0])
+09:29:03   layer   0: load-wait 7.86s compute 1.15s  wf_rows=2564
+[W1011 09:29:25.198561825 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2808086528 bytes (free: 2583101440, total: 23686938624).
+09:29:26   layer   8: load-wait 2.49s compute 0.55s  wf_rows=7764
+09:29:49   layer  16: load-wait 2.38s compute 0.50s  wf_rows=10052
+09:30:12   layer  24: load-wait 2.40s compute 0.48s  wf_rows=10100
+09:30:32   layer  31: load-wait 2.41s compute 0.47s  wf_rows=10100
+09:30:32   pass done: 404 prefill rows (T=45), 10100 spawn rows, 98.1s (metrics 0.1s)
+09:30:33 f1_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.59); queue 4244/4244
+09:30:33 f1_mixtral_bos: ALL PASSES COMPLETE
+09:30:33 group pass 0 done in 98s, peak 11.0 GB
+09:30:33 nothing left to run
+2026-10-11T09:30:40Z END   ext13ab-mixtral-2 rc=0 (114s)

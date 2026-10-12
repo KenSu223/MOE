@@ -1,0 +1,18 @@
+**Writer vs computer per condition (validation cases): total T (single-expert STR patch rescue), direct D (DLA of δ_e, final norm frozen at the corrupted twin), as fractions of the drop over the cases where the expert is clean-active; direct share D/T [95% CI]; all-case T = pop convention**
+
+| model | condition | expert | role | active cases | total T / drop | direct D / drop | direct share D/T | all-case T / drop |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1pre | L37E032 | selected+pop1 | 8/8 | +0.022 [-0.010, +0.073] | -0.002 [-0.003, -0.000] | -0.09 [+nan, +0.09] | 0.0218 |
+| Qwen3-30B-A3B-Base | f1pre | L41E117 | WG | 0/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L44E069 | CF | 2/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L42E115 | CF | 1/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L44E116 | pop2 | 6/8 | +0.101 [+0.015, +0.212] | +0.260 [+0.027, +0.541] | +2.58 [+1.79, +2.73] | 0.0817 |
+| Qwen3-30B-A3B-Base | f1pre | L43E070 | pop3 | 0/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L44E022 | pop4 | 5/8 | -0.004 [-0.015, +0.010] | +0.003 [-0.015, +0.028] | -0.71 [+nan, +nan] | -0.0027 |
+| Qwen3-30B-A3B-Base | f1pre | L37E107 | pop5 | 0/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L39E103 | pop6 | 2/8 | n/a | n/a | n/a |  |
+| Qwen3-30B-A3B-Base | f1pre | L43E036 | pop7 | 5/8 | +0.019 [+0.000, +0.023] | +0.049 [+0.002, +0.090] | +2.56 [+0.45, +nan] | 0.0136 |
+| Qwen3-30B-A3B-Base | f1pre | L39E004 | pop8 | 4/8 | +0.005 [+0.000, +0.019] | +0.001 [-0.001, +0.004] | +0.27 [-0.04, +nan] | 0.0027 |
+| Qwen3-30B-A3B-Base | f1pre | L43E114 | pop9 | 6/8 | +0.020 [+0.000, +0.050] | +0.046 [+0.015, +0.107] | +2.29 [+0.95, +nan] | 0.0163 |
+| Qwen3-30B-A3B-Base | f1pre | L43E087 | pop10 | 6/8 | +0.003 [-0.015, +0.020] | +0.004 [-0.002, +0.009] | +1.22 [-2.61, +nan] | 0.0027 |
+| Qwen3-30B-A3B-Base | f1pre | top-10 set | pop |  | +0.147 [+0.041, +0.255] | +0.288 [+0.083, +0.534] | +1.96 [+0.76, +3.98] |  |

@@ -1,0 +1,30 @@
+2026-10-11T19:44:39Z START ext13-p5-cp_nat-mixtral_bos-grid (waited 75s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/wino_ref/pairs_p5_cp_nat_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_p5_cp_nat_mixtral_bos.json --out p5_cp_nat_mixtral_bos --agent p5-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 25000 --token-budget 120000
+19:44:41 mixtral -> p5_cp_nat_mixtral_bos: window 1, kinds ['layer', 'attn_layer', 'resid'], 840 directed cases, 2400 units, 230400 suffix rows, 10 passes; units per category {'last STR token': 840, 'last token': 840, 'first subsequent token': 532, 'further tokens': 108, 'first STR token': 68, 'middle STR tokens': 12}
+19:44:47 pass 1/10: 260 units (S 1..1), 520 prefill rows, 24960 suffix rows
+19:44:58   layer   0: load-wait 9.44s compute 0.93s  wf_rows=780 wf_tokens=260
+19:45:20   layer   8: load-wait 2.52s compute 0.39s  wf_rows=7020 wf_tokens=6500
+19:45:43   layer  16: load-wait 2.40s compute 0.50s  wf_rows=13260 wf_tokens=12740
+19:46:07   layer  24: load-wait 2.26s compute 0.62s  wf_rows=19500 wf_tokens=18980
+19:46:27   layer  31: load-wait 2.18s compute 0.72s  wf_rows=24960 wf_tokens=24440
+19:46:27   pass done: 520 prefill rows (T=35), 24960 suffix rows (Smax=1, 24960 tokens), 100.1s
+19:46:28 pass 1: 100.1s; 24960 rows saved
+19:46:29 pass 2/10: 260 units (S 1..1), 520 prefill rows, 24960 suffix rows
+19:48:02 pass 2: 92.7s; 49920 rows saved
+19:48:03 pass 3/10: 260 units (S 1..1), 520 prefill rows, 24960 suffix rows
+19:49:36 pass 3: 92.7s; 74880 rows saved
+19:49:37 pass 4/10: 260 units (S 1..2), 520 prefill rows, 24960 suffix rows
+19:51:11 pass 4: 93.0s; 99840 rows saved
+19:51:11 pass 5/10: 260 units (S 2..2), 520 prefill rows, 24960 suffix rows
+19:52:51 pass 5: 92.5s; 124800 rows saved
+19:52:51 pass 6/10: 260 units (S 2..2), 520 prefill rows, 24960 suffix rows
+19:54:31 pass 6: 92.8s; 149760 rows saved
+19:54:31 pass 7/10: 260 units (S 2..3), 520 prefill rows, 24960 suffix rows
+19:56:12 pass 7: 91.2s; 174720 rows saved
+19:56:13 pass 8/10: 260 units (S 3..3), 520 prefill rows, 24960 suffix rows
+19:57:46 pass 8: 88.9s; 199680 rows saved
+19:57:46 pass 9/10: 252 units (S 3..4), 504 prefill rows, 24192 suffix rows
+19:59:25 pass 9: 93.5s; 223872 rows saved
+19:59:26 pass 10/10: 68 units (S 5..10), 136 prefill rows, 6528 suffix rows
+20:01:00 pass 10: 92.6s; 230400 rows saved
+20:01:00 done
+2026-10-11T20:01:07Z END   ext13-p5-cp_nat-mixtral_bos-grid rc=0 (988s)

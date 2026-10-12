@@ -1,0 +1,68 @@
+{
+ "n_margin_pairs_unique_twins": 493,
+ "by_format": {
+  "F1": 446,
+  "F2E": 73,
+  "F2R": 20
+ },
+ "frac_ge1": {
+  "v1": 0.02028397565922921,
+  "v2": 0.37322515212981744
+ },
+ "frac_ge1_by_format": {
+  "v1": {
+   "F1": 0.01905829596412556,
+   "F2E": 0.03424657534246575,
+   "F2R": 0.0
+  },
+  "v2": {
+   "F1": 0.38565022421524664,
+   "F2E": 0.3493150684931507,
+   "F2R": 0.075
+  }
+ },
+ "frac_ge1_names": {
+  "v1": 0.010869565217391304,
+  "v2": 0.10869565217391304
+ },
+ "frac_ge1_objects": {
+  "v1": 0.021252796420581657,
+  "v2": 0.4004474272930649
+ },
+ "sd": {
+  "v1": 0.40555392722069694,
+  "v2": 1.2220187575307802
+ },
+ "r_v1_v2": 0.2771267745486439,
+ "responding": [
+  "v2"
+ ],
+ "flag_none_responds": false,
+ "R": [
+  "v2"
+ ],
+ "templates_frac_ge1": {
+  "v1": 0.007863444572305332,
+  "v2": 0.056194859992328344
+ },
+ "templates_n_keys": 2607,
+ "margin_strata": {
+  "neutral": 235,
+  "reverse": 135,
+  "one-sided": 111,
+  "associative": 12
+ },
+ "margin_strata_names": {
+  "neutral": 39,
+  "one-sided": 3,
+  "reverse": 3,
+  "associative": 1
+ },
+ "margin_strata_objects": {
+  "neutral": 196,
+  "reverse": 132,
+  "one-sided": 108,
+  "associative": 11
+ },
+ "margin_conflicts": 98
+}

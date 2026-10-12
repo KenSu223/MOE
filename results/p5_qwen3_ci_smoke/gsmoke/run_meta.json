@@ -1,0 +1,121 @@
+{
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "group": "gsmoke",
+ "tasks": [
+  "F1pre/qwen3"
+ ],
+ "budget": 100000,
+ "greedy_steps": 20,
+ "head_pool": 32,
+ "expert_pool": 32,
+ "k_grid": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  12,
+  16,
+  24,
+  32,
+  48,
+  64,
+  96,
+  128
+ ],
+ "static_orders": [
+  "mix_oracle",
+  "mix_dla",
+  "head_oracle",
+  "head_dla"
+ ],
+ "init": {
+  "tasks": [
+   "F1pre/qwen3"
+  ],
+  "rows": {
+   "F1pre/qwen3": 6
+  },
+  "budget": 100000,
+  "queue_groups": 36,
+  "queue_items": 1026,
+  "pool_sizes": {
+   "F1pre/qwen3": {
+    "mix": 64,
+    "head": 32
+   }
+  },
+  "n_proxy": {
+   "F1pre/qwen3": 0
+  }
+ },
+ "agent": "p5-circuit",
+ "step1_dirs": {
+  "F1pre/qwen3": "/home/ubuntu/MOE/results/p5_F1pre_qwen3_ci_smoke"
+ },
+ "command": "python scripts/ext13ci_circuit_run.py qwen3 --group gsmoke --conds F1pre --limit 6 --out-suffix _smoke --max-passes 2",
+ "created_utc": "2026-10-11T06:12:00Z",
+ "complete": false,
+ "passes": 2,
+ "pass_notes": [
+  {
+   "tasks": [
+    "F1pre/qwen3"
+   ],
+   "rows": {
+    "F1pre/qwen3": 6
+   },
+   "budget": 100000,
+   "queue_groups": 36,
+   "queue_items": 1026,
+   "pool_sizes": {
+    "F1pre/qwen3": {
+     "mix": 64,
+     "head": 32
+    }
+   },
+   "n_proxy": {
+    "F1pre/qwen3": 0
+   }
+  },
+  {
+   "pass": 0,
+   "spawn_rows": 1602,
+   "adaptive": 576,
+   "static_groups": 36,
+   "pass_s": 64.02269887924194,
+   "peak_GB": 3.5507497787475586,
+   "greedy_left": 12,
+   "queue": "36/36",
+   "all_heads_max_abs_dev": 0.25,
+   "median_r_greedy": {
+    "mix": 0.6025641025641025,
+    "head": 0.6025641025641025
+   },
+   "utc": "2026-10-11T06:13:05Z"
+  },
+  {
+   "pass": 1,
+   "spawn_rows": 552,
+   "adaptive": 552,
+   "static_groups": 0,
+   "pass_s": 36.03771233558655,
+   "peak_GB": 3.51297664642334,
+   "greedy_left": 12,
+   "queue": "36/36",
+   "all_heads_max_abs_dev": NaN,
+   "median_r_greedy": {
+    "mix": 0.72,
+    "head": 0.7
+   },
+   "utc": "2026-10-11T06:13:41Z"
+  }
+ ]
+}

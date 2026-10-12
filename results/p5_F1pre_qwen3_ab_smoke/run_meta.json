@@ -1,0 +1,83 @@
+{
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "task": "wino",
+ "p5_task": "F1pre_qwen3_smoke",
+ "cond": "F1pre",
+ "proto": "qwen3",
+ "family": "main",
+ "src_run": "wino_ref_F1_qwen3",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_F1_train_xl_qwen3.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_F1_qwen3.json",
+ "special_tokens": true,
+ "pool": 32,
+ "noise_rows": 8,
+ "limit": [
+  16,
+  16
+ ],
+ "greedy_steps": 3,
+ "cluster_col": null,
+ "budget": 45000,
+ "n_cases": 32,
+ "n_rows": 32,
+ "n_eval_rows": 16,
+ "init": {
+  "eval_rows": 16,
+  "noise_rows": 8,
+  "pool": 32,
+  "queue_groups": 282,
+  "queue_items": 8464
+ },
+ "agent": "p5-addback",
+ "driver": "scripts/ext13ab_run.py (multi-task; ext8 machinery)",
+ "work": "A0 (both directions, all rows), A1 static orderings + all_active, greedy 15 steps, noising singles, A3 deletion curves (pop/oracle/layerwise/rand0-1/dla/noise_oracle) + all_active; no beam / exact / Shapley",
+ "note": "family main: population ranking from its discovery split, curves on its validation split; prefill rows of later passes = validation cases only (first pass: all)",
+ "command": "python scripts/ext13ab_run.py qwen3 --smoke --greedy-steps 3 --max-passes 6",
+ "created_utc": "2026-10-11T06:05:43Z",
+ "complete": true,
+ "passes": 2,
+ "pass_notes": [
+  {
+   "eval_rows": 16,
+   "noise_rows": 8,
+   "pool": 32,
+   "queue_groups": 282,
+   "queue_items": 8464
+  },
+  {
+   "pass0_candidates_not_routed_in_pass0_clean": 332
+  },
+  {
+   "pass": 0,
+   "group_pass": 0,
+   "spawn_rows": 8976,
+   "adaptive": 512,
+   "static_groups": 282,
+   "prefill_rows": 64,
+   "pass_s": 46.85211992263794,
+   "peak_GB": 6.882757663726807,
+   "pass_spawn_rows_total": 8976,
+   "pass_prefill_rows_total": 64,
+   "greedy_left": 16,
+   "queue": "282/322",
+   "utc": "2026-10-11T06:06:31Z"
+  },
+  {
+   "pass": 1,
+   "group_pass": 1,
+   "spawn_rows": 1320,
+   "adaptive": 480,
+   "static_groups": 40,
+   "prefill_rows": 32,
+   "pass_s": 47.551369428634644,
+   "peak_GB": 3.6032323837280273,
+   "pass_spawn_rows_total": 1320,
+   "pass_prefill_rows_total": 32,
+   "greedy_left": 0,
+   "queue": "322/322",
+   "utc": "2026-10-11T06:07:19Z"
+  }
+ ],
+ "completed_utc": "2026-10-11T06:07:19Z"
+}

@@ -1,0 +1,16 @@
+2026-10-12T01:14:54Z START ext13-p5-vt_a2e_orig-qwen3-sweep (waited 412s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --agent p5-data --max-rows 60000
+01:14:54 qwen3 -> p5_vt_a2e_orig_qwen3: 194 directed cases (97 pairs), families {'main': {'discovery': 120, 'validation': 74}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (27936 spawn rows), T max 31
+01:15:01 pass 1/1: layers 0..47, 388 prefill rows, 27936 spawn rows
+01:15:05   layer   0: load-wait 3.28s compute 0.70s  wf_rows=582
+01:15:14   layer   8: load-wait 1.14s compute 0.10s  wf_rows=5238
+01:15:24   layer  16: load-wait 1.11s compute 0.15s  wf_rows=9894
+01:15:38   layer  24: load-wait 5.04s compute 0.18s  wf_rows=14550
+01:15:50   layer  32: load-wait 1.10s compute 0.21s  wf_rows=19206
+01:15:59   layer  40: load-wait 0.96s compute 0.25s  wf_rows=23862
+01:16:08   layer  47: load-wait 0.97s compute 0.28s  wf_rows=27936
+01:16:09   pass done: 388 prefill rows (T=31), 27936 spawn rows, 68.2s (metrics 1.1s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+01:16:10 family main: layer disc L37; attn_layer disc L43; block disc L43
+01:16:10 Δclean +1.69 Δcorrupt -1.69 drop +3.38; {"layer_discovery_argmax": 37, "layer_discovery_max": 0.306, "layer_discovery_top5": [[37, 0.306], [39, 0.265], [38, 0.251], [42, 0.235], [41, 0.179]], "layer_validation_argmax": 37, "layer_validation_max": 0.294, "layer_validation_top5": [[37, 0.294], [39, 0.24], [33, 0.208], [38, 0.208], [40, 0.157]], "attn_layer_discovery_argmax": 43, "attn_layer_discovery_max": 1.107, "attn_layer_discovery_top5": [[43, 1.107], [45, 0.924], [39, 0.8], [42, 0.789], [38, 0.542]], "attn_layer_validation_argmax": 39, "attn_layer_validation_max": 1.368, "attn_layer_validation_top5": [[39, 1.368], [42, 1.27], [43
+2026-10-12T01:16:16Z END   ext13-p5-vt_a2e_orig-qwen3-sweep rc=0 (82s)

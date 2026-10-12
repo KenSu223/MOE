@@ -1,0 +1,12 @@
+2026-10-11T03:32:28Z START ext13-f1-dla-mixtral (waited 105s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/wino_ref/pairs_F1_train_xl_mixtral_bos.parquet --case-sets data/wino_ref/case_sets_F1_mixtral_bos.json --out wino_ref_F1_mixtral_bos --families main,rep --chunk 512
+03:32:30 mixtral -> wino_ref_F1_mixtral_bos: 884 directed cases, families ['main', 'rep'], 2 prefill-only passes
+03:32:44   layer   0: load-wait 5.26s compute 1.11s  wf_rows=0
+03:33:03   layer   8: load-wait 1.42s compute 0.69s  wf_rows=0
+03:33:24   layer  16: load-wait 1.82s compute 0.69s  wf_rows=0
+03:33:44   layer  24: load-wait 1.47s compute 0.68s  wf_rows=0
+03:34:03   layer  31: load-wait 2.20s compute 0.69s  wf_rows=0
+03:34:03   pass done: 1024 prefill rows (T=47), 0 spawn rows, 85.8s
+03:34:05 pass 1/2: 86s; DLA total - drop: max |.| 0.203
+03:35:27 pass 2/2: 80s; DLA total - drop: max |.| 0.203
+03:35:27 direct effect / drop: attention +0.901, MoE +0.100, embedding +0.000
+2026-10-11T03:35:35Z END   ext13-f1-dla-mixtral rc=0 (187s)

@@ -1,0 +1,12 @@
+{
+ "unit_col": "pair_id",
+ "n_items": 1024,
+ "n_pairs": 512,
+ "n_units": 512,
+ "splits": {
+  "discovery": 128,
+  "rep_discovery": 128,
+  "rep_validation": 128,
+  "validation": 128
+ }
+}

@@ -1,0 +1,20 @@
+2026-10-11T15:14:45Z START p5atp-engine-addback (waited 89s): bash -c 
+    set -e
+    [ -f results/p5_atp_wino/addback_rows.parquet ] || python scripts/ext13atp_engine.py addback --task wino
+    [ -f results/p5_atp_ioi/addback_rows.parquet ] || python scripts/ext13atp_engine.py addback --task ioi
+  
+15:14:58 wino add-back: 128 validation rows, 34816 multi spawns in 1 passes
+15:15:03   layer   0: load-wait 1.78s compute 0.79s  wf_rows=6992
+15:15:15   layer   8: load-wait 1.39s compute 0.35s  wf_rows=23880
+15:15:27   layer  15: load-wait 1.18s compute 0.46s  wf_rows=34816
+15:15:27   pass done: 256 prefill rows (T=27), 34816 spawn rows, 27.3s
+15:15:27 pass 1/1: 34816 spawns, 27.3s
+15:15:28 add-back done: 34816 rows, 30s
+15:15:38 ioi add-back: 128 validation rows, 34816 multi spawns in 1 passes
+15:15:41   layer   0: load-wait 1.23s compute 0.58s  wf_rows=8434
+15:15:44   layer   8: load-wait 0.07s compute 0.31s  wf_rows=20883
+15:15:47   layer  15: load-wait 0.07s compute 0.43s  wf_rows=34816
+15:15:47   pass done: 256 prefill rows (T=20), 34816 spawn rows, 7.8s
+15:15:47 pass 1/1: 34816 spawns, 7.8s
+15:15:47 add-back done: 34816 rows, 9s
+2026-10-11T15:15:49Z END   p5atp-engine-addback rc=0 (64s)

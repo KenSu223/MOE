@@ -1,0 +1,14 @@
+2026-10-12T02:03:08Z START ext13ab-mixtral-18 (waited 1049s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_neu_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+02:03:16 vt_e2a_neu_mixtral_bos: 512 cases, 512 rows (256 validation), K=64; passes done 13, queue 5378/5378, greedy left 256
+02:03:17 pass 0: tasks ['vt_e2a_neu_mixtral_bos'], 512 prefill rows (T max 23), 12800 spawn rows (adaptive [12800], static groups [0])
+02:03:27   layer   0: load-wait 8.77s compute 0.84s  wf_rows=1232
+02:03:50   layer   8: load-wait 2.61s compute 0.30s  wf_rows=7552
+02:04:13   layer  16: load-wait 2.48s compute 0.43s  wf_rows=12784
+02:04:36   layer  24: load-wait 2.36s compute 0.42s  wf_rows=12800
+02:04:56   layer  31: load-wait 2.49s compute 0.39s  wf_rows=12800
+02:04:56   pass done: 512 prefill rows (T=23), 12800 spawn rows, 99.0s (metrics 0.2s)
+02:04:57 vt_e2a_neu_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.03); queue 5378/5378
+02:04:57 vt_e2a_neu_mixtral_bos: ALL PASSES COMPLETE
+02:04:57 group pass 0 done in 99s, peak 8.2 GB
+02:04:57 nothing left to run
+2026-10-12T02:05:04Z END   ext13ab-mixtral-18 rc=0 (116s)

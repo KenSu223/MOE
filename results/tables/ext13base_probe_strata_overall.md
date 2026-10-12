@@ -1,0 +1,6 @@
+**Probe outcome and association strata of the margin pairs (F1 / F2E / F2R pooled, unique twins)**
+
+| Model | r(v1, v2) | Responding | R (used) | Margin pairs: assoc. / one-sided / reverse / neutral / no probe | Names | Objects | Conflicts (reverse & own) |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 0.51 | v1, v2 | v1, v2 | 86 / 299 / 394 / 790 / 0 | 0 / 57 / 133 / 407 | 86 / 242 / 261 / 383 | 245 |
+| Mixtral-8x7B, BOS | 0.28 | v2 | v2 | 12 / 111 / 135 / 235 / 0 | 1 / 3 / 3 / 39 | 11 / 108 / 132 / 196 | 98 |

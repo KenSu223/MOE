@@ -1,0 +1,43 @@
+2026-10-11T14:33:38Z START p5atp-engine-truth (waited 308s): bash -c 
+    set -e
+    [ -f results/p5_atp_data/case_sets_ioi.json ] || python scripts/ext13atp_engine.py scan-ioi
+    [ -f results/p5_atp_wino/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task wino
+    [ -f results/p5_atp_ioi/truth_rows.parquet ] || python scripts/ext13atp_engine.py truth --task ioi
+    python scripts/ext13atp_grad.py --task wino --time-budget 150
+  
+14:33:51   layer   0: load-wait 3.13s compute 0.80s  wf_rows=0
+14:34:05   layer   8: load-wait 1.56s compute 0.08s  wf_rows=0
+14:34:20   layer  15: load-wait 1.21s compute 0.08s  wf_rows=0
+14:34:20   pass done: 512 prefill rows (T=28), 0 spawn rows, 33.0s
+14:34:20 wino: 256 directed cases, mean drop 8.047, min clean margin 0.750
+14:34:21 110072 spawn rows in 3 passes
+14:34:23   layer   0: load-wait 1.92s compute 0.39s  wf_rows=2856
+14:34:39   layer   8: load-wait 1.72s compute 0.22s  wf_rows=25217
+14:34:53   layer  15: load-wait 1.65s compute 0.34s  wf_rows=44710
+14:34:53   pass done: 208 prefill rows (T=28), 44710 spawn rows, 32.0s
+14:34:53 pass 1/3: 44710 spawns, 32.0s
+14:35:18 pass 2/3: 44791 spawns, 24.9s
+14:35:30 pass 3/3: 20571 spawns, 12.3s
+14:35:30 truth done: 110072 rows, 103s
+14:35:45   layer   0: load-wait 1.45s compute 0.63s  wf_rows=0
+14:35:46   layer   8: load-wait 0.07s compute 0.09s  wf_rows=0
+14:35:48   layer  15: load-wait 0.17s compute 0.06s  wf_rows=0
+14:35:48   pass done: 512 prefill rows (T=20), 0 spawn rows, 5.1s
+14:35:48 ioi: 256 directed cases, mean drop 8.875, min clean margin 1.000
+14:35:48 107999 spawn rows in 3 passes
+14:35:49   layer   0: load-wait 0.24s compute 0.22s  wf_rows=2796
+14:35:51   layer   8: load-wait 0.07s compute 0.24s  wf_rows=25080
+14:35:53   layer  15: load-wait 0.07s compute 0.31s  wf_rows=44734
+14:35:53   pass done: 212 prefill rows (T=20), 44734 spawn rows, 4.9s
+14:35:53 pass 1/3: 44734 spawns, 4.9s
+14:35:57 pass 2/3: 44734 spawns, 4.3s
+14:36:01 pass 3/3: 18531 spawns, 3.2s
+14:36:01 truth done: 107999 rows, 18s
+14:36:05 wino: 256 cases, 0 done, 256 to do
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:04, 35.14it/s]Loading weights:   8%|▊         | 15/179 [00:00<00:02, 69.25it/s]Loading weights:  15%|█▍        | 26/179 [00:00<00:01, 77.24it/s]Loading weights:  21%|██        | 37/179 [00:00<00:01, 79.73it/s]Loading weights:  27%|██▋       | 48/179 [00:00<00:01, 80.95it/s]Loading weights:  33%|███▎      | 59/179 [00:00<00:01, 81.98it/s]Loading weights:  39%|███▉      | 70/179 [00:00<00:01, 84.45it/s]Loading weights:  45%|████▌     | 81/179 [00:01<00:01, 85.26it/s]Loading weights:  51%|█████▏    | 92/179 [00:01<00:01, 84.50it/s]Loading weights:  58%|█████▊    | 103/179 [00:01<00:00, 84.20it/s]Loading weights:  64%|██████▎   | 114/179 [00:01<00:00, 84.89it/s]Loading weights:  70%|██████▉   | 125/179 [00:01<00:00, 83.66it/s]Loading weights:  76%|███████▌  | 136/179 [00:01<00:00, 84.33it/s]Loading weights:  82%|████████▏ | 147/179 [00:01<00:00, 85.35it/s]Loading weights:  88%|████████▊ | 158/179 [00:01<00:00, 86.15it/s]Loading weights:  94%|█████████▍| 169/179 [00:02<00:00, 86.50it/s]Loading weights: 100%|██████████| 179/179 [00:02<00:00, 87.51it/s]
+14:36:16 model loaded (12s)
+14:36:59 16 cases this run, 2.67s/case, peak mem 14.2 GiB
+14:37:37 32 cases this run, 2.52s/case, peak mem 14.2 GiB
+14:38:14 48 cases this run, 2.45s/case, peak mem 14.2 GiB
+14:38:35 wino: partial (time budget); 58/256 cases; run 151s
+2026-10-11T14:38:37Z END   p5atp-engine-truth rc=0 (299s)

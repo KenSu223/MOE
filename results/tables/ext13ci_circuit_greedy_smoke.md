@@ -1,0 +1,4 @@
+| Run | Greedy | row k50/80/90 (median; reached) | rows restored k=1/5/10/20 | rows r ≥ 0.9 k=5/10/20 | rows top-1 at last step | heads among first 1/5/10/20 | first picks (share) | most frequent in first 5 |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | mix | 2/never/never; 0.67/0.17/0.00 | 0.17/nan/nan/nan | nan/nan/nan | 0.83 | 1.0/2.8/2.8/2.8 | L40H2 0.67, L42H10 0.33 | L40H2 1.00, L40H0 0.67, L42H10 0.50, L43H31 0.17, L39H31 0.17 |
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | head | 2/never/never; 0.67/0.17/0.00 | 0.17/nan/nan/nan | nan/nan/nan | 0.83 | 1.0/3.0/3.0/3.0 | L40H2 0.67, L42H10 0.33 | L40H2 1.00, L40H0 0.67, L42H10 0.50, L36H28 0.33, L43H31 0.17 |

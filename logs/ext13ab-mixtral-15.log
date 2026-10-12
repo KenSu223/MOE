@@ -1,0 +1,51 @@
+2026-10-11T23:35:31Z START ext13ab-mixtral-15 (waited 739s): python scripts/ext13ab_run.py mixtral --tasks vt_e2a_orig_mixtral_bos --max-passes 13 --budget 37500 --max-tasks 2
+23:35:38 vt_e2a_orig_mixtral_bos: initialised {'eval_rows': 256, 'noise_rows': 256, 'pool': 64, 'queue_groups': 4610, 'queue_items': 79616}
+23:35:39 vt_e2a_orig_mixtral_bos: 512 cases, 512 rows (256 validation), K=64; passes done 0, queue 0/4610, greedy left 256
+23:35:41 pass 0: tasks ['vt_e2a_orig_mixtral_bos'], 1024 prefill rows (T max 23), 37494 spawn rows (adaptive [16384], static groups [1578])
+23:35:49   layer   0: load-wait 6.92s compute 0.93s  wf_rows=9717
+23:36:12   layer   8: load-wait 2.22s compute 0.72s  wf_rows=18796
+23:36:35   layer  16: load-wait 2.02s compute 0.83s  wf_rows=26217
+23:36:59   layer  24: load-wait 1.80s compute 1.04s  wf_rows=36648
+23:37:19   layer  31: load-wait 1.80s compute 1.00s  wf_rows=37494
+23:37:19   pass done: 1024 prefill rows (T=23), 37494 spawn rows, 98.1s (metrics 0.4s)
+23:37:21 vt_e2a_orig_mixtral_bos first pass: ceilings for 512 rows (mean all-MoE rescue +4.542); DLA rows 32768 (130 candidate pairs not routed in this pass's clean run)
+23:37:21 vt_e2a_orig_mixtral_bos pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.48); queue 1578/5122
+23:37:21 group pass 0 done in 98s, peak 10.4 GB
+23:37:24 pass 1: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 37487 spawn rows (adaptive [15872], static groups [1441])
+23:38:58 vt_e2a_orig_mixtral_bos pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.60); queue 3019/5122
+23:38:58 group pass 1 done in 92s, peak 9.6 GB
+23:39:01 pass 2: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 37492 spawn rows (adaptive [15616], static groups [590])
+23:40:35 vt_e2a_orig_mixtral_bos: noise_oracle groups added for 256 rows
+23:40:35 vt_e2a_orig_mixtral_bos pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.68); queue 3609/5378
+23:40:35 group pass 2 done in 93s, peak 9.4 GB
+23:40:37 pass 3: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 37500 spawn rows (adaptive [15360], static groups [1476])
+23:42:12 vt_e2a_orig_mixtral_bos pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.75); queue 5085/5378
+23:42:12 group pass 3 done in 93s, peak 9.8 GB
+23:42:13 pass 4: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 19499 spawn rows (adaptive [15104], static groups [293])
+23:43:46 vt_e2a_orig_mixtral_bos pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.79); queue 5378/5378
+23:43:46 group pass 4 done in 92s, peak 8.4 GB
+23:43:48 pass 5: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 14848 spawn rows (adaptive [14848], static groups [0])
+23:45:20 vt_e2a_orig_mixtral_bos pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.84); queue 5378/5378
+23:45:20 group pass 5 done in 91s, peak 8.1 GB
+23:45:21 pass 6: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 14592 spawn rows (adaptive [14592], static groups [0])
+23:46:54 vt_e2a_orig_mixtral_bos pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.87); queue 5378/5378
+23:46:54 group pass 6 done in 92s, peak 8.1 GB
+23:46:55 pass 7: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 14336 spawn rows (adaptive [14336], static groups [0])
+23:48:28 vt_e2a_orig_mixtral_bos pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.89); queue 5378/5378
+23:48:28 group pass 7 done in 92s, peak 8.1 GB
+23:48:29 pass 8: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 14080 spawn rows (adaptive [14080], static groups [0])
+23:50:00 vt_e2a_orig_mixtral_bos pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.92); queue 5378/5378
+23:50:00 group pass 8 done in 90s, peak 8.1 GB
+23:50:01 pass 9: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 13824 spawn rows (adaptive [13824], static groups [0])
+23:51:35 vt_e2a_orig_mixtral_bos pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.95); queue 5378/5378
+23:51:35 group pass 9 done in 90s, peak 8.1 GB
+23:51:36 pass 10: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 13568 spawn rows (adaptive [13568], static groups [0])
+23:53:05 vt_e2a_orig_mixtral_bos pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.97); queue 5378/5378
+23:53:05 group pass 10 done in 88s, peak 8.1 GB
+23:53:06 pass 11: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 13312 spawn rows (adaptive [13312], static groups [0])
+23:54:36 vt_e2a_orig_mixtral_bos pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 1.00); queue 5378/5378
+23:54:36 group pass 11 done in 90s, peak 8.0 GB
+23:54:37 pass 12: tasks ['vt_e2a_orig_mixtral_bos'], 512 prefill rows (T max 22), 13056 spawn rows (adaptive [13056], static groups [0])
+23:56:11 vt_e2a_orig_mixtral_bos pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 1.00); queue 5378/5378
+23:56:11 group pass 12 done in 93s, peak 8.0 GB
+2026-10-11T23:56:18Z END   ext13ab-mixtral-15 rc=0 (1247s)

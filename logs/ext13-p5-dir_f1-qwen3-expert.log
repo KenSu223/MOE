@@ -1,0 +1,69 @@
+2026-10-11T09:44:27Z START ext13-p5-dir_f1-qwen3-expert (waited 0s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p5_dir_f1_qwen3 --agent p5-data --families main --layers all --pairs-layers auto --max-spawn 60000
+/home/ubuntu/MOE/scripts/ext7_wino_expert.py:43: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  return int(R.loc[fam[f]["discovery"]].mean(0).idxmax())
+09:44:35 qwen3 -> p5_dir_f1_qwen3: 360 directed cases, families ['main'], layers 0..47 (48), pairs layers [44], only_scaled=False, 222714 spawn rows in 4 passes
+09:44:35 pass 1/4: layers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 720 prefill rows, 57311 spawn rows
+09:44:40   layer   0: load-wait 3.40s compute 0.81s  wf_rows=3998
+09:44:49   layer   8: load-wait 0.79s compute 0.42s  wf_rows=36658
+09:44:58   layer  16: load-wait 0.37s compute 0.60s  wf_rows=57311
+09:45:05   layer  24: load-wait 0.51s compute 0.60s  wf_rows=57311
+09:45:16   layer  32: load-wait 1.50s compute 0.60s  wf_rows=57311
+09:45:28   layer  40: load-wait 0.44s compute 0.60s  wf_rows=57311
+09:45:38   layer  47: load-wait 0.31s compute 0.60s  wf_rows=57311
+09:45:38   pass done: 720 prefill rows (T=39), 57311 spawn rows, 61.9s
+09:45:38   L0: 8 recurrent (>= 90/180); best E127 all-case +0.026 active 164
+09:45:38   L1: 8 recurrent (>= 90/180); best E080 all-case +0.021 active 180
+09:45:38   L2: 7 recurrent (>= 90/180); best E087 all-case +0.013 active 180
+09:45:38   L3: 7 recurrent (>= 90/180); best E047 all-case +0.022 active 180
+09:45:38   L4: 8 recurrent (>= 90/180); best E029 all-case +0.021 active 160
+09:45:38   L5: 8 recurrent (>= 90/180); best E064 all-case +0.033 active 154
+09:45:38   L6: 6 recurrent (>= 90/180); best E053 all-case +0.026 active 178
+09:45:38   L7: 7 recurrent (>= 90/180); best E109 all-case +0.023 active 180
+09:45:38   L8: 9 recurrent (>= 90/180); best E008 all-case +0.017 active 153
+09:45:38   L9: 6 recurrent (>= 90/180); best E032 all-case +0.019 active 164
+09:45:38   L10: 7 recurrent (>= 90/180); best E002 all-case +0.020 active 164
+09:45:38   L11: 7 recurrent (>= 90/180); best E011 all-case +0.010 active 165
+09:45:38   L12: 7 recurrent (>= 90/180); best E056 all-case +0.030 active 180
+09:45:38   L13: 10 recurrent (>= 90/180); best E032 all-case +0.017 active 180
+09:45:38 pass 1: 62s; /home/ubuntu/MOE/results/p5_dir_f1_qwen3/str_expert_rows.parquet now 57311 rows
+09:45:38 pass 2/4: layers [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 720 prefill rows, 58778 spawn rows
+09:46:27   L14: 7 recurrent (>= 90/180); best E092 all-case +0.015 active 159
+09:46:27   L15: 8 recurrent (>= 90/180); best E000 all-case +0.015 active 108
+09:46:27   L16: 6 recurrent (>= 90/180); best E105 all-case +0.018 active 164
+09:46:27   L17: 7 recurrent (>= 90/180); best E090 all-case +0.024 active 135
+09:46:27   L18: 9 recurrent (>= 90/180); best E027 all-case +0.008 active 149
+09:46:27   L19: 8 recurrent (>= 90/180); best E018 all-case +0.013 active 178
+09:46:27   L20: 6 recurrent (>= 90/180); best E005 all-case +0.013 active 164
+09:46:27   L21: 6 recurrent (>= 90/180); best E122 all-case +0.016 active 180
+09:46:27   L22: 6 recurrent (>= 90/180); best E003 all-case +0.021 active 162
+09:46:27   L23: 7 recurrent (>= 90/180); best E037 all-case +0.020 active 130
+09:46:27   L24: 7 recurrent (>= 90/180); best E075 all-case +0.017 active 129
+09:46:27   L25: 7 recurrent (>= 90/180); best E045 all-case +0.017 active 103
+09:46:27   L26: 8 recurrent (>= 90/180); best E073 all-case +0.025 active 130
+09:46:27   L27: 8 recurrent (>= 90/180); best E002 all-case +0.014 active 159
+09:46:27 pass 2: 44s; /home/ubuntu/MOE/results/p5_dir_f1_qwen3/str_expert_rows.parquet now 116089 rows
+09:46:27 pass 3/4: layers [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40], 720 prefill rows, 56719 spawn rows
+09:47:23   L28: 6 recurrent (>= 90/180); best E115 all-case +0.016 active 180
+09:47:23   L29: 6 recurrent (>= 90/180); best E112 all-case +0.013 active 127
+09:47:23   L30: 5 recurrent (>= 90/180); best E122 all-case +0.008 active 99
+09:47:23   L31: 3 recurrent (>= 90/180); best E045 all-case +0.010 active 175
+09:47:23   L32: 6 recurrent (>= 90/180); best E109 all-case +0.009 active 160
+09:47:23   L33: 7 recurrent (>= 90/180); best E048 all-case +0.061 active 152
+09:47:23   L34: 7 recurrent (>= 90/180); best E123 all-case +0.024 active 127
+09:47:23   L35: 6 recurrent (>= 90/180); best E090 all-case +0.028 active 180
+09:47:23   L36: 8 recurrent (>= 90/180); best E009 all-case +0.041 active 180
+09:47:23   L37: 7 recurrent (>= 90/180); best E032 all-case +0.188 active 174
+09:47:23   L38: 6 recurrent (>= 90/180); best E010 all-case +0.049 active 163
+09:47:23   L39: 7 recurrent (>= 90/180); best E116 all-case +0.047 active 114
+09:47:23   L40: 7 recurrent (>= 90/180); best E037 all-case +0.125 active 103
+09:47:23 pass 3: 53s; /home/ubuntu/MOE/results/p5_dir_f1_qwen3/str_expert_rows.parquet now 172808 rows
+09:47:23 pass 4/4: layers [41, 42, 43, 44, 45, 46, 47], 720 prefill rows, 49906 spawn rows
+09:48:12   L41: 8 recurrent (>= 90/180); best E062 all-case +0.089 active 127
+09:48:12   L42: 6 recurrent (>= 90/180); best E018 all-case +0.085 active 164
+09:48:12   L43: 7 recurrent (>= 90/180); best E114 all-case +0.108 active 128
+09:48:12   L44: 6 recurrent (>= 90/180); best E116 all-case +0.263 active 144
+09:48:12   L45: 6 recurrent (>= 90/180); best E080 all-case +0.001 active 121
+09:48:12   L46: 6 recurrent (>= 90/180); best E115 all-case -0.067 active 165
+09:48:12   L47: 8 recurrent (>= 90/180); best E036 all-case -0.012 active 164
+09:48:12 pass 4: 48s; /home/ubuntu/MOE/results/p5_dir_f1_qwen3/str_expert_rows.parquet now 222714 rows
+2026-10-11T09:48:19Z END   ext13-p5-dir_f1-qwen3-expert rc=0 (232s)

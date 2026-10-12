@@ -1,0 +1,42 @@
+{
+ "cond": "f1pre",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "agent": "p5-expert",
+ "experiment": "ext13ko expert knockout (route masks on clean prompts), Phase 5 / Direction 9 per condition",
+ "source": {
+  "pairs": "data/wino_ref/pairs_F1_train_xl_qwen3.parquet",
+  "case_sets": "data/wino_ref/case_sets_F1_qwen3.json",
+  "run": "wino_ref_F1_qwen3"
+ },
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "main": {
+   "created_utc": "2026-10-11T06:14:51Z",
+   "passes": [
+    {
+     "pass": "main_p000",
+     "rows": 600,
+     "T": 34,
+     "pass_s": 58.1,
+     "peak_GB": 3.85
+    },
+    {
+     "pass": "null_p000",
+     "rows": 24,
+     "T": 34,
+     "pass_s": 48.5,
+     "peak_GB": 3.5
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py qwen3 --conds f1pre --suffix _smoke --limit 4 --with-wr --time-budget 900",
+   "complete": true,
+   "completed_utc": "2026-10-11T06:15:39Z",
+   "n_passes": 2,
+   "n_conditions": 66,
+   "n_rows": 624
+  }
+ }
+}

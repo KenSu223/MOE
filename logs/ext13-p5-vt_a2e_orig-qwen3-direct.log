@@ -1,0 +1,11 @@
+2026-10-12T02:21:22Z START ext13-p5-vt_a2e_orig-qwen3-direct (waited 1094s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json --out p5_vt_a2e_orig_qwen3 --splits discovery,validation
+02:21:33   layer   0: load-wait 2.91s compute 0.64s  wf_rows=0
+02:21:42   layer   8: load-wait 1.19s compute 0.05s  wf_rows=0
+02:21:52   layer  16: load-wait 1.20s compute 0.06s  wf_rows=0
+02:22:02   layer  24: load-wait 1.16s compute 0.06s  wf_rows=0
+02:22:12   layer  32: load-wait 1.20s compute 0.05s  wf_rows=0
+02:22:22   layer  40: load-wait 1.18s compute 0.05s  wf_rows=0
+02:22:31   layer  47: load-wait 1.17s compute 0.05s  wf_rows=0
+02:22:31   pass done: 194 prefill rows (T=31), 0 spawn rows, 61.0s
+02:22:32 p5_vt_a2e_orig_qwen3: 194 directed cases; A_direct 1.507, M_direct -0.507, DLA attn share 1.507; fp32 vs engine Delta clean max |diff| 0.113
+2026-10-12T02:22:37Z END   ext13-p5-vt_a2e_orig-qwen3-direct rc=0 (75s)

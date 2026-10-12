@@ -1,0 +1,95 @@
+[     0s] ladder cf/qwen3
+[     0s] ladder cf/mixtral_bos
+[     0s] ladder p3_opt/qwen3
+[     2s] ladder p3_opt/mixtral_bos
+[     3s] ladder dir_opt/qwen3
+[     4s] ladder dir_opt/mixtral_bos
+[     4s] ladder vt_e2a_orig/qwen3
+[     5s] ladder vt_e2a_orig/mixtral_bos
+[     6s] ladder vt_e2a_neu/qwen3
+[     7s] ladder vt_e2a_neu/mixtral_bos
+[     8s] ladder cp_vt_orig/qwen3
+[     9s] ladder cp_vt_orig/mixtral_bos
+[    10s] ladder cp_vt_neu/qwen3
+[    12s] ladder cp_vt_neu/mixtral_bos
+[    13s] ladder cp_nat/qwen3
+[    14s] ladder cp_nat/mixtral_bos
+[    15s] ladder dir_f1/qwen3
+[    16s] ladder dir_f1/mixtral_bos
+[    16s] ladder f1/qwen3
+[    18s] ladder f1/mixtral_bos
+[    19s] ladder vt_a2e_orig/qwen3
+[    19s] ladder f2e/qwen3
+[    20s] ladder f2e/mixtral_bos
+[    20s] ladder ioi/qwen3
+[    20s] ladder ioi/mixtral_bos
+[    20s] contrast dir_f1 - dir_opt / qwen3
+[    20s] contrast dir_f1 - dir_opt / mixtral_bos
+[    21s] contrast dir_f1 - cp_nat / qwen3
+[    21s] contrast dir_f1 - cp_nat / mixtral_bos
+[    21s] contrast vt_a2e_orig - vt_e2a_orig / qwen3
+[    21s] contrast cp_nat - p3_opt / qwen3
+[    22s] contrast cp_nat - p3_opt / mixtral_bos
+[    22s] contrast cp_nat - dir_opt / qwen3
+[    22s] contrast cp_nat - dir_opt / mixtral_bos
+[    23s] contrast cp_vt_orig - vt_e2a_orig / qwen3
+[    23s] contrast cp_vt_orig - vt_e2a_orig / mixtral_bos
+[    23s] contrast cp_vt_neu - vt_e2a_neu / qwen3
+[    23s] contrast cp_vt_neu - vt_e2a_neu / mixtral_bos
+[    23s] contrast vt_e2a_neu - vt_e2a_orig / qwen3
+[    24s] contrast vt_e2a_neu - vt_e2a_orig / mixtral_bos
+[    24s] contrast cp_vt_neu - cp_vt_orig / qwen3
+[    24s] contrast cp_vt_neu - cp_vt_orig / mixtral_bos
+[    24s] strata f1pre/qwen3
+[    25s] strata p3_opt/qwen3
+[    25s] strata dir_f1/qwen3
+[    26s] strata dir_opt/qwen3
+[    26s] strata cp_nat/qwen3
+[    26s] strata f1/qwen3
+[    27s] strata vt_e2a_orig/qwen3
+[    27s] strata vt_e2a_neu/qwen3
+[    27s] strata cp_vt_orig/qwen3
+[    27s] strata cp_vt_neu/qwen3
+[    27s] strata vt_a2e_orig/qwen3
+[    28s] strata f2e/qwen3
+[    28s] strata f1pre/mixtral_bos
+[    28s] strata p3_opt/mixtral_bos
+[    28s] strata dir_f1/mixtral_bos
+[    29s] strata dir_opt/mixtral_bos
+[    29s] strata cp_nat/mixtral_bos
+[    30s] strata f1/mixtral_bos
+[    30s] strata vt_e2a_orig/mixtral_bos
+[    30s] strata vt_e2a_neu/mixtral_bos
+[    30s] strata cp_vt_orig/mixtral_bos
+[    30s] strata cp_vt_neu/mixtral_bos
+[    31s] strata f2e/mixtral_bos
+[    31s] ladder computed
+[    31s] curves cf_qwen3
+[    47s] curves cf_mixtral
+[    50s] curves wino_qwen3
+[    52s] curves wino_mixtral
+[    54s] curves f1_qwen3
+[    58s] curves f1_qwen3_rep
+[    61s] curves f1_mixtral_bos
+[    63s] curves dir_f1_qwen3
+[    65s] curves dir_f1_mixtral_bos
+[    67s] curves dir_opt_qwen3
+[    69s] curves dir_opt_mixtral_bos
+[    70s] curves f2e_qwen3
+[    71s] curves f2e_mixtral_bos
+[    72s] curves vt_e2a_orig_qwen3
+[    74s] curves vt_e2a_orig_mixtral_bos
+[    77s] curves vt_e2a_neu_qwen3
+[    79s] curves vt_e2a_neu_mixtral_bos
+[    81s] curves vt_a2e_orig_qwen3
+[    83s] curves cp_vt_orig_qwen3
+[    86s] curves cp_vt_orig_mixtral_bos
+[    88s] curves cp_vt_neu_qwen3
+[    91s] curves cp_vt_neu_mixtral_bos
+[    93s] curves cp_nat_qwen3
+[    96s] curves cp_nat_qwen3_rep
+[   100s] curves cp_nat_mixtral_bos
+[   103s] curves cp_nat_mixtral_bos_rep
+[   111s] curves computed
+[   116s] tables, figures, sections written
+[   116s] done

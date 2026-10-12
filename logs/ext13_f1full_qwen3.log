@@ -1,0 +1,22 @@
+2026-10-11T03:03:02Z START ext13-f1full-qwen3 (waited 0s): python scripts/ext13_scan.py qwen3 --formats F1 --f1-sample 0
+03:03:05 F1: 10682 pairs, 64092 rows, 10 passes
+03:03:09   layer   0: load-wait 2.97s compute 1.04s  wf_rows=0
+03:03:18   layer   8: load-wait 0.65s compute 0.60s  wf_rows=0
+03:03:28   layer  16: load-wait 0.65s compute 0.59s  wf_rows=0
+03:03:38   layer  24: load-wait 0.65s compute 0.59s  wf_rows=0
+03:03:48   layer  32: load-wait 0.65s compute 0.59s  wf_rows=0
+03:03:59   layer  40: load-wait 0.82s compute 0.59s  wf_rows=0
+03:04:08   layer  47: load-wait 0.97s compute 0.59s  wf_rows=0
+03:04:08   pass done: 10000 prefill rows (T=14), 0 spawn rows, 62.6s
+03:04:08   pass 1/10 done (63s)
+03:04:49   pass 2/10 done (41s)
+03:05:42   pass 3/10 done (53s)
+03:06:26   pass 4/10 done (44s)
+03:07:17   pass 5/10 done (50s)
+03:08:00   pass 6/10 done (43s)
+03:08:45   pass 7/10 done (44s)
+03:09:27   pass 8/10 done (42s)
+03:10:10   pass 9/10 done (43s)
+03:10:51   pass 10/10 done (41s)
+03:10:52 F1 {"pairs": 10682, "main": 10236, "correct_both": 3773, "margin": 1503, "margin_main": 1451, "margin_main_names": 520, "margin_main_objects": 931, "margin_connective": 52, "margin_main_associative": 54, "margin_main_half": 356, "margin_main_hard": 1041, "balanced": 1397, "balanced_names": 520, "balanced_objects": 877, "hard": 1041, "margin_main_top1_both": 1083, "mean_drop_margin_main": 5.052334596829772, "probe_drop_over_drop_margin_main": 0.07921906304616565, "n_passes": 10}
+2026-10-11T03:10:59Z END   ext13-f1full-qwen3 rc=0 (477s)

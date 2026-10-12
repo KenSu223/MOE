@@ -1,0 +1,57 @@
+{
+ "cond": "vt_a2e_orig",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "src_run": "p5_vt_a2e_orig_qwen3",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_p5_vt_a2e_orig_qwen3.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_p5_vt_a2e_orig_qwen3.json",
+ "family": "main",
+ "cluster": "seed",
+ "special_tokens": false,
+ "n_val_rows": 74,
+ "n_val_units": 5,
+ "prompt_tokens_median": 27.0,
+ "single_expert_coverage": {
+  "rows": 194,
+  "rows_full": 194,
+  "entries": 74496,
+  "entries_needed": 74496
+ },
+ "attn_classes": [
+  "str",
+  "mention_clean",
+  "mention_corr",
+  "blank",
+  "pos0",
+  "final"
+ ],
+ "rows_per_pass": 160,
+ "n_chunks": 1,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA + attention mass",
+ "agent": "p5-circuit",
+ "command": "python scripts/ext13ci_heads_run.py vt_a2e_orig qwen3 --max-passes 6",
+ "created_utc": "2026-10-12T02:29:54Z",
+ "complete": true,
+ "completed_utc": "2026-10-12T02:30:57Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 74,
+   "prefill": 148,
+   "spawn_rows": 117216,
+   "pass_s": 58.76838803291321,
+   "peak_GB": 10.849005222320557,
+   "mean_drop": 3.6621620655059814,
+   "r_sum_heads_vs_attn_layer": 0.3385513803468638,
+   "head_dla_sum_mean": 5.38212251663208,
+   "candidates_not_routed_clean": 390,
+   "attn_row_sum_minmax": [
+    0.9996337294578552,
+    1.000377893447876
+   ],
+   "utc": "2026-10-12T02:30:57Z"
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+{
+ "cond": "cp_vt_orig",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "src_run": "p5_cp_vt_orig_mixtral_bos",
+ "pairs": "/home/ubuntu/MOE/data/wino_ref/pairs_p5_cp_vt_orig_mixtral_bos.parquet",
+ "case_sets": "/home/ubuntu/MOE/data/wino_ref/case_sets_p5_cp_vt_orig_mixtral_bos.json",
+ "family": "main",
+ "cluster": "seed",
+ "special_tokens": true,
+ "n_val_rows": 256,
+ "n_val_units": 10,
+ "prompt_tokens_median": 25.0,
+ "single_expert_coverage": {
+  "rows": 512,
+  "rows_full": 512,
+  "entries": 32768,
+  "entries_needed": 32768
+ },
+ "attn_classes": [
+  "str",
+  "attr_clean",
+  "attr_corr",
+  "mention_clean",
+  "mention_corr",
+  "prefix_ment_clean",
+  "prefix_ment_corr",
+  "pos0",
+  "final"
+ ],
+ "rows_per_pass": 110,
+ "n_chunks": 3,
+ "wf_chunk": 2048,
+ "step": "step1 single heads + DLA + attention mass",
+ "agent": "p5-circuit",
+ "command": "python scripts/ext13ci_heads_run.py cp_vt_orig mixtral_bos --max-passes 4",
+ "created_utc": "2026-10-11T16:44:47Z",
+ "complete": true,
+ "completed_utc": "2026-10-11T16:49:41Z",
+ "pass_notes": [
+  {
+   "chunk": 0,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 97.5261504650116,
+   "peak_GB": 11.81152629852295,
+   "mean_drop": 5.3255815505981445,
+   "r_sum_heads_vs_attn_layer": 0.3512368499386334,
+   "head_dla_sum_mean": 2.7436470985412598,
+   "candidates_not_routed_clean": 35,
+   "attn_row_sum_minmax": [
+    0.9996280670166016,
+    1.000394344329834
+   ],
+   "utc": "2026-10-11T16:46:28Z"
+  },
+  {
+   "chunk": 1,
+   "rows": 86,
+   "prefill": 172,
+   "spawn_rows": 90816,
+   "pass_s": 92.82633304595947,
+   "peak_GB": 11.820780754089355,
+   "mean_drop": 5.2906975746154785,
+   "r_sum_heads_vs_attn_layer": 0.27999042957069814,
+   "head_dla_sum_mean": 2.410884141921997,
+   "candidates_not_routed_clean": 25,
+   "attn_row_sum_minmax": [
+    0.9996188879013062,
+    1.000382661819458
+   ],
+   "utc": "2026-10-11T16:48:06Z"
+  },
+  {
+   "chunk": 2,
+   "rows": 84,
+   "prefill": 168,
+   "spawn_rows": 88704,
+   "pass_s": 92.84081220626831,
+   "peak_GB": 11.61943769454956,
+   "mean_drop": 5.2410712242126465,
+   "r_sum_heads_vs_attn_layer": 0.3747898209939536,
+   "head_dla_sum_mean": 2.4121618270874023,
+   "candidates_not_routed_clean": 33,
+   "attn_row_sum_minmax": [
+    0.9996234774589539,
+    1.00037682056427
+   ],
+   "utc": "2026-10-11T16:49:41Z"
+  }
+ ]
+}

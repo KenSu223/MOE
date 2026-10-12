@@ -1,0 +1,17 @@
+2026-10-11T03:10:59Z START ext13-f1full-mixtral_bos (waited 0s): python scripts/ext13_scan.py mixtral_bos --formats F1 --f1-sample 0
+03:11:08 F1: 5070 pairs, 30420 rows, 6 passes
+03:11:18   layer   0: load-wait 7.59s compute 2.58s  wf_rows=0
+03:11:41   layer   8: load-wait 1.01s compute 1.88s  wf_rows=0
+03:12:04   layer  16: load-wait 1.01s compute 1.88s  wf_rows=0
+03:12:27   layer  24: load-wait 1.00s compute 1.89s  wf_rows=0
+03:12:47   layer  31: load-wait 1.01s compute 1.89s  wf_rows=0
+03:12:47   pass done: 8442 prefill rows (T=16), 0 spawn rows, 99.1s
+03:12:47   pass 1/6 done (99s)
+[W1011 03:12:50.633779263 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2294284288 bytes (free: 1635188736, total: 23686938624).
+03:14:16   pass 2/6 done (88s)
+03:15:39   pass 3/6 done (83s)
+03:16:57   pass 4/6 done (78s)
+03:18:15   pass 5/6 done (77s)
+03:19:33   pass 6/6 done (79s)
+03:19:35 F1 {"pairs": 5070, "main": 4883, "correct_both": 1394, "margin": 446, "margin_main": 443, "margin_main_names": 27, "margin_main_objects": 416, "margin_connective": 3, "margin_main_associative": 0, "margin_main_half": 13, "margin_main_hard": 430, "balanced": 443, "balanced_names": 27, "balanced_objects": 416, "hard": 430, "margin_main_top1_both": 233, "mean_drop_margin_main": 4.5550225733634315, "probe_drop_over_drop_margin_main": 0.025428978504615004, "n_passes": 6}
+2026-10-11T03:19:43Z END   ext13-f1full-mixtral_bos rc=0 (524s)

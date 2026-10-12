@@ -1,0 +1,8 @@
+**Association probes v1 / v2 on the margin pairs of the valid attribute → entity formats (trigger probes of both twins; pre-registered rule: a probe responds if ≥ 10 % reach |probe| ≥ 1)**
+
+| Model | Probe | Margin pairs (unique twins) | Share |probe| ≥ 1 | Names | Objects | F1 / F2E / F2R | SD | Responds (≥ 0.10) | Templates (random names): share |probe| ≥ 1 |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | v1 | 1569 | 0.230 | 0.131 | 0.291 | 0.235 / 0.218 / 0.174 | 0.98 | yes | 0.072 |
+| Qwen3-30B-A3B-Base | v2 | 1569 | 0.227 | 0.136 | 0.283 | 0.232 / 0.248 / 0.140 | 0.94 | yes | 0.093 |
+| Mixtral-8x7B, BOS | v1 | 493 | 0.020 | 0.011 | 0.021 | 0.019 / 0.034 / 0.000 | 0.41 | no | 0.008 |
+| Mixtral-8x7B, BOS | v2 | 493 | 0.373 | 0.109 | 0.400 | 0.386 / 0.349 / 0.075 | 1.22 | yes | 0.056 |

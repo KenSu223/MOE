@@ -1,0 +1,16 @@
+| Contrast | Model | A − B | shared clusters (A / B) | r(20): A vs B: diff [95% CI] | r(10) | heads among first 10 |
+|---|---|---|---|---|---|---|
+| direction on identical twins: attribute→entity (F1) − entity→attribute (option swap) | Qwen3-30B-A3B-Base | dir_f1 − dir_opt | 90 (90 / 90) | 0.87 vs 0.90: -0.03 [-0.08, +0.01] | 0.77 vs 0.77: +0.00 [-0.04, +0.04] | 8.19 vs 3.63: +4.56 [+4.20, +4.92] |
+| direction on identical twins: attribute→entity (F1) − entity→attribute (option swap) | Mixtral-8x7B (BOS) | dir_f1 − dir_opt | 94 (94 / 94) | 1.03 vs 0.90: +0.13 [+0.10, +0.17] | 0.88 vs 0.74: +0.14 [+0.11, +0.16] | 5.87 vs 2.59: +3.28 [+2.82, +3.72] |
+| direction on the verb templates, original verb (a→e − e→a) | Qwen3-30B-A3B-Base | vt_a2e_orig − vt_e2a_orig | 2 (5 / 17) | 1.03 vs 0.96 (unpaired) | 0.92 vs 0.83 (unpaired) | 8.47 vs 3.65 (unpaired) |
+| copy availability on the templates, original verb (C2 − C1) | Qwen3-30B-A3B-Base | cp_vt_orig − vt_e2a_orig | 9 (13 / 17) | 0.95 vs 0.92: +0.03 [-0.05, +0.12] | 0.82 vs 0.79: +0.02 [-0.06, +0.10] | 4.50 vs 3.71: +0.79 [+0.15, +1.44] |
+| copy availability on the templates, original verb (C2 − C1) | Mixtral-8x7B (BOS) | cp_vt_orig − vt_e2a_orig | 9 (10 / 18) | 0.94 vs 0.96: -0.02 [-0.05, +0.02] | 0.81 vs 0.83: -0.02 [-0.05, +0.02] | 3.87 vs 4.08: -0.21 [-0.86, +0.45] |
+| copy availability on the templates, neutral verb (C2 − C1) | Qwen3-30B-A3B-Base | cp_vt_neu − vt_e2a_neu | 4 (8 / 12) | 0.93 vs 0.92 (unpaired) | 0.79 vs 0.80 (unpaired) | 4.68 vs 3.56 (unpaired) |
+| copy availability on the templates, neutral verb (C2 − C1) | Mixtral-8x7B (BOS) | cp_vt_neu − vt_e2a_neu | 6 (8 / 12) | 0.89 vs 0.89 (unpaired) | 0.74 vs 0.76 (unpaired) | 4.28 vs 3.94 (unpaired) |
+| copy availability on natural pairs (C2 − Phase-3 option swap C1) | Qwen3-30B-A3B-Base | cp_nat − P3wino | 70 (70 / 128) | 0.87 vs 0.95: -0.08 [-0.12, -0.03] | 0.77 vs 0.81: -0.04 [-0.08, -0.00] | 4.34 vs 3.53: +0.81 [+0.51, +1.11] |
+| copy availability on natural pairs (C2 − Phase-3 option swap C1) | Mixtral-8x7B (BOS) | cp_nat − P3wino | 102 (102 / 128) | 0.93 vs 0.94: -0.02 [-0.03, -0.00] | 0.79 vs 0.81: -0.02 [-0.03, -0.01] | 2.89 vs 2.71: +0.19 [-0.00, +0.38] |
+| direction with copy fixed, original verb (C3 − C2) | Qwen3-30B-A3B-Base | vt_a2e_orig − cp_vt_orig | 4 (5 / 13) | 1.03 vs 0.94 (unpaired) | 0.92 vs 0.79 (unpaired) | 8.47 vs 4.64 (unpaired) |
+| direction with copy fixed on natural pairs (C3 − C2) | Qwen3-30B-A3B-Base | dir_f1 − cp_nat | 10 (90 / 70) | 0.85 vs 0.88: -0.03 [-0.11, +0.04] | 0.76 vs 0.78: -0.03 [-0.07, +0.03] | 7.40 vs 4.33: +3.08 [+1.62, +4.45] |
+| direction with copy fixed on natural pairs (C3 − C2) | Mixtral-8x7B (BOS) | dir_f1 − cp_nat | 5 (94 / 102) | 1.00 vs 0.92 (unpaired) | 0.86 vs 0.78 (unpaired) | 5.87 vs 2.89 (unpaired) |
+| F1 attribute→entity vs Phase-3 option swap (shared twins only) | Qwen3-30B-A3B-Base | f1 − P3wino | 2 (128 / 128) | 0.97 vs 0.93 (unpaired) | 0.88 vs 0.80 (unpaired) | 8.11 vs 3.61 (unpaired) |
+| F1 attribute→entity vs Phase-3 option swap (shared twins only) | Mixtral-8x7B (BOS) | f1 − P3wino | 3 (101 / 128) | 1.03 vs 0.94 (unpaired) | 0.87 vs 0.80 (unpaired) | 6.44 vs 2.81 (unpaired) |

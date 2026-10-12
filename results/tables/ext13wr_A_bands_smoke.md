@@ -1,0 +1,5 @@
+**Summed single-expert writes by depth band (all cases): T / drop, D / drop, direct share D/T; routing match = share of p5-data's clean-active (case, expert) pairs also routed in the writer pass**
+
+| model | condition | routing match | first half: T / D / share | L/2..L-9: T / D / share | L-8..L-5: T / D / share | last 4: T / D / share | r(D, T) all |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | f1pre | 0.9697 | -0.346 / +0.001 / -0.0 | +0.528 / +0.055 / 0.1 | +0.210 / +0.385 / 1.83 | -0.466 / -0.442 / 0.95 | 0.493 |

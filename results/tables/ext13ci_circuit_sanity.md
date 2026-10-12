@@ -1,0 +1,21 @@
+| Run | rows / units | all heads (= 1) | all attention | all MoE | all heads: max |Δ − Δ_clean| | layer heads vs attn_layer: median / max |ΔΔ|, r | passes | complete |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 attr→entity | 256 / 128 | 1.001 | 1.000 | 0.243 [0.184, 0.299] | 0.500 | 0.125 / 0.875, 0.9898 | 19 | yes |
+| Mixtral-8x7B (BOS), F1 attr→entity | 202 / 101 | 1.002 | 1.001 | 0.227 [0.134, 0.318] | 0.250 | 0.000 / 0.500, 0.9980 | 19 | yes |
+| Qwen3-30B-A3B-Base, dir: F1 on Phase-3 pairs | 180 / 90 | 0.998 | 1.002 | 0.109 [0.045, 0.170] | 0.500 | 0.125 / 0.875, 0.9958 | 19 | yes |
+| Mixtral-8x7B (BOS), dir: F1 on Phase-3 pairs | 188 / 94 | 1.003 | 1.002 | 0.408 [0.355, 0.457] | 0.500 | 0.000 / 0.500, 0.9982 | 19 | yes |
+| Qwen3-30B-A3B-Base, dir: option swap on the same pairs | 180 / 90 | 0.994 | 0.999 | 0.812 [0.795, 0.829] | 3.500 | 0.125 / 1.375, 0.9955 | 19 | yes |
+| Mixtral-8x7B (BOS), dir: option swap on the same pairs | 188 / 94 | 1.002 | 1.001 | 0.756 [0.732, 0.778] | 0.250 | 0.000 / 0.375, 0.9991 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, natural Phase-3 pairs | 280 / 70 | 0.999 | 0.995 | 0.786 [0.760, 0.812] | 1.375 | 0.125 / 0.875, 0.9934 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, natural Phase-3 pairs | 408 / 102 | 0.999 | 0.999 | 0.732 [0.701, 0.760] | 0.250 | 0.000 / 0.250, 0.9984 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, templates orig | 256 / 13 | 0.995 | 0.998 | 0.703 [0.582, 0.804] | 4.000 | 0.125 / 0.875, 0.9967 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, templates orig | 256 / 10 | 1.000 | 0.999 | 0.545 [0.380, 0.679] | 0.500 | 0.000 / 0.250, 0.9989 | 19 | yes |
+| Qwen3-30B-A3B-Base, copy prefix, templates neutral | 256 / 8 | 1.000 | 0.990 | 0.739 [0.621, 0.831] | 4.125 | 0.125 / 0.750, 0.9983 | 19 | yes |
+| Mixtral-8x7B (BOS), copy prefix, templates neutral | 256 / 8 | 0.999 | 1.000 | 0.463 [0.376, 0.630] | 0.125 | 0.000 / 0.250, 0.9990 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates e→a, orig verb | 256 / 17 | 0.982 | 0.988 | 0.823 [0.786, 0.863] | 4.250 | 0.125 / 1.000, 0.9978 | 19 | yes |
+| Mixtral-8x7B (BOS), verb templates e→a, orig verb | 256 / 18 | 1.000 | 1.000 | 0.677 [0.576, 0.758] | 0.250 | 0.000 / 0.375, 0.9996 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates e→a, neutral verb | 256 / 12 | 0.984 | 0.989 | 0.813 [0.762, 0.863] | 2.250 | 0.000 / 0.875, 0.9977 | 19 | yes |
+| Mixtral-8x7B (BOS), verb templates e→a, neutral verb | 256 / 12 | 0.998 | 1.000 | 0.623 [0.475, 0.745] | 0.375 | 0.000 / 0.375, 0.9992 | 19 | yes |
+| Qwen3-30B-A3B-Base, verb templates a→e, orig verb | 74 / 5 | 1.014 | 1.015 | 0.211 [0.189, 0.486] | 0.500 | 0.125 / 0.500, 0.9876 | 19 | yes |
+| Qwen3-30B-A3B-Base, F2E natural, blank at end | 64 / 32 | 1.011 | 1.000 | 0.227 [0.054, 0.380] | 4.375 | 0.125 / 1.875, 0.9964 | 19 | yes |
+| Mixtral-8x7B (BOS), F2E natural, blank at end | 36 / 18 | 0.999 | 1.000 | -0.056 [-0.328, 0.193] | 0.125 | 0.000 / 0.250, 0.9991 | 19 | yes |

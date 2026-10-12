@@ -1,0 +1,17 @@
+2026-10-11T06:45:42Z START ext13-p5-probes-mixtral_bos (waited 233s): python scripts/ext13_p5_scan.py mixtral_bos --part probes
+06:45:50 probes: 40688 rows, 7566 keys
+06:46:00   layer   0: load-wait 7.01s compute 2.72s  wf_rows=0
+06:46:22   layer   8: load-wait 0.82s compute 1.96s  wf_rows=0
+06:46:46   layer  16: load-wait 1.10s compute 1.96s  wf_rows=0
+06:47:09   layer  24: load-wait 1.01s compute 1.96s  wf_rows=0
+06:47:29   layer  31: load-wait 1.07s compute 1.96s  wf_rows=0
+06:47:29   pass done: 9333 prefill rows (T=15), 0 spawn rows, 98.8s
+06:47:29   pass 1/7 (9333 rows, 99s)
+06:49:03   pass 2/7 (6666 rows, 94s)
+06:50:37   pass 3/7 (6363 rows, 94s)
+06:52:11   pass 4/7 (6086 rows, 94s)
+06:53:45   pass 5/7 (5600 rows, 94s)
+06:55:19   pass 6/7 (5384 rows, 93s)
+06:56:51   pass 7/7 (1256 rows, 92s)
+06:56:52 probe values written {'v1_a': {'count': 7566.0, 'mean': 0.015, 'std': 0.358, 'min': -2.438, '25%': -0.188, '50%': 0.0, '75%': 0.25, 'max': 2.438}, 'v1_b': {'count': 7566.0, 'mean': -0.003, 'std': 0.363, 'min': -1.688, '25%': -0.25, '50%': 0.0, '75%': 0.25, 'max': 2.062}, 'v2_a': {'count': 7566.0, 'mean': 0.044, 'std': 0.862, 'min': -5.25, '25%': -0.375, '50%': 0.0, '75%': 0.438, 'max': 5.188}, 'v2_b': {'count': 7566.0, 'mean': -0.04, 'std': 0.877, 'min': -6.25, '25%': -0.438, '50%': 0.0, '75%': 0.375, 'max': 4.938}}
+2026-10-11T06:56:59Z END   ext13-p5-probes-mixtral_bos rc=0 (677s)

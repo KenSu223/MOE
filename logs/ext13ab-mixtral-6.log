@@ -1,0 +1,14 @@
+2026-10-11T13:26:21Z START ext13ab-mixtral-6 (waited 1416s): python scripts/ext13ab_run.py mixtral --tasks dir_opt_mixtral_bos --max-passes 13 --budget 50000 --max-tasks 2
+13:26:28 dir_opt_mixtral_bos: 376 cases, 376 rows (188 validation), K=64; passes done 13, queue 3950/3950, greedy left 188
+13:26:29 pass 0: tasks ['dir_opt_mixtral_bos'], 376 prefill rows (T max 32), 9400 spawn rows (adaptive [9400], static groups [0])
+13:26:38   layer   0: load-wait 7.83s compute 0.76s  wf_rows=472
+13:27:01   layer   8: load-wait 2.65s compute 0.25s  wf_rows=4120
+13:27:24   layer  16: load-wait 2.39s compute 0.36s  wf_rows=9224
+13:27:47   layer  24: load-wait 2.52s compute 0.37s  wf_rows=9400
+13:28:07   layer  31: load-wait 2.36s compute 0.35s  wf_rows=9400
+13:28:08   pass done: 376 prefill rows (T=32), 9400 spawn rows, 98.0s (metrics 0.1s)
+13:28:08 dir_opt_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.98); queue 3950/3950
+13:28:08 dir_opt_mixtral_bos: ALL PASSES COMPLETE
+13:28:08 group pass 0 done in 98s, peak 9.0 GB
+13:28:08 nothing left to run
+2026-10-11T13:28:15Z END   ext13ab-mixtral-6 rc=0 (114s)

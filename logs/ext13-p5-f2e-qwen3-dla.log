@@ -1,0 +1,13 @@
+2026-10-12T03:13:55Z START ext13-p5-f2e-qwen3-dla (waited 733s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/wino_ref/pairs_p5_f2e_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_f2e_qwen3.json --out p5_f2e_qwen3 --agent p5-data --families main --chunk 512
+03:13:56 qwen3 -> p5_f2e_qwen3: 128 directed cases, families ['main'], 1 prefill-only passes
+03:14:03   layer   0: load-wait 3.49s compute 0.63s  wf_rows=0
+03:14:09   layer   8: load-wait 0.88s compute 0.05s  wf_rows=0
+03:14:18   layer  16: load-wait 0.89s compute 0.06s  wf_rows=0
+03:14:25   layer  24: load-wait 1.00s compute 0.06s  wf_rows=0
+03:14:35   layer  32: load-wait 1.21s compute 0.07s  wf_rows=0
+03:14:46   layer  40: load-wait 1.57s compute 0.07s  wf_rows=0
+03:14:53   layer  47: load-wait 0.96s compute 0.05s  wf_rows=0
+03:14:53   pass done: 256 prefill rows (T=30), 0 spawn rows, 53.6s
+03:14:54 pass 1/1: 54s; DLA total - drop: max |.| 0.189
+03:14:54 direct effect / drop: attention +1.019, MoE -0.021, embedding -0.000
+2026-10-12T03:15:00Z END   ext13-p5-f2e-qwen3-dla rc=0 (65s)

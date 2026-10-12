@@ -1,0 +1,6 @@
+**dir_opt W4 DLA: direct logit attribution of the final-position sublayer outputs (main family)**
+
+| Model | DLA attention / drop | DLA MoE / drop | Attention share of DLA | Top attention layers | Top MoE layers |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 0.053 [0.027, 0.078] | 0.947 [0.922, 0.973] | 0.05 [0.03, 0.08] | L42 +0.028, L38 +0.016, L43 +0.015 | L43 +0.227, L41 +0.194, L44 +0.166 |
+| Mixtral-8x7B, BOS | 0.308 [0.293, 0.324] | 0.691 [0.676, 0.706] | 0.31 [0.29, 0.32] | L25 +0.089, L31 +0.050, L29 +0.028 | L22 +0.187, L26 +0.177, L20 +0.107 |

@@ -1,0 +1,3 @@
+| Run | rows / units | all heads (= 1) | all attention | all MoE | all heads: max |Δ − Δ_clean| | layer heads vs attn_layer: median / max |ΔΔ|, r | passes | complete |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base, F1 pre-neutral (smoke) | 6 / 3 | 1.017 | 1.000 | -0.040 [-0.341, 0.500] | 0.250 | 0.125 / 0.500, 0.9929 | 2 | no |

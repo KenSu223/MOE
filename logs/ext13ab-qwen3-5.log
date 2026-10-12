@@ -1,0 +1,69 @@
+2026-10-11T17:26:20Z START ext13ab-qwen3-5 (waited 3339s): python scripts/ext13ab_run.py qwen3 --tasks cp_vt_neu_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+17:26:28 cp_vt_neu_qwen3: initialised {'eval_rows': 256, 'noise_rows': 128, 'pool': 32, 'queue_groups': 4482, 'queue_items': 135424}
+17:26:29 cp_vt_neu_qwen3: 512 cases, 512 rows (256 validation), K=384; passes done 0, queue 0/4482, greedy left 256
+17:26:32 pass 0: tasks ['cp_vt_neu_qwen3'], 1024 prefill rows (T max 28), 44980 spawn rows (adaptive [8192], static groups [2020])
+17:26:37   layer   0: load-wait 2.90s compute 0.79s  wf_rows=15782
+17:26:46   layer   8: load-wait 0.86s compute 0.40s  wf_rows=25652
+17:26:56   layer  16: load-wait 0.81s compute 0.44s  wf_rows=30332
+17:27:06   layer  24: load-wait 0.78s compute 0.47s  wf_rows=34477
+17:27:16   layer  32: load-wait 0.78s compute 0.49s  wf_rows=37091
+17:27:28   layer  40: load-wait 0.83s compute 0.52s  wf_rows=41310
+17:27:36   layer  47: load-wait 0.34s compute 0.53s  wf_rows=44980
+17:27:37   pass done: 1024 prefill rows (T=28), 44980 spawn rows, 63.7s (metrics 1.7s)
+17:27:44 cp_vt_neu_qwen3 first pass: ceilings for 512 rows (mean all-MoE rescue +3.701); DLA rows 196608 (3167 candidate pairs not routed in this pass's clean run)
+17:27:44 cp_vt_neu_qwen3 pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 0.42); queue 2020/4994
+17:27:44 group pass 0 done in 64s, peak 9.1 GB
+17:27:47 pass 1: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 44876 spawn rows (adaptive [7680], static groups [1092])
+17:28:47 cp_vt_neu_qwen3 pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 0.52); queue 3112/4994
+17:28:47 group pass 1 done in 58s, peak 8.2 GB
+17:28:50 pass 2: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 44987 spawn rows (adaptive [7424], static groups [233])
+17:29:51 cp_vt_neu_qwen3: noise_oracle groups added for 128 rows
+17:29:51 cp_vt_neu_qwen3 pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 0.62); queue 3345/5122
+17:29:51 group pass 2 done in 57s, peak 7.6 GB
+17:29:54 pass 3: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 44485 spawn rows (adaptive [7168], static groups [1777])
+17:30:51 cp_vt_neu_qwen3 pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 0.69); queue 5122/5122
+17:30:51 group pass 3 done in 56s, peak 9.0 GB
+17:30:52 pass 4: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 6912 spawn rows (adaptive [6912], static groups [0])
+[W1011 17:31:28.693896969 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1451229184 bytes (free: 1442250752, total: 23686938624).
+17:31:47 cp_vt_neu_qwen3 pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 0.72); queue 5122/5122
+17:31:47 group pass 4 done in 54s, peak 5.7 GB
+17:31:47 pass 5: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 6656 spawn rows (adaptive [6656], static groups [0])
+[W1011 17:32:23.423547240 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1440743424 bytes (free: 326565888, total: 23686938624).
+17:32:42 cp_vt_neu_qwen3 pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 0.78); queue 5122/5122
+17:32:42 group pass 5 done in 54s, peak 5.6 GB
+17:32:43 pass 6: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 6400 spawn rows (adaptive [6400], static groups [0])
+[W1011 17:33:17.982537071 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1392508928 bytes (free: 892796928, total: 23686938624).
+17:33:37 cp_vt_neu_qwen3 pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 0.81); queue 5122/5122
+17:33:37 group pass 6 done in 53s, peak 5.5 GB
+17:33:37 pass 7: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 6144 spawn rows (adaptive [6144], static groups [0])
+[W1011 17:34:08.873356003 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1361051648 bytes (free: 1222049792, total: 23686938624).
+[W1011 17:34:21.669149363 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1459617792 bytes (free: 1308033024, total: 23686938624).
+17:34:27 cp_vt_neu_qwen3 pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 0.83); queue 5122/5122
+17:34:27 group pass 7 done in 50s, peak 5.4 GB
+17:34:28 pass 8: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 5888 spawn rows (adaptive [5888], static groups [0])
+[W1011 17:34:59.765116196 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 293011456, total: 23686938624).
+17:35:18 cp_vt_neu_qwen3 pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 0.86); queue 5122/5122
+17:35:18 group pass 8 done in 49s, peak 5.3 GB
+17:35:18 pass 9: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 5632 spawn rows (adaptive [5632], static groups [0])
+[W1011 17:35:48.052596839 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1287651328 bytes (free: 519503872, total: 23686938624).
+17:36:07 cp_vt_neu_qwen3 pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 0.87); queue 5122/5122
+17:36:07 group pass 9 done in 48s, peak 5.2 GB
+17:36:07 pass 10: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 5376 spawn rows (adaptive [5376], static groups [0])
+[W1011 17:36:41.166389386 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1237319680 bytes (free: 242679808, total: 23686938624).
+17:37:00 cp_vt_neu_qwen3 pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 0.89); queue 5122/5122
+17:37:00 group pass 10 done in 52s, peak 5.1 GB
+17:37:00 pass 11: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 5120 spawn rows (adaptive [5120], static groups [0])
+[W1011 17:37:32.730326337 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1186988032 bytes (free: 993460224, total: 23686938624).
+17:37:50 cp_vt_neu_qwen3 pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 0.91); queue 5122/5122
+17:37:50 group pass 11 done in 49s, peak 5.0 GB
+17:37:50 pass 12: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 4864 spawn rows (adaptive [4864], static groups [0])
+[W1011 17:38:25.759978619 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1138753536 bytes (free: 263651328, total: 23686938624).
+17:38:41 cp_vt_neu_qwen3 pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 0.92); queue 5122/5122
+17:38:41 group pass 12 done in 50s, peak 4.9 GB
+17:38:41 pass 13: tasks ['cp_vt_neu_qwen3'], 512 prefill rows (T max 28), 4608 spawn rows (adaptive [4608], static groups [0])
+[W1011 17:39:13.881373231 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1086324736 bytes (free: 817299456, total: 23686938624).
+17:39:30 cp_vt_neu_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.93); queue 5122/5122
+17:39:30 cp_vt_neu_qwen3: ALL PASSES COMPLETE
+17:39:30 group pass 13 done in 48s, peak 4.8 GB
+17:39:30 nothing left to run
+2026-10-11T17:39:37Z END   ext13ab-qwen3-5 rc=0 (797s)

@@ -1,0 +1,16 @@
+model,condition,expert,vectors,n,median rank of r (of V),r in top-10 / top-100 (%),median rank in own class (size),z attr_own,z ent_own,z wg_trigger,z names,z cf_any,top-50 attr / ent (%),most promoted
+Qwen3-30B-A3B-Base,f1pre,L37E032,delta,32,85292,0 / 0,18 (32),+0.00,-0.00,+0.00,-0.00,-0.00,0.0 / 0.0,'��' 9%; 'hti' 6%; '的机会' 6%; 'chart' 6%; ' nextPage' 6%; '抵' 6%
+Qwen3-30B-A3B-Base,f1pre,L37E032,clean,32,62147,0 / 0,15 (32),-0.61,-0.06,-0.39,-0.17,+0.09,0.0 / 0.0,'或者其他' 47%; 'escaped' 28%; '/Branch' 25%; ' searchData' 25%; '也需要' 25%; 'IService' 22%
+Qwen3-30B-A3B-Base,f1pre,L37E107,delta,8,90140,0 / 0,18 (32),-0.00,-0.00,-0.00,+0.00,-0.00,0.0 / 0.0,'abouts' 12%; '糊' 12%; 'ufacturer' 12%; '|{\n' 12%; '��' 12%; '折' 12%
+Qwen3-30B-A3B-Base,f1pre,L39E004,delta,20,50969,0 / 0,10 (32),-0.00,+0.01,+0.01,+0.01,+0.07,0.0 / 0.0,'保驾' 10%; ' superhero' 10%; '时常' 10%; '把这些' 10%; ' hel' 5%; ' helm' 5%
+Qwen3-30B-A3B-Base,f1pre,L39E103,delta,8,69828,0 / 0,16 (32),+0.00,+0.00,-0.00,+0.00,+0.00,0.0 / 0.0,' one' 12%; ' solitary' 12%; ' only' 12%; ' constructs' 12%; 'one' 12%; ' одного' 12%
+Qwen3-30B-A3B-Base,f1pre,L42E115,delta,7,16025,14 / 14,7 (32),-0.15,+0.02,-0.03,-0.02,-0.16,0.0 / 0.3,' Werner' 14%; 'unal' 14%; ' Holland' 14%; '荷兰' 14%; '葡萄牙' 14%; '届时' 14%
+Qwen3-30B-A3B-Base,f1pre,L42E115,clean,7,20778,14 / 14,11 (32),-0.22,+0.01,-0.00,-0.43,-0.64,0.0 / 0.3,' unravel' 29%; '重要因素' 29%; ' disadv' 29%; ' Werner' 14%; 'unal' 14%; ' Holland' 14%
+Qwen3-30B-A3B-Base,f1pre,L43E036,delta,24,26964,4 / 8,7 (32),-0.03,+0.03,+0.00,-0.02,+0.00,0.1 / 0.4,'city' 8%; ' winter' 8%; ' summer' 8%; ' winters' 8%; 'BufferData' 4%; 'Cities' 4%
+Qwen3-30B-A3B-Base,f1pre,L43E070,delta,8,32023,25 / 38,7 (32),+0.00,+0.00,+0.00,+0.00,+0.00,0.0 / 0.7,'��' 25%; ' meat' 12%; ' meats' 12%; ' pizzas' 12%; ' baker' 12%; ' Meat' 12%
+Qwen3-30B-A3B-Base,f1pre,L43E087,delta,24,52281,4 / 8,10 (32),-0.00,-0.00,-0.00,+0.00,+0.00,0.0 / 0.3,' selection' 17%; 'selection' 17%; '-selection' 17%; 'Selection' 17%; ' selections' 17%; ' fine' 12%
+Qwen3-30B-A3B-Base,f1pre,L43E114,delta,14,14280,7 / 7,2 (32),+0.00,+0.00,+0.00,-0.00,+0.00,0.3 / 0.1,' opening' 14%; ' Opening' 14%; 'opening' 14%; 'Opening' 14%; '开口' 14%; ' weight' 14%
+Qwen3-30B-A3B-Base,f1pre,L44E022,delta,21,47125,0 / 5,11 (32),+0.01,-0.02,+0.00,+0.02,-0.00,0.0 / 0.3,' cloak' 10%; 'cloak' 10%; ' aisle' 10%; ' home' 10%; ' observation' 5%; '观察' 5%
+Qwen3-30B-A3B-Base,f1pre,L44E069,delta,5,75221,0 / 0,19 (32),+0.01,-0.04,+0.03,-0.09,+0.06,0.0 / 0.4,' Manila' 20%; '苏州' 20%; ' Lisbon' 20%; '杭州' 20%; ' Madrid' 20%; ' Denver' 20%
+Qwen3-30B-A3B-Base,f1pre,L44E069,clean,5,75221,0 / 0,15 (32),-0.11,-0.08,+0.04,+0.05,-0.22,0.0 / 0.4,' Panama' 40%; ' Nicar' 40%; ' Barb' 40%; 'Pu' 20%; ' Pu' 20%; ' Puerto' 20%
+Qwen3-30B-A3B-Base,f1pre,L44E116,delta,22,13392,14 / 14,8 (32),+0.00,+0.00,+0.00,+0.00,+0.00,0.2 / 0.4,' ice' 9%; ' onion' 9%; ' fruit' 9%; ' hard' 9%; '材料' 4%; 'Materials' 4%

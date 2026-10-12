@@ -1,0 +1,12 @@
+2026-10-11T03:35:35Z START ext13-verbs-a2e-mixtral_bos (waited 187s): python scripts/ext13_scan.py mixtral_bos --verbs --verb-dirs attr2ent
+03:35:42 verbs attr2ent: 1872 pairs, 3744 rows, 2 passes
+03:35:51   layer   0: load-wait 5.99s compute 2.45s  wf_rows=0
+03:36:13   layer   8: load-wait 0.45s compute 1.95s  wf_rows=0
+03:36:33   layer  16: load-wait 0.82s compute 1.95s  wf_rows=0
+03:36:52   layer  24: load-wait 0.28s compute 1.94s  wf_rows=0
+03:37:09   layer  31: load-wait 0.74s compute 1.94s  wf_rows=0
+03:37:09   pass done: 3552 prefill rows (T=39), 0 spawn rows, 86.2s
+03:37:09   pass 1/2 done (86s)
+03:38:24   pass 2/2 done (75s)
+03:38:24 attr2ent {"neutral": {"pairs": 624, "correct_both": 197, "margin": 26, "mean_drop": 1.0380608974358974, "median_drop": 1.125, "seeds_with_margin": 4}, "orig": {"pairs": 624, "correct_both": 225, "margin": 8, "mean_drop": 1.1340144230769231, "median_drop": 1.0, "seeds_with_margin": 4}, "unrelated": {"pairs": 624, "correct_both": 79, "margin": 2, "mean_drop": 0.6135817307692307, "median_drop": 0.5, "seeds_with_margin": 1}}
+2026-10-11T03:38:32Z END   ext13-verbs-a2e-mixtral_bos rc=0 (177s)

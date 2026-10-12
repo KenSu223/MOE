@@ -1,0 +1,219 @@
+08:48:08 f1: plan main written: 43 conditions, 3 passes, 8080 rows
+08:48:08 exit: 0 passes run, 2s, out_of_time=False
+2026-10-11T08:49:03Z START ext13ko-mixtral_bos (waited 54s): python scripts/ext13ko_run.py mixtral_bos --conds f1 --with-wr --time-budget 1320
+08:49:05 f1/mixtral_bos main: 3 of 3 passes to run
+08:49:16   layer   0: load-wait 7.81s compute 1.85s  wf_rows=0
+08:49:39   layer   8: load-wait 1.60s compute 1.29s  wf_rows=0
+08:50:02   layer  16: load-wait 1.60s compute 1.29s  wf_rows=0
+08:50:25   layer  24: load-wait 1.60s compute 1.29s  wf_rows=0
+08:50:45   layer  31: load-wait 1.64s compute 1.29s  wf_rows=0
+08:50:46   pass done: 2020 prefill rows (T=45), 0 spawn rows, 99.1s (metrics 0.1s)
+08:50:46 f1 pass full_p000: 2020 rows, T=45, padded 90900, 99.4s, peak 10.2 GB
+08:52:21 f1 pass ctl_p000: 3496 rows, T=33, padded 115368, 93.3s, peak 11.8 GB
+08:53:56 f1 pass ctl_p001: 2564 rows, T=45, padded 115380, 93.7s, peak 12.1 GB
+08:53:56 f1/mixtral_bos main complete
+08:53:59 f1/mixtral_bos writer pass: 404 prompts, T <= 47, layers [15, 17, 18, 19, 20, 21, 24]
+08:55:31 f1 writer pass done in 91s, peak 6.5 GB
+08:55:44 f1 writer projections: 7706 vectors
+08:55:44 exit: 3 passes run, 398s, out_of_time=False
+2026-10-11T08:55:50Z END   ext13ko-mixtral_bos rc=0 (407s)
+10:44:23 dir_f1: plan main written: 43 conditions, 3 passes, 7520 rows
+10:44:23 exit: 0 passes run, 1s, out_of_time=False
+2026-10-11T10:49:09Z START ext13ko-mixtral_bos (waited 285s): python scripts/ext13ko_run.py mixtral_bos --conds dir_f1 --with-wr --time-budget 1320
+10:49:15 dir_f1/mixtral_bos main: 3 of 3 passes to run
+10:49:25   layer   0: load-wait 6.91s compute 1.74s  wf_rows=0
+10:49:47   layer   8: load-wait 1.69s compute 1.17s  wf_rows=0
+10:50:11   layer  16: load-wait 1.72s compute 1.17s  wf_rows=0
+10:50:34   layer  24: load-wait 1.73s compute 1.17s  wf_rows=0
+10:50:54   layer  31: load-wait 1.73s compute 1.17s  wf_rows=0
+10:50:54   pass done: 1880 prefill rows (T=44), 0 spawn rows, 97.8s (metrics 0.1s)
+10:50:57 dir_f1 pass full_p000: 1880 rows, T=44, padded 82720, 98.1s, peak 9.6 GB
+10:52:29 dir_f1 pass ctl_p000: 3272 rows, T=32, padded 104704, 90.6s, peak 11.0 GB
+10:53:54 dir_f1 pass ctl_p001: 2368 rows, T=44, padded 104192, 83.8s, peak 11.2 GB
+10:53:54 dir_f1/mixtral_bos main complete
+10:53:55 dir_f1/mixtral_bos writer pass: 376 prompts, T <= 44, layers [15, 16, 17, 18, 19, 20, 21, 23, 24]
+10:55:20 dir_f1 writer pass done in 85s, peak 6.4 GB
+10:55:33 dir_f1 writer projections: 7430 vectors
+10:55:33 exit: 3 passes run, 378s, out_of_time=False
+2026-10-11T10:55:40Z END   ext13ko-mixtral_bos rc=0 (391s)
+12:33:30 dir_opt: plan main written: 41 conditions, 3 passes, 6580 rows
+12:33:30 exit: 0 passes run, 2s, out_of_time=False
+2026-10-11T12:59:46Z START ext13ko-mixtral_bos (waited 1573s): python scripts/ext13ko_run.py mixtral_bos --conds dir_opt --with-wr --time-budget 1320
+12:59:53 dir_opt/mixtral_bos main: 3 of 3 passes to run
+13:00:02   layer   0: load-wait 6.29s compute 1.22s  wf_rows=0
+13:00:23   layer   8: load-wait 2.16s compute 0.68s  wf_rows=0
+13:00:46   layer  16: load-wait 1.91s compute 0.68s  wf_rows=0
+13:01:06   layer  24: load-wait 0.73s compute 0.69s  wf_rows=0
+13:01:26   layer  31: load-wait 2.20s compute 0.69s  wf_rows=0
+13:01:27   pass done: 1504 prefill rows (T=32), 0 spawn rows, 92.4s (metrics 0.1s)
+13:01:27 dir_opt pass full_p000: 1504 rows, T=32, padded 48128, 92.8s, peak 7.5 GB
+13:02:57 dir_opt pass ctl_p000: 3144 rows, T=20, padded 62880, 88.5s, peak 8.0 GB
+13:04:29 dir_opt pass ctl_p001: 1932 rows, T=32, padded 61824, 91.0s, peak 7.9 GB
+13:04:29 dir_opt/mixtral_bos main complete
+13:04:30 dir_opt/mixtral_bos writer pass: 376 prompts, T <= 32, layers [13, 16, 18, 19, 20, 21, 22, 24, 26]
+13:06:00 dir_opt writer pass done in 90s, peak 6.3 GB
+13:06:13 dir_opt writer projections: 6574 vectors
+13:06:13 exit: 3 passes run, 380s, out_of_time=False
+2026-10-11T13:06:20Z END   ext13ko-mixtral_bos rc=0 (394s)
+16:04:51 cp_vt_orig: plan main written: 49 conditions, 3 passes, 11008 rows
+16:04:51 exit: 0 passes run, 12s, out_of_time=False
+2026-10-11T16:37:50Z START ext13ko-mixtral_bos (waited 1976s): python scripts/ext13ko_run.py mixtral_bos --conds cp_vt_orig --with-wr --time-budget 1320
+16:37:52 cp_vt_orig/mixtral_bos main: 3 of 3 passes to run
+16:38:02   layer   0: load-wait 6.63s compute 1.61s  wf_rows=0
+16:38:24   layer   8: load-wait 1.83s compute 1.01s  wf_rows=0
+16:38:48   layer  16: load-wait 1.88s compute 1.01s  wf_rows=0
+16:39:11   layer  24: load-wait 1.88s compute 1.01s  wf_rows=0
+16:39:31   layer  31: load-wait 1.88s compute 1.01s  wf_rows=0
+16:39:31   pass done: 2304 prefill rows (T=31), 0 spawn rows, 97.6s (metrics 0.1s)
+16:39:31 cp_vt_orig pass full_p000: 2304 rows, T=31, padded 71424, 98.1s, peak 8.5 GB
+16:41:09 cp_vt_orig pass ctl_p000: 4753 rows, T=26, padded 123578, 94.0s, peak 12.5 GB
+16:42:45 cp_vt_orig pass ctl_p001: 3951 rows, T=31, padded 122481, 93.9s, peak 12.4 GB
+16:42:45 cp_vt_orig/mixtral_bos main complete
+16:42:48 cp_vt_orig/mixtral_bos writer pass: 512 prompts, T <= 32, layers [14, 17, 18, 19, 20, 21, 23]
+16:44:20 cp_vt_orig writer pass done in 91s, peak 6.4 GB
+16:44:33 cp_vt_orig writer projections: 7050 vectors
+16:44:33 exit: 3 passes run, 402s, out_of_time=False
+2026-10-11T16:44:40Z END   ext13ko-mixtral_bos rc=0 (410s)
+18:31:30 cp_vt_neu: plan main written: 50 conditions, 3 passes, 12032 rows
+18:31:30 exit: 0 passes run, 6s, out_of_time=False
+2026-10-11T19:03:20Z START ext13ko-mixtral_bos (waited 1907s): python scripts/ext13ko_run.py mixtral_bos --conds cp_vt_neu --with-wr --time-budget 1320
+19:03:26 cp_vt_neu/mixtral_bos main: 3 of 3 passes to run
+19:03:36   layer   0: load-wait 6.55s compute 1.59s  wf_rows=0
+19:03:58   layer   8: load-wait 1.93s compute 1.09s  wf_rows=0
+19:04:20   layer  16: load-wait 0.90s compute 1.09s  wf_rows=0
+19:04:37   layer  24: load-wait 1.00s compute 1.09s  wf_rows=0
+19:04:55   layer  31: load-wait 1.55s compute 1.09s  wf_rows=0
+19:04:55   pass done: 2560 prefill rows (T=30), 0 spawn rows, 87.6s (metrics 0.1s)
+19:04:58 cp_vt_neu pass full_p000: 2560 rows, T=30, padded 76800, 88.1s, peak 8.9 GB
+19:06:32 cp_vt_neu pass ctl_p000: 5002 rows, T=27, padded 135054, 91.5s, peak 13.3 GB
+19:08:08 cp_vt_neu pass ctl_p001: 4470 rows, T=30, padded 134100, 94.0s, peak 13.2 GB
+19:08:08 cp_vt_neu/mixtral_bos main complete
+19:08:10 cp_vt_neu/mixtral_bos writer pass: 512 prompts, T <= 30, layers [13, 14, 18, 19, 20, 21, 23]
+19:09:41 cp_vt_neu writer pass done in 91s, peak 6.4 GB
+19:09:54 cp_vt_neu writer projections: 6592 vectors
+19:09:54 exit: 3 passes run, 388s, out_of_time=False
+2026-10-11T19:10:01Z END   ext13ko-mixtral_bos rc=0 (401s)
+20:06:11 cp_nat: plan main written: 49 conditions, 7 passes, 26264 rows
+20:06:11 exit: 0 passes run, 6s, out_of_time=False
+2026-10-11T20:35:47Z START ext13ko-mixtral_bos (waited 1773s): python scripts/ext13ko_run.py mixtral_bos --conds cp_nat --with-wr --time-budget 1320
+20:35:54 cp_nat/mixtral_bos main: 7 of 7 passes to run
+20:36:05   layer   0: load-wait 7.06s compute 2.33s  wf_rows=0
+20:36:27   layer   8: load-wait 1.18s compute 1.66s  wf_rows=0
+20:36:50   layer  16: load-wait 1.21s compute 1.66s  wf_rows=0
+20:37:12   layer  24: load-wait 0.71s compute 1.66s  wf_rows=0
+20:37:31   layer  31: load-wait 1.25s compute 1.66s  wf_rows=0
+20:37:31   pass done: 4532 prefill rows (T=26), 0 spawn rows, 95.3s (metrics 0.1s)
+20:37:31 cp_nat pass full_p000: 4532 rows, T=26, padded 117832, 96.0s, peak 12.1 GB
+20:38:59 cp_nat pass full_p001: 4063 rows, T=29, padded 117827, 85.2s, peak 12.0 GB
+20:40:31 cp_nat pass full_p002: 2925 rows, T=40, padded 117000, 90.9s, peak 12.1 GB
+20:42:06 cp_nat pass ctl_p000: 4385 rows, T=25, padded 109625, 92.3s, peak 11.5 GB
+20:43:40 cp_nat pass ctl_p001: 4061 rows, T=27, padded 109647, 92.2s, peak 11.4 GB
+20:45:16 cp_nat pass ctl_p002: 3654 rows, T=30, padded 109620, 93.7s, peak 11.4 GB
+20:46:50 cp_nat pass ctl_p003: 2644 rows, T=40, padded 105760, 93.5s, peak 11.3 GB
+20:46:50 cp_nat/mixtral_bos main complete
+20:46:52 cp_nat/mixtral_bos writer pass: 1712 prompts, T <= 40, layers [16, 18, 19, 20, 21, 22, 24, 26]
+20:48:25 cp_nat writer pass done in 92s, peak 8.4 GB
+20:48:48 cp_nat writer projections: 28712 vectors
+20:48:48 exit: 7 passes run, 775s, out_of_time=False
+2026-10-11T20:48:55Z END   ext13ko-mixtral_bos rc=0 (788s)
+23:22:49 vt_e2a_orig: plan main written: 49 conditions, 3 passes, 11008 rows
+23:22:49 exit: 0 passes run, 7s, out_of_time=False
+2026-10-11T23:28:39Z START ext13ko-mixtral_bos (waited 347s): python scripts/ext13ko_run.py mixtral_bos --conds vt_e2a_orig --with-wr --time-budget 1320
+23:28:46 vt_e2a_orig/mixtral_bos main: 3 of 3 passes to run
+23:28:55   layer   0: load-wait 7.15s compute 1.39s  wf_rows=0
+23:29:18   layer   8: load-wait 2.17s compute 0.72s  wf_rows=0
+23:29:41   layer  16: load-wait 2.23s compute 0.72s  wf_rows=0
+23:30:04   layer  24: load-wait 2.26s compute 0.72s  wf_rows=0
+23:30:24   layer  31: load-wait 2.17s compute 0.72s  wf_rows=0
+23:30:25   pass done: 2304 prefill rows (T=22), 0 spawn rows, 97.7s (metrics 0.1s)
+23:30:25 vt_e2a_orig pass full_p000: 2304 rows, T=22, padded 50688, 98.0s, peak 7.6 GB
+23:32:01 vt_e2a_orig pass ctl_p000: 4691 rows, T=19, padded 89129, 93.5s, peak 10.0 GB
+23:33:36 vt_e2a_orig pass ctl_p001: 4013 rows, T=22, padded 88286, 93.7s, peak 9.9 GB
+23:33:36 vt_e2a_orig/mixtral_bos main complete
+23:33:38 vt_e2a_orig/mixtral_bos writer pass: 512 prompts, T <= 23, layers [14, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+23:35:10 vt_e2a_orig writer pass done in 92s, peak 6.3 GB
+23:35:24 vt_e2a_orig writer projections: 7976 vectors
+23:35:24 exit: 3 passes run, 399s, out_of_time=False
+2026-10-11T23:35:31Z END   ext13ko-mixtral_bos rc=0 (412s)
+01:07:58 vt_e2a_neu: plan main written: 49 conditions, 3 passes, 11008 rows
+01:07:58 exit: 0 passes run, 2s, out_of_time=False
+2026-10-12T01:07:59Z START ext13ko-mixtral_bos (waited 0s): python scripts/ext13ko_run.py mixtral_bos --conds vt_e2a_neu --with-wr --time-budget 1320
+01:08:01 vt_e2a_neu/mixtral_bos main: 3 of 3 passes to run
+01:08:09   layer   0: load-wait 6.24s compute 1.22s  wf_rows=0
+01:08:32   layer   8: load-wait 2.14s compute 0.75s  wf_rows=0
+01:08:55   layer  16: load-wait 1.88s compute 0.75s  wf_rows=0
+01:09:18   layer  24: load-wait 2.10s compute 0.75s  wf_rows=0
+01:09:39   layer  31: load-wait 2.50s compute 0.75s  wf_rows=0
+01:09:39   pass done: 2304 prefill rows (T=23), 0 spawn rows, 97.2s (metrics 0.1s)
+01:09:40 vt_e2a_neu pass full_p000: 2304 rows, T=23, padded 52992, 97.5s, peak 7.7 GB
+01:11:15 vt_e2a_neu pass ctl_p000: 4906 rows, T=18, padded 88308, 93.5s, peak 9.9 GB
+01:12:51 vt_e2a_neu pass ctl_p001: 3798 rows, T=23, padded 87354, 93.7s, peak 9.8 GB
+01:12:51 vt_e2a_neu/mixtral_bos main complete
+01:12:55 vt_e2a_neu/mixtral_bos writer pass: 512 prompts, T <= 23, layers [14, 17, 18, 19, 20, 21, 23, 25, 27]
+01:14:28 vt_e2a_neu writer pass done in 92s, peak 6.3 GB
+01:14:47 vt_e2a_neu writer projections: 7178 vectors
+01:14:47 exit: 3 passes run, 406s, out_of_time=False
+2026-10-12T01:14:54Z END   ext13ko-mixtral_bos rc=0 (415s)
+note: own pop ranking ['L19E004', 'L17E005', 'L20E005', 'L21E000', 'L20E001', 'L23E007', 'L18E002', 'L22E000', 'L24E002', 'L17E001'] differs from p5-data's ['L19E004', 'L17E005', 'L20E005', 'L21E000', 'L20E001', 'L23E007', 'L18E002', 'L24E002', 'L22E000', 'L17E001']; using p5-data's
+04:24:43 f2e: plan main written: 49 conditions, 2 passes, 1548 rows
+04:24:43 exit: 0 passes run, 0s, out_of_time=False
+2026-10-12T04:24:44Z START ext13ko-mixtral_bos (waited 0s): python scripts/ext13ko_run.py mixtral_bos --conds f2e --with-wr --time-budget 1320
+04:24:45 f2e/mixtral_bos main: 2 of 2 passes to run
+04:24:53   layer   0: load-wait 5.96s compute 0.67s  wf_rows=0
+04:25:13   layer   8: load-wait 2.02s compute 0.14s  wf_rows=0
+04:25:33   layer  16: load-wait 2.76s compute 0.13s  wf_rows=0
+04:25:55   layer  24: load-wait 2.31s compute 0.14s  wf_rows=0
+04:26:13   layer  31: load-wait 2.59s compute 0.13s  wf_rows=0
+04:26:13   pass done: 324 prefill rows (T=28), 0 spawn rows, 87.2s (metrics 0.0s)
+04:26:13 f2e pass full_p000: 324 rows, T=28, padded 9072, 87.5s, peak 6.2 GB
+04:27:42 f2e pass ctl_p000: 1224 rows, T=28, padded 34272, 87.6s, peak 7.0 GB
+04:27:42 f2e/mixtral_bos main complete
+04:27:42 f2e/mixtral_bos writer pass: 72 prompts, T <= 28, layers [17, 18, 19, 20, 21, 22, 23, 24]
+04:29:14 f2e writer pass done in 91s, peak 6.0 GB
+04:29:24 f2e writer projections: 1220 vectors
+04:29:24 exit: 2 passes run, 279s, out_of_time=False
+2026-10-12T04:29:31Z END   ext13ko-mixtral_bos rc=0 (287s)
+2026-10-12T05:06:52Z START ext13ko-cross-mixtral_bos (waited 2109s): python scripts/ext13ko_run.py mixtral_bos --conds f1,dir_f1,dir_opt,cp_nat,cp_vt_orig,cp_vt_neu,vt_e2a_orig,vt_e2a_neu,f2e --phase cross --time-budget 1320
+05:06:59 f1: plan cross written: 3 conditions, 1 passes, 202 rows
+05:06:59 f1/mixtral_bos cross: 1 of 1 passes to run
+05:07:07   layer   0: load-wait 6.09s compute 0.66s  wf_rows=0
+05:07:29   layer   8: load-wait 2.76s compute 0.14s  wf_rows=0
+05:07:52   layer  16: load-wait 1.92s compute 0.13s  wf_rows=0
+05:08:16   layer  24: load-wait 2.00s compute 0.13s  wf_rows=0
+05:08:36   layer  31: load-wait 2.75s compute 0.14s  wf_rows=0
+05:08:36   pass done: 202 prefill rows (T=45), 0 spawn rows, 95.9s (metrics 0.0s)
+05:08:36 f1 pass ctl_p000: 202 rows, T=45, padded 9090, 96.2s, peak 6.2 GB
+05:08:36 f1/mixtral_bos cross complete
+05:08:36 dir_f1: plan cross written: 3 conditions, 1 passes, 188 rows
+05:08:36 dir_f1/mixtral_bos cross: 1 of 1 passes to run
+05:10:09 dir_f1 pass ctl_p000: 188 rows, T=44, padded 8272, 91.8s, peak 6.2 GB
+05:10:09 dir_f1/mixtral_bos cross complete
+05:10:09 dir_opt: plan cross written: 4 conditions, 1 passes, 564 rows
+05:10:09 dir_opt/mixtral_bos cross: 1 of 1 passes to run
+05:11:42 dir_opt pass ctl_p000: 564 rows, T=32, padded 18048, 92.1s, peak 6.5 GB
+05:11:42 dir_opt/mixtral_bos cross complete
+05:11:42 cp_nat: plan cross written: 3 conditions, 1 passes, 816 rows
+05:11:42 cp_nat/mixtral_bos cross: 1 of 1 passes to run
+05:13:15 cp_nat pass ctl_p000: 816 rows, T=39, padded 31824, 92.2s, peak 6.9 GB
+05:13:15 cp_nat/mixtral_bos cross complete
+05:13:15 cp_vt_orig: plan cross written: 3 conditions, 1 passes, 256 rows
+05:13:15 cp_vt_orig/mixtral_bos cross: 1 of 1 passes to run
+05:14:48 cp_vt_orig pass ctl_p000: 256 rows, T=31, padded 7936, 92.0s, peak 6.2 GB
+05:14:48 cp_vt_orig/mixtral_bos cross complete
+05:14:48 cp_vt_neu: plan cross written: 3 conditions, 0 passes, 0 rows
+05:14:48 cp_vt_neu/mixtral_bos cross: 0 of 0 passes to run
+05:14:48 cp_vt_neu/mixtral_bos cross complete
+05:14:48 vt_e2a_orig: plan cross written: 3 conditions, 1 passes, 256 rows
+05:14:48 vt_e2a_orig/mixtral_bos cross: 1 of 1 passes to run
+05:16:19 vt_e2a_orig pass ctl_p000: 256 rows, T=22, padded 5632, 91.0s, peak 6.1 GB
+05:16:19 vt_e2a_orig/mixtral_bos cross complete
+05:16:20 vt_e2a_neu: plan cross written: 3 conditions, 1 passes, 256 rows
+05:16:20 vt_e2a_neu/mixtral_bos cross: 1 of 1 passes to run
+05:17:48 vt_e2a_neu pass ctl_p000: 256 rows, T=23, padded 5888, 88.3s, peak 6.1 GB
+05:17:48 vt_e2a_neu/mixtral_bos cross complete
+05:17:48 f2e: plan cross written: 3 conditions, 1 passes, 36 rows
+05:17:48 f2e/mixtral_bos cross: 1 of 1 passes to run
+05:19:19 f2e pass ctl_p000: 36 rows, T=28, padded 1008, 90.0s, peak 5.9 GB
+05:19:19 f2e/mixtral_bos cross complete
+05:19:19 exit: 8 passes run, 740s, out_of_time=False
+2026-10-12T05:19:26Z END   ext13ko-cross-mixtral_bos rc=0 (754s)

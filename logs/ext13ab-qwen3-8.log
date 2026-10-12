@@ -1,0 +1,59 @@
+2026-10-12T02:49:08Z START ext13ab-qwen3-8 (waited 1031s): python scripts/ext13ab_run.py qwen3 --tasks vt_a2e_orig_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+02:49:16 vt_a2e_orig_qwen3: initialised {'eval_rows': 74, 'noise_rows': 74, 'pool': 32, 'queue_groups': 1380, 'queue_items': 53814}
+02:49:16 vt_a2e_orig_qwen3: 194 cases, 194 rows (74 validation), K=384; passes done 0, queue 0/1380, greedy left 74
+02:49:19 pass 0: tasks ['vt_a2e_orig_qwen3'], 388 prefill rows (T max 31), 44956 spawn rows (adaptive [2368], static groups [1001])
+02:49:24   layer   0: load-wait 3.08s compute 0.86s  wf_rows=8039
+02:49:30   layer   8: load-wait 0.50s compute 0.24s  wf_rows=17974
+02:49:38   layer  16: load-wait 0.67s compute 0.28s  wf_rows=23615
+02:49:47   layer  24: load-wait 1.13s compute 0.36s  wf_rows=28415
+02:49:56   layer  32: load-wait 0.82s compute 0.37s  wf_rows=34424
+02:50:06   layer  40: load-wait 0.35s compute 0.44s  wf_rows=41163
+02:50:13   layer  47: load-wait 0.70s compute 0.44s  wf_rows=44956
+02:50:15   pass done: 388 prefill rows (T=31), 44956 spawn rows, 55.0s (metrics 1.6s)
+02:50:17 vt_a2e_orig_qwen3 first pass: ceilings for 194 rows (mean all-MoE rescue +0.635); DLA rows 74496 (1065 candidate pairs not routed in this pass's clean run)
+02:50:17 vt_a2e_orig_qwen3 pass 0 done: greedy left 74 (median step 2, median rescue/ceiling 0.47); queue 1001/1528
+02:50:17 group pass 0 done in 55s, peak 8.1 GB
+02:50:18 pass 1: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 16554 spawn rows (adaptive [2220], static groups [527])
+[W1012 02:50:33.602197391 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1879048192 bytes (free: 261554176, total: 23686938624).
+02:51:07 vt_a2e_orig_qwen3: noise_oracle groups added for 74 rows
+02:51:07 vt_a2e_orig_qwen3 pass 1 done: greedy left 74 (median step 3, median rescue/ceiling 0.60); queue 1528/1602
+02:51:07 group pass 1 done in 48s, peak 6.2 GB
+02:51:07 pass 2: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 3700 spawn rows (adaptive [2146], static groups [74])
+02:51:54 vt_a2e_orig_qwen3 pass 2 done: greedy left 74 (median step 4, median rescue/ceiling 0.67); queue 1602/1602
+02:51:54 group pass 2 done in 47s, peak 3.9 GB
+02:51:54 pass 3: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 2072 spawn rows (adaptive [2072], static groups [0])
+02:52:41 vt_a2e_orig_qwen3 pass 3 done: greedy left 74 (median step 5, median rescue/ceiling 0.65); queue 1602/1602
+02:52:41 group pass 3 done in 46s, peak 3.7 GB
+02:52:41 pass 4: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1998 spawn rows (adaptive [1998], static groups [0])
+02:53:27 vt_a2e_orig_qwen3 pass 4 done: greedy left 74 (median step 6, median rescue/ceiling 0.73); queue 1602/1602
+02:53:27 group pass 4 done in 46s, peak 3.7 GB
+02:53:28 pass 5: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1924 spawn rows (adaptive [1924], static groups [0])
+02:54:14 vt_a2e_orig_qwen3 pass 5 done: greedy left 74 (median step 7, median rescue/ceiling 0.78); queue 1602/1602
+02:54:14 group pass 5 done in 46s, peak 3.7 GB
+02:54:14 pass 6: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1850 spawn rows (adaptive [1850], static groups [0])
+02:54:59 vt_a2e_orig_qwen3 pass 6 done: greedy left 74 (median step 8, median rescue/ceiling 0.85); queue 1602/1602
+02:54:59 group pass 6 done in 45s, peak 3.7 GB
+02:54:59 pass 7: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1776 spawn rows (adaptive [1776], static groups [0])
+02:55:46 vt_a2e_orig_qwen3 pass 7 done: greedy left 74 (median step 9, median rescue/ceiling 0.82); queue 1602/1602
+02:55:46 group pass 7 done in 46s, peak 3.7 GB
+02:55:46 pass 8: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1702 spawn rows (adaptive [1702], static groups [0])
+02:56:31 vt_a2e_orig_qwen3 pass 8 done: greedy left 74 (median step 10, median rescue/ceiling 0.85); queue 1602/1602
+02:56:31 group pass 8 done in 45s, peak 3.7 GB
+02:56:31 pass 9: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1628 spawn rows (adaptive [1628], static groups [0])
+02:57:16 vt_a2e_orig_qwen3 pass 9 done: greedy left 74 (median step 11, median rescue/ceiling 0.88); queue 1602/1602
+02:57:16 group pass 9 done in 45s, peak 3.7 GB
+02:57:16 pass 10: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1554 spawn rows (adaptive [1554], static groups [0])
+02:58:02 vt_a2e_orig_qwen3 pass 10 done: greedy left 74 (median step 12, median rescue/ceiling 0.88); queue 1602/1602
+02:58:02 group pass 10 done in 45s, peak 3.7 GB
+02:58:02 pass 11: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1480 spawn rows (adaptive [1480], static groups [0])
+02:58:47 vt_a2e_orig_qwen3 pass 11 done: greedy left 74 (median step 13, median rescue/ceiling 0.87); queue 1602/1602
+02:58:47 group pass 11 done in 45s, peak 3.7 GB
+02:58:47 pass 12: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1406 spawn rows (adaptive [1406], static groups [0])
+02:59:34 vt_a2e_orig_qwen3 pass 12 done: greedy left 74 (median step 14, median rescue/ceiling 1.00); queue 1602/1602
+02:59:34 group pass 12 done in 47s, peak 3.7 GB
+02:59:34 pass 13: tasks ['vt_a2e_orig_qwen3'], 148 prefill rows (T max 27), 1332 spawn rows (adaptive [1332], static groups [0])
+03:00:25 vt_a2e_orig_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.97); queue 1602/1602
+03:00:25 vt_a2e_orig_qwen3: ALL PASSES COMPLETE
+03:00:25 group pass 13 done in 50s, peak 3.6 GB
+03:00:25 nothing left to run
+2026-10-12T03:00:32Z END   ext13ab-qwen3-8 rc=0 (684s)

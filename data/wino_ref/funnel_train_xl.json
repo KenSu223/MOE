@@ -1,0 +1,115 @@
+{
+ "qwen3": {
+  "F2": {
+   "twins": 20199,
+   "dropped": {
+    "R2_no_difference_before_blank": 18287,
+    "R5_difference_at_final_token": 260,
+    "R4_length_mismatch": 440,
+    "R3_entity_multi_token": 310,
+    "R4_more_than_3_tokens": 48,
+    "R4_word_count_mismatch": 13,
+    "R6_duplicate_prompt": 1
+   },
+   "kept": 840,
+   "kept_main": 797,
+   "kept_connective": 43,
+   "kept_names": 469,
+   "kept_main_names": 459
+  },
+  "F1": {
+   "twins": 20199,
+   "dropped": {
+    "R3_entity_multi_token": 3375,
+    "R4_length_mismatch": 5601,
+    "R4_more_than_3_tokens": 342,
+    "R4_word_count_mismatch": 178,
+    "R2_identical_prompts": 2,
+    "R5_difference_at_final_token": 7,
+    "R6_duplicate_prompt": 12
+   },
+   "kept": 10682,
+   "kept_main": 10236,
+   "kept_connective": 446,
+   "kept_names": 5861,
+   "kept_main_names": 5472
+  },
+  "F2R": {
+   "twins": 20199,
+   "dropped": {
+    "R2_not_f2_geometry": 18287,
+    "R7_blank_at_end": 505,
+    "R4_length_mismatch": 264,
+    "R3_entity_multi_token": 116,
+    "R7_not_subject_blank": 281,
+    "R7_elliptical_predicate": 7,
+    "R7_blank_in_pp": 10,
+    "R7_possessive_blank": 22,
+    "R7_plural_blank": 11,
+    "R4_more_than_3_tokens": 40,
+    "R4_word_count_mismatch": 10
+   },
+   "kept": 646,
+   "kept_main": 405,
+   "kept_connective": 241,
+   "kept_names": 598,
+   "kept_main_names": 371
+  }
+ },
+ "mixtral_bos": {
+  "F2": {
+   "twins": 20199,
+   "dropped": {
+    "R2_no_difference_before_blank": 18287,
+    "R3_entity_multi_token": 1051,
+    "R4_length_mismatch": 283,
+    "R4_word_count_mismatch": 15,
+    "R5_difference_at_final_token": 114,
+    "R4_more_than_3_tokens": 23
+   },
+   "kept": 426,
+   "kept_main": 405,
+   "kept_connective": 21,
+   "kept_names": 216,
+   "kept_main_names": 213
+  },
+  "F1": {
+   "twins": 20199,
+   "dropped": {
+    "R3_entity_multi_token": 10854,
+    "R4_length_mismatch": 3956,
+    "R4_word_count_mismatch": 132,
+    "R4_more_than_3_tokens": 171,
+    "R2_identical_prompts": 2,
+    "R5_difference_at_final_token": 6,
+    "R6_duplicate_prompt": 8
+   },
+   "kept": 5070,
+   "kept_main": 4883,
+   "kept_connective": 187,
+   "kept_names": 2238,
+   "kept_main_names": 2081
+  },
+  "F2R": {
+   "twins": 20199,
+   "dropped": {
+    "R2_not_f2_geometry": 18287,
+    "R3_entity_multi_token": 617,
+    "R7_blank_at_end": 505,
+    "R4_length_mismatch": 145,
+    "R7_not_subject_blank": 281,
+    "R7_elliptical_predicate": 7,
+    "R7_blank_in_pp": 10,
+    "R7_possessive_blank": 22,
+    "R7_plural_blank": 11,
+    "R4_more_than_3_tokens": 16,
+    "R4_word_count_mismatch": 7
+   },
+   "kept": 291,
+   "kept_main": 181,
+   "kept_connective": 110,
+   "kept_names": 259,
+   "kept_main_names": 160
+  }
+ }
+}

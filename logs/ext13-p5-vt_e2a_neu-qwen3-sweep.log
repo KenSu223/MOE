@@ -1,0 +1,18 @@
+2026-10-11T23:26:18Z START ext13-p5-vt_e2a_neu-qwen3-sweep (waited 305s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/wino_ref/pairs_p5_vt_e2a_neu_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_vt_e2a_neu_qwen3.json --out p5_vt_e2a_neu_qwen3 --agent p5-data --max-rows 60000
+23:26:19 qwen3 -> p5_vt_e2a_neu_qwen3: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 2 passes (73728 spawn rows), T max 22
+23:26:25 pass 1/2: layers 0..38, 1024 prefill rows, 59904 spawn rows
+23:26:30   layer   0: load-wait 3.14s compute 0.75s  wf_rows=1536
+23:26:39   layer   8: load-wait 1.06s compute 0.20s  wf_rows=13824
+23:26:49   layer  16: load-wait 0.76s compute 0.27s  wf_rows=26112
+23:26:59   layer  24: load-wait 0.90s compute 0.35s  wf_rows=38400
+23:27:09   layer  32: load-wait 1.31s compute 0.43s  wf_rows=50688
+[W1011 23:27:18.272103401 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 981467136 bytes (free: 855048192, total: 23686938624).
+23:27:21   layer  40: load-wait 1.01s compute 0.49s  wf_rows=59904
+23:27:29   layer  47: load-wait 0.75s compute 0.50s  wf_rows=59904
+23:27:31   pass done: 1024 prefill rows (T=22), 59904 spawn rows, 65.7s (metrics 2.3s)
+23:27:32 pass 2/2: layers 39..47, 1024 prefill rows, 13824 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+23:28:32 family main: layer disc L42; attn_layer disc L42; block disc L42
+23:28:32 Δclean +3.16 Δcorrupt -3.16 drop +6.32; {"layer_discovery_argmax": 42, "layer_discovery_max": 1.057, "layer_discovery_top5": [[42, 1.057], [39, 0.908], [43, 0.794], [41, 0.732], [44, 0.628]], "layer_validation_argmax": 43, "layer_validation_max": 1.036, "layer_validation_top5": [[43, 1.036], [39, 0.81], [42, 0.801], [41, 0.776], [38, 0.646]], "attn_layer_discovery_argmax": 42, "attn_layer_discovery_max": 0.375, "attn_layer_discovery_top5": [[42, 0.375], [38, 0.355], [41, 0.323], [40, 0.23], [12, 0.207]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.374, "attn_layer_validation_top5": [[42, 0.374], [43, 0.217], [
+2026-10-11T23:28:39Z END   ext13-p5-vt_e2a_neu-qwen3-sweep rc=0 (141s)

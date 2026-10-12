@@ -1,0 +1,60 @@
+2026-10-11T11:40:08Z START ext13ab-qwen3-3 (waited 469s): python scripts/ext13ab_run.py qwen3 --tasks dir_opt_qwen3 --max-passes 25 --budget 45000 --max-tasks 3
+11:40:16 dir_opt_qwen3: initialised {'eval_rows': 180, 'noise_rows': 128, 'pool': 32, 'queue_groups': 3190, 'queue_items': 109812}
+11:40:17 dir_opt_qwen3: 360 cases, 360 rows (180 validation), K=384; passes done 0, queue 0/3190, greedy left 180
+11:40:20 pass 0: tasks ['dir_opt_qwen3'], 720 prefill rows (T max 29), 44997 spawn rows (adaptive [5760], static groups [2057])
+11:40:25   layer   0: load-wait 2.91s compute 0.78s  wf_rows=14568
+11:40:34   layer   8: load-wait 0.90s compute 0.36s  wf_rows=24887
+11:40:44   layer  16: load-wait 0.85s compute 0.40s  wf_rows=29418
+11:40:54   layer  24: load-wait 0.82s compute 0.42s  wf_rows=32040
+11:41:04   layer  32: load-wait 0.78s compute 0.47s  wf_rows=37111
+11:41:14   layer  40: load-wait 0.73s compute 0.52s  wf_rows=40383
+11:41:23   layer  47: load-wait 1.12s compute 0.51s  wf_rows=44997
+11:41:24   pass done: 720 prefill rows (T=29), 44997 spawn rows, 63.1s (metrics 1.7s)
+11:41:28 dir_opt_qwen3 first pass: ceilings for 360 rows (mean all-MoE rescue +7.235); DLA rows 138240 (2382 candidate pairs not routed in this pass's clean run)
+11:41:28 dir_opt_qwen3 pass 0 done: greedy left 180 (median step 2, median rescue/ceiling 0.38); queue 2057/3550
+11:41:28 group pass 0 done in 63s, peak 9.2 GB
+11:41:30 pass 1: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 44787 spawn rows (adaptive [5400], static groups [201])
+11:42:26 dir_opt_qwen3 pass 1 done: greedy left 180 (median step 3, median rescue/ceiling 0.48); queue 2258/3550
+11:42:26 group pass 1 done in 54s, peak 7.4 GB
+11:42:29 pass 2: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 43968 spawn rows (adaptive [5220], static groups [1292])
+11:43:30 dir_opt_qwen3: noise_oracle groups added for 128 rows
+11:43:30 dir_opt_qwen3 pass 2 done: greedy left 180 (median step 4, median rescue/ceiling 0.56); queue 3550/3678
+11:43:30 group pass 2 done in 53s, peak 8.5 GB
+11:43:31 pass 3: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 7728 spawn rows (adaptive [5040], static groups [128])
+[W1011 11:44:02.593800108 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1549795328 bytes (free: 997654528, total: 23686938624).
+[W1011 11:44:12.348228037 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1822425088 bytes (free: 1823932416, total: 23686938624).
+11:44:19 dir_opt_qwen3 pass 3 done: greedy left 180 (median step 5, median rescue/ceiling 0.63); queue 3678/3678
+11:44:19 group pass 3 done in 48s, peak 5.9 GB
+11:44:20 pass 4: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 4860 spawn rows (adaptive [4860], static groups [0])
+11:45:14 dir_opt_qwen3 pass 4 done: greedy left 180 (median step 6, median rescue/ceiling 0.67); queue 3678/3678
+11:45:14 group pass 4 done in 54s, peak 4.7 GB
+11:45:15 pass 5: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 4680 spawn rows (adaptive [4680], static groups [0])
+11:46:09 dir_opt_qwen3 pass 5 done: greedy left 180 (median step 7, median rescue/ceiling 0.70); queue 3678/3678
+11:46:09 group pass 5 done in 54s, peak 4.7 GB
+11:46:09 pass 6: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 4500 spawn rows (adaptive [4500], static groups [0])
+11:47:04 dir_opt_qwen3 pass 6 done: greedy left 180 (median step 8, median rescue/ceiling 0.73); queue 3678/3678
+11:47:04 group pass 6 done in 55s, peak 4.6 GB
+11:47:05 pass 7: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 4320 spawn rows (adaptive [4320], static groups [0])
+11:48:00 dir_opt_qwen3 pass 7 done: greedy left 180 (median step 9, median rescue/ceiling 0.76); queue 3678/3678
+11:48:00 group pass 7 done in 55s, peak 4.5 GB
+11:48:01 pass 8: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 4140 spawn rows (adaptive [4140], static groups [0])
+11:48:55 dir_opt_qwen3 pass 8 done: greedy left 180 (median step 10, median rescue/ceiling 0.79); queue 3678/3678
+11:48:55 group pass 8 done in 54s, peak 4.5 GB
+11:48:55 pass 9: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 3960 spawn rows (adaptive [3960], static groups [0])
+11:49:50 dir_opt_qwen3 pass 9 done: greedy left 180 (median step 11, median rescue/ceiling 0.80); queue 3678/3678
+11:49:50 group pass 9 done in 54s, peak 4.4 GB
+11:49:50 pass 10: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 3780 spawn rows (adaptive [3780], static groups [0])
+11:50:44 dir_opt_qwen3 pass 10 done: greedy left 180 (median step 12, median rescue/ceiling 0.82); queue 3678/3678
+11:50:44 group pass 10 done in 53s, peak 4.3 GB
+11:50:44 pass 11: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 3600 spawn rows (adaptive [3600], static groups [0])
+11:51:38 dir_opt_qwen3 pass 11 done: greedy left 180 (median step 13, median rescue/ceiling 0.81); queue 3678/3678
+11:51:38 group pass 11 done in 53s, peak 4.2 GB
+11:51:38 pass 12: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 3420 spawn rows (adaptive [3420], static groups [0])
+11:52:31 dir_opt_qwen3 pass 12 done: greedy left 180 (median step 14, median rescue/ceiling 0.84); queue 3678/3678
+11:52:31 group pass 12 done in 53s, peak 4.2 GB
+11:52:32 pass 13: tasks ['dir_opt_qwen3'], 360 prefill rows (T max 28), 3240 spawn rows (adaptive [3240], static groups [0])
+11:53:27 dir_opt_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 0.84); queue 3678/3678
+11:53:27 dir_opt_qwen3: ALL PASSES COMPLETE
+11:53:27 group pass 13 done in 55s, peak 4.1 GB
+11:53:27 nothing left to run
+2026-10-11T11:53:34Z END   ext13ab-qwen3-3 rc=0 (806s)
