@@ -1221,3 +1221,16 @@ recommendations apply):
 - Team page in progress.
 
 Phase 5 committed and pushed 2026-10-12 (results, code, sections, team brief `docs/team_brief_phase5.md`; ≈ 1.4 GB).
+
+**Phase 5 post-hoc (2026-10-13/14, coordinator, CPU only).** `scripts/ext13_posthoc.py` writes `results/tables/ext13_posthoc_*`; summarised in `results/sections/ext13_synthesis.md` ("Post-hoc analyses").
+- Position grid by site.
+- Name-site attention on the templates (role look-up at the name).
+- Entity-question competence by item type.
+- Template stability.
+- Margin rule descriptives.
+
+Proposed next steps, not scheduled:
+1. Head patches at the swapped name.
+2. Expert patches at the swapped word.
+3. A clean-prompt DLA of the first-mention bias on failing name items.
+4. Fix the team page's control table: separate the paired rows from the within-condition rows, and add the A_direct and M columns.

@@ -163,3 +163,53 @@ OLMoE-1B-7B, WinoGrande option swap and IOI, 64 + 64 pairs each; `ext13_atp.md`.
 - Condition registry: `data/wino_ref/p5_conditions.json`.
 - Run dirs: `results/p5_<cond>_<proto>[_ab|_ci]`, `results/p5_<proto>_{ko,wr}*`, `results/p5_atp_*`.
 - Pre-neutral fill-in-the-blank runs, kept as a record: `results/wino_ref_F1_*`.
+
+### Post-hoc analyses (2026-10-13/14; CPU, existing rows; `scripts/ext13_posthoc.py`)
+
+**Position × layer grid by site** (`results/tables/ext13_posthoc_sites.md`).
+- The attention / MoE split of the main text is a final-token measure.
+- At the swapped word's own position the MoE dominates in every condition and direction, in the first layers: L0–L2, Qwen3 0.13–0.22 of the drop, Mixtral 0.51–0.95. This is the WinoGrande analogue of the early subject site of CounterFact (Directions 5-F4, 6b).
+- The tokens in between carry ≤ 0.05 per layer.
+- The information moves from the swapped word to the final token at a hand-off layer: the swapped-word residual still restores ≥ 0.5 up to a layer, and the final-token residual restores ≥ 0.5 from a layer on.
+  - Qwen3: L28 → L29 when asking for the attribute, L34 → L36 when asking for the entity.
+  - Mixtral: L12 → L13 and L14 → L16.
+  - The entity question hands off later; final-token attention then writes the entity (Qwen3 L39–L43, Mixtral L16).
+
+**Name items: the look-up happens at the name, not at the final token** (`results/tables/ext13_posthoc_namesite.md`).
+- On the verb templates (entity → attribute), attention at the swapped name restores much more of the drop than any final-token attention layer:
+  - Qwen3 L6: 0.18–0.32 (final token ≤ 0.10);
+  - Mixtral L7–L9: 0.36–0.46, or 0.65–0.84 summed over L4–L9 (final token ≤ 0.15).
+- This holds in all four template conditions.
+- Object nouns show ≤ 0.05 at their own position. The few natural name items (10 pairs) agree in Mixtral (0.21) but not clearly in Qwen3 (0.04).
+- Reading: the name attends back to its earlier mention to retrieve its role ("find what the person did"), and the final-token MoE turns the role into the attribute. The final-token attention share therefore understates attention on name items.
+
+**Competence of the entity question** (`results/tables/ext13_posthoc_f1_competence.md`).
+- Pass margin, fill-in-the-blank format:
+  - Qwen3: objects 20 %, natural names 10 %, name templates 4 %;
+  - Mixtral: 15 %, 1 %, 0 %.
+- On the templates the models ignore the trigger:
+  - correct in both twins 0.27 / 0.23, about the 0.25 chance level;
+  - the same name in both twins in 68–69 % of pairs;
+  - Qwen3 prefers the first-mentioned name in 65 % of prompts.
+- On the items they do pass, the entity question is attention-dominated, more so than on objects: share 0.78–0.79 (Qwen3 names, templates), 0.68 (Mixtral names, 12 pairs).
+- Failing items have no drop and cannot be traced with STR.
+
+**Template stability** (`results/tables/ext13_posthoc_templates.md`).
+- Outcomes are mostly all-or-none per template across its 48 name pairs:
+  - Qwen3: 16 templates pass for > 80 % of the name pairs, 30 for ≤ 20 %;
+  - Mixtral: 12 and 31.
+- 89 % / 91 % of the drop variance lies between templates. The sentence decides, not the names.
+
+**Margin rule** (`results/tables/ext13_posthoc_margins.md`).
+- "≥ 1 logit" everywhere means logit(answer) − logit(contrast answer). That is the log-odds of the two candidates: 1 logit = a probability ratio of e ≈ 2.7, i.e. 73 % in a two-way choice. It is not a top-1 rule.
+- Top-1 in both twins:
+  - entity question (f1, validation): 0.81 / 0.61;
+  - Phase-3 option swap: 0.25 / 0.33;
+  - CounterFact: the true object is top-1 in 29–32 % of cases.
+- f1 validation clean margins: median 2.0 / 1.75 logits, 10th percentile 1.12.
+
+**Suggested follow-ups (not run).**
+- Head-level patches at the swapped name (Qwen3 L4–L9, Mixtral L5–L10).
+- Expert-level patches at the swapped word (L0–L2).
+- A clean-prompt DLA of the name preference on the failing name items (which components write the first-mention bias).
+- About 30–60 GPU-min per model in total.

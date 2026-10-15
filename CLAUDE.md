@@ -249,6 +249,13 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     ~1/3 of expert patches switch downstream routing; no reverse layer streaming needed for final-position work.
   - Behaviour: base models mostly fail attribute → entity on the name templates (3.7 % / 0.1 % margin) and the restated format (9 %).
   - Fixes during the run: `scripts/ext13_p5_analyze.py` copy_attention indexing (coordinator); two Mixtral OOMs (smaller row budgets).
+  - *Post-hoc (2026-10-13/14, `scripts/ext13_posthoc.py`, tables `ext13_posthoc_*`, synthesis section "Post-hoc analyses")*: by
+    position, the swapped word is read by the MoE at L0–L2 in every condition; hand-off to the final token Qwen3 L28→L29 (attribute) /
+    L34→L36 (entity), Mixtral L12→L13 / L14→L16; on name templates attention AT THE NAME (Qwen3 L6 0.18–0.32, Mixtral L7–L9 0.36–0.46)
+    exceeds any final-token attention layer (role look-up; objects ≤ 0.05) → the final-token share understates attention on names.
+    Entity question competence: names 10 % / 1 %, templates 4 % / 0 % (chance-level, same name in both twins 68–69 %); traced passing
+    name items are attention-dominated (0.78–0.79 / 0.68). Template outcomes are set by the sentence (89–91 % of drop variance between
+    templates). Margin rule = logit(answer) − logit(contrast) ≥ 1 (log-odds, not top-1).
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -275,7 +282,9 @@ Extensions:
 - Phase 5 not done (ext13_synthesis.md caveats): letter A/B format and synonym averaging (user decision); scale series and MIB
   (discussion only); restated-format tracing (38 / 16 pairs) and Mixtral template attribute → entity (margin failure); curve-shape
   GPU check on Mixtral; small samples in f2e (32 / 18 pairs) and vt_a2e_orig (5 validation templates); expert- / head-level patches at
-  non-final positions (trigger, blank, mentions) for the attribute → entity conditions (only the layer-level grid exists). Phase-5 results
+  non-final positions (trigger, blank, mentions) for the attribute → entity conditions (only the layer-level grid exists). Proposed
+  follow-ups (post-hoc): head patches at the swapped name (Qwen3 L4–L9, Mixtral L5–L10), expert patches at the swapped word (L0–L2), DLA
+  of the name preference on failing name items; team page section 3 table: split paired vs within-condition rows, add A_direct / M. Phase-5 results
   committed 2026-10-12 (≈ 1.4 GB).
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
@@ -310,7 +319,7 @@ Extensions:
   offload scratch from the reference checks) is reclaimable. The NVMe is **ephemeral**: an instance stop wipes it;
   re-download with `scripts/download_models.sh` (base three) and `scripts/ext2_zoo_download.sh` (zoo four).
 - Root disk holds code and results: `results/` is 2.4 GB on disk (2026-10-12; was 380 MB before Phases 3–5) (gitignored: `codefact_*/
-  scan_routing.parquet`, `codefact_*/expert_parts/`, `codefact_smoke/`); `.git` is 240 MB. Never write weights or
+  scan_routing.parquet`, `codefact_*/expert_parts/`, `codefact_smoke/`); `.git` is ≈ 2.0 GB (2026-10-12). Never write weights or
   offload folders to the root disk.
 - Before launching GPU work: `pgrep -af "run_sweep|run_expert|run_filter|hf_reference|chain|ext[1-4]_|gpu_queue"`
   and `nvidia-smi`. Submit every GPU job through `bash scripts/gpu_queue.sh <job-name> -- python ...` (flock lock,
