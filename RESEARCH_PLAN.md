@@ -1234,3 +1234,368 @@ Proposed next steps, not scheduled:
 2. Expert patches at the swapped word.
 3. A clean-prompt DLA of the first-mention bias on failing name items.
 4. Fix the team page's control table: separate the paired rows from the within-condition rows, and add the A_direct and M columns.
+
+# Phase 6 (PLAN, finalised 2026-10-16 with the user's decisions; execution starts on the user's go)
+
+This plan answers the team's feedback on the Phase 5 presentation. It covers:
+- one principled dial instead of reformatted tasks;
+- dense counterparts and larger models in the same families;
+- expert-level and concept circuits;
+- one figure fix.
+
+This session executes everything (the other Phase-6 session was stopped by the user). Literature: `docs/phase6_literature_scan.md` (this session) and `docs/phase6_literature_review.md` (written by the stopped session, kept as a second source).
+
+## Feedback → items
+
+| # | Team feedback | Item |
+|---|---|---|
+| 1 | Circuit analysis down to specific experts; can the ICML paper (Arora, Wu, Steinhardt, Schwettmann 2026, arXiv 2601.22594, "Language Model Circuits Are Sparse in the Neuron Basis") be applied to MoE? | P6-5 C1, C2 |
+| 2 | Does a bigger model (more capacity) in the same family change the attention / MoE distribution? | P6-4 |
+| 3 | The same experiments on the dense counterparts in the same family (Qwen / Mistral) | P6-3 |
+| 4 | Add-back curves: show how many random experts equal greedy's first k (as in Phase 4) | P6-0 |
+| 5 | Ladder: drastic changes that follow one principle (one dial, e.g. associativity); different tasks, not reformatted tasks; a graded expectation written down before the experiment; "if it is level 5, how do we get to level 3?" | P6-1, P6-2 |
+| 6 | Parallel plots MoE vs dense: can work done by attention move to a dense / larger FFN? | P6-3, P6-4 |
+| 7 | Circuits of experts + heads that specialise in one concept; do we need the ICML paper or is there a simpler way? | P6-5 C1, C3 |
+| 8 | Same WinoGrande instance, variations that change the component distribution: significant / novel? | P6-2, P6-6 |
+
+## User decisions (2026-10-16)
+
+1. **Disk.** Delete the transformers offload scratch `/opt/dlami/nvme/offload` (65 GB) and the three zoo checkpoints (Qwen3-30B-A3B-Instruct-2507, Qwen3-Coder-30B-A3B-Instruct, Mixtral-8x7B-Instruct-v0.1; 201 GB, re-downloadable with `scripts/ext2_zoo_download.sh`).
+2. **Qwen3-235B-A22B: dropped.** There is no Base checkpoint, and 438 GiB does not fit on the disk.
+3. **Order 0 → 1 → 2 → 4 → R → (user decision) → 3.** The larger model (Mixtral-8x22B) comes last. Scope as recommended (cell × model matrix below).
+4. **Predictions** are generated and committed before any Stage-1 GPU job, so they can be compared later (`data/dial/preregistration.md`, `data/dial/predictions.json`).
+5. **This session** executes all of Phase 6 (coordinator + sub-agents).
+6. **Qwen2-7B ↔ Qwen2-57B-A14B** is added as the second architecture-matched dense / MoE pair.
+7. **Stage 3 is gated (2026-10-16).** Before Mixtral-8x22B:
+   - analyse the finished Stages 0, 1, 2 and 4;
+   - write the full analysis report (all ext14 sections + synthesis, assembled into EXTENSIONS_REPORT.md, plus the predicted-vs-observed check);
+   - build the team-facing artifact (Phase-5 style);
+   - show both to the user (Stage R). The user then decides whether Stage 3 runs.
+   - **The current execution scope ends at Stage R.**
+
+## Organising principle: one dial
+
+Everything measured so far fits one reading:
+- The final-token attention share is high when the information that decides the answer arrives at the final token late and already in its output form (copying).
+- It is low when the final-token MoE has to transform what arrives (generate an attribute, recall a fact).
+- Anchors (attention share, Qwen3 / Mixtral BOS):
+  - entity → attribute 0.16–0.31 / 0.34–0.42;
+  - CounterFact 0.54 / 0.58;
+  - attribute → entity 0.69–0.79 / 0.52–0.65;
+  - IOI 0.92 / 0.80.
+- Phase-5 controls that did NOT move it much: copy prefix +0.07 / +0.04, neutral verb +0.01, association strata ≤ 0.11.
+
+The dial is: **where the deciding information is and how many transformations separate it from the answer token** (stated verbatim in context → stated in another form → implied by an event → only in the weights).
+- P6-2 turns this dial on the same WinoGrande items.
+- P6-1 places different tasks on it in advance.
+- P6-3 / P6-4 ask whether the dial readings move with dense vs MoE and with capacity.
+
+## P6-0 Quick fixes (CPU, ≈ 2 h; coordinator)
+
+- **Add-back figures** (Phase 3/4/5; `scripts/ext13ab_plot.py`, `scripts/ext8_plot_simple.py`): for greedy k ∈ {1, 5, 10, 15}, mark the random-order k that reaches the same r.
+  - Definition: k_rand(k) = the smallest k′ with r_rand(k′) ≥ r_greedy(k), interpolated in log k.
+  - Report "never" if greedy exceeds random's maximum. This happens whenever greedy overshoots the all-MoE ceiling, because random ends at the ceiling.
+  - Horizontal dotted connectors on the plot; a table per condition (`results/tables/ext13ab_random_equiv.md`, the same for oracle).
+  - Add the Phase-4-style table "experts for 80 %" (greedy / oracle / random / active) to the Phase-5 team page.
+- **Phase-5 team page, section 3:** split the paired rows from the within-condition rows; add the A_direct and all-MoE M columns; republish the same artifact.
+- The same random-equivalent marks become standard in every Phase-6 add-back figure.
+
+## Common rules for every Phase-6 cell
+
+A *cell* is one task condition on one model.
+
+**Item rules.**
+- R1: both answers are single tokens in the model family's tokenizer (leading-space form).
+- R2: the clean and corrupted prompts have equal length and differ at exactly one token (the STR swap).
+- R3: margin logit(answer) − logit(contrast) ≥ 1 in both directions of the pair.
+- R4: deduplicate by normalised text. Where a sentence names two entities, both orders are built and balanced.
+- R5: discovery / validation split 50 / 50 by pair (seeded), capped at 128 / 128. A cell is reported only with ≥ 64 validation pairs; otherwise it is marked "insufficient" and not redesigned silently.
+- R6: paired comparisons use the intersection of passing pairs:
+  - across the E levels (P6-2);
+  - across a twin pair (P6-3);
+  - across a family's capacity series (P6-4).
+  - Each model's own set is reported alongside.
+- Items are built once per tokenizer family. Mistral-7B / Mixtral-8x7B / Mixtral-8x22B share the 32k SentencePiece tokenizer; Qwen2 / Qwen3 share the Qwen BPE (identity checked in Stage 0). Where possible, items valid in both families are preferred, so the same text runs everywhere.
+
+**Output tiers.**
+- **Tier 1 (core distribution set, every cell):**
+  - T1 competence scan + case set.
+  - T2 single-layer attention and MoE / MLP patch at the final token at every layer → attention share (AUC+ ratio), peaks.
+  - T3 direct split of the final-token difference (attention vs MoE / MLP, exact final norm) and all-MoE / MLP M.
+  - T4 position × layer grid (attention, MoE / MLP, residual) at the swapped token / tokens in between / final token → hand-off layers.
+  - T5 head singles at the final token in the top attention layers.
+  - Runners: the Phase-3 generic runners `ext7_wino_{scan,sweep,joint,dla,grid,heads}.py` on the cell's pair parquet.
+- **Tier 2 (full Phase-4 set, selected cells):**
+  - expert singles and selection;
+  - add-back (greedy / oracle / random, with the random-equivalent marks);
+  - mixed head + expert greedy;
+  - knockout with matched controls;
+  - writer DLA.
+  - Runners: the Phase-5 `ext13ab_* / ext13ci_* / ext13ko_* / ext13wr_*`, generalised to the Phase-6 condition registry.
+  - Dense models have no experts; their tier-2 analogue is the neuron level (P6-5 C1).
+
+**Statistics.** Pair-level bootstrap (template-clustered for templated tasks). Primary readout: attention share. Secondary: A_direct, M, hand-off layer.
+
+## P6-1 Ladder v2: different tasks, graded before the experiment
+
+Four new tasks are placed on the dial in advance; four existing tasks are anchors. The anchors are measured on Qwen3 / Mixtral already, so for those two models they are not predictions; for the new models they are. Cue distance (tokens between the swapped token and the final token) is recorded as a covariate, because across tasks it is confounded with the dial.
+
+| ID | Grade | Task | Clean prompt → answer (STR swap) | Answer source | Predicted share (Qwen3 / Mixtral) | Item source |
+|---|---|---|---|---|---|---|
+| L-ant | 1 | antonym (new) | `The opposite of hot is` → " cold" (hot ↔ cold) | weights; cue adjacent | ≤ 0.30 | LRE `adjective_antonym` (Hernandez et al., ICLR 2024) + 3 templates; fallback: curated list |
+| L-prop | 1–2 | object property (new) | `The color of a banana is` → " yellow" (banana ↔ tomato) | weights; cue = entity | 0.30–0.55 | LRE commonsense relations (`fruit_outside_color`, `substance_phase_of_matter`, …); pairs of objects with different values |
+| L-e2a | 2 | WinoGrande entity → attribute (anchor = E3-e2a) | `… until the jug was` → " empty" | weights + context | (0.16–0.42) | P6-2 item set |
+| L-cf | 2 | CounterFact (anchor) | `The Eiffel Tower is located in` → " Paris" | weights | (0.54–0.58) | Direction-6 STR filter per model |
+| L-a2e | 3 | WinoGrande attribute → entity (anchor = E3-a2e) | F1 cloze → " jug" | context entity selected by inference | (0.52–0.79) | P6-2 item set |
+| L-bind | 4 | explicit binding look-up (new) | `The apple is in the red box and the key is in the blue box. The red box contains the` → " apple" (red ↔ blue) | context, stated | ≥ 0.75 | synthetic: single-token objects × colours, both orders (Feng & Steinhardt style) |
+| L-ioi | 5 | IOI (anchor) | name copy (S2 swap) | context, copy | (0.80–0.92) | `ext7_ioi_build.py` per tokenizer |
+| L-ind | 5 | induction on unrelated word pairs (new) | `dog = table, cup = river. dog =` → " table" (dog ↔ cup) | context, verbatim copy | ≥ 0.85 | synthetic: random unrelated single-token words. Words, not digits: the 32k tokenizer splits " 7" into two tokens |
+
+Test: Spearman between the predicted grade and the measured share in each model. ρ ≥ 0.8 means the dial holds. Also check whether dense / larger models keep the order (P6-3 / P6-4).
+
+## P6-2 One dial on the same WinoGrande instance (the core new experiment)
+
+Items: the Phase-3 776 twins plus train_xl twins as needed. Only the evidence part of the sentence changes; the blank clause, the question line, the STR position and its distance to the final token stay identical across levels. The full blank clause is always kept (lesson of the Phase-5 F2 cut). Frames:
+- attribute → entity: the F1 cloze `Fill in the blank: <sentence>\nAnswer: the`;
+- entity → attribute: the Phase-3 option-swap form, the sentence cut after the entity's copula.
+
+**Dial E (explicitness: how the entity–attribute binding is supplied).** Example twin: jug / pot, empty / full.
+
+| Level | Evidence part (both orders of the two statements are built) | Attribute → entity (swap empty ↔ full) | Entity → attribute (swap jug ↔ pot) |
+|---|---|---|---|
+| E1 stated verbatim | `The jug was empty and the pot was full, so` | `Fill in the blank: … so the _ was empty.\nAnswer: the` → " jug" | `… so the jug was` → " empty" |
+| E1p stated in other words (paraphrase; no verbatim copy) | `The jug was drained and the pot was filled, so` | → " jug" | → " empty" |
+| E2 stated by negation (copy trap: copying the stated word gives the wrong answer) | `The jug was not full and the pot was not empty, so` | → " jug" | → " empty" |
+| E3 implied by the event (= Phase 5 F1 / Phase 3 option swap) | `The restaurant worker poured water from the jug into the pot until` | → " jug" | → " empty" |
+| E0 no evidence, prior only (strong-prior items) | `Of the jug and the pot,` | → prior answer | → prior answer |
+
+Building E1 / E2:
+- Each twin's blank clause is filled with its own answer ("the jug was empty", "the pot was full").
+- E1p replaces each trigger by a paraphrase: WordNet synonyms / similar-to adjectives plus a hand-checked list for the most frequent triggers; items without an acceptable paraphrase are excluded from E1p and counted.
+- E2 inserts "not" after the copula and uses the other trigger. It requires a blank clause of the form `_ (was|is|were|are) [too|very|more] TRIGGER`; other items are excluded from E2, and the count is reported.
+- 50 items per level are eyeballed before scanning.
+
+Predictions (written into the pre-registration in Stage 0):
+- Attribute → entity: E1 ≥ 0.8 (IOI-like look-up); E1p ≈ E1 (the entity is still looked up); E2 < E1; E3 ≈ Phase-5 F1 (0.69 / 0.52).
+- Entity → attribute: E1 ≥ 0.7 (induction copy of the stated word); E1p < E1 (no verbatim copy; the MoE maps the paraphrase); E2 drops sharply (the MoE has to negate); E3 ≈ the option swap (0.19 / 0.35).
+- E1 vs E1p separates "copy the exact token" from "use a stated binding".
+- Two hypotheses for the Phase-5 direction effect:
+  - H-inference: the direction gap closes at E1, i.e. the direction mattered because entity → attribute needs inference.
+  - H-type: the gap persists at E1, i.e. entities are moved by attention and attributes are written by the MoE whatever the evidence.
+- "From level 5 to level 3": E1 is the copy level, and every step adds exactly one transformation.
+
+**Dial A (associativity / prior support, the team's example).**
+- At level E1, the stated binding either agrees with a strong lexical prior, is neutral (the E1 main set), or conflicts with it (the two statements reversed); E0 gives the prior alone.
+- Prior strength = the Phase-5 v2 probe.
+- Strong priors are rare in the 776 twins (|v2| ≥ 2 in 46 Qwen3 / 122 Mixtral). Items are drawn from the train_xl pool plus a controlled set of noun pairs with strong priors (elephant / mouse – big / small, feather / rock – light / heavy, ice / fire – cold / hot), checked with the same probe.
+- Continuous version: five bins of probe log-odds give a dose–response curve.
+- Predictions: share(conflict) ≥ share(neutral) > share(agree) > share(E0). In conflict cells the MoE's direct contribution is negative: the MoE writes the prior and attention overrides it.
+- Optional anchor at the end of Stage 1 if time allows (known dense result, sanity check only; ≈ 3 h): CounterFact with context agreeing / conflicting / nonce subject (`The Eiffel Tower is in Rome. The Eiffel Tower is in`).
+
+## P6-3 Dense counterparts: two architecture-matched pairs + one capacity series
+
+| Pair / series | Geometry | Why | Caveats |
+|---|---|---|---|
+| **Mistral-7B-v0.1 ↔ Mixtral-8x7B-v0.1** | both 32 L, d 4096, 32 / 8 heads; expert FFN = dense FFN 14336; same 32k tokenizer | "same attention, ×8 FFN, 2 of 8 routed". Likely upcycled: Lo et al. 2024 report expert vs dense FFN cosine ≈ 0.6. Stage 0 also compares the attention weights | upcycling never confirmed by Mistral |
+| **Qwen2-7B ↔ Qwen2-57B-A14B** | both 28 L, d 3584, 28 / 4 heads; dense FFN 18944 vs 64 routed experts (2560, top 8) + one always-on shared expert (20480, sigmoid gate) | officially upcycled ("upscaled from Qwen2-7B", Qwen2 report 2407.10671); bonus: shared (dense-like) vs routed split inside one model | previous Qwen generation; q/k/v biases and the shared expert need engine support |
+| Qwen3-4B / 8B / 14B-Base (+ 30B-A3B) | 36 / 36 / 40 L, d 2560 / 4096 / 5120 vs MoE 48 L, d 2048 | capacity without sparsity, same tokenizer and generation as our main Qwen3 (4B ≈ active-matched, 14B ≈ quality-matched) | no architecture twin (no Qwen3-32B-Base); Choe et al. 2025: early attention unusually strong in Qwen dense models (report per-layer curves, not only shares); Qwen3-1.7B: competence only |
+
+**Engine (sub-agent p6-engine; additive, behind family checks).**
+- Dense families `mistral`, `qwen2`, `qwen3`: the MLP is one expert with weight 1, keys `mlp.{gate,up,down}_proj`; `qwen3` uses the per-head q/k norm and tied embeddings ≤ 4B; `qwen2` uses q/k/v biases.
+- `qwen2_moe`: q/k/v biases; routed experts without top-k renormalisation (per config); the shared expert as an always-on extra contribution with weight sigmoid(w_sg · x), recorded separately.
+- Neuron diagnostics + spawn kind `expert_neurons` (for P6-5 C1).
+- `PrefillSpec.head_mask` ((layer, head), …; mode zero | mean) for the R-causal check.
+- Verification:
+  - dense models against transformers hooks on the model itself (it fits on the GPU);
+  - Qwen2-MoE on a small randomly initialised `Qwen2MoeForCausalLM` (fp32, exact) plus 5 prompts against transformers-with-offload on Qwen2-57B;
+  - `verify_olmoe*.json` and the E4 checks must stay identical.
+
+**Hypotheses (pre-registered; sources in P6-6).**
+- H-invariant: the share is a property of the task (dense ≈ MoE ± 0.1). Prior: Li et al. 2025 find nearly identical attention / FFN attribution for Mistral-7B and Mixtral.
+- H-capacity: more FFN capacity moves work from attention to the FFN in knowledge tasks (CounterFact, entity → attribute, E3), not in copy tasks (IOI, induction, E1). This follows the "MoE capacity helps memorisation, not reasoning" literature and "copying across positions cannot move into the FFN".
+- H-sparsity: sparse routing moves work to attention (MoE share > dense; shown only in 1-layer toy models by Smithline & Mascioli 2026).
+- The twins change capacity and sparsity together. The Qwen3 dense series (capacity without sparsity) and the Qwen2-57B shared-vs-routed split help separate them.
+
+**Outputs.**
+- Per task: MoE and dense curves side by side (depth-normalised layer axis l / L).
+- Attention-share shift dense → MoE per task (arrows), for both twins.
+- Qwen2-57B: shared vs routed contribution per layer.
+- The Mistral ↔ Mixtral attention-weight similarity table.
+
+## P6-4 Capacity: Mixtral-8x22B-v0.1 (last stage; runs only if the user approves it after the Stage-R report)
+
+- 141 B total, 39 B active; 56 L, d 6144, 48 / 8 heads; same 32k tokenizer; 262 GiB on disk.
+- ≈ 3× a Mixtral-8x7B pass; ≈ 5 GB per layer, so the double buffer fits in RAM and on the GPU.
+- Cells: set A (below) with T1–T3 first; T4 / T5 only if time allows.
+- Before the gate, the capacity question is answered by the series that need no 8x22B (Qwen3 4B → 8B → 14B → 30B-A3B, Mistral-7B → Mixtral-8x7B, Qwen2-7B → Qwen2-57B-A14B). Mixtral-8x22B extends the Mistral series if approved.
+- Series (depth-normalised):
+  - Mistral-7B → Mixtral-8x7B → Mixtral-8x22B;
+  - Qwen3 4B → 8B → 14B → 30B-A3B;
+  - Qwen2-7B → Qwen2-57B-A14B.
+
+## P6-5 Circuits: experts + heads, down to neurons; concept circuits
+
+- **C0 (exists).** Component circuits at the final token: mixed head + expert greedy (r(20) 0.93–1.00), knockout (necessity), DLA (writers).
+  - Missing: edges, positions other than the final one, sub-expert granularity, generality across tasks.
+- **C1 Neurons inside the selected experts (forward only).**
+  - Experts: Qwen3 L44E069, L42E115, L41E117, L37E032; Mixtral L19E002, L20E000, L18E001; plus the E1-cell experts from Stage 1 and the Qwen2-57B experts from Stage 2.
+  - Record the intermediate activations at the final token (Qwen3 768, Mixtral 14,336, Qwen2 2,560 neurons per expert).
+  - Neuron score = Δa_i · w_e · (W_down[:, i] · ∇LD), with the final norm frozen (as expert DLA, which was ≈ the patching oracle).
+  - Validate with `expert_neurons` subset patches: the number of neurons needed for 80 % of the expert's rescue.
+  - Dense analogue: the MLP neurons of Mistral-7B / Qwen2-7B at the matching layers.
+  - Upcycling cross-check: do the top neurons of a Mixtral expert match the top neurons of the Mistral-7B MLP of the same layer (weight-row correspondence)?
+- **C2 RelP on the neuron basis (Arora et al. 2026) ported to MoE (pilot).**
+  - The method: gradient × activation in a linearised replacement model (frozen RMSNorm denominator, SiLU gate and attention; half rule on the gated product); node = neuron × position; edges via normalised flow; mean-ablation faithfulness / completeness; code github.com/TransluceAI/circuits.
+  - MoE port: freeze the top-k set and the routing weights; generalise the half rule to w_e · SiLU(gate) ⊙ up; score both runs for experts active in only one; report the routing-switch rate. Nguyen 2026: IG completeness breaks under recomputed routing.
+  - Pilot on OLMoE (AtP code exists) and Mistral-7B (transformers autograd; fits on the GPU), on the E1 / E3 cells and CounterFact.
+  - **Decision point DP3 (user):** build reverse layer streaming (F3, ≈ 1–2 days + verification) for Qwen3-30B / Mixtral only if the pilot shows neuron circuits add something beyond C1.
+- **C3 Concept circuits (no gradients).** A concept spans several different tasks:
+  - SIZE / STATE (WinoGrande E1 / E3 big–small, empty–full items; the property task);
+  - COUNTRY (CounterFact P17 / P36; the binding task with countries if built);
+  - PERSON-ROLE (IOI; Phase-5 name templates).
+  - Per task: rank heads + experts (DLA + single patches; AtP on OLMoE).
+  - Concept scoring = AUROC of per-case exact effects against concept labels, on existing rows.
+  - Concept circuit = the components in the top set of ≥ 2 tasks of the concept and not of the other concepts.
+  - Edges among them by path patching at the final token.
+  - Validation: a concept × task knockout matrix (necessity across the concept's tasks, specificity against the other concepts, matched random sets) and add-back of the concept set.
+  - Li & Subramani 2026 warn that component circuits are consistent but not task-specific, so the specificity matrix is mandatory. Expectation: experts are more specific than heads (our knockout dissociation contrast was +0.065 / +0.041).
+- **Answer to the team:** for experts + heads the ICML method is not needed. The forward tools above suffice. That method matters only for neuron granularity, edges at scale and non-final positions, and on the 30B / 47B models it needs F3.
+
+## P6-6 Novelty (literature scan 2026-10-16, full report with 50 references: `docs/phase6_literature_scan.md`)
+
+| Question | Status | Closest work | Consequence for the plan |
+|---|---|---|---|
+| Graded dial with attention / MLP split | **Partially done.** Binary context-vs-memory contrasts in dense models: Monea et al. ACL 2024 (parametric = MLP at the subject, contextual = distributed), Merullo et al. NAACL 2024, Zhao et al. NeurIPS 2025, Ortu et al. ACL 2024. Graded dials only behavioural (Yu et al. 2023 frequency; Ortu similarity bins). **Not found:** ≥ 3 levels on the same items with the share measured along them; nothing in MoE; nothing on WinoGrande in decoder LMs. | Monea 2024, Merullo 2024, Zhao 2025 | **P6-2 Dial E is the novel core.** Dial A conflict cells and the CounterFact knowledge-conflict anchor replicate known dense results (sanity checks, not claims). Fouilhé et al. 2026: phrasing alone moves memory reliance by up to 80 pp, so the frame is held fixed across levels (as designed). |
+| Dense vs MoE | **Partially done.** Li et al. ACL 2025 (attribution, not patching): FFN / attention gain Mistral-7B 6.74 / 2.96 vs Mixtral 6.79 / 3.03, i.e. nearly identical. Smithline & Mascioli 2026: in 1-layer toy models, sparse routing moves computation from the FFN to attention. Lo et al. 2024: Mixtral experts vs the Mistral-7B FFN cosine ≈ 0.6 (upcycling likely); attention weights never compared. **Not found:** patching shares on identical items, dense parent vs MoE child. | Li 2025, Herbst ICML 2026, Smithline 2026 | Three competing pre-registered hypotheses for P6-3: H-invariant (prior from Li 2025), H-capacity (more FFN → less attention), H-sparsity (MoE → more attention, Smithline toy result). Choe et al. EMNLP 2025: early-layer attention is unusually important in Qwen dense models (a confound; report per-layer, not only shares). |
+| Expert-level circuits | **Partially done.** Single experts / expert sets with ablation exist (Lu 2026, Bandarkar 2026, SteerMoE, Super Experts). **Not found:** joint head + expert circuits validated by patching; any EAP / RelP / attribution graph on an MoE LM. Nguyen 2026: IG completeness breaks when routing is recomputed; freezing helps. | Lu 2026, Li ACL 2025, Li ICLR 2026 | C2 (RelP on MoE) would be new; freeze routing, report the switch rate. Super Experts (Su et al. 2026) touches our BOS-sink expert E006. Salomone et al. 2026: expert modularity can dissolve under pre-registered tests, a reason to pre-register C3 too. |
+| Concept circuits | **Partially done** (dense; heads or features): Merullo ICLR 2024 (IOI ↔ Colored Objects share 78 % of heads), Lindsey 2025, function vectors. **Key caveat:** Li & Subramani 2026: component-level circuits are consistent but NOT task-specific (another task's circuit hurts as much); neuron-level ones are specific but inconsistent. | Merullo 2024, Lindsey 2025, Li & Subramani 2026 | C3 must include the cross-concept specificity matrix and matched random sets. Expect experts to be more specific than heads (our knockout dissociation contrast +0.065 / +0.041), and test it. |
+
+Not new: context answers via attention and parametric answers via MLPs; single-expert causal localisation; cross-task head reuse. New as far as found:
+- the matched-item dial with attention / MoE shares;
+- the dense-parent vs MoE-child comparison on identical items;
+- head + expert circuits with add-back / knockout;
+- RelP / neuron circuits on MoE.
+
+## Additions borrowed from the stopped session (2026-10-16, user asked to review them)
+
+| Point | Decision |
+|---|---|
+| A paraphrase level ("drained / filled") | **Adopted as E1p** (P6-2). It separates verbatim copy from a stated binding, which the negation level E2 does not. |
+| Another conflict: keep the event sentence and add a contrary statement | **Adopted as Set C (source competition)**. The prompt is E3 + `The jug was full and the pot was empty.` (contradicting) or the agreeing statement (redundant). This is statement vs inference, a different conflict from Dial A's statement vs lexical prior. Δ is signed toward the statement. Items where the model follows the statement and items where it follows the event are analysed as separate subsets (each needs ≥ 64 validation pairs). Behaviour (which source wins) is measured on every model; tier 1 runs on Qwen3 / Mixtral, attribute → entity. |
+| Feasibility: 82 % (615 / 749) of the twins' blank clauses have the form `the _ was (too) X` | **Used as the expected yield.** p6-data re-counts it and reports the yield per level before any split. |
+| Robustness to the metric and the corruption site; a causal test | **Adopted** (next section). |
+
+## Robustness and causal checks (Stage 1, Qwen3 / Mixtral; metric check on every cell)
+
+- **R-metric.** Every tier-1 sweep records the F5 metric columns (`--metrics`). The attention share is recomputed under the normalised logit difference and Δp(answer). The ranking of cells must agree (Spearman per model); disagreements are reported.
+- **R-site.** E1-a2e is run a second time with the corruption in the evidence instead of the question: swap the two statements' attributes, `The jug was full and the pot was empty`, which also flips the answer. The share should not depend on the site; the position grid shows where each site's information travels.
+- **R-causal (a causal handle on the share).** On E1-a2e and E3-e2a, knock out:
+  - the top-3 mover heads by single-head rescue (head mask in both runs, zero and mean modes; new engine field, p6-engine);
+  - separately, the top-3 experts (existing route mask);
+  - each with matched random heads / experts as controls.
+  - Then re-run T2 / T3. Prediction: removing mover heads lowers the attention rescue and the share (and partly lowers task performance); removing the experts lowers the MoE share.
+  - If the share does not move, it is a description, not a mechanism handle. This is reported either way.
+
+## Phase-5 lessons → guards in Phase 6 (checked by the coordinator before each stage)
+
+| Phase-5 problem | Guard in Phase 6 |
+|---|---|
+| **F2 cut**: sentences cut at the blank lost the deciding words (69 % of F2 pairs). Found only after scans. | Every level contains the information its definition says. E3 prompts contain the whole WinoGrande sentence: a2e = F1 frame; e2a = prompt + trigger = sentence, checked string-wise on 100 % of items. E1 / E1p / E2 keep the whole blank clause. p6-data writes a completeness audit table per cell (Phase-5 style). Any item that fails is dropped; a cell that fails is void. The audit and 50 eyeballed items per level are done **before** any scan. |
+| **Positional shortcut**: the "Of X and Y, one … the other …" copy prefix let Mixtral answer by position (43 % vs 0 % by order). | Every two-entity frame (E0–E2, Set C, L-bind, L-ind, Dial A) is built in both orders. An item counts only if both orders pass (the Phase-5 copy-control rule). Pass rates by order are reported before patching; an order gap > 10 pp on any cell stops that cell for review. E0 has no "one … the other" structure. |
+| **Analysis crash blocked the chains**: a numpy mixed-indexing bug crashed the copy-attention analysis, no BASE READY was written, downstream chains waited ≈ 3.5 h unnoticed. | Every analysis script is smoke-run on the first finished cell before the chains are armed. chain_watch watches analysis logs as well as GPU return codes. New alarm: a base cell whose GPU jobs are done but has no BASE READY within 30 min. |
+| **OOM on long prompts** (Mixtral copy-prefix sweep 60k rows, add-back rep). | Row budgets scale with prompt length (token budget). New models (Qwen2-57B 64 experts top-8, Qwen3-14B streamed) get a one-cell smoke run to calibrate budgets. `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. `.done_<stage>` markers. The add-back chain keeps its automatic 3/4 budget retry. |
+| **Usage limit killed every sub-agent at once.** | All GPU work runs in detached chains that finish analyses on their own. Agents are resumed with "resume from disk, do not redo GPU work". Sub-agents do not arm Monitors. |
+| **Watcher false alarm** on a chain subshell exit. | chain_watch tracks top-level chain PIDs only (fixed in Phase 5). |
+| **ETA guesses were wrong** (16–20 h, then 25–30 h). | ETAs only from measured per-stage times. Re-estimate after the first cell of every new model and report it. |
+| **Two sessions on the same phase.** | Only this session executes Phase 6 (the other was stopped by the user). |
+| **Names fail attribute → entity** on templates (chance) and the names / objects mix differs by model. | Objects are the common stratum. Names / objects are reported separately. Cells below 64 validation pairs are "insufficient", not redesigned silently. |
+| **Probe responsiveness differed by model** (Qwen3 v1 + v2, Mixtral v2 only). | Run the association probes on every new model and apply the 10 % responsiveness rule per model before using the neutral / strong-prior strata. |
+| **Margin ≠ top-1** confusion. | Margin = logit(answer) − logit(contrast) ≥ 1 everywhere. The top-1 rate is reported alongside. |
+| **Clustered items** (templates; the two directed cases of a pair). | Bootstrap over pairs, template-clustered where templates exist. Discovery and validation never share a template. |
+| **Tokenisation** conventions (BOS; leading-space answer tokens; object-token rule in the base reproduction). | Mistral family with BOS (as Mixtral in Phases 3–5); Qwen without. Qwen2 vs Qwen3 and Mixtral-8x7B vs 8x22B tokenizer identity checked on all items. Answers are leading-space single tokens, checked per tokenizer. |
+
+## Cell × model matrix (scope)
+
+Cell sets:
+- **Set A (14 cells):** L-ant, L-prop, L-cf, L-ioi, L-bind, L-ind, E1-{a2e,e2a}, E1p-{a2e,e2a}, E2-{a2e,e2a}, E3-a2e (= L-a2e), E3-e2a (= L-e2a).
+- **Set C (source competition, 2 cells):** E3 + an agreeing statement, E3 + a contradicting statement (attribute → entity).
+- **Set B (6 cells):** A-agree-{a2e, e2a}, A-conf-{a2e, e2a}, E0-{a2e, e2a}.
+
+| Model (key, protocol) | Stage | Set A | Set B | Tier 2 |
+|---|---|---|---|---|
+| Qwen3-30B-A3B-Base (`qwen3`) | 1 | 14 (L-cf / L-ioi reuse the Phase-3/4 runs → 12 new) | 6 | E1-a2e, E1-e2a (E3 tier 2 = the Phase-5 dir_f1 / dir_opt runs); Set C; robustness checks |
+| Mixtral-8x7B-v0.1 BOS (`mixtral_bos`) | 1 | 14 (12 new) | 6 | as Qwen3 |
+| Mistral-7B-v0.1 BOS (`mistral7b_bos`) | 2 | 14 | if DP4 | C1 neurons |
+| Qwen2-7B (`qwen2_7b`) | 2 | 14 | if DP4 | C1 neurons |
+| Qwen2-57B-A14B (`qwen2_57b`) | 2 | 14 | if DP4 | E1-a2e, E3-a2e (+ shared vs routed) |
+| Qwen3-4B / 8B / 14B-Base (`qwen3_4b`, `qwen3_8b`, `qwen3_14b`) | 2 | 14 each | — | — |
+| Qwen3-1.7B-Base (`qwen3_1p7b`) | 2 | T1 (competence) only | — | — |
+| Mixtral-8x22B-v0.1 BOS (`mixtral22_bos`) | 3 (gated, DP6) | 14, T1–T3 (T4 / T5 if time allows) | — | — |
+
+## Disk plan
+
+| Step | Action | Free on NVMe (approx.) |
+|---|---|---|
+| now | — | 45 GB |
+| Stage 0 | delete the offload scratch (65 GB) and the three zoo checkpoints (201 GB), as approved | ≈ 311 GB |
+| Stage 0 / 2 | download Mistral-7B 13.5 GiB, Qwen2-7B 14.2, Qwen2-57B-A14B 107, Qwen3 1.7B / 4B / 8B / 14B 3 + 7 + 15 + 28 (≈ 188 GiB) | ≈ 109 GB |
+| before Stage 3, only if DP6 = go (DP5) | delete this phase's Qwen2 and Qwen3-dense downloads (re-downloadable); keep Mistral-7B | ≈ 297 GB |
+| Stage 3, only if DP6 = go | download Mixtral-8x22B (262 GiB ≈ 281 GB) | ≈ 16 GB |
+
+If space runs short, ask before touching anything else (OLMoE checkpoints, raw diagnostics in `moe_ext*`).
+
+## Agents, files, handshake, monitoring
+
+Pattern of Phase 5 (PLAYBOOK section 7): sub-agents own disjoint files; detached chains wait on handshake lines; every GPU job goes through `scripts/gpu_queue.sh`.
+
+| Agent | Owns | Delivers |
+|---|---|---|
+| coordinator (this session) | plan, `data/dial/preregistration.md` / `predictions.json`, P6-0, disk and downloads, `moetrace/models.py` entries, queue order, monitoring, synthesis | `results/sections/ext14_synthesis.md`, prediction check, team page, CLAUDE.md / README / PLAYBOOK / memory |
+| p6-engine | `moetrace/arch.py`, `weights.py`, `engine.py` (additive), `scripts/ext14_engine_verify*.py`, `logs/ext14_engine_api.md` | dense / qwen2 / qwen2_moe families, `expert_neurons`, verification JSONs, regression identity |
+| p6-data | `moetrace/ext14_data.py`, `scripts/ext14_build_*.py`, `ext14_scan*.py`, `ext14_casesets.py`, `data/dial/` (except the pre-registration) | condition registry `data/dial/p6_conditions.json`, pair parquets per tokenizer, case sets, QA samples, PROGRESS lines `[p6-data] BASE READY <cell>/<model>` |
+| p6-run | `scripts/ext14_run_*`, `ext14_analyze*.py`, `moetrace/ext14_analysis.py` | tier-1 / tier-2 chains, figures `results/figures/ext14_*`, sections `ext14_{ladder,dial,dense,scale}.md` |
+| p6-circuit | `moetrace/ext14_circuit*.py`, `scripts/ext14ci_*` | C1 / C2 pilot / C3, section `ext14_circuit.md` |
+
+- Run dirs: `results/p6_<cell>_<model>` (tier 1), `results/p6_<cell>_<model>_t2` (tier 2), `results/p6ci_*`.
+- Monitoring: `scripts/chain_watch.py` armed under the Monitor tool for the whole run (failed jobs, tracebacks, analysis crashes, chain exits, GPU idle with chains alive, long jobs), re-armed every 30 min, with check-ins without waiting to be asked. Analysis logs are watched, not only GPU return codes (lesson of the Phase-5 copy-attention crash).
+
+## Order, GPU estimate, decision points
+
+Per-cell tier-1 times are measured from Phase 5 (scan + sweep + joint + DLA + grid + heads): Qwen3 ≈ 25 min, Mixtral-8x7B ≈ 38 min. Extrapolated (re-calibrated after each new model's first cell and reported): dense 7–8B ≈ 13–15 min, Qwen3-4B ≈ 8, Qwen3-14B ≈ 20, Qwen2-57B ≈ 40, Mixtral-8x22B (T1–T3) ≈ 70.
+
+| Stage | Content | GPU (±30 %) | Other work |
+|---|---|---|---|
+| 0 | disk cleanup + downloads; P6-0; builders + 50-item QA per level; pre-registration → **commit**; upcycling weight check (CPU); engine work starts (runs in parallel with Stage 1) | scans only | ≈ 1–1.5 days |
+| 1 | Qwen3-30B + Mixtral-8x7B: 20 new tier-1 cells (Set A, B, C) + tier 2 on E1 × 2 + robustness checks | ≈ 29 h | analysis, sections |
+| 2 | twins + Qwen3 dense series (Set A; Set C behaviour) | ≈ 29 h (+4 h if DP4) | engine verification first |
+| 4 | C1, C3, C2 pilot | ≈ 9 h | ≈ 1 day analysis |
+| **R** | **interim report:** all ext14 sections + `ext14_synthesis.md` (Stages 0–2, 4), EXTENSIONS_REPORT assembled, `ext14_prereg_check.md`, team page `docs/team_brief_phase6.md` + artifact → shown to the user → **DP6** | 0 (CPU) | ≈ ½–1 day |
+| 3 | Mixtral-8x22B, **only if the user approves at DP6**; then sections / synthesis / team page updated | ≈ 14 h (+8 h for T4 / T5) | download ≈ 281 GB |
+
+Total before the gate ≈ 67 GPU-h (Phase 5: 25 h), about 3½–4½ days wall-clock if the GPU stays busy. Stage 3 adds ≈ 14 h if approved.
+
+Decision points:
+- DP1 (coordinator): Stage-0 QA. 50 items per level eyeballed; cells with < 64 validation pairs are reported as "insufficient".
+- DP2 (fixed now): the tier-2 cells listed in the matrix.
+- DP3 (user): build F3 after the C2 pilot, or not.
+- DP4 (fixed rule): Set B on the twins if Stage-1 Dial A shows a dose–response: share(conflict) − share(agree) ≥ 0.10 with the 95 % CI excluding 0 in either model.
+- DP5 (coordinator, only if DP6 = go): before Stage 3, delete this phase's own Stage-2 downloads (disk plan); anything else needs the user.
+- **DP6 (user): after Stage R, run Stage 3 (Mixtral-8x22B) or stop.** Nothing for Stage 3 (deletions, download, jobs) happens before this decision.
+
+## Deliverables
+
+- `data/dial/preregistration.md` + `data/dial/predictions.json`, committed before any Stage-1 GPU job. After the runs, an automatic predicted-vs-observed table `results/tables/ext14_prereg_check.md`.
+- Sections `ext14_{ladder,dial,dense,scale,circuit}.md` + `ext14_synthesis.md`, assembled into EXTENSIONS_REPORT.md as Directions 14 / 14a–14e.
+  - They are complete at Stage R for Stages 0–2 and 4.
+  - `ext14_scale.md` covers the Qwen3 dense series and the two twins at R, and gets Mixtral-8x22B only if DP6 = go.
+- Figures:
+  - ladder: predicted grade vs observed share;
+  - dial: share vs level per direction with the predicted bands overlaid;
+  - Dial A dose–response;
+  - dense vs MoE parallel curves and share arrows;
+  - capacity series;
+  - neurons per expert;
+  - concept × task knockout matrix;
+  - add-back with random-equivalent marks.
+- Team page `docs/team_brief_phase6.md` + artifact (Phase-5 style), built at Stage R and shown to the user before DP6; updated after Stage 3 if it runs.
+- CLAUDE.md, README, PLAYBOOK, memory and PROGRESS updated. Commits: the pre-registration (approved); everything else at milestones when the user asks.

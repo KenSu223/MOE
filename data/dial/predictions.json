@@ -1,0 +1,417 @@
+{
+ "written": "2026-10-16",
+ "plan": "RESEARCH_PLAN.md Phase 6",
+ "metric_definition": "attn_share = AUC+(single-layer attention patch at the final token) / (AUC+(attention) + AUC+(MoE or MLP)), validation pairs, LD = logit(answer) - logit(contrast) unless stated",
+ "models_alias": {
+  "QM": "qwen3 and mixtral_bos, each separately",
+  "twins": "mistral7b_bos<->mixtral_bos and qwen2_7b<->qwen2_57b",
+  "all": "every Phase-6 model with >= 64 validation pairs"
+ },
+ "predictions": [
+  {
+   "id": "L1",
+   "models": "qwen3",
+   "cell": "L-ant",
+   "metric": "attn_share",
+   "prediction": "<= 0.30",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L2",
+   "models": "mixtral_bos",
+   "cell": "L-ant",
+   "metric": "attn_share",
+   "prediction": "<= 0.40",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L3",
+   "models": "qwen3",
+   "cell": "L-prop",
+   "metric": "attn_share",
+   "prediction": "0.30-0.55",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L4",
+   "models": "mixtral_bos",
+   "cell": "L-prop",
+   "metric": "attn_share",
+   "prediction": "0.35-0.60",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L5",
+   "models": "qwen3",
+   "cell": "L-bind",
+   "metric": "attn_share",
+   "prediction": ">= 0.75",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L6",
+   "models": "mixtral_bos",
+   "cell": "L-bind",
+   "metric": "attn_share",
+   "prediction": ">= 0.65",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L7",
+   "models": "qwen3",
+   "cell": "L-ind",
+   "metric": "attn_share",
+   "prediction": ">= 0.85",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L8",
+   "models": "mixtral_bos",
+   "cell": "L-ind",
+   "metric": "attn_share",
+   "prediction": ">= 0.75",
+   "test": "validation mean inside band",
+   "note": ""
+  },
+  {
+   "id": "L9",
+   "models": "all",
+   "cell": "ladder",
+   "metric": "spearman(grade, attn_share)",
+   "prediction": ">= 0.8 in every model",
+   "test": "grades: L-ant 1, L-prop 1.5, L-e2a 2, L-cf 2, L-a2e 3, L-bind 4, L-ioi 5, L-ind 5",
+   "note": ""
+  },
+  {
+   "id": "E1",
+   "models": "qwen3",
+   "cell": "E1-a2e",
+   "metric": "attn_share",
+   "prediction": ">= 0.80",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E2",
+   "models": "mixtral_bos",
+   "cell": "E1-a2e",
+   "metric": "attn_share",
+   "prediction": ">= 0.70",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E3",
+   "models": "QM",
+   "cell": "E1p-a2e vs E1-a2e",
+   "metric": "attn_share difference",
+   "prediction": "|E1p - E1| <= 0.10",
+   "test": "paired items, bootstrap CI overlaps the band",
+   "note": ""
+  },
+  {
+   "id": "E4",
+   "models": "QM",
+   "cell": "E2-a2e vs E1-a2e",
+   "metric": "attn_share difference",
+   "prediction": "E1 - E2 >= 0.10",
+   "test": "paired items, CI excludes 0",
+   "note": ""
+  },
+  {
+   "id": "E5",
+   "models": "qwen3",
+   "cell": "E3-a2e",
+   "metric": "attn_share",
+   "prediction": "0.65-0.80 (= Phase-5 F1 level)",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E6",
+   "models": "mixtral_bos",
+   "cell": "E3-a2e",
+   "metric": "attn_share",
+   "prediction": "0.45-0.65",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E7",
+   "models": "qwen3",
+   "cell": "E1-e2a",
+   "metric": "attn_share",
+   "prediction": ">= 0.70",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E8",
+   "models": "mixtral_bos",
+   "cell": "E1-e2a",
+   "metric": "attn_share",
+   "prediction": ">= 0.65",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E9",
+   "models": "QM",
+   "cell": "E1p-e2a vs E1-e2a",
+   "metric": "attn_share difference",
+   "prediction": "E1 - E1p >= 0.10",
+   "test": "paired items, CI excludes 0",
+   "note": ""
+  },
+  {
+   "id": "E10",
+   "models": "QM",
+   "cell": "E2-e2a vs E1p-e2a",
+   "metric": "attn_share difference",
+   "prediction": "E1p - E2 > 0",
+   "test": "paired items",
+   "note": ""
+  },
+  {
+   "id": "E11",
+   "models": "qwen3",
+   "cell": "E3-e2a",
+   "metric": "attn_share",
+   "prediction": "0.10-0.30 (= option swap level)",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E12",
+   "models": "mixtral_bos",
+   "cell": "E3-e2a",
+   "metric": "attn_share",
+   "prediction": "0.25-0.45",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "E13",
+   "models": "QM",
+   "cell": "direction gap a2e - e2a at E1",
+   "metric": "attn_share difference",
+   "prediction": "H-inference (best guess): |gap(E1)| <= 0.10; H-type: gap(E1) >= 0.5 * gap(E3)",
+   "test": "decided by the paired-item CI of gap(E1)",
+   "note": ""
+  },
+  {
+   "id": "E14",
+   "models": "QM",
+   "cell": "dial E monotonicity",
+   "metric": "attn_share",
+   "prediction": "a2e: E1 >= E1p > E2 and E1 > E3; e2a: E1 > E1p > E2 >= E3",
+   "test": "ordering of validation means",
+   "note": ""
+  },
+  {
+   "id": "A1",
+   "models": "QM",
+   "cell": "Dial A (a2e and e2a)",
+   "metric": "attn_share",
+   "prediction": "conflict >= neutral(E1) > agree > E0",
+   "test": "ordering of validation means",
+   "note": ""
+  },
+  {
+   "id": "A2",
+   "models": "QM",
+   "cell": "A-conf",
+   "metric": "MoE direct contribution (signed toward the answer)",
+   "prediction": "< 0",
+   "test": "validation mean, CI excludes 0",
+   "note": ""
+  },
+  {
+   "id": "A3",
+   "models": "qwen3",
+   "cell": "E0",
+   "metric": "attn_share",
+   "prediction": "<= 0.35",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "A4",
+   "models": "mixtral_bos",
+   "cell": "E0",
+   "metric": "attn_share",
+   "prediction": "<= 0.45",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "A5",
+   "models": "QM",
+   "cell": "Dial A dose-response",
+   "metric": "attn_share vs probe log-odds bin",
+   "prediction": "monotone decreasing with prior support (5 bins)",
+   "test": "Spearman over bins < 0",
+   "note": ""
+  },
+  {
+   "id": "C1",
+   "models": "all",
+   "cell": "Set C conflict (E3 + contradicting statement)",
+   "metric": "behaviour",
+   "prediction": "the explicit statement wins in >= 60 % of margin items",
+   "test": "fraction of items whose clean preference follows the statement",
+   "note": ""
+  },
+  {
+   "id": "C2",
+   "models": "QM",
+   "cell": "Set C statement-following subset",
+   "metric": "attn_share",
+   "prediction": "within 0.10 of E1-a2e",
+   "test": "paired comparison",
+   "note": ""
+  },
+  {
+   "id": "C3",
+   "models": "QM",
+   "cell": "Set C event-following subset (if >= 64 val pairs)",
+   "metric": "attn_share",
+   "prediction": "within 0.10 of E3-a2e",
+   "test": "paired comparison",
+   "note": ""
+  },
+  {
+   "id": "R1",
+   "models": "QM",
+   "cell": "all Stage-1 cells",
+   "metric": "spearman(cell ranking LD vs normalised LD / dp)",
+   "prediction": ">= 0.8",
+   "test": "per model",
+   "note": ""
+  },
+  {
+   "id": "R2",
+   "models": "QM",
+   "cell": "E1-a2e evidence-site vs question-site",
+   "metric": "attn_share difference",
+   "prediction": "|diff| <= 0.15",
+   "test": "validation means",
+   "note": ""
+  },
+  {
+   "id": "R3",
+   "models": "QM",
+   "cell": "E1-a2e, E3-e2a: knockout top-3 mover heads",
+   "metric": "attention AUC+ and share",
+   "prediction": "attention AUC+ drops >= 20 % and share drops >= 0.05 more than with matched random heads",
+   "test": "CI of the difference vs random",
+   "note": ""
+  },
+  {
+   "id": "R4",
+   "models": "QM",
+   "cell": "E1-a2e, E3-e2a: knockout top-3 experts",
+   "metric": "MoE AUC+",
+   "prediction": "drops >= 20 % more than with matched random experts",
+   "test": "CI of the difference vs random",
+   "note": ""
+  },
+  {
+   "id": "D0",
+   "models": "twins",
+   "cell": "all Set-A cells",
+   "metric": "best guess",
+   "prediction": "H-invariant for Mistral-7B <-> Mixtral (prior: Li et al. ACL 2025)",
+   "test": "",
+   "note": ""
+  },
+  {
+   "id": "D1",
+   "models": "twins",
+   "cell": "Set A",
+   "metric": "H-invariant",
+   "prediction": "|share_dense - share_MoE| <= 0.10 in >= 80 % of cells",
+   "test": "per twin",
+   "note": ""
+  },
+  {
+   "id": "D2",
+   "models": "twins",
+   "cell": "Set A",
+   "metric": "H-capacity",
+   "prediction": "share_MoE - share_dense <= -0.10 in knowledge cells (L-ant, L-prop, L-cf, E3-e2a) and |diff| <= 0.10 in copy cells (L-ind, L-ioi, L-bind, E1-*)",
+   "test": "per twin",
+   "note": ""
+  },
+  {
+   "id": "D3",
+   "models": "twins",
+   "cell": "Set A",
+   "metric": "H-sparsity",
+   "prediction": "share_MoE - share_dense >= +0.10 in most cells",
+   "test": "per twin",
+   "note": ""
+  },
+  {
+   "id": "D4",
+   "models": "twins",
+   "cell": "Set A",
+   "metric": "spearman(cell ranking dense vs MoE)",
+   "prediction": ">= 0.8",
+   "test": "per twin",
+   "note": ""
+  },
+  {
+   "id": "D5",
+   "models": "qwen3 dense series",
+   "cell": "Set A",
+   "metric": "attn_share trend 4B -> 8B -> 14B",
+   "prediction": "|trend| <= 0.10 per cell; ordering preserved (Spearman >= 0.8 with Qwen3-30B-A3B)",
+   "test": "",
+   "note": ""
+  },
+  {
+   "id": "D6",
+   "models": "qwen2_57b",
+   "cell": "Set A knowledge cells",
+   "metric": "shared-expert share of the MoE rescue",
+   "prediction": ">= 0.5",
+   "test": "",
+   "note": ""
+  },
+  {
+   "id": "N1",
+   "models": "qwen3",
+   "cell": "selected experts (L44E069, L41E117, L37E032, ...)",
+   "metric": "neurons for 80 % of the expert's rescue",
+   "prediction": "<= 50 of 768",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "N2",
+   "models": "mixtral_bos",
+   "cell": "selected experts (L20E000, L19E002, L18E001)",
+   "metric": "neurons for 80 % of the expert's rescue",
+   "prediction": "<= 200 of 14336",
+   "test": "validation mean",
+   "note": ""
+  },
+  {
+   "id": "N3",
+   "models": "QM",
+   "cell": "concept circuits",
+   "metric": "specificity (own-concept KO effect minus other-concept KO effect)",
+   "prediction": "experts > heads",
+   "test": "concept x task KO matrix",
+   "note": ""
+  }
+ ]
+}

@@ -3,7 +3,7 @@
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
 Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
-Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05; Phase 5 2026-10-12.
+Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05; Phase 5 2026-10-12; Phase 6 plan 2026-10-16.
 
 ## 1. What this project is
 
@@ -36,6 +36,12 @@ contribution vectors). Headlines in section 2b.**
 Directions 13 / 13a–13h; team page `docs/team_brief_phase5.md`): the team meeting's critique of the WinoGrande option swap —
 WinoGrande in its original attribute → entity direction, association-neutral sets, verb and memorisation controls, copy vs
 generate, the task ladder, why the add-back curves differ, attribution-patching pilot (OLMoE). ≈ 25 GPU-h. Headlines in 2b.**
+**Phase 6 PLANNED, NOT STARTED (2026-10-16; plan in RESEARCH_PLAN.md "Phase 6" with the user's decisions; literature
+`docs/phase6_literature_scan.md`, `docs/phase6_literature_review.md`): the team's feedback on Phase 5 — one pre-registered dial on the same
+WinoGrande items (explicitness E0–E3 × direction; associativity), a ladder of different tasks graded in advance, dense twins
+(Mistral-7B ↔ Mixtral-8x7B, Qwen2-7B ↔ Qwen2-57B-A14B) and the Qwen3 dense series, Mixtral-8x22B last (Qwen3-235B dropped), circuits
+(neurons inside experts, RelP port pilot, concept circuits), random-equivalent marks on add-back plots. Order 0 → 1 → 2 → 4 → R
+(full report + team artifact, shown to the user) → user decides on Stage 3 (Mixtral-8x22B); ≈ 56 GPU-h before the gate; predictions committed before any GPU run; this session family (coordinator + p6-* agents) executes; prefix ext14.**
 
 ## 2. Results in one screen (base reproduction)
 
