@@ -1,0 +1,50 @@
+{
+ "dA_e1_a2e": {
+  "reasons": {
+   "R1_answer_multi_token": 270,
+   "R2_2_differing_tokens": 2,
+   "R2_length_mismatch": 48,
+   "item:incomplete_dropped": 21,
+   "ok": 1000
+  },
+  "pairs": 958,
+  "items": 250,
+  "items_ctrl": 229
+ },
+ "dA_e1_e2a": {
+  "reasons": {
+   "R1_answer_multi_token": 88,
+   "R2_2_differing_tokens": 42,
+   "R2_3_differing_tokens": 2,
+   "R2_length_mismatch": 190,
+   "item:incomplete_dropped": 20,
+   "ok": 996
+  },
+  "pairs": 956,
+  "items": 249,
+  "items_ctrl": 229
+ },
+ "e0_a2e": {
+  "reasons": {
+   "R1_answer_multi_token": 135,
+   "R2_2_differing_tokens": 1,
+   "R2_length_mismatch": 24,
+   "ok": 500
+  },
+  "pairs": 500,
+  "items": 250,
+  "items_ctrl": 229
+ },
+ "e0_e2a": {
+  "reasons": {
+   "R1_answer_multi_token": 44,
+   "R2_2_differing_tokens": 21,
+   "R2_3_differing_tokens": 1,
+   "R2_length_mismatch": 95,
+   "ok": 498
+  },
+  "pairs": 498,
+  "items": 249,
+  "items_ctrl": 229
+ }
+}

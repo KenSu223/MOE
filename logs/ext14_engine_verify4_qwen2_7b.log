@@ -1,0 +1,163 @@
+03:56:28 qwen2_7b: qwen2, 6 units, dtype bf16
+03:56:46   hf_bf16 chain 18s
+03:56:58   hf_fp32 chain 12s
+03:57:03   eng_bf16 pass 4s
+03:57:10   eng_fp32 pass 7s
+03:57:10   eng_bf16 vs hf_bf16: |dDelta| mean 0.2031 max 0.6875, |d logp| max 0.667
+03:57:10   hf_bf16 vs hf_fp32: |dDelta| mean 0.5594 max 1.189, |d logp| max 1.71
+03:57:10   eng_bf16 vs hf_fp32: |dDelta| mean 0.4292 max 1.345, |d logp| max 1.043
+03:57:10   eng_fp32 vs hf_fp32: |dDelta| mean 3.497e-06 max 7.629e-06, |d logp| max 1.335e-05
+03:57:10 wrote results/verify_ext14_qwen2_7b_chain.json
+03:57:10 model: "qwen2_7b"
+03:57:10 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e"
+03:57:10 family: "qwen2"
+03:57:10 dtype: "bf16"
+03:57:10 n_layers: 28
+03:57:10 n_experts: 1
+03:57:10 top_k: 1
+03:57:10 shared_inter: 0
+03:57:10 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+03:57:10 started: "2026-10-17T03:56:21Z"
+03:57:10 hf_offload: false
+03:57:10 light_plan: false
+03:57:10 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+03:57:10 router_fp32_flag: false
+03:57:10 total_s: 41.78528881072998
+03:57:26 qwen2_7b: qwen2, 4 units, dtype bf16
+03:57:26   144 configurations
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   1%|          | 2/339 [00:00<00:38,  8.68it/s]Loading weights:   5%|▌         | 18/339 [00:00<00:04, 65.64it/s]Loading weights:  12%|█▏        | 42/339 [00:00<00:02, 119.90it/s]Loading weights:  19%|█▉        | 64/339 [00:00<00:01, 148.93it/s]Loading weights:  24%|██▍       | 83/339 [00:00<00:01, 160.64it/s]Loading weights:  32%|███▏      | 108/339 [00:00<00:01, 187.65it/s]Loading weights:  38%|███▊      | 129/339 [00:00<00:01, 192.72it/s]Loading weights:  44%|████▍     | 150/339 [00:00<00:00, 196.77it/s]Loading weights:  54%|█████▍    | 184/339 [00:01<00:00, 232.80it/s]Loading weights:  61%|██████▏   | 208/339 [00:01<00:00, 232.35it/s]Loading weights:  69%|██████▊   | 233/339 [00:01<00:00, 227.04it/s]Loading weights:  76%|███████▌  | 257/339 [00:01<00:00, 230.43it/s]Loading weights:  83%|████████▎ | 282/339 [00:01<00:00, 227.28it/s]Loading weights:  90%|█████████ | 306/339 [00:01<00:00, 229.39it/s]Loading weights:  97%|█████████▋| 330/339 [00:01<00:00, 227.69it/s]Loading weights: 100%|██████████| 339/339 [00:01<00:00, 196.58it/s]
+03:57:34   HF unit 1/4 done (5s)
+03:57:36   HF unit 2/4 done (7s)
+03:57:38   HF unit 3/4 done (8s)
+03:57:40   HF unit 4/4 done (10s)
+03:57:44   engine pass: 24 prefill rows, 168 spawns, 3.3s
+03:57:44 wrote results/verify_ext14_qwen2_7b.json
+03:57:44 model: "qwen2_7b"
+03:57:44 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e"
+03:57:44 family: "qwen2"
+03:57:44 dtype: "bf16"
+03:57:44 n_layers: 28
+03:57:44 n_experts: 1
+03:57:44 top_k: 1
+03:57:44 shared_inter: 0
+03:57:44 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+03:57:44 started: "2026-10-17T03:57:21Z"
+03:57:44 hf_offload: false
+03:57:44 light_plan: true
+03:57:44 units: {"pairs_checked": 2, "pairs_tokenizer_identical": 2, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 4}
+03:57:44 router_fp32_flag: false
+03:57:44 hf_s: 13.91537070274353
+03:57:44 n_configs: 144
+03:57:44 n_spawns: 168
+03:57:44 prefill_delta_vs_hf: {"C": {"n": 4, "maxabs": 0.3125, "meanabs": 0.15625, "frac_exact": 0.0}, "X": {"n": 4, "maxabs": 0.3125, "meanabs": 0.15625, "frac_exact": 0.0}, "CMz": {"n": 4, "maxabs": 0.3125, "meanabs": 0.234375, "frac_exact": 0.0}, "XMz": {"n": 4, "maxabs": 0.25, "meanabs": 0.109375, "frac_exact": 0.0}, "CMm": {"n": 4, "maxabs": 0.1875, "meanabs": 0.125, "frac_exact": 0.0}, "XMm": {"n": 4, "maxabs": 0.375, "meanabs": 0.171875, "frac_exact": 0.0}}
+03:57:44 prefill_metrics_vs_hf: {"logp_true": {"n": 24, "maxabs": 0.815765380859375, "meanabs": 0.3358309517304103, "frac_exact": 0.0}, "logp_foil": {"n": 24, "maxabs": 0.8806209564208984, "meanabs": 0.3136582424243291, "frac_exact": 0.0}, "p_true": {"n": 24, "maxabs": 0.010465681552886963, "meanabs": 0.0016641976150519138, "frac_exact": 0.0}, "kl_to_clean": {"n": 24, "maxabs": 0.12318813800811768, "meanabs": 0.029643942912419636, "frac_exact": 0.5}}
+03:57:44 prefill_rank_equal_frac: 0.2916666666666667
+03:57:44 head_mask_effect_on_delta_hf: {"Mz": 0.1796875, "Mm": 0.1953125}
+03:57:44 spawn_delta_vs_hf: {"den_attn": {"n": 16, "maxabs": 0.375, "meanabs": 0.203125, "frac_exact": 0.0625, "rescue_corr": 0.8754573803723045, "rescue_hf_meanabs": 0.171875}, "den_block": {"n": 16, "maxabs": 0.5625, "meanabs": 0.16015625, "frac_exact": 0.25, "rescue_corr": 0.9806694270882811, "rescue_hf_meanabs": 0.51171875}, "den_expert0": {"n": 4, "maxabs": 0.125, "meanabs": 0.0625, "frac_exact": 0.25, "rescue_corr": 0.9935185370438254, "rescue_hf_meanabs": 0.953125}, "den_head": {"n": 12, "maxabs": 0.4375, "meanabs": 0.1875, "frac_exact": 0.16666666666666666, "rescue_corr": 0.2945137539309162, "rescue_hf_meanabs": 
+03:57:44 spawn_rescue_corr_all: 0.9929940609071862
+03:57:44 competent_units: [0, 1, 3]
+03:57:44 spawn_rescue_corr_competent: 0.996309245684287
+03:57:44 spawn_delta_maxabs_all: 0.5625
+03:57:44 spawn_metrics_vs_hf: {"logp_true": {"n": 144, "maxabs": 0.8679418563842773, "meanabs": 0.3033666718337271, "frac_exact": 0.0}, "logp_foil": {"n": 144, "maxabs": 0.9741077423095703, "meanabs": 0.27564772632386947, "frac_exact": 0.0}, "p_true": {"n": 144, "maxabs": 0.005472861230373383, "meanabs": 0.0005173787924630031, "frac_exact": 0.0}, "kl_to_clean": {"n": 144, "maxabs": 0.20722126960754395, "meanabs": 0.05754172674157113, "frac_exact": 0.0}}
+03:57:44 spawn_rank_equal_frac: 0.14583333333333334
+03:57:44 identities: {"neurons_linearity_relerr_max": 2.7423692472439143e-07, "neurons_all_vs_expert_vec_relerr_max": 0.003745564492419362, "neurons_all_vs_expert_ddelta": {"n": 4, "maxabs": 0.1875, "meanabs": 0.078125, "frac_exact": 0.25}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 12, "maxabs": 0.3125, "meanabs": 0.09375, "frac_exact": 0.4166666666666667}, "attn_head_on_masked_head_vs_parent": {"n": 8, "maxabs": 0.125, "meanabs": 0.078125, "frac_exact": 0.25}}
+03:57:44 diag_attn_heads_mean_relerr: {"n": 112, "maxabs": 0.14558354020118713, "meanabs": 0.0598235105031303, "frac_exact": 0.0}
+03:57:44 diag_resid_layers_relerr: {"n": 112, "maxabs": 0.06826125830411911, "meanabs": 0.015711853525967205, "frac_exact": 0.03571428571428571}
+03:57:44 diag_expert_neurons_act_relerr: {"n": 4, "maxabs": 0.12078237533569336, "meanabs": 0.07780707161873579, "frac_exact": 0.0}
+03:57:44 diag_expert_neurons_w_abs: {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}
+03:57:44 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+03:57:44 diag_expert_neurons_routed_mismatch: 0
+03:57:44 head_mask_zero_heads_final_maxabs: 0.0
+03:57:44 total_s: 18.035927057266235
+03:57:50 qwen2_7b: qwen2, 4 units, dtype fp32
+03:57:50   144 configurations
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   0%|          | 1/339 [00:00<01:19,  4.26it/s]Loading weights:   1%|          | 2/339 [00:00<02:01,  2.77it/s]Loading weights:   5%|▍         | 16/339 [00:00<00:11, 27.83it/s]Loading weights:   8%|▊         | 28/339 [00:00<00:07, 42.06it/s]Loading weights:  12%|█▏        | 40/339 [00:01<00:05, 51.11it/s]Loading weights:  15%|█▌        | 52/339 [00:01<00:05, 57.05it/s]Loading weights:  19%|█▉        | 64/339 [00:01<00:04, 57.15it/s]Loading weights:  22%|██▏       | 76/339 [00:01<00:04, 58.08it/s]Loading weights:  26%|██▌       | 88/339 [00:01<00:03, 67.63it/s]Loading weights:  29%|██▉       | 100/339 [00:02<00:03, 62.21it/s]Loading weights:  33%|███▎      | 112/339 [00:02<00:03, 67.94it/s]Loading weights:  37%|███▋      | 124/339 [00:02<00:03, 69.93it/s]Loading weights:  40%|████      | 136/339 [00:02<00:02, 74.42it/s]Loading weights:  44%|████▎     | 148/339 [00:02<00:02, 68.98it/s]Loading weights:  47%|████▋     | 160/339 [00:02<00:02, 68.98it/s]Loading weights:  54%|█████▍    | 184/339 [00:03<00:01, 95.57it/s]Loading weights:  61%|██████▏   | 208/339 [00:03<00:01, 123.25it/s]Loading weights:  68%|██████▊   | 232/339 [00:03<00:00, 147.43it/s]Loading weights:  76%|███████▌  | 256/339 [00:03<00:00, 162.26it/s]Loading weights:  83%|████████▎ | 280/339 [00:03<00:00, 179.26it/s]Loading weights:  90%|████████▉ | 304/339 [00:03<00:00, 185.60it/s]Loading weights:  97%|█████████▋| 328/339 [00:03<00:00, 194.55it/s]Loading weights: 100%|██████████| 339/339 [00:03<00:00, 92.15it/s] 
+Some parameters are on the meta device because they were offloaded to the cpu.
+03:59:01   HF unit 1/4 done (66s)
+04:00:06   HF unit 2/4 done (131s)
+04:01:11   HF unit 3/4 done (196s)
+04:02:16   HF unit 4/4 done (261s)
+04:02:23   engine pass: 24 prefill rows, 168 spawns, 6.3s
+04:02:24 wrote results/verify_ext14_qwen2_7b_fp32.json
+04:02:24 model: "qwen2_7b"
+04:02:24 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e"
+04:02:24 family: "qwen2"
+04:02:24 dtype: "fp32"
+04:02:24 n_layers: 28
+04:02:24 n_experts: 1
+04:02:24 top_k: 1
+04:02:24 shared_inter: 0
+04:02:24 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:02:24 started: "2026-10-17T03:57:47Z"
+04:02:24 hf_offload: true
+04:02:24 light_plan: true
+04:02:24 units: {"pairs_checked": 2, "pairs_tokenizer_identical": 2, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 4}
+04:02:24 router_fp32_flag: false
+04:02:24 hf_s: 266.06264567375183
+04:02:24 n_configs: 144
+04:02:24 n_spawns: 168
+04:02:24 prefill_delta_vs_hf: {"C": {"n": 4, "maxabs": 1.33514404296875e-05, "meanabs": 4.76837158203125e-06, "frac_exact": 0.0}, "X": {"n": 4, "maxabs": 1.33514404296875e-05, "meanabs": 4.76837158203125e-06, "frac_exact": 0.0}, "CMz": {"n": 4, "maxabs": 1.52587890625e-05, "meanabs": 6.198883056640625e-06, "frac_exact": 0.25}, "XMz": {"n": 4, "maxabs": 2.6702880859375e-05, "meanabs": 1.4066696166992188e-05, "frac_exact": 0.0}, "CMm": {"n": 4, "maxabs": 1.430511474609375e-05, "meanabs": 6.67572021484375e-06, "frac_exact": 0.25}, "XMm": {"n": 4, "maxabs": 1.1444091796875e-05, "meanabs": 7.3909759521484375e-06, "frac_exact": 
+04:02:24 prefill_metrics_vs_hf: {"logp_true": {"n": 24, "maxabs": 2.6702880859375e-05, "meanabs": 1.0604659716288248e-05, "frac_exact": 0.0}, "logp_foil": {"n": 24, "maxabs": 2.288818359375e-05, "meanabs": 9.998679161071777e-06, "frac_exact": 0.0}, "p_true": {"n": 24, "maxabs": 2.6226043701171875e-06, "meanabs": 2.511248264151315e-07, "frac_exact": 0.0}, "kl_to_clean": {"n": 24, "maxabs": 7.867813110351562e-06, "meanabs": 1.955777406692505e-06, "frac_exact": 0.5416666666666666}}
+04:02:24 prefill_rank_equal_frac: 1.0
+04:02:24 head_mask_effect_on_delta_hf: {"Mz": 0.18165063858032227, "Mm": 0.13283038139343262}
+04:02:24 spawn_delta_vs_hf: {"den_attn": {"n": 16, "maxabs": 2.002716064453125e-05, "meanabs": 6.973743438720703e-06, "frac_exact": 0.0625, "rescue_corr": 0.9999999998449923, "rescue_hf_meanabs": 0.17015069723129272}, "den_block": {"n": 16, "maxabs": 2.09808349609375e-05, "meanabs": 6.616115570068359e-06, "frac_exact": 0.125, "rescue_corr": 0.9999999999646983, "rescue_hf_meanabs": 0.3913821578025818}, "den_expert0": {"n": 4, "maxabs": 1.33514404296875e-05, "meanabs": 8.106231689453125e-06, "frac_exact": 0.25, "rescue_corr": 0.9999999999796645, "rescue_hf_meanabs": 0.8443937301635742}, "den_head": {"n": 12, "maxabs": 1.52
+04:02:24 spawn_rescue_corr_all: 0.9999999999715229
+04:02:24 competent_units: [0, 1, 3]
+04:02:24 spawn_rescue_corr_competent: 0.9999999999765845
+04:02:24 spawn_delta_maxabs_all: 3.24249267578125e-05
+04:02:24 spawn_metrics_vs_hf: {"logp_true": {"n": 144, "maxabs": 4.76837158203125e-05, "meanabs": 1.1675059795379639e-05, "frac_exact": 0.006944444444444444}, "logp_foil": {"n": 144, "maxabs": 3.910064697265625e-05, "meanabs": 1.1723902490403918e-05, "frac_exact": 0.0}, "p_true": {"n": 144, "maxabs": 4.172325134277344e-07, "meanabs": 4.553496384889715e-08, "frac_exact": 0.006944444444444444}, "kl_to_clean": {"n": 144, "maxabs": 1.5854835510253906e-05, "meanabs": 3.7506158858175495e-06, "frac_exact": 0.006944444444444444}}
+04:02:24 spawn_rank_equal_frac: 1.0
+04:02:24 identities: {"neurons_linearity_relerr_max": 4.5755140831715835e-07, "neurons_all_vs_expert_vec_relerr_max": 2.2941828774492024e-06, "neurons_all_vs_expert_ddelta": {"n": 4, "maxabs": 4.76837158203125e-06, "meanabs": 2.6226043701171875e-06, "frac_exact": 0.0}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 12, "maxabs": 6.67572021484375e-06, "meanabs": 1.986821492513021e-06, "frac_exact": 0.25}, "attn_head_on_masked_head_vs_parent": {"n": 8, "maxabs": 8.58306884765625e-06, "meanabs": 3.814697265625e-06, "frac_exact": 0.
+04:02:24 diag_attn_heads_mean_relerr: {"n": 112, "maxabs": 1.3392123037192505e-05, "meanabs": 3.2428536067235266e-06, "frac_exact": 0.0}
+04:02:24 diag_resid_layers_relerr: {"n": 112, "maxabs": 4.536427240964258e-06, "meanabs": 7.572006178894039e-07, "frac_exact": 0.03571428571428571}
+04:02:24 diag_expert_neurons_act_relerr: {"n": 0}
+04:02:24 diag_expert_neurons_w_abs: {"n": 0}
+04:02:24 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+04:02:24 diag_expert_neurons_routed_mismatch: 0
+04:02:24 head_mask_zero_heads_final_maxabs: 0.0
+04:02:24 total_s: 273.9471437931061
+04:02:32 qwen2_7b: qwen2, 6 units, dtype bf16
+04:02:36   engine proto {'model_key': 'qwen2_7b', 'dtype': 'bfloat16', 'router_fp32': False}: 4s
+04:02:43   engine fp32 {'model_key': 'qwen2_7b', 'dtype': 'float32', 'router_fp32': False}: 7s
+04:02:44   engine proto vs fp32: rescue r 0.9480, |d rescue| mean 0.19, attention share 0.226 vs 0.227
+04:02:44 wrote results/verify_ext14_qwen2_7b_vsfp32.json
+04:02:44 model: "qwen2_7b"
+04:02:44 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e"
+04:02:44 family: "qwen2"
+04:02:44 dtype: "bf16"
+04:02:44 n_layers: 28
+04:02:44 n_experts: 1
+04:02:44 top_k: 1
+04:02:44 shared_inter: 0
+04:02:44 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:02:44 started: "2026-10-17T04:02:29Z"
+04:02:44 hf_offload: false
+04:02:44 light_plan: false
+04:02:44 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+04:02:44 router_fp32_flag: false
+04:02:44 total_s: 12.09508752822876
+04:02:50 qwen2_7b: qwen2, 6 units, dtype bf16
+04:02:56   engine identities 5.5s: {"layer": 14, "zero_vs_parent": {"n": 6, "maxabs": 0.25, "meanabs": 0.09375, "frac_exact": 0.3333333333333333}, "union_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 6, "maxabs": 0.0625, "meanabs": 0.03125, "frac_exact": 0.5}, "neurons_linearity_relerr_max": 2.9289529379639134e-07, "expert_rescue_mean": 0.0729166641831398, "layer_rescue_mean": 0.0729166641831398, "clean_delta_pos_frac": 1.0, "drop_mean": 6.6875}
+04:02:58   engine pass 1.8s
+04:02:58   sanity: [{"prompt": "The capital of France is", "answer": " Paris", "rank": 1, "p": 0.28251540660858154}, {"prompt": "The Eiffel Tower is located in the city of", "answer": " Paris", "rank": 1, "p": 0.41877126693725586}, {"prompt": "Water is made of hydrogen and", "answer": " oxygen", "rank": 1, "p": 0.8355186581611633}, {"prompt": "The opposite of hot is", "answer": " cold", "rank": 1, "p": 0.5307809114456177}, {"prompt": "Monday, Tuesday, Wednesday,", "answer": " Thursday", "rank": 1, "p": 0.5867019891738892}]
+04:03:00   layer 1: update relerr max 0.01045 mean 0.006725; vs fp32: engine 0.01253 / transformers 0.01301
+04:03:01   layer 14: update relerr max 0.009953 mean 0.008447; vs fp32: engine 0.6848 / transformers 0.6848
+04:03:02   layer 27: update relerr max 0.09632 mean 0.02059; vs fp32: engine 0.1441 / transformers 0.1428
+04:03:02 wrote results/verify_ext14_qwen2_7b_perlayer.json
+04:03:02 model: "qwen2_7b"
+04:03:02 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e"
+04:03:02 family: "qwen2"
+04:03:02 dtype: "bf16"
+04:03:02 n_layers: 28
+04:03:02 n_experts: 1
+04:03:02 top_k: 1
+04:03:02 shared_inter: 0
+04:03:02 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:03:02 started: "2026-10-17T04:02:48Z"
+04:03:02 hf_offload: false
+04:03:02 light_plan: false
+04:03:02 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+04:03:02 router_fp32_flag: false
+04:03:02 total_s: 12.050009727478027

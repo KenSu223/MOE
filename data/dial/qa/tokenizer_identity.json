@@ -1,0 +1,555 @@
+{
+ "Mistral-7B-v0.1 (mistral7b_bos)": {
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "family": "mistral",
+  "vocab_identical": true,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 6468,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 6412,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 4500,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 4492,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 6468,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 6412,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 3346,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 3334,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1074,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 764,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7416,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 9668,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 6700,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 6700,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 80954,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": true
+ },
+ "Qwen2-7B (qwen2_7b)": {
+  "repo": "Qwen/Qwen2-7B",
+  "family": "qwen",
+  "vocab_identical": false,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": false
+ },
+ "Qwen2-57B-A14B (qwen2_57b)": {
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "family": "qwen",
+  "vocab_identical": false,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": false
+ },
+ "Qwen3-1.7B-Base (qwen3_1p7b)": {
+  "repo": "Qwen/Qwen3-1.7B-Base",
+  "family": "qwen",
+  "vocab_identical": true,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": true
+ },
+ "Qwen3-4B-Base (qwen3_4b)": {
+  "repo": "Qwen/Qwen3-4B-Base",
+  "family": "qwen",
+  "vocab_identical": true,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": true
+ },
+ "Qwen3-8B-Base (qwen3_8b)": {
+  "repo": "Qwen/Qwen3-8B-Base",
+  "family": "qwen",
+  "vocab_identical": true,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": true
+ },
+ "Qwen3-14B-Base (qwen3_14b)": {
+  "repo": "Qwen/Qwen3-14B-Base",
+  "family": "qwen",
+  "vocab_identical": true,
+  "bos_default": true,
+  "cells": {
+   "e1_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e1_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e1p_a2e": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e1p_e2a": {
+    "prompts": 7604,
+    "mismatch": 0
+   },
+   "e2_a2e": {
+    "prompts": 12136,
+    "mismatch": 0
+   },
+   "e2_e2a": {
+    "prompts": 12120,
+    "mismatch": 0
+   },
+   "e3_a2e": {
+    "prompts": 6220,
+    "mismatch": 0
+   },
+   "e3_e2a": {
+    "prompts": 6244,
+    "mismatch": 0
+   },
+   "l_ant": {
+    "prompts": 1260,
+    "mismatch": 0
+   },
+   "l_bind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_ind": {
+    "prompts": 1600,
+    "mismatch": 0
+   },
+   "l_prop": {
+    "prompts": 1690,
+    "mismatch": 0
+   },
+   "pilot_frames": {
+    "prompts": 4000,
+    "mismatch": 0
+   },
+   "probe_specs": {
+    "prompts": 7200,
+    "mismatch": 0
+   },
+   "rsite_e1_a2e": {
+    "prompts": 14580,
+    "mismatch": 0
+   },
+   "sc_agree_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   },
+   "sc_conflict_a2e": {
+    "prompts": 12448,
+    "mismatch": 0
+   }
+  },
+  "prompts_checked": 133010,
+  "prompts_mismatch": 0,
+  "reuse_family_pairs": true
+ }
+}

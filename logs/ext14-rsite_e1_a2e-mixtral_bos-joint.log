@@ -1,0 +1,14 @@
+16:23:20 mixtral -> p6_rsite_e1_a2e_mixtral_bos: 512 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+16:23:27 pass 1/1: 1024 prefill rows, 3072 multi rows
+16:23:37   layer   0: load-wait 7.62s compute 1.20s  wf_rows=3072
+16:23:57   layer   8: load-wait 1.93s compute 0.59s  wf_rows=3072
+16:24:17   layer  16: load-wait 2.17s compute 0.60s  wf_rows=3072
+16:24:37   layer  24: load-wait 2.69s compute 0.59s  wf_rows=3072
+16:24:57   layer  31: load-wait 2.32s compute 0.59s  wf_rows=3072
+16:24:57   pass done: 1024 prefill rows (T=36), 3072 spawn rows, 88.8s
+16:24:57 denoise  all_attn  all     : effect/drop +1.001 (mean effect +3.72, drop 3.72)
+16:24:57 denoise  all_block all     : effect/drop +1.000 (mean effect +3.72, drop 3.72)
+16:24:57 denoise  all_moe   all     : effect/drop -0.380 (mean effect -1.41, drop 3.72)
+16:24:57 noise    all_attn  all     : effect/drop +0.999 (mean effect +3.72, drop 3.72)
+16:24:57 noise    all_block all     : effect/drop +1.000 (mean effect +3.72, drop 3.72)
+16:24:57 noise    all_moe   all     : effect/drop -0.381 (mean effect -1.42, drop 3.72)

@@ -3,7 +3,7 @@
 Read this first. It is the entry point for any new agent session in this repository: what the project is, what has
 already been done and with what result, how the codebase is used, and the rules that keep work here consistent.
 Details live in the documents listed in section 8; this file is the map. Last full refresh: 2026-09-20; Phase 2 wave 1 added 2026-09-21;
-Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05; Phase 5 2026-10-12; Phase 6 plan 2026-10-16.
+Direction 6 (STR best-practices check) and 6b (STR layer × position grid) added 2026-09-28; Phase 3 2026-10-04; Phase 4 2026-10-05; Phase 5 2026-10-12; Phase 6 2026-10-17.
 
 ## 1. What this project is
 
@@ -36,12 +36,14 @@ contribution vectors). Headlines in section 2b.**
 Directions 13 / 13a–13h; team page `docs/team_brief_phase5.md`): the team meeting's critique of the WinoGrande option swap —
 WinoGrande in its original attribute → entity direction, association-neutral sets, verb and memorisation controls, copy vs
 generate, the task ladder, why the add-back curves differ, attribution-patching pilot (OLMoE). ≈ 25 GPU-h. Headlines in 2b.**
-**Phase 6 PLANNED, NOT STARTED (2026-10-16; plan in RESEARCH_PLAN.md "Phase 6" with the user's decisions; literature
-`docs/phase6_literature_scan.md`, `docs/phase6_literature_review.md`): the team's feedback on Phase 5 — one pre-registered dial on the same
-WinoGrande items (explicitness E0–E3 × direction; associativity), a ladder of different tasks graded in advance, dense twins
-(Mistral-7B ↔ Mixtral-8x7B, Qwen2-7B ↔ Qwen2-57B-A14B) and the Qwen3 dense series, Mixtral-8x22B last (Qwen3-235B dropped), circuits
-(neurons inside experts, RelP port pilot, concept circuits), random-equivalent marks on add-back plots. Order 0 → 1 → 2 → 4 → R
-(full report + team artifact, shown to the user) → user decides on Stage 3 (Mixtral-8x22B); ≈ 56 GPU-h before the gate; predictions committed before any GPU run; this session family (coordinator + p6-* agents) executes; prefix ext14.**
+**Phase 6 Stage R COMPLETE, NOT COMMITTED (2026-10-16/17; plan RESEARCH_PLAN.md "Phase 6" + "Scope cut"; synthesis
+`results/sections/ext14_synthesis.md`, sections `ext14_{ladder,dial,dense,scale,circuit}.md`, assembled as Directions 14 / 14a–14e;
+pre-registration `data/dial/preregistration.md` (committed 4143e09) + check `results/tables/ext14_prereg_check.md`; team page
+`docs/pages/team_brief_phase6/index.html` / `docs/team_brief_phase6.md`, artifact 3KKhAYJxcBw2M21VKoL1FE): one dial on the same WinoGrande twins (E1 stated / E1p / E2 /
+E3 event / E0 × direction; associativity; statement vs event), ladder v2 of different tasks graded in advance, dense twins
+(Mistral-7B ↔ Mixtral-8x7B, Qwen2-7B ↔ Qwen2-57B-A14B, both Qwen2 in fp32), Qwen3 4B/8B/14B series, circuits (C1 neurons, C2 RelP
+pilot, C3 concept circuits). 8 models, 102 analysed cells. Stage 3 (Mixtral-8x22B) and F3 await the user's decision (DP6, DP3).
+Agents p6-data / p6-engine / p6-analysis / p6-circuit; prefix ext14. Headlines in 2b.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -262,6 +264,25 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     Entity question competence: names 10 % / 1 %, templates 4 % / 0 % (chance-level, same name in both twins 68–69 %); traced passing
     name items are attention-dominated (0.78–0.79 / 0.68). Template outcomes are set by the sentence (89–91 % of drop variance between
     templates). Margin rule = logit(answer) − logit(contrast) ≥ 1 (log-odds, not top-1).
+- **Phase 6 (2026-10-16/17, Stage R; 8 models; STR; 45 pre-registered predictions: 22 held, 14 failed, 8 untestable, 1 pending)**:
+  - *Answer type sets the split, stating the binding moves it*: attribute → entity (answer = entity) attention-heavy at every evidence
+    level (0.48–0.83, even prior-only E0 0.73 in Qwen3); entity → attribute FFN-heavy when inferred (E3 0.18–0.34); stating the attribute
+    (E1) raises e→a toward attention in 7 of 8 models (Qwen3-4B 0.31 → 0.58, 8B 0.28 → 0.55, 14B 0.21 → 0.46, Qwen2 0.21 → 0.37/0.38,
+    Mistral 0.31 → 0.49, Mixtral 0.34 → 0.50); Qwen3-30B-A3B does not (0.18 → 0.22, gap +0.59: H-type). Paraphrase = verbatim (≤ 0.07);
+    negation (E2) fails in every model (copy trap). Frame artefact: `…, so the _ was X` at chance; P3 `{A} and {B}. Fill in the blank:
+    The _ was X.` 0.99 / 0.80.
+  - *Dense parent vs MoE child = no difference*: Mistral-7B ↔ Mixtral 10/10 cells within ±0.10 (Spearman 0.98), Qwen2-7B ↔ 57B 6/7
+    (antonym −0.11); Qwen2-57B shared expert carries 0.43–0.77 of the MoE rescue; Mixtral experts = Mistral-7B MLP neuron for neuron.
+    Qwen3 dense 4B → 14B flat; Qwen3-30B-A3B departs (copy cells higher, IOI 0.92 vs 0.73). Qwen2-57B unusable in bf16 (flat routers;
+    bf16 vs fp32 routing agreement 0.08) → fp32.
+  - *Ladder v2*: top holds (IOI 0.71–0.92, induction 0.67–0.77, binding 0.65–0.79), antonyms 0.35–0.59 (not low); Spearman 0.55–0.87.
+    Associativity weak (Qwen3 a→e 0.73–0.83; MoE writes the prior −0.30 in conflict). Statement beats event in 8/9 models.
+  - *Circuits*: 1–4 neurons per prompt carry 80 % of an expert (Qwen3 2.1–4.3 of 768, Mixtral 3.8–17 of 14,336; case-specific;
+    indirect L37E032 needs magnitude ranking 33); RelP ported to MoE (frozen routing) ≈ forward DLA at the final token, value at
+    non-final positions (DP3: no F3 recommended); C3 Qwen3 concept circuits remove 0.43 / 0.70 / 0.16 on own tasks vs ≤ 0.06 elsewhere.
+  - *Robustness*: metric-invariant (Spearman ≥ 0.97); top-3 head / expert knockouts lower their repair 21–31 % beyond random, share moves
+    0.02–0.07. Tier 2 E1 a→e: Qwen3 re-selects L37E032, Mixtral L17E007. Logistics: GPU queue priorities
+    (`logs/gpu_queue_lowprio.txt`), one GPU job per cell, pooled / behaviour-only rule, three usage limits survived.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -292,6 +313,9 @@ Extensions:
   follow-ups (post-hoc): head patches at the swapped name (Qwen3 L4–L9, Mixtral L5–L10), expert patches at the swapped word (L0–L2), DLA
   of the name preference on failing name items; team page section 3 table: split paired vs within-condition rows, add A_direct / M. Phase-5 results
   committed 2026-10-12 (≈ 1.4 GB).
+- Phase 6 not done (ext14_synthesis.md caveats): Stage 3 Mixtral-8x22B (DP6, user) and F3 (DP3, user); Mixtral Dial A / E0 (too few
+  strong-prior items, behaviour only); E2 traced nowhere (behaviour only); Qwen2-57B trimmed to 10 cells; Mistral E1 cells only on all
+  association strata; readouts at the final token only (no grids / heads except e1_a2e, e1_e2a, e3_e2a and C3 cells after the scope cut).
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
   grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
@@ -319,7 +343,9 @@ Extensions:
 - Python venv: `. /home/ubuntu/MOE/.venv/bin/activate` (Python 3.14, torch 2.14+cu130, transformers 5.16.1,
   safetensors, pandas, pyarrow, scipy, matplotlib, datasets). `~/.local/bin/claude` and `~/.local/bin/gh` exist.
 - **Always `export HF_HOME=/opt/dlami/nvme/hf`** before any script (`scripts/gpu_queue.sh` does it for you).
-  Seven checkpoints live there (≈ 407 GiB): Qwen3-30B-A3B-Base 61 G, Qwen3-30B-A3B-Instruct-2507 57 G,
+  Since 2026-10-16 (Phase 6) the NVMe holds Qwen3-30B-A3B-Base, Mixtral-8x7B, OLMoE (+Instruct), Mistral-7B, Qwen2-7B, Qwen2-57B-A14B,
+  Qwen3-1.7B/4B/8B/14B-Base (≈ 404 GB used, 117 GB free); the zoo Instruct / Coder checkpoints and the offload scratch were deleted
+  (user-approved). Before Phase 6: seven checkpoints (≈ 407 GiB): Qwen3-30B-A3B-Base 61 G, Qwen3-30B-A3B-Instruct-2507 57 G,
   Qwen3-Coder-30B-A3B-Instruct 57 G, Mixtral-8x7B-v0.1 93 G, Mixtral-8x7B-Instruct-v0.1 87 G, OLMoE-1B-7B-0125 39 G
   (fp32 shards), OLMoE-1B-7B-0125-Instruct 13 G. NVMe free ≈ 49 GB; `/opt/dlami/nvme/offload` (65 GB, transformers
   offload scratch from the reference checks) is reclaimable. The NVMe is **ephemeral**: an instance stop wipes it;
@@ -362,7 +388,7 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `coalitions`, `stability_grid`, `relation_heldout`, `noise_table`, `funnel_check`.
 - `report.py` `build()` → Tables 1–16 (md+csv) + `figure1()`; `alt_summary(suffix=...)` for secondary runs;
   `write_report.py` `write(...)` → `results/REPORT.md`.
-- `models.py` `MODELS` registry: `qwen3`, `mixtral`, `olmoe`, `olmoe_instruct`, `qwen3_instruct`, `qwen3_coder`,
+- `models.py` `MODELS` registry: `qwen3`, `mixtral`, `olmoe`, `olmoe_instruct`, `qwen3_instruct`, `qwen3_coder`, Phase 6: `mistral7b`, `qwen2_7b`, `qwen2_57b` (fp32), `qwen3_1p7b`, `qwen3_4b`, `qwen3_8b`, `qwen3_14b`, `mixtral22` (entry only),
   `mixtral_instruct` → repo, label, n_controls (3 for top-8, 1 for top-2), paper_layer, paper_expert.
 
 `moetrace/` (extensions, one module per direction, none edits the base modules)
@@ -394,6 +420,7 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   IOI names), `ext13_p5.py` (p5-data: builds, copy prefixes, case sets), `ext13ab.py` (add-back registry), `ext13ci.py` (heads +
   experts), `ext13ko.py` / `ext13wr.py` (knockout, writers), `ext13syn.py` / `ext13syn_curves.py` (ladder, curve shapes),
   `ext13atp.py` / `ext13atp_analysis.py` (AtP pilot, transformers autograd on OLMoE). No engine change.
+- Phase 6: `ext14_data.py` (dial / ladder / Dial A / Set C builders, frames P3 / I2, PP-blank exclusion, reconstruction checks), `ext14_analysis.py` (cross-cell analysis, prediction checks), `ext14_plotutil.py` (random-equivalent marks for add-back plots), `ext14_circuit.py` / `ext14_circuit_an.py` / `ext14_circuit_relp.py` / `ext14_circuit_c3.py` (C1 neurons, C2 RelP functional forward with frozen routing, C3 concept circuits). Engine (p6-engine, additive; `logs/ext14_engine_api.md`): dense families (MLP = expert 0; Mistral, Qwen2 with q/k/v bias, Qwen3 dense), `qwen2_moe` (shared expert = index 64, zero-mode knockout), `PrefillSpec.head_mask` (zero | mean, inherited by spawns), `route_mask_inherit`, `DiagSpec.expert_neurons` + kind `expert_neurons`, models.py protocol flags `act_dtype` / `router_fp32` applied by `Engine(repo)`; verification `results/verify_ext14_*.json`.
 - Direction 6: `ext6_str.py` (STR donors: `donor_index`, `candidates` = same relation, true object == case foil, same template,
   identical token positions and continuation ids; `select` (margin 1.0, K = 5, `random.Random(2000 + case_id)`);
   `model_data(run, donors='mean'|'first')` → `analysis.ModelData` with donor-aggregated rows so every `analysis.py`
@@ -446,6 +473,7 @@ layers and cases, see `run_expert.py --layer-chunks` and `scripts/ext4_scan.py`)
   `ext13ab_{run,analyze,plot,ready}.py` + `ext13ab_chain.sh`; `ext13ci_{heads_run,circuit_run,analyze,text}.py` + `ext13ci_chain.py`;
   `ext13ko_run.py`, `ext13wr_*` + `ext13ko_chain.sh`; `ext13syn_all.py` (ladder + curves, re-runnable); `ext13atp_*`.
   Earlier Phase-5 tools: `ext13_{build,scan,casesets,positions,verbs}.py`.
+- Phase 6: `ext14_build_*` / `ext14_scan*` / `ext14_casesets.py` / `ext14_jobs.py` / `ext14_chain_base*.sh` / `ext14_chain_base_cell.sh` (one GPU job per cell) / `ext14_base_analyze.py` (p6-data); `ext14_engine_{verify,gate,merge*}` (p6-engine); `ext14_t2_*`, `ext14_causal_{run,analyze}.py`, `ext14_all.py` (re-runs every ext14 table / figure / section), `ext14_analyze_chain.py` (p6-analysis); `ext14ci_*` + `ext14ci_all.py` (p6-circuit); `ext14_synth.py` (coordinator: synthesis figure, `ext14_prereg_check.md`); `ext14_download.sh`; `chain_watch.py --persist --err-files` (Phase-6 options). `gpu_queue.sh` has priorities: names matching `logs/gpu_queue_lowprio.txt` yield while a high-priority job waits.
 - Direction 6b: `ext6_str_grid.py <model> --out <str run> [--window 1|5] [--no-special-tokens]` (layer × position grid,
   units packed by suffix length), `ext6_str_grid_verify.py`, `ext6_str_grid_analyze.py` (heatmaps, peaks, last/middle
   ratio, sliding vs adding, GN comparison with the F4 `*_subject` runs), `ext6_str_grid_text.py`, `ext6_str_grid_chain.sh`.
@@ -488,6 +516,7 @@ ext7_controls_summary,ext8_addback_summary,ext9_knockout_summary,ext10_circuit_s
 ext12_complete_summary,ext13base_summary,ext13ab_summary,ext13ci_summary,ext13ko_summary,ext13syn_summary,ext13atp_summary}.json`.
 
 Recipes:
+- Phase 6: `p6_<cell>_<proto>` (tier 1; protos qwen3, mixtral_bos, mistral7b_bos, qwen2_7b, qwen2_57b, qwen3_{4b,8b,14b}), `_t2` (tier 2, e1_a2e), `p6_causal_*`, `p6ci_*` (C1 / C2 / C3), `dial_scan_<proto>` (competence scans), `<proto>_str` (CounterFact filters for the new models). Data in `data/dial/` (registry `p6_conditions.json`, pre-registration, QA, build report).
 - *Paper protocol on a new MoE model*: add a `MODELS` entry (family must be Qwen3-MoE, Mixtral or OLMoE; other
   families need `arch.py` key templates and possibly engine work), write `data/model_usage/<key>.json` with
   `ext2_zoo_usage.py`, then `ext2_zoo_filter.py` → `ext2_zoo_sweep.py` → `ext2_zoo_expert.py` → `ext2_zoo_analyze.py`.
@@ -547,6 +576,8 @@ Three patterns were used and are documented in PLAYBOOK.md:
 - `PLAYBOOK.md` the unattended-run process, timelines, problems and fixes (all three patterns).
 - `docs/team_brief_winogrande_str.md` (Phase 3/4) and `docs/team_brief_phase5.md` (Phase 5) team one-pagers; the published Phase-5
   page's HTML source is `docs/pages/team_brief_phase5/index.html` (figures from `results/figures/`; artifact JQ9nWn4wno8CuJ8Gte3qZw).
+- `docs/team_brief_phase6.md` and `docs/pages/team_brief_phase6/index.html` (Phase 6 team page, artifact 3KKhAYJxcBw2M21VKoL1FE; figures from
+  `results/figures/`); `docs/phase6_literature_scan.md` / `docs/phase6_literature_review.md`; `data/dial/preregistration.md` (Phase 6 predictions).
 - `results/REPORT.md` base deliverable: sections 1–8 plus 6b (Mixtral without BOS).
 - `results/EXTENSIONS_REPORT.md` extension deliverable, assembled from `results/sections/ext*.md`.
 - `docs/ext3_literature_review.md` attention sinks, BOS, MoE routing, tokenisation conventions (30 references).

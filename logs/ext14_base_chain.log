@@ -1,0 +1,447 @@
+2026-10-16T19:31:39Z ext14-scan-qwen3-dialE-core1 rc=0
+2026-10-16T19:47:29Z ext14-scan-qwen3-dialE-core2 rc=0
+2026-10-16T19:48:34Z ext14-scan-qwen3-pilot rc=0
+2026-10-16T19:50:27Z ext14-scan-qwen3-probes rc=0
+2026-10-16T19:54:03Z ext14-scan-qwen3-ladder rc=0
+2026-10-16T20:12:45Z ext14-scan-mixtral_bos-dialE-core1 rc=0
+2026-10-16T20:16:02Z ext14-scan-mixtral_bos-pilot rc=0
+2026-10-16T20:16:02Z scan chain pilot done (qwen3 mixtral_bos)
+2026-10-16T20:19:26Z ext14-scan-mixtral_bos-probes rc=0
+2026-10-16T20:19:26Z scan chain probes done (qwen3 mixtral_bos)
+2026-10-16T20:23:37Z a2eP3 scan chains stopped before start (e3p3 blocker); relaunch after rebuild
+2026-10-16T20:27:12Z ext14-scan-mixtral_bos-ladder rc=0
+2026-10-16T20:27:12Z scan chain ladder done (qwen3 mixtral_bos)
+2026-10-16T20:29:20Z ext14-scan-qwen3-ladder2 rc=0
+2026-10-16T20:29:20Z scan chain ladder2 done (qwen3)
+2026-10-16T20:30:12Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop e0_a2e e0_e2a aagr_a2e aagr_e2a acon_a2e acon_e2a sc_agree_a2e sc_conflict_stmt_a2e sc_conflict_event_a2e rsite_e1_a2e] protos=[qwen3 mixtral_bos] pid=3560933
+2026-10-16T20:32:03Z chain_base (pid 3560933) stopped before any job started (IND pilot: l_ind reframed); restarted below
+2026-10-16T20:32:10Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop e0_a2e e0_e2a aagr_a2e aagr_e2a acon_a2e acon_e2a sc_agree_a2e sc_conflict_stmt_a2e sc_conflict_event_a2e rsite_e1_a2e] protos=[qwen3 mixtral_bos] pid=3604990
+2026-10-16T20:44:40Z ext14-scan-mixtral_bos-dialE-core2 rc=0
+2026-10-16T20:44:40Z scan chain dialE_core done (qwen3 mixtral_bos)
+2026-10-16T20:49:44Z ext14-scan-mixtral_bos-a2eP3 rc=0
+2026-10-16T20:49:44Z scan2 a2eP3 done (mixtral_bos)
+2026-10-16T20:56:08Z ext14-scan-qwen3-a2eP3 rc=0
+2026-10-16T20:56:08Z scan2 a2eP3 done (qwen3)
+2026-10-16T20:59:47Z ext14-scan-qwen3-dialA rc=0
+2026-10-16T21:01:39Z ext14-l_bind-qwen3-sweep rc=0 scale=1.0
+2026-10-16T21:02:43Z ext14-scan-qwen3-indpilot rc=0
+2026-10-16T21:05:04Z ext14-scan-mistral7b_bos-probes rc=0
+2026-10-16T21:05:38Z ext14-cf-filter-mistral7b_bos rc=0
+2026-10-16T21:24:24Z ext14-scan-mixtral_bos-dialE-ext2 rc=0
+2026-10-16T21:24:24Z scan2 dialE-ext2 done (mixtral_bos)
+2026-10-16T21:35:41Z ext14-scan-mixtral_bos-dialE-ext1 rc=0
+2026-10-16T21:35:41Z scan2 dialE-ext1 done (mixtral_bos)
+2026-10-16T21:50:04Z ext14-scan-qwen3-dialE-ext1 rc=0
+2026-10-16T21:50:04Z scan2 dialE-ext1 done (qwen3)
+2026-10-16T21:56:03Z ext14-scan-qwen3-dialE-ext2 rc=0
+2026-10-16T21:56:03Z scan2 dialE-ext2 done (qwen3)
+2026-10-16T21:56:48Z casesets qwen3 [Dial E after extension] rc=0
+2026-10-16T22:02:34Z ext14-scan-mixtral_bos-dialA rc=0
+2026-10-16T22:02:34Z scan2 dialA done (qwen3 mixtral_bos)
+2026-10-16T22:03:03Z casesets mixtral_bos [e0_a2e,e0_e2a,aagr_a2e,aagr_e2a,acon_a2e,acon_e2a] rc=0
+2026-10-16T22:03:49Z ext14-l_bind-qwen3-joint rc=0 scale=1.0
+2026-10-16T22:05:42Z ext14-scan-mixtral_bos-indpilot rc=0
+2026-10-16T22:05:42Z scan2 indpilot done (qwen3 mixtral_bos)
+2026-10-16T22:11:00Z ext14-scan-mistral7b_bos-cells rc=0
+2026-10-16T22:11:00Z stage2 scans done (mistral7b_bos)
+2026-10-16T22:21:11Z ext14-scan-mistral7b_bos-l_cf rc=0
+2026-10-16T22:21:11Z scan2 l_cf done (mistral7b_bos)
+2026-10-16T22:23:00Z ext14-scan-mixtral_bos-dialE-ext3 rc=0
+2026-10-16T22:23:00Z scan2 dialE-ext3 done (mixtral_bos)
+2026-10-16T22:23:04Z casesets mixtral_bos [e1_e2a,e3_a2e,e1p_a2e,e1p_e2a,rsite_e1_a2e] rc=0
+2026-10-16T22:23:04Z chain_base_cases done
+2026-10-16T22:24:20Z ext14-l_bind-qwen3-dla rc=0 scale=1.0
+2026-10-16T22:33:22Z ext14-l_bind-qwen3-direct rc=0 scale=1.0
+2026-10-16T22:36:21Z l_ind frame I2 (coordinator line: 0)
+2026-10-16T22:47:15Z ext14-l_bind-qwen3-grid rc=0 scale=1.0
+2026-10-16T22:49:39Z ext14-scan-qwen3-l_ind-I2 rc=0
+2026-10-16T22:49:41Z casesets l_ind qwen3 rc=0
+2026-10-16T22:52:19Z ext14-l_bind-qwen3-heads rc=0 scale=1.0
+2026-10-16T22:52:44Z analyze l_bind qwen3 rc=0
+2026-10-16T22:55:16Z ext14-scan-mixtral_bos-l_ind-I2 rc=0
+2026-10-16T22:55:18Z casesets l_ind mixtral_bos rc=0
+2026-10-16T22:55:18Z l_ind (I2) registered
+2026-10-16T22:57:31Z ext14-e1_a2e-qwen3-sweep rc=0 scale=1.0
+2026-10-16T22:59:48Z ext14-e1_a2e-qwen3-joint rc=0 scale=1.0
+2026-10-16T23:02:15Z ext14-e1_a2e-qwen3-dla rc=0 scale=1.0
+2026-10-16T23:05:30Z ext14-e1_a2e-qwen3-direct rc=0 scale=1.0
+2026-10-16T23:13:51Z ext14-e1_a2e-qwen3-grid rc=0 scale=1.0
+2026-10-16T23:18:54Z ext14-e1_a2e-qwen3-heads rc=0 scale=1.0
+2026-10-16T23:19:27Z analyze e1_a2e qwen3 rc=0
+2026-10-16T23:24:18Z ext14-e1_a2e-mixtral_bos-sweep rc=0 scale=1.0
+2026-10-16T23:33:31Z ext14-e1_a2e-mixtral_bos-joint rc=0 scale=1.0
+2026-10-16T23:50:18Z ext14-e1_a2e-mixtral_bos-dla rc=0 scale=1.0
+2026-10-16T23:55:12Z ext14-e1_a2e-mixtral_bos-direct rc=0 scale=1.0
+2026-10-17T00:17:41Z ext14-e1_a2e-mixtral_bos-grid rc=0 scale=1.0
+2026-10-17T00:27:59Z ext14-e1_a2e-mixtral_bos-heads rc=0 scale=1.0
+2026-10-17T00:28:44Z analyze e1_a2e mixtral_bos rc=0
+2026-10-17T00:34:56Z ext14-e1_e2a-qwen3-sweep rc=0 scale=1.0
+2026-10-17T00:40:10Z ext14-e1_e2a-qwen3-joint rc=0 scale=1.0
+2026-10-17T00:58:56Z ext14-e1_e2a-qwen3-dla rc=0 scale=1.0
+2026-10-17T01:04:13Z ext14-e1_e2a-qwen3-direct rc=0 scale=1.0
+2026-10-17T01:12:09Z ext14-e1_e2a-qwen3-grid rc=0 scale=1.0
+2026-10-17T01:30:51Z ext14-e1_e2a-qwen3-heads rc=0 scale=1.0
+2026-10-17T01:31:10Z analyze e1_e2a qwen3 rc=0
+2026-10-17T01:48:01Z ext14-e1_e2a-mixtral_bos-sweep rc=0 scale=1.0
+2026-10-17T01:51:33Z s2 mistral7b_bos start (pid 2026916)
+2026-10-17T01:51:33Z s2 qwen3_4b start (pid 2026918)
+2026-10-17T01:51:33Z s2 qwen3_8b start (pid 2026917)
+2026-10-17T01:56:03Z ext14-e1_e2a-mixtral_bos-joint rc=0 scale=1.0
+2026-10-17T01:56:30Z ext14-scan-mistral7b_bos-l_ind rc=0
+2026-10-17T01:56:30Z scan2 l_ind done (mistral7b_bos)
+2026-10-17T01:59:32Z ext14-scan-qwen3_8b-probes rc=0
+2026-10-17T02:01:23Z ext14-scan-qwen3_4b-probes rc=0
+2026-10-17T02:07:29Z chain_base pid 3604990 stopped (scope cut: no grid / heads by default); its queued job ext14-e1_e2a-mixtral_bos-dla had not started; a new chain follows
+2026-10-17T02:07:34Z ext14-scan-mistral7b_bos-dialE-ext rc=0
+2026-10-17T02:07:34Z scan2 dialE-ext done (mistral7b_bos)
+2026-10-17T02:08:38Z casesets mistral7b_bos Set A rc=0
+2026-10-17T02:08:39Z casesets mistral7b_bos Set C (behaviour only) rc=0
+2026-10-17T02:08:39Z chain_base start cells=[e3p3_a2e] protos=[mistral7b_bos] pid=2399158
+2026-10-17T02:08:43Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop e0_a2e e0_e2a aagr_a2e aagr_e2a acon_a2e acon_e2a sc_agree_a2e sc_conflict_stmt_a2e sc_conflict_event_a2e rsite_e1_a2e] protos=[qwen3 mixtral_bos] pid=2400253
+2026-10-17T02:37:51Z ready-watcher2: started Stage 2 for qwen2_57b
+2026-10-17T02:37:51Z s2 qwen2_57b start (pid 3024044)
+2026-10-17T02:41:43Z ext14-scan-qwen3_8b-cells rc=0
+2026-10-17T02:45:04Z ext14-scan-qwen3_4b-cells rc=0
+2026-10-17T02:45:23Z ext14-e3p3_a2e-mistral7b_bos-sweep rc=0 scale=1.0
+2026-10-17T02:47:13Z ext14-e1_e2a-mixtral_bos-dla rc=0 scale=1.0
+2026-10-17T03:08:51Z ext14-cf-filter-qwen3_8b rc=0
+2026-10-17T03:09:13Z ext14-cf-filter-qwen3_4b rc=0
+2026-10-17T03:09:30Z ext14-e3p3_a2e-mistral7b_bos-joint rc=0 scale=1.0
+2026-10-17T03:11:16Z ext14-e1_e2a-mixtral_bos-direct rc=0 scale=1.0
+2026-10-17T03:11:23Z analyze e1_e2a mixtral_bos rc=0
+2026-10-17T03:22:01Z chain_base start cells=[e1_a2e_all e1_e2a_all] protos=[mixtral_bos qwen3] pid=3974986
+2026-10-17T03:22:33Z all-strata cells for mistral7b_bos: [e1_a2e_all e1_e2a_all e1p_a2e_all e1p_e2a_all]
+2026-10-17T03:22:39Z casesets mistral7b_bos all-strata rc=0
+2026-10-17T03:22:39Z chain_base start cells=[e1_a2e_all e1_e2a_all e1p_a2e_all e1p_e2a_all] protos=[mistral7b_bos] pid=3988333
+2026-10-17T03:37:08Z ext14-scan-qwen3_8b-l_cf rc=0
+2026-10-17T03:37:08Z stage2 scans done (qwen3_8b)
+2026-10-17T03:37:17Z ext14-scan-qwen3_4b-l_cf rc=0
+2026-10-17T03:37:17Z stage2 scans done (qwen3_4b)
+2026-10-17T03:37:37Z ext14-e3p3_a2e-mistral7b_bos-dla rc=0 scale=1.0
+2026-10-17T03:39:28Z ext14-e3p3_a2e-qwen3-sweep rc=0 scale=1.0
+2026-10-17T03:46:08Z ext14-e1_a2e_all-mixtral_bos-sweep rc=0 scale=1.0
+2026-10-17T03:46:32Z ext14-e1_a2e_all-mistral7b_bos-sweep rc=0 scale=1.0
+2026-10-17T04:03:34Z ready-watcher3: started Stage 2 for qwen2_7b
+2026-10-17T04:03:34Z s2 qwen2_7b start (pid 669678)
+2026-10-17T04:06:36Z ext14-scan-qwen3_4b-dialE-ext rc=0
+2026-10-17T04:06:40Z casesets qwen3_4b Set A rc=0
+2026-10-17T04:06:42Z casesets qwen3_4b Set C (behaviour only) rc=0
+2026-10-17T04:06:42Z chain_base start cells=[e1_a2e] protos=[qwen3_4b] pid=739472
+2026-10-17T04:07:34Z all-strata cells for qwen3_4b: []
+2026-10-17T04:13:10Z ext14-scan-qwen3_8b-dialE-ext rc=0
+2026-10-17T04:13:15Z casesets qwen3_8b Set A rc=0
+2026-10-17T04:13:18Z casesets qwen3_8b Set C (behaviour only) rc=0
+2026-10-17T04:13:18Z chain_base start cells=[e1_a2e] protos=[qwen3_8b] pid=882591
+2026-10-17T04:13:27Z ext14-e3p3_a2e-mistral7b_bos-direct rc=0 scale=1.0
+2026-10-17T04:13:34Z analyze e3p3_a2e mistral7b_bos rc=0
+2026-10-17T04:13:34Z chain_base done cells=[e3p3_a2e] protos=[mistral7b_bos]
+2026-10-17T04:13:34Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[mistral7b_bos] pid=888157
+2026-10-17T04:13:34Z e1_a2e/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T04:13:34Z e1_e2a/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T04:13:34Z all-strata cells for qwen3_8b: []
+2026-10-17T04:19:39Z ext14-e3p3_a2e-qwen3-joint rc=0 scale=1.0
+2026-10-17T04:25:15Z ext14-e1_a2e_all-mixtral_bos-joint rc=0 scale=1.0
+2026-10-17T04:25:38Z ext14-e1_a2e_all-mistral7b_bos-joint rc=0 scale=1.0
+2026-10-17T04:51:35Z ready-watcher3: started Stage 2 for qwen3_14b
+2026-10-17T04:51:35Z s2 qwen3_14b start (pid 1695015)
+2026-10-17T04:58:41Z ext14-scan-qwen2_7b-probes rc=0
+2026-10-17T04:59:11Z ext14-e1_a2e-qwen3_4b-sweep rc=0 scale=1.0
+2026-10-17T04:59:54Z ext14-e1_a2e-qwen3_8b-sweep rc=0 scale=1.0
+2026-10-17T05:00:15Z ext14-e3_a2e-mistral7b_bos-sweep rc=0 scale=1.0
+2026-10-17T05:01:29Z ext14-e3p3_a2e-qwen3-dla rc=0 scale=1.0
+2026-10-17T05:05:27Z ext14-e1_a2e_all-mixtral_bos-dla rc=0 scale=1.0
+2026-10-17T05:05:50Z ext14-e1_a2e_all-mistral7b_bos-dla rc=0 scale=1.0
+2026-10-17T05:25:35Z ready-watcher3: started Stage 2 for qwen3_1p7b
+2026-10-17T05:29:24Z ext14-scan-qwen3_14b-probes rc=0
+2026-10-17T05:44:27Z ext14-scan-qwen2_7b-cells rc=0
+2026-10-17T05:44:40Z ext14-e1_a2e-qwen3_4b-joint rc=0 scale=1.0
+2026-10-17T05:45:01Z ext14-e1_a2e-qwen3_8b-joint rc=0 scale=1.0
+2026-10-17T05:45:19Z ext14-e3_a2e-mistral7b_bos-joint rc=0 scale=1.0
+2026-10-17T05:46:30Z ext14-e3p3_a2e-qwen3-direct rc=0 scale=1.0
+2026-10-17T05:46:37Z analyze e3p3_a2e qwen3 rc=0
+2026-10-17T05:52:37Z ext14-e1_a2e_all-mixtral_bos-direct rc=0 scale=1.0
+2026-10-17T05:52:48Z analyze e1_a2e_all mixtral_bos rc=0
+2026-10-17T05:53:00Z ext14-e1_a2e_all-mistral7b_bos-direct rc=0 scale=1.0
+2026-10-17T05:53:07Z analyze e1_a2e_all mistral7b_bos rc=0
+2026-10-17T05:57:22Z ext14-scan-qwen3_1p7b-probes rc=0
+2026-10-17T06:07:04Z ext14-scan-qwen3_14b-cells rc=0
+2026-10-17T06:08:19Z ext14-cf-filter-qwen2_7b rc=0
+2026-10-17T06:08:32Z ext14-e1_a2e-qwen3_4b-dla rc=0 scale=1.0
+2026-10-17T06:08:56Z ext14-e1_a2e-qwen3_8b-dla rc=0 scale=1.0
+2026-10-17T06:09:15Z ext14-e3_a2e-mistral7b_bos-dla rc=0 scale=1.0
+2026-10-17T06:12:42Z ext14-e3p3_a2e-mixtral_bos-sweep rc=0 scale=1.0
+2026-10-17T06:18:17Z ext14-e1_a2e_all-qwen3-sweep rc=0 scale=1.0
+2026-10-17T06:18:41Z ext14-e1_e2a_all-mistral7b_bos-sweep rc=0 scale=1.0
+2026-10-17T06:23:48Z ext14-scan-qwen3_1p7b-cells rc=0
+2026-10-17T06:24:47Z ext14-cf-filter-qwen3_14b rc=0
+2026-10-17T06:25:09Z ext14-scan-qwen2_7b-l_cf rc=0
+2026-10-17T06:25:09Z stage2 scans done (qwen2_7b)
+2026-10-17T06:25:20Z ext14-e1_a2e-qwen3_4b-direct rc=0 scale=1.0
+2026-10-17T06:25:32Z analyze e1_a2e qwen3_4b rc=0
+2026-10-17T06:25:32Z chain_base done cells=[e1_a2e] protos=[qwen3_4b]
+2026-10-17T06:25:32Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_4b] pid=3705326
+2026-10-17T06:25:40Z ext14-e1_a2e-qwen3_8b-direct rc=0 scale=1.0
+2026-10-17T06:25:50Z analyze e1_a2e qwen3_8b rc=0
+2026-10-17T06:25:50Z chain_base done cells=[e1_a2e] protos=[qwen3_8b]
+2026-10-17T06:25:50Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_8b] pid=3712341
+2026-10-17T06:25:58Z ext14-e3_a2e-mistral7b_bos-direct rc=0 scale=1.0
+2026-10-17T06:26:05Z analyze e3_a2e mistral7b_bos rc=0
+2026-10-17T06:27:47Z ext14-e3p3_a2e-mixtral_bos-joint rc=0 scale=1.0
+2026-10-17T06:29:02Z ext14-e1_a2e_all-qwen3-joint rc=0 scale=1.0
+2026-10-17T06:29:24Z ext14-e1_e2a_all-mistral7b_bos-joint rc=0 scale=1.0
+2026-10-17T06:33:14Z ext14-cf-filter-qwen3_1p7b rc=0
+2026-10-17T06:33:48Z ext14-scan-qwen3_14b-l_cf rc=0
+2026-10-17T06:33:48Z stage2 scans done (qwen3_14b)
+2026-10-17T06:34:13Z ext14-e1_e2a-qwen3_4b-sweep rc=0 scale=1.0
+2026-10-17T06:47:36Z ready-watcher3: started Stage 2 for qwen2_57b
+2026-10-17T06:47:36Z ready-watcher3 done
+2026-10-17T06:47:36Z s2 qwen2_57b start (pid 4178959)
+2026-10-17T06:53:04Z ext14-scan-qwen2_7b-dialE-ext rc=0
+2026-10-17T06:53:08Z casesets qwen2_7b Set A rc=0
+2026-10-17T06:53:11Z casesets qwen2_7b Set C (behaviour only) rc=0
+2026-10-17T06:53:11Z chain_base start cells=[e1_a2e] protos=[qwen2_7b] pid=104382
+2026-10-17T06:53:36Z ext14-e1_e2a-qwen3_8b-sweep rc=0 scale=1.0
+2026-10-17T06:54:02Z all-strata cells for qwen2_7b: []
+2026-10-17T06:54:13Z ext14-e3_e2a-mistral7b_bos-sweep rc=0 scale=1.0
+2026-10-17T06:56:02Z ext14-e3p3_a2e-mixtral_bos-dla rc=0 scale=1.0
+2026-10-17T06:57:19Z ext14-e1_a2e_all-qwen3-dla rc=0 scale=1.0
+2026-10-17T06:57:42Z ext14-e1_e2a_all-mistral7b_bos-dla rc=0 scale=1.0
+2026-10-17T07:01:20Z ext14-scan-qwen3_1p7b-l_cf rc=0
+2026-10-17T07:01:20Z stage2 scans done (qwen3_1p7b)
+2026-10-17T07:01:31Z ext14-e1_e2a-qwen3_4b-joint rc=0 scale=1.0
+2026-10-17T07:02:23Z casesets qwen3_1p7b (behaviour only) rc=0
+2026-10-17T07:09:16Z ext14-scan-qwen3_14b-dialE-ext rc=0
+2026-10-17T07:09:20Z casesets qwen3_14b Set A rc=0
+2026-10-17T07:09:22Z casesets qwen3_14b Set C (behaviour only) rc=0
+2026-10-17T07:09:22Z chain_base start cells=[e1_a2e] protos=[qwen3_14b] pid=453439
+2026-10-17T07:10:02Z all-strata cells for qwen3_14b: []
+2026-10-17T07:33:12Z ext14-scan-qwen2_57b-probes rc=0
+2026-10-17T07:34:43Z ext14-e1_a2e-qwen2_7b-sweep rc=0 scale=1.0
+2026-10-17T07:35:02Z ext14-e1_e2a-qwen3_8b-joint rc=0 scale=1.0
+2026-10-17T07:35:23Z ext14-e3_e2a-mistral7b_bos-joint rc=0 scale=1.0
+2026-10-17T07:37:11Z ext14-e3p3_a2e-mixtral_bos-direct rc=0 scale=1.0
+2026-10-17T07:37:18Z analyze e3p3_a2e mixtral_bos rc=0
+2026-10-17T07:38:26Z ext14-e1_a2e_all-qwen3-direct rc=0 scale=1.0
+2026-10-17T07:38:41Z analyze e1_a2e_all qwen3 rc=0
+2026-10-17T07:38:49Z ext14-e1_e2a_all-mistral7b_bos-direct rc=0 scale=1.0
+2026-10-17T07:38:55Z analyze e1_e2a_all mistral7b_bos rc=0
+2026-10-17T07:38:55Z e1p_a2e_all/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T07:39:01Z ext14-e1_e2a-qwen3_4b-dla rc=0 scale=1.0
+2026-10-17T07:40:28Z ext14-e1_a2e-qwen3_14b-sweep rc=0 scale=1.0
+2026-10-17T08:38:50Z ext14-scan-qwen2_57b-cells rc=0
+2026-10-17T08:39:33Z ext14-e1_a2e-qwen2_7b-joint rc=0 scale=1.0
+2026-10-17T08:39:55Z ext14-e1_e2a-qwen3_8b-dla rc=0 scale=1.0
+2026-10-17T08:40:18Z ext14-e3_e2a-mistral7b_bos-dla rc=0 scale=1.0
+2026-10-17T08:53:54Z ext14-e3_a2e-qwen3-t1 rc=0 scale=1.0
+2026-10-17T08:54:03Z analyze e3_a2e qwen3 rc=0
+2026-10-17T09:01:06Z ext14-e1_e2a_all-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T09:01:16Z analyze e1_e2a_all mixtral_bos rc=0
+2026-10-17T09:01:58Z ext14-e1p_e2a_all-mistral7b_bos-t1 rc=0 scale=1.0
+2026-10-17T09:02:06Z analyze e1p_e2a_all mistral7b_bos rc=0
+2026-10-17T09:02:06Z chain_base done cells=[e1_a2e_all e1_e2a_all e1p_a2e_all e1p_e2a_all] protos=[mistral7b_bos]
+2026-10-17T09:02:06Z all-strata chain done (mistral7b_bos)
+2026-10-17T09:02:08Z ext14-e1_e2a-qwen3_4b-direct rc=0 scale=1.0
+2026-10-17T09:02:22Z analyze e1_e2a qwen3_4b rc=0
+2026-10-17T09:02:44Z ext14-e1_a2e-qwen3_14b-joint rc=0 scale=1.0
+2026-10-17T09:07:59Z ext14-cf-filter-qwen2_57b rc=0
+2026-10-17T09:08:41Z ext14-e1_a2e-qwen2_7b-dla rc=0 scale=1.0
+2026-10-17T09:09:00Z ext14-e1_e2a-qwen3_8b-direct rc=0 scale=1.0
+2026-10-17T09:09:09Z analyze e1_e2a qwen3_8b rc=0
+2026-10-17T09:09:18Z ext14-e3_e2a-mistral7b_bos-direct rc=0 scale=1.0
+2026-10-17T09:09:28Z analyze e3_e2a mistral7b_bos rc=0
+2026-10-17T09:09:28Z e1p_a2e/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T09:09:28Z e1p_e2a/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T09:09:29Z e2_a2e/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T09:09:29Z e2_e2a/mistral7b_bos skipped: insufficient / behaviour only
+2026-10-17T09:31:02Z ext14-e3_a2e-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T09:31:09Z analyze e3_a2e mixtral_bos rc=0
+2026-10-17T09:31:35Z analyze e3_e2a qwen3 rc=0
+2026-10-17T09:32:14Z analyze e3_e2a mixtral_bos rc=0
+2026-10-17T09:36:51Z ext14-e1_e2a_all-qwen3-t1 rc=0 scale=1.0
+2026-10-17T09:37:06Z analyze e1_e2a_all qwen3 rc=0
+2026-10-17T09:37:06Z chain_base done cells=[e1_a2e_all e1_e2a_all] protos=[mixtral_bos qwen3]
+2026-10-17T09:40:35Z ext14-e3p3_a2e-qwen3_4b-t1 rc=0 scale=1.0
+2026-10-17T09:40:43Z analyze e3p3_a2e qwen3_4b rc=0
+2026-10-17T09:40:53Z analyze e3_a2e qwen3_4b rc=0
+2026-10-17T09:41:05Z analyze e3_e2a qwen3_4b rc=0
+2026-10-17T09:41:19Z analyze e1p_a2e qwen3_4b rc=0
+2026-10-17T09:41:22Z ext14-e1_a2e-qwen3_14b-dla rc=0 scale=1.0
+2026-10-17T09:43:56Z ext14-scan-qwen2_57b-l_cf rc=0
+2026-10-17T09:43:56Z stage2 scans done (qwen2_57b)
+2026-10-17T09:44:25Z ext14-e1_a2e-qwen2_7b-direct rc=0 scale=1.0
+2026-10-17T09:44:35Z analyze e1_a2e qwen2_7b rc=0
+2026-10-17T09:44:35Z chain_base done cells=[e1_a2e] protos=[qwen2_7b]
+2026-10-17T09:44:35Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen2_7b] pid=3767225
+2026-10-17T09:50:20Z ext14-e3p3_a2e-qwen3_8b-t1 rc=0 scale=1.0
+2026-10-17T09:50:31Z analyze e3p3_a2e qwen3_8b rc=0
+2026-10-17T09:50:44Z analyze e3_a2e qwen3_8b rc=0
+2026-10-17T09:50:55Z analyze e3_e2a qwen3_8b rc=0
+2026-10-17T09:51:05Z analyze e1p_a2e qwen3_8b rc=0
+2026-10-17T09:54:14Z ext14-l_ind-mistral7b_bos-t1 rc=0 scale=1.0
+2026-10-17T09:54:24Z analyze l_ind mistral7b_bos rc=0
+2026-10-17T09:54:39Z analyze l_bind mistral7b_bos rc=0
+2026-10-17T09:54:47Z analyze l_ant mistral7b_bos rc=0
+2026-10-17T09:55:20Z analyze l_prop mistral7b_bos rc=0
+2026-10-17T10:05:12Z ext14-e1p_a2e-qwen3-t1 rc=0 scale=1.0
+2026-10-17T10:05:26Z analyze e1p_a2e qwen3 rc=0
+2026-10-17T10:05:26Z e1p_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T10:05:52Z analyze e1p_e2a qwen3 rc=0
+2026-10-17T10:08:26Z ext14-e1p_e2a-qwen3_4b-t1 rc=0 scale=1.0
+2026-10-17T10:08:41Z analyze e1p_e2a qwen3_4b rc=0
+2026-10-17T10:08:41Z e2_a2e/qwen3_4b skipped: insufficient / behaviour only
+2026-10-17T10:08:41Z e2_e2a/qwen3_4b skipped: insufficient / behaviour only
+2026-10-17T10:08:52Z analyze l_ind qwen3_4b rc=0
+2026-10-17T10:09:01Z ext14-e1_a2e-qwen3_14b-direct rc=0 scale=1.0
+2026-10-17T10:09:02Z analyze l_bind qwen3_4b rc=0
+2026-10-17T10:09:11Z analyze l_ant qwen3_4b rc=0
+2026-10-17T10:09:12Z analyze e1_a2e qwen3_14b rc=0
+2026-10-17T10:09:12Z chain_base done cells=[e1_a2e] protos=[qwen3_14b]
+2026-10-17T10:09:12Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_14b] pid=118147
+2026-10-17T10:19:59Z ext14-e1_e2a-qwen2_7b-t1 rc=0 scale=1.0
+2026-10-17T10:20:14Z analyze e1_e2a qwen2_7b rc=0
+2026-10-17T10:22:09Z analyze e3p3_a2e qwen2_7b rc=0
+2026-10-17T10:27:23Z analyze e3_a2e qwen2_7b rc=0
+2026-10-17T10:28:37Z analyze e3_e2a qwen2_7b rc=0
+2026-10-17T10:28:42Z ext14-scan-qwen2_57b-dialE-ext rc=0
+2026-10-17T10:28:45Z casesets qwen2_57b Set A rc=0
+2026-10-17T10:28:47Z casesets qwen2_57b Set C (behaviour only) rc=0
+2026-10-17T10:28:47Z chain_base start cells=[e1_a2e] protos=[qwen2_57b] pid=537682
+2026-10-17T10:29:05Z all-strata cells for qwen2_57b: [e1p_a2e_all e1p_e2a_all]
+2026-10-17T10:29:06Z casesets qwen2_57b all-strata rc=0
+2026-10-17T10:29:06Z chain_base start cells=[e1p_a2e_all e1p_e2a_all] protos=[qwen2_57b] pid=545046
+2026-10-17T10:29:06Z e1p_a2e_all/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T10:29:06Z e1p_e2a_all/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T10:29:06Z chain_base done cells=[e1p_a2e_all e1p_e2a_all] protos=[qwen2_57b]
+2026-10-17T10:29:06Z all-strata chain done (qwen2_57b)
+2026-10-17T10:32:26Z ext14-e1p_e2a-qwen3_8b-t1 rc=0 scale=1.0
+2026-10-17T10:32:35Z analyze e1p_e2a qwen3_8b rc=0
+2026-10-17T10:32:35Z e2_a2e/qwen3_8b skipped: insufficient / behaviour only
+2026-10-17T10:32:35Z e2_e2a/qwen3_8b skipped: insufficient / behaviour only
+2026-10-17T10:32:35Z l_ind/qwen3_8b skipped: insufficient / behaviour only
+2026-10-17T10:32:40Z analyze l_bind qwen3_8b rc=0
+2026-10-17T10:32:54Z analyze l_ant qwen3_8b rc=0
+2026-10-17T10:33:07Z analyze l_prop qwen3_8b rc=0
+2026-10-17T10:34:16Z ext14-l_cf-mistral7b_bos-t1 rc=0 scale=1.0
+2026-10-17T10:34:23Z analyze l_cf mistral7b_bos rc=0
+2026-10-17T10:34:40Z analyze l_ioi mistral7b_bos rc=0
+2026-10-17T10:34:40Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[mistral7b_bos]
+2026-10-17T10:34:40Z s2 mistral7b_bos done
+2026-10-17T10:49:25Z ext14-e1p_e2a-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T10:49:32Z analyze e1p_e2a mixtral_bos rc=0
+2026-10-17T10:49:32Z e2_a2e/qwen3 skipped: insufficient / behaviour only
+2026-10-17T10:49:32Z e2_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T10:49:32Z e2_e2a/qwen3 skipped: insufficient / behaviour only
+2026-10-17T10:49:32Z e2_e2a/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T10:51:33Z ext14-l_prop-qwen3_4b-t1 rc=0 scale=1.0
+2026-10-17T10:51:44Z analyze l_prop qwen3_4b rc=0
+2026-10-17T10:51:56Z analyze l_cf qwen3_4b rc=0
+2026-10-17T10:52:16Z analyze l_ioi qwen3_4b rc=0
+2026-10-17T10:52:16Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_4b]
+2026-10-17T10:52:16Z s2 qwen3_4b done
+2026-10-17T11:02:34Z ext14-e1_e2a-qwen3_14b-t1 rc=0 scale=1.0
+2026-10-17T11:02:45Z analyze e1_e2a qwen3_14b rc=0
+2026-10-17T11:03:48Z analyze e3p3_a2e qwen3_14b rc=0
+2026-10-17T11:04:03Z analyze e3_a2e qwen3_14b rc=0
+2026-10-17T11:04:15Z analyze e3_e2a qwen3_14b rc=0
+2026-10-17T11:11:02Z ext14-e1p_a2e-qwen2_7b-t1 rc=0 scale=1.0
+2026-10-17T11:11:18Z analyze e1p_a2e qwen2_7b rc=0
+2026-10-17T11:13:05Z analyze e1p_e2a qwen2_7b rc=0
+2026-10-17T11:13:05Z e2_a2e/qwen2_7b skipped: insufficient / behaviour only
+2026-10-17T11:13:06Z e2_e2a/qwen2_7b skipped: insufficient / behaviour only
+2026-10-17T11:13:08Z ext14-e1_a2e-qwen2_57b-t1 rc=1 scale=1.0
+2026-10-17T11:13:11Z analyze l_ind qwen2_7b rc=0
+2026-10-17T11:13:11Z l_bind/qwen2_7b skipped: insufficient / behaviour only
+2026-10-17T11:13:19Z analyze l_ant qwen2_7b rc=0
+2026-10-17T11:15:16Z ext14-l_cf-qwen3_8b-t1 rc=0 scale=1.0
+2026-10-17T11:15:22Z analyze l_cf qwen3_8b rc=0
+2026-10-17T11:15:40Z analyze l_ioi qwen3_8b rc=0
+2026-10-17T11:15:40Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_8b]
+2026-10-17T11:15:40Z s2 qwen3_8b done
+2026-10-17T11:25:18Z ext14-l_ind-qwen3-t1 rc=0 scale=1.0
+2026-10-17T11:25:23Z analyze l_ind qwen3 rc=0
+2026-10-17T11:25:37Z analyze l_ind mixtral_bos rc=0
+2026-10-17T11:33:18Z ext14-e1p_a2e-qwen3_14b-t1 rc=0 scale=1.0
+2026-10-17T11:33:54Z analyze e1p_a2e qwen3_14b rc=0
+2026-10-17T11:43:20Z analyze e1p_e2a qwen3_14b rc=0
+2026-10-17T11:43:21Z e2_a2e/qwen3_14b skipped: insufficient / behaviour only
+2026-10-17T11:43:21Z e2_e2a/qwen3_14b skipped: insufficient / behaviour only
+2026-10-17T11:43:25Z analyze l_ind qwen3_14b rc=0
+2026-10-17T11:43:34Z analyze l_bind qwen3_14b rc=0
+2026-10-17T11:57:58Z ext14-e1_a2e-qwen2_57b-t1 rc=0 scale=0.75
+2026-10-17T11:58:08Z analyze e1_a2e qwen2_57b rc=0
+2026-10-17T11:58:08Z chain_base done cells=[e1_a2e] protos=[qwen2_57b]
+2026-10-17T11:58:08Z chain_base start cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen2_57b] pid=2471137
+2026-10-17T12:04:08Z ext14-l_prop-qwen2_7b-t1 rc=0 scale=1.0
+2026-10-17T12:04:16Z analyze l_prop qwen2_7b rc=0
+2026-10-17T12:04:35Z analyze l_cf qwen2_7b rc=0
+2026-10-17T12:04:48Z analyze l_ioi qwen2_7b rc=0
+2026-10-17T12:04:49Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen2_7b]
+2026-10-17T12:04:49Z s2 qwen2_7b done
+2026-10-17T12:20:38Z ext14-l_bind-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T12:20:46Z analyze l_bind mixtral_bos rc=0
+2026-10-17T12:20:55Z analyze l_ant qwen3 rc=0
+2026-10-17T12:21:12Z analyze l_ant mixtral_bos rc=0
+2026-10-17T12:27:35Z ext14-l_ant-qwen3_14b-t1 rc=0 scale=1.0
+2026-10-17T12:27:56Z analyze l_ant qwen3_14b rc=0
+2026-10-17T12:28:25Z analyze l_prop qwen3_14b rc=0
+2026-10-17T12:29:13Z analyze l_cf qwen3_14b rc=0
+2026-10-17T12:29:53Z analyze l_ioi qwen3_14b rc=0
+2026-10-17T12:29:53Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen3_14b]
+2026-10-17T12:29:53Z s2 qwen3_14b done
+2026-10-17T12:47:50Z ext14-e1_e2a-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T12:47:59Z analyze e1_e2a qwen2_57b rc=0
+2026-10-17T12:58:50Z ext14-l_prop-qwen3-t1 rc=0 scale=1.0
+2026-10-17T13:00:22Z analyze l_prop qwen3 rc=0
+2026-10-17T13:20:22Z ext14-e3p3_a2e-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T13:20:32Z analyze e3p3_a2e qwen2_57b rc=0
+2026-10-17T13:20:32Z e3_a2e/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T13:38:53Z ext14-l_prop-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T13:39:01Z analyze l_prop mixtral_bos rc=0
+2026-10-17T13:41:12Z analyze e0_a2e qwen3 rc=0
+2026-10-17T13:41:12Z e0_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T13:41:13Z ext14-e3_e2a-qwen2_57b-t1 rc=1 scale=1.0
+2026-10-17T14:16:08Z ext14-e3_e2a-qwen2_57b-t1 rc=0 scale=0.75
+2026-10-17T14:16:18Z analyze e3_e2a qwen2_57b rc=0
+2026-10-17T14:16:18Z e1p_a2e/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T14:16:18Z e1p_e2a/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T14:16:18Z e2_a2e/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T14:16:18Z e2_e2a/qwen2_57b skipped: tier 1 trimmed for qwen2_57b (behaviour only)
+2026-10-17T14:26:26Z ext14-e0_e2a-qwen3-t1 rc=0 scale=1.0
+2026-10-17T14:26:32Z analyze e0_e2a qwen3 rc=0
+2026-10-17T14:26:32Z e0_e2a/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T14:29:47Z analyze aagr_a2e qwen3 rc=0
+2026-10-17T14:29:48Z aagr_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T14:45:58Z ext14-l_ind-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T14:46:07Z analyze l_ind qwen2_57b rc=0
+2026-10-17T14:46:07Z l_bind/qwen2_57b skipped: insufficient / behaviour only
+2026-10-17T14:56:20Z ext14-aagr_e2a-qwen3-t1 rc=0 scale=1.0
+2026-10-17T14:56:41Z analyze aagr_e2a qwen3 rc=0
+2026-10-17T14:56:41Z aagr_e2a/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T15:03:50Z analyze acon_a2e qwen3 rc=0
+2026-10-17T15:03:50Z acon_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T15:03:50Z acon_e2a/qwen3 skipped: insufficient / behaviour only
+2026-10-17T15:03:50Z acon_e2a/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T15:16:47Z ext14-l_ant-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T15:16:56Z analyze l_ant qwen2_57b rc=0
+2026-10-17T15:18:44Z ext14-e1_e2a-mixtral_bos-t1heads rc=0
+2026-10-17T15:18:59Z analyze e1_e2a mixtral_bos (+heads) rc=0
+2026-10-17T15:33:40Z ext14-sc_agree_a2e-qwen3-t1 rc=0 scale=1.0
+2026-10-17T15:41:07Z analyze sc_agree_a2e qwen3 rc=0
+2026-10-17T15:41:18Z analyze sc_agree_a2e mixtral_bos rc=0
+2026-10-17T15:41:28Z analyze sc_conflict_stmt_a2e qwen3 rc=0
+2026-10-17T15:41:28Z sc_conflict_stmt_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T15:41:28Z sc_conflict_event_a2e/qwen3 skipped: insufficient / behaviour only
+2026-10-17T15:41:28Z sc_conflict_event_a2e/mixtral_bos skipped: insufficient / behaviour only
+2026-10-17T15:54:25Z ext14-l_prop-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T15:54:37Z analyze l_prop qwen2_57b rc=0
+2026-10-17T16:01:59Z ext14-rsite_e1_a2e-qwen3-t1 rc=0 scale=1.0
+2026-10-17T16:02:23Z analyze rsite_e1_a2e qwen3 rc=0
+2026-10-17T16:19:43Z ext14-l_cf-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T16:19:51Z analyze l_cf qwen2_57b rc=0
+2026-10-17T16:29:49Z ext14-rsite_e1_a2e-mixtral_bos-t1 rc=0 scale=1.0
+2026-10-17T16:29:59Z analyze rsite_e1_a2e mixtral_bos rc=0
+2026-10-17T16:29:59Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop e0_a2e e0_e2a aagr_a2e aagr_e2a acon_a2e acon_e2a sc_agree_a2e sc_conflict_stmt_a2e sc_conflict_event_a2e rsite_e1_a2e] protos=[qwen3 mixtral_bos]
+2026-10-17T16:50:37Z ext14-l_ioi-qwen2_57b-t1 rc=0 scale=1.0
+2026-10-17T16:50:46Z analyze l_ioi qwen2_57b rc=0
+2026-10-17T16:50:46Z chain_base done cells=[e1_a2e e1_e2a e3p3_a2e e3_a2e e3_e2a e1p_a2e e1p_e2a e2_a2e e2_e2a l_ind l_bind l_ant l_prop l_cf l_ioi] protos=[qwen2_57b]
+2026-10-17T16:50:46Z s2 qwen2_57b done

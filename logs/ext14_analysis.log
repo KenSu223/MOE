@@ -1,0 +1,419 @@
+
+===== 2026-10-16T22:54:06Z scripts/ext14_all.py
+22:54:08 cell l_bind/qwen3
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+22:54:17 wrote /home/ubuntu/MOE/results/ext14_summary.json: 5 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-16T23:20:33Z scripts/ext14_all.py
+23:20:35 cell e1_a2e/qwen3
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+23:20:41 wrote /home/ubuntu/MOE/results/ext14_summary.json: 6 cells, protos ['qwen3', 'mixtral_bos']
+23:20:44 sections failed: TypeError('unsupported format string passed to NoneType.__format__')
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 892, in main
+    SEC.write_all(S, SECT, SFX)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 376, in write_all
+    f.write(fn(S, sfx))
+            ~~^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 79, in ladder_section
+    f"{rho:+.2f}" + (f" (CI over the cells' bootstrap draws {F(x.get('spearman_ci'))})" if x.get("spearman_ci") else "") +
+      ^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+23:20:44 done in 10s
+
+===== 2026-10-16T23:29:45Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+23:29:47 wrote /home/ubuntu/MOE/results/ext14_summary.json: 6 cells, protos ['qwen3', 'mixtral_bos']
+23:29:50 sections failed: TypeError('unsupported format string passed to NoneType.__format__')
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 892, in main
+    SEC.write_all(S, SECT, SFX)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 376, in write_all
+    f.write(fn(S, sfx))
+            ~~^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 79, in ladder_section
+    f"{rho:+.2f}" + (f" (CI over the cells' bootstrap draws {F(x.get('spearman_ci'))})" if x.get("spearman_ci") else "") +
+      ^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+23:29:50 done in 5s
+
+===== 2026-10-16T23:45:26Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+23:45:36 wrote /home/ubuntu/MOE/results/ext14_summary.json: 6 cells, protos ['qwen3', 'mixtral_bos']
+23:45:38 sections failed: TypeError('unsupported format string passed to NoneType.__format__')
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 892, in main
+    SEC.write_all(S, SECT, SFX)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 376, in write_all
+    f.write(fn(S, sfx))
+            ~~^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 79, in ladder_section
+    f"{rho:+.2f}" + (f" (CI over the cells' bootstrap draws {F(x.get('spearman_ci'))})" if x.get("spearman_ci") else "") +
+      ^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+23:45:38 done in 11s
+
+===== 2026-10-16T23:53:24Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+23:53:27 wrote /home/ubuntu/MOE/results/ext14_summary.json: 6 cells, protos ['qwen3', 'mixtral_bos']
+23:53:29 sections failed: TypeError('unsupported format string passed to NoneType.__format__')
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 892, in main
+    SEC.write_all(S, SECT, SFX)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 376, in write_all
+    f.write(fn(S, sfx))
+            ~~^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 79, in ladder_section
+    f"{rho:+.2f}" + (f" (CI over the cells' bootstrap draws {F(x.get('spearman_ci'))})" if x.get("spearman_ci") else "") +
+      ^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+23:53:29 done in 5s
+
+===== 2026-10-17T00:25:22Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+00:25:30 wrote /home/ubuntu/MOE/results/ext14_summary.json: 6 cells, protos ['qwen3', 'mixtral_bos']
+00:25:32 sections failed: TypeError('unsupported format string passed to NoneType.__format__')
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 892, in main
+    SEC.write_all(S, SECT, SFX)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 376, in write_all
+    f.write(fn(S, sfx))
+            ~~^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_analyze_sections.py", line 79, in ladder_section
+    f"{rho:+.2f}" + (f" (CI over the cells' bootstrap draws {F(x.get('spearman_ci'))})" if x.get("spearman_ci") else "") +
+      ^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+00:25:32 done in 9s
+
+===== 2026-10-17T00:34:05Z scripts/ext14_all.py
+00:34:06 cell e1_a2e/mixtral_bos
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+00:34:18 wrote /home/ubuntu/MOE/results/ext14_summary.json: 7 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T00:34:18Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+00:34:34 wrote /home/ubuntu/MOE/results/ext14_summary.json: 7 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T00:39:06Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+00:39:10 wrote /home/ubuntu/MOE/results/ext14_summary.json: 7 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T01:03:28Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+01:03:34 wrote /home/ubuntu/MOE/results/ext14_summary.json: 7 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T01:08:47Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+01:09:02 wrote /home/ubuntu/MOE/results/ext14_summary.json: 7 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T01:46:59Z scripts/ext14_all.py
+01:47:00 cell e1_e2a/qwen3
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+01:47:27 wrote /home/ubuntu/MOE/results/ext14_summary.json: 8 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T01:47:28Z scripts/ext14_all.py
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/mixtral_bos failed: ValueError('Index contains duplicate entries, cannot reshape')
+[ext14] load l_cf/qwen3 failed: ValueError('Index contains duplicate entries, cannot reshape')
+01:47:39 wrote /home/ubuntu/MOE/results/ext14_summary.json: 8 cells, protos ['qwen3', 'mixtral_bos']
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 899, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 886, in main
+    tables(S)
+    ~~~~~~^^^
+  File "/home/ubuntu/MOE/scripts/ext14_all.py", line 454, in tables
+    rows.append({"Model": lab(p), "Cell": f"Spearman of the cell ranking: LD vs norm. LD {R.get('spearman_ld_nld', float('nan')):.2f}, LD vs Δp {R.get('spearman_ld_dp', float('nan')):.2f}",
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+
+===== 2026-10-17T01:55:11Z scripts/ext14_all.py
+01:55:31 wrote /home/ubuntu/MOE/results/ext14_summary.json: 8 cells, protos ['qwen3', 'mixtral_bos']
+01:55:35 done in 13s
+
+===== 2026-10-17T02:49:34Z scripts/ext14_all.py
+02:49:39 wrote /home/ubuntu/MOE/results/ext14_summary.json: 8 cells, protos ['qwen3', 'mixtral_bos']
+02:49:42 done in 8s
+
+===== 2026-10-17T03:23:24Z scripts/ext14_all.py
+03:23:34 wrote /home/ubuntu/MOE/results/ext14_summary.json: 9 cells, protos ['qwen3', 'mixtral_bos']
+03:23:38 done in 13s
+
+===== 2026-10-17T03:23:38Z scripts/ext14_all.py
+03:23:49 wrote /home/ubuntu/MOE/results/ext14_summary.json: 9 cells, protos ['qwen3', 'mixtral_bos']
+03:23:52 done in 14s
+
+===== 2026-10-17T03:55:08Z scripts/ext14_all.py
+03:55:14 wrote /home/ubuntu/MOE/results/ext14_summary.json: 9 cells, protos ['qwen3', 'mixtral_bos']
+03:55:17 done in 9s
+
+===== 2026-10-17T04:38:28Z scripts/ext14_all.py
+04:38:28 cell e3p3_a2e/mistral7b_bos
+04:38:56 wrote /home/ubuntu/MOE/results/ext14_summary.json: 10 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos']
+04:39:00 done in 32s
+
+===== 2026-10-17T04:39:00Z scripts/ext14_all.py
+04:39:08 wrote /home/ubuntu/MOE/results/ext14_summary.json: 10 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos']
+04:39:12 done in 11s
+
+===== 2026-10-17T05:18:46Z scripts/ext14_all.py
+05:18:52 wrote /home/ubuntu/MOE/results/ext14_summary.json: 10 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos']
+05:18:56 done in 10s
+
+===== 2026-10-17T05:47:05Z scripts/ext14_all.py
+05:47:06 cell e3p3_a2e/qwen3
+05:47:12 wrote /home/ubuntu/MOE/results/ext14_summary.json: 11 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos']
+05:47:15 done in 10s
+
+===== 2026-10-17T05:53:17Z scripts/ext14_all.py
+05:53:18 cell e1_a2e_all/mixtral_bos
+05:53:19 cell e1_a2e_all/mistral7b_bos
+05:53:28 wrote /home/ubuntu/MOE/results/ext14_summary.json: 13 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos']
+05:53:33 done in 15s
+
+===== 2026-10-17T06:25:50Z scripts/ext14_all.py
+06:25:50 cell e1_a2e/qwen3_4b
+06:25:51 cell e1_a2e/qwen3_8b
+06:25:59 wrote /home/ubuntu/MOE/results/ext14_summary.json: 15 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+06:26:04 done in 14s
+
+===== 2026-10-17T06:28:05Z scripts/ext14_all.py
+06:28:06 cell e3_a2e/mistral7b_bos
+06:28:24 wrote /home/ubuntu/MOE/results/ext14_summary.json: 16 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+06:28:29 done in 24s
+
+===== 2026-10-17T07:39:07Z scripts/ext14_all.py
+07:39:07 cell e1_a2e_all/qwen3
+07:39:09 cell e1_e2a_all/mistral7b_bos
+07:39:09 cell e3p3_a2e/mixtral_bos
+07:39:47 wrote /home/ubuntu/MOE/results/ext14_summary.json: 19 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+07:39:53 done in 45s
+
+===== 2026-10-17T08:54:49Z scripts/ext14_all.py
+08:54:50 cell e3_a2e/qwen3
+08:55:15 wrote /home/ubuntu/MOE/results/ext14_summary.json: 20 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+08:55:22 done in 32s
+
+===== 2026-10-17T09:01:27Z scripts/ext14_all.py
+09:01:27 cell e1_e2a_all/mixtral_bos
+09:01:43 wrote /home/ubuntu/MOE/results/ext14_summary.json: 21 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+09:01:49 done in 22s
+
+===== 2026-10-17T09:03:50Z scripts/ext14_all.py
+09:03:52 cell e1_e2a/qwen3_4b
+09:05:05 cell e1p_e2a_all/mistral7b_bos
+09:08:01 wrote /home/ubuntu/MOE/results/ext14_summary.json: 23 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+09:08:07 done in 255s
+
+===== 2026-10-17T09:10:08Z scripts/ext14_all.py
+09:10:09 cell e1_e2a/qwen3_8b
+09:10:10 cell e3_e2a/mistral7b_bos
+09:10:33 wrote /home/ubuntu/MOE/results/ext14_summary.json: 25 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+09:10:39 done in 30s
+
+===== 2026-10-17T09:32:53Z scripts/ext14_all.py
+09:32:54 cell e3_a2e/mixtral_bos
+09:33:00 cell e3_e2a/qwen3
+09:33:09 cell e3_e2a/mixtral_bos
+09:33:28 wrote /home/ubuntu/MOE/results/ext14_summary.json: 28 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen3_4b', 'qwen3_8b']
+09:33:35 done in 41s
+
+===== 2026-10-17T15:09:53Z scripts/ext14_all.py (refresher)
+15:09:54 cell acon_a2e/qwen3
+15:16:49 wrote /home/ubuntu/MOE/results/ext14_summary.json: 101 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+15:17:02 done in 428s
+
+===== 2026-10-17T15:20:03Z scripts/ext14_all.py (refresher)
+15:21:39 cell e1_e2a/mixtral_bos
+15:24:17 wrote /home/ubuntu/MOE/results/ext14_summary.json: 102 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+15:24:31 done in 171s
+
+===== 2026-10-17T15:42:32Z scripts/ext14_all.py (refresher)
+15:52:46 wrote /home/ubuntu/MOE/results/ext14_summary.json: 105 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+15:53:00 done in 355s
+
+===== 2026-10-17T15:56:01Z scripts/ext14_all.py (refresher)
+15:56:14 cell l_prop/qwen2_57b
+15:58:57 wrote /home/ubuntu/MOE/results/ext14_summary.json: 106 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+15:59:10 done in 176s
+
+===== 2026-10-17T16:05:11Z scripts/ext14_all.py (refresher)
+16:05:13 cell rsite_e1_a2e/qwen3
+16:10:07 wrote /home/ubuntu/MOE/results/ext14_summary.json: 107 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+16:10:20 done in 308s
+
+===== 2026-10-17T16:22:21Z scripts/ext14_all.py (refresher)
+16:22:23 cell l_cf/qwen2_57b
+16:24:24 wrote /home/ubuntu/MOE/results/ext14_summary.json: 108 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+16:24:39 done in 136s
+
+===== 2026-10-17T16:30:40Z scripts/ext14_all.py (refresher)
+16:30:41 cell rsite_e1_a2e/mixtral_bos
+16:40:21 wrote /home/ubuntu/MOE/results/ext14_summary.json: 109 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+16:40:35 done in 594s
+
+===== 2026-10-17T16:52:36Z scripts/ext14_all.py (refresher)
+16:52:38 cell l_ioi/qwen2_57b
+16:54:41 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+16:54:56 done in 139s
+
+===== 2026-10-17T17:27:40Z scripts/ext14_all.py
+
+===== 2026-10-17T17:27:57Z scripts/ext14_all.py (refresher)
+17:29:45 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+17:30:00 done in 140s
+
+===== 2026-10-17T17:30:01Z scripts/ext14_all.py
+17:31:43 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+17:31:58 done in 118s
+17:33:51 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+17:34:05 done in 127s
+
+===== 2026-10-17T17:57:04Z scripts/ext14_all.py
+
+===== 2026-10-17T17:58:59Z scripts/ext14_all.py (refresher)
+17:59:11 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+17:59:25 done in 140s
+18:01:13 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+18:01:27 done in 122s
+
+===== 2026-10-17T18:27:57Z scripts/ext14_all.py
+
+===== 2026-10-17T18:28:28Z scripts/ext14_all.py (refresher)
+18:28:48 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+18:29:01 done in 64s
+18:31:24 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+18:31:39 done in 157s
+
+===== 2026-10-17T18:41:55Z scripts/ext14_all.py
+18:42:48 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+18:43:02 done in 66s
+
+===== 2026-10-17T18:43:40Z scripts/ext14_all.py (refresher)
+18:44:30 wrote /home/ubuntu/MOE/results/ext14_summary.json: 110 cells, protos ['qwen3', 'mixtral_bos', 'mistral7b_bos', 'qwen2_7b', 'qwen2_57b', 'qwen3_4b', 'qwen3_8b', 'qwen3_14b']
+18:44:43 done in 63s

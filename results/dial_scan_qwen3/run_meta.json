@@ -1,0 +1,661 @@
+{
+ "scan_cells_core_e1_a2e+e1_e2a+e3_a2e+e3_e2a+rsite_e1_a2e": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1_a2e,e1_e2a,e3_a2e,e3_e2a,rsite_e1_a2e",
+  "created_utc": "2026-10-16T19:27:23Z",
+  "complete": true,
+  "cells": {
+   "e1_a2e": {
+    "pairs": 1194,
+    "margin": 181,
+    "reverse_margin": 0,
+    "margin_rate": 0.152,
+    "by_order": {
+     "1": 0.159,
+     "2": 0.144
+    },
+    "top1_both": 0.484,
+    "passes": 1
+   },
+   "e1_e2a": {
+    "pairs": 1194,
+    "margin": 792,
+    "reverse_margin": 0,
+    "margin_rate": 0.663,
+    "by_order": {
+     "1": 0.672,
+     "2": 0.655
+    },
+    "top1_both": 0.143,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 651,
+    "margin": 172,
+    "reverse_margin": 0,
+    "margin_rate": 0.264,
+    "by_order": {
+     "1": 0.29,
+     "2": 0.216
+    },
+    "top1_both": 0.309,
+    "passes": 1
+   },
+   "e3_e2a": {
+    "pairs": 656,
+    "margin": 644,
+    "reverse_margin": 0,
+    "margin_rate": 0.982,
+    "by_order": {
+     "1": 0.979,
+     "2": 0.987
+    },
+    "top1_both": 0.265,
+    "passes": 1
+   },
+   "rsite_e1_a2e": {
+    "pairs": 1194,
+    "margin": 251,
+    "reverse_margin": 9,
+    "margin_rate": 0.21,
+    "by_order": {
+     "1": 0.302,
+     "2": 0.119
+    },
+    "top1_both": 0.462,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T19:31:31Z"
+ },
+ "scan_cells_core_e1p_a2e+e1p_e2a+e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e",
+  "created_utc": "2026-10-16T19:42:09Z",
+  "complete": true,
+  "cells": {
+   "e1p_a2e": {
+    "pairs": 980,
+    "margin": 134,
+    "reverse_margin": 0,
+    "margin_rate": 0.137,
+    "by_order": {
+     "1": 0.149,
+     "2": 0.124
+    },
+    "top1_both": 0.355,
+    "passes": 1
+   },
+   "e1p_e2a": {
+    "pairs": 980,
+    "margin": 614,
+    "reverse_margin": 2,
+    "margin_rate": 0.627,
+    "by_order": {
+     "1": 0.643,
+     "2": 0.61
+    },
+    "top1_both": 0.064,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 1194,
+    "margin": 3,
+    "reverse_margin": 0,
+    "margin_rate": 0.003,
+    "by_order": {
+     "1": 0.0,
+     "2": 0.005
+    },
+    "top1_both": 0.054,
+    "passes": 1
+   },
+   "e2_e2a": {
+    "pairs": 1194,
+    "margin": 52,
+    "reverse_margin": 17,
+    "margin_rate": 0.044,
+    "by_order": {
+     "1": 0.039,
+     "2": 0.049
+    },
+    "top1_both": 0.044,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 1302,
+    "margin": 796,
+    "reverse_margin": 0,
+    "margin_rate": 0.611,
+    "by_order": {
+     "1": 0.613,
+     "2": 0.61
+    },
+    "top1_both": 0.835,
+    "passes": 1
+   },
+   "sc_conflict_a2e": {
+    "pairs": 1302,
+    "margin": 149,
+    "reverse_margin": 139,
+    "margin_rate": 0.114,
+    "by_order": {
+     "1": 0.115,
+     "2": 0.114
+    },
+    "top1_both": 0.323,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T19:47:22Z"
+ },
+ "scan_cells_all_pilot_frames": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells pilot_frames",
+  "created_utc": "2026-10-16T19:47:31Z",
+  "complete": true,
+  "cells": {
+   "pilot_frames": {
+    "pairs": 2000,
+    "margin": 1018,
+    "reverse_margin": 0,
+    "margin_rate": 0.509,
+    "by_order": {
+     "1": 0.501,
+     "2": 0.517
+    },
+    "top1_both": 0.619,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T19:48:27Z"
+ },
+ "scan_probes_core_": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part probes",
+  "created_utc": "2026-10-16T19:48:35Z",
+  "complete": true,
+  "n_rows": 7200,
+  "n_keys": 900,
+  "n_passes": 2,
+  "completed_utc": "2026-10-16T19:50:20Z"
+ },
+ "scan_cells_all_l_ind+l_bind+l_ant+l_prop": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind,l_bind,l_ant,l_prop",
+  "created_utc": "2026-10-16T19:50:28Z",
+  "complete": true,
+  "cells": {
+   "l_ind": {
+    "pairs": 800,
+    "margin": 318,
+    "reverse_margin": 0,
+    "margin_rate": 0.398,
+    "by_order": {
+     "1": 0.38,
+     "2": 0.415
+    },
+    "top1_both": 0.796,
+    "passes": 1
+   },
+   "l_bind": {
+    "pairs": 800,
+    "margin": 207,
+    "reverse_margin": 0,
+    "margin_rate": 0.259,
+    "by_order": {
+     "1": 0.255,
+     "2": 0.262
+    },
+    "top1_both": 0.599,
+    "passes": 1
+   },
+   "l_ant": {
+    "pairs": 630,
+    "margin": 550,
+    "reverse_margin": 11,
+    "margin_rate": 0.873,
+    "by_order": {
+     "1": 0.873
+    },
+    "top1_both": 0.479,
+    "passes": 1
+   },
+   "l_prop": {
+    "pairs": 845,
+    "margin": 693,
+    "reverse_margin": 0,
+    "margin_rate": 0.82,
+    "by_order": {
+     "1": 0.82
+    },
+    "top1_both": 0.267,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T19:53:56Z"
+ },
+ "scan_cells_all_l_bind+l_ind": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_bind,l_ind",
+  "created_utc": "2026-10-16T20:27:13Z",
+  "complete": true,
+  "cells": {
+   "l_bind": {
+    "pairs": 3200,
+    "margin": 781,
+    "reverse_margin": 0,
+    "margin_rate": 0.244,
+    "by_order": {
+     "1": 0.242,
+     "2": 0.246
+    },
+    "top1_both": 0.582,
+    "passes": 1
+   },
+   "l_ind": {
+    "pairs": 1600,
+    "margin": 622,
+    "reverse_margin": 0,
+    "margin_rate": 0.389,
+    "by_order": {
+     "1": 0.395,
+     "2": 0.382
+    },
+    "top1_both": 0.791,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T20:29:12Z"
+ },
+ "scan_cells_core_e1_a2e+e1p_a2e+e2_a2e+rsite_e1_a2e+e3p3_a2e+sc_agree_a2e+sc_conflict_a2e": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1_a2e,e1p_a2e,e2_a2e,rsite_e1_a2e,e3p3_a2e,sc_agree_a2e,sc_conflict_a2e",
+  "created_utc": "2026-10-16T20:49:45Z",
+  "complete": true,
+  "cells": {
+   "e1_a2e": {
+    "pairs": 1178,
+    "margin": 1116,
+    "reverse_margin": 0,
+    "margin_rate": 0.947,
+    "by_order": {
+     "1": 0.941,
+     "2": 0.954
+    },
+    "top1_both": 0.909,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 970,
+    "margin": 721,
+    "reverse_margin": 0,
+    "margin_rate": 0.743,
+    "by_order": {
+     "1": 0.73,
+     "2": 0.757
+    },
+    "top1_both": 0.896,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 1178,
+    "margin": 0,
+    "reverse_margin": 824,
+    "margin_rate": 0.0,
+    "by_order": {
+     "1": 0.0,
+     "2": 0.0
+    },
+    "top1_both": 0.0,
+    "passes": 1
+   },
+   "rsite_e1_a2e": {
+    "pairs": 1150,
+    "margin": 1070,
+    "reverse_margin": 0,
+    "margin_rate": 0.93,
+    "by_order": {
+     "1": 0.939,
+     "2": 0.922
+    },
+    "top1_both": 0.914,
+    "passes": 1
+   },
+   "e3p3_a2e": {
+    "pairs": 624,
+    "margin": 137,
+    "reverse_margin": 1,
+    "margin_rate": 0.22,
+    "by_order": {
+     "1": 0.227,
+     "2": 0.205
+    },
+    "top1_both": 0.324,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 1286,
+    "margin": 468,
+    "reverse_margin": 0,
+    "margin_rate": 0.364,
+    "by_order": {
+     "1": 0.37,
+     "2": 0.358
+    },
+    "top1_both": 0.681,
+    "passes": 1
+   },
+   "sc_conflict_a2e": {
+    "pairs": 1286,
+    "margin": 182,
+    "reverse_margin": 38,
+    "margin_rate": 0.142,
+    "by_order": {
+     "1": 0.152,
+     "2": 0.131
+    },
+    "top1_both": 0.407,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T20:56:03Z"
+ },
+ "scan_cells_all_dA_e1_a2e+dA_e1_e2a+e0_a2e+e0_e2a": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells dA_e1_a2e,dA_e1_e2a,e0_a2e,e0_e2a",
+  "created_utc": "2026-10-16T20:56:09Z",
+  "complete": true,
+  "cells": {
+   "dA_e1_a2e": {
+    "pairs": 1398,
+    "margin": 1365,
+    "reverse_margin": 0,
+    "margin_rate": 0.976,
+    "by_order": {
+     "1": 0.973,
+     "2": 0.98
+    },
+    "top1_both": 0.989,
+    "passes": 1
+   },
+   "dA_e1_e2a": {
+    "pairs": 1398,
+    "margin": 665,
+    "reverse_margin": 7,
+    "margin_rate": 0.476,
+    "by_order": {
+     "1": 0.476,
+     "2": 0.475
+    },
+    "top1_both": 0.005,
+    "passes": 1
+   },
+   "e0_a2e": {
+    "pairs": 742,
+    "margin": 484,
+    "reverse_margin": 5,
+    "margin_rate": 0.652,
+    "by_order": {
+     "1": 0.655,
+     "2": 0.65
+    },
+    "top1_both": 0.825,
+    "passes": 1
+   },
+   "e0_e2a": {
+    "pairs": 742,
+    "margin": 206,
+    "reverse_margin": 0,
+    "margin_rate": 0.278,
+    "by_order": {
+     "1": 0.288,
+     "2": 0.267
+    },
+    "top1_both": 0.004,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T20:59:43Z"
+ },
+ "scan_cells_all_pilot_ind": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells pilot_ind",
+  "created_utc": "2026-10-16T21:01:40Z",
+  "complete": true,
+  "cells": {
+   "pilot_ind": {
+    "pairs": 2000,
+    "margin": 335,
+    "reverse_margin": 11,
+    "margin_rate": 0.168,
+    "by_order": {
+     "1": 0.167,
+     "2": 0.168
+    },
+    "top1_both": 0.319,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T21:02:37Z"
+ },
+ "scan_cells_ext_e1_e2a+e3p3_a2e+e3_a2e+e1p_a2e+e1p_e2a": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e1p_a2e,e1p_e2a",
+  "created_utc": "2026-10-16T21:44:53Z",
+  "complete": true,
+  "cells": {
+   "e1_e2a": {
+    "pairs": 2400,
+    "margin": 1266,
+    "reverse_margin": 5,
+    "margin_rate": 0.527,
+    "by_order": {
+     "1": 0.538,
+     "2": 0.517
+    },
+    "top1_both": 0.08,
+    "passes": 1
+   },
+   "e3p3_a2e": {
+    "pairs": 1200,
+    "margin": 191,
+    "reverse_margin": 5,
+    "margin_rate": 0.159,
+    "by_order": {
+     "1": 0.156,
+     "2": 0.168
+    },
+    "top1_both": 0.274,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 1200,
+    "margin": 182,
+    "reverse_margin": 2,
+    "margin_rate": 0.152,
+    "by_order": {
+     "1": 0.142,
+     "2": 0.182
+    },
+    "top1_both": 0.238,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 2400,
+    "margin": 1864,
+    "reverse_margin": 0,
+    "margin_rate": 0.777,
+    "by_order": {
+     "1": 0.781,
+     "2": 0.772
+    },
+    "top1_both": 0.891,
+    "passes": 2
+   },
+   "e1p_e2a": {
+    "pairs": 2400,
+    "margin": 1218,
+    "reverse_margin": 3,
+    "margin_rate": 0.507,
+    "by_order": {
+     "1": 0.521,
+     "2": 0.494
+    },
+    "top1_both": 0.04,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T21:49:57Z"
+ },
+ "scan_cells_ext_e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset ext --cells e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e",
+  "created_utc": "2026-10-16T21:50:05Z",
+  "complete": true,
+  "cells": {
+   "e2_a2e": {
+    "pairs": 2400,
+    "margin": 0,
+    "reverse_margin": 1295,
+    "margin_rate": 0.0,
+    "by_order": {
+     "1": 0.0,
+     "2": 0.0
+    },
+    "top1_both": 0.003,
+    "passes": 2
+   },
+   "e2_e2a": {
+    "pairs": 2400,
+    "margin": 71,
+    "reverse_margin": 66,
+    "margin_rate": 0.03,
+    "by_order": {
+     "1": 0.03,
+     "2": 0.029
+    },
+    "top1_both": 0.022,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 2400,
+    "margin": 1141,
+    "reverse_margin": 1,
+    "margin_rate": 0.475,
+    "by_order": {
+     "1": 0.493,
+     "2": 0.458
+    },
+    "top1_both": 0.721,
+    "passes": 2
+   },
+   "sc_conflict_a2e": {
+    "pairs": 2400,
+    "margin": 542,
+    "reverse_margin": 12,
+    "margin_rate": 0.226,
+    "by_order": {
+     "1": 0.25,
+     "2": 0.202
+    },
+    "top1_both": 0.501,
+    "passes": 2
+   }
+  },
+  "completed_utc": "2026-10-16T21:55:56Z"
+ },
+ "scan_cells_all_l_ind": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "proto": "qwen3",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind",
+  "created_utc": "2026-10-16T22:48:26Z",
+  "complete": true,
+  "cells": {
+   "l_ind": {
+    "pairs": 1600,
+    "margin": 194,
+    "reverse_margin": 0,
+    "margin_rate": 0.121,
+    "by_order": {
+     "1": 0.116,
+     "2": 0.126
+    },
+    "top1_both": 0.333,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T22:49:33Z"
+ }
+}

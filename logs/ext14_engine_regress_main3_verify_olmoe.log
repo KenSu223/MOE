@@ -1,0 +1,35 @@
+[runwt] moetrace from /home/ubuntu/MOE/moetrace
+02:59:42 picked 50 cases; first prompt: 'Virginia State Route 33 is located in' true=Virginia foil=Milan subj_pos=[0, 1, 2, 3, 4]
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:01<00:43,  3.98it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:28,  5.81it/s]Loading weights:  15%|█▍        | 26/179 [00:04<00:24,  6.22it/s]Loading weights:  21%|██        | 37/179 [00:06<00:22,  6.37it/s]Loading weights:  26%|██▌       | 46/179 [00:06<00:14,  9.25it/s]Loading weights:  28%|██▊       | 50/179 [00:07<00:20,  6.29it/s]Loading weights:  33%|███▎      | 59/179 [00:09<00:20,  5.96it/s]Loading weights:  39%|███▉      | 70/179 [00:11<00:17,  6.14it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:15,  6.31it/s]Loading weights:  51%|█████▏    | 92/179 [00:14<00:13,  6.39it/s]Loading weights:  58%|█████▊    | 103/179 [00:16<00:11,  6.48it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.51it/s]Loading weights:  70%|██████▉   | 125/179 [00:19<00:08,  6.53it/s]Loading weights:  76%|███████▌  | 136/179 [00:21<00:06,  6.55it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:04,  6.53it/s]Loading weights:  88%|████████▊ | 158/179 [00:24<00:03,  6.56it/s]Loading weights:  94%|█████████▍| 169/179 [00:26<00:01,  6.55it/s]Loading weights: 100%|██████████| 179/179 [00:26<00:00,  6.85it/s]
+03:00:18 HF forwards done for 50 cases
+03:00:21 HF layer patches done: 50
+03:00:59 HF expert patches done: 221
+03:01:01   layer   0: load-wait 1.45s compute 0.21s  wf_rows=209
+03:01:03   layer   8: load-wait 0.07s compute 0.11s  wf_rows=843
+03:01:04   layer  15: load-wait 0.11s compute 0.03s  wf_rows=1421
+03:01:04   pass done: 100 prefill rows (T=14), 1421 spawn rows, 4.4s
+03:01:05 embed_std_engine: 0.009373849257826805
+03:01:05 embed_std_hf: 0.009373849257826805
+03:01:05 engine_pass_s: 4.469046354293823
+03:01:05 delta_clean_maxdiff_vs_hf: 0.3828125
+03:01:05 delta_noised_maxdiff_vs_hf: 0.61328125
+03:01:05 delta_clean_frac_within_0.1: 0.72
+03:01:05 delta_noised_frac_within_0.1: 0.46
+03:01:05 delta_bmm_vs_fullmatmul_maxdiff: 0.0
+03:01:05 delta_bmm_vs_fullmatmul_frac_equal: 1.0
+03:01:05 top1_agreement_clean: 0.98
+03:01:05 logit_true_clean_maxdiff_vs_hf: 0.28125
+03:01:05 zero_on_noised_maxdiff: 0.40625
+03:01:05 zero_on_clean_maxdiff: 0.125
+03:01:05 layer_patch_vs_hf_n: 50
+03:01:05 layer_patch_vs_hf_maxdiff: 0.578125
+03:01:05 layer_patch_vs_hf_frac_within_0.1: 0.58
+03:01:05 layer_rescue_vs_hf_maxdiff: 0.498046875
+03:01:05 expert_patch_vs_hf_n: 221
+03:01:05 expert_patch_vs_hf_maxdiff: 1.07421875
+03:01:05 expert_patch_vs_hf_frac_within_0.1: 0.334841628959276
+03:01:05 routing_set_agreement: 38/40
+03:01:05 union_vs_layer_maxdiff: 0.0
+03:01:05 union_vs_layer_frac_equal: 1.0
+03:01:05 pass_total_s: 4.41669774055481
+03:01:05 curve: [-0.034, 0.084, 0.181, 0.111, 0.135, 0.018, 0.004, 0.075, 0.009, 0.054, 0.113, 0.561, 1.218, 1.063, -0.543, 0.219]

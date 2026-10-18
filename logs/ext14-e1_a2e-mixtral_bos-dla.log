@@ -1,0 +1,11 @@
+2026-10-16T23:48:24Z START ext14-e1_a2e-mixtral_bos-dla (waited 893s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --chunk 480
+23:48:26 mixtral -> p6_e1_a2e_mixtral_bos: 392 directed cases, families ['main'], 1 prefill-only passes
+23:48:40   layer   0: load-wait 6.20s compute 0.91s  wf_rows=0
+23:49:02   layer   8: load-wait 2.54s compute 0.36s  wf_rows=0
+23:49:26   layer  16: load-wait 2.53s compute 0.36s  wf_rows=0
+23:49:49   layer  24: load-wait 2.53s compute 0.36s  wf_rows=0
+23:50:09   layer  31: load-wait 2.65s compute 0.36s  wf_rows=0
+23:50:09   pass done: 784 prefill rows (T=32), 0 spawn rows, 96.5s
+23:50:10 pass 1/1: 96s; DLA total - drop: max |.| 0.223
+23:50:11 direct effect / drop: attention +0.968, MoE +0.032, embedding +0.000
+2026-10-16T23:50:18Z END   ext14-e1_a2e-mixtral_bos-dla rc=0 (114s)

@@ -1,0 +1,23 @@
+2026-10-16T18:52:13Z DONE Qwen/Qwen2-7B rc=0 elapsed=67s
+2026-10-16T18:52:13Z DONE Qwen/Qwen3-4B-Base rc=0 elapsed=67s
+2026-10-16T18:52:27Z DONE mistralai/Mistral-7B-v0.1 rc=0 elapsed=81s
+scripts/ext14_download.sh: line 10: 1458712 Killed                     hf download "$repo" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+2026-10-16T18:53:16Z DONE Qwen/Qwen3-1.7B-Base rc=0 elapsed=49s
+scripts/ext14_download.sh: line 10: 1458713 Killed                     hf download "$repo" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+scripts/ext14_download.sh: line 10: 1490282 Killed                     hf download "$repo" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+2026-10-16T18:54:47Z DONE Qwen/Qwen3-8B-Base rc=0 elapsed=140s
+2026-10-16T18:54:59Z DONE Qwen/Qwen3-14B-Base rc=0 elapsed=152s
+2026-10-16T18:58:57Z DONE Qwen/Qwen2-57B-A14B rc=0 elapsed=390s
+2026-10-16T18:58:57Z EXT14_DOWNLOADS_DONE
+119G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B
+15G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B
+3.3G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-1.7B-Base
+33G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-14B-Base
+61G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base
+7.6G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-4B-Base
+16G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-8B-Base
+39G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125
+13G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125-Instruct
+14G	/opt/dlami/nvme/hf/hub/models--mistralai--Mistral-7B-v0.1
+93G	/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1
+/dev/mapper/vg.01-lv_ephemeral  549G  416G  106G  80% /opt/dlami/nvme

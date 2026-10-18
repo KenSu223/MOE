@@ -1,0 +1,21 @@
+  bf16 thresholds scaled by the transformers bf16-vs-fp32 noise floor 0.045: max 1.00, mean 0.15, overall r >= 0.98
+  [bf16] rescue corr 0.98935, spawn max |dDelta| 0.25, competent units r 0.99233
+  prefill max |dDelta| 0.25
+  [real32] rescue corr 1.00000, spawn max |dDelta| 3.24e-05, competent units r 1.00000
+  prefill max |dDelta| 3.05e-05
+  noise compare: corr vs fp32 transformers bf16 0.9975 / engine bf16 0.9976; mean |d| 0.0489 / 0.0533; engine fp32 vs transformers fp32 r 1.000000 -> noise
+  chain eng_bf16__hf_bf16: |dDelta| mean 0.0625 max 0.125, rank equal 0.73
+  chain hf_bf16__hf_fp32: |dDelta| mean 0.0449 max 0.169, rank equal 0.73
+  chain eng_bf16__hf_fp32: |dDelta| mean 0.0498 max 0.133, rank equal 0.82
+  chain eng_fp32__hf_fp32: |dDelta| mean 6.99e-06 max 1.53e-05, rank equal 1.00
+  chain hf_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain hf_fp32 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_fp32 sanity ranks [1, 1, 1, 1, 1]
+  engine {'model_key': 'qwen3_1p7b', 'dtype': 'bfloat16', 'router_fp32': False} vs engine fp32: rescue r 0.9884, |d rescue| mean 0.0584, attention share 0.404 vs 0.417
+  layer 1: update relerr max 0.00464; vs fp32: engine 0.00512 / transformers 0.00545
+  layer 14: update relerr max 0.0145; vs fp32: engine 0.0716 / transformers 0.0715
+  layer 27: update relerr max 0.00438; vs fp32: engine 0.00849 / transformers 0.00788
+  sanity 5/5 answers in the top 5: Paris#1, Paris#1, oxygen#1, cold#1, Thursday#1
+  clean Delta > 0 in 0.83 of the units, mean drop 3.67
+PASS

@@ -1,0 +1,1513 @@
+{
+ "model": "qwen2_7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e",
+ "family": "qwen2",
+ "dtype": "fp32",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T03:57:47Z",
+ "hf_offload": true,
+ "light_plan": true,
+ "units": {
+  "pairs_checked": 2,
+  "pairs_tokenizer_identical": 2,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 4
+ },
+ "router_fp32_flag": false,
+ "hf_s": 266.06264567375183,
+ "n_configs": 144,
+ "n_spawns": 168,
+ "prefill_delta_vs_hf": {
+  "C": {
+   "n": 4,
+   "maxabs": 1.33514404296875e-05,
+   "meanabs": 4.76837158203125e-06,
+   "frac_exact": 0.0
+  },
+  "X": {
+   "n": 4,
+   "maxabs": 1.33514404296875e-05,
+   "meanabs": 4.76837158203125e-06,
+   "frac_exact": 0.0
+  },
+  "CMz": {
+   "n": 4,
+   "maxabs": 1.52587890625e-05,
+   "meanabs": 6.198883056640625e-06,
+   "frac_exact": 0.25
+  },
+  "XMz": {
+   "n": 4,
+   "maxabs": 2.6702880859375e-05,
+   "meanabs": 1.4066696166992188e-05,
+   "frac_exact": 0.0
+  },
+  "CMm": {
+   "n": 4,
+   "maxabs": 1.430511474609375e-05,
+   "meanabs": 6.67572021484375e-06,
+   "frac_exact": 0.25
+  },
+  "XMm": {
+   "n": 4,
+   "maxabs": 1.1444091796875e-05,
+   "meanabs": 7.3909759521484375e-06,
+   "frac_exact": 0.0
+  }
+ },
+ "prefill_metrics_vs_hf": {
+  "logp_true": {
+   "n": 24,
+   "maxabs": 2.6702880859375e-05,
+   "meanabs": 1.0604659716288248e-05,
+   "frac_exact": 0.0
+  },
+  "logp_foil": {
+   "n": 24,
+   "maxabs": 2.288818359375e-05,
+   "meanabs": 9.998679161071777e-06,
+   "frac_exact": 0.0
+  },
+  "p_true": {
+   "n": 24,
+   "maxabs": 2.6226043701171875e-06,
+   "meanabs": 2.511248264151315e-07,
+   "frac_exact": 0.0
+  },
+  "kl_to_clean": {
+   "n": 24,
+   "maxabs": 7.867813110351562e-06,
+   "meanabs": 1.955777406692505e-06,
+   "frac_exact": 0.5416666666666666
+  }
+ },
+ "prefill_rank_equal_frac": 1.0,
+ "head_mask_effect_on_delta_hf": {
+  "Mz": 0.18165063858032227,
+  "Mm": 0.13283038139343262
+ },
+ "spawn_delta_vs_hf": {
+  "den_attn": {
+   "n": 16,
+   "maxabs": 2.002716064453125e-05,
+   "meanabs": 6.973743438720703e-06,
+   "frac_exact": 0.0625,
+   "rescue_corr": 0.9999999998449923,
+   "rescue_hf_meanabs": 0.17015069723129272
+  },
+  "den_block": {
+   "n": 16,
+   "maxabs": 2.09808349609375e-05,
+   "meanabs": 6.616115570068359e-06,
+   "frac_exact": 0.125,
+   "rescue_corr": 0.9999999999646983,
+   "rescue_hf_meanabs": 0.3913821578025818
+  },
+  "den_expert0": {
+   "n": 4,
+   "maxabs": 1.33514404296875e-05,
+   "meanabs": 8.106231689453125e-06,
+   "frac_exact": 0.25,
+   "rescue_corr": 0.9999999999796645,
+   "rescue_hf_meanabs": 0.8443937301635742
+  },
+  "den_head": {
+   "n": 12,
+   "maxabs": 1.52587890625e-05,
+   "meanabs": 6.5962473551432294e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999958289666,
+   "rescue_hf_meanabs": 0.037871996561686196
+  },
+  "den_layer": {
+   "n": 16,
+   "maxabs": 1.811981201171875e-05,
+   "meanabs": 5.900859832763672e-06,
+   "frac_exact": 0.0625,
+   "rescue_corr": 0.9999999999362631,
+   "rescue_hf_meanabs": 0.28328436613082886
+  },
+  "den_multi_attn_mlp": {
+   "n": 4,
+   "maxabs": 1.049041748046875e-05,
+   "meanabs": 5.9604644775390625e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999999507606,
+   "rescue_hf_meanabs": 0.8566467761993408
+  },
+  "den_multi_heads": {
+   "n": 4,
+   "maxabs": 2.193450927734375e-05,
+   "meanabs": 1.33514404296875e-05,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999998246758,
+   "rescue_hf_meanabs": 0.3778994083404541
+  },
+  "den_multi_mlp_block_attn": {
+   "n": 4,
+   "maxabs": 1.239776611328125e-05,
+   "meanabs": 9.298324584960938e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999999280984,
+   "rescue_hf_meanabs": 1.2170214653015137
+  },
+  "den_resid": {
+   "n": 16,
+   "maxabs": 2.384185791015625e-05,
+   "meanabs": 8.881092071533203e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999999936456,
+   "rescue_hf_meanabs": 1.7297692894935608
+  },
+  "den_zero": {
+   "n": 4,
+   "maxabs": 1.1444091796875e-05,
+   "meanabs": 4.0531158447265625e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmm_attn": {
+   "n": 4,
+   "maxabs": 1.049041748046875e-05,
+   "meanabs": 5.0067901611328125e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999996365151,
+   "rescue_hf_meanabs": 0.2023618221282959
+  },
+  "hmm_headfree": {
+   "n": 4,
+   "maxabs": 1.049041748046875e-05,
+   "meanabs": 7.867813110351562e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999998959082785,
+   "rescue_hf_meanabs": 0.010854959487915039
+  },
+  "hmm_headmasked": {
+   "n": 4,
+   "maxabs": 8.58306884765625e-06,
+   "meanabs": 5.245208740234375e-06,
+   "frac_exact": 0.25,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmm_layer": {
+   "n": 4,
+   "maxabs": 1.430511474609375e-05,
+   "meanabs": 1.0251998901367188e-05,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999992529911,
+   "rescue_hf_meanabs": 0.10293340682983398
+  },
+  "hmm_multi": {
+   "n": 4,
+   "maxabs": 1.811981201171875e-05,
+   "meanabs": 8.106231689453125e-06,
+   "frac_exact": 0.25,
+   "rescue_corr": 0.9999999999806222,
+   "rescue_hf_meanabs": 0.9165956974029541
+  },
+  "hmm_none": {
+   "n": 4,
+   "maxabs": 1.239776611328125e-05,
+   "meanabs": 9.059906005859375e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmz_attn": {
+   "n": 4,
+   "maxabs": 3.24249267578125e-05,
+   "meanabs": 1.6689300537109375e-05,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999995885765,
+   "rescue_hf_meanabs": 0.19020462036132812
+  },
+  "hmz_headfree": {
+   "n": 4,
+   "maxabs": 2.86102294921875e-05,
+   "meanabs": 1.0967254638671875e-05,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999580677992,
+   "rescue_hf_meanabs": 0.009786128997802734
+  },
+  "hmz_headmasked": {
+   "n": 4,
+   "maxabs": 3.0517578125e-05,
+   "meanabs": 1.3828277587890625e-05,
+   "frac_exact": 0.0,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmz_layer": {
+   "n": 4,
+   "maxabs": 1.33514404296875e-05,
+   "meanabs": 6.9141387939453125e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999990245502,
+   "rescue_hf_meanabs": 0.11229109764099121
+  },
+  "hmz_multi": {
+   "n": 4,
+   "maxabs": 1.811981201171875e-05,
+   "meanabs": 8.821487426757812e-06,
+   "frac_exact": 0.0,
+   "rescue_corr": 0.9999999998668768,
+   "rescue_hf_meanabs": 0.8627157211303711
+  },
+  "hmz_none": {
+   "n": 4,
+   "maxabs": 2.574920654296875e-05,
+   "meanabs": 1.239776611328125e-05,
+   "frac_exact": 0.25,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  }
+ },
+ "spawn_rescue_corr_all": 0.9999999999715229,
+ "rows": [
+  {
+   "tag": "den_layer_1",
+   "unit": 0,
+   "eng_delta": -5.12480354309082,
+   "hf_delta": -5.124798774719238,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_attn_1",
+   "unit": 0,
+   "eng_delta": -5.092540740966797,
+   "hf_delta": -5.09255313873291,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_block_1",
+   "unit": 0,
+   "eng_delta": -5.100676536560059,
+   "hf_delta": -5.100678443908691,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_resid_1",
+   "unit": 0,
+   "eng_delta": -5.132747650146484,
+   "hf_delta": -5.132752418518066,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_layer_9",
+   "unit": 0,
+   "eng_delta": -5.062813758850098,
+   "hf_delta": -5.06281852722168,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_attn_9",
+   "unit": 0,
+   "eng_delta": -5.225691795349121,
+   "hf_delta": -5.225695610046387,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_block_9",
+   "unit": 0,
+   "eng_delta": -5.151581764221191,
+   "hf_delta": -5.1515913009643555,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_resid_9",
+   "unit": 0,
+   "eng_delta": -5.200491905212402,
+   "hf_delta": -5.200473785400391,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_layer_18",
+   "unit": 0,
+   "eng_delta": -3.1555356979370117,
+   "hf_delta": -3.155522346496582,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_attn_18",
+   "unit": 0,
+   "eng_delta": -5.211437225341797,
+   "hf_delta": -5.2114410400390625,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_block_18",
+   "unit": 0,
+   "eng_delta": -2.904116630554199,
+   "hf_delta": -2.904116630554199,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_resid_18",
+   "unit": 0,
+   "eng_delta": -1.2977428436279297,
+   "hf_delta": -1.297734260559082,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_layer_26",
+   "unit": 0,
+   "eng_delta": -4.998132705688477,
+   "hf_delta": -4.99813175201416,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_attn_26",
+   "unit": 0,
+   "eng_delta": -4.9015045166015625,
+   "hf_delta": -4.901505470275879,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_block_26",
+   "unit": 0,
+   "eng_delta": -4.79248046875,
+   "hf_delta": -4.792478561401367,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_resid_26",
+   "unit": 0,
+   "eng_delta": 1.826085090637207,
+   "hf_delta": 1.8261051177978516,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_head_9_3",
+   "unit": 0,
+   "eng_delta": -5.110727310180664,
+   "hf_delta": -5.110742568969727,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_head_18_19",
+   "unit": 0,
+   "eng_delta": -5.129080772399902,
+   "hf_delta": -5.1290788650512695,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_head_26_22",
+   "unit": 0,
+   "eng_delta": -5.271943092346191,
+   "hf_delta": -5.27193546295166,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_expert0_18",
+   "unit": 0,
+   "eng_delta": -3.1555356979370117,
+   "hf_delta": -3.155522346496582,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 0,
+   "eng_delta": -3.2093915939331055,
+   "hf_delta": -3.209400177001953,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 0,
+   "eng_delta": -2.76200008392334,
+   "hf_delta": -2.7619876861572266,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 0,
+   "eng_delta": -5.0006608963012695,
+   "hf_delta": -5.000676155090332,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "den_zero_9",
+   "unit": 0,
+   "eng_delta": -5.113093376159668,
+   "hf_delta": -5.113090515136719,
+   "eng_parent": -5.113086700439453,
+   "hf_parent": -5.113090515136719
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 0,
+   "eng_delta": -4.848544120788574,
+   "hf_delta": -4.848559379577637,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmz_layer_9",
+   "unit": 0,
+   "eng_delta": -4.825216293334961,
+   "hf_delta": -4.8252153396606445,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmz_attn_18",
+   "unit": 0,
+   "eng_delta": -4.839442253112793,
+   "hf_delta": -4.839446067810059,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 0,
+   "eng_delta": -4.848540306091309,
+   "hf_delta": -4.848559379577637,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 0,
+   "eng_delta": -4.852849960327148,
+   "hf_delta": -4.8528547286987305,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 0,
+   "eng_delta": -3.024714469909668,
+   "hf_delta": -3.024707794189453,
+   "eng_parent": -4.848543167114258,
+   "hf_parent": -4.848559379577637
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 0,
+   "eng_delta": -5.63958740234375,
+   "hf_delta": -5.639598846435547,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "hmm_layer_9",
+   "unit": 0,
+   "eng_delta": -5.582551002502441,
+   "hf_delta": -5.5825605392456055,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "hmm_attn_18",
+   "unit": 0,
+   "eng_delta": -5.632948875427246,
+   "hf_delta": -5.632953643798828,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 0,
+   "eng_delta": -5.639591217041016,
+   "hf_delta": -5.639598846435547,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 0,
+   "eng_delta": -5.6500444412231445,
+   "hf_delta": -5.650049209594727,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 0,
+   "eng_delta": -3.247150421142578,
+   "hf_delta": -3.2471561431884766,
+   "eng_parent": -5.63958740234375,
+   "hf_parent": -5.639598846435547
+  },
+  {
+   "tag": "den_layer_1",
+   "unit": 1,
+   "eng_delta": -1.7923517227172852,
+   "hf_delta": -1.7923526763916016,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_attn_1",
+   "unit": 1,
+   "eng_delta": -1.7980480194091797,
+   "hf_delta": -1.7980623245239258,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_block_1",
+   "unit": 1,
+   "eng_delta": -1.7873811721801758,
+   "hf_delta": -1.7874021530151367,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_resid_1",
+   "unit": 1,
+   "eng_delta": -1.811941146850586,
+   "hf_delta": -1.811955451965332,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_layer_9",
+   "unit": 1,
+   "eng_delta": -1.8191938400268555,
+   "hf_delta": -1.8192119598388672,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_attn_9",
+   "unit": 1,
+   "eng_delta": -1.862924575805664,
+   "hf_delta": -1.862936019897461,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_block_9",
+   "unit": 1,
+   "eng_delta": -1.8947267532348633,
+   "hf_delta": -1.8947372436523438,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_resid_9",
+   "unit": 1,
+   "eng_delta": -2.019211769104004,
+   "hf_delta": -2.019235610961914,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_layer_18",
+   "unit": 1,
+   "eng_delta": -0.7157764434814453,
+   "hf_delta": -0.7157859802246094,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_attn_18",
+   "unit": 1,
+   "eng_delta": -1.6375885009765625,
+   "hf_delta": -1.637603759765625,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_block_18",
+   "unit": 1,
+   "eng_delta": -0.4021625518798828,
+   "hf_delta": -0.4021596908569336,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_resid_18",
+   "unit": 1,
+   "eng_delta": 0.8942470550537109,
+   "hf_delta": 0.8942451477050781,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_layer_26",
+   "unit": 1,
+   "eng_delta": -1.6089725494384766,
+   "hf_delta": -1.6089839935302734,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_attn_26",
+   "unit": 1,
+   "eng_delta": -1.6569900512695312,
+   "hf_delta": -1.6570100784301758,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_block_26",
+   "unit": 1,
+   "eng_delta": -1.477025032043457,
+   "hf_delta": -1.477034568786621,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_resid_26",
+   "unit": 1,
+   "eng_delta": 5.073251724243164,
+   "hf_delta": 5.073256492614746,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_head_9_7",
+   "unit": 1,
+   "eng_delta": -1.8033266067504883,
+   "hf_delta": -1.8033380508422852,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_head_18_8",
+   "unit": 1,
+   "eng_delta": -1.7600317001342773,
+   "hf_delta": -1.7600431442260742,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_head_26_23",
+   "unit": 1,
+   "eng_delta": -1.719717025756836,
+   "hf_delta": -1.7197275161743164,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_expert0_18",
+   "unit": 1,
+   "eng_delta": -0.7157764434814453,
+   "hf_delta": -0.7157859802246094,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 1,
+   "eng_delta": -0.8335084915161133,
+   "hf_delta": -0.8335075378417969,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 1,
+   "eng_delta": -0.4384317398071289,
+   "hf_delta": -0.43842315673828125,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 1,
+   "eng_delta": -1.5823116302490234,
+   "hf_delta": -1.5823183059692383,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "den_zero_9",
+   "unit": 1,
+   "eng_delta": -1.8000869750976562,
+   "hf_delta": -1.8000984191894531,
+   "eng_parent": -1.8000850677490234,
+   "hf_parent": -1.8000984191894531
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 1,
+   "eng_delta": -1.7894868850708008,
+   "hf_delta": -1.7895126342773438,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmz_layer_9",
+   "unit": 1,
+   "eng_delta": -1.8158178329467773,
+   "hf_delta": -1.8158245086669922,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmz_attn_18",
+   "unit": 1,
+   "eng_delta": -1.5493812561035156,
+   "hf_delta": -1.5494136810302734,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 1,
+   "eng_delta": -1.7894821166992188,
+   "hf_delta": -1.7895126342773438,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 1,
+   "eng_delta": -1.809586524963379,
+   "hf_delta": -1.809615135192871,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 1,
+   "eng_delta": -0.6890344619750977,
+   "hf_delta": -0.6890411376953125,
+   "eng_parent": -1.7894859313964844,
+   "hf_parent": -1.7895126342773438
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 1,
+   "eng_delta": -1.7307348251342773,
+   "hf_delta": -1.7307472229003906,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "hmm_layer_9",
+   "unit": 1,
+   "eng_delta": -1.7492122650146484,
+   "hf_delta": -1.7492265701293945,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "hmm_attn_18",
+   "unit": 1,
+   "eng_delta": -1.535294532775879,
+   "hf_delta": -1.5352964401245117,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 1,
+   "eng_delta": -1.730738639831543,
+   "hf_delta": -1.7307472229003906,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 1,
+   "eng_delta": -1.7514429092407227,
+   "hf_delta": -1.7514524459838867,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 1,
+   "eng_delta": -0.6982488632202148,
+   "hf_delta": -0.6982488632202148,
+   "eng_parent": -1.7307376861572266,
+   "hf_parent": -1.7307472229003906
+  },
+  {
+   "tag": "den_layer_1",
+   "unit": 2,
+   "eng_delta": -1.9104137420654297,
+   "hf_delta": -1.9104156494140625,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_attn_1",
+   "unit": 2,
+   "eng_delta": -1.8954057693481445,
+   "hf_delta": -1.8954095840454102,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_block_1",
+   "unit": 2,
+   "eng_delta": -1.9018487930297852,
+   "hf_delta": -1.9018497467041016,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_resid_1",
+   "unit": 2,
+   "eng_delta": -1.8679380416870117,
+   "hf_delta": -1.8679437637329102,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_layer_9",
+   "unit": 2,
+   "eng_delta": -1.7610530853271484,
+   "hf_delta": -1.7610511779785156,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_attn_9",
+   "unit": 2,
+   "eng_delta": -2.4335851669311523,
+   "hf_delta": -2.4335880279541016,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_block_9",
+   "unit": 2,
+   "eng_delta": -2.4804906845092773,
+   "hf_delta": -2.4805068969726562,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_resid_9",
+   "unit": 2,
+   "eng_delta": -2.513951301574707,
+   "hf_delta": -2.513948440551758,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_layer_18",
+   "unit": 2,
+   "eng_delta": -1.589432716369629,
+   "hf_delta": -1.589442253112793,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_attn_18",
+   "unit": 2,
+   "eng_delta": -2.006420135498047,
+   "hf_delta": -2.006420135498047,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_block_18",
+   "unit": 2,
+   "eng_delta": -1.7262086868286133,
+   "hf_delta": -1.726212501525879,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_resid_18",
+   "unit": 2,
+   "eng_delta": -1.0193805694580078,
+   "hf_delta": -1.0193796157836914,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_layer_26",
+   "unit": 2,
+   "eng_delta": -2.2814321517944336,
+   "hf_delta": -2.281431198120117,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_attn_26",
+   "unit": 2,
+   "eng_delta": -1.7910451889038086,
+   "hf_delta": -1.7910470962524414,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_block_26",
+   "unit": 2,
+   "eng_delta": -2.1290082931518555,
+   "hf_delta": -2.1290082931518555,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_resid_26",
+   "unit": 2,
+   "eng_delta": 0.24277687072753906,
+   "hf_delta": 0.2427806854248047,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_head_9_2",
+   "unit": 2,
+   "eng_delta": -1.9098396301269531,
+   "hf_delta": -1.909841537475586,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_head_18_21",
+   "unit": 2,
+   "eng_delta": -2.0091075897216797,
+   "hf_delta": -2.0091114044189453,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_head_26_14",
+   "unit": 2,
+   "eng_delta": -1.910614013671875,
+   "hf_delta": -1.9106101989746094,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_expert0_18",
+   "unit": 2,
+   "eng_delta": -1.589432716369629,
+   "hf_delta": -1.589442253112793,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 2,
+   "eng_delta": -2.085972785949707,
+   "hf_delta": -2.0859832763671875,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 2,
+   "eng_delta": -1.2228364944458008,
+   "hf_delta": -1.222844123840332,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 2,
+   "eng_delta": -3.0027647018432617,
+   "hf_delta": -3.002774238586426,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "den_zero_9",
+   "unit": 2,
+   "eng_delta": -1.909754753112793,
+   "hf_delta": -1.9097557067871094,
+   "eng_parent": -1.909754753112793,
+   "hf_parent": -1.9097557067871094
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 2,
+   "eng_delta": -2.124209403991699,
+   "hf_delta": -2.124209403991699,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmz_layer_9",
+   "unit": 2,
+   "eng_delta": -1.9203834533691406,
+   "hf_delta": -1.920370101928711,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmz_attn_18",
+   "unit": 2,
+   "eng_delta": -2.269916534423828,
+   "hf_delta": -2.2698936462402344,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 2,
+   "eng_delta": -2.124213218688965,
+   "hf_delta": -2.124209403991699,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 2,
+   "eng_delta": -2.1200246810913086,
+   "hf_delta": -2.1200180053710938,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 2,
+   "eng_delta": -1.854222297668457,
+   "hf_delta": -1.8542404174804688,
+   "eng_parent": -2.12420654296875,
+   "hf_parent": -2.124209403991699
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 2,
+   "eng_delta": -2.0656633377075195,
+   "hf_delta": -2.0656747817993164,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "hmm_layer_9",
+   "unit": 2,
+   "eng_delta": -1.9285526275634766,
+   "hf_delta": -1.928563117980957,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "hmm_attn_18",
+   "unit": 2,
+   "eng_delta": -2.3125858306884766,
+   "hf_delta": -2.312588691711426,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 2,
+   "eng_delta": -2.0656700134277344,
+   "hf_delta": -2.0656747817993164,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 2,
+   "eng_delta": -2.0631332397460938,
+   "hf_delta": -2.063143730163574,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 2,
+   "eng_delta": -2.116748809814453,
+   "hf_delta": -2.116757392883301,
+   "eng_parent": -2.065667152404785,
+   "hf_parent": -2.0656747817993164
+  },
+  {
+   "tag": "den_layer_1",
+   "unit": 3,
+   "eng_delta": -0.2537260055541992,
+   "hf_delta": -0.2537384033203125,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_attn_1",
+   "unit": 3,
+   "eng_delta": -0.23293685913085938,
+   "hf_delta": -0.23294639587402344,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_block_1",
+   "unit": 3,
+   "eng_delta": -0.23194408416748047,
+   "hf_delta": -0.2319488525390625,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_resid_1",
+   "unit": 3,
+   "eng_delta": -0.24913978576660156,
+   "hf_delta": -0.24913787841796875,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_layer_9",
+   "unit": 3,
+   "eng_delta": -0.045597076416015625,
+   "hf_delta": -0.045599937438964844,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_attn_9",
+   "unit": 3,
+   "eng_delta": -0.8663082122802734,
+   "hf_delta": -0.8663053512573242,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_block_9",
+   "unit": 3,
+   "eng_delta": -0.8550167083740234,
+   "hf_delta": -0.8550252914428711,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_resid_9",
+   "unit": 3,
+   "eng_delta": -0.5777788162231445,
+   "hf_delta": -0.5777978897094727,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_layer_18",
+   "unit": 3,
+   "eng_delta": -0.2639141082763672,
+   "hf_delta": -0.2639141082763672,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_attn_18",
+   "unit": 3,
+   "eng_delta": 0.1013479232788086,
+   "hf_delta": 0.1013498306274414,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_block_18",
+   "unit": 3,
+   "eng_delta": -0.03847026824951172,
+   "hf_delta": -0.0384674072265625,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_resid_18",
+   "unit": 3,
+   "eng_delta": 0.6088104248046875,
+   "hf_delta": 0.6088008880615234,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_layer_26",
+   "unit": 3,
+   "eng_delta": -0.2794179916381836,
+   "hf_delta": -0.2794170379638672,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_attn_26",
+   "unit": 3,
+   "eng_delta": -0.07645702362060547,
+   "hf_delta": -0.07645034790039062,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_block_26",
+   "unit": 3,
+   "eng_delta": -0.2098388671875,
+   "hf_delta": -0.20985031127929688,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_resid_26",
+   "unit": 3,
+   "eng_delta": 1.891366958618164,
+   "hf_delta": 1.8913650512695312,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_head_9_27",
+   "unit": 3,
+   "eng_delta": -0.2690553665161133,
+   "hf_delta": -0.26905250549316406,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_head_18_12",
+   "unit": 3,
+   "eng_delta": -0.26805973052978516,
+   "hf_delta": -0.26805877685546875,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_head_26_12",
+   "unit": 3,
+   "eng_delta": -0.26181697845458984,
+   "hf_delta": -0.2618093490600586,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_expert0_18",
+   "unit": 3,
+   "eng_delta": -0.2639141082763672,
+   "hf_delta": -0.2639141082763672,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 3,
+   "eng_delta": -0.6286153793334961,
+   "hf_delta": -0.6286115646362305,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 3,
+   "eng_delta": 0.21985435485839844,
+   "hf_delta": 0.2198629379272461,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 3,
+   "eng_delta": -0.3368959426879883,
+   "hf_delta": -0.3369178771972656,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "den_zero_9",
+   "unit": 3,
+   "eng_delta": -0.2485342025756836,
+   "hf_delta": -0.2485332489013672,
+   "eng_parent": -0.24853229522705078,
+   "hf_parent": -0.2485332489013672
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 3,
+   "eng_delta": -0.28365325927734375,
+   "hf_delta": -0.2836618423461914,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmz_layer_9",
+   "unit": 3,
+   "eng_delta": -0.08798599243164062,
+   "hf_delta": -0.08799266815185547,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmz_attn_18",
+   "unit": 3,
+   "eng_delta": 0.08226776123046875,
+   "hf_delta": 0.0822601318359375,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 3,
+   "eng_delta": -0.2836599349975586,
+   "hf_delta": -0.2836618423461914,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 3,
+   "eng_delta": -0.29421329498291016,
+   "hf_delta": -0.2942171096801758,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 3,
+   "eng_delta": -0.5402364730834961,
+   "hf_delta": -0.5402326583862305,
+   "eng_parent": -0.28365135192871094,
+   "hf_parent": -0.2836618423461914
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 3,
+   "eng_delta": -0.20852184295654297,
+   "hf_delta": -0.20852088928222656,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  },
+  {
+   "tag": "hmm_layer_9",
+   "unit": 3,
+   "eng_delta": -0.009409904479980469,
+   "hf_delta": -0.009416580200195312,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  },
+  {
+   "tag": "hmm_attn_18",
+   "unit": 3,
+   "eng_delta": 0.15192699432373047,
+   "hf_delta": 0.15191650390625,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 3,
+   "eng_delta": -0.20852088928222656,
+   "hf_delta": -0.20852088928222656,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 3,
+   "eng_delta": -0.2182607650756836,
+   "hf_delta": -0.21825408935546875,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 3,
+   "eng_delta": -0.3988981246948242,
+   "hf_delta": -0.3988800048828125,
+   "eng_parent": -0.20852184295654297,
+   "hf_parent": -0.20852088928222656
+  }
+ ],
+ "competent_units": [
+  0,
+  1,
+  3
+ ],
+ "spawn_rescue_corr_competent": 0.9999999999765845,
+ "spawn_delta_maxabs_all": 3.24249267578125e-05,
+ "spawn_metrics_vs_hf": {
+  "logp_true": {
+   "n": 144,
+   "maxabs": 4.76837158203125e-05,
+   "meanabs": 1.1675059795379639e-05,
+   "frac_exact": 0.006944444444444444
+  },
+  "logp_foil": {
+   "n": 144,
+   "maxabs": 3.910064697265625e-05,
+   "meanabs": 1.1723902490403918e-05,
+   "frac_exact": 0.0
+  },
+  "p_true": {
+   "n": 144,
+   "maxabs": 4.172325134277344e-07,
+   "meanabs": 4.553496384889715e-08,
+   "frac_exact": 0.006944444444444444
+  },
+  "kl_to_clean": {
+   "n": 144,
+   "maxabs": 1.5854835510253906e-05,
+   "meanabs": 3.7506158858175495e-06,
+   "frac_exact": 0.006944444444444444
+  }
+ },
+ "spawn_rank_equal_frac": 1.0,
+ "identities": {
+  "neurons_linearity_relerr_max": 4.5755140831715835e-07,
+  "neurons_all_vs_expert_vec_relerr_max": 2.2941828774492024e-06,
+  "neurons_all_vs_expert_ddelta": {
+   "n": 4,
+   "maxabs": 4.76837158203125e-06,
+   "meanabs": 2.6226043701171875e-06,
+   "frac_exact": 0.0
+  },
+  "coalition_union_or_dense_clean_vs_layer_ddelta": {
+   "n": 4,
+   "maxabs": 0.0,
+   "meanabs": 0.0,
+   "frac_exact": 1.0
+  },
+  "zero_vs_parent": {
+   "n": 12,
+   "maxabs": 6.67572021484375e-06,
+   "meanabs": 1.986821492513021e-06,
+   "frac_exact": 0.25
+  },
+  "attn_head_on_masked_head_vs_parent": {
+   "n": 8,
+   "maxabs": 8.58306884765625e-06,
+   "meanabs": 3.814697265625e-06,
+   "frac_exact": 0.0
+  }
+ },
+ "diag_attn_heads_mean_relerr": {
+  "n": 112,
+  "maxabs": 1.3392123037192505e-05,
+  "meanabs": 3.2428536067235266e-06,
+  "frac_exact": 0.0
+ },
+ "diag_resid_layers_relerr": {
+  "n": 112,
+  "maxabs": 4.536427240964258e-06,
+  "meanabs": 7.572006178894039e-07,
+  "frac_exact": 0.03571428571428571
+ },
+ "diag_expert_neurons_act_relerr": {
+  "n": 0
+ },
+ "diag_expert_neurons_w_abs": {
+  "n": 0
+ },
+ "diag_expert_neurons_hypothetical_act_relerr": {
+  "n": 0
+ },
+ "diag_expert_neurons_routed_mismatch": 0,
+ "head_mask_zero_heads_final_maxabs": 0.0,
+ "total_s": 273.9471437931061
+}

@@ -1,0 +1,411 @@
+{
+ "scan_probes_core_": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "proto": "mistral7b_bos",
+  "family": "mistral",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py mistral7b_bos --part probes --specs data/dial/build/probe_specs_full_mistral.parquet",
+  "created_utc": "2026-10-16T21:02:44Z",
+  "complete": true,
+  "n_rows": 20728,
+  "n_keys": 2591,
+  "n_passes": 4,
+  "completed_utc": "2026-10-16T21:05:02Z"
+ },
+ "scan_cells_core_e1_a2e+e1_e2a+e3p3_a2e+e3_a2e+e3_e2a+e1p_a2e+e1p_e2a+e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e+l_ant+l_": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "proto": "mistral7b_bos",
+  "family": "mistral",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py mistral7b_bos --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ioi",
+  "created_utc": "2026-10-16T22:05:44Z",
+  "complete": true,
+  "cells": {
+   "e1_a2e": {
+    "pairs": 1142,
+    "margin": 233,
+    "reverse_margin": 0,
+    "margin_rate": 0.204,
+    "by_order": {
+     "1": 0.219,
+     "2": 0.189
+    },
+    "top1_both": 0.56,
+    "passes": 1
+   },
+   "e1_e2a": {
+    "pairs": 1142,
+    "margin": 156,
+    "reverse_margin": 28,
+    "margin_rate": 0.137,
+    "by_order": {
+     "1": 0.135,
+     "2": 0.138
+    },
+    "top1_both": 0.271,
+    "passes": 1
+   },
+   "e3p3_a2e": {
+    "pairs": 606,
+    "margin": 154,
+    "reverse_margin": 0,
+    "margin_rate": 0.254,
+    "by_order": {
+     "1": 0.257,
+     "2": 0.249
+    },
+    "top1_both": 0.375,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 626,
+    "margin": 173,
+    "reverse_margin": 0,
+    "margin_rate": 0.276,
+    "by_order": {
+     "1": 0.29,
+     "2": 0.252
+    },
+    "top1_both": 0.244,
+    "passes": 1
+   },
+   "e3_e2a": {
+    "pairs": 630,
+    "margin": 549,
+    "reverse_margin": 0,
+    "margin_rate": 0.871,
+    "by_order": {
+     "1": 0.863,
+     "2": 0.886
+    },
+    "top1_both": 0.335,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 936,
+    "margin": 94,
+    "reverse_margin": 0,
+    "margin_rate": 0.1,
+    "by_order": {
+     "1": 0.094,
+     "2": 0.107
+    },
+    "top1_both": 0.388,
+    "passes": 1
+   },
+   "e1p_e2a": {
+    "pairs": 936,
+    "margin": 97,
+    "reverse_margin": 1,
+    "margin_rate": 0.104,
+    "by_order": {
+     "1": 0.103,
+     "2": 0.105
+    },
+    "top1_both": 0.013,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 1142,
+    "margin": 1,
+    "reverse_margin": 11,
+    "margin_rate": 0.001,
+    "by_order": {
+     "1": 0.0,
+     "2": 0.002
+    },
+    "top1_both": 0.014,
+    "passes": 1
+   },
+   "e2_e2a": {
+    "pairs": 1142,
+    "margin": 66,
+    "reverse_margin": 4,
+    "margin_rate": 0.058,
+    "by_order": {
+     "1": 0.056,
+     "2": 0.06
+    },
+    "top1_both": 0.176,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 1252,
+    "margin": 145,
+    "reverse_margin": 0,
+    "margin_rate": 0.116,
+    "by_order": {
+     "1": 0.139,
+     "2": 0.093
+    },
+    "top1_both": 0.443,
+    "passes": 2
+   },
+   "sc_conflict_a2e": {
+    "pairs": 1252,
+    "margin": 4,
+    "reverse_margin": 15,
+    "margin_rate": 0.003,
+    "by_order": {
+     "1": 0.003,
+     "2": 0.003
+    },
+    "top1_both": 0.093,
+    "passes": 2
+   },
+   "l_ant": {
+    "pairs": 537,
+    "margin": 491,
+    "reverse_margin": 8,
+    "margin_rate": 0.914,
+    "by_order": {
+     "1": 0.914
+    },
+    "top1_both": 0.564,
+    "passes": 1
+   },
+   "l_prop": {
+    "pairs": 382,
+    "margin": 302,
+    "reverse_margin": 0,
+    "margin_rate": 0.791,
+    "by_order": {
+     "1": 0.791
+    },
+    "top1_both": 0.283,
+    "passes": 1
+   },
+   "l_bind": {
+    "pairs": 3200,
+    "margin": 885,
+    "reverse_margin": 0,
+    "margin_rate": 0.277,
+    "by_order": {
+     "1": 0.276,
+     "2": 0.278
+    },
+    "top1_both": 0.71,
+    "passes": 2
+   },
+   "l_ioi": {
+    "pairs": 1600,
+    "margin": 1598,
+    "reverse_margin": 0,
+    "margin_rate": 0.999,
+    "by_order": {
+     "1": 0.997,
+     "2": 1.0
+    },
+    "top1_both": 0.643,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T22:10:58Z"
+ },
+ "scan_cells_all_l_cf": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "proto": "mistral7b_bos",
+  "family": "mistral",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_cf",
+  "created_utc": "2026-10-16T22:20:55Z",
+  "complete": true,
+  "cells": {
+   "l_cf": {
+    "pairs": 212,
+    "margin": 196,
+    "reverse_margin": 0,
+    "margin_rate": 0.925,
+    "by_order": {
+     "1": 0.925
+    },
+    "top1_both": 0.208,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-16T22:21:10Z"
+ },
+ "scan_cells_all_l_ind": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "proto": "mistral7b_bos",
+  "family": "mistral",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_ind",
+  "created_utc": "2026-10-17T01:56:04Z",
+  "complete": true,
+  "cells": {
+   "l_ind": {
+    "pairs": 1600,
+    "margin": 599,
+    "reverse_margin": 0,
+    "margin_rate": 0.374,
+    "by_order": {
+     "1": 0.39,
+     "2": 0.359
+    },
+    "top1_both": 0.671,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-17T01:56:28Z"
+ },
+ "scan_cells_ext_e1_a2e+e1_e2a+e3p3_a2e+e3_a2e+e3_e2a+e1p_a2e+e1p_e2a+e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "proto": "mistral7b_bos",
+  "family": "mistral",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py mistral7b_bos --part cells --subset ext --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e",
+  "created_utc": "2026-10-17T02:01:23Z",
+  "complete": true,
+  "cells": {
+   "e1_a2e": {
+    "pairs": 2030,
+    "margin": 294,
+    "reverse_margin": 0,
+    "margin_rate": 0.145,
+    "by_order": {
+     "1": 0.152,
+     "2": 0.138
+    },
+    "top1_both": 0.491,
+    "passes": 2
+   },
+   "e1_e2a": {
+    "pairs": 2002,
+    "margin": 127,
+    "reverse_margin": 56,
+    "margin_rate": 0.063,
+    "by_order": {
+     "1": 0.059,
+     "2": 0.068
+    },
+    "top1_both": 0.13,
+    "passes": 1
+   },
+   "e3p3_a2e": {
+    "pairs": 966,
+    "margin": 98,
+    "reverse_margin": 4,
+    "margin_rate": 0.101,
+    "by_order": {
+     "1": 0.095,
+     "2": 0.117
+    },
+    "top1_both": 0.172,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 1016,
+    "margin": 85,
+    "reverse_margin": 0,
+    "margin_rate": 0.084,
+    "by_order": {
+     "1": 0.075,
+     "2": 0.107
+    },
+    "top1_both": 0.106,
+    "passes": 1
+   },
+   "e3_e2a": {
+    "pairs": 1006,
+    "margin": 216,
+    "reverse_margin": 1,
+    "margin_rate": 0.215,
+    "by_order": {
+     "1": 0.223,
+     "2": 0.194
+    },
+    "top1_both": 0.042,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 1284,
+    "margin": 90,
+    "reverse_margin": 0,
+    "margin_rate": 0.07,
+    "by_order": {
+     "1": 0.067,
+     "2": 0.073
+    },
+    "top1_both": 0.326,
+    "passes": 1
+   },
+   "e1p_e2a": {
+    "pairs": 1280,
+    "margin": 105,
+    "reverse_margin": 3,
+    "margin_rate": 0.082,
+    "by_order": {
+     "1": 0.084,
+     "2": 0.08
+    },
+    "top1_both": 0.008,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 2030,
+    "margin": 2,
+    "reverse_margin": 56,
+    "margin_rate": 0.001,
+    "by_order": {
+     "1": 0.001,
+     "2": 0.001
+    },
+    "top1_both": 0.013,
+    "passes": 2
+   },
+   "e2_e2a": {
+    "pairs": 2002,
+    "margin": 69,
+    "reverse_margin": 3,
+    "margin_rate": 0.034,
+    "by_order": {
+     "1": 0.035,
+     "2": 0.034
+    },
+    "top1_both": 0.08,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 2036,
+    "margin": 223,
+    "reverse_margin": 0,
+    "margin_rate": 0.11,
+    "by_order": {
+     "1": 0.109,
+     "2": 0.11
+    },
+    "top1_both": 0.406,
+    "passes": 2
+   },
+   "sc_conflict_a2e": {
+    "pairs": 2036,
+    "margin": 50,
+    "reverse_margin": 9,
+    "margin_rate": 0.025,
+    "by_order": {
+     "1": 0.023,
+     "2": 0.027
+    },
+    "top1_both": 0.222,
+    "passes": 2
+   }
+  },
+  "completed_utc": "2026-10-17T02:07:32Z"
+ }
+}

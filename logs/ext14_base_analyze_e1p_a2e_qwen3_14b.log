@@ -1,0 +1,7 @@
+11:33:18 e1p_a2e qwen3_14b W2
+/home/ubuntu/MOE/moetrace/ext7_pairs.py:280: RuntimeWarning: divide by zero encountered in divide
+  r = a[idx].mean(1) / b[idx].mean(1)
+11:33:22 cluster bootstrap
+11:33:24 W4
+11:33:54 tables / figures written to /home/ubuntu/MOE/results/p6_e1p_a2e_qwen3_14b
+11:33:54 registry updated {"status": {"cases": true, "base": true}, "headline": {"share_val": [0.6639088346503638, 0.6425811489733579, 0.6838373370236139], "A_direct": [1.3901913643524981, 1.3116641966711224, 1.480756059337223], "M_all_moe": [0.3084311937065329, 0.2483734195311241, 0.3636336600944332], "n_pairs_val": 128, "n_units_val": 64}}

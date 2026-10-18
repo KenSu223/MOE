@@ -1,0 +1,14 @@
+10:18:24 qwen2_7b -> p6_e3_e2a_qwen2_7b: 512 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+10:18:26 pass 1/1: 1024 prefill rows, 3072 multi rows
+10:18:30   layer   0: load-wait 2.29s compute 1.12s  wf_rows=3072
+10:18:38   layer   8: load-wait 0.09s compute 0.97s  wf_rows=3072
+10:18:47   layer  16: load-wait 0.09s compute 0.98s  wf_rows=3072
+10:18:55   layer  24: load-wait 0.09s compute 0.98s  wf_rows=3072
+10:18:58   layer  27: load-wait 0.09s compute 0.98s  wf_rows=3072
+10:18:58   pass done: 1024 prefill rows (T=30), 3072 spawn rows, 32.3s
+10:18:59 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.97, drop 7.97)
+10:18:59 denoise  all_block all     : effect/drop +1.000 (mean effect +7.97, drop 7.97)
+10:18:59 denoise  all_moe   all     : effect/drop +0.931 (mean effect +7.42, drop 7.97)
+10:18:59 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.97, drop 7.97)
+10:18:59 noise    all_block all     : effect/drop +1.000 (mean effect +7.97, drop 7.97)
+10:18:59 noise    all_moe   all     : effect/drop +0.931 (mean effect +7.42, drop 7.97)

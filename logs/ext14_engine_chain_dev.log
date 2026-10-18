@@ -1,0 +1,7 @@
+2026-10-16T19:25:57Z START p6eng-dev-tiny-olmoe (waited 256s): bash -c cd /home/ubuntu/MOE_wt_p6engine && for f in mistral qwen2 qwen3 qwen2_moe; do python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 4 > /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 2 --per-layer 1,2,3 >> /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; done; python scripts/ext14_engine_verify.py --model olmoe --units 6 > /home/ubuntu/MOE/logs/ext14_engine_dev_olmoe.log 2>&1
+2026-10-16T19:26:14Z END   p6eng-dev-tiny-olmoe rc=1 (17s)
+2026-10-16T19:26:14Z tiny+olmoe rc=0
+2026-10-16T19:31:39Z START p6eng-dev-regress (waited 325s): bash /home/ubuntu/MOE_wt_p6engine/scripts/ext14_engine_regress.sh /home/ubuntu/MOE_wt_p6engine dev
+2026-10-16T19:39:18Z regression dev in /home/ubuntu/MOE_wt_p6engine: rc 0 0 0 0 ok=1
+2026-10-16T19:39:18Z END   p6eng-dev-regress rc=0 (459s)
+2026-10-16T19:39:18Z regress rc=0

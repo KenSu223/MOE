@@ -1,0 +1,24 @@
+2026-10-16T22:41:12Z START ext14-l_bind-qwen3-grid (waited 470s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+22:41:14 qwen3 -> p6_l_bind_qwen3: window 1, kinds ['layer', 'attn_layer', 'resid'], 512 directed cases, 2048 units, 294912 suffix rows, 6 passes; units per category {'last STR token': 512, 'first subsequent token': 512, 'further tokens': 512, 'last token': 512}
+22:41:21 pass 1/6: 416 units (S 1..1), 832 prefill rows, 59904 suffix rows
+22:41:24   layer   0: load-wait 2.89s compute 0.71s  wf_rows=1248 wf_tokens=416
+22:41:33   layer   8: load-wait 1.09s compute 0.16s  wf_rows=11232 wf_tokens=10400
+22:41:43   layer  16: load-wait 1.03s compute 0.22s  wf_rows=21216 wf_tokens=20384
+22:41:53   layer  24: load-wait 0.96s compute 0.29s  wf_rows=31200 wf_tokens=30368
+22:42:03   layer  32: load-wait 0.90s compute 0.35s  wf_rows=41184 wf_tokens=40352
+22:42:13   layer  40: load-wait 0.84s compute 0.41s  wf_rows=51168 wf_tokens=50336
+22:42:22   layer  47: load-wait 0.78s compute 0.46s  wf_rows=59904 wf_tokens=59072
+22:42:23   pass done: 832 prefill rows (T=21), 59904 suffix rows (Smax=1, 59904 tokens), 62.6s
+22:42:24 pass 1: 62.6s; 59904 rows saved
+22:42:24 pass 2/6: 416 units (S 1..2), 832 prefill rows, 59904 suffix rows
+22:43:24 pass 2: 56.6s; 119808 rows saved
+22:43:24 pass 3/6: 416 units (S 2..3), 832 prefill rows, 59904 suffix rows
+22:44:21 pass 3: 55.1s; 179712 rows saved
+22:44:22 pass 4/6: 347 units (S 3..4), 694 prefill rows, 49968 suffix rows
+22:45:21 pass 4: 54.8s; 229680 rows saved
+22:45:22 pass 5/6: 347 units (S 4..4), 694 prefill rows, 49968 suffix rows
+22:46:20 pass 5: 54.5s; 279648 rows saved
+22:46:20 pass 6/6: 106 units (S 4..4), 212 prefill rows, 15264 suffix rows
+22:47:08 pass 6: 46.1s; 294912 rows saved
+22:47:08 done
+2026-10-16T22:47:15Z END   ext14-l_bind-qwen3-grid rc=0 (363s)

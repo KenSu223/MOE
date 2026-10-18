@@ -1,0 +1,24 @@
+2026-10-17T00:05:51Z START ext14-e1_a2e-mixtral_bos-grid (waited 639s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 56250 --token-budget 187500
+00:05:53 mixtral -> p6_e1_a2e_mixtral_bos: window 1, kinds ['layer', 'attn_layer', 'resid'], 392 directed cases, 2688 units, 258048 suffix rows, 7 passes; units per category {'further tokens': 1512, 'last STR token': 392, 'first subsequent token': 392, 'last token': 392}
+00:05:59 pass 1/7: 585 units (S 1..2), 1170 prefill rows, 56160 suffix rows
+00:06:07   layer   0: load-wait 6.61s compute 1.43s  wf_rows=1755 wf_tokens=778
+00:06:30   layer   8: load-wait 2.04s compute 0.90s  wf_rows=15795 wf_tokens=19450
+00:06:53   layer  16: load-wait 1.69s compute 1.25s  wf_rows=29835 wf_tokens=38122
+00:07:17   layer  24: load-wait 1.34s compute 1.59s  wf_rows=43875 wf_tokens=56794
+00:07:37   layer  31: load-wait 1.03s compute 1.90s  wf_rows=56160 wf_tokens=73132
+00:07:38   pass done: 1170 prefill rows (T=32), 56160 suffix rows (Smax=2, 74688 tokens), 98.6s
+00:07:42 pass 1: 98.6s; 56160 rows saved
+00:07:42 pass 2/7: 585 units (S 2..3), 1170 prefill rows, 56160 suffix rows
+00:09:23 pass 2: 95.7s; 112320 rows saved
+00:09:23 pass 3/7: 398 units (S 3..4), 796 prefill rows, 38208 suffix rows
+00:11:03 pass 3: 94.4s; 150528 rows saved
+00:11:03 pass 4/7: 390 units (S 5..5), 780 prefill rows, 37440 suffix rows
+00:12:45 pass 4: 96.3s; 187968 rows saved
+00:12:45 pass 5/7: 325 units (S 5..6), 650 prefill rows, 31200 suffix rows
+00:14:25 pass 5: 95.1s; 219168 rows saved
+00:14:25 pass 6/7: 279 units (S 6..7), 558 prefill rows, 26784 suffix rows
+00:16:05 pass 6: 94.7s; 245952 rows saved
+00:16:06 pass 7/7: 126 units (S 7..7), 252 prefill rows, 12096 suffix rows
+00:17:33 pass 7: 84.7s; 258048 rows saved
+00:17:34 done
+2026-10-17T00:17:41Z END   ext14-e1_a2e-mixtral_bos-grid rc=0 (710s)

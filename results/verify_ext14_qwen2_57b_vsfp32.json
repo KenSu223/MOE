@@ -1,0 +1,138 @@
+{
+ "model": "qwen2_57b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8",
+ "family": "qwen2_moe",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 64,
+ "top_k": 8,
+ "shared_inter": 20480,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T03:26:19Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "router_fp32_flag": false,
+ "vs_fp32": {
+  "protocol": {
+   "model_key": "qwen2_57b",
+   "dtype": "bfloat16",
+   "router_fp32": false
+  },
+  "pass_s": {
+   "proto": 132.16898775100708,
+   "fp32": 167.76412177085876
+  },
+  "peak_mem_gb": {
+   "proto": 9.564566135406494,
+   "fp32": 19.09766149520874
+  },
+  "rescue_corr_all": 0.0974368127178685,
+  "rescue_absdiff": {
+   "n": 522,
+   "maxabs": 5.8123674392700195,
+   "meanabs": 0.6559940023897252,
+   "frac_exact": 0.0
+  },
+  "prefill_delta_absdiff": {
+   "n": 12,
+   "maxabs": 6.9499616622924805,
+   "meanabs": 4.039985020955403,
+   "frac_exact": 0.0
+  },
+  "by_kind": {
+   "attn_layer": {
+    "n": 168,
+    "maxabs": 2.4847002029418945,
+    "meanabs": 0.36143864904131207,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.2818165734729261,
+    "rescue_fp32_meanabs": 0.3204572796821594
+   },
+   "block": {
+    "n": 18,
+    "maxabs": 5.8123674392700195,
+    "meanabs": 0.8772560225592719,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.20625176902385586,
+    "rescue_fp32_meanabs": 0.9048995971679688
+   },
+   "layer": {
+    "n": 168,
+    "maxabs": 5.444553375244141,
+    "meanabs": 0.8745177217892238,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.07540067439782598,
+    "rescue_fp32_meanabs": 0.7198960781097412
+   },
+   "shared": {
+    "n": 168,
+    "maxabs": 3.433574676513672,
+    "meanabs": 0.7083189913204738,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.031535418665078245,
+    "rescue_fp32_meanabs": 0.5074911117553711
+   }
+  },
+  "final_routing_agreement_by_layer": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.16666666666666666,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "final_routing_agreement_mean": 0.005952380952380952,
+  "attn_share_mean_curve": {
+   "proto": 0.27503135800361633,
+   "fp32": 0.25970131158828735
+  },
+  "attn_share_per_unit": {
+   "proto": [
+    0.36531364917755127,
+    0.5028571486473083,
+    0.3382352888584137,
+    0.3447099030017853,
+    0.2842824459075928,
+    0.06885144859552383
+   ],
+   "fp32": [
+    0.2539406716823578,
+    0.3966006338596344,
+    0.29743826389312744,
+    0.36740171909332275,
+    0.3003700077533722,
+    0.15913091599941254
+   ]
+  }
+ },
+ "total_s": 302.10494208335876
+}

@@ -1,0 +1,58 @@
+2026-10-16T21:44:52Z START ext14-scan-qwen3-dialE-ext1 (waited 2892s): python scripts/ext14_scan.py qwen3 --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e1p_a2e,e1p_e2a
+21:44:55 e1_e2a [ext]: 2400 pairs, 4800 rows
+21:44:59   layer   0: load-wait 2.88s compute 0.78s  wf_rows=0
+21:45:07   layer   8: load-wait 0.81s compute 0.43s  wf_rows=0
+21:45:18   layer  16: load-wait 1.28s compute 0.43s  wf_rows=0
+21:45:27   layer  24: load-wait 0.81s compute 0.43s  wf_rows=0
+21:45:37   layer  32: load-wait 0.81s compute 0.43s  wf_rows=0
+21:45:47   layer  40: load-wait 0.81s compute 0.43s  wf_rows=0
+21:45:56   layer  47: load-wait 0.81s compute 0.43s  wf_rows=0
+21:45:56   pass done: 4800 prefill rows (T=21), 0 spawn rows, 61.0s
+21:45:56   pass 1/1 (4800 rows, 61s)
+21:45:56 e1_e2a {"pairs": 2400, "margin": 1266, "reverse_margin": 5, "margin_rate": 0.527, "by_order": {"1": 0.538, "2": 0.517}, "top1_both": 0.08, "passes": 1}
+21:45:56 e3p3_a2e [ext]: 1200 pairs, 2400 rows
+21:45:58   layer   0: load-wait 1.22s compute 0.44s  wf_rows=0
+21:46:07   layer   8: load-wait 0.68s compute 0.44s  wf_rows=0
+21:46:17   layer  16: load-wait 0.72s compute 0.44s  wf_rows=0
+21:46:23   layer  24: load-wait 0.23s compute 0.44s  wf_rows=0
+21:46:30   layer  32: load-wait 0.71s compute 0.44s  wf_rows=0
+21:46:39   layer  40: load-wait 0.73s compute 0.44s  wf_rows=0
+21:46:47   layer  47: load-wait 0.74s compute 0.44s  wf_rows=0
+21:46:47   pass done: 2400 prefill rows (T=42), 0 spawn rows, 51.4s
+21:46:47   pass 1/1 (2400 rows, 51s)
+21:46:48 e3p3_a2e {"pairs": 1200, "margin": 191, "reverse_margin": 5, "margin_rate": 0.159, "by_order": {"1": 0.156, "2": 0.168}, "top1_both": 0.274, "passes": 1}
+21:46:48 e3_a2e [ext]: 1200 pairs, 2400 rows
+21:46:49   layer   0: load-wait 0.99s compute 0.44s  wf_rows=0
+21:46:56   layer   8: load-wait 0.31s compute 0.44s  wf_rows=0
+21:47:04   layer  16: load-wait 0.60s compute 0.44s  wf_rows=0
+21:47:13   layer  24: load-wait 0.71s compute 0.44s  wf_rows=0
+21:47:22   layer  32: load-wait 0.64s compute 0.44s  wf_rows=0
+21:47:30   layer  40: load-wait 0.64s compute 0.44s  wf_rows=0
+21:47:38   layer  47: load-wait 0.67s compute 0.44s  wf_rows=0
+21:47:38   pass done: 2400 prefill rows (T=42), 0 spawn rows, 50.1s
+21:47:38   pass 1/1 (2400 rows, 50s)
+21:47:38 e3_a2e {"pairs": 1200, "margin": 182, "reverse_margin": 2, "margin_rate": 0.152, "by_order": {"1": 0.142, "2": 0.182}, "top1_both": 0.238, "passes": 1}
+21:47:38 e1p_a2e [ext]: 2400 pairs, 4800 rows
+21:47:40   layer   0: load-wait 0.73s compute 0.59s  wf_rows=0
+21:47:49   layer   8: load-wait 0.90s compute 0.59s  wf_rows=0
+21:47:56   layer  16: load-wait 0.43s compute 0.59s  wf_rows=0
+21:48:02   layer  24: load-wait 0.13s compute 0.59s  wf_rows=0
+21:48:09   layer  32: load-wait 0.54s compute 0.59s  wf_rows=0
+21:48:18   layer  40: load-wait 0.59s compute 0.59s  wf_rows=0
+21:48:26   layer  47: load-wait 0.53s compute 0.59s  wf_rows=0
+21:48:26   pass done: 4752 prefill rows (T=29), 0 spawn rows, 47.4s
+21:48:26   pass 1/2 (4752 rows, 47s)
+21:49:09   pass 2/2 (48 rows, 43s)
+21:49:09 e1p_a2e {"pairs": 2400, "margin": 1864, "reverse_margin": 0, "margin_rate": 0.777, "by_order": {"1": 0.781, "2": 0.772}, "top1_both": 0.891, "passes": 2}
+21:49:11 e1p_e2a [ext]: 2400 pairs, 4800 rows
+21:49:12   layer   0: load-wait 0.69s compute 0.47s  wf_rows=0
+21:49:20   layer   8: load-wait 0.36s compute 0.47s  wf_rows=0
+21:49:28   layer  16: load-wait 0.64s compute 0.47s  wf_rows=0
+21:49:35   layer  24: load-wait 0.19s compute 0.47s  wf_rows=0
+21:49:40   layer  32: load-wait 0.62s compute 0.47s  wf_rows=0
+21:49:49   layer  40: load-wait 0.62s compute 0.47s  wf_rows=0
+21:49:57   layer  47: load-wait 0.62s compute 0.47s  wf_rows=0
+21:49:57   pass done: 4800 prefill rows (T=23), 0 spawn rows, 46.0s
+21:49:57   pass 1/1 (4800 rows, 46s)
+21:49:57 e1p_e2a {"pairs": 2400, "margin": 1218, "reverse_margin": 3, "margin_rate": 0.507, "by_order": {"1": 0.521, "2": 0.494}, "top1_both": 0.04, "passes": 1}
+2026-10-16T21:50:04Z END   ext14-scan-qwen3-dialE-ext1 rc=0 (312s)

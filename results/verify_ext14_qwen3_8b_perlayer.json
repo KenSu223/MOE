@@ -1,0 +1,167 @@
+{
+ "model": "qwen3_8b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-8B-Base/snapshots/49e3418fbbbca6ecbdf9608b4d22e5a407081db4",
+ "family": "qwen3",
+ "dtype": "bf16",
+ "n_layers": 36,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-16T22:19:43Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "per_layer": {
+  "behaviour": {
+   "delta": [
+    1.375,
+    4.875,
+    1.25,
+    2.5,
+    0.625,
+    3.625
+   ],
+   "rank_true": [
+    2,
+    1,
+    32,
+    20,
+    21,
+    33
+   ],
+   "top1_is_true": [
+    false,
+    true,
+    false,
+    false,
+    false,
+    false
+   ],
+   "sanity": [
+    {
+     "prompt": "The capital of France is",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.14772804081439972
+    },
+    {
+     "prompt": "The Eiffel Tower is located in the city of",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.39673176407814026
+    },
+    {
+     "prompt": "Water is made of hydrogen and",
+     "answer": " oxygen",
+     "rank": 1,
+     "p": 0.8756682276725769
+    },
+    {
+     "prompt": "The opposite of hot is",
+     "answer": " cold",
+     "rank": 1,
+     "p": 0.19859716296195984
+    },
+    {
+     "prompt": "Monday, Tuesday, Wednesday,",
+     "answer": " Thursday",
+     "rank": 1,
+     "p": 0.7269311547279358
+    }
+   ]
+  },
+  "identities": {
+   "layer": 18,
+   "zero_vs_parent": {
+    "n": 6,
+    "maxabs": 0.125,
+    "meanabs": 0.041666666666666664,
+    "frac_exact": 0.6666666666666666
+   },
+   "union_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "setall_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "neurons_all_vs_expert": {
+    "n": 6,
+    "maxabs": 0.125,
+    "meanabs": 0.041666666666666664,
+    "frac_exact": 0.6666666666666666
+   },
+   "neurons_linearity_relerr_max": 2.950247335320455e-07,
+   "expert_rescue_mean": 0.0833333358168602,
+   "layer_rescue_mean": 0.0833333358168602,
+   "clean_delta_pos_frac": 1.0,
+   "drop_mean": 4.75
+  },
+  "layers": {
+   "1": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.006945284549146891,
+     "meanabs": 0.004612229870293628,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 0.25,
+     "meanabs": 0.08735795454545454,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   },
+   "18": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.01793661341071129,
+     "meanabs": 0.011993470940400253,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 0.5,
+     "meanabs": 0.26136363636363635,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   },
+   "35": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.003818414406850934,
+     "meanabs": 0.0032629263798960233,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 12.0,
+     "meanabs": 8.181818181818182,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   }
+  }
+ },
+ "total_s": 14.27267861366272
+}

@@ -1,0 +1,7 @@
+08:59:43   layer   0: load-wait 6.07s compute 0.61s  wf_rows=0
+09:00:02   layer   8: load-wait 1.69s compute 0.13s  wf_rows=0
+09:00:21   layer  16: load-wait 3.25s compute 0.13s  wf_rows=0
+09:00:39   layer  24: load-wait 2.54s compute 0.13s  wf_rows=0
+09:00:58   layer  31: load-wait 2.69s compute 0.13s  wf_rows=0
+09:00:59   pass done: 412 prefill rows (T=21), 0 spawn rows, 81.8s
+09:01:00 p6_e1_e2a_all_mixtral_bos: 412 directed cases; A_direct 0.731, M_direct 0.269, DLA attn share 0.732; fp32 vs engine Delta clean max |diff| 0.134

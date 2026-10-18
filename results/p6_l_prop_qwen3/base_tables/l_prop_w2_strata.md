@@ -1,0 +1,20 @@
+**l_prop W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | person-name options | False | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | True | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | False | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | True | 180 | 9.79 | 0.151 [0.134, 0.170] | 0.159 [0.148, 0.171] | 0.34 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | False | 75 | 10.34 | 0.255 [0.228, 0.280] | 0.126 [0.107, 0.145] | 0.33 [0.30, 0.36] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe reverse | False | 255 | 9.95 | 0.183 [0.167, 0.199] | 0.149 [0.140, 0.159] | 0.33 [0.32, 0.36] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 92 | 9.18 | 0.259 [0.236, 0.282] | 0.153 [0.137, 0.171] | 0.37 [0.35, 0.40] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 163 | 10.39 | 0.145 [0.126, 0.164] | 0.147 [0.135, 0.160] | 0.32 [0.30, 0.34] |

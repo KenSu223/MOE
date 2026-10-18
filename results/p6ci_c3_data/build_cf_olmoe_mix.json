@@ -1,0 +1,83 @@
+{
+ "model": "olmoe",
+ "proto": "olmoe",
+ "special_tokens": true,
+ "relations": {
+  "P17": {
+   "tokenised": 171,
+   "with_donor": 150,
+   "pairs_margin": 137,
+   "discovery": 64,
+   "validation": 64
+  },
+  "P27": {
+   "tokenised": 189,
+   "with_donor": 150,
+   "pairs_margin": 133,
+   "discovery": 64,
+   "validation": 64
+  },
+  "P495": {
+   "tokenised": 168,
+   "with_donor": 150,
+   "pairs_margin": 109,
+   "discovery": 54,
+   "validation": 55
+  },
+  "P103": {
+   "tokenised": 168,
+   "with_donor": 150,
+   "pairs_margin": 140,
+   "discovery": 64,
+   "validation": 64
+  },
+  "P178": {
+   "tokenised": 160,
+   "with_donor": 150,
+   "pairs_margin": 143,
+   "discovery": 64,
+   "validation": 64
+  },
+  "P1412": {
+   "tokenised": 162,
+   "with_donor": 150,
+   "pairs_margin": 115,
+   "discovery": 57,
+   "validation": 58
+  },
+  "P364": {
+   "tokenised": 162,
+   "with_donor": 150,
+   "pairs_margin": 120,
+   "discovery": 60,
+   "validation": 60
+  },
+  "P136": {
+   "tokenised": 156,
+   "with_donor": 150,
+   "pairs_margin": 92,
+   "discovery": 46,
+   "validation": 46
+  },
+  "P30": {
+   "tokenised": 49,
+   "with_donor": 48,
+   "pairs_margin": 40,
+   "discovery": 20,
+   "validation": 20
+  },
+  "P101": {
+   "tokenised": 198,
+   "with_donor": 150,
+   "pairs_margin": 103,
+   "discovery": 51,
+   "validation": 52
+  }
+ },
+ "merged": {
+  "name": "mix",
+  "discovery": 64,
+  "validation": 64
+ },
+ "utc": "2026-10-17T02:48:11Z"
+}

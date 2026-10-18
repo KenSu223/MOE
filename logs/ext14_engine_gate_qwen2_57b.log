@@ -1,0 +1,7 @@
+  layer 1: update relerr max 0.00588, routing 0.079
+  layer 13: update relerr max 0.0649, routing 0.143
+  layer 13: update relerr on positions with equal routing 0.0222
+  layer 27: update relerr max 0.014, routing 0.935
+  sanity 3/5 answers in the top 5: Paris#1, Paris#1, oxygen#50, cold#1, Thursday#86
+  clean Delta > 0 in 1.00 of the units, mean drop 1.32
+FAIL: layer 1 routing agreement 0.07940544304180666; layer 13 routing agreement 0.1426300971755517

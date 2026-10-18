@@ -1,0 +1,19 @@
+{
+ "bf16_json": "results/verify_ext14_qwen3_1p7b.json",
+ "fp32_json": "results/verify_ext14_qwen3_1p7b_fp32.json",
+ "n_matched": 306,
+ "corr": {
+  "hf_bf16_vs_fp32": 0.9975087904601144,
+  "eng_bf16_vs_fp32": 0.9975582352310981,
+  "eng_bf16_vs_hf_bf16": 0.9942378850911117,
+  "eng_fp32_vs_hf_fp32": 0.9999999998929346
+ },
+ "mean_absdiff": {
+  "hf_bf16_vs_fp32": 0.04888051475574768,
+  "eng_bf16_vs_fp32": 0.05326681822733162,
+  "eng_bf16_vs_hf_bf16": 0.07148692810457516,
+  "eng_fp32_vs_hf_fp32": 1.1818081724877451e-05
+ },
+ "fp32_rescue_meanabs": 0.3493006026822757,
+ "verdict": "noise"
+}

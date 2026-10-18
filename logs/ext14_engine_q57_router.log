@@ -1,0 +1,10 @@
+2026-10-17T02:51:44Z START p6eng-q57-router (waited 814s): python scripts/ext14_engine_q57_router.py --units 3
+[transformers] You tried to access the `ExpertsInterface` with a `config._experts_implementation` set to `None`. This is expected if you use an Expert Module as a standalone Module. If this is not the case, something went wrong with the dispatch of `config._experts_implementation`
+02:55:36 fp32: 217s
+02:57:30 bf16: 113s
+02:59:23 bf16_router32: 113s
+02:59:23 fp32: |dDelta| vs fp32 mean 0 max 0, sanity ranks [1, 1, 1, 1, 1], routing agreement vs fp32 mean 1.000
+02:59:23 bf16: |dDelta| vs fp32 mean 3.86 max 7, sanity ranks [1, 1, 47, 1, 40874], routing agreement vs fp32 mean 0.077
+02:59:23 bf16_router32: |dDelta| vs fp32 mean 3.94 max 7.15, sanity ranks [1, 1, 42, 1, 124639], routing agreement vs fp32 mean 0.190
+02:59:23 wrote results/verify_ext14_qwen2_57b_router.json
+2026-10-17T02:59:28Z END   p6eng-q57-router rc=0 (464s)

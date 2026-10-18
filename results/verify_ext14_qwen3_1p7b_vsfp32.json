@@ -1,0 +1,99 @@
+{
+ "model": "qwen3_1p7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+ "family": "qwen3",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T05:23:48Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "router_fp32_flag": false,
+ "vs_fp32": {
+  "protocol": {
+   "model_key": "qwen3_1p7b",
+   "dtype": "bfloat16",
+   "router_fp32": false
+  },
+  "pass_s": {
+   "proto": 1.4464402198791504,
+   "fp32": 1.5016999244689941
+  },
+  "peak_mem_gb": {
+   "proto": 1.6169261932373047,
+   "fp32": 2.2068891525268555
+  },
+  "rescue_corr_all": 0.9884390159048408,
+  "rescue_absdiff": {
+   "n": 354,
+   "maxabs": 0.27892112731933594,
+   "meanabs": 0.05844242828713972,
+   "frac_exact": 0.0
+  },
+  "prefill_delta_absdiff": {
+   "n": 12,
+   "maxabs": 0.09693336486816406,
+   "meanabs": 0.046690940856933594,
+   "frac_exact": 0.0
+  },
+  "by_kind": {
+   "attn_layer": {
+    "n": 168,
+    "maxabs": 0.2063426971435547,
+    "meanabs": 0.05781214577811105,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9868598645159103,
+    "rescue_fp32_meanabs": 0.1883918046951294
+   },
+   "block": {
+    "n": 18,
+    "maxabs": 0.15489578247070312,
+    "meanabs": 0.07461908128526476,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9914426269927707,
+    "rescue_fp32_meanabs": 0.3350851237773895
+   },
+   "layer": {
+    "n": 168,
+    "maxabs": 0.27892112731933594,
+    "meanabs": 0.05733949797494071,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9899575428067585,
+    "rescue_fp32_meanabs": 0.3028919994831085
+   }
+  },
+  "attn_share_mean_curve": {
+   "proto": 0.4042145609855652,
+   "fp32": 0.41734448075294495
+  },
+  "attn_share_per_unit": {
+   "proto": [
+    0.3839285671710968,
+    0.4285714328289032,
+    0.4000000059604645,
+    0.25,
+    0.41304346919059753,
+    0.43884891271591187
+   ],
+   "fp32": [
+    0.37535178661346436,
+    0.43176308274269104,
+    0.5364679098129272,
+    0.5120263695716858,
+    0.40124407410621643,
+    0.4326757788658142
+   ]
+  }
+ },
+ "total_s": 3.5450687408447266
+}

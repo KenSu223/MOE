@@ -1,0 +1,23 @@
+{
+ "task": "mistral7b_wino",
+ "model": "mistral7b",
+ "items": [
+  "wino",
+  "mixtral",
+  "wino_mixtral_bos_str",
+  "data/wino_str/pairs_train_xl_mixtral_bos.parquet",
+  "data/wino_str/case_sets.json"
+ ],
+ "experts": [
+  "L18E000",
+  "L19E000",
+  "L20E000",
+  "L21E000"
+ ],
+ "n_rows": 512,
+ "n_prefill": 1024,
+ "limit": null,
+ "pass_s": 29.1,
+ "command": "scripts/ext14ci_c1_run.py mistral7b_wino score",
+ "utc": "2026-10-16T23:53:23Z"
+}

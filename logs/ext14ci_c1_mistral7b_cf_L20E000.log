@@ -1,0 +1,5 @@
+2026-10-17T01:12:09Z START p6ci-c1-mistral7b_cf-L20E000 (waited 417s): python scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L20E000 --max-spawn 30000
+01:12:26 patch mistral7b_cf L20E000: 369 rows (98 cases), 70 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 14336]
+01:12:41 pass 1/1: 467 prefill, 25830 spawns, 14s
+01:12:41 patch done
+2026-10-17T01:12:43Z END   p6ci-c1-mistral7b_cf-L20E000 rc=0 (34s)

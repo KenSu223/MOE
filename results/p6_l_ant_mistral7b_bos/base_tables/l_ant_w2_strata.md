@@ -1,0 +1,20 @@
+**l_ant W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| mistral7b_bos | person-name options | True | 0 |  |  |  |  |
+| mistral7b_bos | person-name options | False | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | True | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | False | 0 |  |  |  |  |
+| mistral7b_bos | item built in both tokenizer families | True | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | item built in both tokenizer families | False | 0 |  |  |  |  |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | False | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | probe-associative | True | 0 |  |  |  |  |
+| mistral7b_bos | probe-associative | False | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | probe one-sided | True | 0 |  |  |  |  |
+| mistral7b_bos | probe one-sided | False | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | probe reverse | True | 0 |  |  |  |  |
+| mistral7b_bos | probe reverse | False | 252 | 10.79 | 0.105 [0.095, 0.115] | 0.123 [0.113, 0.133] | 0.46 [0.44, 0.47] |
+| mistral7b_bos | top-1 in both directions | True | 163 | 11.07 | 0.097 [0.085, 0.110] | 0.114 [0.102, 0.126] | 0.45 [0.44, 0.47] |
+| mistral7b_bos | top-1 in both directions | False | 89 | 10.28 | 0.121 [0.103, 0.139] | 0.141 [0.124, 0.160] | 0.46 [0.44, 0.48] |

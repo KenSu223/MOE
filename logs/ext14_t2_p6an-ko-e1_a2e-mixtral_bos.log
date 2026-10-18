@@ -1,0 +1,18 @@
+2026-10-17T01:48:01Z START p6an-ko-e1_a2e-mixtral_bos (waited 22s): python scripts/ext14_t2_run.py ko mixtral_bos --conds e1_a2e --with-wr --time-budget 1320
+01:48:13 e1_a2e: plan main written: 51 conditions, 3 passes, 8100 rows
+01:48:13 e1_a2e/mixtral_bos main: 3 of 3 passes to run
+01:48:22   layer   0: load-wait 6.20s compute 1.27s  wf_rows=0
+01:48:40   layer   8: load-wait 1.40s compute 0.74s  wf_rows=0
+01:48:56   layer  16: load-wait 1.62s compute 0.74s  wf_rows=0
+01:49:20   layer  24: load-wait 3.44s compute 0.74s  wf_rows=0
+01:49:41   layer  31: load-wait 2.15s compute 0.74s  wf_rows=0
+01:49:41   pass done: 1800 prefill rows (T=29), 0 spawn rows, 86.6s (metrics 0.0s)
+01:49:41 e1_a2e pass full_p000: 1800 rows, T=29, padded 52200, 87.0s, peak 7.6 GB
+01:51:09 e1_a2e pass ctl_p000: 3333 rows, T=26, padded 86658, 86.0s, peak 9.7 GB
+01:52:32 e1_a2e pass ctl_p001: 2967 rows, T=29, padded 86043, 82.2s, peak 9.7 GB
+01:52:32 e1_a2e/mixtral_bos main complete
+01:52:33 e1_a2e/mixtral_bos writer pass: 392 prompts, T <= 32, layers [14, 15, 16, 17, 18, 19, 20, 21, 23]
+01:54:01 e1_a2e writer pass done in 88s, peak 6.3 GB
+01:54:14 e1_a2e writer projections: 7924 vectors
+01:54:14 exit: 3 passes run, 362s, out_of_time=False
+2026-10-17T01:54:21Z END   p6an-ko-e1_a2e-mixtral_bos rc=0 (380s)

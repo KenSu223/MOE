@@ -1,0 +1,14 @@
+2026-10-17T01:46:19Z START ext14-e1_e2a-mixtral_bos-sweep (waited 908s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e1_e2a_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_e2a_mixtral_bos.json --out p6_e1_e2a_mixtral_bos --agent p6-data --max-rows 40000
+01:46:20 mixtral -> p6_e1_e2a_mixtral_bos: 160 directed cases (80 pairs), families {'main': {'discovery': 160, 'validation': 160}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (15360 spawn rows), T max 18
+01:46:26 pass 1/1: layers 0..31, 320 prefill rows, 15360 spawn rows
+01:46:34   layer   0: load-wait 6.83s compute 0.81s  wf_rows=480
+01:46:55   layer   8: load-wait 2.42s compute 0.15s  wf_rows=4320
+01:47:12   layer  16: load-wait 2.47s compute 0.22s  wf_rows=8160
+01:47:34   layer  24: load-wait 2.58s compute 0.28s  wf_rows=12000
+01:47:54   layer  31: load-wait 2.42s compute 0.33s  wf_rows=15360
+01:47:54   pass done: 320 prefill rows (T=18), 15360 spawn rows, 88.1s (metrics 0.2s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+01:47:55 family main: layer disc L19; attn_layer disc L19; block disc L19
+01:47:55 Δclean +1.96 Δcorrupt -1.96 drop +3.92; {"layer_discovery_argmax": 19, "layer_discovery_max": 0.726, "layer_discovery_top5": [[19, 0.726], [20, 0.665], [21, 0.48], [22, 0.351], [18, 0.305]], "layer_validation_argmax": 19, "layer_validation_max": 0.726, "layer_validation_top5": [[19, 0.726], [20, 0.665], [21, 0.48], [22, 0.351], [18, 0.305]], "attn_layer_discovery_argmax": 19, "attn_layer_discovery_max": 0.734, "attn_layer_discovery_top5": [[19, 0.734], [13, 0.7], [15, 0.628], [18, 0.509], [20, 0.362]], "attn_layer_validation_argmax": 19, "attn_layer_validation_max": 0.734, "attn_layer_validation_top5": [[19, 0.734], [13, 0.7], [15, 
+2026-10-17T01:48:01Z END   ext14-e1_e2a-mixtral_bos-sweep rc=0 (102s)

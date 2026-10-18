@@ -1,0 +1,850 @@
+{
+ "proto": "mixtral_bos",
+ "tasks": [
+  "ss_e3",
+  "ss_e1",
+  "co_p17",
+  "co_nat",
+  "pr_ioi",
+  "pr_f1n",
+  "pr_e1n",
+  "ct_lang"
+ ],
+ "concept_of": {
+  "ss_e3": "SIZE_STATE",
+  "ss_e1": "SIZE_STATE",
+  "co_p17": "COUNTRY",
+  "co_nat": "COUNTRY",
+  "pr_ioi": "PERSON_ROLE",
+  "pr_f1n": "PERSON_ROLE",
+  "pr_e1n": "PERSON_ROLE",
+  "ct_lang": "CONTROL"
+ },
+ "top": {
+  "ss_e3": {
+   "heads": [
+    "L25H9",
+    "L22H20",
+    "L19H13",
+    "L13H18",
+    "L19H12",
+    "L15H7",
+    "L13H4",
+    "L31H22",
+    "L15H8",
+    "L20H26"
+   ],
+   "experts": [
+    "L20E000",
+    "L19E006",
+    "L21E006",
+    "L24E002",
+    "L26E002",
+    "L16E007",
+    "L21E004",
+    "L25E002",
+    "L18E005",
+    "L26E007"
+   ],
+   "head_vals": [
+    0.0843,
+    0.0681,
+    0.0585,
+    0.0337,
+    0.0287,
+    0.0282,
+    0.0247,
+    0.0242,
+    0.024,
+    0.0207
+   ],
+   "expert_vals": [
+    0.1542,
+    0.1338,
+    0.1012,
+    0.091,
+    0.088,
+    0.075,
+    0.0641,
+    0.0511,
+    0.0504,
+    0.0402
+   ],
+   "n_units": 172
+  },
+  "ss_e1": {
+   "heads": [
+    "L19H13",
+    "L15H8",
+    "L19H12",
+    "L16H0",
+    "L15H7",
+    "L13H18",
+    "L18H3",
+    "L13H4",
+    "L19H8",
+    "L15H11"
+   ],
+   "experts": [],
+   "head_vals": [
+    0.1077,
+    0.0845,
+    0.0792,
+    0.0755,
+    0.068,
+    0.0618,
+    0.0608,
+    0.0549,
+    0.0537,
+    0.0478
+   ],
+   "expert_vals": [],
+   "n_units": 72
+  },
+  "co_p17": {
+   "heads": [
+    "L24H22",
+    "L18H4",
+    "L19H29",
+    "L24H23",
+    "L24H21",
+    "L15H1",
+    "L15H3",
+    "L19H30",
+    "L18H14",
+    "L18H12"
+   ],
+   "experts": [
+    "L19E002",
+    "L21E001",
+    "L22E001",
+    "L20E000",
+    "L18E001",
+    "L29E004",
+    "L23E002",
+    "L28E002",
+    "L25E003",
+    "L27E007"
+   ],
+   "head_vals": [
+    0.1682,
+    0.1677,
+    0.0644,
+    0.041,
+    0.0191,
+    0.0179,
+    0.0147,
+    0.0137,
+    0.011,
+    0.0101
+   ],
+   "expert_vals": [
+    0.0649,
+    0.0446,
+    0.028,
+    0.0254,
+    0.0179,
+    0.0157,
+    0.0148,
+    0.0127,
+    0.0121,
+    0.0118
+   ],
+   "n_units": 96
+  },
+  "co_nat": {
+   "heads": [
+    "L18H4",
+    "L24H22",
+    "L19H29",
+    "L24H23",
+    "L24H21",
+    "L15H1",
+    "L19H30",
+    "L18H14",
+    "L15H3",
+    "L18H12"
+   ],
+   "experts": [
+    "L21E001",
+    "L19E002",
+    "L25E003",
+    "L22E001",
+    "L20E005",
+    "L18E001",
+    "L23E002",
+    "L27E006",
+    "L24E007",
+    "L28E002"
+   ],
+   "head_vals": [
+    0.2728,
+    0.2331,
+    0.1107,
+    0.0712,
+    0.0613,
+    0.0432,
+    0.0386,
+    0.0272,
+    0.027,
+    0.0182
+   ],
+   "expert_vals": [
+    0.0626,
+    0.0513,
+    0.0359,
+    0.0357,
+    0.0257,
+    0.0235,
+    0.0223,
+    0.0165,
+    0.0151,
+    0.0147
+   ],
+   "n_units": 192
+  },
+  "pr_ioi": {
+   "heads": [
+    "L21H6",
+    "L19H10",
+    "L31H5",
+    "L16H15",
+    "L19H8",
+    "L16H3",
+    "L31H28",
+    "L16H16",
+    "L31H6",
+    "L31H22"
+   ],
+   "experts": [],
+   "head_vals": [
+    0.1084,
+    0.0648,
+    0.0642,
+    0.0509,
+    0.0497,
+    0.0331,
+    0.0318,
+    0.0311,
+    0.0266,
+    0.0239
+   ],
+   "expert_vals": [],
+   "n_units": 256
+  },
+  "pr_f1n": {
+   "heads": [
+    "L16H1",
+    "L19H8",
+    "L19H18",
+    "L16H14",
+    "L19H14",
+    "L19H12",
+    "L16H12",
+    "L21H7",
+    "L16H0",
+    "L15H8"
+   ],
+   "experts": [
+    "L17E007",
+    "L16E005",
+    "L18E001",
+    "L15E002",
+    "L15E006",
+    "L20E006",
+    "L19E007",
+    "L28E003",
+    "L19E006",
+    "L13E000"
+   ],
+   "head_vals": [
+    0.1455,
+    0.1363,
+    0.1211,
+    0.116,
+    0.0899,
+    0.0855,
+    0.0794,
+    0.0758,
+    0.0714,
+    0.0684
+   ],
+   "expert_vals": [
+    0.1251,
+    0.1149,
+    0.0572,
+    0.0532,
+    0.0439,
+    0.0425,
+    0.0418,
+    0.0359,
+    0.0313,
+    0.0229
+   ],
+   "n_units": 24
+  },
+  "pr_e1n": {
+   "heads": [
+    "L16H1",
+    "L19H8",
+    "L13H11",
+    "L16H0",
+    "L18H10",
+    "L19H9",
+    "L16H14",
+    "L19H16",
+    "L18H30",
+    "L16H12"
+   ],
+   "experts": [
+    "L17E007",
+    "L16E005",
+    "L15E006",
+    "L28E003",
+    "L19E007",
+    "L31E002",
+    "L15E002",
+    "L31E007",
+    "L17E001",
+    "L20E006"
+   ],
+   "head_vals": [
+    0.4814,
+    0.332,
+    0.299,
+    0.2301,
+    0.1161,
+    0.0709,
+    0.068,
+    0.065,
+    0.065,
+    0.0466
+   ],
+   "expert_vals": [
+    0.2388,
+    0.1012,
+    0.0958,
+    0.0838,
+    0.043,
+    0.0417,
+    0.0365,
+    0.0287,
+    0.0258,
+    0.0252
+   ],
+   "n_units": 32
+  },
+  "ct_lang": {
+   "heads": [
+    "L18H4",
+    "L24H22",
+    "L19H29",
+    "L24H21",
+    "L24H23",
+    "L15H1",
+    "L15H3",
+    "L19H30",
+    "L15H7",
+    "L18H12"
+   ],
+   "experts": [
+    "L22E005",
+    "L20E005",
+    "L19E006",
+    "L21E006",
+    "L21E001",
+    "L19E004",
+    "L26E007",
+    "L21E000",
+    "L22E001",
+    "L26E003"
+   ],
+   "head_vals": [
+    0.3068,
+    0.2481,
+    0.1049,
+    0.0795,
+    0.0586,
+    0.0425,
+    0.0377,
+    0.0299,
+    0.0158,
+    0.013
+   ],
+   "expert_vals": [
+    0.0356,
+    0.0355,
+    0.0288,
+    0.0245,
+    0.0233,
+    0.023,
+    0.0227,
+    0.0196,
+    0.0195,
+    0.0182
+   ],
+   "n_units": 96
+  }
+ },
+ "circuits": {
+  "SIZE_STATE": {
+   "tasks": [
+    "ss_e3",
+    "ss_e1"
+   ],
+   "insufficient": false,
+   "heads": [
+    "L13H18",
+    "L13H4",
+    "L15H7",
+    "L19H13"
+   ],
+   "experts": [],
+   "shared_with_other_concepts": [
+    "L15H8",
+    "L19H12"
+   ],
+   "in_control_top": [
+    "L15H7"
+   ],
+   "n_candidates": 6,
+   "random": [
+    {
+     "heads": [
+      "L13H25",
+      "L13H20",
+      "L15H0",
+      "L19H5"
+     ],
+     "experts": []
+    },
+    {
+     "heads": [
+      "L13H28",
+      "L13H12",
+      "L15H2",
+      "L19H8"
+     ],
+     "experts": []
+    }
+   ]
+  },
+  "COUNTRY": {
+   "tasks": [
+    "co_p17",
+    "co_nat"
+   ],
+   "insufficient": false,
+   "heads": [
+    "L15H1",
+    "L15H3",
+    "L18H12",
+    "L18H14",
+    "L18H4",
+    "L19H29",
+    "L19H30",
+    "L24H21",
+    "L24H22",
+    "L24H23"
+   ],
+   "experts": [
+    "L19E002",
+    "L21E001",
+    "L22E001",
+    "L23E002",
+    "L25E003",
+    "L28E002"
+   ],
+   "shared_with_other_concepts": [
+    "L18E001"
+   ],
+   "in_control_top": [
+    "L15H1",
+    "L15H3",
+    "L18H12",
+    "L18H4",
+    "L19H29",
+    "L19H30",
+    "L21E001",
+    "L22E001",
+    "L24H21",
+    "L24H22",
+    "L24H23"
+   ],
+   "n_candidates": 17,
+   "random": [
+    {
+     "heads": [
+      "L15H2",
+      "L15H22",
+      "L18H30",
+      "L18H17",
+      "L18H24",
+      "L19H10",
+      "L19H15",
+      "L24H10",
+      "L24H27",
+      "L24H7"
+     ],
+     "experts": [
+      "L19E001",
+      "L21E000",
+      "L22E002",
+      "L23E007",
+      "L25E007",
+      "L28E006"
+     ]
+    },
+    {
+     "heads": [
+      "L15H11",
+      "L15H9",
+      "L18H31",
+      "L18H15",
+      "L18H29",
+      "L19H12",
+      "L19H14",
+      "L24H30",
+      "L24H9",
+      "L24H4"
+     ],
+     "experts": [
+      "L19E006",
+      "L21E002",
+      "L22E005",
+      "L23E007",
+      "L25E004",
+      "L28E003"
+     ]
+    }
+   ]
+  },
+  "PERSON_ROLE": {
+   "tasks": [
+    "pr_ioi",
+    "pr_f1n",
+    "pr_e1n"
+   ],
+   "insufficient": false,
+   "heads": [
+    "L16H1",
+    "L16H12",
+    "L16H14"
+   ],
+   "experts": [
+    "L15E002",
+    "L15E006",
+    "L16E005",
+    "L17E007",
+    "L19E007",
+    "L20E006",
+    "L28E003"
+   ],
+   "shared_with_other_concepts": [
+    "L16H0",
+    "L19H8"
+   ],
+   "in_control_top": [],
+   "n_candidates": 12,
+   "random": [
+    {
+     "heads": [
+      "L16H27",
+      "L16H31",
+      "L16H28"
+     ],
+     "experts": [
+      "L15E000",
+      "L15E004",
+      "L16E006",
+      "L17E005",
+      "L19E002",
+      "L20E005",
+      "L28E001"
+     ]
+    },
+    {
+     "heads": [
+      "L16H10",
+      "L16H25",
+      "L16H20"
+     ],
+     "experts": [
+      "L15E005",
+      "L15E000",
+      "L16E000",
+      "L17E002",
+      "L19E006",
+      "L20E003",
+      "L28E006"
+     ]
+    }
+   ]
+  }
+ },
+ "task_info": [
+  {
+   "task": "ss_e3",
+   "concept": "SIZE_STATE",
+   "n_sel_units": 172,
+   "n_eval_pairs": 48,
+   "head_layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ],
+   "has_experts": true,
+   "n_effect_units": 172
+  },
+  {
+   "task": "ss_e1",
+   "concept": "SIZE_STATE",
+   "n_sel_units": 72,
+   "n_eval_pairs": 36,
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19
+   ],
+   "has_experts": false,
+   "n_effect_units": 72
+  },
+  {
+   "task": "co_p17",
+   "concept": "COUNTRY",
+   "n_sel_units": 96,
+   "n_eval_pairs": 48,
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "has_experts": true,
+   "n_effect_units": 96
+  },
+  {
+   "task": "co_nat",
+   "concept": "COUNTRY",
+   "n_sel_units": 192,
+   "n_eval_pairs": 48,
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "has_experts": true,
+   "n_effect_units": 192
+  },
+  {
+   "task": "pr_ioi",
+   "concept": "PERSON_ROLE",
+   "n_sel_units": 256,
+   "n_eval_pairs": 48,
+   "head_layers": [
+    16,
+    19,
+    21,
+    22,
+    31
+   ],
+   "has_experts": false,
+   "n_effect_units": 256
+  },
+  {
+   "task": "pr_f1n",
+   "concept": "PERSON_ROLE",
+   "n_sel_units": 24,
+   "n_eval_pairs": 11,
+   "head_layers": [
+    15,
+    16,
+    19,
+    21,
+    27
+   ],
+   "has_experts": true,
+   "n_effect_units": 24
+  },
+  {
+   "task": "pr_e1n",
+   "concept": "PERSON_ROLE",
+   "n_sel_units": 32,
+   "n_eval_pairs": 14,
+   "head_layers": [
+    13,
+    16,
+    18,
+    19,
+    23
+   ],
+   "has_experts": true,
+   "n_effect_units": 32
+  },
+  {
+   "task": "ct_lang",
+   "concept": "CONTROL",
+   "n_sel_units": 96,
+   "n_eval_pairs": 48,
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "has_experts": true,
+   "n_effect_units": 96
+  }
+ ],
+ "measured": {
+  "ss_e3": {
+   "head_layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ],
+   "experts": true
+  },
+  "ss_e1": {
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19
+   ],
+   "experts": false
+  },
+  "co_p17": {
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "experts": true
+  },
+  "co_nat": {
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "experts": true
+  },
+  "pr_ioi": {
+   "head_layers": [
+    16,
+    19,
+    21,
+    22,
+    31
+   ],
+   "experts": false
+  },
+  "pr_f1n": {
+   "head_layers": [
+    15,
+    16,
+    19,
+    21,
+    27
+   ],
+   "experts": true
+  },
+  "pr_e1n": {
+   "head_layers": [
+    13,
+    16,
+    18,
+    19,
+    23
+   ],
+   "experts": true
+  },
+  "ct_lang": {
+   "head_layers": [
+    13,
+    15,
+    16,
+    18,
+    19,
+    24
+   ],
+   "experts": true
+  }
+ },
+ "note": "existing-rows C3 (scope cut 2026-10-17); selection = source validation split, evaluation = source discovery split"
+}

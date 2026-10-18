@@ -1,0 +1,11 @@
+2026-10-17T09:41:22Z START ext14-scan-qwen2_57b-l_cf (waited 1990s): python scripts/ext14_scan.py qwen2_57b --part cells --subset all --cells l_cf
+09:41:26 l_cf [all]: 217 pairs, 434 rows
+09:41:51   layer   0: load-wait 24.61s compute 0.88s  wf_rows=0
+09:42:23   layer   8: load-wait 3.62s compute 0.38s  wf_rows=0
+09:42:55   layer  16: load-wait 3.64s compute 0.40s  wf_rows=0
+09:43:27   layer  24: load-wait 3.62s compute 0.38s  wf_rows=0
+09:43:39   layer  27: load-wait 3.62s compute 0.38s  wf_rows=0
+09:43:40   pass done: 434 prefill rows (T=15), 0 spawn rows, 133.8s
+09:43:40   pass 1/1 (434 rows, 134s)
+09:43:42 l_cf {"pairs": 217, "margin": 202, "reverse_margin": 0, "margin_rate": 0.931, "by_order": {"1": 0.931}, "top1_both": 0.253, "passes": 1}
+2026-10-17T09:43:56Z END   ext14-scan-qwen2_57b-l_cf rc=0 (154s)

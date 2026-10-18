@@ -1,0 +1,160 @@
+{
+ "n_cases": 512,
+ "pass_times_s": [
+  154.16102957725525,
+  115.82504343986511,
+  115.88289642333984,
+  113.96246480941772
+ ],
+ "mean_delta_clean": 4.549827268347144,
+ "mean_delta_corrupt": -4.5495455879718065,
+ "mean_drop": 9.09937285631895,
+ "families": {
+  "main": {
+   "layer_discovery_argmax": 25,
+   "layer_discovery_max": 3.176,
+   "layer_discovery_top5": [
+    [
+     25,
+     3.176
+    ],
+    [
+     22,
+     1.757
+    ],
+    [
+     24,
+     1.633
+    ],
+    [
+     23,
+     1.498
+    ],
+    [
+     21,
+     1.442
+    ]
+   ],
+   "layer_validation_argmax": 25,
+   "layer_validation_max": 2.893,
+   "layer_validation_top5": [
+    [
+     25,
+     2.893
+    ],
+    [
+     24,
+     1.844
+    ],
+    [
+     23,
+     1.731
+    ],
+    [
+     22,
+     1.723
+    ],
+    [
+     21,
+     1.526
+    ]
+   ],
+   "attn_layer_discovery_argmax": 20,
+   "attn_layer_discovery_max": 1.375,
+   "attn_layer_discovery_top5": [
+    [
+     20,
+     1.375
+    ],
+    [
+     19,
+     0.491
+    ],
+    [
+     18,
+     0.262
+    ],
+    [
+     16,
+     0.249
+    ],
+    [
+     22,
+     0.224
+    ]
+   ],
+   "attn_layer_validation_argmax": 20,
+   "attn_layer_validation_max": 1.319,
+   "attn_layer_validation_top5": [
+    [
+     20,
+     1.319
+    ],
+    [
+     19,
+     0.659
+    ],
+    [
+     18,
+     0.322
+    ],
+    [
+     16,
+     0.254
+    ],
+    [
+     22,
+     0.207
+    ]
+   ],
+   "block_discovery_argmax": 25,
+   "block_discovery_max": 3.25,
+   "block_discovery_top5": [
+    [
+     25,
+     3.25
+    ],
+    [
+     20,
+     2.613
+    ],
+    [
+     22,
+     2.061
+    ],
+    [
+     24,
+     1.756
+    ],
+    [
+     23,
+     1.635
+    ]
+   ],
+   "block_validation_argmax": 25,
+   "block_validation_max": 2.98,
+   "block_validation_top5": [
+    [
+     25,
+     2.98
+    ],
+    [
+     20,
+     2.457
+    ],
+    [
+     22,
+     1.997
+    ],
+    [
+     24,
+     1.954
+    ],
+    [
+     23,
+     1.905
+    ]
+   ]
+  }
+ }
+}

@@ -1,0 +1,74 @@
+2026-10-17T07:01:31Z START ext14-scan-qwen3_14b-dialE-ext (waited 1614s): python scripts/ext14_scan.py qwen3_14b --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_conflict_a2e
+07:01:36 e1_e2a [ext]: 2400 pairs, 4800 rows
+07:01:39   layer   0: load-wait 1.35s compute 1.49s  wf_rows=0
+07:01:49   layer   8: load-wait 0.10s compute 1.24s  wf_rows=0
+07:02:01   layer  16: load-wait 0.10s compute 1.24s  wf_rows=0
+07:02:11   layer  24: load-wait 0.09s compute 1.24s  wf_rows=0
+07:02:22   layer  32: load-wait 0.23s compute 1.24s  wf_rows=0
+07:02:32   layer  39: load-wait 0.18s compute 1.24s  wf_rows=0
+07:02:32   pass done: 4800 prefill rows (T=21), 0 spawn rows, 56.3s
+07:02:32   pass 1/1 (4800 rows, 56s)
+07:02:32 e1_e2a {"pairs": 2400, "margin": 957, "reverse_margin": 5, "margin_rate": 0.399, "by_order": {"1": 0.405, "2": 0.392}, "top1_both": 0.115, "passes": 1}
+07:02:32 e3p3_a2e [ext]: 1200 pairs, 2400 rows
+07:02:34   layer   0: load-wait 0.09s compute 1.25s  wf_rows=0
+07:02:44   layer   8: load-wait 0.06s compute 1.25s  wf_rows=0
+07:02:54   layer  16: load-wait 0.06s compute 1.25s  wf_rows=0
+07:03:05   layer  24: load-wait 0.06s compute 1.25s  wf_rows=0
+07:03:15   layer  32: load-wait 0.05s compute 1.25s  wf_rows=0
+07:03:24   layer  39: load-wait 0.05s compute 1.25s  wf_rows=0
+07:03:24   pass done: 2400 prefill rows (T=42), 0 spawn rows, 52.1s
+07:03:24   pass 1/1 (2400 rows, 52s)
+07:03:24 e3p3_a2e {"pairs": 1200, "margin": 472, "reverse_margin": 13, "margin_rate": 0.393, "by_order": {"1": 0.411, "2": 0.336}, "top1_both": 0.432, "passes": 1}
+07:03:25 e3_a2e [ext]: 1200 pairs, 2400 rows
+07:03:26   layer   0: load-wait 0.09s compute 1.25s  wf_rows=0
+07:03:36   layer   8: load-wait 0.05s compute 1.25s  wf_rows=0
+07:03:47   layer  16: load-wait 0.05s compute 1.25s  wf_rows=0
+07:03:57   layer  24: load-wait 0.05s compute 1.25s  wf_rows=0
+07:04:07   layer  32: load-wait 0.05s compute 1.25s  wf_rows=0
+07:04:17   layer  39: load-wait 0.05s compute 1.25s  wf_rows=0
+07:04:17   pass done: 2400 prefill rows (T=42), 0 spawn rows, 52.0s
+07:04:17   pass 1/1 (2400 rows, 52s)
+07:04:17 e3_a2e {"pairs": 1200, "margin": 483, "reverse_margin": 3, "margin_rate": 0.403, "by_order": {"1": 0.41, "2": 0.378}, "top1_both": 0.444, "passes": 1}
+07:04:17 e1p_e2a [ext]: 2400 pairs, 4800 rows
+07:04:18   layer   0: load-wait 0.09s compute 1.36s  wf_rows=0
+07:04:30   layer   8: load-wait 0.05s compute 1.36s  wf_rows=0
+07:04:41   layer  16: load-wait 0.05s compute 1.36s  wf_rows=0
+07:04:52   layer  24: load-wait 0.05s compute 1.36s  wf_rows=0
+07:05:03   layer  32: load-wait 0.05s compute 1.36s  wf_rows=0
+07:05:13   layer  39: load-wait 0.05s compute 1.36s  wf_rows=0
+07:05:13   pass done: 4800 prefill rows (T=23), 0 spawn rows, 56.4s
+07:05:13   pass 1/1 (4800 rows, 56s)
+07:05:13 e1p_e2a {"pairs": 2400, "margin": 1083, "reverse_margin": 1, "margin_rate": 0.451, "by_order": {"1": 0.45, "2": 0.452}, "top1_both": 0.018, "passes": 1}
+07:05:13 e2_a2e [ext]: 2400 pairs, 4800 rows
+07:05:15   layer   0: load-wait 0.09s compute 1.63s  wf_rows=0
+07:05:29   layer   8: load-wait 0.05s compute 1.63s  wf_rows=0
+07:05:42   layer  16: load-wait 0.05s compute 1.63s  wf_rows=0
+07:05:56   layer  24: load-wait 0.05s compute 1.63s  wf_rows=0
+07:06:09   layer  32: load-wait 0.05s compute 1.63s  wf_rows=0
+07:06:21   layer  39: load-wait 0.05s compute 1.63s  wf_rows=0
+07:06:21   pass done: 4736 prefill rows (T=28), 0 spawn rows, 67.4s
+07:06:21   pass 1/2 (4736 rows, 67s)
+07:06:25   pass 2/2 (64 rows, 4s)
+07:06:25 e2_a2e {"pairs": 2400, "margin": 12, "reverse_margin": 1255, "margin_rate": 0.005, "by_order": {"1": 0.006, "2": 0.004}, "top1_both": 0.017, "passes": 2}
+07:06:25 e2_e2a [ext]: 2400 pairs, 4800 rows
+07:06:26   layer   0: load-wait 0.09s compute 1.36s  wf_rows=0
+07:06:38   layer   8: load-wait 0.05s compute 1.36s  wf_rows=0
+07:06:49   layer  16: load-wait 0.05s compute 1.36s  wf_rows=0
+07:07:00   layer  24: load-wait 0.05s compute 1.36s  wf_rows=0
+07:07:11   layer  32: load-wait 0.05s compute 1.36s  wf_rows=0
+07:07:21   layer  39: load-wait 0.05s compute 1.36s  wf_rows=0
+07:07:21   pass done: 4800 prefill rows (T=23), 0 spawn rows, 56.4s
+07:07:21   pass 1/1 (4800 rows, 56s)
+07:07:21 e2_e2a {"pairs": 2400, "margin": 136, "reverse_margin": 24, "margin_rate": 0.057, "by_order": {"1": 0.053, "2": 0.06}, "top1_both": 0.037, "passes": 1}
+07:07:22 sc_conflict_a2e [ext]: 2400 pairs, 4800 rows
+07:07:23   layer   0: load-wait 0.09s compute 1.74s  wf_rows=0
+07:07:38   layer   8: load-wait 0.05s compute 1.74s  wf_rows=0
+07:07:52   layer  16: load-wait 0.05s compute 1.74s  wf_rows=0
+07:08:06   layer  24: load-wait 0.05s compute 1.74s  wf_rows=0
+07:08:21   layer  32: load-wait 0.05s compute 1.74s  wf_rows=0
+07:08:33   layer  39: load-wait 0.05s compute 1.74s  wf_rows=0
+07:08:33   pass done: 3414 prefill rows (T=41), 0 spawn rows, 71.6s
+07:08:33   pass 1/2 (3414 rows, 72s)
+07:09:12   pass 2/2 (1386 rows, 39s)
+07:09:12 sc_conflict_a2e {"pairs": 2400, "margin": 1377, "reverse_margin": 22, "margin_rate": 0.574, "by_order": {"1": 0.596, "2": 0.552}, "top1_both": 0.741, "passes": 2}
+2026-10-17T07:09:16Z END   ext14-scan-qwen3_14b-dialE-ext rc=0 (465s)

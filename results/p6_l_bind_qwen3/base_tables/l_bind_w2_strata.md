@@ -1,0 +1,20 @@
+**l_bind W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | person-name options | False | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | True | 128 | 5.43 | 0.076 [0.069, 0.084] | 0.290 [0.280, 0.300] | 0.79 [0.77, 0.81] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | False | 128 | 5.13 | 0.072 [0.065, 0.079] | 0.296 [0.286, 0.307] | 0.79 [0.76, 0.81] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | True | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | False | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe reverse | False | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 256 | 5.28 | 0.074 [0.069, 0.079] | 0.293 [0.286, 0.300] | 0.79 [0.78, 0.81] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 0 |  |  |  |  |

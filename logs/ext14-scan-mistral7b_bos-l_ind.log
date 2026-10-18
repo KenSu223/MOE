@@ -1,0 +1,11 @@
+2026-10-17T01:56:03Z START ext14-scan-mistral7b_bos-l_ind (waited 439s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_ind
+01:56:07 l_ind [all]: 1600 pairs, 3200 rows
+01:56:09   layer   0: load-wait 0.74s compute 0.90s  wf_rows=0
+01:56:14   layer   8: load-wait 0.07s compute 0.55s  wf_rows=0
+01:56:19   layer  16: load-wait 0.07s compute 0.55s  wf_rows=0
+01:56:24   layer  24: load-wait 0.07s compute 0.55s  wf_rows=0
+01:56:28   layer  31: load-wait 0.07s compute 0.55s  wf_rows=0
+01:56:28   pass done: 3200 prefill rows (T=21), 0 spawn rows, 21.1s
+01:56:28   pass 1/1 (3200 rows, 21s)
+01:56:28 l_ind {"pairs": 1600, "margin": 599, "reverse_margin": 0, "margin_rate": 0.374, "by_order": {"1": 0.39, "2": 0.359}, "top1_both": 0.671, "passes": 1}
+2026-10-17T01:56:30Z END   ext14-scan-mistral7b_bos-l_ind rc=0 (27s)

@@ -1,0 +1,5 @@
+**e0_e2a: pair sets (directed cases pooled; pair means)**
+
+| Model | Family | Pairs | Units | Mean Δ clean | Drop [95% CI] | Clean top-1 | Names | Probe strata neutral / assoc. / one-sided / reverse | Local assoc | Median T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | 200 | 50 items | +2.32 | +4.63 [+4.39, +4.89] | 0.02 | 0.00 | 0.00 / 0.00 / 0.00 / 0.00 | nan | 10 |

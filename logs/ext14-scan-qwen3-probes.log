@@ -1,0 +1,13 @@
+2026-10-16T19:48:34Z START ext14-scan-qwen3-probes (waited 484s): python scripts/ext14_scan.py qwen3 --part probes
+19:48:38 probes: 7200 rows, 900 keys
+19:48:42   layer   0: load-wait 2.84s compute 1.05s  wf_rows=0
+19:48:50   layer   8: load-wait 0.58s compute 0.60s  wf_rows=0
+19:48:58   layer  16: load-wait 0.21s compute 0.60s  wf_rows=0
+19:49:05   layer  24: load-wait 0.49s compute 0.60s  wf_rows=0
+19:49:14   layer  32: load-wait 0.58s compute 0.60s  wf_rows=0
+19:49:24   layer  40: load-wait 0.76s compute 0.60s  wf_rows=0
+19:49:33   layer  47: load-wait 1.43s compute 0.60s  wf_rows=0
+19:49:33   pass done: 6086 prefill rows (T=23), 0 spawn rows, 54.6s
+19:49:33   pass 1/2 (6086 rows, 55s)
+19:50:20   pass 2/2 (1114 rows, 47s)
+2026-10-16T19:50:27Z END   ext14-scan-qwen3-probes rc=0 (113s)

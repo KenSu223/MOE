@@ -1,0 +1,273 @@
+{
+ "items": {
+  "ext:D2_blank_clause_not_copular": 1891,
+  "ext:D0_not_phase3_geometry": 13462,
+  "ext:ok": 3647,
+  "core:ok": 654,
+  "core:D4_multiword_option": 16,
+  "ext:D4_multiword_option": 282,
+  "core:D5_blank_in_pp": 8,
+  "ext:D5_blank_in_pp": 91,
+  "ext:D3_name_blank_with_determiner": 32,
+  "core:D2_blank_clause_not_copular": 94,
+  "ext:D1_trigger_not_a_word": 1,
+  "ext:D3_object_blank_without_determiner": 17,
+  "core:D3_name_blank_with_determiner": 2,
+  "core:D3_object_blank_without_determiner": 2
+ },
+ "items_kept": {
+  "core776": 654,
+  "ext": 3647
+ },
+ "e1_a2e": {
+  "frame": "P3",
+  "reasons": {
+   "R1_answer_multi_token": 1258,
+   "R2_2_differing_tokens": 98,
+   "R2_3_differing_tokens": 12,
+   "R2_length_mismatch": 1076,
+   "check_n:both_filled_clauses_in_evidence": 5946,
+   "check_n:whole_blank_clause_a": 5946,
+   "check_n:whole_blank_clause_b": 5946,
+   "item:R4_duplicate_prompt": 106,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1222,
+   "ok": 6158
+  },
+  "pairs": 5946,
+  "items": 2973,
+  "items_core": 589,
+  "items_names": 528
+ },
+ "e1_e2a": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 1430,
+   "R2_2_differing_tokens": 56,
+   "R2_3_differing_tokens": 2,
+   "R2_length_mismatch": 964,
+   "check_n:both_filled_clauses_in_evidence": 5938,
+   "check_n:whole_blank_clause_a": 5938,
+   "check_n:whole_blank_clause_b": 5938,
+   "item:R4_duplicate_prompt": 106,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1226,
+   "ok": 6150
+  },
+  "pairs": 5938,
+  "items": 2969,
+  "items_core": 589,
+  "items_names": 528
+ },
+ "e3_a2e": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 629,
+   "R2_2_differing_tokens": 66,
+   "R2_3_differing_tokens": 6,
+   "R2_length_mismatch": 541,
+   "check_n:whole_sentence_a": 3049,
+   "check_n:whole_sentence_b": 3049,
+   "item:R4_duplicate_prompt": 10,
+   "item:incomplete_dropped": 0,
+   "ok": 3059
+  },
+  "pairs": 3049,
+  "items": 3049,
+  "items_core": 643,
+  "items_names": 525
+ },
+ "e3_e2a": {
+  "frame": null,
+  "reasons": {
+   "R2_option_not_one_token": 30,
+   "W3_trigger_multi_token": 715,
+   "W4_length_mismatch": 482,
+   "check_n:prompt_plus_trigger_is_sentence_a": 3061,
+   "check_n:prompt_plus_trigger_is_sentence_b": 3061,
+   "item:R4_duplicate_prompt": 13,
+   "item:incomplete_dropped": 0,
+   "ok": 3074
+  },
+  "pairs": 3061,
+  "items": 3061,
+  "items_core": 648,
+  "items_names": 528
+ },
+ "e1p_a2e": {
+  "frame": "P3",
+  "reasons": {
+   "R1_answer_multi_token": 746,
+   "R2_2_differing_tokens": 14,
+   "R2_length_mismatch": 136,
+   "check_n:no_verbatim_trigger_in_evidence": 3748,
+   "check_n:paraphrases_in_evidence": 3748,
+   "check_n:whole_blank_clause_a": 3748,
+   "check_n:whole_blank_clause_b": 3748,
+   "item:P1_hand_list_no_paraphrase": 509,
+   "item:P2_not_in_hand_list": 1313,
+   "item:P3_paraphrase_shares_stem_with_a_trigger": 28,
+   "item:P4_paraphrases_share_stem": 33,
+   "item:R4_duplicate_prompt": 96,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 448,
+   "ok": 3940
+  },
+  "pairs": 3748,
+  "items": 1874,
+  "items_core": 485,
+  "items_names": 275
+ },
+ "e1p_e2a": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 174,
+   "R2_2_differing_tokens": 38,
+   "R2_length_mismatch": 684,
+   "check_n:no_verbatim_trigger_in_evidence": 3748,
+   "check_n:paraphrases_in_evidence": 3748,
+   "check_n:whole_blank_clause_a": 3748,
+   "check_n:whole_blank_clause_b": 3748,
+   "item:P1_hand_list_no_paraphrase": 509,
+   "item:P2_not_in_hand_list": 1313,
+   "item:P3_paraphrase_shares_stem_with_a_trigger": 28,
+   "item:P4_paraphrases_share_stem": 33,
+   "item:R4_duplicate_prompt": 96,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 448,
+   "ok": 3940
+  },
+  "pairs": 3748,
+  "items": 1874,
+  "items_core": 485,
+  "items_names": 275
+ },
+ "e2_a2e": {
+  "frame": "P3",
+  "reasons": {
+   "R1_answer_multi_token": 1258,
+   "R2_2_differing_tokens": 98,
+   "R2_3_differing_tokens": 12,
+   "R2_length_mismatch": 1076,
+   "check_n:negated_other_trigger": 5946,
+   "check_n:whole_blank_clause_a": 5946,
+   "check_n:whole_blank_clause_b": 5946,
+   "item:R4_duplicate_prompt": 106,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1222,
+   "ok": 6158
+  },
+  "pairs": 5946,
+  "items": 2973,
+  "items_core": 589,
+  "items_names": 528
+ },
+ "e2_e2a": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 1430,
+   "R2_2_differing_tokens": 56,
+   "R2_3_differing_tokens": 2,
+   "R2_length_mismatch": 964,
+   "check_n:negated_other_trigger": 5938,
+   "check_n:whole_blank_clause_a": 5938,
+   "check_n:whole_blank_clause_b": 5938,
+   "item:R4_duplicate_prompt": 106,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1226,
+   "ok": 6150
+  },
+  "pairs": 5938,
+  "items": 2969,
+  "items_core": 589,
+  "items_names": 528
+ },
+ "sc_agree_a2e": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 1258,
+   "R2_2_differing_tokens": 132,
+   "R2_3_differing_tokens": 12,
+   "R2_length_mismatch": 1082,
+   "check_n:reconstructs_prompt_a": 6102,
+   "check_n:reconstructs_prompt_b": 6102,
+   "check_n:whole_sentence_a": 6102,
+   "check_n:whole_sentence_b": 6102,
+   "item:R4_duplicate_prompt": 8,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1242,
+   "ok": 6118
+  },
+  "pairs": 6102,
+  "items": 3051,
+  "items_core": 643,
+  "items_names": 525
+ },
+ "sc_conflict_a2e": {
+  "frame": null,
+  "reasons": {
+   "R1_answer_multi_token": 1258,
+   "R2_2_differing_tokens": 132,
+   "R2_3_differing_tokens": 12,
+   "R2_length_mismatch": 1082,
+   "check_n:reconstructs_prompt_a": 6102,
+   "check_n:reconstructs_prompt_b": 6102,
+   "check_n:whole_sentence_a": 6102,
+   "check_n:whole_sentence_b": 6102,
+   "item:R4_duplicate_prompt": 8,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1242,
+   "ok": 6118
+  },
+  "pairs": 6102,
+  "items": 3051,
+  "items_core": 643,
+  "items_names": 525
+ },
+ "rsite_e1_a2e": {
+  "frame": "P3",
+  "reasons": {
+   "R1_answer_multi_token": 1258,
+   "R2_3_differing_tokens": 254,
+   "R2_length_mismatch": 818,
+   "check_n:evidence_mentions_swapped": 6060,
+   "check_n:question_identical": 6060,
+   "check_n:whole_blank_clause_a": 6060,
+   "check_n:whole_blank_clause_b": 6060,
+   "item:R4_duplicate_prompt": 106,
+   "item:incomplete_dropped": 0,
+   "item:not_both_orders_built": 1165,
+   "ok": 6272
+  },
+  "pairs": 6060,
+  "items": 3030,
+  "items_core": 575,
+  "items_names": 240
+ },
+ "e3p3_a2e": {
+  "frame": null,
+  "reasons": {
+   "E3P3_complement_clause": 105,
+   "E3P3_text_before_blank_np": 53,
+   "R1_answer_multi_token": 602,
+   "R2_2_differing_tokens": 44,
+   "R2_3_differing_tokens": 6,
+   "R2_length_mismatch": 517,
+   "check_fail:both_entities_in_event_clause": 41,
+   "check_n:blank_np_is_det_only": 2964,
+   "check_n:both_entities_in_event_clause": 2964,
+   "check_n:only_connective_dropped": 2964,
+   "check_n:reconstructs_sentence_a": 2964,
+   "check_n:reconstructs_sentence_b": 2964,
+   "check_n:whole_blank_clause_a": 2964,
+   "check_n:whole_blank_clause_b": 2964,
+   "item:R4_duplicate_prompt": 10,
+   "item:incomplete_dropped": 41,
+   "ok": 2974
+  },
+  "pairs": 2923,
+  "items": 2923,
+  "items_core": 624,
+  "items_names": 506
+ }
+}

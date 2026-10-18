@@ -1,0 +1,11 @@
+2026-10-16T20:16:02Z START ext14-scan-mixtral_bos-probes (waited 1535s): python scripts/ext14_scan.py mixtral_bos --part probes
+20:16:09 probes: 7416 rows, 927 keys
+20:16:18   layer   0: load-wait 6.30s compute 2.45s  wf_rows=0
+20:16:41   layer   8: load-wait 0.78s compute 1.96s  wf_rows=0
+20:17:04   layer  16: load-wait 0.90s compute 1.96s  wf_rows=0
+20:17:27   layer  24: load-wait 0.75s compute 1.96s  wf_rows=0
+20:17:47   layer  31: load-wait 0.93s compute 1.96s  wf_rows=0
+20:17:47   pass done: 5384 prefill rows (T=26), 0 spawn rows, 97.0s
+20:17:47   pass 1/2 (5384 rows, 97s)
+20:19:19   pass 2/2 (2032 rows, 92s)
+2026-10-16T20:19:26Z END   ext14-scan-mixtral_bos-probes rc=0 (204s)

@@ -1,0 +1,11 @@
+2026-10-16T22:20:55Z START ext14-scan-mistral7b_bos-l_cf (waited 3522s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_cf
+22:20:57 l_cf [all]: 212 pairs, 424 rows
+22:20:58   layer   0: load-wait 0.73s compute 0.35s  wf_rows=0
+22:21:00   layer   8: load-wait 0.38s compute 0.06s  wf_rows=0
+22:21:04   layer  16: load-wait 0.38s compute 0.06s  wf_rows=0
+22:21:07   layer  24: load-wait 0.38s compute 0.06s  wf_rows=0
+22:21:10   layer  31: load-wait 0.38s compute 0.06s  wf_rows=0
+22:21:10   pass done: 424 prefill rows (T=16), 0 spawn rows, 13.2s
+22:21:10   pass 1/1 (424 rows, 13s)
+22:21:10 l_cf {"pairs": 212, "margin": 196, "reverse_margin": 0, "margin_rate": 0.925, "by_order": {"1": 0.925}, "top1_both": 0.208, "passes": 1}
+2026-10-16T22:21:11Z END   ext14-scan-mistral7b_bos-l_cf rc=0 (16s)

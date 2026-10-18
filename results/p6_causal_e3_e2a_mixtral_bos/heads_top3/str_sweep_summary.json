@@ -1,0 +1,85 @@
+{
+ "n_cases": 256,
+ "pass_times_s": [
+  82.34544110298157
+ ],
+ "mean_delta_clean": 3.59375,
+ "mean_delta_corrupt": -3.595703125,
+ "mean_drop": 7.189453125,
+ "families": {
+  "main": {
+   "layer_validation_argmax": 20,
+   "layer_validation_max": 1.309,
+   "layer_validation_top5": [
+    [
+     20,
+     1.309
+    ],
+    [
+     21,
+     1.167
+    ],
+    [
+     19,
+     1.05
+    ],
+    [
+     26,
+     0.998
+    ],
+    [
+     18,
+     0.801
+    ]
+   ],
+   "attn_layer_validation_argmax": 13,
+   "attn_layer_validation_max": 0.729,
+   "attn_layer_validation_top5": [
+    [
+     13,
+     0.729
+    ],
+    [
+     15,
+     0.64
+    ],
+    [
+     19,
+     0.424
+    ],
+    [
+     20,
+     0.322
+    ],
+    [
+     16,
+     0.292
+    ]
+   ],
+   "block_validation_argmax": 20,
+   "block_validation_max": 1.579,
+   "block_validation_top5": [
+    [
+     20,
+     1.579
+    ],
+    [
+     19,
+     1.483
+    ],
+    [
+     21,
+     1.192
+    ],
+    [
+     26,
+     1.098
+    ],
+    [
+     16,
+     1.059
+    ]
+   ]
+  }
+ }
+}

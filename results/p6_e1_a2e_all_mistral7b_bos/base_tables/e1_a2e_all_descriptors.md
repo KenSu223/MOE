@@ -1,0 +1,5 @@
+**e1_a2e_all: pair sets (directed cases pooled; pair means)**
+
+| Model | Family | Pairs | Units | Mean Δ clean | Drop [95% CI] | Clean top-1 | Names | Probe strata neutral / assoc. / one-sided / reverse | Local assoc | Median T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mistral7b_bos | main | 188 | 47 items | +2.30 | +4.59 [+4.34, +4.87] | 0.97 | 0.17 | 0.40 / 0.04 / 0.28 / 0.28 | nan | 26 |

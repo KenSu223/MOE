@@ -1,0 +1,146 @@
+2026-10-17T05:29:24Z START ext14-scan-qwen2_7b-cells (waited 1843s): python scripts/ext14_scan.py qwen2_7b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+05:29:27 e1_a2e [core]: 1178 pairs, 2356 rows
+05:29:32   layer   0: load-wait 2.63s compute 2.33s  wf_rows=0
+05:29:50   layer   8: load-wait 0.11s compute 2.12s  wf_rows=0
+05:30:08   layer  16: load-wait 0.12s compute 2.12s  wf_rows=0
+05:30:25   layer  24: load-wait 0.11s compute 2.12s  wf_rows=0
+05:30:32   layer  27: load-wait 0.11s compute 2.09s  wf_rows=0
+05:30:32   pass done: 2356 prefill rows (T=32), 0 spawn rows, 64.8s
+05:30:32   pass 1/1 (2356 rows, 65s)
+05:30:32 e1_a2e {"pairs": 1178, "margin": 216, "reverse_margin": 0, "margin_rate": 0.183, "by_order": {"1": 0.19, "2": 0.177}, "top1_both": 0.698, "passes": 1}
+05:30:32 e1_e2a [core]: 1178 pairs, 2356 rows
+05:30:34   layer   0: load-wait 0.14s compute 1.50s  wf_rows=0
+05:30:47   layer   8: load-wait 0.09s compute 1.52s  wf_rows=0
+05:31:00   layer  16: load-wait 0.09s compute 1.51s  wf_rows=0
+05:31:13   layer  24: load-wait 0.09s compute 1.52s  wf_rows=0
+05:31:18   layer  27: load-wait 0.09s compute 1.52s  wf_rows=0
+05:31:18   pass done: 2356 prefill rows (T=23), 0 spawn rows, 45.2s
+05:31:18   pass 1/1 (2356 rows, 45s)
+05:31:18 e1_e2a {"pairs": 1178, "margin": 426, "reverse_margin": 3, "margin_rate": 0.362, "by_order": {"1": 0.358, "2": 0.365}, "top1_both": 0.396, "passes": 1}
+05:31:18 e3p3_a2e [core]: 624 pairs, 1248 rows
+05:31:20   layer   0: load-wait 0.14s compute 1.40s  wf_rows=0
+05:31:32   layer   8: load-wait 0.09s compute 1.40s  wf_rows=0
+05:31:44   layer  16: load-wait 0.09s compute 1.39s  wf_rows=0
+05:31:56   layer  24: load-wait 0.09s compute 1.42s  wf_rows=0
+05:32:00   layer  27: load-wait 0.09s compute 1.39s  wf_rows=0
+05:32:00   pass done: 1248 prefill rows (T=40), 0 spawn rows, 41.8s
+05:32:00   pass 1/1 (1248 rows, 42s)
+05:32:00 e3p3_a2e {"pairs": 624, "margin": 123, "reverse_margin": 0, "margin_rate": 0.197, "by_order": {"1": 0.23, "2": 0.135}, "top1_both": 0.381, "passes": 1}
+05:32:00 e3_a2e [core]: 643 pairs, 1286 rows
+05:32:02   layer   0: load-wait 0.14s compute 1.51s  wf_rows=0
+05:32:15   layer   8: load-wait 0.09s compute 1.49s  wf_rows=0
+05:32:27   layer  16: load-wait 0.09s compute 1.48s  wf_rows=0
+05:32:40   layer  24: load-wait 0.09s compute 1.47s  wf_rows=0
+05:32:44   layer  27: load-wait 0.09s compute 1.47s  wf_rows=0
+05:32:44   pass done: 1286 prefill rows (T=41), 0 spawn rows, 44.0s
+05:32:44   pass 1/1 (1286 rows, 44s)
+05:32:44 e3_a2e {"pairs": 643, "margin": 121, "reverse_margin": 0, "margin_rate": 0.188, "by_order": {"1": 0.202, "2": 0.162}, "top1_both": 0.306, "passes": 1}
+05:32:45 e3_e2a [core]: 648 pairs, 1296 rows
+05:32:46   layer   0: load-wait 0.14s compute 1.12s  wf_rows=0
+05:32:56   layer   8: load-wait 0.09s compute 1.12s  wf_rows=0
+05:33:05   layer  16: load-wait 0.09s compute 1.11s  wf_rows=0
+05:33:15   layer  24: load-wait 0.09s compute 1.11s  wf_rows=0
+05:33:19   layer  27: load-wait 0.09s compute 1.12s  wf_rows=0
+05:33:19   pass done: 1296 prefill rows (T=31), 0 spawn rows, 34.0s
+05:33:19   pass 1/1 (1296 rows, 34s)
+05:33:19 e3_e2a {"pairs": 648, "margin": 534, "reverse_margin": 0, "margin_rate": 0.824, "by_order": {"1": 0.828, "2": 0.817}, "top1_both": 0.235, "passes": 1}
+05:33:19 e1p_a2e [core]: 970 pairs, 1940 rows
+05:33:21   layer   0: load-wait 0.14s compute 1.64s  wf_rows=0
+05:33:35   layer   8: load-wait 0.09s compute 1.61s  wf_rows=0
+05:33:48   layer  16: load-wait 0.09s compute 1.63s  wf_rows=0
+05:34:02   layer  24: load-wait 0.09s compute 1.62s  wf_rows=0
+05:34:07   layer  27: load-wait 0.09s compute 1.63s  wf_rows=0
+05:34:07   pass done: 1940 prefill rows (T=30), 0 spawn rows, 48.3s
+05:34:07   pass 1/1 (1940 rows, 48s)
+05:34:07 e1p_a2e {"pairs": 970, "margin": 203, "reverse_margin": 0, "margin_rate": 0.209, "by_order": {"1": 0.219, "2": 0.2}, "top1_both": 0.697, "passes": 1}
+05:34:08 e1p_e2a [core]: 970 pairs, 1940 rows
+05:34:09   layer   0: load-wait 0.14s compute 1.14s  wf_rows=0
+05:34:19   layer   8: load-wait 0.09s compute 1.15s  wf_rows=0
+05:34:29   layer  16: load-wait 0.09s compute 1.14s  wf_rows=0
+05:34:39   layer  24: load-wait 0.10s compute 1.14s  wf_rows=0
+05:34:43   layer  27: load-wait 0.09s compute 1.15s  wf_rows=0
+05:34:43   pass done: 1940 prefill rows (T=21), 0 spawn rows, 34.5s
+05:34:43   pass 1/1 (1940 rows, 35s)
+05:34:43 e1p_e2a {"pairs": 970, "margin": 236, "reverse_margin": 0, "margin_rate": 0.243, "by_order": {"1": 0.256, "2": 0.231}, "top1_both": 0.054, "passes": 1}
+05:34:43 e2_a2e [core]: 1178 pairs, 2356 rows
+05:34:46   layer   0: load-wait 0.14s compute 2.23s  wf_rows=0
+05:35:04   layer   8: load-wait 0.09s compute 2.24s  wf_rows=0
+05:35:23   layer  16: load-wait 0.09s compute 2.25s  wf_rows=0
+05:35:42   layer  24: load-wait 0.09s compute 2.23s  wf_rows=0
+05:35:49   layer  27: load-wait 0.10s compute 2.26s  wf_rows=0
+05:35:49   pass done: 2356 prefill rows (T=34), 0 spawn rows, 65.4s
+05:35:49   pass 1/1 (2356 rows, 65s)
+05:35:49 e2_a2e {"pairs": 1178, "margin": 0, "reverse_margin": 24, "margin_rate": 0.0, "by_order": {"1": 0.0, "2": 0.0}, "top1_both": 0.023, "passes": 1}
+05:35:49 e2_e2a [core]: 1178 pairs, 2356 rows
+05:35:51   layer   0: load-wait 0.14s compute 1.65s  wf_rows=0
+05:36:05   layer   8: load-wait 0.09s compute 1.67s  wf_rows=0
+05:36:19   layer  16: load-wait 0.09s compute 1.64s  wf_rows=0
+05:36:33   layer  24: load-wait 0.09s compute 1.65s  wf_rows=0
+05:36:38   layer  27: load-wait 0.10s compute 1.65s  wf_rows=0
+05:36:38   pass done: 2356 prefill rows (T=25), 0 spawn rows, 49.2s
+05:36:38   pass 1/1 (2356 rows, 49s)
+05:36:38 e2_e2a {"pairs": 1178, "margin": 33, "reverse_margin": 3, "margin_rate": 0.028, "by_order": {"1": 0.031, "2": 0.025}, "top1_both": 0.085, "passes": 1}
+05:36:39 sc_agree_a2e [core]: 1286 pairs, 2572 rows
+05:36:42   layer   0: load-wait 0.14s compute 3.73s  wf_rows=0
+05:37:13   layer   8: load-wait 0.10s compute 3.73s  wf_rows=0
+05:37:44   layer  16: load-wait 0.09s compute 3.75s  wf_rows=0
+05:38:15   layer  24: load-wait 0.09s compute 3.76s  wf_rows=0
+05:38:26   layer  27: load-wait 0.09s compute 3.75s  wf_rows=0
+05:38:26   pass done: 2572 prefill rows (T=52), 0 spawn rows, 107.7s
+05:38:26   pass 1/1 (2572 rows, 108s)
+05:38:26 sc_agree_a2e {"pairs": 1286, "margin": 30, "reverse_margin": 0, "margin_rate": 0.023, "by_order": {"1": 0.033, "2": 0.014}, "top1_both": 0.241, "passes": 1}
+05:38:27 sc_conflict_a2e [core]: 1286 pairs, 2572 rows
+05:38:30   layer   0: load-wait 0.14s compute 3.73s  wf_rows=0
+05:39:01   layer   8: load-wait 0.09s compute 3.75s  wf_rows=0
+05:39:32   layer  16: load-wait 0.09s compute 3.76s  wf_rows=0
+05:40:03   layer  24: load-wait 0.10s compute 3.77s  wf_rows=0
+05:40:14   layer  27: load-wait 0.10s compute 3.76s  wf_rows=0
+05:40:14   pass done: 2572 prefill rows (T=52), 0 spawn rows, 107.7s
+05:40:14   pass 1/1 (2572 rows, 108s)
+05:40:14 sc_conflict_a2e {"pairs": 1286, "margin": 3, "reverse_margin": 1, "margin_rate": 0.002, "by_order": {"1": 0.003, "2": 0.002}, "top1_both": 0.093, "passes": 1}
+05:40:14 l_ant [core]: 630 pairs, 1260 rows
+05:40:15   layer   0: load-wait 0.15s compute 0.38s  wf_rows=0
+05:40:19   layer   8: load-wait 0.10s compute 0.38s  wf_rows=0
+05:40:23   layer  16: load-wait 0.09s compute 0.39s  wf_rows=0
+05:40:26   layer  24: load-wait 0.09s compute 0.38s  wf_rows=0
+05:40:28   layer  27: load-wait 0.09s compute 0.38s  wf_rows=0
+05:40:28   pass done: 1260 prefill rows (T=11), 0 spawn rows, 13.4s
+05:40:28   pass 1/1 (1260 rows, 13s)
+05:40:28 l_ant {"pairs": 630, "margin": 520, "reverse_margin": 16, "margin_rate": 0.825, "by_order": {"1": 0.825}, "top1_both": 0.34, "passes": 1}
+05:40:28 l_prop [core]: 845 pairs, 1690 rows
+05:40:29   layer   0: load-wait 0.14s compute 0.70s  wf_rows=0
+05:40:35   layer   8: load-wait 0.09s compute 0.70s  wf_rows=0
+05:40:42   layer  16: load-wait 0.09s compute 0.71s  wf_rows=0
+05:40:48   layer  24: load-wait 0.09s compute 0.70s  wf_rows=0
+05:40:50   layer  27: load-wait 0.09s compute 0.70s  wf_rows=0
+05:40:50   pass done: 1690 prefill rows (T=15), 0 spawn rows, 22.4s
+05:40:51   pass 1/1 (1690 rows, 22s)
+05:40:51 l_prop {"pairs": 845, "margin": 668, "reverse_margin": 0, "margin_rate": 0.791, "by_order": {"1": 0.791}, "top1_both": 0.289, "passes": 1}
+05:40:51 l_bind [core]: 3200 pairs, 6400 rows
+05:40:55   layer   0: load-wait 0.14s compute 3.78s  wf_rows=0
+05:41:26   layer   8: load-wait 0.09s compute 3.79s  wf_rows=0
+05:41:57   layer  16: load-wait 0.09s compute 3.78s  wf_rows=0
+05:42:28   layer  24: load-wait 0.09s compute 3.77s  wf_rows=0
+05:42:39   layer  27: load-wait 0.09s compute 3.78s  wf_rows=0
+05:42:39   pass done: 6400 prefill rows (T=21), 0 spawn rows, 108.6s
+05:42:40   pass 1/1 (6400 rows, 109s)
+05:42:40 l_bind {"pairs": 3200, "margin": 396, "reverse_margin": 0, "margin_rate": 0.124, "by_order": {"1": 0.124, "2": 0.123}, "top1_both": 0.542, "passes": 1}
+05:42:40 l_ind [core]: 1600 pairs, 3200 rows
+05:42:42   layer   0: load-wait 0.14s compute 1.72s  wf_rows=0
+05:42:56   layer   8: load-wait 0.09s compute 1.69s  wf_rows=0
+05:43:11   layer  16: load-wait 0.09s compute 1.71s  wf_rows=0
+05:43:25   layer  24: load-wait 0.09s compute 1.70s  wf_rows=0
+05:43:30   layer  27: load-wait 0.09s compute 1.71s  wf_rows=0
+05:43:30   pass done: 3200 prefill rows (T=19), 0 spawn rows, 50.4s
+05:43:31   pass 1/1 (3200 rows, 50s)
+05:43:31 l_ind {"pairs": 1600, "margin": 215, "reverse_margin": 1, "margin_rate": 0.134, "by_order": {"1": 0.126, "2": 0.142}, "top1_both": 0.372, "passes": 1}
+05:43:31 l_ioi [core]: 1600 pairs, 3200 rows
+05:43:33   layer   0: load-wait 0.14s compute 1.82s  wf_rows=0
+05:43:48   layer   8: load-wait 0.09s compute 1.78s  wf_rows=0
+05:44:03   layer  16: load-wait 0.09s compute 1.80s  wf_rows=0
+05:44:18   layer  24: load-wait 0.09s compute 1.81s  wf_rows=0
+05:44:24   layer  27: load-wait 0.09s compute 1.79s  wf_rows=0
+05:44:24   pass done: 3200 prefill rows (T=20), 0 spawn rows, 53.0s
+05:44:24   pass 1/1 (3200 rows, 53s)
+05:44:24 l_ioi {"pairs": 1600, "margin": 1573, "reverse_margin": 0, "margin_rate": 0.983, "by_order": {"1": 0.984, "2": 0.982}, "top1_both": 0.627, "passes": 1}
+2026-10-17T05:44:27Z END   ext14-scan-qwen2_7b-cells rc=0 (903s)

@@ -1,0 +1,15 @@
+2026-10-16T22:21:11Z START ext14-scan-mixtral_bos-dialE-ext3 (waited 2646s): python scripts/ext14_scan.py mixtral_bos --part cells --subset ext --cells e1_e2a,e3_a2e,e1p_a2e,e1p_e2a,rsite_e1_a2e
+22:21:13 e1_e2a no pairs in subset ext
+22:21:14 e3_a2e no pairs in subset ext
+22:21:14 e1p_a2e no pairs in subset ext
+22:21:14 e1p_e2a no pairs in subset ext
+22:21:14 rsite_e1_a2e [ext]: 1178 pairs, 2356 rows
+22:21:22   layer   0: load-wait 6.96s compute 1.60s  wf_rows=0
+22:21:45   layer   8: load-wait 1.73s compute 1.16s  wf_rows=0
+22:22:09   layer  16: load-wait 1.73s compute 1.16s  wf_rows=0
+22:22:33   layer  24: load-wait 1.83s compute 1.16s  wf_rows=0
+22:22:53   layer  31: load-wait 1.73s compute 1.16s  wf_rows=0
+22:22:53   pass done: 2356 prefill rows (T=35), 0 spawn rows, 98.9s
+22:22:53   pass 1/1 (2356 rows, 99s)
+22:22:53 rsite_e1_a2e {"pairs": 1178, "margin": 271, "reverse_margin": 1, "margin_rate": 0.23, "by_order": {"1": 0.27, "2": 0.19}, "top1_both": 0.666, "passes": 1}
+2026-10-16T22:23:00Z END   ext14-scan-mixtral_bos-dialE-ext3 rc=0 (109s)

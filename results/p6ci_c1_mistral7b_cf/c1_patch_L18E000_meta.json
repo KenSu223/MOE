@@ -1,0 +1,27 @@
+{
+ "task": "mistral7b_cf",
+ "expert": "L18E000",
+ "n_rows": 369,
+ "n_cases": 98,
+ "per_row": 70,
+ "k_grid": [
+  1,
+  2,
+  5,
+  10,
+  20,
+  50,
+  100,
+  200,
+  500,
+  1000,
+  2000,
+  5000,
+  14336
+ ],
+ "passes": 1,
+ "max_spawn": 30000,
+ "limit": null,
+ "command": "scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L18E000 --max-spawn 30000",
+ "utc": "2026-10-17T00:59:28Z"
+}

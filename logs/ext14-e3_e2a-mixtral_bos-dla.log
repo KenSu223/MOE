@@ -1,0 +1,10 @@
+09:21:20 mixtral -> p6_e3_e2a_mixtral_bos: 512 directed cases, families ['main'], 2 prefill-only passes
+09:21:33   layer   0: load-wait 6.08s compute 0.89s  wf_rows=0
+09:21:54   layer   8: load-wait 1.82s compute 0.44s  wf_rows=0
+09:22:13   layer  16: load-wait 2.29s compute 0.44s  wf_rows=0
+09:22:30   layer  24: load-wait 1.48s compute 0.44s  wf_rows=0
+09:22:48   layer  31: load-wait 2.42s compute 0.44s  wf_rows=0
+09:22:48   pass done: 960 prefill rows (T=32), 0 spawn rows, 81.4s
+09:22:49 pass 1/2: 81s; DLA total - drop: max |.| 0.196
+09:24:15 pass 2/2: 84s; DLA total - drop: max |.| 0.196
+09:24:15 direct effect / drop: attention +0.278, MoE +0.721, embedding -0.000

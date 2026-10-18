@@ -1,0 +1,213 @@
+{
+ "note": "ext14 Phase 6 cell aagr_a2e, mixtral_bos: items passing the margin in every order; fixed item split; cap 128 pairs per split (priority ['preferred', 'both_fams', 'rank']). scripts/ext14_casesets.py docstring.",
+ "pair_idx_of": {
+  "ctrl|palace|cabin|big|small|dA_e1_a2e|bind|o1": 100032,
+  "ctrl|palace|cabin|big|small|dA_e1_a2e|bind|o2": 100033,
+  "ctrl|warehouse|drawer|large|tiny|dA_e1_a2e|bind|o1": 100050,
+  "ctrl|warehouse|drawer|large|tiny|dA_e1_a2e|bind|o2": 100051,
+  "ctrl|summer|winter|hot|cold|dA_e1_a2e|bind|o1": 100098,
+  "ctrl|summer|winter|hot|cold|dA_e1_a2e|bind|o2": 100099,
+  "ctrl|lion|mouse|loud|quiet|dA_e1_a2e|bind|o1": 100200,
+  "ctrl|lion|mouse|loud|quiet|dA_e1_a2e|bind|o2": 100201,
+  "ctrl|day|night|bright|dark|dA_e1_a2e|bind|o1": 100206,
+  "ctrl|day|night|bright|dark|dA_e1_a2e|bind|o2": 100207,
+  "ctrl|highway|alley|wide|narrow|dA_e1_a2e|bind|o1": 100350,
+  "ctrl|highway|alley|wide|narrow|dA_e1_a2e|bind|o2": 100351,
+  "ctrl|city|village|big|small|dA_e1_a2e|bind|o1": 100458,
+  "ctrl|city|village|big|small|dA_e1_a2e|bind|o2": 100459,
+  "ctrl|ship|boat|big|small|dA_e1_a2e|bind|o1": 100464,
+  "ctrl|ship|boat|big|small|dA_e1_a2e|bind|o2": 100465,
+  "ctrl|desert|snow|hot|cold|dA_e1_a2e|bind|o1": 100522,
+  "ctrl|desert|snow|hot|cold|dA_e1_a2e|bind|o2": 100523,
+  "ctrl|sheep|lion|gentle|fierce|dA_e1_a2e|bind|o1": 100736,
+  "ctrl|sheep|lion|gentle|fierce|dA_e1_a2e|bind|o2": 100737,
+  "ctrl|angel|devil|holy|evil|dA_e1_a2e|bind|o1": 100750,
+  "ctrl|angel|devil|holy|evil|dA_e1_a2e|bind|o2": 100751,
+  "32204AGAABAE39KIV47A9RUAGMSHGQ|dA_e1_a2e|bind|o1": 2526,
+  "32204AGAABAE39KIV47A9RUAGMSHGQ|dA_e1_a2e|bind|o2": 2527,
+  "334ZEL5JX8T6FKE3EF8HACYN590SOZ|dA_e1_a2e|bind|o1": 3598,
+  "334ZEL5JX8T6FKE3EF8HACYN590SOZ|dA_e1_a2e|bind|o2": 3599,
+  "33N1S8XHHOZIK4TG354EU9IHYJA1ZJ|dA_e1_a2e|bind|o1": 4512,
+  "33N1S8XHHOZIK4TG354EU9IHYJA1ZJ|dA_e1_a2e|bind|o2": 4513,
+  "344M16OZKKTNNG99C5OZ66U2D0NENN|dA_e1_a2e|bind|o1": 5236,
+  "344M16OZKKTNNG99C5OZ66U2D0NENN|dA_e1_a2e|bind|o2": 5237,
+  "3909MD9T21VBZOWSEH5MY1LTBNKEFR|dA_e1_a2e|bind|o1": 10772,
+  "3909MD9T21VBZOWSEH5MY1LTBNKEFR|dA_e1_a2e|bind|o2": 10773,
+  "3BC9H1KCYWQBGFZE47RG9SZ9OOWWYB|dA_e1_a2e|bind|o1": 13136,
+  "3BC9H1KCYWQBGFZE47RG9SZ9OOWWYB|dA_e1_a2e|bind|o2": 13137,
+  "3BVS8WK9Q29X2CMY5Y9H0QS1QNOBII|dA_e1_a2e|bind|o1": 13766,
+  "3BVS8WK9Q29X2CMY5Y9H0QS1QNOBII|dA_e1_a2e|bind|o2": 13767,
+  "3CRWSLD91MI3HP1YUICVY3ZHDXOMOD|dA_e1_a2e|bind|o1": 14296,
+  "3CRWSLD91MI3HP1YUICVY3ZHDXOMOD|dA_e1_a2e|bind|o2": 14297,
+  "3GITHABACYJGYBYMZNHYC7X5SHO2NX|dA_e1_a2e|bind|o1": 17880,
+  "3GITHABACYJGYBYMZNHYC7X5SHO2NX|dA_e1_a2e|bind|o2": 17881,
+  "3H6W48L9F4N2DC86TMJX43IPW1SPW2|dA_e1_a2e|bind|o1": 18488,
+  "3H6W48L9F4N2DC86TMJX43IPW1SPW2|dA_e1_a2e|bind|o2": 18489,
+  "3HYV4299H2A2K9M563ZGO948PS98ER|dA_e1_a2e|bind|o1": 19486,
+  "3HYV4299H2A2K9M563ZGO948PS98ER|dA_e1_a2e|bind|o2": 19487,
+  "3I7KR83SNCR5KEXP7HGXM0CNSH1K9V|dA_e1_a2e|bind|o1": 19722,
+  "3I7KR83SNCR5KEXP7HGXM0CNSH1K9V|dA_e1_a2e|bind|o2": 19723,
+  "3LG268AV384T8P2ULETGNSB4QIPRE0|dA_e1_a2e|bind|o1": 23352,
+  "3LG268AV384T8P2ULETGNSB4QIPRE0|dA_e1_a2e|bind|o2": 23353,
+  "3LVTFB9DE7W6ARISYS64A3AKXBHQG3|dA_e1_a2e|bind|o1": 23636,
+  "3LVTFB9DE7W6ARISYS64A3AKXBHQG3|dA_e1_a2e|bind|o2": 23637,
+  "3NOEP8XAU6GWW1C3NPRJYKK5V5RPX3|dA_e1_a2e|bind|o1": 25734,
+  "3NOEP8XAU6GWW1C3NPRJYKK5V5RPX3|dA_e1_a2e|bind|o2": 25735,
+  "3SBNLSTU6U3XIAALZ0C93DVIZQ6ZDD|dA_e1_a2e|bind|o1": 31350,
+  "3SBNLSTU6U3XIAALZ0C93DVIZQ6ZDD|dA_e1_a2e|bind|o2": 31351,
+  "3T6SSHJUZHO7PK04B81YMDWDJ3ZII1|dA_e1_a2e|bind|o1": 32270,
+  "3T6SSHJUZHO7PK04B81YMDWDJ3ZII1|dA_e1_a2e|bind|o2": 32271,
+  "3UYRNV2KITXRKQ0BF4QZMYA8EFJN8K|dA_e1_a2e|bind|o1": 34262,
+  "3UYRNV2KITXRKQ0BF4QZMYA8EFJN8K|dA_e1_a2e|bind|o2": 34263,
+  "3X4Q1O9UBJ0KWMUBQCA6FL2RI63O7A|dA_e1_a2e|bind|o1": 37074,
+  "3X4Q1O9UBJ0KWMUBQCA6FL2RI63O7A|dA_e1_a2e|bind|o2": 37075,
+  "3Y40HMYLL3W9O6KZ4BQD8Q743JMXU4|dA_e1_a2e|bind|o1": 38550,
+  "3Y40HMYLL3W9O6KZ4BQD8Q743JMXU4|dA_e1_a2e|bind|o2": 38551
+ },
+ "pairs": {
+  "discovery": [
+   4512,
+   4513,
+   18488,
+   18489
+  ],
+  "validation": [
+   5236,
+   5237,
+   13136,
+   13137,
+   17880,
+   17881,
+   23352,
+   23353,
+   23636,
+   23637,
+   31350,
+   31351,
+   100032,
+   100033,
+   100050,
+   100051
+  ]
+ },
+ "directed": {
+  "discovery": [
+   9024,
+   9025,
+   9026,
+   9027,
+   36976,
+   36977,
+   36978,
+   36979
+  ],
+  "validation": [
+   10472,
+   10473,
+   10474,
+   10475,
+   26272,
+   26273,
+   26274,
+   26275,
+   35760,
+   35761,
+   35762,
+   35763,
+   46704,
+   46705,
+   46706,
+   46707,
+   47272,
+   47273,
+   47274,
+   47275,
+   62700,
+   62701,
+   62702,
+   62703,
+   200064,
+   200065,
+   200066,
+   200067,
+   200100,
+   200101,
+   200102,
+   200103
+  ]
+ },
+ "strata": {
+  "discovery": {
+   "pairs": 4,
+   "items": 2,
+   "names": 0,
+   "objects": 4,
+   "order1": 2,
+   "order2": 2,
+   "core776": 2,
+   "antonym_pair": 0,
+   "both_fams": 0,
+   "source": {
+    "wino": 4
+   },
+   "group": {
+    "": 4
+   },
+   "frame": {
+    "P3": 4
+   }
+  },
+  "validation": {
+   "pairs": 16,
+   "items": 8,
+   "names": 0,
+   "objects": 16,
+   "order1": 8,
+   "order2": 8,
+   "core776": 8,
+   "antonym_pair": 6,
+   "both_fams": 0,
+   "source": {
+    "wino": 12,
+    "ctrl": 4
+   },
+   "group": {
+    "": 12,
+    "big/small": 2,
+    "large/tiny": 2
+   },
+   "frame": {
+    "P3": 16
+   }
+  }
+ },
+ "pools": {
+  "n_pool_pairs": 62,
+  "n_pool_items": 31,
+  "n_margin_pairs": 27,
+  "n_items_pass_all_strata": 10,
+  "n_items_pass": 10,
+  "assoc_strata_pool_items": null,
+  "n_pairs_of_passing_items": 20,
+  "core_margin_pairs_of_passing_items": null,
+  "extension_scanned": false,
+  "order_pass_rates": {
+   "1": 0.4516,
+   "2": 0.4194
+  },
+  "order_gap": 0.0322,
+  "top1_rate_pool": 0.7419,
+  "top1_rate_selected": 0.9,
+  "margin_rate_pool": 0.4355,
+  "behaviour": {
+   "items": 31,
+   "target_wins_all_orders": 10,
+   "other_wins_all_orders": 0,
+   "other_is": "other answer",
+   "pair_rate_target_margin": 0.4355,
+   "pair_rate_other_margin": 0.0161,
+   "pair_rate_target_prefers": 0.7903,
+   "pair_rate_other_prefers": 0.0161
+  }
+ }
+}

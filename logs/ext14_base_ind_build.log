@@ -1,0 +1,14 @@
+shared single-token words: objects 44 colours 13 induction words 60
+qwen l_ind {"pairs": 1600, "items": 800, "by_source": {"synthetic": 800}}
+mistral l_ind {"pairs": 1600, "items": 800, "by_source": {"synthetic": 800}}
+l_ind pairs shared by both families 1600
+22:49:40 e1_e2a qwen3 dropping 16 scanned pairs whose prompts differ from the current build
+22:49:40 e1p_e2a qwen3 dropping 10 scanned pairs whose prompts differ from the current build
+22:49:40 e2_e2a qwen3 dropping 16 scanned pairs whose prompts differ from the current build
+22:49:41 e3_a2e qwen3 dropping 8 scanned pairs whose prompts differ from the current build
+22:49:41 e3_e2a qwen3 dropping 8 scanned pairs whose prompts differ from the current build
+22:49:41 l_ind qwen3 splits {'discovery': 66, 'validation': 66} pool 800 items pass 33 order {1: 0.1163, 2: 0.1263} top1 0.9091 
+22:55:17 e1_e2a mixtral_bos dropping 16 scanned pairs whose prompts differ from the current build
+22:55:18 e3_a2e mixtral_bos dropping 8 scanned pairs whose prompts differ from the current build
+22:55:18 e3_e2a mixtral_bos dropping 8 scanned pairs whose prompts differ from the current build
+22:55:18 l_ind mixtral_bos splits {'discovery': 128, 'validation': 128} pool 800 items pass 144 order {1: 0.3837, 2: 0.3488} top1 0.8398 

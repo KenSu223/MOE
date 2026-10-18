@@ -1,0 +1,67 @@
+{
+ "note": "ext14 Phase 6 cell acon_e2a, mixtral_bos: items passing the margin in every order; fixed item split; cap 128 pairs per split (priority ['preferred', 'both_fams', 'rank']). scripts/ext14_casesets.py docstring.",
+ "pair_idx_of": {
+  "ctrl|palace|cabin|big|small|dA_e1_e2a|swap|o1": 100032,
+  "ctrl|palace|cabin|big|small|dA_e1_e2a|swap|o2": 100033,
+  "ctrl|warehouse|drawer|large|tiny|dA_e1_e2a|swap|o1": 100050,
+  "ctrl|warehouse|drawer|large|tiny|dA_e1_e2a|swap|o2": 100051,
+  "ctrl|summer|winter|hot|cold|dA_e1_e2a|swap|o1": 100098,
+  "ctrl|summer|winter|hot|cold|dA_e1_e2a|swap|o2": 100099,
+  "ctrl|lion|mouse|loud|quiet|dA_e1_e2a|swap|o1": 100200,
+  "ctrl|lion|mouse|loud|quiet|dA_e1_e2a|swap|o2": 100201,
+  "ctrl|day|night|bright|dark|dA_e1_e2a|swap|o1": 100206,
+  "ctrl|day|night|bright|dark|dA_e1_e2a|swap|o2": 100207,
+  "ctrl|highway|alley|wide|narrow|dA_e1_e2a|swap|o1": 100350,
+  "ctrl|highway|alley|wide|narrow|dA_e1_e2a|swap|o2": 100351,
+  "ctrl|city|village|big|small|dA_e1_e2a|swap|o1": 100458,
+  "ctrl|city|village|big|small|dA_e1_e2a|swap|o2": 100459,
+  "ctrl|ship|boat|big|small|dA_e1_e2a|swap|o1": 100464,
+  "ctrl|ship|boat|big|small|dA_e1_e2a|swap|o2": 100465,
+  "ctrl|desert|snow|hot|cold|dA_e1_e2a|swap|o1": 100522,
+  "ctrl|desert|snow|hot|cold|dA_e1_e2a|swap|o2": 100523,
+  "ctrl|sheep|lion|gentle|fierce|dA_e1_e2a|swap|o1": 100736,
+  "ctrl|sheep|lion|gentle|fierce|dA_e1_e2a|swap|o2": 100737,
+  "ctrl|angel|devil|holy|evil|dA_e1_e2a|swap|o1": 100750,
+  "ctrl|angel|devil|holy|evil|dA_e1_e2a|swap|o2": 100751,
+  "3OID399FXIL67IISIMU2SJ38BX1DFN|dA_e1_e2a|bind|o1": 26564,
+  "3OID399FXIL67IISIMU2SJ38BX1DFN|dA_e1_e2a|bind|o2": 26565
+ },
+ "pairs": {
+  "discovery": [],
+  "validation": []
+ },
+ "directed": {
+  "discovery": [],
+  "validation": []
+ },
+ "strata": {},
+ "pools": {
+  "n_pool_pairs": 24,
+  "n_pool_items": 12,
+  "n_margin_pairs": 1,
+  "n_items_pass_all_strata": 0,
+  "n_items_pass": 0,
+  "assoc_strata_pool_items": null,
+  "n_pairs_of_passing_items": 0,
+  "core_margin_pairs_of_passing_items": null,
+  "extension_scanned": false,
+  "order_pass_rates": {
+   "1": 0.0833,
+   "2": 0.0
+  },
+  "order_gap": 0.0833,
+  "top1_rate_pool": 0.0,
+  "top1_rate_selected": null,
+  "margin_rate_pool": 0.0417,
+  "behaviour": {
+   "items": 12,
+   "target_wins_all_orders": 0,
+   "other_wins_all_orders": 0,
+   "other_is": "prior",
+   "pair_rate_target_margin": 0.0417,
+   "pair_rate_other_margin": 0.0,
+   "pair_rate_target_prefers": 0.2083,
+   "pair_rate_other_prefers": 0.0833
+  }
+ }
+}

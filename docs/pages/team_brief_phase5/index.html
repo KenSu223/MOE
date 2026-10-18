@@ -173,18 +173,39 @@ B: Fill in the blank: The janitor tried to clean the mirror with the spray but t
 
 <section>
   <h2>3 · Controls: copy, verbs, names, association</h2>
+  <p class="col"><strong>Paired changes.</strong> The same items are run under two conditions, and the table gives condition a − condition b with a 95 % CI (validation pairs). Columns:</p>
+  <ul class="col">
+    <li><strong>attention share:</strong> as in section 2.</li>
+    <li><strong>direct attention:</strong> the part of the answer written directly by attention layers, as a fraction of the drop.</li>
+    <li><strong>all-MoE M:</strong> the fraction of the drop restored when every MoE output is put back at once.</li>
+  </ul>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Change (same items, paired)</th><th class="n">Attention share Qwen3</th><th class="n">Mixtral</th></tr></thead>
+      <thead><tr><th>Change (a − b, same items)</th><th class="n">Items (units)</th><th class="n">Attention share</th><th class="n">Direct attention</th><th class="n">All-MoE M</th></tr></thead>
       <tbody>
-        <tr><td>Ask for the entity instead of the attribute</td><td class="n">+0.52 [0.46, 0.56]</td><td class="n">+0.18 [0.15, 0.20]</td></tr>
-        <tr><td>Make the attribute copyable ("Options: …"), natural twins</td><td class="n">+0.07 [0.01, 0.11]</td><td class="n">+0.04 [0.02, 0.05]</td></tr>
-        <tr><td>Make the attribute copyable, name templates</td><td class="n">−0.06 to +0.04</td><td class="n">+0.01</td></tr>
-        <tr><td>Neutral verb instead of the original (bought → got)</td><td class="n">+0.01 [−0.04, +0.05]</td><td class="n">+0.01 [−0.01, +0.03]</td></tr>
-        <tr><td>Association strata within a condition</td><td class="n">≤ 0.11</td><td class="n">≤ 0.11</td></tr>
-        <tr><td>Name items vs object items within a condition</td><td class="n">+0.08 to +0.16</td><td class="n">+0.08 to +0.16</td></tr>
+        <tr><td colspan="5"><strong>Qwen3-30B-A3B</strong></td></tr>
+        <tr><td>Ask for the entity instead of the attribute</td><td class="n">90</td><td class="n">+0.52 [0.46, 0.56]</td><td class="n">+1.03 [0.94, 1.13]</td><td class="n">−0.70 [−0.77, −0.64]</td></tr>
+        <tr><td>Make the attribute copyable ("Options: …"), natural twins</td><td class="n">70</td><td class="n">+0.07 [0.01, 0.11]</td><td class="n">−0.05 [−0.10, −0.01]</td><td class="n">−0.07 [−0.09, −0.05]</td></tr>
+        <tr><td>Make the attribute copyable, name templates (original verb)</td><td class="n">28 (8 templates)</td><td class="n">+0.04 [−0.04, 0.10]</td><td class="n">−0.09 [−0.18, 0.01]</td><td class="n">−0.08 [−0.19, −0.03]</td></tr>
+        <tr><td>Neutral verb instead of the original (bought → got)</td><td class="n">70 (11 templates)</td><td class="n">+0.01 [−0.04, 0.05]</td><td class="n">+0.00 [−0.02, 0.04]</td><td class="n">+0.01 [−0.01, 0.02]</td></tr>
+        <tr><td colspan="5"><strong>Mixtral-8x7B</strong></td></tr>
+        <tr><td>Ask for the entity instead of the attribute</td><td class="n">94</td><td class="n">+0.18 [0.15, 0.20]</td><td class="n">+0.55 [0.46, 0.64]</td><td class="n">−0.35 [−0.40, −0.29]</td></tr>
+        <tr><td>Make the attribute copyable ("Options: …"), natural twins</td><td class="n">102</td><td class="n">+0.04 [0.02, 0.05]</td><td class="n">+0.10 [0.08, 0.12]</td><td class="n">−0.06 [−0.08, −0.05]</td></tr>
+        <tr><td>Make the attribute copyable, name templates (original verb)</td><td class="n">35 (8 templates)</td><td class="n">+0.00 [−0.04, 0.05]</td><td class="n">+0.08 [0.02, 0.16]</td><td class="n">−0.09 [−0.17, −0.02]</td></tr>
+        <tr><td>Neutral verb instead of the original (bought → got)</td><td class="n">54 (10 templates)</td><td class="n">+0.01 [−0.01, 0.03]</td><td class="n">+0.01 [−0.03, 0.04]</td><td class="n">−0.01 [−0.05, 0.03]</td></tr>
       </tbody>
     </table>
+  </div>
+  <p class="col"><strong>Within-condition strata.</strong> These are not paired: one condition, different items in each stratum.</p>
+  <div class="table-wrap" style="max-width: 640px">
+    <table>
+      <thead><tr><th>Stratum difference within a condition</th><th class="n">Attention share, both models</th></tr></thead>
+      <tbody>
+        <tr><td>Association strata (how strongly the adjective goes with each noun)</td><td class="n">≤ 0.11</td></tr>
+        <tr><td>Name items vs object items</td><td class="n">+0.08 to +0.16</td></tr>
+      </tbody>
+    </table>
+  </div>
   </div>
   <ul class="col">
     <li><strong>Unrelated verb</strong> ("talked with" instead of "gave a hand"): the effect disappears. The mean drop falls from about 5 logits to 0.2 / 0.0, so the models use the verb.</li>
@@ -248,6 +269,19 @@ B: Fill in the blank: The janitor tried to clean the mirror with the spray but t
     <dt><span class="line" style="background:#8a8984"></span>random</dt><dd>Random order, average of 5.</dd>
     <dt><span class="dash"></span>dashed line</dt><dd>Every MoE output put back at once.</dd>
   </dl>
+  <p class="col"><strong>Grey dotted lines.</strong> For greedy's first 1, 5, 10 and 15 experts, a dotted line runs to the number of experts that random order needs to restore the same fraction. "never" means random order does not get there at all: greedy is above the all-MoE line, where random order ends.</p>
+  <div class="table-wrap" style="max-width: 760px">
+    <table>
+      <thead><tr><th>Same twins · model</th><th class="n">Experts for 80 %: greedy · oracle · random</th><th class="n">Random experts needed to match greedy's first 1 · 5 · 10 · 15</th></tr></thead>
+      <tbody>
+        <tr><td>Attribute question · Qwen3 (384 active)</td><td class="n">11 · 48 · 320</td><td class="n">80 · 212 · 276 · 300</td></tr>
+        <tr><td>Attribute question · Mixtral (64 active)</td><td class="n">8 · 9 · 48</td><td class="n">13 · 38 · 54 · never</td></tr>
+        <tr><td>Entity question · Qwen3</td><td class="n">5 · 128 · 384 *</td><td class="n">never · never · never · never</td></tr>
+        <tr><td>Entity question · Mixtral</td><td class="n">3 · 4 · 64</td><td class="n">22 · never · never · never</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col">The 80 % column is relative to the all-MoE line. * Qwen3 entity question: that line is only 0.10, so the column uses 80 % of each curve's own maximum.</p>
   <div class="plate"><button type="button" data-zoom="figures/ext13syn_curves_overshoot.png" aria-label="Enlarge the overshoot scatter plots"><img src="figures/ext13syn_curves_overshoot.png" alt="Scatter plots: the overshoot over the all-MoE line tracks the late-MoE term with r 0.98, the late negative experts and the direct attention share" loading="lazy"></button></div>
   <p class="col">Each point is one condition and model. The y-axis is how far the best expert subset rises above the all-MoE line. Left panel: the x-axis is how much more we restore when the last four layers are left out (r = 0.98).</p>
   <div class="key"><strong>What happens.</strong>

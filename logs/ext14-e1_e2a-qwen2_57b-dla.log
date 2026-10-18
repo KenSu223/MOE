@@ -1,0 +1,10 @@
+12:40:16 qwen2_57b -> p6_e1_e2a_qwen2_57b: 512 directed cases, families ['main'], 2 prefill-only passes
+12:40:53   layer   0: load-wait 27.99s compute 1.15s  wf_rows=0
+12:41:25   layer   8: load-wait 3.41s compute 0.61s  wf_rows=0
+12:41:57   layer  16: load-wait 3.33s compute 0.60s  wf_rows=0
+12:42:29   layer  24: load-wait 3.45s compute 0.61s  wf_rows=0
+12:42:41   layer  27: load-wait 3.40s compute 0.60s  wf_rows=0
+12:42:41   pass done: 512 prefill rows (T=20), 0 spawn rows, 137.3s
+12:42:43 pass 1/2: 137s; DLA total - drop: max |.| 0.000
+12:44:58 pass 2/2: 112s; DLA total - drop: max |.| 0.000
+12:44:58 direct effect / drop: attention +0.205, MoE +0.795, embedding +0.000

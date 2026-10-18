@@ -1,0 +1,45 @@
+2026-10-17T10:19:59Z START ext14-scan-qwen2_57b-dialE-ext (waited 2119s): python scripts/ext14_scan.py qwen2_57b --part cells --subset ext --cells e1_e2a,e3p3_a2e
+10:20:03 e1_e2a [ext]: 2400 pairs, 4800 rows
+10:20:49   layer   0: load-wait 42.61s compute 3.59s  wf_rows=0
+[W1017 10:20:53.632866098 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 10:21:01.650288658 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 10:21:13.752760460 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:21:17.825871454 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+10:21:20   layer   8: load-wait 1.30s compute 2.83s  wf_rows=0
+[W1017 10:21:21.685755386 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 22478848, total: 23686938624).
+[W1017 10:21:33.729579269 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:21:37.721288461 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:21:41.721811842 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+10:21:52   layer  16: load-wait 1.29s compute 2.79s  wf_rows=0
+[W1017 10:21:53.748930750 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 10:22:02.624424797 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:22:09.854852168 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:22:13.951091233 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 22478848, total: 23686938624).
+[W1017 10:22:17.968780983 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+10:22:24   layer  24: load-wait 0.78s compute 2.82s  wf_rows=0
+[W1017 10:22:25.910453495 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:22:33.967961036 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+10:22:37   layer  27: load-wait 1.15s compute 2.76s  wf_rows=0
+10:22:37   pass done: 3240 prefill rows (T=15), 0 spawn rows, 154.0s
+10:22:37   pass 1/2 (3240 rows, 154s)
+[W1017 10:22:48.889804873 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:24:28.123867019 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+10:24:31   pass 2/2 (1560 rows, 114s)
+10:24:31 e1_e2a {"pairs": 2400, "margin": 845, "reverse_margin": 16, "margin_rate": 0.352, "by_order": {"1": 0.347, "2": 0.358}, "top1_both": 0.04, "passes": 2}
+10:24:38 e3p3_a2e [ext]: 1200 pairs, 2400 rows
+10:24:45   layer   0: load-wait 3.61s compute 2.88s  wf_rows=0
+[W1017 10:24:45.295281030 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 10:24:49.295097697 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 10:24:53.308327545 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:25:09.349069286 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 10:25:13.337884387 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 22478848, total: 23686938624).
+10:25:17   layer   8: load-wait 0.96s compute 2.88s  wf_rows=0
+10:25:49   layer  16: load-wait 1.16s compute 2.85s  wf_rows=0
+10:26:21   layer  24: load-wait 1.14s compute 2.86s  wf_rows=0
+[W1017 10:26:30.578130754 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+10:26:33   layer  27: load-wait 1.35s compute 2.87s  wf_rows=0
+10:26:33   pass done: 1692 prefill rows (T=29), 0 spawn rows, 114.9s
+10:26:33   pass 1/2 (1692 rows, 115s)
+10:28:27   pass 2/2 (708 rows, 114s)
+10:28:27 e3p3_a2e {"pairs": 1200, "margin": 361, "reverse_margin": 8, "margin_rate": 0.301, "by_order": {"1": 0.311, "2": 0.269}, "top1_both": 0.398, "passes": 2}
+2026-10-17T10:28:42Z END   ext14-scan-qwen2_57b-dialE-ext rc=0 (523s)

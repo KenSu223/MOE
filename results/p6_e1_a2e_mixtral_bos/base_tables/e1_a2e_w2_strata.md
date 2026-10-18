@@ -1,0 +1,26 @@
+**e1_a2e W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | person-name options | True | 30 | 3.87 | 0.308 [0.290, 0.326] | 0.531 [0.485, 0.576] | 0.60 [0.58, 0.63] |
+| Mixtral-8x7B, BOS | person-name options | False | 166 | 3.83 | 0.105 [0.096, 0.114] | 0.263 [0.250, 0.277] | 0.59 [0.57, 0.61] |
+| Mixtral-8x7B, BOS | statement order 1 (entity of A mentioned first) | True | 98 | 3.81 | 0.133 [0.113, 0.153] | 0.306 [0.278, 0.335] | 0.60 [0.58, 0.62] |
+| Mixtral-8x7B, BOS | statement order 1 (entity of A mentioned first) | False | 98 | 3.87 | 0.140 [0.123, 0.157] | 0.303 [0.276, 0.333] | 0.59 [0.57, 0.61] |
+| Mixtral-8x7B, BOS | core-776 twin | True | 72 | 4.11 | 0.120 [0.103, 0.138] | 0.275 [0.247, 0.308] | 0.57 [0.54, 0.59] |
+| Mixtral-8x7B, BOS | core-776 twin | False | 124 | 3.68 | 0.147 [0.129, 0.165] | 0.323 [0.298, 0.350] | 0.62 [0.60, 0.63] |
+| Mixtral-8x7B, BOS | degree adverb in the blank clause (too / very / more ...) | True | 122 | 4.02 | 0.149 [0.130, 0.167] | 0.320 [0.293, 0.348] | 0.58 [0.56, 0.60] |
+| Mixtral-8x7B, BOS | degree adverb in the blank clause (too / very / more ...) | False | 74 | 3.54 | 0.114 [0.100, 0.129] | 0.275 [0.253, 0.298] | 0.63 [0.61, 0.65] |
+| Mixtral-8x7B, BOS | complementary antonym pair | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | complementary antonym pair | False | 196 | 3.84 | 0.137 [0.124, 0.150] | 0.304 [0.285, 0.324] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | item built in both tokenizer families | True | 194 | 3.85 | 0.137 [0.124, 0.151] | 0.305 [0.285, 0.325] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | item built in both tokenizer families | False | 2 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | True | 196 | 3.84 | 0.137 [0.124, 0.150] | 0.304 [0.285, 0.324] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | False | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-associative | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-associative | False | 196 | 3.84 | 0.137 [0.124, 0.150] | 0.304 [0.285, 0.324] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | probe one-sided | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe one-sided | False | 196 | 3.84 | 0.137 [0.124, 0.150] | 0.304 [0.285, 0.324] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | probe reverse | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe reverse | False | 196 | 3.84 | 0.137 [0.124, 0.150] | 0.304 [0.285, 0.324] | 0.60 [0.58, 0.61] |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 187 | 3.80 | 0.138 [0.125, 0.152] | 0.308 [0.288, 0.330] | 0.60 [0.59, 0.61] |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 9 |  |  |  |  |

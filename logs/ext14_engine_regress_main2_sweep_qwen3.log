@@ -1,0 +1,4 @@
+[runwt] moetrace from /home/ubuntu/MOE/moetrace
+21:40:26 p5_f2e_qwen3: 256 prefill rows, 18432 spawns (chunk 0: layers 0..47)
+21:41:30 pass 64.6s
+21:41:32 {"run": "p5_f2e_qwen3", "model": "qwen3", "n_rows_old": 18688, "n_rows_new": 18688, "unmatched": 0, "engine_file": "/home/ubuntu/MOE/moetrace/engine.py", "pass_s": 66.38455963134766, "fields": {"delta": {"n_differ": 0, "maxabs": 0.0}, "logit_true": {"n_differ": 0, "maxabs": 0.0}, "logit_foil": {"n_differ": 0, "maxabs": 0.0}, "top1": {"n_differ": 0, "maxabs": 0.0}, "vnorm": {"n_differ": 0, "maxabs": 0.0}, "logp_true": {"n_differ": 0, "maxabs": 0.0}, "logp_foil": {"n_differ": 0, "maxabs": 0.0}, "p_true": {"n_differ": 0, "maxabs": 0.0}, "p_foil": {"n_differ": 0, "maxabs": 0.0}, "rank_true": {"n_differ": 0, "maxabs": 0.0}, "kl_to_clean": {"n_differ": 0, "maxabs": 0.0}}, "routing": {"n": 98304, "n_old": 98304, "expert": 0, "weight": 0, "cnorm": 0}, "identical": true}

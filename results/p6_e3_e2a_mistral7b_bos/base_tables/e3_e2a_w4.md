@@ -1,0 +1,6 @@
+**e3_e2a W4: all-MoE patch and direct-path split at the final position (/ drop; pair bootstrap)**
+
+| Model | Set | Pairs | All-MoE M denoise | All-MoE M noise | A_direct | M_direct | DLA share attention | DLA share MoE |
+|---|---|---|---|---|---|---|---|---|
+| mistral7b_bos | main_validation | 128 | 0.847 [0.828, 0.867] | 0.847 [0.828, 0.867] | 0.216 [0.195, 0.238] | 0.784 [0.762, 0.805] | 0.218 [0.197, 0.239] | 0.782 [0.761, 0.803] |
+| mistral7b_bos | main_all | 256 | 0.857 [0.845, 0.869] | 0.857 [0.845, 0.869] | 0.205 [0.191, 0.220] | 0.795 [0.780, 0.809] | 0.206 [0.193, 0.221] | 0.794 [0.779, 0.807] |

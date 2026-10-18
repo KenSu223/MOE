@@ -1,0 +1,210 @@
+{
+ "model": "qwen3_1p7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+ "family": "qwen3",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T05:23:57Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "router_fp32_flag": false,
+ "per_layer": {
+  "behaviour": {
+   "delta": [
+    0.25,
+    5.25,
+    1.375,
+    -1.125,
+    3.0,
+    2.25
+   ],
+   "rank_true": [
+    3,
+    1,
+    76,
+    156,
+    2,
+    9
+   ],
+   "top1_is_true": [
+    false,
+    true,
+    false,
+    false,
+    false,
+    false
+   ],
+   "sanity": [
+    {
+     "prompt": "The capital of France is",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.36017516255378723
+    },
+    {
+     "prompt": "The Eiffel Tower is located in the city of",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.41856658458709717
+    },
+    {
+     "prompt": "Water is made of hydrogen and",
+     "answer": " oxygen",
+     "rank": 1,
+     "p": 0.9583704471588135
+    },
+    {
+     "prompt": "The opposite of hot is",
+     "answer": " cold",
+     "rank": 1,
+     "p": 0.584378182888031
+    },
+    {
+     "prompt": "Monday, Tuesday, Wednesday,",
+     "answer": " Thursday",
+     "rank": 1,
+     "p": 0.6853787302970886
+    }
+   ]
+  },
+  "identities": {
+   "layer": 14,
+   "zero_vs_parent": {
+    "n": 6,
+    "maxabs": 0.125,
+    "meanabs": 0.020833333333333332,
+    "frac_exact": 0.8333333333333334
+   },
+   "union_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "setall_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "neurons_all_vs_expert": {
+    "n": 6,
+    "maxabs": 0.125,
+    "meanabs": 0.10416666666666667,
+    "frac_exact": 0.16666666666666666
+   },
+   "neurons_linearity_relerr_max": 2.1156682805667515e-07,
+   "expert_rescue_mean": -0.0416666679084301,
+   "layer_rescue_mean": -0.0416666679084301,
+   "clean_delta_pos_frac": 0.8333333333333334,
+   "drop_mean": 3.6666667461395264
+  },
+  "layers": {
+   "1": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.004635919351130724,
+     "meanabs": 0.004190792858769948,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 0.25,
+     "meanabs": 0.20454545454545456,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.005121043883264065,
+     "meanabs": 0.004429109331051057,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.005454814527183771,
+     "meanabs": 0.004478102655742656,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": null,
+    "hf_vs_fp32_routing_agreement": null
+   },
+   "14": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.014518292620778084,
+     "meanabs": 0.01255876791070808,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 1.0,
+     "meanabs": 0.5454545454545454,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.07159431278705597,
+     "meanabs": 0.041958053850314835,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.07154934853315353,
+     "meanabs": 0.04189862310886383,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": null,
+    "hf_vs_fp32_routing_agreement": null
+   },
+   "27": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.004378086421638727,
+     "meanabs": 0.002829330803995783,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 64.0,
+     "meanabs": 29.818181818181817,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.00848768837749958,
+     "meanabs": 0.005616633412004871,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.007879878394305706,
+     "meanabs": 0.00509744516404515,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": null,
+    "hf_vs_fp32_routing_agreement": null
+   }
+  }
+ },
+ "total_s": 5.239951133728027
+}

@@ -113,13 +113,65 @@ One decoder layer is resident on the GPU at a time (see weights.LayerStreamer). 
                     else itself (KL = 0 exactly). Note delta = logit_true - logit_foil = logp_true - logp_foil (the
                     log-odds; the normaliser cancels).
 
+    ext14 (Phase 6, p6-engine) additions, all behind new families / fields / kinds with defaults; existing families, kinds
+    and outputs are unchanged:
+    * dense families (arch.DENSE_FAMILIES: mistral, qwen2, qwen3): the MLP is expert 0 with weight 1 (n_experts = 1,
+      top_k = 1, no router). Kinds layer / expert (expert 0) / coalition_* patch the MLP output; recorded routing is
+      trivial (route_idx 0, route_w 1, route_cnorm = |MLP output|, router logits 0). Route masks raise ValueError.
+    * qwen2_moe (Qwen2-57B-A14B): q/k/v biases; routed experts (norm_topk from the config: False) plus the always-on
+      shared expert with weight sigmoid(w_sg . x) (bf16 gate, as HF). The shared expert has engine index E = n_experts:
+      it is NOT in route_idx / route_w / route_cnorm / contrib_dla / contrib_final_vectors (those keep k routed slots);
+      it is recorded separately in extra["shared_w"] / extra["shared_cnorm"] (fp32 [L, B], final position) and, with the
+      matching diagnostics, diag["contrib_dla_shared"] ([L, B]) and diag["contrib_final_vectors_shared"][l] ([B, H]).
+      Spawns: kind expert with expert = E patches the shared expert; coalition_set may contain E; layer patches routed +
+      shared; coalition_clean / coalition_union include the shared expert (it is active in every run); heads_experts
+      steps accept E. Route masks apply to routed experts only (as OLMoE, reroute renormalises the full softmax).
+    * PrefillSpec.head_mask = ((layer, head), ...), head_mask_mode = "zero" (default) | "mean", head_mask_mean = per-head
+      vectors [head_dim] (dict (layer, head) -> vector, or a sequence aligned with head_mask; rounded to the activation
+      dtype): the per-head attention output BEFORE o_proj is replaced by 0 / the mean vector at EVERY position of the row,
+      before o_proj (so attn_heads_final / attn_head patches see the masked values). Unlike route masks, a head-masked row
+      may be a spawn's parent: its wavefront rows inherit the mask (the listed heads are replaced at the patched final
+      position too), so knockouts in the clean and corrupted rows followed by the usual spawns are supported.
+      DiagSpec.attn_heads_mean (layers) records each prefill row's per-head outputs averaged over its valid positions
+      (fp32 [B, nH, D]) for building mean vectors. ext5_subject.SubjectEngine.run_subject does NOT apply head masks.
+    * Qwen2-MoE: PrefillSpec.route_mask may contain the shared expert (expert index E = n_experts) in mode "zero": its
+      contribution is 0 at the masked positions (the recorded gate value extra["shared_w"] is unchanged, shared_cnorm 0,
+      like a zero-masked routed slot); mode "reroute" raises ValueError for it (it is not routed). Inherited by wavefront
+      rows with route_mask_inherit like the routed entries.
+    * PrefillSpec.route_mask_inherit = True (default False = the ext9 behaviour: a spawn on a route-masked parent raises):
+      spawns may use the route-masked row as parent and their wavefront rows inherit the row's mask at the final position
+      (both route_mask_pos values mask the final position; reroute -> router logits -inf, zero -> contributions 0) at every
+      layer at which the wavefront row computes its own MoE (the spawn layer for kinds spawned before the MoE, every later
+      layer). With the source (clean) row masked identically, this is "knock out, then patch" for T2 / T3 re-runs.
+    * neurons: DiagSpec.expert_neurons = ((layer, expert), ...) records, for every prefill row at the final position, the
+      expert's intermediate activations a = SiLU(W_gate x) * (W_up x) (bf16 values as fp32 [B, inter_e]), the applied
+      weight w (fp32 [B]; 0 when the expert is not routed in that row; dense 1; shared = its sigmoid gate) and routed
+      (bool [B]); rows where the expert is not routed get the activations the expert WOULD compute (routed = False).
+      Spawn kind expert_neurons (SpawnSpec.expert = e, SpawnSpec.neurons = neuron indices N) sets those neurons'
+      weighted activations at the final position to the source's, everything else as in the parent:
+          v = sum_{i in N} (w_src a_i,src - w_own a_i,own) W_down[:, i]      (fp32)
+      N = all neurons equals the expert kind up to the bf16 rounding of the expert's down projection; v is linear in N.
+      Single-layer kind (not a multi step); dense: e = 0; Qwen2-MoE: e = E is the shared expert.
+    * DiagSpec.resid_layers = layers whose full residual stream after the layer (bf16 [B, T, H], CPU) is recorded; -1 =
+      the embeddings (input of layer 0). Verification aid (per-layer checks against transformers decoder layers).
+    * Engine(repo, dtype=torch.float32) runs every activation in fp32 (verification of tiny random models only; the
+      default bf16 path is unchanged).
+    * Model-specific numerics protocols (moetrace.models.MODELS entry flags, applied automatically by Engine(repo) so that
+      every runner uses them): "router_fp32": True -> the router logits are computed in fp32 from the bf16 router input
+      and weights (softmax / top-k / renormalisation as before, routing weights cast back to the activation dtype as HF);
+      "act_dtype": "fp32" -> fp32 weights and activations. Explicit Engine(..., dtype=, router_fp32=) arguments override.
+      Qwen2-57B-A14B: its routers are so flat that bf16 router logits change the routed sets almost everywhere relative to
+      fp32 (logs/ext14_engine_api.md, "Qwen2-57B numerics protocol"). Engine.protocol records what was applied.
+
 Numerics follow transformers 5.16 modeling files (RMSNorm in fp32 then cast; RoPE tables fp32 -> bf16; router logits
 bf16, softmax fp32, top-k, optional renormalisation; routing weights cast to bf16 for Qwen3/OLMoE and kept fp32 for
 Mixtral; expert MLP in bf16; residual stream bf16).
 """
 from __future__ import annotations
 
+import dataclasses
 import math
+import os
 import time
 from dataclasses import dataclass, field
 from typing import Optional
@@ -144,6 +196,8 @@ MULTI_STEP_KINDS = MULTI_STEP_KINDS + ("attn_head", "heads_experts")  # ext9: pe
 MULTI_HEAD_STEP_KINDS = ("attn_head", "heads_experts")  # ext9: steps that patch heads before the MoE of their layer
 ROUTE_MASK_POS = ("all", "final")  # ext9: PrefillSpec.route_mask_pos
 ROUTE_MASK_MODES = ("reroute", "zero")  # ext9: PrefillSpec.route_mask_mode
+KINDS = KINDS + ("expert_neurons",)  # ext14: neuron-subset patch inside one expert (single-layer kind)
+HEAD_MASK_MODES = ("zero", "mean")  # ext14: PrefillSpec.head_mask_mode
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -248,7 +302,8 @@ def attn_wavefront(qw, kw, vw, K, V, parent, valid_len, scale: float, chunk: int
 
 def moe_forward(x: torch.Tensor, w: LayerWeights, spec: ArchSpec, final_map: Optional[torch.Tensor], n_final: int,
                 token_chunk: int = 8192, return_logits: bool = False, logit_mask: Optional[torch.Tensor] = None,
-                zero_mask: Optional[torch.Tensor] = None):
+                zero_mask: Optional[torch.Tensor] = None, extras: Optional[dict] = None,
+                shared_zero_mask: Optional[torch.Tensor] = None):
     """Sparse MoE block on flattened tokens x [N, H] (bf16).
 
     Returns (out_bf16 [N, H], acc_fp32 [N, H], topi [N, k], topv [N, k] fp32, contrib [n_final, k, H] fp32 or None).
@@ -257,20 +312,41 @@ def moe_forward(x: torch.Tensor, w: LayerWeights, spec: ArchSpec, final_map: Opt
     ext9 route masks (bool [N, E] or None): logit_mask = experts removed from the router's menu (logit -inf before the
     softmax, then top-k / renormalisation as usual); zero_mask = experts whose contribution is set to 0 with the routing
     (indices and returned weights) unchanged.
+    ext14: dense families (spec.is_dense): one expert (the MLP) with weight 1, no router (logits = 0, masks not allowed).
+    Qwen2-MoE (spec.shared_inter > 0): the shared expert's contribution sigmoid(w_sg . x) * SharedMLP(x) is added to the
+    fp32 accumulator (and so to the outputs); the returned topi / topv / contrib keep the k routed slots. extras (dict or
+    None) receives "shared_w" (fp32 [N], the bf16 gate values) and "shared_contrib" (fp32 [n_final, H]); if it holds
+    "capture" (expert -> ACT [n_final + 1, inter_e] zeros), "capture_w" (-> fp32 [n_final + 1]) and "capture_routed"
+    (-> bool [n_final + 1]), the intermediate activations SiLU(g) * u, applied weight and routed flag of those experts at the
+    final-mapped tokens are written there (expert index E = shared expert).
+    shared_zero_mask (bool [N] or None, ext14): tokens whose shared-expert contribution is set to 0 (gate value unchanged).
     """
     N, Hd = x.shape
     k, E = spec.top_k, spec.n_experts
-    logits = F.linear(x, w.router)  # bf16 [N, E]
-    if logit_mask is not None:  # ext9 reroute
-        probs = torch.softmax(logits.float().masked_fill(logit_mask, float("-inf")), dim=-1)
+    if spec.is_dense:  # ext14: the MLP is expert 0 with weight 1
+        assert logit_mask is None and zero_mask is None, "route masks are not defined for dense models"
+        logits = torch.zeros(N, 1, dtype=x.dtype, device=x.device)
+        topi = torch.zeros(N, 1, dtype=torch.long, device=x.device)
+        topv = torch.ones(N, 1, dtype=torch.float32, device=x.device)
     else:
-        probs = torch.softmax(logits.float(), dim=-1)
-    topv, topi = torch.topk(probs, k, dim=-1)
-    if spec.norm_topk:
-        topv = topv / topv.sum(dim=-1, keepdim=True)
-    if spec.family != "mixtral":
-        topv = topv.to(x.dtype).float()  # HF casts routing weights back to the activation dtype (not for Mixtral)
+        if getattr(spec, "router_fp32", False):  # ext14 protocol: fp32 router logits (input and weight upcast), chunked
+            wr32 = w.router.float()
+            logits = torch.cat([F.linear(x[s0 : s0 + 32768].float(), wr32) for s0 in range(0, N, 32768)], 0) if N else \
+                torch.zeros(0, E, dtype=torch.float32, device=x.device)
+            del wr32
+        else:
+            logits = F.linear(x, w.router)  # bf16 [N, E]
+        if logit_mask is not None:  # ext9 reroute
+            probs = torch.softmax(logits.float().masked_fill(logit_mask, float("-inf")), dim=-1)
+        else:
+            probs = torch.softmax(logits.float(), dim=-1)
+        topv, topi = torch.topk(probs, k, dim=-1)
+        if spec.norm_topk:
+            topv = topv / topv.sum(dim=-1, keepdim=True)
+        if spec.family != "mixtral":
+            topv = topv.to(x.dtype).float()  # HF casts routing weights back to the activation dtype (not for Mixtral)
     topv_c = topv  # weights applied to the expert outputs
+    cap = extras.get("capture") if extras is not None else None  # ext14 neuron capture: expert -> [n_final + 1, inter]
     if zero_mask is not None:  # ext9 zero: masked slots contribute nothing (routing unchanged)
         topv_c = topv * (~torch.gather(zero_mask, 1, topi)).float()
     flat_e = topi.reshape(-1)
@@ -295,18 +371,63 @@ def moe_forward(x: torch.Tensor, w: LayerWeights, spec: ArchSpec, final_map: Opt
             xe = x[tk]
             gu = F.linear(xe, w.gate_up[e])
             g, u = gu.chunk(2, dim=-1)
-            y = F.linear(F.silu(g) * u, w.down[e])  # bf16 [n, H]
+            a_ = F.silu(g) * u  # intermediate activations (ext14: named so that they can be captured)
+            y = F.linear(a_, w.down[e])  # bf16 [n, H]
             ce = y.float() * topv_c[tk, sl, None]  # fp32 contribution of expert e to each token
             acc.index_add_(0, tk, ce)
             if contrib is not None:
                 fm = final_map[tk]
                 fm = torch.where(fm >= 0, fm, torch.full_like(fm, n_final))
                 contrib[fm, sl] = ce
+                if cap is not None and e in cap:  # ext14
+                    cap[e][fm] = a_
+                    extras["capture_w"][e][fm] = topv_c[tk, sl]
+                    extras["capture_routed"][e][fm] = True
+    if spec.shared_inter:  # ext14: Qwen2-MoE shared expert, always on, weight sigmoid(w_sg . x) (bf16 as HF)
+        sh_w = torch.empty(N, dtype=torch.float32, device=x.device)
+        sh_c = torch.zeros(n_final + 1, Hd, dtype=torch.float32, device=x.device) if final_map is not None else None
+        for s0 in range(0, N, token_chunk):
+            xs = x[s0 : s0 + token_chunk]
+            g, u = F.linear(xs, w.sh_gate_up).chunk(2, dim=-1)
+            a_ = F.silu(g) * u
+            y = F.linear(a_, w.sh_down)
+            gw = torch.sigmoid(F.linear(xs, w.sh_router))  # [n, 1] in the activation dtype
+            gw_c = gw.float()  # weight applied to the shared output (ext14: 0 where the shared expert is masked)
+            if shared_zero_mask is not None:
+                gw_c = gw_c * (~shared_zero_mask[s0 : s0 + token_chunk]).float()[:, None]
+            ce = y.float() * gw_c
+            acc[s0 : s0 + token_chunk] += ce
+            sh_w[s0 : s0 + token_chunk] = gw[:, 0].float()
+            if sh_c is not None:
+                fm = final_map[s0 : s0 + token_chunk]
+                fm = torch.where(fm >= 0, fm, torch.full_like(fm, n_final))
+                sh_c[fm] = ce
+                if cap is not None and E in cap:
+                    cap[E][fm] = a_
+                    extras["capture_w"][E][fm] = gw_c[:, 0]
+                    extras["capture_routed"][E][fm] = True
+        if extras is not None:
+            extras["shared_w"] = sh_w
+            extras["shared_contrib"] = sh_c[:n_final] if sh_c is not None else None
     if contrib is not None:
         contrib = contrib[:n_final]
     if return_logits:
         return acc.to(x.dtype), acc, topi, topv, contrib, logits
     return acc.to(x.dtype), acc, topi, topv, contrib
+
+
+def model_protocol(repo_or_dir: str, snapshot: str = "") -> dict:
+    """ext14: numerics protocol flags of the MODELS entry whose repo matches (by id or snapshot path); {} otherwise."""
+    try:
+        from .models import MODELS
+    except Exception:  # pragma: no cover
+        return {}
+    snap = os.path.abspath(snapshot) if snapshot else ""
+    for k, m in MODELS.items():
+        r = m.get("repo", "")
+        if r and (repo_or_dir == r or ("/models--" + r.replace("/", "--") + "/") in snap + "/"):
+            return {"key": k, "router_fp32": bool(m.get("router_fp32", False)), "act_dtype": m.get("act_dtype")}
+    return {}
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -327,6 +448,11 @@ class PrefillSpec:
     route_mask: tuple = ()  # ext9: ((layer, expert), ...) experts knocked out in this row (see module docstring)
     route_mask_pos: str = "all"  # ext9: "all" positions of the row | "final" position only
     route_mask_mode: str = "reroute"  # ext9: "reroute" (logit -inf, next-best expert takes the slot) | "zero" (c_e := 0)
+    route_mask_inherit: bool = False  # ext14: spawns may use this route-masked row as parent; their wavefront rows inherit
+    #                                   the row's mask (final position) at every layer from the spawn on (default: raise)
+    head_mask: tuple = ()  # ext14: ((layer, head), ...) heads knocked out at every position of this row (and its spawns)
+    head_mask_mode: str = "zero"  # ext14: "zero" | "mean" (per-head vectors from head_mask_mean)
+    head_mask_mean: object = None  # ext14: dict (layer, head) -> [head_dim] vector, or a sequence aligned with head_mask
 
 
 @dataclass
@@ -361,6 +487,15 @@ class DiagSpec:
                         position are recorded: contrib_final_vectors dict layer -> fp32 [B, k, H] CPU tensor (slot s =
                         route_idx[layer, b, s]; c_e = w_e E_e(x), 0 for a zero-masked slot) and moe_out_final_fp32 dict
                         layer -> fp32 [B, H] (the fp32 MoE output = sum over slots up to fp32 summation order).
+                        ext14 Qwen2-MoE: contrib_final_vectors_shared dict layer -> fp32 [B, H] (the shared expert; the
+                        MoE output = routed slots + shared).
+    expert_neurons      (ext14) ((layer, expert), ...): expert_neurons dict (layer, expert) -> {"act": fp32 [B, inter_e]
+                        (bf16 values), "w": fp32 [B] applied weight (0 = not routed), "routed": bool [B]} at the final
+                        position of the prefill rows (see the module docstring; expert E = Qwen2-MoE shared expert).
+    attn_heads_mean     (ext14) layers: attn_heads_mean dict layer -> fp32 [B, nH, D] per-head outputs before o_proj
+                        averaged over each row's valid positions (after any head mask of the row).
+    resid_layers        (ext14) layers (-1 = embeddings): resid_layers dict layer -> bf16 [B, T, H] CPU tensor, the full
+                        residual stream after that layer (verification aid; memory-heavy).
     """
     attn_final: bool = False
     resid_norms: bool = False
@@ -373,11 +508,15 @@ class DiagSpec:
     spawn_vectors: bool = False
     contrib_dla: bool = False
     contrib_final_vectors: tuple = ()  # ext9
+    expert_neurons: tuple = ()  # ext14
+    attn_heads_mean: tuple = ()  # ext14
+    resid_layers: tuple = ()  # ext14
 
     @property
     def any_layer(self) -> bool:
         return (self.attn_final or self.resid_norms or self.router_logits_final or self.resid_final
-                or bool(self.route_all_layers) or self.attn_out_final or bool(self.attn_heads_final))
+                or bool(self.route_all_layers) or self.attn_out_final or bool(self.attn_heads_final)
+                or bool(self.expert_neurons) or bool(self.attn_heads_mean) or bool(self.resid_layers))
 
 
 @dataclass
@@ -392,6 +531,7 @@ class SpawnSpec:
     steps: tuple = ()  # ext5 multi: ((layer, kind, experts), ...) with strictly increasing layers; layer == steps[0][0]
     #                    ext9: (layer, "attn_head", heads), (layer, "heads_experts", (heads, experts))
     kl_ref: int = -1  # ext8 metrics: prefill row whose softmax is this row's KL reference (-1 = clean)
+    neurons: tuple = ()  # ext14 expert_neurons: neuron indices of expert `expert` set to the source's values
 
 
 def _int_set(x) -> tuple:
@@ -486,10 +626,20 @@ METRIC_NAMES = ("logp_true", "logp_foil", "p_true", "p_foil", "rank_true", "kl_t
 # engine
 # ----------------------------------------------------------------------------------------------------------------
 class Engine:
-    def __init__(self, repo_or_dir: str, device: str = "cuda"):
+    def __init__(self, repo_or_dir: str, device: str = "cuda", dtype: Optional[torch.dtype] = None,
+                 router_fp32: Optional[bool] = None):
         self.spec, self.snapshot = load_spec(repo_or_dir)
         self.device = device
-        self.store = CheckpointStore(self.snapshot, self.spec, device=device)
+        proto = model_protocol(repo_or_dir, self.snapshot)  # ext14: model-specific numerics protocol (models.py flags)
+        if dtype is None:
+            dtype = torch.float32 if proto.get("act_dtype") == "fp32" else BF16
+        if router_fp32 is None:
+            router_fp32 = bool(proto.get("router_fp32", False))
+        if router_fp32:
+            self.spec = dataclasses.replace(self.spec, router_fp32=True)
+        self.protocol = {"model_key": proto.get("key"), "dtype": str(dtype).replace("torch.", ""), "router_fp32": bool(router_fp32)}
+        self.dtype = dtype  # ext14: activation / weight dtype (bf16 unless a protocol / argument says fp32)
+        self.store = CheckpointStore(self.snapshot, self.spec, device=device, dtype=dtype)
         self.g = self.store.load_globals()
         self._embed_std: Optional[float] = None
         self.hidden = self.spec.hidden
@@ -504,9 +654,14 @@ class Engine:
     def _qk(self, x: torch.Tensor, w: LayerWeights, B: int, T: int):
         """Project + q/k norm + reshape. Returns q [B, nH, T, D], k [B, nKV, T, D], v [B, nKV, T, D]."""
         s = self.spec
-        q = F.linear(x, w.wq)
-        k = F.linear(x, w.wk)
-        v = F.linear(x, w.wv)
+        if w.bq is None:
+            q = F.linear(x, w.wq)
+            k = F.linear(x, w.wk)
+            v = F.linear(x, w.wv)
+        else:  # ext14: q/k/v biases (Qwen2, Qwen2-MoE)
+            q = F.linear(x, w.wq, w.bq)
+            k = F.linear(x, w.wk, w.bk)
+            v = F.linear(x, w.wv, w.bv)
         if s.qk_norm == "full":  # OLMoE: RMSNorm over the full projection before the head split
             q = rmsnorm(q, w.q_norm, s.rms_eps)
             k = rmsnorm(k, w.k_norm, s.rms_eps)
@@ -555,9 +710,47 @@ class Engine:
             v[sh] += dh @ wo_h.t()
         return v
 
-    def _build_v(self, spawns, idx, acc_f, topi_f, contrib, out_alpha, out_ne, out_np, attn_f=None):
+    @property
+    def n_e_all(self) -> int:
+        """ext14: number of expert indices addressable by spawns (n_experts, + 1 for the Qwen2-MoE shared expert)."""
+        return self.spec.n_experts + (1 if self.spec.shared_inter else 0)
+
+    def _inter_e(self, e: int) -> int:
+        """ext14: intermediate size of expert e (shared_inter for the Qwen2-MoE shared expert E)."""
+        return self.spec.shared_inter if (self.spec.shared_inter and e == self.spec.n_experts) else self.spec.inter
+
+    def _expert_down(self, w: LayerWeights, e: int) -> torch.Tensor:
+        """ext14: W_down [H, inter_e] of expert e at the current layer (e = n_experts: the shared expert)."""
+        return w.sh_down if (self.spec.shared_inter and e == self.spec.n_experts) else w.down[e]
+
+    def _neurons_v(self, spawns, idx, sel_np, parent, clean, neur, w: LayerWeights) -> torch.Tensor:
+        """ext14 expert_neurons vectors for the spawns idx[j], j in sel_np:
+        v = sum_{i in N} (w_src a_i,src - w_own a_i,own) W_down[:, i] in fp32 (neur: capture dicts of this layer)."""
+        out = torch.zeros(len(sel_np), self.hidden, dtype=torch.float32, device=self.device)
+        ex_of = np.array([spawns[idx[j]].expert for j in sel_np])
+        for e in np.unique(ex_of):
+            jj = np.nonzero(ex_of == e)[0]
+            e = int(e)
+            act, wt = neur["capture"][e], neur["capture_w"][e]
+            wd = self._expert_down(w, e).float()  # [H, I]
+            I_ = wd.shape[1]
+            for c0 in range(0, len(jj), 4096):
+                part = jj[c0 : c0 + 4096]
+                rows = torch.tensor(sel_np[part], device=self.device)
+                c, p_ = clean[rows], parent[rows]
+                d = wt[c][:, None] * act[c].float() - wt[p_][:, None] * act[p_].float()  # [m, I]
+                m_ = np.zeros((len(part), I_), dtype=bool)
+                for r_, j in enumerate(part):
+                    m_[r_, np.asarray(spawns[idx[sel_np[j]]].neurons, dtype=np.int64)] = True
+                d = d * torch.from_numpy(m_).to(self.device)
+                out[torch.tensor(part, device=self.device)] = d @ wd.t()
+            del wd
+        return out
+
+    def _build_v(self, spawns, idx, acc_f, topi_f, contrib, out_alpha, out_ne, out_np, attn_f=None, neur=None, w=None):
         """Intervention vectors for the spawn indices idx (all at the current layer). Returns [n, H] fp32.
-        attn_f (bf16 [B, H], ext2): final-position attention-sublayer output of the prefill rows (kind block_diff)."""
+        attn_f (bf16 [B, H], ext2): final-position attention-sublayer output of the prefill rows (kind block_diff).
+        neur / w (ext14): neuron capture dicts and the layer weights (kind expert_neurons)."""
         dev = self.device
         n = len(idx)
         Hd = self.hidden
@@ -610,8 +803,13 @@ class Engine:
                     vv = vv - (contrib[p] * (1.0 - in_clean)[..., None]).sum(1)
                 v[sel] = vv
             elif kind == "coalition_set":  # ext5: explicit expert list S per spawn
-                mask = self._set_mask([spawns[idx[j]].experts for j in sel_np], self.spec.n_experts)
+                mask = self._set_mask([spawns[idx[j]].experts for j in sel_np], self.n_e_all)  # ext14: + shared expert
                 v[sel] = self._set_delta(mask, contrib[c], topi_f[c], contrib[p], topi_f[p])
+            elif kind == "expert_neurons":  # ext14
+                assert neur is not None and w is not None
+                d = self._neurons_v(spawns, idx, sel_np, parent, clean, neur, w)
+                v[sel] = d
+                ne[sel] = d.norm(dim=-1)
             elif kind == "block_diff":  # ext2 numerics check: both sublayer differences of this layer
                 assert attn_f is not None
                 v[sel] = (acc_f[c] - acc_f[p]) + (attn_f[c].float() - attn_f[p].float())
@@ -631,11 +829,14 @@ class Engine:
         """metrics / metrics_chunk (ext5): full-vocabulary softmax statistics for every row (see module docstring),
         computed in chunks of metrics_chunk rows at the head; fills PassResult.metrics_prefill / metrics_spawn."""
         s, dev = self.spec, self.device
+        BF16 = self.dtype  # ext14: activation dtype of this engine (torch.bfloat16 unless built for an fp32 check)
         Hd = self.hidden
         B = len(prefill)
         lens = np.array([len(p.ids) for p in prefill], dtype=np.int64)
         T = int(lens.max())
         offsets = np.array([int(getattr(p, "pos_offset", 0)) for p in prefill], dtype=np.int64)
+        if s.sliding_window is not None:  # ext14 (Mistral): sliding-window masking is not implemented
+            assert T + int(offsets.max()) <= s.sliding_window, f"prompt longer than the sliding window {s.sliding_window}"
         use_offsets = bool((offsets != 0).any())
         sink_donor = np.array([int(getattr(p, "sink_donor", -1)) for p in prefill], dtype=np.int64)
         use_sink = bool((sink_donor >= 0).any())
@@ -643,29 +844,76 @@ class Engine:
         # ext9 route masks: layer -> mode -> (flat token indices b*T + t, expert indices), numpy int64 (built on CPU)
         route_masked = np.zeros(B, dtype=bool)
         rm_by_layer: dict[int, dict[str, tuple]] = {}
+        route_inherit = np.zeros(B, dtype=bool)  # ext14: route-masked rows whose spawns inherit the mask
+        rm_inh_cpu: dict[tuple, np.ndarray] = {}  # ext14: (layer, mode) -> bool [B, E] final-position masks of those rows
         rm_parts: dict[tuple, list] = {}
         for b, p in enumerate(prefill):
             rmask = tuple(getattr(p, "route_mask", ()) or ())
             if not rmask:
                 continue
+            if s.is_dense:  # ext14
+                raise ValueError(f"row {b}: route_mask on a dense model ({s.family}); there is no router to mask")
             pos_, mode_ = getattr(p, "route_mask_pos", "all"), getattr(p, "route_mask_mode", "reroute")
             assert pos_ in ROUTE_MASK_POS, f"route_mask_pos {pos_!r}"
             assert mode_ in ROUTE_MASK_MODES, f"route_mask_mode {mode_!r}"
             route_masked[b] = True
+            inherit_ = bool(getattr(p, "route_mask_inherit", False))  # ext14
+            route_inherit[b] = inherit_
             per_l: dict[int, set] = {}
             for (l_, e_) in rmask:
                 l_, e_ = int(l_), int(e_)
-                assert 0 <= l_ < s.n_layers and 0 <= e_ < s.n_experts, f"route_mask entry {(l_, e_)} out of range"
+                if s.shared_inter and e_ == s.n_experts:  # ext14: Qwen2-MoE shared expert (always on): zero mode only
+                    if mode_ != "zero":
+                        raise ValueError(f"row {b}: route_mask entry {(l_, e_)} is the always-on shared expert; 'reroute' does "
+                                         "not apply to it (it is not routed), use route_mask_mode='zero'")
+                    assert 0 <= l_ < s.n_layers, f"route_mask entry {(l_, e_)} out of range"
+                else:
+                    assert 0 <= l_ < s.n_layers and 0 <= e_ < s.n_experts, f"route_mask entry {(l_, e_)} out of range"
                 per_l.setdefault(l_, set()).add(e_)
             toks = np.arange(lens[b] - 1, lens[b]) if pos_ == "final" else np.arange(lens[b])
             toks = b * T + toks
             for l_, es in per_l.items():
-                assert len(es) <= s.n_experts - s.top_k, f"row {b} layer {l_}: at most E - k experts can be masked"
+                assert len([e for e in es if e < s.n_experts]) <= s.n_experts - s.top_k, \
+                    f"row {b} layer {l_}: at most E - k experts can be masked"
                 es_ = np.array(sorted(es), dtype=np.int64)
                 rm_parts.setdefault((l_, mode_), []).append((np.repeat(toks, len(es_)), np.tile(es_, len(toks))))
+                if inherit_:  # ext14: the final position's mask, inherited by the row's wavefront rows
+                    rm_inh_cpu.setdefault((l_, mode_), np.zeros((B, self.n_e_all), dtype=bool))[b, es_] = True
         for (l_, mode_), parts in rm_parts.items():
             rm_by_layer.setdefault(l_, {})[mode_] = (np.concatenate([a for a, _ in parts]), np.concatenate([e for _, e in parts]))
         del rm_parts
+        rm_inh = {k_: torch.from_numpy(v_).to(dev) for k_, v_ in rm_inh_cpu.items()}  # ext14
+        del rm_inh_cpu
+        # ext14 head masks: layer -> (on bool [B, nH], values fp32 [B, nH, D]) built on CPU, moved to the GPU below
+        hm_cpu: dict[int, tuple] = {}
+        for b, p in enumerate(prefill):
+            hmask = tuple(getattr(p, "head_mask", ()) or ())
+            if not hmask:
+                continue
+            hmode = getattr(p, "head_mask_mode", "zero")
+            assert hmode in HEAD_MASK_MODES, f"head_mask_mode {hmode!r}"
+            hmean = getattr(p, "head_mask_mean", None)
+            assert hmode == "zero" or hmean is not None, f"row {b}: head_mask_mode 'mean' needs head_mask_mean"
+            for j_, (l_, h_) in enumerate(hmask):
+                l_, h_ = int(l_), int(h_)
+                assert 0 <= l_ < s.n_layers and 0 <= h_ < s.n_heads, f"head_mask entry {(l_, h_)} out of range"
+                on_, val_ = hm_cpu.setdefault(l_, (np.zeros((B, s.n_heads), dtype=bool),
+                                                   torch.zeros(B, s.n_heads, s.head_dim, dtype=torch.float32)))
+                on_[b, h_] = True
+                if hmode == "mean":
+                    vec = hmean[(l_, h_)] if isinstance(hmean, dict) else hmean[j_]
+                    vec = torch.as_tensor(np.asarray(vec.float().cpu() if torch.is_tensor(vec) else vec, dtype=np.float32))
+                    assert vec.shape == (s.head_dim,), f"head_mask_mean vector of {(l_, h_)} has shape {tuple(vec.shape)}"
+                    val_[b, h_] = vec
+                else:
+                    val_[b, h_] = 0.0
+        hm_by_layer: dict[int, tuple] = {}
+        for l_, (on_, val_) in hm_cpu.items():
+            on_t = torch.from_numpy(on_).to(dev)
+            hb_, hh_ = on_t.nonzero(as_tuple=True)
+            val_t = val_.to(dev, BF16)
+            hm_by_layer[l_] = (on_t, val_t, hb_, hh_, val_t[hb_, hh_])  # table (wavefront rows), prefill index lists
+        del hm_cpu
         ids = torch.zeros(B, T, dtype=torch.long)
         for b, p in enumerate(prefill):
             ids[b, : len(p.ids)] = torch.tensor(p.ids, dtype=torch.long)
@@ -700,9 +948,14 @@ class Engine:
         multi_steps_n: dict[int, list] = {}  # ext9: spawn idx -> normalised steps (multi spawns with head steps)
         head_set_first: dict[int, tuple] = {}  # ext9: spawn idx -> heads patched at the spawn (attn_head kind / first step)
         spawn_view = list(spawns)  # multi spawns replaced by their first-step single-layer spec (for _build_v)
+        neur_layers: dict[int, set] = {}  # ext14: layer -> experts whose neuron activations are captured
+        for (l_, e_) in diag.expert_neurons:
+            assert 0 <= int(e_) < self.n_e_all, f"DiagSpec.expert_neurons: expert {e_} out of range"
+            neur_layers.setdefault(int(l_), set()).add(int(e_))
+        diag_neur = set((int(l_), int(e_)) for (l_, e_) in diag.expert_neurons)
         for i, sp in enumerate(spawns):
             assert sp.kind in KINDS, sp.kind
-            if route_masked[sp.parent]:  # ext9
+            if route_masked[sp.parent] and not route_inherit[sp.parent]:  # ext9 (ext14: unless the row has route_mask_inherit)
                 raise ValueError(f"spawn {i}: its parent prefill row {sp.parent} carries a route_mask; wavefront rows are "
                                  "never masked, so patching a knocked-out run is not supported")
             if sp.kind == "attn_head":  # ext9 bookkeeping (unchanged semantics)
@@ -727,7 +980,7 @@ class Engine:
                     for st in steps:
                         hs_ = _step_heads(st)
                         assert all(0 <= h < s.n_heads for h in hs_), f"multi head step: head index out of range {hs_}"
-                        assert st[1] != "heads_experts" or all(0 <= e < s.n_experts for e in st[2][1]), "expert out of range"
+                        assert st[1] != "heads_experts" or all(0 <= e < self.n_e_all for e in st[2][1]), "expert out of range"
                         if hs_:
                             need_heads.add(st[0])
                 if steps[0][1] in PRE_MOE_KINDS or steps[0][1] == "heads_experts":  # ext8: first step attn_layer (ext9:
@@ -753,6 +1006,12 @@ class Engine:
             else:
                 if sp.kind == "coalition_set":
                     assert len(sp.experts) > 0, "coalition_set with an empty expert list"
+                if sp.kind == "expert_neurons":  # ext14
+                    assert 0 <= sp.expert < self.n_e_all, f"expert_neurons: expert {sp.expert} out of range"
+                    nn_ = np.asarray(sp.neurons, dtype=np.int64)
+                    assert len(nn_) > 0, "expert_neurons without neurons"
+                    assert nn_.min() >= 0 and nn_.max() < self._inter_e(sp.expert), "expert_neurons: neuron index out of range"
+                    neur_layers.setdefault(sp.layer, set()).add(int(sp.expert))
                 by_layer.setdefault(sp.layer, []).append(i)
                 if sp.kind == "block_diff":
                     need_attn_f.add(sp.layer)
@@ -773,7 +1032,7 @@ class Engine:
         sp_np = np.zeros(S, dtype=np.float32)
         sp_vnorm = np.zeros(S, dtype=np.float32)
 
-        cos_all, sin_all = rope_tables(T + int(offsets.max()), s.head_dim, s.rope_theta, dev)
+        cos_all, sin_all = rope_tables(T + int(offsets.max()), s.head_dim, s.rope_theta, dev, dtype=BF16)
         offsets_t = torch.tensor(offsets, device=dev)
         if use_offsets:  # per-row RoPE positions t + offset; gathered tables [B, 1, T, D]
             pos_ids = torch.arange(T, device=dev)[None, :] + offsets_t[:, None]
@@ -831,6 +1090,23 @@ class Engine:
         if cfv_layers:
             dg["contrib_final_vectors"] = {}
             dg["moe_out_final_fp32"] = {}
+            if s.shared_inter:  # ext14
+                dg["contrib_final_vectors_shared"] = {}
+        if s.shared_inter:  # ext14: shared expert records (final position)
+            sh_w_rec = np.zeros((L, B), dtype=np.float32)
+            sh_cn_rec = np.zeros((L, B), dtype=np.float32)
+            if diag.contrib_dla:
+                dg["contrib_dla_shared"] = np.zeros((L, B), dtype=np.float32)
+        if diag_neur:
+            dg["expert_neurons"] = {}
+        hmean_layers = set(int(l_) for l_ in diag.attn_heads_mean)  # ext14
+        if hmean_layers:
+            dg["attn_heads_mean"] = {}
+        resid_set = set(int(l_) for l_ in diag.resid_layers)  # ext14
+        if resid_set:
+            dg["resid_layers"] = {}
+            if -1 in resid_set:
+                dg["resid_layers"][-1] = Hs.cpu()
         valid_pos = (torch.arange(T, device=dev)[None, :] < lens_t[:, None])  # [B, T]
         layer_times = []
         t_start = time.time()
@@ -858,6 +1134,12 @@ class Engine:
                 del p_final
             else:
                 o = attn_prefill(q, k_att, v_att, mask_att, scale, None, row_chunk)
+            if l in hm_by_layer:  # ext14 head masks: per-head outputs before o_proj, every position of the masked rows
+                hb_, hh_, hv_ = hm_by_layer[l][2:]
+                o[hb_, hh_] = hv_[:, None, :].expand(-1, T, -1)
+            if l in hmean_layers:  # ext14: per-head outputs averaged over the valid positions, fp32 [B, nH, D]
+                dg["attn_heads_mean"][int(l)] = (torch.einsum("bhtd,bt->bhd", o.float(), valid_pos.float())
+                                                 / lens_t[:, None, None].float()).cpu()
             heads_f = None
             if l in need_heads:  # ext5: final-position per-head outputs before o_proj, bf16 [B, nH, D]
                 heads_f = o[ar, :, final_t, :]
@@ -885,6 +1167,12 @@ class Engine:
                 kw = apply_rope(kw, cw, sw)
                 ow_h = attn_wavefront(qw, kw, vw, k_att, v_att, wf_parent[:n_wf], pos, scale, chunk=wf_chunk,
                                       sink_valid=has_sink_t if use_sink else None)  # per-head, before o_proj
+                if l in hm_by_layer:  # ext14: wavefront rows inherit their parent row's head mask
+                    on_t, val_t = hm_by_layer[l][:2]
+                    pw_ = wf_parent[:n_wf]
+                    rr_, hh_w = on_t[pw_].nonzero(as_tuple=True)
+                    if len(rr_):
+                        ow_h[rr_, hh_w, 0] = val_t[pw_[rr_], hh_w]
                 ow = F.linear(ow_h.reshape(n_wf, s.n_heads * s.head_dim), w.wo)
                 if l not in multi_head_later:  # ext9: the per-head outputs are only kept for later head steps
                     del ow_h
@@ -979,7 +1267,8 @@ class Engine:
             x2 = rmsnorm(Hs, w.ln2, s.rms_eps).view(B * T, Hd)
             if n_wf > 0:
                 x2 = torch.cat([x2, rmsnorm(wf_H[:n_wf], w.ln2, s.rms_eps)], 0)
-            need_contrib = record_routing or (l in by_layer) or (l in multi_later) or diag.contrib_dla or (l in cfv_layers)
+            need_contrib = (record_routing or (l in by_layer) or (l in multi_later) or diag.contrib_dla or (l in cfv_layers)
+                            or (l in neur_layers))  # ext14
             want_logits = diag.router_logits_final or (l in diag.route_all_layers)
             n_multi = 0
             if l in multi_later:  # ext5: live rows receiving a later step here also get their contributions recorded
@@ -990,19 +1279,33 @@ class Engine:
                 n_multi = len(ml)
                 final_map[B * T + m_rows_t] = B + torch.arange(n_multi, device=dev)
                 wf_pre_multi = wf_H[m_rows_t].clone()  # the rows' own pre-MoE residual at this layer
-            lmask = zmask = None
+            ex_d = None  # ext14: shared expert outputs / neuron captures from moe_forward
+            if s.shared_inter or l in neur_layers:
+                ex_d = {}
+                if l in neur_layers:
+                    nf_ = B + n_multi + 1
+                    ex_d["capture"] = {e_: torch.zeros(nf_, self._inter_e(e_), dtype=BF16, device=dev) for e_ in neur_layers[l]}
+                    ex_d["capture_w"] = {e_: torch.zeros(nf_, dtype=torch.float32, device=dev) for e_ in neur_layers[l]}
+                    ex_d["capture_routed"] = {e_: torch.zeros(nf_, dtype=torch.bool, device=dev) for e_ in neur_layers[l]}
+            lmask = zmask = shzmask = None
             if l in rm_by_layer:  # ext9 route masks (prefill tokens only; wavefront rows are never masked)
                 for mode_, (tk_, ex_) in rm_by_layer[l].items():
-                    m_ = torch.zeros(x2.shape[0], s.n_experts, dtype=torch.bool, device=dev)
+                    m_ = torch.zeros(x2.shape[0], self.n_e_all, dtype=torch.bool, device=dev)  # ext14: + shared column
                     m_[torch.from_numpy(tk_).to(dev), torch.from_numpy(ex_).to(dev)] = True
+                    if n_wf > 0 and (l, mode_) in rm_inh:  # ext14: wavefront rows inherit their parent's final-position mask
+                        m_[B * T : B * T + n_wf] = rm_inh[(l, mode_)][wf_parent[:n_wf]]
+                    if s.shared_inter:  # ext14: the shared expert's column (zero mode only, checked when parsing)
+                        if mode_ == "zero":
+                            shzmask = m_[:, s.n_experts]
+                        m_ = m_[:, : s.n_experts]
                     if mode_ == "reroute":
                         lmask = m_
                     else:
                         zmask = m_
                     del m_
             mo = moe_forward(x2, w, s, final_map[: B * T + n_wf] if need_contrib else None, B + n_multi, return_logits=want_logits,
-                             logit_mask=lmask, zero_mask=zmask)
-            del lmask, zmask
+                             logit_mask=lmask, zero_mask=zmask, extras=ex_d, shared_zero_mask=shzmask)
+            del lmask, zmask, shzmask
             out_bf, acc, topi, topv, contrib = mo[:5]
             if want_logits:
                 rlog = mo[5]
@@ -1021,6 +1324,8 @@ class Engine:
                 dg["resid_norms"][l] = (Hs.float().norm(dim=-1) * valid_pos).cpu().numpy()
             if diag.resid_final:
                 dg["resid_final"][l] = Hs[ar, final_t].cpu()
+            if l in resid_set:  # ext14
+                dg["resid_layers"][int(l)] = Hs.cpu()
             acc_f = acc[final_idx]
             topi_f = topi[final_idx]
             topv_f = topv[final_idx]
@@ -1033,6 +1338,38 @@ class Engine:
             if l in cfv_layers:  # ext9
                 dg["contrib_final_vectors"][int(l)] = contrib[:B].cpu()
                 dg["moe_out_final_fp32"][int(l)] = acc_f.cpu()
+            if l in neur_layers:  # ext14: neuron diagnostics of the prefill rows (hypothetical activations if not routed)
+                for e_ in sorted(neur_layers[l]):
+                    if (int(l), e_) not in diag_neur:
+                        continue
+                    act_ = ex_d["capture"][e_][:B].clone()
+                    rt_ = ex_d["capture_routed"][e_][:B]
+                    nr_ = (~rt_).nonzero(as_tuple=True)[0]
+                    if len(nr_):
+                        gw_ = w.sh_gate_up if (s.shared_inter and e_ == s.n_experts) else w.gate_up[e_]
+                        g_, u_ = F.linear(x2[final_idx[nr_]], gw_).chunk(2, dim=-1)
+                        act_[nr_] = F.silu(g_) * u_
+                    dg["expert_neurons"][(int(l), e_)] = {"act": act_.float().cpu().numpy(),
+                                                          "w": ex_d["capture_w"][e_][:B].cpu().numpy(),
+                                                          "routed": rt_.cpu().numpy()}
+                    del act_
+            if s.shared_inter:  # ext14: shared expert = extra slot with index E for the spawn machinery (records keep k)
+                sh_cf = ex_d["shared_contrib"]  # fp32 [B + n_multi, H] or None
+                sh_wf = ex_d["shared_w"]  # fp32 [N]
+                if record_routing:
+                    sh_w_rec[l] = sh_wf[final_idx].cpu().numpy()
+                    if sh_cf is not None:
+                        sh_cn_rec[l] = sh_cf[:B].norm(dim=-1).cpu().numpy()
+                if diag.contrib_dla:
+                    dg["contrib_dla_shared"][l] = (sh_cf[:B] * u_dla).sum(-1).cpu().numpy()
+                if l in cfv_layers:
+                    dg["contrib_final_vectors_shared"][int(l)] = sh_cf[:B].cpu()
+                topi = torch.cat([topi, torch.full_like(topi[:, :1], s.n_experts)], 1)
+                topv = torch.cat([topv, sh_wf[:, None]], 1)
+                if contrib is not None:
+                    contrib = torch.cat([contrib, sh_cf[:, None]], 1)
+                topi_f = topi[final_idx]
+                topv_f = topv[final_idx]
             # ---- ext5 multi: later steps on live rows, h = h_pre_moe_own + bf16(MoE_own + v), v = clean - own
             if n_multi:
                 own_contrib = contrib[B : B + n_multi]  # [n_multi, k, H] fp32
@@ -1053,16 +1390,16 @@ class Engine:
                         elif kind == "layer":
                             vm[sel] = acc_f[c] - own_acc[sel]
                         elif kind in ("expert", "coalition_set"):
-                            mask = self._set_mask([steps_m[j][2] for j in sel_np], s.n_experts)
+                            mask = self._set_mask([steps_m[j][2] for j in sel_np], self.n_e_all)  # ext14: + shared
                             vm[sel] = self._set_delta(mask, contrib[c], topi_f[c], own_contrib[sel], own_topi[sel])
                         elif kind == "coalition_clean":  # S = the clean run's top-k set
-                            mask = torch.zeros(len(sel_np), s.n_experts, dtype=torch.bool, device=dev)
+                            mask = torch.zeros(len(sel_np), self.n_e_all, dtype=torch.bool, device=dev)  # ext14: + shared
                             mask.scatter_(1, topi_f[c], True)
                             vm[sel] = self._set_delta(mask, contrib[c], topi_f[c], own_contrib[sel], own_topi[sel])
                         elif kind == "block":  # ext8: MoE side of a later block step (residual rebuilt below)
                             vm[sel] = acc_f[c] - own_acc[sel]
                         elif kind == "heads_experts":  # ext9: experts part (heads already patched into h_mid)
-                            mask = self._set_mask([steps_m[j][2][1] for j in sel_np], s.n_experts)
+                            mask = self._set_mask([steps_m[j][2][1] for j in sel_np], self.n_e_all)  # ext14: + shared
                             vm[sel] = self._set_delta(mask, contrib[c], topi_f[c], own_contrib[sel], own_topi[sel])
                         else:
                             raise ValueError(kind)
@@ -1093,10 +1430,11 @@ class Engine:
             if l in by_layer:
                 idx = by_layer[l]
                 if len(idx) <= bv_chunk:
-                    vvec = self._build_v(spawn_view, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np, attn_f=attn_f)
+                    vvec = self._build_v(spawn_view, idx, acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np, attn_f=attn_f,
+                                         neur=ex_d, w=w)
                 else:  # bound the [n, k, H] fp32 temporaries of _build_v (identical result)
                     vvec = torch.cat([self._build_v(spawn_view, idx[c0 : c0 + bv_chunk], acc_f, topi_f, contrib, sp_alpha, sp_ne, sp_np,
-                                                    attn_f=attn_f) for c0 in range(0, len(idx), bv_chunk)], 0)
+                                                    attn_f=attn_f, neur=ex_d, w=w) for c0 in range(0, len(idx), bv_chunk)], 0)
                 sp_vnorm[idx] = vvec.norm(dim=-1).cpu().numpy()
                 if diag.spawn_vectors:
                     for jj, i in enumerate(idx):
@@ -1145,7 +1483,7 @@ class Engine:
                 wf_row_of_spawn[np.array(idx)] = np.arange(n_wf, n_wf + n)
                 n_wf += n
                 del h_out_f, out_f, h_new, vn
-            del x2, out_bf, acc, topi, topv, contrib
+            del x2, out_bf, acc, topi, topv, contrib, ex_d
             if l in multi_attn_later:  # ext8 (n_wf > 0 asserted on the attention side)
                 del ma_da
             torch.cuda.synchronize()
@@ -1226,7 +1564,10 @@ class Engine:
             sp_logit_true=sp_lt, sp_logit_foil=sp_lf, sp_alpha=sp_alpha, sp_norm_e=sp_ne, sp_norm_partner=sp_np,
             sp_vnorm=sp_vnorm, layer_times=layer_times,
             extra={"total_s": total, "T": T, "diag": dg, "row_chunk": row_chunk, "use_offsets": use_offsets, "use_sink": use_sink,
-                   "metrics_s": metrics_s, "multi_vnorm": multi_vnorm, "route_masked_rows": int(route_masked.sum())},
+                   "metrics_s": metrics_s, "multi_vnorm": multi_vnorm, "route_masked_rows": int(route_masked.sum()),
+                   **({"shared_w": sh_w_rec, "shared_cnorm": sh_cn_rec} if s.shared_inter else {}),  # ext14
+                   "head_masked_rows": int(sum(1 for p in prefill if getattr(p, "head_mask", ()))),  # ext14
+                   "engine_protocol": dict(getattr(self, "protocol", {}))},  # ext14
             metrics_prefill=metrics_prefill, metrics_spawn=metrics_spawn,
         )
 

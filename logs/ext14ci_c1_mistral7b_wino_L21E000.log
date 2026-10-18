@@ -1,0 +1,5 @@
+2026-10-17T00:34:56Z START p6ci-c1-mistral7b_wino-L21E000 (waited 371s): python scripts/ext14ci_c1_run.py mistral7b_wino patch --expert L21E000 --max-spawn 30000
+00:35:04 patch mistral7b_wino L21E000: 228 rows (228 cases), 70 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 14336]
+00:35:19 pass 1/1: 456 prefill, 15960 spawns, 14s
+00:35:19 patch done
+2026-10-17T00:35:22Z END   p6ci-c1-mistral7b_wino-L21E000 rc=0 (26s)

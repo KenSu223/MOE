@@ -1,0 +1,5 @@
+scripts/ext14ci_c1_analyze.py rc 0
+scripts/ext14ci_relp_analyze.py rc 0
+scripts/ext14ci_c3_existing.py --proto qwen3 --report rc 0
+scripts/ext14ci_c3_existing.py --proto mixtral_bos --report rc 0
+scripts/ext14ci_text.py rc 0

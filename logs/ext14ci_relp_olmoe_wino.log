@@ -1,0 +1,18 @@
+2026-10-17T03:11:16Z START p6ci-c2-relp-olmoe-wino (waited 1383s): python scripts/ext14ci_relp_run.py olmoe wino --n-cases 48
+03:11:24 olmoe wino: 48 cases
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:01<00:45,  3.84it/s]Loading weights:   8%|▊         | 15/179 [00:02<00:28,  5.81it/s]Loading weights:  15%|█▍        | 26/179 [00:04<00:24,  6.17it/s]Loading weights:  21%|██        | 37/179 [00:06<00:22,  6.34it/s]Loading weights:  27%|██▋       | 48/179 [00:07<00:20,  6.42it/s]Loading weights:  33%|███▎      | 59/179 [00:09<00:18,  6.47it/s]Loading weights:  39%|███▉      | 70/179 [00:11<00:16,  6.53it/s]Loading weights:  45%|████▌     | 81/179 [00:12<00:14,  6.54it/s]Loading weights:  51%|█████▏    | 92/179 [00:14<00:13,  6.53it/s]Loading weights:  58%|█████▊    | 103/179 [00:16<00:11,  6.56it/s]Loading weights:  64%|██████▎   | 114/179 [00:17<00:09,  6.59it/s]Loading weights:  70%|██████▉   | 125/179 [00:19<00:08,  6.58it/s]Loading weights:  76%|███████▌  | 136/179 [00:21<00:06,  6.54it/s]Loading weights:  82%|████████▏ | 147/179 [00:22<00:04,  6.59it/s]Loading weights:  87%|████████▋ | 156/179 [00:22<00:02,  8.69it/s]Loading weights:  89%|████████▉ | 160/179 [00:24<00:02,  6.43it/s]Loading weights:  94%|█████████▍| 169/179 [00:26<00:01,  6.09it/s]Loading weights: 100%|██████████| 179/179 [00:26<00:00,  6.84it/s]
+03:12:08 means over 1680 tokens
+03:12:26 case 4/48 (26s)
+03:12:42 case 8/48 (43s)
+03:12:59 case 12/48 (60s)
+03:13:13 case 16/48 (74s)
+03:13:29 case 20/48 (90s)
+03:13:43 case 24/48 (104s)
+03:13:58 case 28/48 (119s)
+03:14:13 case 32/48 (134s)
+03:14:30 case 36/48 (151s)
+03:14:47 case 40/48 (167s)
+03:15:02 case 44/48 (183s)
+03:15:18 case 48/48 (199s)
+03:15:18 done
+2026-10-17T03:15:19Z END   p6ci-c2-relp-olmoe-wino rc=0 (242s)

@@ -1,0 +1,7 @@
+10:14:26   layer   0: load-wait 2.30s compute 0.67s  wf_rows=0
+10:14:31   layer   8: load-wait 0.09s compute 0.46s  wf_rows=0
+10:14:35   layer  16: load-wait 0.09s compute 0.46s  wf_rows=0
+10:14:39   layer  24: load-wait 0.09s compute 0.45s  wf_rows=0
+10:14:41   layer  27: load-wait 0.09s compute 0.45s  wf_rows=0
+10:14:41   pass done: 404 prefill rows (T=40), 0 spawn rows, 17.7s
+10:14:42 p6_e3p3_a2e_qwen2_7b: 404 directed cases; A_direct 0.948, M_direct 0.052, DLA attn share 0.946; fp32 vs engine Delta clean max |diff| 0.000

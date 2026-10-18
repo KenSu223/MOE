@@ -1,0 +1,18 @@
+2026-10-17T17:56:59Z START p6ci-c3-val-mixtral_bos-pr_ioi+pr_f1n+pr_e1n+ct_lang (waited 516s, low priority): bash -c for t in pr_ioi pr_f1n pr_e1n ct_lang ; do python scripts/ext14ci_c3_validate.py --proto mixtral_bos --tasks $t --max-rows 2048 --max-spawn 16000 || exit 1; done
+17:57:06 mixtral_bos: 3 circuits, 27 sets, tasks ['pr_ioi']
+18:01:32 pr_ioi: knockout 2688 rows (265s)
+18:02:54 pr_ioi: add-back / edges 7200 spawns in 1 passes (82s)
+18:02:54 done
+18:03:08 mixtral_bos: 3 circuits, 27 sets, tasks ['pr_f1n']
+18:04:32 pr_f1n: knockout 616 rows (83s)
+18:05:54 pr_f1n: add-back / edges 1650 spawns in 1 passes (82s)
+18:05:54 done
+18:06:08 mixtral_bos: 3 circuits, 27 sets, tasks ['pr_e1n']
+18:07:29 pr_e1n: knockout 784 rows (80s)
+18:08:53 pr_e1n: add-back / edges 2100 spawns in 1 passes (84s)
+18:08:54 done
+18:09:08 mixtral_bos: 3 circuits, 27 sets, tasks ['ct_lang']
+18:12:50 ct_lang: knockout 2688 rows (222s)
+18:14:14 ct_lang: add-back / edges 2592 spawns in 1 passes (84s)
+18:14:14 done
+2026-10-17T18:14:21Z END   p6ci-c3-val-mixtral_bos-pr_ioi+pr_f1n+pr_e1n+ct_lang rc=0 (1042s)

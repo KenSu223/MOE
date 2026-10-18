@@ -1,0 +1,16 @@
+2026-10-17T04:50:23Z START ext14-scan-qwen2_7b-probes (waited 2809s): python scripts/ext14_scan.py qwen2_7b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+04:50:27 probes: 29600 rows, 3700 keys
+04:50:33   layer   0: load-wait 2.38s compute 4.09s  wf_rows=0
+04:51:05   layer   8: load-wait 0.10s compute 3.92s  wf_rows=0
+04:51:38   layer  16: load-wait 0.11s compute 3.93s  wf_rows=0
+[W1017 04:51:46.723781110 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+04:52:10   layer  24: load-wait 0.10s compute 3.92s  wf_rows=0
+04:52:22   layer  27: load-wait 0.10s compute 3.93s  wf_rows=0
+04:52:23   pass done: 8235 prefill rows (T=17), 0 spawn rows, 115.9s
+04:52:23   pass 1/5 (8235 rows, 116s)
+04:54:16   pass 2/5 (7368 rows, 113s)
+04:56:09   pass 3/5 (6363 rows, 113s)
+[W1017 04:57:25.273399409 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 9895936, total: 23686938624).
+04:58:02   pass 4/5 (6086 rows, 112s)
+04:58:36   pass 5/5 (1548 rows, 34s)
+2026-10-17T04:58:41Z END   ext14-scan-qwen2_7b-probes rc=0 (498s)

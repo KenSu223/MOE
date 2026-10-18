@@ -1,0 +1,10 @@
+2026-10-17T15:18:44Z START ext14-sc_agree_a2e-qwen3-t1 (waited 893s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 sc_agree_a2e sc_conflict_stmt_a2e
+2026-10-17T15:22:58Z ext14-sc_agree_a2e-qwen3-sweep rc=0 (253s, in bundle job)
+2026-10-17T15:24:12Z ext14-sc_agree_a2e-qwen3-joint rc=0 (74s, in bundle job)
+2026-10-17T15:26:41Z ext14-sc_agree_a2e-qwen3-dla rc=0 (149s, in bundle job)
+2026-10-17T15:27:50Z ext14-sc_agree_a2e-qwen3-direct rc=0 (69s, in bundle job)
+2026-10-17T15:29:44Z ext14-sc_conflict_stmt_a2e-qwen3-sweep rc=0 (113s, in bundle job)
+2026-10-17T15:31:09Z ext14-sc_conflict_stmt_a2e-qwen3-joint rc=0 (85s, in bundle job)
+2026-10-17T15:32:30Z ext14-sc_conflict_stmt_a2e-qwen3-dla rc=0 (81s, in bundle job)
+2026-10-17T15:33:40Z ext14-sc_conflict_stmt_a2e-qwen3-direct rc=0 (70s, in bundle job)
+2026-10-17T15:33:40Z END   ext14-sc_agree_a2e-qwen3-t1 rc=0 (896s)

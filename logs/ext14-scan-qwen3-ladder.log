@@ -1,0 +1,46 @@
+2026-10-16T19:50:27Z START ext14-scan-qwen3-ladder (waited 506s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind,l_bind,l_ant,l_prop
+19:50:36 l_ind [all]: 800 pairs, 1600 rows
+19:50:39   layer   0: load-wait 2.98s compute 0.70s  wf_rows=0
+19:50:47   layer   8: load-wait 1.11s compute 0.09s  wf_rows=0
+19:50:56   layer  16: load-wait 1.14s compute 0.09s  wf_rows=0
+19:51:05   layer  24: load-wait 1.04s compute 0.09s  wf_rows=0
+19:51:14   layer  32: load-wait 0.84s compute 0.09s  wf_rows=0
+19:51:23   layer  40: load-wait 0.72s compute 0.09s  wf_rows=0
+19:51:33   layer  47: load-wait 0.67s compute 0.09s  wf_rows=0
+19:51:33   pass done: 1600 prefill rows (T=12), 0 spawn rows, 57.0s
+19:51:33   pass 1/1 (1600 rows, 57s)
+19:51:33 l_ind {"pairs": 800, "margin": 318, "reverse_margin": 0, "margin_rate": 0.398, "by_order": {"1": 0.38, "2": 0.415}, "top1_both": 0.796, "passes": 1}
+19:51:35 l_bind [all]: 800 pairs, 1600 rows
+19:51:36   layer   0: load-wait 0.77s compute 0.15s  wf_rows=0
+19:51:42   layer   8: load-wait 0.41s compute 0.15s  wf_rows=0
+19:51:51   layer  16: load-wait 0.97s compute 0.15s  wf_rows=0
+19:51:59   layer  24: load-wait 0.92s compute 0.16s  wf_rows=0
+19:52:08   layer  32: load-wait 0.99s compute 0.15s  wf_rows=0
+19:52:17   layer  40: load-wait 1.03s compute 0.15s  wf_rows=0
+19:52:25   layer  47: load-wait 1.14s compute 0.15s  wf_rows=0
+19:52:25   pass done: 1600 prefill rows (T=21), 0 spawn rows, 50.1s
+19:52:25   pass 1/1 (1600 rows, 50s)
+19:52:25 l_bind {"pairs": 800, "margin": 207, "reverse_margin": 0, "margin_rate": 0.259, "by_order": {"1": 0.255, "2": 0.262}, "top1_both": 0.599, "passes": 1}
+19:52:25 l_ant [all]: 630 pairs, 1260 rows
+19:52:26   layer   0: load-wait 0.75s compute 0.08s  wf_rows=0
+19:52:35   layer   8: load-wait 1.19s compute 0.07s  wf_rows=0
+19:52:43   layer  16: load-wait 0.82s compute 0.07s  wf_rows=0
+19:52:50   layer  24: load-wait 0.90s compute 0.07s  wf_rows=0
+19:52:57   layer  32: load-wait 0.90s compute 0.07s  wf_rows=0
+19:53:05   layer  40: load-wait 1.22s compute 0.07s  wf_rows=0
+19:53:13   layer  47: load-wait 1.11s compute 0.07s  wf_rows=0
+19:53:13   pass done: 1260 prefill rows (T=11), 0 spawn rows, 47.4s
+19:53:13   pass 1/1 (1260 rows, 47s)
+19:53:13 l_ant {"pairs": 630, "margin": 550, "reverse_margin": 11, "margin_rate": 0.873, "by_order": {"1": 0.873}, "top1_both": 0.479, "passes": 1}
+19:53:15 l_prop [all]: 845 pairs, 1690 rows
+19:53:16   layer   0: load-wait 0.85s compute 0.12s  wf_rows=0
+19:53:21   layer   8: load-wait 0.60s compute 0.12s  wf_rows=0
+19:53:28   layer  16: load-wait 0.71s compute 0.12s  wf_rows=0
+19:53:36   layer  24: load-wait 0.77s compute 0.12s  wf_rows=0
+19:53:44   layer  32: load-wait 0.77s compute 0.12s  wf_rows=0
+19:53:50   layer  40: load-wait 0.38s compute 0.12s  wf_rows=0
+19:53:56   layer  47: load-wait 0.79s compute 0.11s  wf_rows=0
+19:53:56   pass done: 1690 prefill rows (T=15), 0 spawn rows, 41.0s
+19:53:56   pass 1/1 (1690 rows, 41s)
+19:53:56 l_prop {"pairs": 845, "margin": 693, "reverse_margin": 0, "margin_rate": 0.82, "by_order": {"1": 0.82}, "top1_both": 0.267, "passes": 1}
+2026-10-16T19:54:03Z END   ext14-scan-qwen3-ladder rc=0 (216s)

@@ -1,0 +1,267 @@
+{
+ "model": "qwen2_57b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8",
+ "family": "qwen2_moe",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 64,
+ "top_k": 8,
+ "shared_inter": 20480,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T02:29:21Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "per_layer": {
+  "behaviour": {
+   "delta": [
+    0.21875,
+    1.53125,
+    0.75,
+    1.375,
+    0.1875,
+    -0.015625
+   ],
+   "rank_true": [
+    43,
+    47,
+    63,
+    28,
+    20,
+    1378
+   ],
+   "top1_is_true": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "sanity": [
+    {
+     "prompt": "The capital of France is",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.2949541509151459
+    },
+    {
+     "prompt": "The Eiffel Tower is located in the city of",
+     "answer": " Paris",
+     "rank": 1,
+     "p": 0.679103672504425
+    },
+    {
+     "prompt": "Water is made of hydrogen and",
+     "answer": " oxygen",
+     "rank": 50,
+     "p": 0.0021562138572335243
+    },
+    {
+     "prompt": "The opposite of hot is",
+     "answer": " cold",
+     "rank": 1,
+     "p": 0.7155502438545227
+    },
+    {
+     "prompt": "Monday, Tuesday, Wednesday,",
+     "answer": " Thursday",
+     "rank": 86,
+     "p": 0.00124887574929744
+    }
+   ]
+  },
+  "identities": {
+   "layer": 14,
+   "zero_vs_parent": {
+    "n": 6,
+    "maxabs": 0.0625,
+    "meanabs": 0.0390625,
+    "frac_exact": 0.0
+   },
+   "union_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "setall_vs_layer": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "neurons_all_vs_expert": {
+    "n": 6,
+    "maxabs": 0.046875,
+    "meanabs": 0.018229166666666668,
+    "frac_exact": 0.5
+   },
+   "neurons_linearity_relerr_max": 1.507273736933712e-07,
+   "expert_rescue_mean": 0.0885416641831398,
+   "layer_rescue_mean": 0.2434895783662796,
+   "shared_expert_vs_set": {
+    "n": 6,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "shared_neurons_all_vs_expert": {
+    "n": 6,
+    "maxabs": 0.1875,
+    "meanabs": 0.09098307291666667,
+    "frac_exact": 0.0
+   },
+   "shared_rescue_mean": 0.3644205629825592,
+   "shared_w_final_mean_by_layer": [
+    0.01619466207921505,
+    0.02315775491297245,
+    0.014984130859375,
+    0.02414957620203495,
+    0.02585856057703495,
+    0.0346272774040699,
+    0.0492757149040699,
+    0.0390218086540699,
+    0.0457763671875,
+    0.0469156913459301,
+    0.0528971366584301,
+    0.0828857421875,
+    0.17041015625,
+    0.1547037810087204,
+    0.1067708358168602,
+    0.1039225235581398,
+    0.1053059920668602,
+    0.0687662735581398,
+    0.08203125,
+    0.0885009765625,
+    0.08642578125,
+    0.11328125,
+    0.1266276091337204,
+    0.167236328125,
+    0.1435546875,
+    0.144287109375,
+    0.0917154923081398,
+    0.1709798127412796
+   ],
+   "clean_delta_pos_frac": 1.0,
+   "drop_mean": 1.3229166269302368
+  },
+  "layers": {
+   "1": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.0058821383863687515,
+     "meanabs": 0.0043277079662816095,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 0.5,
+     "meanabs": 0.2684659090909091,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 6,
+     "maxabs": 0.005399201065301895,
+     "meanabs": 0.004437611593554418,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 0.07940544304180666,
+    "routing_overlap": 0.7245109057609057,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.010163414292037487,
+     "meanabs": 0.005295609589666128,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.008986277505755424,
+     "meanabs": 0.005082107445394451,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": 0.008658008658008658,
+    "hf_vs_fp32_routing_agreement": 0.016083916083916086
+   },
+   "13": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.06494352221488953,
+     "meanabs": 0.02261035262861035,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 4.0,
+     "meanabs": 1.0795454545454546,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 10,
+     "maxabs": 0.02216251753270626,
+     "meanabs": 0.01251636347733438,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 0.1426300971755517,
+    "routing_overlap": 0.7145729270729271,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.09537778794765472,
+     "meanabs": 0.049969584427096626,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.0948701947927475,
+     "meanabs": 0.04971654052761468,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": 0.12809463264008716,
+    "hf_vs_fp32_routing_agreement": 0.21296582205673117
+   },
+   "27": {
+    "update_relerr": {
+     "n": 11,
+     "maxabs": 0.014000777155160904,
+     "meanabs": 0.006769369038837877,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 11,
+     "maxabs": 4.0,
+     "meanabs": 1.8636363636363635,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 11,
+     "maxabs": 0.009368352591991425,
+     "meanabs": 0.005365868035534566,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 0.9346925801471255,
+    "routing_overlap": 0.9918365725183907,
+    "engine_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.03148127347230911,
+     "meanabs": 0.016721616075797516,
+     "frac_exact": 0.0
+    },
+    "hf_vs_fp32_update_relerr": {
+     "n": 11,
+     "maxabs": 0.03160018473863602,
+     "meanabs": 0.015902998264540325,
+     "frac_exact": 0.0
+    },
+    "engine_vs_fp32_routing_agreement": 0.8991947446492902,
+    "hf_vs_fp32_routing_agreement": 0.9245421245421247
+   }
+  }
+ },
+ "total_s": 388.45561265945435
+}

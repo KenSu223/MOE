@@ -1,0 +1,20 @@
+{
+ "task": "qwen3_wino",
+ "model": "qwen3",
+ "items": [
+  "wino",
+  "qwen3",
+  "wino_qwen3_str",
+  "data/wino_str/pairs_train_xl_qwen3.parquet",
+  "data/wino_str/case_sets.json"
+ ],
+ "experts": [
+  "L41E117"
+ ],
+ "n_rows": 512,
+ "n_prefill": 1024,
+ "limit": null,
+ "pass_s": 54.5,
+ "command": "scripts/ext14ci_c1_run.py qwen3_wino score",
+ "utc": "2026-10-16T22:48:19Z"
+}

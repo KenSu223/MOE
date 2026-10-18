@@ -1,0 +1,6 @@
+2026-10-17T17:15:20Z START p6ci-c3-val-qwen3-ct_lang (waited 1352s, low priority): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks ct_lang --max-rows 2048 --max-spawn 16000
+17:15:27 qwen3: 3 circuits, 27 sets, tasks ['ct_lang']
+17:17:54 ct_lang: knockout 2688 rows (146s)
+17:18:39 ct_lang: add-back / edges 2592 spawns in 1 passes (46s)
+17:18:40 done
+2026-10-17T17:18:46Z END   p6ci-c3-val-qwen3-ct_lang rc=0 (206s)

@@ -1,0 +1,30 @@
+**e1p_e2a_all W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| mistral7b_bos | person-name options | True | 60 | 4.18 | 0.112 [0.099, 0.127] | 0.175 [0.155, 0.194] | 0.41 [0.38, 0.44] |
+| mistral7b_bos | person-name options | False | 172 | 4.40 | 0.171 [0.156, 0.185] | 0.156 [0.137, 0.176] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | True | 116 | 4.39 | 0.158 [0.140, 0.176] | 0.159 [0.139, 0.180] | 0.40 [0.38, 0.42] |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | False | 116 | 4.30 | 0.154 [0.138, 0.171] | 0.162 [0.139, 0.186] | 0.42 [0.40, 0.44] |
+| mistral7b_bos | core-776 twin | True | 112 | 4.54 | 0.156 [0.135, 0.176] | 0.155 [0.131, 0.180] | 0.41 [0.39, 0.44] |
+| mistral7b_bos | core-776 twin | False | 120 | 4.16 | 0.156 [0.142, 0.170] | 0.166 [0.149, 0.183] | 0.40 [0.38, 0.43] |
+| mistral7b_bos | degree adverb in the blank clause (too / very / more ...) | True | 120 | 4.28 | 0.167 [0.149, 0.184] | 0.187 [0.167, 0.208] | 0.43 [0.40, 0.45] |
+| mistral7b_bos | degree adverb in the blank clause (too / very / more ...) | False | 112 | 4.42 | 0.145 [0.128, 0.162] | 0.132 [0.113, 0.153] | 0.38 [0.36, 0.40] |
+| mistral7b_bos | complementary antonym pair | True | 4 |  |  |  |  |
+| mistral7b_bos | complementary antonym pair | False | 228 | 4.37 | 0.158 [0.146, 0.171] | 0.159 [0.144, 0.175] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | association-neutral by the model's own probes (_all cells) | True | 100 | 4.16 | 0.142 [0.124, 0.159] | 0.173 [0.147, 0.202] | 0.41 [0.39, 0.44] |
+| mistral7b_bos | association-neutral by the model's own probes (_all cells) | False | 132 | 4.48 | 0.166 [0.150, 0.183] | 0.151 [0.134, 0.169] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | association-neutral by the twin / counterpart's probes (_all cells) | True | 120 | 4.31 | 0.149 [0.135, 0.162] | 0.177 [0.157, 0.196] | 0.41 [0.38, 0.43] |
+| mistral7b_bos | association-neutral by the twin / counterpart's probes (_all cells) | False | 112 | 4.38 | 0.164 [0.143, 0.185] | 0.143 [0.120, 0.168] | 0.42 [0.39, 0.44] |
+| mistral7b_bos | item built in both tokenizer families | True | 232 | 4.35 | 0.156 [0.144, 0.168] | 0.160 [0.145, 0.176] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | item built in both tokenizer families | False | 0 |  |  |  |  |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | True | 100 | 4.16 | 0.142 [0.124, 0.159] | 0.173 [0.147, 0.202] | 0.41 [0.39, 0.44] |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | False | 132 | 4.48 | 0.166 [0.150, 0.183] | 0.151 [0.134, 0.169] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | probe-associative | True | 0 |  |  |  |  |
+| mistral7b_bos | probe-associative | False | 232 | 4.35 | 0.156 [0.144, 0.168] | 0.160 [0.145, 0.176] | 0.41 [0.39, 0.43] |
+| mistral7b_bos | probe one-sided | True | 28 | 5.54 | 0.168 [0.137, 0.204] | 0.097 [0.067, 0.132] | 0.43 [0.39, 0.47] |
+| mistral7b_bos | probe one-sided | False | 204 | 4.18 | 0.154 [0.141, 0.167] | 0.172 [0.156, 0.188] | 0.41 [0.39, 0.42] |
+| mistral7b_bos | probe reverse | True | 104 | 4.20 | 0.165 [0.146, 0.185] | 0.170 [0.153, 0.188] | 0.40 [0.38, 0.42] |
+| mistral7b_bos | probe reverse | False | 128 | 4.46 | 0.149 [0.133, 0.165] | 0.153 [0.130, 0.176] | 0.42 [0.40, 0.44] |
+| mistral7b_bos | top-1 in both directions | True | 10 | 5.11 | 0.267 [0.214, 0.307] | 0.109 [0.048, 0.170] | 0.39 [0.33, 0.48] |
+| mistral7b_bos | top-1 in both directions | False | 222 | 4.31 | 0.150 [0.139, 0.162] | 0.163 [0.148, 0.179] | 0.41 [0.39, 0.43] |

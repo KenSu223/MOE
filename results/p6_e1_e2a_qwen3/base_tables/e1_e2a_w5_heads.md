@@ -1,0 +1,12 @@
+**e1_e2a W5: top six and bottom two heads (final position; layers = top-4 attention layers + one null layer)**
+
+| Model | Head | Val rescue [95% CI] | Disc. mean | z (val / disc) | ≥ 2 SD both | Share of attn_layer |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | L38H18 | +0.403 [+0.352, +0.454] | +0.420 | +5.4 / +5.2 | yes | 5.29 |
+| Qwen3-30B-A3B-Base | L38H21 | +0.288 [+0.240, +0.342] | +0.340 | +3.8 / +4.2 | yes | 3.79 |
+| Qwen3-30B-A3B-Base | L36H28 | +0.261 [+0.231, +0.293] | +0.273 | +3.5 / +3.3 | yes | 213.60 |
+| Qwen3-30B-A3B-Base | L42H18 | +0.195 [+0.161, +0.230] | +0.252 | +2.6 / +3.0 | yes | 0.42 |
+| Qwen3-30B-A3B-Base | L38H20 | +0.141 [+0.108, +0.177] | +0.168 | +1.8 / +2.0 | no | 1.85 |
+| Qwen3-30B-A3B-Base | L43H24 | +0.111 [+0.090, +0.132] | +0.119 | +1.4 / +1.3 | no | 0.40 |
+| Qwen3-30B-A3B-Base | L36H31 | -0.198 [-0.231, -0.165] | -0.242 | -2.8 / -3.4 | yes | -161.80 |
+| Qwen3-30B-A3B-Base | L38H16 | -0.456 [-0.516, -0.403] | -0.337 | -6.4 / -4.6 | yes | -5.98 |

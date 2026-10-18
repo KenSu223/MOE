@@ -1,0 +1,8 @@
+2026-10-16T22:57:31Z START p6ci-c1-qwen3_f1-score (waited 243s): python scripts/ext14ci_c1_run.py qwen3_f1 score
+22:57:41 score qwen3_f1: 1024 prefill rows, 0 spawns, experts [(37, 32)]
+22:58:33 pass 52s
+/home/ubuntu/MOE/moetrace/ext14_circuit.py:179: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  t = torch.as_tensor(true_ids, device=head.device, dtype=torch.long)
+22:58:34 L37E032: active clean 499/512, corrupt 499; sum dla vs slot dla r=1.0000, max |diff| 0.0013
+22:58:34 score done
+2026-10-16T22:58:40Z END   p6ci-c1-qwen3_f1-score rc=0 (69s)

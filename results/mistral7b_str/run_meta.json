@@ -1,0 +1,18 @@
+{
+ "filter": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "special_tokens": true,
+  "k": 5,
+  "margin": 1.0,
+  "seed_base": 2000,
+  "command": "python scripts/ext14_scan_cf.py mistral7b --out mistral7b_str --paper-key Mixtral",
+  "created_utc": "2026-10-16T21:05:15Z",
+  "complete": true,
+  "completed_utc": "2026-10-16T21:05:36Z",
+  "pass_times_s": [
+   17.405641317367554,
+   3.019763946533203
+  ]
+ }
+}

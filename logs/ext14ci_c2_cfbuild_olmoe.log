@@ -1,0 +1,24 @@
+2026-10-17T02:47:13Z START p6ci-c2-cfbuild-olmoe (waited 2285s): python scripts/ext14ci_c3_cf_build.py olmoe --proto olmoe --rels P17,P27,P495,P103,P178,P1412,P364,P136,P30,P101 --max-per-rel 150 --merge-as mix
+02:47:28 P17: 171 tokenised, 150 with >= 1 symmetric donor
+02:47:28 P27: 189 tokenised, 150 with >= 1 symmetric donor
+02:47:29 P495: 168 tokenised, 150 with >= 1 symmetric donor
+02:47:31 P103: 168 tokenised, 150 with >= 1 symmetric donor
+02:47:32 P178: 160 tokenised, 150 with >= 1 symmetric donor
+02:47:33 P1412: 162 tokenised, 150 with >= 1 symmetric donor
+02:47:34 P364: 162 tokenised, 150 with >= 1 symmetric donor
+02:47:37 P136: 156 tokenised, 150 with >= 1 symmetric donor
+02:47:37 P30: 49 tokenised, 48 with >= 1 symmetric donor
+02:47:38 P101: 198 tokenised, 150 with >= 1 symmetric donor
+02:48:06 pass rows 0-4096
+02:48:09 pass rows 4096-5231
+02:48:10 P17: 137 margin pairs -> 64 / 64
+02:48:10 P27: 133 margin pairs -> 64 / 64
+02:48:10 P495: 109 margin pairs -> 54 / 55
+02:48:10 P103: 140 margin pairs -> 64 / 64
+02:48:10 P178: 143 margin pairs -> 64 / 64
+02:48:10 P1412: 115 margin pairs -> 57 / 58
+02:48:10 P364: 120 margin pairs -> 60 / 60
+02:48:10 P136: 92 margin pairs -> 46 / 46
+02:48:10 P30: 40 margin pairs -> 20 / 20
+02:48:11 P101: 103 margin pairs -> 51 / 52
+2026-10-17T02:48:13Z END   p6ci-c2-cfbuild-olmoe rc=0 (60s)

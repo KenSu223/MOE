@@ -18,6 +18,8 @@ _ap = argparse.ArgumentParser()
 _ap.add_argument("--chains", default=None)
 _ap.add_argument("--progress-tag", default=None)
 _ap.add_argument("--state", default="/tmp/chain_watch_state.json")
+_ap.add_argument("--err-files", default=None, help="comma-separated globs (relative to the repo) to scan for errors")
+_ap.add_argument("--persist", action="store_true", help="keep watching when no chain is alive (agents still building)")
 _A, _ = _ap.parse_known_args()
 ST = _A.state
 CHAIN_RE = None  # set below
@@ -26,6 +28,8 @@ ERR_RE = re.compile(r"Traceback|Error|rc=[1-9]|Killed|FAILED|abort")
 ERR_FILES = ["logs/ext13_p5_analyze_*.log", "logs/ext13ab_analyze.log", "logs/ext13ko_analyze.log", "logs/ext13wr_analyze.log",
              "logs/ext13ab_chain.log", "logs/ext13ko_chain_*.log", "logs/ext13_p5_chain.log",
              "logs/ext13_p5_fix_cpnat_mixtral.out", "logs/ext13ci_analyze*.log", "logs/ext13ci_chain_*.log"]
+if _A.err_files:
+    ERR_FILES = [g.strip() for g in _A.err_files.split(",") if g.strip()]
 PROG_RE = re.compile(_A.progress_tag or r"\[p5-(data|addback|circuit|expert|atp)\]")
 IDLE_MIN, LONG_MIN = 20, 50
 CHAIN_RE = _A.chains or CHAIN_RE_DEFAULT
@@ -69,7 +73,7 @@ def chains():
         if len(parts) < 3:
             continue
         pid, ppid, cmd = parts
-        if re.search(CHAIN_RE, cmd) and "pgrep" not in cmd and "p5_watch" not in cmd and not cmd.startswith("/bin/bash -c source"):
+        if re.search(CHAIN_RE, cmd) and "pgrep" not in cmd and "p5_watch" not in cmd and "chain_watch" not in cmd and not cmd.startswith("/bin/bash -c source"):
             rows.append((pid, ppid, cmd))
     pids = {r[0] for r in rows}
     return {pid: " ".join(cmd.split()[-3:]) for pid, ppid, cmd in rows if ppid not in pids}
@@ -117,7 +121,7 @@ def main():
                         emit(f"ERROR in {os.path.relpath(p, R)}: {ln.strip()}")
         # stage completions from the agents' chains
         for ln in new_lines(state, f"{R}/logs/PROGRESS.md"):
-            if PROG_RE.search(ln) and re.search(r"BASE READY|DONE|COMPLETE|done|complete|FAIL|fail|error", ln):
+            if PROG_RE.search(ln) and re.search(r"BASE READY|CASES READY|READY|REVIEW|REQUEST|VOID|DONE|COMPLETE|done|complete|FAIL|fail|error|OOM", ln):
                 emit("PROGRESS " + ln.strip("- ").strip())
         # chain processes
         cur = chains()
@@ -138,7 +142,7 @@ def main():
         if job and mins >= LONG_MIN and state["long_flag"] != job:
             emit(f"LONG JOB {job} running {mins:.0f} min")
             state["long_flag"] = job
-        if not cur:
+        if not cur and not _A.persist:
             emit("ALL WATCHED CHAINS EXITED")
             json.dump(state, open(ST, "w"))
             return

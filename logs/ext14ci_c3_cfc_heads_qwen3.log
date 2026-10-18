@@ -1,0 +1,17 @@
+2026-10-17T03:23:24Z START p6ci-c3-cfc-heads-qwen3 (waited 1898s): python scripts/ext7_wino_heads.py --model qwen3 --pairs results/p6ci_c3_data/pairs_cfc_qwen3.parquet --case-sets results/p6ci_c3_data/case_sets_cfc_qwen3.json --out p6ci_c3_cfc_qwen3 --splits discovery --families main --layers 28,38,39,40,42,43 --max-rows 40000 --agent p6-circuit
+03:23:25 qwen3 -> p6ci_c3_cfc_qwen3: 384 directed cases, layers [28, 38, 39, 40, 42, 43] (null layer None), 32 heads, 3 passes, 80640 spawn rows; mentions: none (no mention columns, no WinoGrande text)
+03:23:33 pass 1/3: layers [28, 38], 768 prefill rows, 26880 spawn rows
+03:23:37   layer   0: load-wait 3.00s compute 0.62s  wf_rows=0
+03:23:45   layer   8: load-wait 0.95s compute 0.07s  wf_rows=0
+03:23:52   layer  16: load-wait 0.87s compute 0.06s  wf_rows=0
+03:24:00   layer  24: load-wait 1.16s compute 0.06s  wf_rows=0
+03:24:10   layer  32: load-wait 1.05s compute 0.14s  wf_rows=13440
+03:24:21   layer  40: load-wait 0.80s compute 0.21s  wf_rows=26880
+03:24:30   layer  47: load-wait 0.85s compute 0.21s  wf_rows=26880
+03:24:30   pass done: 768 prefill rows (T=15), 26880 spawn rows, 56.2s
+03:24:34 pass 1: 56s; 26880 rows
+03:24:34 pass 2/3: layers [39, 40], 768 prefill rows, 26880 spawn rows
+03:25:18 pass 2: 42s; 53760 rows
+03:25:18 pass 3/3: layers [42, 43], 768 prefill rows, 26880 spawn rows
+03:26:05 pass 3: 47s; 80640 rows
+2026-10-17T03:26:12Z END   p6ci-c3-cfc-heads-qwen3 rc=0 (168s)

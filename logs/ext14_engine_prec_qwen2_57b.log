@@ -1,0 +1,22 @@
+2026-10-17T04:13:27Z START p6eng-prec-qwen2_57b (waited 2111s): python scripts/ext14_engine_verify.py --model qwen2_57b --units 32 --vs-fp32 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --tag _e1a2e
+04:13:36 qwen2_57b: qwen2_moe, 64 units, dtype bf16
+04:15:41   engine proto {'model_key': 'qwen2_57b', 'dtype': 'bfloat16', 'router_fp32': False}: 126s
+04:18:06   engine fp32 {'model_key': 'qwen2_57b', 'dtype': 'float32', 'router_fp32': False}: 143s
+04:18:07   engine proto vs fp32: rescue r -0.0374, |d rescue| mean 0.475, attention share 0.678 vs 0.582, final routing agreement 0.000
+04:18:07 wrote results/verify_ext14_qwen2_57b_vsfp32_e1a2e.json
+04:18:07 model: "qwen2_57b"
+04:18:07 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+04:18:07 family: "qwen2_moe"
+04:18:07 dtype: "bf16"
+04:18:07 n_layers: 28
+04:18:07 n_experts: 64
+04:18:07 top_k: 8
+04:18:07 shared_inter: 20480
+04:18:07 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:18:07 started: "2026-10-17T04:13:30Z"
+04:18:07 hf_offload: false
+04:18:07 light_plan: false
+04:18:07 units: {"pairs_checked": 32, "pairs_tokenizer_identical": 32, "file": "data/dial/pairs_e1_a2e_qwen3.parquet", "kind": "wino_train_xl_str", "n": 64}
+04:18:07 router_fp32_flag: false
+04:18:07 total_s: 271.5166208744049
+2026-10-17T04:18:23Z END   p6eng-prec-qwen2_57b rc=0 (296s)

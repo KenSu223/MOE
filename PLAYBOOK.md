@@ -119,3 +119,24 @@ Phase 5 共 11 组条件 × 2 个模型，每组都要出 Phase 3/4 的全套结
 - PROGRESS 里的 `BASE READY` 行和各代理的完成行；
 - 各条链的日志：`logs/ext13_p5_chain.log`、`logs/ext13ab_chain.log`、`logs/ext13ci_chain_*.log`、`logs/ext13ko_chain_*.log`；
 - 分析日志里有没有 Traceback。
+
+## 8. 第六阶段的经验（2026-10-16/17，协调者 + 五个子代理，三次触到用量上限）
+
+Phase 6 是 8 个模型、约 100 个实验组。预测在任何 GPU 任务之前就提交了。其间三次用量上限把所有子代理同时停掉，后台链都撑过来了。在第五阶段经验之外，新增的做法：
+
+| 做法 | 为什么 |
+|---|---|
+| 预测先写死、先 commit（`data/dial/preregistration.md`），只能在文末追加带日期的补记 | 之后能逐条核对"对 / 错 / 无法检验"。补记里写明改了什么、发生在测量之前 |
+| 新句式先做行为试跑，并在试跑前定好选择规则 | 第一种"写明"句式让两个模型都在随机水平；只改一行版式就到了 0.99 / 0.80。induction 的格式同样先试跑 |
+| 每个造题器都要做逐字还原校验（拼回原句必须一模一样） | 空格在介词短语里时（"the one on the _"），按连接词截断会留下"because the one on."，这正是 F2 截断那类问题 |
+| 小样本组用固定规则：验证集不足 64 但总数够 64 就合并跑（不做选择 / 验证切分），否则只报行为 | 不临时放宽阈值；合并组不参与需要验证集的预测检验 |
+| 新 MoE 模型先查 bf16 和 fp32 的 routing 是否一致 | Qwen2-57B 的路由几乎是均匀的，bf16 舍入让 routing 一致率只有 0.08；连 transformers 自己的 bf16 也答错。只把路由改成 fp32 不够，整体用 fp32 |
+| GPU 队列分优先级（`logs/gpu_queue_lowprio.txt`），一个组的几个阶段合并成一个 GPU 任务 | 十几条链各排一个任务时，每个任务都要等一整圈（约 27 分钟），主实验只拿到 13% 的 GPU 时间。改了以后约 80% |
+| 交接信号只匹配"行首时间戳 + 写入者标签" | 协调者在自己的日志行里引用了信号原文，监视脚本误以为信号已到，提前启动了 Qwen2-57B（在 GPU 任务开始前取消了） |
+| 用户要求"只跑必要的"之后，默认每组只做最小集（扫描、逐层 patch、all-MoE、直接拆分） | 网格、单 head、完整第二档只在下游确实需要的组上跑，省下约 40% 的单组 GPU 时间 |
+| 用量上限之后：先看各链是否还活着、有没有失败任务，再用同一 agent ID 发"从磁盘恢复、不重做 GPU 工作"，并附上具体待办 | 三次恢复都没有丢失 GPU 工作；OOM 的任务链会自动用 0.75 的预算重试 |
+
+恢复检查清单在前几节基础上增加：
+- `data/dial/p6_conditions.json`（registry）和 PROGRESS 里的 `[p6-data] BASE READY / CASES READY / BEHAVIOUR ONLY` 行；
+- `logs/ext14_base_chain.log`、`logs/ext14_t2_chain.log`、`logs/ext14_analyze_chain.log`、`logs/ext14ci_*`；
+- `logs/gpu_queue.log` 里 rc≠0 的任务（OOM 会被自动以 0.75 重试）。

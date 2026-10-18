@@ -78,4 +78,4 @@ E14 (monotonic order of the levels):
 
 ## Addendum
 
-(empty)
+- 2026-10-16 ~20:20Z (coordinator; before any attention share was measured; no prediction edited): the a2e E1-family frame changed from `{A} and {B}, so the _ was X` to P3 `{A} and {B}. Fill in the blank: The _ was X.` after a behaviour-only frame pilot (data/dial/qa/frame_pilot.md). The E-level predictions E1–E14 refer to the P3 cells; E3-a2e predictions (E5, E6) are tested on both the F1 anchor `e3_a2e` and the frame-matched `e3p3_a2e`.

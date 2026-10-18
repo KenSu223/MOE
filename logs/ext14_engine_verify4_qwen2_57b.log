@@ -1,0 +1,40 @@
+03:26:26 qwen2_57b: qwen2_moe, 6 units, dtype bf16
+03:28:38   engine proto {'model_key': 'qwen2_57b', 'dtype': 'bfloat16', 'router_fp32': False}: 132s
+03:31:27   engine fp32 {'model_key': 'qwen2_57b', 'dtype': 'float32', 'router_fp32': False}: 168s
+03:31:28   engine proto vs fp32: rescue r 0.0974, |d rescue| mean 0.656, attention share 0.275 vs 0.260, final routing agreement 0.006
+03:31:28 wrote results/verify_ext14_qwen2_57b_vsfp32.json
+03:31:28 model: "qwen2_57b"
+03:31:28 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+03:31:28 family: "qwen2_moe"
+03:31:28 dtype: "bf16"
+03:31:28 n_layers: 28
+03:31:28 n_experts: 64
+03:31:28 top_k: 8
+03:31:28 shared_inter: 20480
+03:31:28 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+03:31:28 started: "2026-10-17T03:26:19Z"
+03:31:28 hf_offload: false
+03:31:28 light_plan: false
+03:31:28 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+03:31:28 router_fp32_flag: false
+03:31:28 total_s: 302.10494208335876
+03:32:00 qwen2_57b: qwen2_moe, 6 units, dtype bf16
+03:34:07   engine proto {'model_key': 'qwen2_57b', 'dtype': 'bfloat16', 'router_fp32': True}: 127s
+03:36:27   engine fp32 {'model_key': 'qwen2_57b', 'dtype': 'float32', 'router_fp32': False}: 139s
+03:36:28   engine proto vs fp32: rescue r 0.2594, |d rescue| mean 0.619, attention share 0.227 vs 0.260, final routing agreement 0.012
+03:36:28 wrote results/verify_ext14_qwen2_57b_r32_vsfp32.json
+03:36:28 model: "qwen2_57b"
+03:36:28 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+03:36:28 family: "qwen2_moe"
+03:36:28 dtype: "bf16"
+03:36:28 n_layers: 28
+03:36:28 n_experts: 64
+03:36:28 top_k: 8
+03:36:28 shared_inter: 20480
+03:36:28 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+03:36:28 started: "2026-10-17T03:31:59Z"
+03:36:28 hf_offload: false
+03:36:28 light_plan: false
+03:36:28 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+03:36:28 router_fp32_flag: true
+03:36:28 total_s: 268.1996810436249

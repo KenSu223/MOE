@@ -1,0 +1,11 @@
+2026-10-16T22:03:49Z START ext14-scan-mixtral_bos-indpilot (waited 3666s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells pilot_ind
+22:03:56 pilot_ind [all]: 2000 pairs, 4000 rows
+22:04:06   layer   0: load-wait 8.14s compute 1.70s  wf_rows=0
+22:04:29   layer   8: load-wait 2.28s compute 1.18s  wf_rows=0
+22:04:52   layer  16: load-wait 1.71s compute 1.18s  wf_rows=0
+22:05:15   layer  24: load-wait 1.71s compute 1.18s  wf_rows=0
+22:05:35   layer  31: load-wait 1.72s compute 1.18s  wf_rows=0
+22:05:35   pass done: 4000 prefill rows (T=21), 0 spawn rows, 99.1s
+22:05:35   pass 1/1 (4000 rows, 99s)
+22:05:36 pilot_ind {"pairs": 2000, "margin": 669, "reverse_margin": 0, "margin_rate": 0.335, "by_order": {"1": 0.324, "2": 0.345}, "top1_both": 0.54, "passes": 1}
+2026-10-16T22:05:42Z END   ext14-scan-mixtral_bos-indpilot rc=0 (113s)

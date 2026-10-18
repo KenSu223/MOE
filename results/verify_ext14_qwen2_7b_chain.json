@@ -1,0 +1,165 @@
+{
+ "model": "qwen2_7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e",
+ "family": "qwen2",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T03:56:21Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "router_fp32_flag": false,
+ "chain": {
+  "n_unit_prompts": 6,
+  "sanity_prompts": [
+   "The capital of France is",
+   "The Eiffel Tower is located in the city of",
+   "Water is made of hydrogen and",
+   "The opposite of hot is",
+   "Monday, Tuesday, Wednesday,"
+  ],
+  "runs": {
+   "hf_bf16": {
+    "delta_units": [
+     2.875,
+     5.1875,
+     0.125,
+     2.0,
+     3.75,
+     5.40625
+    ],
+    "sanity_rank": [
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "hf_fp32": {
+    "delta_units": [
+     1.8001012802124023,
+     5.113090515136719,
+     0.24853038787841797,
+     1.9097509384155273,
+     4.554784774780273,
+     4.217500686645508
+    ],
+    "sanity_rank": [
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "eng_bf16": {
+    "delta_units": [
+     2.625,
+     5.25,
+     0.1875,
+     2.0,
+     4.4375,
+     5.5625
+    ],
+    "sanity_rank": [
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "eng_fp32": {
+    "delta_units": [
+     1.800093650817871,
+     5.113083839416504,
+     0.2485332489013672,
+     1.9097518920898438,
+     4.554784774780273,
+     4.217503547668457
+    ],
+    "sanity_rank": [
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  "compare": {
+   "eng_bf16__hf_bf16": {
+    "delta_absdiff": {
+     "n": 6,
+     "maxabs": 0.6875,
+     "meanabs": 0.203125,
+     "frac_exact": 0.16666666666666666
+    },
+    "logp_true_absdiff": {
+     "n": 11,
+     "maxabs": 0.6669979095458984,
+     "meanabs": 0.22659612921151248,
+     "frac_exact": 0.0
+    },
+    "rank_equal_frac": 0.6363636363636364
+   },
+   "hf_bf16__hf_fp32": {
+    "delta_absdiff": {
+     "n": 6,
+     "maxabs": 1.1887493133544922,
+     "meanabs": 0.5594369570414225,
+     "frac_exact": 0.0
+    },
+    "logp_true_absdiff": {
+     "n": 11,
+     "maxabs": 1.7097368240356445,
+     "meanabs": 0.4130610796538266,
+     "frac_exact": 0.0
+    },
+    "rank_equal_frac": 0.6363636363636364
+   },
+   "eng_bf16__hf_fp32": {
+    "delta_absdiff": {
+     "n": 6,
+     "maxabs": 1.3449993133544922,
+     "meanabs": 0.4292286237080892,
+     "frac_exact": 0.0
+    },
+    "logp_true_absdiff": {
+     "n": 11,
+     "maxabs": 1.042738914489746,
+     "meanabs": 0.2108878344297409,
+     "frac_exact": 0.0
+    },
+    "rank_equal_frac": 0.8181818181818182
+   },
+   "eng_fp32__hf_fp32": {
+    "delta_absdiff": {
+     "n": 6,
+     "maxabs": 7.62939453125e-06,
+     "meanabs": 3.4968058268229165e-06,
+     "frac_exact": 0.16666666666666666
+    },
+    "logp_true_absdiff": {
+     "n": 11,
+     "maxabs": 1.33514404296875e-05,
+     "meanabs": 4.352493719621138e-06,
+     "frac_exact": 0.0
+    },
+    "rank_equal_frac": 1.0
+   }
+  }
+ },
+ "total_s": 41.78528881072998
+}

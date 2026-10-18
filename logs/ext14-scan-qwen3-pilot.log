@@ -1,0 +1,13 @@
+2026-10-16T19:47:29Z START ext14-scan-qwen3-pilot (waited 592s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells pilot_frames
+19:47:38 pilot_frames [all]: 2000 pairs, 4000 rows
+19:47:43   layer   0: load-wait 3.20s compute 1.09s  wf_rows=0
+19:47:48   layer   8: load-wait 0.11s compute 0.57s  wf_rows=0
+19:47:54   layer  16: load-wait 0.23s compute 0.58s  wf_rows=0
+19:48:01   layer  24: load-wait 0.44s compute 0.58s  wf_rows=0
+19:48:10   layer  32: load-wait 0.48s compute 0.57s  wf_rows=0
+19:48:19   layer  40: load-wait 0.53s compute 0.57s  wf_rows=0
+19:48:27   layer  47: load-wait 0.72s compute 0.57s  wf_rows=0
+19:48:27   pass done: 4000 prefill rows (T=33), 0 spawn rows, 49.1s
+19:48:27   pass 1/1 (4000 rows, 49s)
+19:48:27 pilot_frames {"pairs": 2000, "margin": 1018, "reverse_margin": 0, "margin_rate": 0.509, "by_order": {"1": 0.501, "2": 0.517}, "top1_both": 0.619, "passes": 1}
+2026-10-16T19:48:34Z END   ext14-scan-qwen3-pilot rc=0 (65s)

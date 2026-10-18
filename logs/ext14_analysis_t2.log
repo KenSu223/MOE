@@ -1,0 +1,85 @@
+
+===== 2026-10-16T23:29:32Z scripts/ext14_t2_select.py e1_a2e qwen3
+e1_a2e/qwen3: selected L37E032 (layer L37, pattern A, spec [0.21321614583333334, 0.16389973958333334, 0.2683919270833333]); pop top-3 [[37, 32, 0.2803], [44, 116, 0.2407], [43, 70, 0.1025]] (8s)
+
+===== 2026-10-16T23:29:41Z scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3
+23:29:42 analysing e1_a2e/qwen3
+23:29:44 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-16T23:44:47Z scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3
+23:44:54 analysing e1_a2e/qwen3
+23:44:54 analysing e1_a2e_qwen3
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+23:45:23 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-16T23:52:46Z scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3
+23:52:53 analysing e1_a2e/qwen3
+23:52:53 analysing e1_a2e_qwen3
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+23:53:23 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T00:24:29Z scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3
+00:24:36 analysing e1_a2e/qwen3
+00:24:36 analysing e1_a2e_qwen3
+00:25:07 analysing e1_a2e/qwen3 (e1_a2e)
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+00:25:18 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T00:33:01Z scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3
+00:33:08 analysing e1_a2e/qwen3
+00:33:08 analysing e1_a2e_qwen3
+00:33:43 analysing e1_a2e/qwen3 (e1_a2e)
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+00:34:02 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T00:38:53Z scripts/ext14_t2_select.py e1_a2e mixtral_bos
+e1_a2e/mixtral_bos: selected L17E007 (layer L17, pattern A, spec [0.20625, 0.13194444444444445, 0.2847222222222222]); pop top-3 [[17, 7, 0.3172], [15, 6, 0.2748], [14, 5, 0.2176]] (5s)
+
+===== 2026-10-17T00:39:00Z scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos
+00:39:02 analysing e1_a2e/mixtral_bos
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+00:39:05 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T01:02:59Z scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos
+01:03:06 analysing e1_a2e/mixtral_bos
+01:03:06 analysing e1_a2e_mixtral_bos
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+01:03:28 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T01:08:10Z scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos
+01:08:18 analysing e1_a2e/mixtral_bos
+01:08:18 analysing e1_a2e_mixtral_bos
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+01:08:46 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T01:46:19Z scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos
+01:46:26 analysing e1_a2e/mixtral_bos
+01:46:26 analysing e1_a2e_mixtral_bos
+01:46:48 analysing e1_a2e/mixtral_bos (e1_a2e)
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+01:46:56 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)
+
+===== 2026-10-17T01:54:21Z scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos
+01:54:28 analysing e1_a2e/mixtral_bos
+01:54:28 analysing e1_a2e_mixtral_bos
+01:54:57 analysing e1_a2e/mixtral_bos (e1_a2e)
+written ext14_t2_ab_e1_a2e_addback
+written ext14_t2_ab_e1_a2e_deletion
+written ext14_t2_ab_e1_a2e_split
+01:55:08 wrote /home/ubuntu/MOE/results/ext14_t2_summary.json (1 cells)

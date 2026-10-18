@@ -1,0 +1,10 @@
+09:39:19 qwen3_4b -> p6_e3_e2a_qwen3_4b: 512 directed cases, families ['main'], 1 prefill-only passes
+09:39:22   layer   0: load-wait 0.31s compute 0.41s  wf_rows=0
+09:39:23   layer   8: load-wait 0.02s compute 0.14s  wf_rows=0
+09:39:24   layer  16: load-wait 0.02s compute 0.14s  wf_rows=0
+09:39:25   layer  24: load-wait 0.02s compute 0.14s  wf_rows=0
+09:39:27   layer  32: load-wait 0.02s compute 0.14s  wf_rows=0
+09:39:27   layer  35: load-wait 0.02s compute 0.14s  wf_rows=0
+09:39:27   pass done: 1024 prefill rows (T=29), 0 spawn rows, 6.4s
+09:39:28 pass 1/1: 6s; DLA total - drop: max |.| 0.182
+09:39:28 direct effect / drop: attention +0.241, MoE +0.758, embedding +0.000

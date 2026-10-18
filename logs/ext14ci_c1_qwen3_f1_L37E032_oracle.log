@@ -1,0 +1,7 @@
+2026-10-17T04:19:39Z START p6ci-c1-qwen3_f1-L37E032-oracle (waited 2209s): python scripts/ext14ci_c1_run.py qwen3_f1 oracle --expert L37E032 --n-rows 96 --max-spawn 30000
+04:20:51 singles pass 1/3: 29991 spawns, 63s
+04:21:31 singles pass 2/3: 29991 spawns, 40s
+04:22:24 singles pass 3/3: 13842 spawns, 53s
+04:23:10 oracle top-k pass 1/1: 960 spawns, 46s
+04:23:10 oracle done
+2026-10-17T04:23:18Z END   p6ci-c1-qwen3_f1-L37E032-oracle rc=0 (219s)

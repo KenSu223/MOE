@@ -1,0 +1,16 @@
+2026-10-17T04:25:15Z START ext14-e1_a2e_all-mistral7b_bos-joint (waited 2323s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e1_a2e_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mistral7b_bos.json --out p6_e1_a2e_all_mistral7b_bos --agent p6-data --families main --max-rows 30000
+04:25:16 mistral7b -> p6_e1_a2e_all_mistral7b_bos: 188 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+04:25:23 pass 1/1: 376 prefill rows, 1128 multi rows
+04:25:24   layer   0: load-wait 0.74s compute 0.54s  wf_rows=1128
+04:25:26   layer   8: load-wait 0.32s compute 0.11s  wf_rows=1128
+04:25:30   layer  16: load-wait 0.32s compute 0.11s  wf_rows=1128
+04:25:33   layer  24: load-wait 0.33s compute 0.11s  wf_rows=1128
+04:25:36   layer  31: load-wait 0.32s compute 0.11s  wf_rows=1128
+04:25:36   pass done: 376 prefill rows (T=29), 1128 spawn rows, 13.3s
+04:25:36 denoise  all_attn  all     : effect/drop +1.000 (mean effect +4.59, drop 4.59)
+04:25:36 denoise  all_block all     : effect/drop +1.000 (mean effect +4.59, drop 4.59)
+04:25:36 denoise  all_moe   all     : effect/drop +0.421 (mean effect +1.93, drop 4.59)
+04:25:36 noise    all_attn  all     : effect/drop +1.000 (mean effect +4.59, drop 4.59)
+04:25:36 noise    all_block all     : effect/drop +1.000 (mean effect +4.59, drop 4.59)
+04:25:36 noise    all_moe   all     : effect/drop +0.421 (mean effect +1.93, drop 4.59)
+2026-10-17T04:25:38Z END   ext14-e1_a2e_all-mistral7b_bos-joint rc=0 (23s)

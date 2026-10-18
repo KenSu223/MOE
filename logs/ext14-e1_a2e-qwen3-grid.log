@@ -1,0 +1,26 @@
+2026-10-16T23:07:24Z START ext14-e1_a2e-qwen3-grid (waited 114s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+23:07:25 qwen3 -> p6_e1_a2e_qwen3: window 1, kinds ['layer', 'attn_layer', 'resid'], 512 directed cases, 2484 units, 357696 suffix rows, 7 passes; units per category {'further tokens': 948, 'last STR token': 512, 'first subsequent token': 512, 'last token': 512}
+23:07:32 pass 1/7: 416 units (S 1..1), 832 prefill rows, 59904 suffix rows
+23:07:36   layer   0: load-wait 2.89s compute 0.73s  wf_rows=1248 wf_tokens=416
+23:07:45   layer   8: load-wait 1.07s compute 0.18s  wf_rows=11232 wf_tokens=10400
+23:07:55   layer  16: load-wait 1.00s compute 0.25s  wf_rows=21216 wf_tokens=20384
+23:08:05   layer  24: load-wait 0.93s compute 0.32s  wf_rows=31200 wf_tokens=30368
+23:08:15   layer  32: load-wait 0.86s compute 0.39s  wf_rows=41184 wf_tokens=40352
+23:08:25   layer  40: load-wait 0.79s compute 0.46s  wf_rows=51168 wf_tokens=50336
+23:08:34   layer  47: load-wait 0.73s compute 0.52s  wf_rows=59904 wf_tokens=59072
+23:08:35   pass done: 832 prefill rows (T=26), 59904 suffix rows (Smax=1, 59904 tokens), 62.5s
+23:08:36 pass 1: 62.5s; 59904 rows saved
+23:08:36 pass 2/7: 416 units (S 1..2), 832 prefill rows, 59904 suffix rows
+23:09:28 pass 2: 48.4s; 119808 rows saved
+23:09:28 pass 3/7: 416 units (S 2..3), 832 prefill rows, 59904 suffix rows
+23:10:19 pass 3: 45.6s; 179712 rows saved
+23:10:20 pass 4/7: 347 units (S 3..4), 694 prefill rows, 49968 suffix rows
+23:11:10 pass 4: 45.5s; 229680 rows saved
+23:11:10 pass 5/7: 347 units (S 4..4), 694 prefill rows, 49968 suffix rows
+23:12:00 pass 5: 47.7s; 279648 rows saved
+23:12:01 pass 6/7: 277 units (S 4..5), 554 prefill rows, 39888 suffix rows
+23:12:49 pass 6: 43.7s; 319536 rows saved
+23:12:50 pass 7/7: 265 units (S 5..5), 530 prefill rows, 38160 suffix rows
+23:13:43 pass 7: 45.9s; 357696 rows saved
+23:13:43 done
+2026-10-16T23:13:51Z END   ext14-e1_a2e-qwen3-grid rc=0 (387s)

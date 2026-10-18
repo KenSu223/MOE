@@ -1,0 +1,11 @@
+2026-10-16T22:53:25Z START ext14-scan-mixtral_bos-l_ind-I2 (waited 224s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells l_ind
+22:53:31 l_ind [all]: 1600 pairs, 3200 rows
+22:53:40   layer   0: load-wait 7.11s compute 1.59s  wf_rows=0
+22:54:02   layer   8: load-wait 1.95s compute 0.94s  wf_rows=0
+22:54:25   layer  16: load-wait 1.95s compute 0.94s  wf_rows=0
+22:54:49   layer  24: load-wait 1.95s compute 0.94s  wf_rows=0
+22:55:09   layer  31: load-wait 1.94s compute 0.95s  wf_rows=0
+22:55:09   pass done: 3200 prefill rows (T=21), 0 spawn rows, 97.5s
+22:55:09   pass 1/1 (3200 rows, 97s)
+22:55:09 l_ind {"pairs": 1600, "margin": 586, "reverse_margin": 0, "margin_rate": 0.366, "by_order": {"1": 0.384, "2": 0.349}, "top1_both": 0.635, "passes": 1}
+2026-10-16T22:55:16Z END   ext14-scan-mixtral_bos-l_ind-I2 rc=0 (111s)

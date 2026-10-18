@@ -1,0 +1,13 @@
+2026-10-17T06:56:02Z START ext14-e1_a2e_all-qwen3-dla (waited 1619s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e1_a2e_all_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_all_qwen3.json --out p6_e1_a2e_all_qwen3 --agent p6-data --families main --chunk 512
+06:56:03 qwen3 -> p6_e1_a2e_all_qwen3: 512 directed cases, families ['main'], 1 prefill-only passes
+06:56:14   layer   0: load-wait 2.89s compute 0.68s  wf_rows=0
+06:56:23   layer   8: load-wait 1.10s compute 0.14s  wf_rows=0
+06:56:33   layer  16: load-wait 1.07s compute 0.14s  wf_rows=0
+06:56:43   layer  24: load-wait 1.10s compute 0.14s  wf_rows=0
+06:56:52   layer  32: load-wait 1.10s compute 0.14s  wf_rows=0
+06:57:02   layer  40: load-wait 1.10s compute 0.14s  wf_rows=0
+06:57:11   layer  47: load-wait 1.10s compute 0.14s  wf_rows=0
+06:57:11   pass done: 1024 prefill rows (T=29), 0 spawn rows, 60.8s
+06:57:12 pass 1/1: 61s; DLA total - drop: max |.| 0.199
+06:57:13 direct effect / drop: attention +1.224, MoE -0.223, embedding +0.000
+2026-10-17T06:57:19Z END   ext14-e1_a2e_all-qwen3-dla rc=0 (77s)

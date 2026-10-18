@@ -1,0 +1,12 @@
+**e1_e2a W5: top six and bottom two heads (final position; layers = top-4 attention layers + one null layer)**
+
+| Model | Head | Val rescue [95% CI] | Disc. mean | z (val / disc) | ≥ 2 SD both | Share of attn_layer |
+|---|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | L19H13 | +0.376 [+0.323, +0.430] | +0.376 | +5.3 / +5.3 | yes | 0.52 |
+| Mixtral-8x7B, BOS | L19H12 | +0.262 [+0.229, +0.295] | +0.262 | +3.6 / +3.6 | yes | 0.36 |
+| Mixtral-8x7B, BOS | L15H7 | +0.235 [+0.174, +0.300] | +0.235 | +3.2 / +3.2 | yes | 0.37 |
+| Mixtral-8x7B, BOS | L16H0 | +0.228 [+0.198, +0.259] | +0.228 | +3.1 / +3.1 | yes | -36.50 |
+| Mixtral-8x7B, BOS | L18H3 | +0.225 [+0.184, +0.265] | +0.225 | +3.0 / +3.0 | yes | 0.44 |
+| Mixtral-8x7B, BOS | L13H18 | +0.198 [+0.159, +0.239] | +0.198 | +2.6 / +2.6 | yes | 0.28 |
+| Mixtral-8x7B, BOS | L19H10 | -0.198 [-0.255, -0.146] | -0.198 | -3.2 / -3.2 | yes | -0.27 |
+| Mixtral-8x7B, BOS | L16H2 | -0.202 [-0.234, -0.169] | -0.202 | -3.3 / -3.3 | yes | 32.25 |

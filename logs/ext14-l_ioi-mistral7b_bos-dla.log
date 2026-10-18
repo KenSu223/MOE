@@ -1,0 +1,9 @@
+10:33:56 mistral7b -> p6_l_ioi_mistral7b_bos: 512 directed cases, families ['main'], 1 prefill-only passes
+10:33:58   layer   0: load-wait 0.62s compute 0.46s  wf_rows=0
+10:34:00   layer   8: load-wait 0.04s compute 0.18s  wf_rows=0
+10:34:02   layer  16: load-wait 0.04s compute 0.18s  wf_rows=0
+10:34:03   layer  24: load-wait 0.03s compute 0.18s  wf_rows=0
+10:34:05   layer  31: load-wait 0.04s compute 0.18s  wf_rows=0
+10:34:05   pass done: 1024 prefill rows (T=21), 0 spawn rows, 7.8s
+10:34:06 pass 1/1: 8s; DLA total - drop: max |.| 0.106
+10:34:06 direct effect / drop: attention +1.105, MoE -0.105, embedding +0.000

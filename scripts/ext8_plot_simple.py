@@ -18,8 +18,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
+sys.path.insert(0, "/home/ubuntu/MOE")
+from moetrace.ext14_plotutil import draw_random_equivalent, random_equivalent, fmt_equiv, fmt_k  # Phase 6 P6-0
 
 R = "/home/ubuntu/MOE/results"
+EQUIV = []
 PANELS = [("cf_qwen3", "CounterFact · Qwen3-30B-A3B"), ("cf_mixtral", "CounterFact · Mixtral-8x7B"),
           ("wino_qwen3", "WinoGrande · Qwen3-30B-A3B"), ("wino_mixtral", "WinoGrande · Mixtral-8x7B")]
 # reference palette (dataviz skill, categorical slots 2 and 1) + a neutral for the baseline
@@ -73,13 +77,20 @@ def plot(kind, summ):
                     solid_joinstyle="round", label=spec["label"][o], zorder=3 if o == "greedy" else 2)
         ax.axhline(ceil, color=INK2, linewidth=1.0, linestyle=(0, (4, 3)), zorder=1)
         ax.text(1.05, ceil + 0.015, f"{spec['ceiling_text']}: {ceil:.2f}", color=INK2, fontsize=8.5, va="bottom")
+        eq_txt = ""
+        if "greedy" in curves and "rand" in curves:
+            d = draw_random_equivalent(ax, curves["greedy"][0], curves["greedy"][1], curves["rand"][0], curves["rand"][1],
+                                       color=INK2, kmax=K)
+            eq_txt = "\nrandom-order k that matches greedy's first k: " + fmt_equiv(d)
+            EQUIV.append((title, K, d, random_equivalent(curves["oracle"][0], curves["oracle"][1], curves["rand"][0],
+                                                         curves["rand"][1])))
         ax.text(0.0, 1.02, "experts for 80 % of the ceiling: "
-                + " · ".join(f"{spec['short'][o]} {fk(k80[o])}" for o in spec["order"]),
+                + " · ".join(f"{spec['short'][o]} {fk(k80[o])}" for o in spec["order"]) + eq_txt,
                 transform=ax.transAxes, ha="left", va="bottom", fontsize=8.8, color=INK2)
         ax.set_xscale("log")
         ax.set_xlim(0.9, K * 1.1)
         ax.set_ylim(-0.03, 1.0)
-        ax.set_title(f"{title}  (K = {K})", fontsize=10.5, loc="left", pad=20)
+        ax.set_title(f"{title}  (K = {K})", fontsize=10.5, loc="left", pad=32 if kind == "addback" else 20)
         ax.grid(True, which="major", color=GRID, linewidth=0.8)
         ax.set_axisbelow(True)
         for sp in ("top", "right"):
@@ -105,6 +116,17 @@ def main():
                          "ytick.color": INK2, "axes.titlecolor": INK})
     plot("addback", summ)
     plot("deletion", summ)
+    ks = (1, 5, 10, 15)
+    L = ["# Random-order experts needed to match greedy's / the oracle's first k (Phase-3/4 add-back, validation)", "",
+         "k_rand(k) = smallest k' with r_random(k') >= r_greedy(k) (log-k interpolation); 'never' = not reached. Written by",
+         "scripts/ext8_plot_simple.py (Phase 6, P6-0).", "",
+         "| Task · model | K | greedy 1 | greedy 5 | greedy 10 | greedy 15 | oracle 1 | oracle 5 | oracle 10 | oracle 15 |",
+         "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for title, K, g, o in EQUIV:
+        L.append(f"| {title} | {K} | " + " | ".join(fmt_k(g[k]) if k in g else "–" for k in ks) + " | "
+                 + " | ".join(fmt_k(o[k]) if k in o else "–" for k in ks) + " |")
+    open(f"{R}/tables/ext8_random_equiv.md", "w").write("\n".join(L) + "\n")
+    print("written results/tables/ext8_random_equiv.md")
 
 
 if __name__ == "__main__":

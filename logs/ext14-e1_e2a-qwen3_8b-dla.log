@@ -1,0 +1,12 @@
+2026-10-17T08:39:33Z START ext14-e1_e2a-qwen3_8b-dla (waited 3871s): python scripts/ext7_wino_dla.py --model qwen3_8b --pairs data/dial/pairs_e1_e2a_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_8b.json --out p6_e1_e2a_qwen3_8b --agent p6-data --families main --chunk 512
+08:39:34 qwen3_8b -> p6_e1_e2a_qwen3_8b: 404 directed cases, families ['main'], 1 prefill-only passes
+08:39:38   layer   0: load-wait 0.72s compute 0.45s  wf_rows=0
+08:39:40   layer   8: load-wait 0.25s compute 0.13s  wf_rows=0
+08:39:43   layer  16: load-wait 0.25s compute 0.13s  wf_rows=0
+08:39:46   layer  24: load-wait 0.25s compute 0.13s  wf_rows=0
+08:39:50   layer  32: load-wait 0.06s compute 0.13s  wf_rows=0
+08:39:51   layer  35: load-wait 0.26s compute 0.13s  wf_rows=0
+08:39:51   pass done: 808 prefill rows (T=20), 0 spawn rows, 13.9s
+08:39:52 pass 1/1: 14s; DLA total - drop: max |.| 0.376
+08:39:52 direct effect / drop: attention +0.658, MoE +0.344, embedding -0.000
+2026-10-17T08:39:55Z END   ext14-e1_e2a-qwen3_8b-dla rc=0 (22s)

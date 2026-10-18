@@ -1,0 +1,164 @@
+{
+ "sweep": {
+  "model": "qwen3_14b",
+  "repo": "Qwen/Qwen3-14B-Base",
+  "pairs": "data/dial/pairs_e1p_e2a_qwen3_14b.parquet",
+  "case_sets": "data/dial/case_sets_e1p_e2a_qwen3_14b.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 30000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+   ],
+   [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   [
+    38,
+    39
+   ]
+  ],
+  "metrics": true,
+  "agent": "p6-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen3_14b --pairs data/dial/pairs_e1p_e2a_qwen3_14b.parquet --case-sets data/dial/case_sets_e1p_e2a_qwen3_14b.json --out p6_e1p_e2a_qwen3_14b --agent p6-data --max-rows 30000",
+  "created_utc": "2026-10-17T11:28:15Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T11:29:20Z",
+  "pass_times_s": [
+   29.49093532562256,
+   19.342092037200928,
+   12.964455604553223
+  ],
+  "n_rows": 62464
+ },
+ "joint": {
+  "model": "qwen3_14b",
+  "repo": "Qwen/Qwen3-14B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    39
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_joint.py --model qwen3_14b --pairs data/dial/pairs_e1p_e2a_qwen3_14b.parquet --case-sets data/dial/case_sets_e1p_e2a_qwen3_14b.json --out p6_e1p_e2a_qwen3_14b --agent p6-data --families main --max-rows 22500",
+  "created_utc": "2026-10-17T11:29:24Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T11:29:41Z",
+  "pass_times_s": [
+   16.604156255722046
+  ],
+  "n_rows": 3072
+ },
+ "dla": {
+  "model": "qwen3_14b",
+  "repo": "Qwen/Qwen3-14B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_dla.py --model qwen3_14b --pairs data/dial/pairs_e1p_e2a_qwen3_14b.parquet --case-sets data/dial/case_sets_e1p_e2a_qwen3_14b.json --out p6_e1p_e2a_qwen3_14b --agent p6-data --families main --chunk 384",
+  "created_utc": "2026-10-17T11:29:46Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T11:30:05Z",
+  "pass_times_s": [
+   11.844917058944702,
+   4.652636766433716
+  ]
+ },
+ "direct_split": {
+  "model": "qwen3_14b",
+  "pairs": "data/dial/pairs_e1p_e2a_qwen3_14b.parquet",
+  "case_sets": "data/dial/case_sets_e1p_e2a_qwen3_14b.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 12.414385557174683,
+  "command": "python -m moetrace.ext7_controls direct --model qwen3_14b --pairs data/dial/pairs_e1p_e2a_qwen3_14b.parquet --case-sets data/dial/case_sets_e1p_e2a_qwen3_14b.json --out p6_e1p_e2a_qwen3_14b --splits discovery,validation",
+  "completed_utc": "2026-10-17T11:30:20Z"
+ }
+}

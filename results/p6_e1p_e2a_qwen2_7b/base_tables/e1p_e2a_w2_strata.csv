@@ -1,0 +1,23 @@
+Model,Stratum,Value,Pairs,Mean drop,MoE at L*_MoE / drop,Attention at L*_attn / drop,Attention share
+qwen2_7b,person-name options,True,96,6.64,"0.307 [0.276, 0.338]","0.279 [0.241, 0.320]","0.31 [0.29, 0.33]"
+qwen2_7b,person-name options,False,160,5.31,"0.235 [0.220, 0.249]","0.226 [0.191, 0.262]","0.38 [0.36, 0.39]"
+qwen2_7b,statement order 1 (entity of A mentioned first),True,128,5.85,"0.269 [0.246, 0.294]","0.258 [0.217, 0.300]","0.35 [0.33, 0.37]"
+qwen2_7b,statement order 1 (entity of A mentioned first),False,128,5.76,"0.263 [0.241, 0.287]","0.238 [0.206, 0.271]","0.35 [0.33, 0.37]"
+qwen2_7b,core-776 twin,True,114,5.64,"0.276 [0.251, 0.304]","0.202 [0.161, 0.244]","0.36 [0.33, 0.38]"
+qwen2_7b,core-776 twin,False,142,5.94,"0.258 [0.237, 0.278]","0.284 [0.250, 0.320]","0.34 [0.33, 0.36]"
+qwen2_7b,degree adverb in the blank clause (too / very / more ...),True,108,5.98,"0.271 [0.251, 0.292]","0.200 [0.154, 0.246]","0.36 [0.34, 0.38]"
+qwen2_7b,degree adverb in the blank clause (too / very / more ...),False,148,5.68,"0.262 [0.237, 0.287]","0.286 [0.255, 0.318]","0.34 [0.32, 0.36]"
+qwen2_7b,complementary antonym pair,True,0,,,,
+qwen2_7b,complementary antonym pair,False,256,5.81,"0.266 [0.250, 0.282]","0.249 [0.223, 0.276]","0.35 [0.34, 0.36]"
+qwen2_7b,item built in both tokenizer families,True,174,5.57,"0.265 [0.246, 0.285]","0.226 [0.193, 0.261]","0.35 [0.34, 0.37]"
+qwen2_7b,item built in both tokenizer families,False,82,6.31,"0.267 [0.236, 0.298]","0.291 [0.249, 0.334]","0.34 [0.32, 0.37]"
+qwen2_7b,probe-neutral (both triggers |probe| < 1),True,256,5.81,"0.266 [0.250, 0.282]","0.249 [0.223, 0.276]","0.35 [0.34, 0.36]"
+qwen2_7b,probe-neutral (both triggers |probe| < 1),False,0,,,,
+qwen2_7b,probe-associative,True,0,,,,
+qwen2_7b,probe-associative,False,256,5.81,"0.266 [0.250, 0.282]","0.249 [0.223, 0.276]","0.35 [0.34, 0.36]"
+qwen2_7b,probe one-sided,True,0,,,,
+qwen2_7b,probe one-sided,False,256,5.81,"0.266 [0.250, 0.282]","0.249 [0.223, 0.276]","0.35 [0.34, 0.36]"
+qwen2_7b,probe reverse,True,0,,,,
+qwen2_7b,probe reverse,False,256,5.81,"0.266 [0.250, 0.282]","0.249 [0.223, 0.276]","0.35 [0.34, 0.36]"
+qwen2_7b,top-1 in both directions,True,18,5.88,"0.223 [0.190, 0.259]","0.291 [0.171, 0.404]","0.38 [0.34, 0.41]"
+qwen2_7b,top-1 in both directions,False,238,5.80,"0.269 [0.252, 0.287]","0.245 [0.219, 0.274]","0.35 [0.33, 0.36]"

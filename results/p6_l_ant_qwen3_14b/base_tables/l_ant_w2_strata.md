@@ -1,0 +1,20 @@
+**l_ant W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| qwen3_14b | person-name options | True | 0 |  |  |  |  |
+| qwen3_14b | person-name options | False | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | statement order 1 (entity of A mentioned first) | True | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | statement order 1 (entity of A mentioned first) | False | 0 |  |  |  |  |
+| qwen3_14b | item built in both tokenizer families | True | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | item built in both tokenizer families | False | 0 |  |  |  |  |
+| qwen3_14b | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| qwen3_14b | probe-neutral (both triggers |probe| < 1) | False | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | probe-associative | True | 0 |  |  |  |  |
+| qwen3_14b | probe-associative | False | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | probe one-sided | True | 0 |  |  |  |  |
+| qwen3_14b | probe one-sided | False | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | probe reverse | True | 0 |  |  |  |  |
+| qwen3_14b | probe reverse | False | 252 | 8.29 | 0.103 [0.093, 0.114] | 0.464 [0.439, 0.492] | 0.59 [0.58, 0.61] |
+| qwen3_14b | top-1 in both directions | True | 120 | 9.77 | 0.092 [0.079, 0.106] | 0.408 [0.373, 0.443] | 0.61 [0.59, 0.63] |
+| qwen3_14b | top-1 in both directions | False | 132 | 6.95 | 0.117 [0.101, 0.135] | 0.537 [0.498, 0.581] | 0.58 [0.55, 0.59] |

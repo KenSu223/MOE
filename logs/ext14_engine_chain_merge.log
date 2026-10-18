@@ -1,0 +1,49 @@
+2026-10-16T19:54:03Z START p6eng-merge (waited 642s): bash scripts/ext14_engine_merge.sh
+2026-10-16T19:54:03Z merged: arch.py=d929a3bb weights.py=537793c6 models.py=e14bd219 engine.py=572a24bb 
+2026-10-16T20:01:50Z regression main in /home/ubuntu/MOE: rc 0 0 0 0 ok=1
+2026-10-16T20:01:50Z regression identical in the main tree
+2026-10-16T20:04:50Z official tiny + OLMoE verification ok=1
+2026-10-16T20:04:50Z END   p6eng-merge rc=0 (647s)
+2026-10-16T20:04:50Z merge job rc=0
+  rescue corr 0.99606, spawn max |dDelta| 0.469
+  prefill max |dDelta| 0.344
+PASS
+  rescue corr 1.00000, spawn max |dDelta| 2.18e-06
+  prefill max |dDelta| 2.26e-06
+  layer 1: update relerr max 2.95e-07
+  layer 2: update relerr max 2.8e-07
+  layer 3: update relerr max 2.85e-07
+  clean Delta > 0 in 0.25 of the units, mean drop -0.19
+PASS
+  rescue corr 1.00000, spawn max |dDelta| 2.68e-06
+  prefill max |dDelta| 1.73e-06
+  layer 1: update relerr max 3.21e-07
+  layer 2: update relerr max 2.76e-07
+  layer 3: update relerr max 2.85e-07
+  clean Delta > 0 in 0.50 of the units, mean drop 0.44
+PASS
+  rescue corr 1.00000, spawn max |dDelta| 3.22e-06
+  prefill max |dDelta| 3.46e-06
+  layer 1: update relerr max 3.26e-07
+  layer 2: update relerr max 3.02e-07
+  layer 3: update relerr max 3.04e-07
+  clean Delta > 0 in 0.50 of the units, mean drop -0.02
+PASS
+  rescue corr 1.00000, spawn max |dDelta| 4.17e-06
+  prefill max |dDelta| 5.42e-06
+  layer 1: update relerr max 3.46e-07, routing 1.000
+  layer 2: update relerr max 2.94e-07, routing 1.000
+  layer 3: update relerr max 2.89e-07, routing 1.000
+  clean Delta > 0 in 0.75 of the units, mean drop 0.22
+PASS
+2026-10-16T20:29:20Z START p6eng-verify-mistral7b (waited 1470s): bash -c cd /home/ubuntu/MOE && python scripts/ext14_engine_verify.py --model mistral7b --units 6 > logs/ext14_engine_verify_mistral7b.log 2>&1 && python scripts/ext14_engine_verify.py --model mistral7b --units 3 --per-layer 1,16,31 >> logs/ext14_engine_verify_mistral7b.log 2>&1
+2026-10-16T20:31:01Z END   p6eng-verify-mistral7b rc=0 (101s)
+2026-10-16T20:31:01Z mistral7b verify rc=0 gate=0
+  rescue corr 0.99960, spawn max |dDelta| 0.188
+  prefill max |dDelta| 0.0625
+  layer 1: update relerr max 0.00052
+  layer 16: update relerr max 0.00953
+  layer 31: update relerr max 0.00389
+  sanity 5/5 answers in the top 5: Paris#4, Paris#1, oxygen#1, cold#1, Thursday#1
+  clean Delta > 0 in 1.00 of the units, mean drop 6.46
+PASS

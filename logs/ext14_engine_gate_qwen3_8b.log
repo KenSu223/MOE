@@ -1,0 +1,8 @@
+  rescue corr 0.99023, spawn max |dDelta| 0.375
+  prefill max |dDelta| 0.25
+  layer 1: update relerr max 0.00695
+  layer 18: update relerr max 0.0179
+  layer 35: update relerr max 0.00382
+  sanity 5/5 answers in the top 5: Paris#1, Paris#1, oxygen#1, cold#1, Thursday#1
+  clean Delta > 0 in 1.00 of the units, mean drop 4.75
+PASS

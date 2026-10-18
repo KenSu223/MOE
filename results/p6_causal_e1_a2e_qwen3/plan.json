@@ -1,0 +1,371 @@
+{
+ "cell": "e1_a2e",
+ "proto": "qwen3",
+ "heads": {
+  "top3": [
+   [
+    42,
+    10
+   ],
+   [
+    39,
+    27
+   ],
+   [
+    43,
+    24
+   ]
+  ],
+  "top3_disc_val": [
+   [
+    42,
+    10,
+    1.63525390625,
+    1.69873046875
+   ],
+   [
+    39,
+    27,
+    0.90625,
+    0.87744140625
+   ],
+   [
+    43,
+    24,
+    0.84130859375,
+    0.85546875
+   ]
+  ],
+  "layers_scanned": [
+   27,
+   39,
+   42,
+   43,
+   45
+  ],
+  "nH": 32,
+  "r0": [
+   [
+    42,
+    1
+   ],
+   [
+    39,
+    20
+   ],
+   [
+    43,
+    8
+   ]
+  ],
+  "r1": [
+   [
+    42,
+    25
+   ],
+   [
+    39,
+    0
+   ],
+   [
+    43,
+    28
+   ]
+  ],
+  "r2": [
+   [
+    42,
+    8
+   ],
+   [
+    39,
+    5
+   ],
+   [
+    43,
+    6
+   ]
+  ]
+ },
+ "experts": {
+  "top3": [
+   [
+    37,
+    32
+   ],
+   [
+    44,
+    116
+   ],
+   [
+    43,
+    70
+   ]
+  ],
+  "pop_top10": [
+   [
+    37,
+    32,
+    0.2802734375
+   ],
+   [
+    44,
+    116,
+    0.24072265625
+   ],
+   [
+    43,
+    70,
+    0.1025390625
+   ],
+   [
+    38,
+    118,
+    0.09814453125
+   ],
+   [
+    41,
+    62,
+    0.09326171875
+   ],
+   [
+    42,
+    30,
+    0.08984375
+   ],
+   [
+    42,
+    68,
+    0.08349609375
+   ],
+   [
+    42,
+    102,
+    0.0830078125
+   ],
+   [
+    37,
+    107,
+    0.08203125
+   ],
+   [
+    40,
+    105,
+    0.0546875
+   ]
+  ],
+  "source": "p6_e1_a2e_qwen3_t2",
+  "freq_top3": [
+   0.95703125,
+   0.779296875,
+   0.3203125
+  ],
+  "r0": [
+   [
+    37,
+    29
+   ],
+   [
+    44,
+    22
+   ],
+   [
+    43,
+    97
+   ]
+  ],
+  "freq_r0": [
+   0.720703125,
+   0.75,
+   0.30078125
+  ],
+  "r1": [
+   [
+    37,
+    26
+   ],
+   [
+    44,
+    20
+   ],
+   [
+    43,
+    97
+   ]
+  ],
+  "freq_r1": [
+   0.8203125,
+   0.705078125,
+   0.30078125
+  ],
+  "r2": [
+   [
+    37,
+    66
+   ],
+   [
+    44,
+    20
+   ],
+   [
+    43,
+    97
+   ]
+  ],
+  "freq_r2": [
+   0.8515625,
+   0.705078125,
+   0.30078125
+  ]
+ },
+ "masks": {
+  "none": {},
+  "heads_top3": {
+   "head_mask": [
+    [
+     42,
+     10
+    ],
+    [
+     39,
+     27
+    ],
+    [
+     43,
+     24
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_top3": {
+   "route_mask": [
+    [
+     37,
+     32
+    ],
+    [
+     44,
+     116
+    ],
+    [
+     43,
+     70
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r0": {
+   "head_mask": [
+    [
+     42,
+     1
+    ],
+    [
+     39,
+     20
+    ],
+    [
+     43,
+     8
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r0": {
+   "route_mask": [
+    [
+     37,
+     29
+    ],
+    [
+     44,
+     22
+    ],
+    [
+     43,
+     97
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r1": {
+   "head_mask": [
+    [
+     42,
+     25
+    ],
+    [
+     39,
+     0
+    ],
+    [
+     43,
+     28
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r1": {
+   "route_mask": [
+    [
+     37,
+     26
+    ],
+    [
+     44,
+     20
+    ],
+    [
+     43,
+     97
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r2": {
+   "head_mask": [
+    [
+     42,
+     8
+    ],
+    [
+     39,
+     5
+    ],
+    [
+     43,
+     6
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r2": {
+   "route_mask": [
+    [
+     37,
+     66
+    ],
+    [
+     44,
+     20
+    ],
+    [
+     43,
+     97
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  }
+ },
+ "splits": "validation",
+ "created_utc": "2026-10-17T02:14:33Z",
+ "note": "heads ranked by discovery single-head rescue (tier-1 W5 layers); experts by discovery all-case single-expert rescue; random heads: same layers, excluding the top-10 heads; random experts: same layer, nearest final-position routing frequency (4 candidates), excluding the population top-10"
+}

@@ -1,0 +1,13 @@
+09:53:20 mistral7b -> p6_l_prop_mistral7b_bos: 502 directed cases (251 pairs), families {'main': {'discovery': 246, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 2 passes (48192 spawn rows), T max 16
+09:53:21 pass 1/2: layers 0..25, 1004 prefill rows, 39156 spawn rows
+09:53:23   layer   0: load-wait 0.60s compute 0.44s  wf_rows=1506
+09:53:25   layer   8: load-wait 0.04s compute 0.26s  wf_rows=13554
+09:53:28   layer  16: load-wait 0.03s compute 0.38s  wf_rows=25602
+09:53:31   layer  24: load-wait 0.03s compute 0.51s  wf_rows=37650
+09:53:35   layer  31: load-wait 0.03s compute 0.53s  wf_rows=39156
+09:53:36   pass done: 1004 prefill rows (T=16), 39156 spawn rows, 14.2s (metrics 0.4s)
+09:53:36 pass 2/2: layers 26..31, 1004 prefill rows, 9036 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+09:53:43 family main: layer disc L23; attn_layer disc L19; block disc L19
+09:53:43 Δclean +5.07 Δcorrupt -5.07 drop +10.14; {"layer_discovery_argmax": 23, "layer_discovery_max": 1.382, "layer_discovery_top5": [[23, 1.382], [20, 1.343], [22, 1.223], [21, 1.222], [24, 1.089]], "layer_validation_argmax": 20, "layer_validation_max": 1.377, "layer_validation_top5": [[20, 1.377], [24, 1.333], [22, 1.237], [21, 1.179], [23, 1.131]], "attn_layer_discovery_argmax": 19, "attn_layer_discovery_max": 1.586, "attn_layer_discovery_top5": [[19, 1.586], [18, 0.806], [15, 0.724], [21, 0.533], [31, 0.528]], "attn_layer_validation_argmax": 19, "attn_layer_validation_max": 1.641, "attn_layer_validation_top5": [[19, 1.641], [15, 0.703],

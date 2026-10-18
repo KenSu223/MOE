@@ -1,0 +1,358 @@
+<title>WinoGrande Phase 6 Brief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, same system as the Phase 3/4/5 briefs; figure plates on white in both themes. */
+:root {
+  --bg: #f4f6f8; --surface: #ffffff; --fg: #19202b; --muted: #586273; --line: #d7dce3;
+  --accent: #1d5c86; --accent-soft: #e2ecf4; --swap: #c2410c; --plate: #ffffff;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #10141a; --surface: #171d25; --fg: #e4e8ee; --muted: #9aa5b4; --line: #2a333f;
+    --accent: #84b6dc; --accent-soft: #1b2a37; --swap: #fb923c; --plate: #ffffff; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #10141a; --surface: #171d25; --fg: #e4e8ee; --muted: #9aa5b4; --line: #2a333f;
+  --accent: #84b6dc; --accent-soft: #1b2a37; --swap: #fb923c; --plate: #ffffff; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px; }
+main { max-width: 1000px; margin-inline: auto; display: grid; gap: 8px; }
+.col { max-width: 70ch; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 700; }
+h2 { font-size: 1.3rem; font-weight: 700; }
+h3 { font-size: 1.02rem; font-weight: 600; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+header { padding-block: 40px 20px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+section { padding-block: 28px 12px; display: grid; gap: 14px; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+.ex { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.8; white-space: pre; }
+.ex b { color: var(--swap); font-weight: 500; }
+.ex .lab { color: var(--muted); }
+.plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px; }
+.plates figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.plates figcaption { font-family: var(--font-display); font-size: 0.86rem; font-weight: 600; color: var(--muted); }
+.plate { background: var(--plate); border: 1px solid var(--line); border-radius: 6px; padding: 10px; }
+.plate button { all: unset; cursor: zoom-in; display: block; width: 100%; }
+.plate img { display: block; width: 100%; height: auto; max-width: 100%; }
+.legend { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 0; max-width: 840px; }
+.legend dt { font-family: var(--font-mono); font-size: 0.82rem; white-space: nowrap; padding-top: 3px; }
+.legend dd { margin: 0; min-width: 0; }
+.sw { display: inline-block; width: 0.85em; height: 0.85em; border-radius: 2px; margin-right: 6px; vertical-align: -0.08em; }
+.line { display: inline-block; width: 1.4em; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: 0.25em; }
+.dash { display: inline-block; width: 1.4em; border-top: 2px dashed #52514e; margin-right: 6px; vertical-align: 0.3em; }
+.key { background: var(--accent-soft); border-radius: 6px; padding: 12px 16px; max-width: 840px; display: grid; gap: 6px; }
+.key strong { color: var(--accent); }
+.glance { display: grid; gap: 10px; max-width: 880px; }
+.glance div { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr); gap: 4px 16px; padding-block: 8px; border-bottom: 1px solid var(--line); }
+.glance div:last-child { border-bottom: 0; }
+.glance .q { font-family: var(--font-display); font-weight: 600; font-size: 0.92rem; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); max-width: 100%; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; color: var(--muted); background: var(--accent-soft); white-space: nowrap; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+td.n { font-family: var(--font-mono); font-size: 0.84rem; }
+td code { white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.note { font-size: 0.9rem; color: var(--muted); max-width: 840px; }
+#lightbox { position: fixed; inset: 0; background: rgba(8, 11, 15, 0.88); z-index: 10; overflow: auto; padding: 24px; cursor: zoom-out; }
+#lightbox img { display: block; max-width: none; margin: auto; background: #ffffff; }
+#lightbox .close { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 16px; font-family: var(--font-mono);
+  font-size: 0.85rem; color: #ffffff; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .legend { grid-template-columns: 1fr; gap: 2px; } .legend dd { margin-bottom: 8px; }
+  .glance div { grid-template-columns: 1fr; }
+}
+</style>
+
+<main>
+<header>
+  <span class="eyebrow">Expert-aware causal tracing in MoE LMs · 8 models · bf16 (Qwen2 pair fp32) · Phase 6, before the 8x22B gate</span>
+  <h1>WinoGrande Phase 6 Brief</h1>
+  <p class="col">Follow-up to the <a href="https://claude.ai/artifact/JQ9nWn4wno8CuJ8Gte3qZw">Phase 5 brief</a>.</p>
+  <p class="col">You asked for the following, and this brief answers each in turn:</p>
+  <ul class="col">
+    <li>one principled dial, turned on the same WinoGrande items, with the expected result written down before the experiment;</li>
+    <li>different tasks graded in advance;</li>
+    <li>dense counterparts and bigger models in the same family;</li>
+    <li>circuits down to experts and neurons.</li>
+  </ul>
+  <p class="col">We fixed 45 predictions in a commit before any GPU run.</p>
+</header>
+
+<section>
+  <h2>Answers at a glance</h2>
+  <div class="glance">
+    <div><span class="q">What moves the attention / FFN split on the same items?</span><span>Mainly the answer type. When the answer is an entity, attention does most of the repair; when it is an attribute, the FFN / experts do. Stating the attribute next to its entity moves the attribute answers toward attention in 7 of 8 models. Qwen3-30B-A3B ignores the statement.</span></div>
+    <div><span class="q">Dense vs MoE?</span><span>No difference at matched architecture. Mistral-7B and Mixtral-8x7B agree within ±0.10 on all 10 tasks; Qwen2-7B and Qwen2-57B agree on 6 of 7.</span></div>
+    <div><span class="q">More capacity?</span><span>The dense Qwen3 series is flat from 4B to 14B. Qwen3-30B-A3B departs in both directions, but that is not a size trend. Mixtral-8x22B waits for your go.</span></div>
+    <div><span class="q">Graded tasks, predicted in advance?</span><span>The top of the predicted order held: IOI, induction and explicit binding look-up are the most attention-heavy. The bottom failed: antonyms sit near 0.5, not near 0.2.</span></div>
+    <div><span class="q">Associativity as a dial?</span><span>Weak: the spread is 0.10. When a statement contradicts the prior, the experts write the prior answer and attention overrides it.</span></div>
+    <div><span class="q">Experts down to neurons?</span><span>1–4 neurons per prompt carry 80 % of an expert's effect, but different neurons for different prompts. Mixtral's experts are Mistral-7B's MLP, neuron for neuron.</span></div>
+    <div><span class="q">The ICML paper (neuron circuits, RelP) on MoE?</span><span>It ports and works. At the final token it adds little to what we have; its value is at earlier positions. For expert + head circuits it is not needed.</span></div>
+    <div><span class="q">Concept circuits of experts + heads?</span><span>In both models, the concept circuits hurt their own tasks much more than other tasks. Experts are more concept-specific than heads in 3 of 6 cases; in the country circuits, the heads are more specific than the experts.</span></div>
+    <div><span class="q">Is the same-instance dial new?</span><span>As far as our literature scan found, yes. Context-vs-memory contrasts exist for dense models, but not a 3+ level dial on the same items with an attention / FFN split, and nothing in MoE.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>1 · Setup</h2>
+  <p class="col">The readout is the same as in Phase 5: attention's share of the repair at the last token.</p>
+  <ul class="col">
+    <li>Patch every attention output, then every MoE (or MLP) output, layer by layer.</li>
+    <li>Compare the total positive repair of the two: 1 means all attention, 0 means all FFN.</li>
+    <li>The corrupted prompt is always the twin, so exactly one word differs.</li>
+  </ul>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Model</th><th>Type</th><th>Twin / series</th><th class="n">Analysed cells</th></tr></thead>
+      <tbody>
+        <tr><td>Qwen3-30B-A3B</td><td>MoE, 128 experts, top-8</td><td>Qwen3 series anchor</td><td class="n">21</td></tr>
+        <tr><td>Qwen3-4B / 8B / 14B</td><td>dense</td><td>Qwen3 series</td><td class="n">13 · 12 · 13</td></tr>
+        <tr><td>Mixtral-8x7B</td><td>MoE, 8 experts, top-2</td><td>child of Mistral-7B</td><td class="n">14</td></tr>
+        <tr><td>Mistral-7B</td><td>dense</td><td>parent of Mixtral</td><td class="n">12</td></tr>
+        <tr><td>Qwen2-57B-A14B</td><td>MoE, 64 + 1 shared expert, fp32</td><td>child of Qwen2-7B</td><td class="n">9</td></tr>
+        <tr><td>Qwen2-7B</td><td>dense, fp32</td><td>parent of Qwen2-57B</td><td class="n">12</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>The dial: one WinoGrande twin, different evidence</h3>
+  <p class="col">Only the evidence changes. The question, the swapped word and the format stay fixed.</p>
+<div class="ex"><span class="lab">E1 stated</span>     The jug was empty and the pot was full.  Fill in the blank: The _ was <b>empty</b>.  Answer: the → " jug"
+<span class="lab">E1p paraphrase</span> The jug was drained and the pot was filled. …                              → " jug"
+<span class="lab">E2 negation</span>    The jug was not full and the pot was not empty. …                            → " jug"
+<span class="lab">E3 event</span>       The restaurant worker poured water from the jug into the pot. …              → " jug"
+
+<span class="lab">entity → attribute, same levels</span>  … , so the <b>jug</b> was → " empty"</div>
+  <ul class="col">
+    <li><strong>Filters as in Phase 5:</strong> single-token answers; one swapped token; correct both ways by ≥ 1 logit; both orders of the two statements must pass.</li>
+    <li><strong>Pilots before any patching:</strong> our first format (<code>…, so the _ was empty</code>) gave chance-level answers in both models. A one-line layout change fixed it, and the format was chosen by a rule written before the pilot.</li>
+    <li><strong>Small cells:</strong> pooled (no held-out split) or behaviour only, by a fixed rule.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>2 · The answer type sets the split; stating the binding moves it</h2>
+  <div class="plate"><button type="button" data-zoom="figures/ext14syn_answer_type.png" aria-label="Enlarge the answer-type figure"><img src="figures/ext14syn_answer_type.png" alt="Per model, attention share for entity answers (blue, high) and attribute answers (orange, low), with arrows from the event level to the stated level; the orange arrows are long in seven models and short in Qwen3-30B-A3B" loading="lazy"></button></div>
+  <dl class="legend">
+    <dt><span class="sw" style="background:#2a78d6"></span>blue</dt><dd>Attribute → entity: the answer is an entity, e.g. " jug".</dd>
+    <dt><span class="sw" style="background:#eb6834"></span>orange</dt><dd>Entity → attribute: the answer is an attribute, e.g. " empty".</dd>
+    <dt>● → ◆</dt><dd>From the binding implied by the event (E3) to the binding stated outright (E1). Open markers are pooled cells.</dd>
+  </dl>
+  <div class="key"><strong>Takeaway.</strong>
+    <ul>
+      <li><strong>Entity answers are attention-heavy at every level</strong> (0.48–0.83). This holds even with no evidence at all (Qwen3: 0.73).</li>
+      <li><strong>Attribute answers are FFN-heavy when the attribute must be inferred</strong> (0.18–0.34).</li>
+      <li><strong>Stating the attribute moves attribute answers toward attention in 7 of 8 models.</strong>
+        <ul>
+          <li>Qwen3-4B 0.31 → 0.58, Qwen3-8B 0.28 → 0.55, Qwen3-14B 0.21 → 0.46.</li>
+          <li>Qwen2 twins 0.21 → 0.37–0.38, Mistral 0.31 → 0.49, Mixtral 0.34 → 0.50.</li>
+          <li>The direction gap roughly halves.</li>
+        </ul></li>
+      <li><strong>Qwen3-30B-A3B is the exception</strong> (0.18 → 0.22). Its gap stays at +0.59. Our best guess before the run was that the gap closes; for this model that guess failed.</li>
+      <li><strong>A paraphrase works as well as the exact words</strong> (E1p = E1 within 0.07). The binding matters, not copying the word. This also explains Phase 5's small copy effect: an "Options:" list makes the word available without binding it to an entity.</li>
+      <li><strong>Negation fails in every model.</strong> In the entity question the models choose the entity that sits next to the matching word. In the Qwen3 family that wrong answer wins 41–60 % of pairs. This level is reported as behaviour only.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>3 · Dense parent vs MoE child, and capacity</h2>
+  <div class="plate"><button type="button" data-zoom="figures/ext14_dense_arrows.png" aria-label="Enlarge dense versus MoE arrows"><img src="figures/ext14_dense_arrows.png" alt="Two panels; for every task the dense and MoE attention shares nearly coincide, with one larger shift for antonyms in Qwen2" loading="lazy"></button></div>
+  <ul class="col">
+    <li><strong>Mistral-7B → Mixtral-8x7B</strong>, identical prompts: every task within ±0.10 (MoE − dense −0.03 to +0.06). The order of the tasks is preserved (Spearman 0.98).</li>
+    <li><strong>Qwen2-7B → Qwen2-57B-A14B:</strong> 6 of 7 tasks within ±0.10; antonyms −0.11 (Spearman 0.89).</li>
+    <li><strong>The always-on shared expert carries most of Qwen2-57B's expert repair:</strong> 0.68–0.77 for entities and antonyms, about half for attributes (0.43–0.51).</li>
+    <li><strong>Mixtral is an upcycled Mistral.</strong> Every layer-20 expert matches Mistral-7B's layer-20 MLP neuron by neuron. The WinoGrande expert's top-10 neurons are 8 of Mistral's own top neurons.</li>
+  </ul>
+  <div class="plate"><button type="button" data-zoom="figures/ext14_capacity_qwen3.png" aria-label="Enlarge the Qwen3 capacity series"><img src="figures/ext14_capacity_qwen3.png" alt="Attention share per task for Qwen3-4B, 8B, 14B and 30B-A3B: flat across the dense models, with the MoE model higher on copy tasks and lower on attribute answers" loading="lazy"></button></div>
+  <div class="key"><strong>Takeaway.</strong>
+    <ul>
+      <li><strong>At matched architecture the split is a property of the task, not of dense vs sparse FFNs.</strong> We had written down three hypotheses: invariant (our best guess), "more FFN capacity takes work from attention", and "sparsity pushes work to attention". Only "invariant" held.</li>
+      <li><strong>The dense Qwen3 series is flat from 4B to 14B.</strong> Qwen3-30B-A3B is more attention-heavy on copy tasks (IOI 0.92 vs 0.73) and less on attribute answers. With no Qwen3 dense twin, that is a property of this model, not a capacity trend.</li>
+      <li><strong>Qwen2-57B must run in fp32.</strong> Its expert routers are nearly uniform, so bf16 rounding changes most routing decisions, even in the reference implementation. In bf16 the attention share would read 0.68 instead of 0.58.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>4 · Different tasks, graded in advance</h2>
+  <div class="plate"><button type="button" data-zoom="figures/ext14_ladder.png" aria-label="Enlarge the ladder"><img src="figures/ext14_ladder.png" alt="Per model, attention share against the pre-registered grade 1 to 5; copy tasks at the top, antonyms higher than predicted" loading="lazy"></button></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Grade</th><th>Task (example)</th><th class="n">Attention share, range over 8 models</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Antonym: "The opposite of hot is" → cold</td><td class="n">0.35–0.59</td></tr>
+        <tr><td>1.5</td><td>Object property: "The color of a banana is" → yellow</td><td class="n">0.33–0.42</td></tr>
+        <tr><td>2</td><td>WinoGrande entity → attribute (event)</td><td class="n">0.18–0.34</td></tr>
+        <tr><td>2</td><td>CounterFact</td><td class="n">0.41–0.58</td></tr>
+        <tr><td>3</td><td>WinoGrande attribute → entity (event)</td><td class="n">0.48–0.73</td></tr>
+        <tr><td>4</td><td>Binding look-up: "The red box contains the" → apple</td><td class="n">0.65–0.79</td></tr>
+        <tr><td>5</td><td>Induction: "dog: table · cup: river · dog:" → table</td><td class="n">0.67–0.77</td></tr>
+        <tr><td>5</td><td>IOI</td><td class="n">0.71–0.92</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="key"><strong>Takeaway.</strong> The copy and look-up tasks are at the top, as predicted. Antonyms are not at the bottom: the cue word sits right before the answer, so "the answer lives in the weights" does not mean a low attention share at the last token. Rank correlation with our grades is 0.55–0.87 (0.79–0.93 without antonyms).</div>
+</section>
+
+<section>
+  <h2>5 · Associativity, and statement vs event</h2>
+  <div class="table-wrap" style="max-width: 720px">
+    <table>
+      <thead><tr><th>Qwen3, attribute → entity, binding stated</th><th class="n">Attention share</th></tr></thead>
+      <tbody>
+        <tr><td>Statement conflicts with the prior ("The elephant was small and the mouse was big")</td><td class="n">0.83</td></tr>
+        <tr><td>Neutral pair</td><td class="n">0.81</td></tr>
+        <tr><td>Statement agrees with the prior</td><td class="n">0.79</td></tr>
+        <tr><td>No statement, prior only</td><td class="n">0.73</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="col">
+    <li><strong>Associativity is a weak dial.</strong> The spread is 0.10. In conflict items the experts push the prior answer (−0.30 of the drop) and attention overrides them.</li>
+    <li><strong>An explicit statement beats the event.</strong> Event sentence + a contradicting statement: models follow the statement in 57–100 % of decided items (Qwen3 0.94, Mixtral 0.76, Mistral 0.57).</li>
+    <li><strong>Mixtral had too few strong-prior items</strong> for this dial; it is reported as behaviour only.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6 · Circuits: experts, neurons, concepts</h2>
+  <div class="table-wrap" style="max-width: 760px">
+    <table>
+      <thead><tr><th>Expert (task)</th><th class="n">Neurons in the expert</th><th class="n">Neurons for 80 % of its effect, per prompt</th></tr></thead>
+      <tbody>
+        <tr><td>Qwen3 L44E069 (CounterFact)</td><td class="n">768</td><td class="n">2.1</td></tr>
+        <tr><td>Qwen3 L41E117 (WinoGrande attribute)</td><td class="n">768</td><td class="n">2.7</td></tr>
+        <tr><td>Qwen3 L37E032 (WinoGrande entity, indirect)</td><td class="n">768</td><td class="n">33 *</td></tr>
+        <tr><td>Mixtral L19E002 (CounterFact)</td><td class="n">14,336</td><td class="n">6.7</td></tr>
+        <tr><td>Mixtral L20E000 (WinoGrande attribute)</td><td class="n">14,336</td><td class="n">17</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The top neurons are different for every prompt: a fixed set covering all prompts needs 8 to several thousand. * Ranked by activation change × weight size; ranking by direct effect needs 511 for this indirect expert. Random order needs ~590 of 768 or ~10,300 of 14,336.</p>
+  <ul class="col">
+    <li><strong>The ICML method (RelP on neurons), ported to MoE</strong> with frozen routing, piloted on OLMoE and Mistral-7B. At the last token it ranks neurons about as well as our forward scores.
+      <ul>
+        <li>On factual recall, three quarters of the neuron effect sits at the subject and relation positions. A last-token-only circuit gets 0.23–0.50 of the drop.</li>
+        <li>That is where the method helps. It is not needed for expert + head circuits.</li>
+      </ul></li>
+    <li><strong>Concept circuits.</strong> Each circuit is the set of heads and experts shared by two or more tasks of one concept. Knocking it out removes, from its own tasks vs other tasks:
+      <div class="table-wrap" style="max-width: 640px; margin-block: 6px">
+        <table>
+          <thead><tr><th>Concept</th><th class="n">Qwen3 (own / other)</th><th class="n">Mixtral (own / other)</th></tr></thead>
+          <tbody>
+            <tr><td>Size / state</td><td class="n">0.43 / 0.09</td><td class="n">0.32 / 0.11</td></tr>
+            <tr><td>Country</td><td class="n">0.70 / 0.16</td><td class="n">0.69 / 0.25</td></tr>
+            <tr><td>Person role</td><td class="n">0.21 / 0.04</td><td class="n">0.39 / 0.02</td></tr>
+          </tbody>
+        </table>
+      </div>
+      The country circuits leak most into other tasks: they overlap with the general factual-recall machinery.</li>
+    <li><strong>Experts vs heads:</strong> experts are more concept-specific in 3 of 6 cases: size / state in both models (Qwen3 0.98 vs 0.56, Mixtral 0.93 vs 0.69) and person role in Qwen3. In the country circuits the heads are more specific.</li>
+  </ul>
+  <div class="plate"><button type="button" data-zoom="figures/ext14_t2_ab_e1_a2e_addback.png" aria-label="Enlarge add-back curves with random-equivalent marks"><img src="figures/ext14_t2_ab_e1_a2e_addback.png" alt="Add-back curves for the stated entity question: greedy, oracle and random order, with dotted marks showing how many random experts match greedy's first k" loading="lazy"></button></div>
+  <p class="note">Add-back figures now mark how many random experts match greedy's first 1 / 5 / 10 / 15 ("never" when greedy is above the all-expert line). This is the same in the Phase-3/4/5 figures, and the Phase 5 page is updated.</p>
+</section>
+
+<section>
+  <h2>7 · How our predictions did</h2>
+  <div class="table-wrap" style="max-width: 640px">
+    <table>
+      <thead><tr><th>Outcome (45 predictions)</th><th class="n">Count</th></tr></thead>
+      <tbody>
+        <tr><td>Held</td><td class="n">21</td></tr>
+        <tr><td>Held partly</td><td class="n">1</td></tr>
+        <tr><td>Failed</td><td class="n">15</td></tr>
+        <tr><td>Not testable (pooled or behaviour-only cells)</td><td class="n">8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="col">
+    <li><strong>Failures that taught us something:</strong>
+      <ul>
+        <li>antonyms are not FFN-only;</li>
+        <li>in Qwen3-30B-A3B, stating the binding does not move attribute answers;</li>
+        <li>finding an entity is attention-heavy even with no evidence (0.73, not ≤ 0.35);</li>
+        <li>neither capacity nor sparsity moved the twins;</li>
+        <li>the ladder's rank correlation reached 0.8 in only 3 of 8 models;</li>
+        <li>where attention does little (attribute answers), knocking out the top heads or experts falls just short of the 20 % bar.</li>
+      </ul></li>
+    <li><strong>Held:</strong>
+      <ul>
+        <li>the copy / look-up top of the ladder;</li>
+        <li>event-level shares as in Phase 5;</li>
+        <li>dense = MoE for both twins;</li>
+        <li>a flat dense Qwen3 series;</li>
+        <li>the shared expert carrying most of Qwen2-57B's expert repair;</li>
+        <li>metric invariance;</li>
+        <li>expert knockouts on the entity question;</li>
+        <li>moving the swap into the evidence leaves the share unchanged;</li>
+        <li>neuron counts;</li>
+        <li>statements beating events in 8 of 9 models.</li>
+      </ul></li>
+  </ul>
+</section>
+
+<section>
+  <h2>8 · Checks and lessons</h2>
+  <ul class="col">
+    <li><strong>Metric:</strong> the ranking of tasks is the same under logit difference, normalised logit difference and probability (Spearman ≥ 0.97).</li>
+    <li><strong>Causal handle:</strong> on the stated entity question, knocking out the top-3 heads or experts lowers the attention or expert repair by 21–31 % more than matched random ones (12–19 % on attribute answers). The share itself moves only 0.02–0.07, so the split is spread over many components.</li>
+    <li><strong>Corruption site:</strong> swapping the evidence instead of the question changes the share by only 0.03–0.05.</li>
+    <li><strong>Format matters more than expected:</strong> one format change took a base model from chance to 99 % on the same facts. Every new format now gets a behaviour pilot with a fixed decision rule first.</li>
+    <li><strong>Cutting sentences is risky:</strong> one builder left "… because the one on." Every prompt is now checked by reassembling the original sentence.</li>
+    <li><strong>Check precision per model:</strong> the bf16 routing of a flat-router MoE can be noise.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>9 · Open, and what we need from you</h2>
+  <ul class="col">
+    <li><strong>Mixtral-8x22B</strong> (bigger Mixtral, same family). Proposed: the ladder plus the stated / event levels, about 14 GPU hours. Your call.</li>
+    <li><strong>A gradient engine for the 30B / 47B models</strong> (needed for neuron circuits at all positions). Our recommendation: not now.</li>
+    <li><strong>Caveats:</strong>
+      <ul>
+        <li>Mistral-7B and the twin comparisons of the stated level use all association strata (the neutral sets were too small).</li>
+        <li>Several Mixtral / Mistral cells are pooled.</li>
+        <li>The associativity dial is Qwen3-only.</li>
+        <li>All readouts are at the last token.</li>
+      </ul></li>
+  </ul>
+  <p class="note">Full results: <code>results/sections/ext14_synthesis.md</code> and Directions 14–14e of <code>results/EXTENSIONS_REPORT.md</code>; predictions in <code>data/dial/preregistration.md</code>.</p>
+</section>
+</main>
+
+<div id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Enlarged figure">
+  <button type="button" class="close" id="lb-close">Close (Esc)</button>
+  <img id="lb-img" alt="">
+</div>
+<script>
+(function () {
+  var box = document.getElementById('lightbox'), img = document.getElementById('lb-img'), last = null;
+  function close() { box.hidden = true; img.removeAttribute('src'); if (last) last.focus(); }
+  document.querySelectorAll('[data-zoom]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var i = b.querySelector('img'); img.src = b.getAttribute('data-zoom'); img.alt = i ? i.alt : '';
+      box.hidden = false; last = b; document.getElementById('lb-close').focus();
+    });
+  });
+  box.addEventListener('click', close);
+  document.getElementById('lb-close').addEventListener('click', function (e) { e.stopPropagation(); close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+})();
+</script>

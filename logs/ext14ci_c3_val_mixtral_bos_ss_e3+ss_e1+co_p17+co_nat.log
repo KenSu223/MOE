@@ -1,0 +1,18 @@
+2026-10-17T17:27:35Z START p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat (waited 455s, low priority): bash -c for t in ss_e3 ss_e1 co_p17 co_nat ; do python scripts/ext14ci_c3_validate.py --proto mixtral_bos --tasks $t --max-rows 2048 --max-spawn 16000 || exit 1; done
+17:27:43 mixtral_bos: 3 circuits, 27 sets, tasks ['ss_e3']
+17:32:16 ss_e3: knockout 2688 rows (272s)
+17:33:48 ss_e3: add-back / edges 7584 spawns in 1 passes (92s)
+17:33:49 done
+17:34:03 mixtral_bos: 3 circuits, 27 sets, tasks ['ss_e1']
+17:35:38 ss_e1: knockout 2016 rows (95s)
+17:37:07 ss_e1: add-back / edges 5688 spawns in 1 passes (89s)
+17:37:07 done
+17:37:22 mixtral_bos: 3 circuits, 27 sets, tasks ['co_p17']
+17:41:10 co_p17: knockout 2688 rows (228s)
+17:42:41 co_p17: add-back / edges 14688 spawns in 1 passes (90s)
+17:42:41 done
+17:42:55 mixtral_bos: 3 circuits, 27 sets, tasks ['co_nat']
+17:46:48 co_nat: knockout 2688 rows (232s)
+17:48:11 co_nat: add-back / edges 14688 spawns in 1 passes (84s)
+17:48:12 done
+2026-10-17T17:48:18Z END   p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat rc=0 (1243s)

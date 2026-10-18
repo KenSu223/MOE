@@ -1,0 +1,46 @@
+{
+ "heads": {
+  "model": "mixtral",
+  "repo": "mistralai/Mixtral-8x7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "layers": [
+   13,
+   15,
+   16,
+   18,
+   19,
+   24
+  ],
+  "null_layer": null,
+  "n_heads": 32,
+  "n_cases": 384,
+  "chunks": [
+   [
+    13,
+    15
+   ],
+   [
+    16,
+    18
+   ],
+   [
+    19,
+    24
+   ]
+  ],
+  "mentions": "none (no mention columns, no WinoGrande text)",
+  "agent": "p6-circuit",
+  "command": "python scripts/ext7_wino_heads.py --model mixtral --pairs results/p6ci_c3_data/pairs_cfc_mixtral_bos.parquet --case-sets results/p6ci_c3_data/case_sets_cfc_mixtral_bos.json --out p6ci_c3_cfc_mixtral_bos --splits discovery --families main --layers 13,15,16,18,19,24 --max-rows 40000 --agent p6-circuit",
+  "created_utc": "2026-10-17T13:45:08Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T13:49:37Z",
+  "pass_times_s": [
+   94.48657250404358,
+   87.63054633140564,
+   84.4026153087616
+  ],
+  "n_rows": 80640
+ }
+}

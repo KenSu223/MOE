@@ -1,0 +1,15 @@
+2026-10-17T01:56:30Z START ext14-scan-qwen3_8b-probes (waited 466s): python scripts/ext14_scan.py qwen3_8b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+01:56:33 probes: 29600 rows, 3700 keys
+01:56:35   layer   0: load-wait 0.71s compute 1.36s  wf_rows=0
+01:56:44   layer   8: load-wait 0.06s compute 1.09s  wf_rows=0
+01:56:54   layer  16: load-wait 0.07s compute 1.09s  wf_rows=0
+01:57:03   layer  24: load-wait 0.08s compute 1.09s  wf_rows=0
+01:57:12   layer  32: load-wait 0.09s compute 1.09s  wf_rows=0
+01:57:16   layer  35: load-wait 0.07s compute 1.09s  wf_rows=0
+01:57:16   pass done: 8235 prefill rows (T=17), 0 spawn rows, 43.0s
+01:57:16   pass 1/5 (8235 rows, 43s)
+01:57:57   pass 2/5 (7368 rows, 41s)
+01:58:38   pass 3/5 (6363 rows, 41s)
+01:59:18   pass 4/5 (6086 rows, 41s)
+01:59:31   pass 5/5 (1548 rows, 12s)
+2026-10-17T01:59:32Z END   ext14-scan-qwen3_8b-probes rc=0 (182s)

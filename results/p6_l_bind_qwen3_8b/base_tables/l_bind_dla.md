@@ -1,0 +1,5 @@
+**l_bind W4 DLA: direct logit attribution of the final-position sublayer outputs (main family)**
+
+| Model | DLA attention / drop | DLA MoE / drop | Attention share of DLA | Top attention layers | Top MoE layers |
+|---|---|---|---|---|---|
+| qwen3_8b | 1.892 [1.808, 1.975] | -0.881 [-0.965, -0.798] | 1.87 [1.79, 1.95] | L33 +0.432, L31 +0.337, L32 +0.313 | L29 +0.144, L30 +0.142, L31 +0.101 |

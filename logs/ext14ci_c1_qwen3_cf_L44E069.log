@@ -1,0 +1,5 @@
+2026-10-16T22:24:20Z START p6ci-c1-qwen3_cf-L44E069 (waited 574s): python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L44E069 --max-spawn 30000
+22:24:35 patch qwen3_cf L44E069: 406 rows (105 cases), 55 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 400, 768]
+22:25:26 pass 1/1: 511 prefill, 22330 spawns, 50s
+22:25:26 patch done
+2026-10-16T22:25:32Z END   p6ci-c1-qwen3_cf-L44E069 rc=0 (72s)

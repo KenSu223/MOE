@@ -1,0 +1,6 @@
+**e1_a2e W4: all-MoE patch and direct-path split at the final position (/ drop; pair bootstrap)**
+
+| Model | Set | Pairs | All-MoE M denoise | All-MoE M noise | A_direct | M_direct | DLA share attention | DLA share MoE |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main_validation | 128 | -0.164 [-0.199, -0.131] | -0.166 [-0.203, -0.131] | 1.331 [1.295, 1.368] | -0.331 [-0.368, -0.295] | 1.327 [1.291, 1.364] | -0.327 [-0.364, -0.291] |
+| Qwen3-30B-A3B-Base | main_all | 256 | -0.135 [-0.160, -0.110] | -0.136 [-0.161, -0.110] | 1.300 [1.273, 1.328] | -0.300 [-0.328, -0.273] | 1.297 [1.270, 1.324] | -0.297 [-0.324, -0.270] |

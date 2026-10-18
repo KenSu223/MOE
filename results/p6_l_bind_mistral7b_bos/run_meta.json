@@ -1,0 +1,152 @@
+{
+ "sweep": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "pairs": "data/dial/pairs_l_bind_mistral7b_bos.parquet",
+  "case_sets": "data/dial/case_sets_l_bind_mistral7b_bos.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 40000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ]
+  ],
+  "metrics": true,
+  "agent": "p6-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_l_bind_mistral7b_bos.parquet --case-sets data/dial/case_sets_l_bind_mistral7b_bos.json --out p6_l_bind_mistral7b_bos --agent p6-data --max-rows 40000",
+  "created_utc": "2026-10-17T09:51:26Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T09:51:52Z",
+  "pass_times_s": [
+   16.6374933719635,
+   7.487162828445435
+  ],
+  "n_rows": 50176
+ },
+ "joint": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    31
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_l_bind_mistral7b_bos.parquet --case-sets data/dial/case_sets_l_bind_mistral7b_bos.json --out p6_l_bind_mistral7b_bos --agent p6-data --families main --max-rows 30000",
+  "created_utc": "2026-10-17T09:51:55Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T09:52:05Z",
+  "pass_times_s": [
+   9.300622463226318
+  ],
+  "n_rows": 3072
+ },
+ "dla": {
+  "model": "mistral7b",
+  "repo": "mistralai/Mistral-7B-v0.1",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_l_bind_mistral7b_bos.parquet --case-sets data/dial/case_sets_l_bind_mistral7b_bos.json --out p6_l_bind_mistral7b_bos --agent p6-data --families main --chunk 512",
+  "created_utc": "2026-10-17T09:52:08Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T09:52:18Z",
+  "pass_times_s": [
+   8.04788851737976
+  ]
+ },
+ "direct_split": {
+  "model": "mistral7b",
+  "pairs": "data/dial/pairs_l_bind_mistral7b_bos.parquet",
+  "case_sets": "data/dial/case_sets_l_bind_mistral7b_bos.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 7.367508411407471,
+  "command": "python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_l_bind_mistral7b_bos.parquet --case-sets data/dial/case_sets_l_bind_mistral7b_bos.json --out p6_l_bind_mistral7b_bos --splits discovery,validation",
+  "completed_utc": "2026-10-17T09:52:27Z"
+ }
+}

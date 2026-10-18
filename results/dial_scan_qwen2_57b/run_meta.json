@@ -1,0 +1,308 @@
+{
+ "scan_probes_core_": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "proto": "qwen2_57b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen2_57b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet",
+  "created_utc": "2026-10-17T07:09:17Z",
+  "complete": true,
+  "engine_protocol": {
+   "model_key": "qwen2_57b",
+   "dtype": "float32",
+   "router_fp32": false
+  },
+  "n_rows": 29600,
+  "n_keys": 3700,
+  "n_passes": 12,
+  "completed_utc": "2026-10-17T07:32:58Z"
+ },
+ "scan_cells_core_e1_a2e+e1_e2a+e3p3_a2e+e3_a2e+e3_e2a+e1p_a2e+e1p_e2a+e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e+l_ant+l_": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "proto": "qwen2_57b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen2_57b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi",
+  "created_utc": "2026-10-17T07:40:29Z",
+  "complete": true,
+  "engine_protocol": {
+   "model_key": "qwen2_57b",
+   "dtype": "float32",
+   "router_fp32": false
+  },
+  "cells": {
+   "e1_a2e": {
+    "pairs": 1178,
+    "margin": 910,
+    "reverse_margin": 0,
+    "margin_rate": 0.772,
+    "by_order": {
+     "1": 0.776,
+     "2": 0.769
+    },
+    "top1_both": 0.943,
+    "passes": 2
+   },
+   "e1_e2a": {
+    "pairs": 1178,
+    "margin": 580,
+    "reverse_margin": 5,
+    "margin_rate": 0.492,
+    "by_order": {
+     "1": 0.489,
+     "2": 0.496
+    },
+    "top1_both": 0.07,
+    "passes": 2
+   },
+   "e3p3_a2e": {
+    "pairs": 624,
+    "margin": 293,
+    "reverse_margin": 2,
+    "margin_rate": 0.47,
+    "by_order": {
+     "1": 0.474,
+     "2": 0.46
+    },
+    "top1_both": 0.505,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 643,
+    "margin": 330,
+    "reverse_margin": 0,
+    "margin_rate": 0.513,
+    "by_order": {
+     "1": 0.516,
+     "2": 0.509
+    },
+    "top1_both": 0.496,
+    "passes": 2
+   },
+   "e3_e2a": {
+    "pairs": 648,
+    "margin": 544,
+    "reverse_margin": 0,
+    "margin_rate": 0.84,
+    "by_order": {
+     "1": 0.856,
+     "2": 0.809
+    },
+    "top1_both": 0.222,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 970,
+    "margin": 503,
+    "reverse_margin": 0,
+    "margin_rate": 0.519,
+    "by_order": {
+     "1": 0.52,
+     "2": 0.518
+    },
+    "top1_both": 0.841,
+    "passes": 2
+   },
+   "e1p_e2a": {
+    "pairs": 970,
+    "margin": 515,
+    "reverse_margin": 1,
+    "margin_rate": 0.531,
+    "by_order": {
+     "1": 0.546,
+     "2": 0.515
+    },
+    "top1_both": 0.008,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 1178,
+    "margin": 3,
+    "reverse_margin": 98,
+    "margin_rate": 0.003,
+    "by_order": {
+     "1": 0.002,
+     "2": 0.003
+    },
+    "top1_both": 0.04,
+    "passes": 2
+   },
+   "e2_e2a": {
+    "pairs": 1178,
+    "margin": 89,
+    "reverse_margin": 7,
+    "margin_rate": 0.076,
+    "by_order": {
+     "1": 0.076,
+     "2": 0.075
+    },
+    "top1_both": 0.028,
+    "passes": 2
+   },
+   "sc_agree_a2e": {
+    "pairs": 1286,
+    "margin": 713,
+    "reverse_margin": 0,
+    "margin_rate": 0.554,
+    "by_order": {
+     "1": 0.574,
+     "2": 0.535
+    },
+    "top1_both": 0.802,
+    "passes": 3
+   },
+   "sc_conflict_a2e": {
+    "pairs": 1286,
+    "margin": 90,
+    "reverse_margin": 36,
+    "margin_rate": 0.07,
+    "by_order": {
+     "1": 0.075,
+     "2": 0.065
+    },
+    "top1_both": 0.274,
+    "passes": 3
+   },
+   "l_ant": {
+    "pairs": 630,
+    "margin": 567,
+    "reverse_margin": 8,
+    "margin_rate": 0.9,
+    "by_order": {
+     "1": 0.9
+    },
+    "top1_both": 0.348,
+    "passes": 1
+   },
+   "l_prop": {
+    "pairs": 845,
+    "margin": 676,
+    "reverse_margin": 0,
+    "margin_rate": 0.8,
+    "by_order": {
+     "1": 0.8
+    },
+    "top1_both": 0.314,
+    "passes": 1
+   },
+   "l_bind": {
+    "pairs": 3200,
+    "margin": 57,
+    "reverse_margin": 14,
+    "margin_rate": 0.018,
+    "by_order": {
+     "1": 0.022,
+     "2": 0.014
+    },
+    "top1_both": 0.136,
+    "passes": 3
+   },
+   "l_ind": {
+    "pairs": 1600,
+    "margin": 807,
+    "reverse_margin": 0,
+    "margin_rate": 0.504,
+    "by_order": {
+     "1": 0.516,
+     "2": 0.492
+    },
+    "top1_both": 0.814,
+    "passes": 2
+   },
+   "l_ioi": {
+    "pairs": 1600,
+    "margin": 1592,
+    "reverse_margin": 0,
+    "margin_rate": 0.995,
+    "by_order": {
+     "1": 0.993,
+     "2": 0.996
+    },
+    "top1_both": 0.682,
+    "passes": 2
+   }
+  },
+  "completed_utc": "2026-10-17T08:38:36Z"
+ },
+ "scan_cells_all_l_cf": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "proto": "qwen2_57b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen2_57b --part cells --subset all --cells l_cf",
+  "created_utc": "2026-10-17T09:41:22Z",
+  "complete": true,
+  "engine_protocol": {
+   "model_key": "qwen2_57b",
+   "dtype": "float32",
+   "router_fp32": false
+  },
+  "cells": {
+   "l_cf": {
+    "pairs": 217,
+    "margin": 202,
+    "reverse_margin": 0,
+    "margin_rate": 0.931,
+    "by_order": {
+     "1": 0.931
+    },
+    "top1_both": 0.253,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-17T09:43:42Z"
+ },
+ "scan_cells_ext_e1_e2a+e3p3_a2e": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "proto": "qwen2_57b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen2_57b --part cells --subset ext --cells e1_e2a,e3p3_a2e",
+  "created_utc": "2026-10-17T10:20:00Z",
+  "complete": true,
+  "engine_protocol": {
+   "model_key": "qwen2_57b",
+   "dtype": "float32",
+   "router_fp32": false
+  },
+  "cells": {
+   "e1_e2a": {
+    "pairs": 2400,
+    "margin": 845,
+    "reverse_margin": 16,
+    "margin_rate": 0.352,
+    "by_order": {
+     "1": 0.347,
+     "2": 0.358
+    },
+    "top1_both": 0.04,
+    "passes": 2
+   },
+   "e3p3_a2e": {
+    "pairs": 1200,
+    "margin": 361,
+    "reverse_margin": 8,
+    "margin_rate": 0.301,
+    "by_order": {
+     "1": 0.311,
+     "2": 0.269
+    },
+    "top1_both": 0.398,
+    "passes": 2
+   }
+  },
+  "completed_utc": "2026-10-17T10:28:27Z"
+ }
+}

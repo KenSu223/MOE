@@ -1,0 +1,7 @@
+Model,Family,Patched output,L* (disc.),Disc. mean,Validation rescue at L* [95% CI],Normalised,Discovery top 4
+mistral7b_bos,main,layer,L20,+0.68,"+0.678 [+0.615, +0.745]","0.156 [0.144, 0.168]","L20 +0.68, L21 +0.51, L18 +0.48, L26 +0.47"
+mistral7b_bos,main,attn_layer,L13,+0.70,"+0.697 [+0.636, +0.760]","0.160 [0.145, 0.176]","L13 +0.70, L19 +0.67, L15 +0.55, L25 +0.36"
+mistral7b_bos,main,block,L19,+1.05,"+1.054 [+0.979, +1.132]","0.243 [0.227, 0.258]","L19 +1.05, L20 +0.79, L15 +0.79, L25 +0.74"
+mistral7b_bos,main_interior,layer,L20,+0.68,"+0.678 [+0.615, +0.745]","0.156 [0.144, 0.168]","L20 +0.68, L21 +0.51, L18 +0.48, L26 +0.47"
+mistral7b_bos,main_interior,attn_layer,L13,+0.70,"+0.697 [+0.636, +0.760]","0.160 [0.145, 0.176]","L13 +0.70, L19 +0.67, L15 +0.55, L25 +0.36"
+mistral7b_bos,main_interior,block,L19,+1.05,"+1.054 [+0.979, +1.132]","0.243 [0.227, 0.258]","L19 +1.05, L20 +0.79, L15 +0.79, L25 +0.74"

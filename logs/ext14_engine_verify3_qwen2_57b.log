@@ -1,0 +1,48 @@
+02:18:50 qwen2_57b: qwen2_moe, 6 units, dtype bf16
+[transformers] You tried to access the `ExpertsInterface` with a `config._experts_implementation` set to `None`. This is expected if you use an Expert Module as a standalone Module. If this is not the case, something went wrong with the dispatch of `config._experts_implementation`
+02:20:51   hf_bf16 chain 121s
+02:24:32   hf_fp32 chain 221s
+02:26:36   eng_bf16 pass 124s
+02:28:58   eng_fp32 pass 142s
+02:28:58   eng_bf16 vs hf_bf16: |dDelta| mean 0.8047 max 1.781, |d logp| max 6.742, routing agreement mean 0.442 min 0.052
+02:28:58   hf_bf16 vs hf_fp32: |dDelta| mean 3.855 max 6.997, |d logp| max 12.69, routing agreement mean 0.077 min 0.000
+02:28:58   eng_bf16 vs hf_fp32: |dDelta| mean 3.988 max 6.95, |d logp| max 6.264, routing agreement mean 0.076 min 0.000
+02:28:58   eng_fp32 vs hf_fp32: |dDelta| mean 3.282e-05 max 6.533e-05, |d logp| max 3.937e-05, routing agreement mean 1.000 min 1.000
+02:28:58 wrote results/verify_ext14_qwen2_57b_chain.json
+02:28:58 model: "qwen2_57b"
+02:28:58 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+02:28:58 family: "qwen2_moe"
+02:28:58 dtype: "bf16"
+02:28:58 n_layers: 28
+02:28:58 n_experts: 64
+02:28:58 top_k: 8
+02:28:58 shared_inter: 20480
+02:28:58 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+02:28:58 started: "2026-10-17T02:18:44Z"
+02:28:58 hf_offload: false
+02:28:58 light_plan: false
+02:28:58 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+02:28:58 total_s: 607.5074505805969
+02:29:28 qwen2_57b: qwen2_moe, 6 units, dtype bf16
+02:33:28   engine identities 238.0s: {"layer": 14, "zero_vs_parent": {"n": 6, "maxabs": 0.0625, "meanabs": 0.0390625, "frac_exact": 0.0}, "union_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 6, "maxabs": 0.046875, "meanabs": 0.018229166666666668, "frac_exact": 0.5}, "neurons_linearity_relerr_max": 1.507273736933712e-07, "expert_rescue_mean": 0.0885416641831398, "layer_rescue_mean": 0.2434895783662796, "shared_expert_vs_set": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "shared_neurons_all_vs_expert": {"n": 6, "maxabs": 0.1875, "meanabs": 0.09098307291666667, "frac_exact": 0.0}, "shared_rescue_mean": 0.3644205629825592, "shared_w_final_mean_by_layer": [0.01619466207921505, 0.0231
+02:35:21   engine pass 112.4s
+02:35:21   sanity: [{"prompt": "The capital of France is", "answer": " Paris", "rank": 1, "p": 0.2949541509151459}, {"prompt": "The Eiffel Tower is located in the city of", "answer": " Paris", "rank": 1, "p": 0.679103672504425}, {"prompt": "Water is made of hydrogen and", "answer": " oxygen", "rank": 50, "p": 0.0021562138572335243}, {"prompt": "The opposite of hot is", "answer": " cold", "rank": 1, "p": 0.7155502438545227}, {"prompt": "Monday, Tuesday, Wednesday,", "answer": " Thursday", "rank": 86, "p": 0.00124887574929744}]
+[transformers] You tried to access the `ExpertsInterface` with a `config._experts_implementation` set to `None`. This is expected if you use an Expert Module as a standalone Module. If this is not the case, something went wrong with the dispatch of `config._experts_implementation`
+02:35:37   layer 1: update relerr max 0.005882 mean 0.004328, routing sets equal 0.079, overlap 0.725; vs fp32: engine 0.01016 / transformers 0.008986, routing vs fp32: engine 0.009 / transformers 0.016
+02:35:48   layer 13: update relerr max 0.06494 mean 0.02261, routing sets equal 0.143, overlap 0.715; vs fp32: engine 0.09538 / transformers 0.09487, routing vs fp32: engine 0.128 / transformers 0.213
+02:35:57   layer 27: update relerr max 0.014 mean 0.006769, routing sets equal 0.935, overlap 0.992; vs fp32: engine 0.03148 / transformers 0.0316, routing vs fp32: engine 0.899 / transformers 0.925
+02:35:57 wrote results/verify_ext14_qwen2_57b_perlayer.json
+02:35:57 model: "qwen2_57b"
+02:35:57 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+02:35:57 family: "qwen2_moe"
+02:35:57 dtype: "bf16"
+02:35:57 n_layers: 28
+02:35:57 n_experts: 64
+02:35:57 top_k: 8
+02:35:57 shared_inter: 20480
+02:35:57 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+02:35:57 started: "2026-10-17T02:29:21Z"
+02:35:57 hf_offload: false
+02:35:57 light_plan: false
+02:35:57 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+02:35:57 total_s: 388.45561265945435

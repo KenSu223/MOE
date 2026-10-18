@@ -1,0 +1,17 @@
+Model,Stratum,Value,Pairs,Mean drop,MoE at L*_MoE / drop,Attention at L*_attn / drop,Attention share
+qwen2_57b,person-name options,True,0,,,,
+qwen2_57b,person-name options,False,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,statement order 1 (entity of A mentioned first),True,128,5.09,"0.161 [0.151, 0.172]","0.477 [0.457, 0.498]","0.71 [0.70, 0.72]"
+qwen2_57b,statement order 1 (entity of A mentioned first),False,128,4.83,"0.155 [0.145, 0.166]","0.478 [0.460, 0.497]","0.71 [0.70, 0.72]"
+qwen2_57b,item built in both tokenizer families,True,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,item built in both tokenizer families,False,0,,,,
+qwen2_57b,probe-neutral (both triggers |probe| < 1),True,0,,,,
+qwen2_57b,probe-neutral (both triggers |probe| < 1),False,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,probe-associative,True,0,,,,
+qwen2_57b,probe-associative,False,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,probe one-sided,True,0,,,,
+qwen2_57b,probe one-sided,False,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,probe reverse,True,0,,,,
+qwen2_57b,probe reverse,False,256,4.96,"0.158 [0.151, 0.166]","0.478 [0.464, 0.492]","0.71 [0.70, 0.72]"
+qwen2_57b,top-1 in both directions,True,244,4.96,"0.160 [0.152, 0.167]","0.481 [0.467, 0.496]","0.71 [0.70, 0.72]"
+qwen2_57b,top-1 in both directions,False,12,4.99,"0.133 [0.085, 0.173]","0.403 [0.359, 0.453]","0.68 [0.61, 0.73]"

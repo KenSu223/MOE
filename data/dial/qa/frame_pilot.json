@@ -1,0 +1,616 @@
+{
+ "metrics": {
+  "qwen3|P0|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.10344827586206896,
+   "correct_both": 0.40229885057471265,
+   "order_gap": 0.011494252873563218,
+   "first_mention_bias": 0.6020114942528736,
+   "items_both_orders_margin": 0.028735632183908046,
+   "drop_median": 1.5
+  },
+  "qwen3|P0|objects|neutral": {
+   "pairs": 304,
+   "items": 152,
+   "margin": 0.07894736842105263,
+   "correct_both": 0.39473684210526316,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.6525493421052632,
+   "items_both_orders_margin": 0.006578947368421052,
+   "drop_median": 1.375
+  },
+  "qwen3|P0|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.6153846153846154,
+   "correct_both": 0.8846153846153846,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.1502403846153846,
+   "items_both_orders_margin": 0.46153846153846156,
+   "drop_median": 3.5625
+  },
+  "qwen3|P0|names|neutral": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.6153846153846154,
+   "correct_both": 0.8846153846153846,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.1502403846153846,
+   "items_both_orders_margin": 0.46153846153846156,
+   "drop_median": 3.5625
+  },
+  "qwen3|P0|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.17,
+   "correct_both": 0.465,
+   "order_gap": 0.009999999999999981,
+   "first_mention_bias": 0.54328125,
+   "items_both_orders_margin": 0.085,
+   "drop_median": 1.625
+  },
+  "qwen3|P0|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.15730337078651685,
+   "correct_both": 0.46629213483146065,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.5791783707865169,
+   "items_both_orders_margin": 0.07303370786516854,
+   "drop_median": 1.625
+  },
+  "qwen3|P1|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.08620689655172414,
+   "correct_both": 0.45977011494252873,
+   "order_gap": 0.022988505747126436,
+   "first_mention_bias": 0.028376436781609195,
+   "items_both_orders_margin": 0.011494252873563218,
+   "drop_median": 1.25
+  },
+  "qwen3|P1|objects|neutral": {
+   "pairs": 304,
+   "items": 152,
+   "margin": 0.06578947368421052,
+   "correct_both": 0.45723684210526316,
+   "order_gap": 0.013157894736842111,
+   "first_mention_bias": 0.07216282894736842,
+   "items_both_orders_margin": 0.0,
+   "drop_median": 1.125
+  },
+  "qwen3|P1|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.46153846153846156,
+   "correct_both": 0.75,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.07692307692307693,
+   "items_both_orders_margin": 0.23076923076923078,
+   "drop_median": 3.3125
+  },
+  "qwen3|P1|names|neutral": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.46153846153846156,
+   "correct_both": 0.75,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.07692307692307693,
+   "items_both_orders_margin": 0.23076923076923078,
+   "drop_median": 3.3125
+  },
+  "qwen3|P1|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.135,
+   "correct_both": 0.4975,
+   "order_gap": 0.01999999999999999,
+   "first_mention_bias": 0.0146875,
+   "items_both_orders_margin": 0.04,
+   "drop_median": 1.375
+  },
+  "qwen3|P1|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.12359550561797752,
+   "correct_both": 0.5,
+   "order_gap": 0.011235955056179789,
+   "first_mention_bias": 0.05038623595505618,
+   "items_both_orders_margin": 0.033707865168539325,
+   "drop_median": 1.25
+  },
+  "qwen3|P2|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.8074712643678161,
+   "correct_both": 0.9511494252873564,
+   "order_gap": -0.06321839080459768,
+   "first_mention_bias": 0.05836925287356322,
+   "items_both_orders_margin": 0.6781609195402298,
+   "drop_median": 4.5
+  },
+  "qwen3|P2|objects|neutral": {
+   "pairs": 304,
+   "items": 152,
+   "margin": 0.8125,
+   "correct_both": 0.9506578947368421,
+   "order_gap": -0.07236842105263164,
+   "first_mention_bias": 0.09004934210526316,
+   "items_both_orders_margin": 0.6842105263157895,
+   "drop_median": 4.375
+  },
+  "qwen3|P2|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.7884615384615384,
+   "correct_both": 0.9423076923076923,
+   "order_gap": -0.1923076923076923,
+   "first_mention_bias": 0.390625,
+   "items_both_orders_margin": 0.6923076923076923,
+   "drop_median": 5.75
+  },
+  "qwen3|P2|names|neutral": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.7884615384615384,
+   "correct_both": 0.9423076923076923,
+   "order_gap": -0.1923076923076923,
+   "first_mention_bias": 0.390625,
+   "items_both_orders_margin": 0.6923076923076923,
+   "drop_median": 5.75
+  },
+  "qwen3|P2|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.805,
+   "correct_both": 0.95,
+   "order_gap": -0.07999999999999996,
+   "first_mention_bias": 0.1015625,
+   "items_both_orders_margin": 0.68,
+   "drop_median": 4.625
+  },
+  "qwen3|P2|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.8089887640449438,
+   "correct_both": 0.949438202247191,
+   "order_gap": -0.0898876404494382,
+   "first_mention_bias": 0.13395365168539325,
+   "items_both_orders_margin": 0.6853932584269663,
+   "drop_median": 4.5
+  },
+  "qwen3|P3|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.9683908045977011,
+   "correct_both": 0.985632183908046,
+   "order_gap": 0.005747126436781547,
+   "first_mention_bias": 0.16864224137931033,
+   "items_both_orders_margin": 0.9425287356321839,
+   "drop_median": 6.875
+  },
+  "qwen3|P3|objects|neutral": {
+   "pairs": 304,
+   "items": 152,
+   "margin": 0.9671052631578947,
+   "correct_both": 0.9868421052631579,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.14247532894736842,
+   "items_both_orders_margin": 0.9407894736842105,
+   "drop_median": 6.8125
+  },
+  "qwen3|P3|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.9038461538461539,
+   "correct_both": 0.9615384615384616,
+   "order_gap": -0.03846153846153855,
+   "first_mention_bias": -0.24639423076923078,
+   "items_both_orders_margin": 0.8461538461538461,
+   "drop_median": 8.5625
+  },
+  "qwen3|P3|names|neutral": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.9038461538461539,
+   "correct_both": 0.9615384615384616,
+   "order_gap": -0.03846153846153855,
+   "first_mention_bias": -0.24639423076923078,
+   "items_both_orders_margin": 0.8461538461538461,
+   "drop_median": 8.5625
+  },
+  "qwen3|P3|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.96,
+   "correct_both": 0.9825,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.1146875,
+   "items_both_orders_margin": 0.93,
+   "drop_median": 7.0625
+  },
+  "qwen3|P3|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.9578651685393258,
+   "correct_both": 0.9831460674157303,
+   "order_gap": -0.005617977528089901,
+   "first_mention_bias": 0.08567415730337079,
+   "items_both_orders_margin": 0.9269662921348315,
+   "drop_median": 7.0
+  },
+  "qwen3|P4|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.4885057471264368,
+   "correct_both": 0.8132183908045977,
+   "order_gap": -0.022988505747126464,
+   "first_mention_bias": -0.13182471264367815,
+   "items_both_orders_margin": 0.3275862068965517,
+   "drop_median": 3.5
+  },
+  "qwen3|P4|objects|neutral": {
+   "pairs": 304,
+   "items": 152,
+   "margin": 0.47368421052631576,
+   "correct_both": 0.8092105263157895,
+   "order_gap": -0.03947368421052627,
+   "first_mention_bias": -0.16138980263157895,
+   "items_both_orders_margin": 0.3026315789473684,
+   "drop_median": 3.375
+  },
+  "qwen3|P4|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.38461538461538464,
+   "correct_both": 0.5384615384615384,
+   "order_gap": -0.07692307692307693,
+   "first_mention_bias": 0.40685096153846156,
+   "items_both_orders_margin": 0.19230769230769232,
+   "drop_median": 4.3125
+  },
+  "qwen3|P4|names|neutral": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.38461538461538464,
+   "correct_both": 0.5384615384615384,
+   "order_gap": -0.07692307692307693,
+   "first_mention_bias": 0.40685096153846156,
+   "items_both_orders_margin": 0.19230769230769232,
+   "drop_median": 4.3125
+  },
+  "qwen3|P4|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.475,
+   "correct_both": 0.7775,
+   "order_gap": -0.02999999999999997,
+   "first_mention_bias": -0.061796875,
+   "items_both_orders_margin": 0.31,
+   "drop_median": 3.5
+  },
+  "qwen3|P4|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.4606741573033708,
+   "correct_both": 0.7696629213483146,
+   "order_gap": -0.0449438202247191,
+   "first_mention_bias": -0.07838834269662921,
+   "items_both_orders_margin": 0.28651685393258425,
+   "drop_median": 3.5
+  },
+  "mixtral_bos|P0|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.017241379310344827,
+   "correct_both": 0.0603448275862069,
+   "order_gap": -0.011494252873563218,
+   "first_mention_bias": 0.17313218390804597,
+   "items_both_orders_margin": 0.005747126436781609,
+   "drop_median": -0.375
+  },
+  "mixtral_bos|P0|objects|neutral": {
+   "pairs": 306,
+   "items": 153,
+   "margin": 0.00980392156862745,
+   "correct_both": 0.049019607843137254,
+   "order_gap": -0.0196078431372549,
+   "first_mention_bias": 0.1909722222222222,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.375
+  },
+  "mixtral_bos|P0|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.0,
+   "correct_both": 0.0,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.22235576923076922,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P0|names|neutral": {
+   "pairs": 50,
+   "items": 25,
+   "margin": 0.0,
+   "correct_both": 0.0,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.25125,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P0|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.015,
+   "correct_both": 0.0525,
+   "order_gap": -0.01,
+   "first_mention_bias": 0.17953125,
+   "items_both_orders_margin": 0.005,
+   "drop_median": -0.375
+  },
+  "mixtral_bos|P0|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.008426966292134831,
+   "correct_both": 0.042134831460674156,
+   "order_gap": -0.016853932584269662,
+   "first_mention_bias": 0.199438202247191,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.375
+  },
+  "mixtral_bos|P1|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.014367816091954023,
+   "correct_both": 0.06321839080459771,
+   "order_gap": 0.005747126436781609,
+   "first_mention_bias": 0.10596264367816093,
+   "items_both_orders_margin": 0.011494252873563218,
+   "drop_median": -0.4375
+  },
+  "mixtral_bos|P1|objects|neutral": {
+   "pairs": 306,
+   "items": 153,
+   "margin": 0.016339869281045753,
+   "correct_both": 0.06209150326797386,
+   "order_gap": 0.0065359477124183,
+   "first_mention_bias": 0.14460784313725492,
+   "items_both_orders_margin": 0.013071895424836602,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P1|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.0,
+   "correct_both": 0.038461538461538464,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.01201923076923077,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P1|names|neutral": {
+   "pairs": 50,
+   "items": 25,
+   "margin": 0.0,
+   "correct_both": 0.04,
+   "order_gap": 0.0,
+   "first_mention_bias": 0.00125,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P1|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.0125,
+   "correct_both": 0.06,
+   "order_gap": 0.004999999999999999,
+   "first_mention_bias": 0.090625,
+   "items_both_orders_margin": 0.01,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P1|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.014044943820224719,
+   "correct_both": 0.05898876404494382,
+   "order_gap": 0.0056179775280898875,
+   "first_mention_bias": 0.12447331460674158,
+   "items_both_orders_margin": 0.011235955056179775,
+   "drop_median": -0.5
+  },
+  "mixtral_bos|P2|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.028735632183908046,
+   "correct_both": 0.22701149425287356,
+   "order_gap": -0.011494252873563218,
+   "first_mention_bias": -0.19863505747126436,
+   "items_both_orders_margin": 0.011494252873563218,
+   "drop_median": 0.375
+  },
+  "mixtral_bos|P2|objects|neutral": {
+   "pairs": 306,
+   "items": 153,
+   "margin": 0.02287581699346405,
+   "correct_both": 0.2222222222222222,
+   "order_gap": -0.006535947712418302,
+   "first_mention_bias": -0.1954656862745098,
+   "items_both_orders_margin": 0.006535947712418301,
+   "drop_median": 0.25
+  },
+  "mixtral_bos|P2|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.0,
+   "correct_both": 0.11538461538461539,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.051682692307692304,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.25
+  },
+  "mixtral_bos|P2|names|neutral": {
+   "pairs": 50,
+   "items": 25,
+   "margin": 0.0,
+   "correct_both": 0.12,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.04,
+   "items_both_orders_margin": 0.0,
+   "drop_median": -0.1875
+  },
+  "mixtral_bos|P2|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.025,
+   "correct_both": 0.2125,
+   "order_gap": -0.009999999999999998,
+   "first_mention_bias": -0.17953125,
+   "items_both_orders_margin": 0.01,
+   "drop_median": 0.25
+  },
+  "mixtral_bos|P2|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.019662921348314606,
+   "correct_both": 0.20786516853932585,
+   "order_gap": -0.0056179775280898875,
+   "first_mention_bias": -0.1736306179775281,
+   "items_both_orders_margin": 0.0056179775280898875,
+   "drop_median": 0.25
+  },
+  "mixtral_bos|P3|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.23563218390804597,
+   "correct_both": 0.7931034482758621,
+   "order_gap": -0.011494252873563232,
+   "first_mention_bias": 0.11566091954022989,
+   "items_both_orders_margin": 0.13793103448275862,
+   "drop_median": 2.0
+  },
+  "mixtral_bos|P3|objects|neutral": {
+   "pairs": 306,
+   "items": 153,
+   "margin": 0.23529411764705882,
+   "correct_both": 0.7973856209150327,
+   "order_gap": -0.01307189542483661,
+   "first_mention_bias": 0.12050653594771242,
+   "items_both_orders_margin": 0.13725490196078433,
+   "drop_median": 2.0
+  },
+  "mixtral_bos|P3|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.25,
+   "correct_both": 0.6153846153846154,
+   "order_gap": -0.038461538461538436,
+   "first_mention_bias": 0.22956730769230768,
+   "items_both_orders_margin": 0.15384615384615385,
+   "drop_median": 1.5
+  },
+  "mixtral_bos|P3|names|neutral": {
+   "pairs": 50,
+   "items": 25,
+   "margin": 0.26,
+   "correct_both": 0.62,
+   "order_gap": -0.040000000000000036,
+   "first_mention_bias": 0.25625,
+   "items_both_orders_margin": 0.16,
+   "drop_median": 1.5
+  },
+  "mixtral_bos|P3|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.2375,
+   "correct_both": 0.77,
+   "order_gap": -0.014999999999999986,
+   "first_mention_bias": 0.13046875,
+   "items_both_orders_margin": 0.14,
+   "drop_median": 2.0
+  },
+  "mixtral_bos|P3|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.23876404494382023,
+   "correct_both": 0.7724719101123596,
+   "order_gap": -0.01685393258426965,
+   "first_mention_bias": 0.13957162921348315,
+   "items_both_orders_margin": 0.1404494382022472,
+   "drop_median": 1.875
+  },
+  "mixtral_bos|P4|objects|all": {
+   "pairs": 348,
+   "items": 174,
+   "margin": 0.3160919540229885,
+   "correct_both": 0.6264367816091954,
+   "order_gap": 0.06896551724137934,
+   "first_mention_bias": -0.46264367816091956,
+   "items_both_orders_margin": 0.1781609195402299,
+   "drop_median": 2.25
+  },
+  "mixtral_bos|P4|objects|neutral": {
+   "pairs": 306,
+   "items": 153,
+   "margin": 0.3137254901960784,
+   "correct_both": 0.6209150326797386,
+   "order_gap": 0.05228758169934644,
+   "first_mention_bias": -0.4660947712418301,
+   "items_both_orders_margin": 0.16993464052287582,
+   "drop_median": 2.25
+  },
+  "mixtral_bos|P4|names|all": {
+   "pairs": 52,
+   "items": 26,
+   "margin": 0.09615384615384616,
+   "correct_both": 0.4807692307692308,
+   "order_gap": -0.038461538461538464,
+   "first_mention_bias": 0.28725961538461536,
+   "items_both_orders_margin": 0.038461538461538464,
+   "drop_median": 1.375
+  },
+  "mixtral_bos|P4|names|neutral": {
+   "pairs": 50,
+   "items": 25,
+   "margin": 0.1,
+   "correct_both": 0.5,
+   "order_gap": -0.039999999999999994,
+   "first_mention_bias": 0.30875,
+   "items_both_orders_margin": 0.04,
+   "drop_median": 1.4375
+  },
+  "mixtral_bos|P4|all|all": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.2875,
+   "correct_both": 0.6075,
+   "order_gap": 0.05499999999999999,
+   "first_mention_bias": -0.36515625,
+   "items_both_orders_margin": 0.16,
+   "drop_median": 2.125
+  },
+  "mixtral_bos|P4|all|neutral": {
+   "pairs": 356,
+   "items": 178,
+   "margin": 0.28370786516853935,
+   "correct_both": 0.6039325842696629,
+   "order_gap": 0.039325842696629254,
+   "first_mention_bias": -0.3572682584269663,
+   "items_both_orders_margin": 0.15168539325842698,
+   "drop_median": 2.125
+  }
+ },
+ "decision": {
+  "qwen3": {
+   "frame": "P3",
+   "neutral_objects_correct_both": 0.9868421052631579,
+   "order_gap": 0.0
+  },
+  "mixtral_bos": {
+   "frame": "P3",
+   "neutral_objects_correct_both": 0.7973856209150327,
+   "order_gap": 0.01307189542483661
+  }
+ }
+}

@@ -1,0 +1,36 @@
+{
+ "model": "mixtral",
+ "proto": "mixtral_bos",
+ "special_tokens": true,
+ "relations": {
+  "P17": {
+   "tokenised": 466,
+   "with_donor": 400,
+   "pairs_margin": 391,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P27": {
+   "tokenised": 465,
+   "with_donor": 400,
+   "pairs_margin": 387,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P495": {
+   "tokenised": 452,
+   "with_donor": 400,
+   "pairs_margin": 359,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P103": {
+   "tokenised": 444,
+   "with_donor": 400,
+   "pairs_margin": 389,
+   "discovery": 48,
+   "validation": 48
+  }
+ },
+ "utc": "2026-10-17T13:44:52Z"
+}

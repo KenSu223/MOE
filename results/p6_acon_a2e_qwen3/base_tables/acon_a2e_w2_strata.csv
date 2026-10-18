@@ -1,0 +1,19 @@
+Model,Stratum,Value,Pairs,Mean drop,MoE at L*_MoE / drop,Attention at L*_attn / drop,Attention share
+Qwen3-30B-A3B-Base,person-name options,True,0,,,,
+Qwen3-30B-A3B-Base,person-name options,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,statement order 1 (entity of A mentioned first),True,128,8.42,"0.062 [0.056, 0.068]","0.288 [0.276, 0.299]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,statement order 1 (entity of A mentioned first),False,128,8.22,"0.055 [0.050, 0.060]","0.286 [0.275, 0.297]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,core-776 twin,True,0,,,,
+Qwen3-30B-A3B-Base,core-776 twin,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,item built in both tokenizer families,True,0,,,,
+Qwen3-30B-A3B-Base,item built in both tokenizer families,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,probe-neutral (both triggers |probe| < 1),True,0,,,,
+Qwen3-30B-A3B-Base,probe-neutral (both triggers |probe| < 1),False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,probe-associative,True,0,,,,
+Qwen3-30B-A3B-Base,probe-associative,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,probe one-sided,True,0,,,,
+Qwen3-30B-A3B-Base,probe one-sided,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,probe reverse,True,0,,,,
+Qwen3-30B-A3B-Base,probe reverse,False,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,top-1 in both directions,True,256,8.32,"0.059 [0.055, 0.062]","0.287 [0.279, 0.295]","0.84 [0.82, 0.85]"
+Qwen3-30B-A3B-Base,top-1 in both directions,False,0,,,,

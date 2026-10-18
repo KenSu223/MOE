@@ -1,0 +1,3 @@
+  engine {'model_key': 'qwen2_57b', 'dtype': 'bfloat16', 'router_fp32': False} vs engine fp32: rescue r 0.0974, |d rescue| mean 0.656, attention share 0.275 vs 0.260, final routing agreement 0.006
+  engine {'model_key': 'qwen2_57b', 'dtype': 'bfloat16', 'router_fp32': True} vs engine fp32: rescue r 0.2594, |d rescue| mean 0.619, attention share 0.227 vs 0.260, final routing agreement 0.012
+FAIL: engine protocol vs fp32 rescue corr 0.0974368127178685; engine protocol vs fp32 rescue corr 0.25936114066787574

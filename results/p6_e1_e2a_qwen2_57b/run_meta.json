@@ -1,0 +1,207 @@
+{
+ "sweep": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "pairs": "data/dial/pairs_e1_e2a_qwen2_57b.parquet",
+  "case_sets": "data/dial/case_sets_e1_e2a_qwen2_57b.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 20000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   [
+    26,
+    27
+   ]
+  ],
+  "metrics": true,
+  "agent": "p6-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen2_57b --pairs data/dial/pairs_e1_e2a_qwen2_57b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen2_57b.json --out p6_e1_e2a_qwen2_57b --agent p6-data --max-rows 20000",
+  "created_utc": "2026-10-17T12:27:37Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T12:34:07Z",
+  "pass_times_s": [
+   151.40920329093933,
+   116.19008684158325,
+   113.60940933227539
+  ],
+  "n_rows": 44032
+ },
+ "joint": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    27
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_joint.py --model qwen2_57b --pairs data/dial/pairs_e1_e2a_qwen2_57b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen2_57b.json --out p6_e1_e2a_qwen2_57b --agent p6-data --families main --max-rows 15000",
+  "created_utc": "2026-10-17T12:34:28Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T12:37:11Z",
+  "pass_times_s": [
+   142.85044479370117
+  ],
+  "n_rows": 3072
+ },
+ "joint_shared": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    27
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "routed_only",
+    "all"
+   ],
+   [
+    "denoise",
+    "shared_only",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "routed_only",
+    "all"
+   ],
+   [
+    "noise",
+    "shared_only",
+    "all"
+   ]
+  ],
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan_joint_shared.py --model qwen2_57b --pairs data/dial/pairs_e1_e2a_qwen2_57b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen2_57b.json --out p6_e1_e2a_qwen2_57b --agent p6-data --families main --max-rows 15000",
+  "created_utc": "2026-10-17T12:37:33Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T12:40:01Z",
+  "pass_times_s": [
+   144.12054204940796
+  ],
+  "n_rows": 3072
+ },
+ "dla": {
+  "model": "qwen2_57b",
+  "repo": "Qwen/Qwen2-57B-A14B",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_dla.py --model qwen2_57b --pairs data/dial/pairs_e1_e2a_qwen2_57b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen2_57b.json --out p6_e1_e2a_qwen2_57b --agent p6-data --families main --chunk 256",
+  "created_utc": "2026-10-17T12:40:22Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T12:44:58Z",
+  "pass_times_s": [
+   137.33290100097656,
+   112.45348715782166
+  ]
+ },
+ "direct_split": {
+  "model": "qwen2_57b",
+  "pairs": "data/dial/pairs_e1_e2a_qwen2_57b.parquet",
+  "case_sets": "data/dial/case_sets_e1_e2a_qwen2_57b.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 142.86590385437012,
+  "command": "python -m moetrace.ext7_controls direct --model qwen2_57b --pairs data/dial/pairs_e1_e2a_qwen2_57b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen2_57b.json --out p6_e1_e2a_qwen2_57b --splits discovery,validation",
+  "completed_utc": "2026-10-17T12:47:36Z"
+ }
+}

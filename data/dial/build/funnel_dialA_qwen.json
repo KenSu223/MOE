@@ -1,0 +1,44 @@
+{
+ "dA_e1_a2e": {
+  "reasons": {
+   "R1_answer_multi_token": 100,
+   "R2_length_mismatch": 34,
+   "item:incomplete_dropped": 43,
+   "ok": 1484
+  },
+  "pairs": 1398,
+  "items": 371,
+  "items_ctrl": 328
+ },
+ "dA_e1_e2a": {
+  "reasons": {
+   "R1_answer_multi_token": 34,
+   "R2_length_mismatch": 100,
+   "item:incomplete_dropped": 43,
+   "ok": 1484
+  },
+  "pairs": 1398,
+  "items": 371,
+  "items_ctrl": 328
+ },
+ "e0_a2e": {
+  "reasons": {
+   "R1_answer_multi_token": 50,
+   "R2_length_mismatch": 17,
+   "ok": 742
+  },
+  "pairs": 742,
+  "items": 371,
+  "items_ctrl": 328
+ },
+ "e0_e2a": {
+  "reasons": {
+   "R1_answer_multi_token": 17,
+   "R2_length_mismatch": 50,
+   "ok": 742
+  },
+  "pairs": 742,
+  "items": 371,
+  "items_ctrl": 328
+ }
+}

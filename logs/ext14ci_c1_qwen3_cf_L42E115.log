@@ -1,0 +1,5 @@
+2026-10-16T22:33:22Z START p6ci-c1-qwen3_cf-L42E115 (waited 467s): python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L42E115 --max-spawn 30000
+22:33:34 patch qwen3_cf L42E115: 425 rows (108 cases), 55 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 400, 768]
+22:34:23 pass 1/1: 533 prefill, 23375 spawns, 48s
+22:34:23 patch done
+2026-10-16T22:34:29Z END   p6ci-c1-qwen3_cf-L42E115 rc=0 (67s)

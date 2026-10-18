@@ -1,0 +1,19 @@
+{
+ "task": "qwen3_cf",
+ "model": "qwen3",
+ "items": [
+  "cf",
+  "qwen3",
+  "qwen3_str"
+ ],
+ "experts": [
+  "L44E069",
+  "L42E115"
+ ],
+ "n_rows": 16,
+ "n_prefill": 22,
+ "limit": 3,
+ "pass_s": 56.7,
+ "command": "scripts/ext14ci_c1_run.py qwen3_cf score --limit 3 --smoke",
+ "utc": "2026-10-16T21:06:41Z"
+}

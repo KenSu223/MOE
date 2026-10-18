@@ -1,0 +1,32 @@
+11:43:20 qwen2_57b -> p6_e1_a2e_qwen2_57b: 512 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+11:43:28 pass 1/1: 1024 prefill rows, 3072 multi rows
+11:44:02   layer   0: load-wait 31.95s compute 2.29s  wf_rows=3072
+[W1017 11:44:07.201862672 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 11:44:11.197717145 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:44:20.241950016 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 11:44:33.855982740 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+11:44:35   layer   8: load-wait 2.13s compute 1.91s  wf_rows=3072
+[W1017 11:44:41.420912724 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 11:44:49.892232647 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:44:53.421798981 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:44:57.399355557 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:45:05.926765444 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+11:45:07   layer  16: load-wait 2.10s compute 1.91s  wf_rows=3072
+[W1017 11:45:09.407397371 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:45:13.413167649 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:45:17.421113583 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 11:45:25.438521881 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 11:45:33.496887455 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 11:45:37.507644501 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+11:45:39   layer  24: load-wait 2.05s compute 1.96s  wf_rows=3072
+[W1017 11:45:41.463322146 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 11:45:45.995561109 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+[W1017 11:45:49.769897160 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20381696, total: 23686938624).
+11:45:52   layer  27: load-wait 2.48s compute 1.91s  wf_rows=3072
+11:45:52   pass done: 1024 prefill rows (T=29), 3072 spawn rows, 143.7s
+11:45:53 denoise  all_attn  all     : effect/drop +1.000 (mean effect +6.31, drop 6.31)
+11:45:53 denoise  all_block all     : effect/drop +1.000 (mean effect +6.31, drop 6.31)
+11:45:53 denoise  all_moe   all     : effect/drop +0.535 (mean effect +3.37, drop 6.31)
+11:45:53 noise    all_attn  all     : effect/drop +1.000 (mean effect +6.31, drop 6.31)
+11:45:53 noise    all_block all     : effect/drop +1.000 (mean effect +6.31, drop 6.31)
+11:45:53 noise    all_moe   all     : effect/drop +0.535 (mean effect +3.37, drop 6.31)

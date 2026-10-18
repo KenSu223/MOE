@@ -1,0 +1,10 @@
+**l_cf W2: final-position single-layer patches (pair bootstrap)**
+
+| Model | Family | Patched output | L* (disc.) | Disc. mean | Validation rescue at L* [95% CI] | Normalised | Discovery top 4 |
+|---|---|---|---|---|---|---|---|
+| mistral7b_bos | main | layer | L21 | +1.14 | +1.245 [+1.086, +1.407] | 0.102 [0.090, 0.114] | L21 +1.14, L20 +1.04, L19 +0.84, L25 +0.74 |
+| mistral7b_bos | main | attn_layer | L18 | +2.24 | +2.378 [+2.064, +2.726] | 0.195 [0.171, 0.220] | L18 +2.24, L24 +1.94, L19 +1.75, L15 +0.65 |
+| mistral7b_bos | main | block | L19 | +2.95 | +3.020 [+2.673, +3.377] | 0.247 [0.229, 0.265] | L19 +2.95, L18 +2.69, L24 +2.15, L21 +1.28 |
+| mistral7b_bos | main_interior | layer | L21 | +1.14 | +1.245 [+1.086, +1.407] | 0.102 [0.090, 0.114] | L21 +1.14, L20 +1.04, L19 +0.84, L25 +0.74 |
+| mistral7b_bos | main_interior | attn_layer | L18 | +2.24 | +2.378 [+2.064, +2.726] | 0.195 [0.171, 0.220] | L18 +2.24, L24 +1.94, L19 +1.75, L15 +0.65 |
+| mistral7b_bos | main_interior | block | L19 | +2.95 | +3.020 [+2.673, +3.377] | 0.247 [0.229, 0.265] | L19 +2.95, L18 +2.69, L24 +2.15, L21 +1.28 |

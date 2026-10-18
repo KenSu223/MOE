@@ -1,0 +1,22 @@
+**aagr_e2a W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | person-name options | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | True | 89 | 8.19 | 0.094 [0.063, 0.125] | 0.109 [0.085, 0.134] | 0.34 [0.30, 0.40] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | False | 89 | 8.00 | 0.103 [0.076, 0.131] | 0.108 [0.079, 0.138] | 0.33 [0.28, 0.40] |
+| Qwen3-30B-A3B-Base | core-776 twin | True | 12 | 10.79 | 0.152 [0.105, 0.210] | 0.066 [0.020, 0.129] | 0.32 [0.24, 0.44] |
+| Qwen3-30B-A3B-Base | core-776 twin | False | 166 | 7.90 | 0.094 [0.071, 0.114] | 0.113 [0.092, 0.132] | 0.34 [0.30, 0.39] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe reverse | False | 178 | 8.10 | 0.099 [0.078, 0.119] | 0.108 [0.089, 0.127] | 0.33 [0.30, 0.38] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 6 |  |  |  |  |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 172 | 8.08 | 0.099 [0.077, 0.121] | 0.109 [0.089, 0.128] | 0.32 [0.29, 0.37] |

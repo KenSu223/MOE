@@ -1,0 +1,15 @@
+2026-10-17T06:53:36Z START ext14-e3_e2a-mistral7b_bos-sweep (waited 1650s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e3_e2a_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_e2a_mistral7b_bos.json --out p6_e3_e2a_mistral7b_bos --agent p6-data --max-rows 37500
+06:53:36 mistral7b -> p6_e3_e2a_mistral7b_bos: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 2 passes (49152 spawn rows), T max 32
+06:53:38 pass 1/2: layers 0..23, 1024 prefill rows, 36864 spawn rows
+06:53:39   layer   0: load-wait 0.73s compute 0.58s  wf_rows=1536
+06:53:43   layer   8: load-wait 0.07s compute 0.43s  wf_rows=13824
+06:53:48   layer  16: load-wait 0.11s compute 0.58s  wf_rows=26112
+06:53:53   layer  24: load-wait 0.07s compute 0.72s  wf_rows=36864
+06:53:59   layer  31: load-wait 0.07s compute 0.72s  wf_rows=36864
+06:53:59   pass done: 1024 prefill rows (T=32), 36864 spawn rows, 21.4s (metrics 0.4s)
+06:54:00 pass 2/2: layers 24..31, 1024 prefill rows, 12288 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+06:54:12 family main: layer disc L22; attn_layer disc L13; block disc L22
+06:54:12 Δclean +3.79 Δcorrupt -3.79 drop +7.58; {"layer_discovery_argmax": 22, "layer_discovery_max": 1.451, "layer_discovery_top5": [[22, 1.451], [21, 1.435], [18, 1.262], [26, 1.199], [20, 1.122]], "layer_validation_argmax": 21, "layer_validation_max": 1.301, "layer_validation_top5": [[21, 1.301], [22, 1.158], [26, 1.142], [20, 1.115], [18, 1.074]], "attn_layer_discovery_argmax": 13, "attn_layer_discovery_max": 1.215, "attn_layer_discovery_top5": [[13, 1.215], [19, 0.762], [15, 0.638], [25, 0.392], [20, 0.345]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.178, "attn_layer_validation_top5": [[13, 1.178], [19, 0.745],
+2026-10-17T06:54:13Z END   ext14-e3_e2a-mistral7b_bos-sweep rc=0 (37s)

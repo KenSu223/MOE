@@ -1,0 +1,20 @@
+{
+ "task": "mixtral_wino",
+ "model": "mixtral",
+ "items": [
+  "wino",
+  "mixtral",
+  "wino_mixtral_bos_str",
+  "data/wino_str/pairs_train_xl_mixtral_bos.parquet",
+  "data/wino_str/case_sets.json"
+ ],
+ "experts": [
+  "L20E000"
+ ],
+ "n_rows": 512,
+ "n_prefill": 1024,
+ "limit": null,
+ "pass_s": 104.7,
+ "command": "scripts/ext14ci_c1_run.py mixtral_wino score",
+ "utc": "2026-10-16T23:04:07Z"
+}

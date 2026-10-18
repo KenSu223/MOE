@@ -62,14 +62,27 @@ The bars mean the same as in the earlier brief: M add-back, M deletion, MoE ≤ 
 
 ## 3. Controls
 
-| Change (same items, paired) | Attention share, Qwen3 | Mixtral |
-|---|---|---|
-| ask for the entity instead of the attribute | +0.52 [0.46, 0.56] | +0.18 [0.15, 0.20] |
-| make the attribute copyable ("Options: …"), natural twins | +0.07 [0.01, 0.11] | +0.04 [0.02, 0.05] |
-| make the attribute copyable, name templates | −0.06 to +0.04 | +0.01 |
-| neutral verb instead of the original | +0.01 [−0.04, +0.05] | +0.01 [−0.01, +0.03] |
-| association strata within a condition | ≤ 0.11 | ≤ 0.11 |
-| name items vs object items within a condition | +0.08 to +0.16 | +0.08 to +0.16 |
+Paired changes. The same items are run under two conditions; each value is a − b with a 95 % CI (validation pairs).
+- Direct attention = the part of the answer written directly by attention, as a fraction of the drop.
+- All-MoE M = the fraction of the drop restored by putting every MoE output back.
+
+| Change (a − b, same items) | Model | Items (units) | Attention share | Direct attention | All-MoE M |
+|---|---|---|---|---|---|
+| ask for the entity instead of the attribute | Qwen3 | 90 | +0.52 [0.46, 0.56] | +1.03 [0.94, 1.13] | −0.70 [−0.77, −0.64] |
+| make the attribute copyable ("Options: …"), natural twins | Qwen3 | 70 | +0.07 [0.01, 0.11] | −0.05 [−0.10, −0.01] | −0.07 [−0.09, −0.05] |
+| make the attribute copyable, name templates (orig. verb) | Qwen3 | 28 (8 templates) | +0.04 [−0.04, 0.10] | −0.09 [−0.18, 0.01] | −0.08 [−0.19, −0.03] |
+| neutral verb instead of the original | Qwen3 | 70 (11 templates) | +0.01 [−0.04, 0.05] | +0.00 [−0.02, 0.04] | +0.01 [−0.01, 0.02] |
+| ask for the entity instead of the attribute | Mixtral | 94 | +0.18 [0.15, 0.20] | +0.55 [0.46, 0.64] | −0.35 [−0.40, −0.29] |
+| make the attribute copyable, natural twins | Mixtral | 102 | +0.04 [0.02, 0.05] | +0.10 [0.08, 0.12] | −0.06 [−0.08, −0.05] |
+| make the attribute copyable, name templates (orig. verb) | Mixtral | 35 (8 templates) | +0.00 [−0.04, 0.05] | +0.08 [0.02, 0.16] | −0.09 [−0.17, −0.02] |
+| neutral verb instead of the original | Mixtral | 54 (10 templates) | +0.01 [−0.01, 0.03] | +0.01 [−0.03, 0.04] | −0.01 [−0.05, 0.03] |
+
+Within-condition strata (not paired: one condition, different items per stratum):
+
+| Stratum difference within a condition | Attention share, both models |
+|---|---|
+| association strata | ≤ 0.11 |
+| name items vs object items | +0.08 to +0.16 |
 
 - **Unrelated verb.** With an unrelated verb ("talked with" instead of "gave a hand") the effect disappears: the drop falls from about 5 logits to 0.2 / 0.0.
 - **Memorisation.** The original WinoGrande names pass no more often than new names (0.31 vs 0.38 in Qwen3, 0.31 vs 0.29 in Mixtral).

@@ -1,0 +1,10 @@
+2026-10-17T11:13:08Z START ext14-l_cf-qwen3_8b-t1 (waited 2400s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_8b l_cf l_ioi
+2026-10-17T11:13:41Z ext14-l_cf-qwen3_8b-sweep rc=0 (32s, in bundle job)
+2026-10-17T11:13:51Z ext14-l_cf-qwen3_8b-joint rc=0 (10s, in bundle job)
+2026-10-17T11:14:01Z ext14-l_cf-qwen3_8b-dla rc=0 (10s, in bundle job)
+2026-10-17T11:14:08Z ext14-l_cf-qwen3_8b-direct rc=0 (7s, in bundle job)
+2026-10-17T11:14:41Z ext14-l_ioi-qwen3_8b-sweep rc=0 (32s, in bundle job)
+2026-10-17T11:14:54Z ext14-l_ioi-qwen3_8b-joint rc=0 (13s, in bundle job)
+2026-10-17T11:15:07Z ext14-l_ioi-qwen3_8b-dla rc=0 (13s, in bundle job)
+2026-10-17T11:15:16Z ext14-l_ioi-qwen3_8b-direct rc=0 (9s, in bundle job)
+2026-10-17T11:15:16Z END   ext14-l_cf-qwen3_8b-t1 rc=0 (128s)

@@ -1,0 +1,11 @@
+2026-10-17T03:37:17Z START ext14-e3p3_a2e-mistral7b_bos-dla (waited 1667s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --agent p6-data --families main --chunk 357
+03:37:18 mistral7b -> p6_e3p3_a2e_mistral7b_bos: 212 directed cases, families ['main'], 1 prefill-only passes
+03:37:21   layer   0: load-wait 0.73s compute 0.42s  wf_rows=0
+03:37:23   layer   8: load-wait 0.28s compute 0.15s  wf_rows=0
+03:37:26   layer  16: load-wait 0.43s compute 0.15s  wf_rows=0
+03:37:30   layer  24: load-wait 0.28s compute 0.15s  wf_rows=0
+03:37:33   layer  31: load-wait 0.28s compute 0.15s  wf_rows=0
+03:37:33   pass done: 424 prefill rows (T=43), 0 spawn rows, 13.4s
+03:37:33 pass 1/1: 13s; DLA total - drop: max |.| 0.099
+03:37:34 direct effect / drop: attention +0.926, MoE +0.073, embedding -0.000
+2026-10-17T03:37:37Z END   ext14-e3p3_a2e-mistral7b_bos-dla rc=0 (20s)

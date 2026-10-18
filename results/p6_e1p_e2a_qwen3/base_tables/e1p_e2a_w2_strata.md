@@ -1,0 +1,26 @@
+**e1p_e2a W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 52 | 7.64 | 0.078 [0.051, 0.109] | 0.207 [0.170, 0.244] | 0.45 [0.41, 0.49] |
+| Qwen3-30B-A3B-Base | person-name options | False | 204 | 8.98 | 0.205 [0.190, 0.220] | 0.023 [0.012, 0.034] | 0.25 [0.22, 0.28] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | True | 128 | 8.72 | 0.178 [0.156, 0.200] | 0.053 [0.034, 0.074] | 0.28 [0.25, 0.32] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | False | 128 | 8.70 | 0.187 [0.166, 0.208] | 0.058 [0.038, 0.081] | 0.27 [0.23, 0.31] |
+| Qwen3-30B-A3B-Base | core-776 twin | True | 178 | 8.96 | 0.196 [0.178, 0.214] | 0.037 [0.023, 0.052] | 0.25 [0.22, 0.28] |
+| Qwen3-30B-A3B-Base | core-776 twin | False | 78 | 8.14 | 0.148 [0.124, 0.172] | 0.102 [0.070, 0.136] | 0.34 [0.30, 0.39] |
+| Qwen3-30B-A3B-Base | degree adverb in the blank clause (too / very / more ...) | True | 176 | 9.61 | 0.188 [0.170, 0.205] | 0.031 [0.019, 0.045] | 0.24 [0.22, 0.27] |
+| Qwen3-30B-A3B-Base | degree adverb in the blank clause (too / very / more ...) | False | 80 | 6.73 | 0.165 [0.134, 0.193] | 0.132 [0.096, 0.166] | 0.40 [0.35, 0.45] |
+| Qwen3-30B-A3B-Base | complementary antonym pair | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | complementary antonym pair | False | 256 | 8.71 | 0.182 [0.167, 0.197] | 0.056 [0.042, 0.070] | 0.27 [0.25, 0.30] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | True | 224 | 8.86 | 0.190 [0.174, 0.205] | 0.045 [0.032, 0.060] | 0.26 [0.24, 0.29] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | False | 32 | 7.66 | 0.123 [0.079, 0.163] | 0.142 [0.086, 0.203] | 0.38 [0.32, 0.46] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 256 | 8.71 | 0.182 [0.167, 0.197] | 0.056 [0.042, 0.070] | 0.27 [0.25, 0.30] |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 256 | 8.71 | 0.182 [0.167, 0.197] | 0.056 [0.042, 0.070] | 0.27 [0.25, 0.30] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 256 | 8.71 | 0.182 [0.167, 0.197] | 0.056 [0.042, 0.070] | 0.27 [0.25, 0.30] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe reverse | False | 256 | 8.71 | 0.182 [0.167, 0.197] | 0.056 [0.042, 0.070] | 0.27 [0.25, 0.30] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 24 | 8.47 | 0.216 [0.163, 0.268] | 0.092 [0.052, 0.144] | 0.31 [0.26, 0.37] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 232 | 8.73 | 0.179 [0.163, 0.194] | 0.052 [0.038, 0.067] | 0.27 [0.24, 0.30] |

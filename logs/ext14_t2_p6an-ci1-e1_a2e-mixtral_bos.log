@@ -1,0 +1,20 @@
+2026-10-17T01:04:42Z START p6an-ci1-e1_a2e-mixtral_bos (waited 67s): python scripts/ext14_t2_run.py ci1 e1_a2e mixtral_bos --max-passes 4
+01:04:46 e1_a2e/mixtral_bos: 180 validation rows, 2 chunks (2 to do), L=32 nH=32; spawn rows per row 1056; attention classes ['str', 'attr_clean', 'attr_corr', 'mention_clean', 'mention_corr', 'blank', 'q', 'pos0', 'final']
+01:04:46 pass (chunk 0): 180 prefill rows (90 clean), 95040 spawn rows
+01:04:55   layer   0: load-wait 7.59s compute 0.78s  wf_rows=2970
+01:05:18   layer   8: load-wait 2.39s compute 0.55s  wf_rows=26730
+01:05:42   layer  16: load-wait 1.67s compute 0.97s  wf_rows=50490
+01:06:05   layer  24: load-wait 1.57s compute 1.39s  wf_rows=74250
+01:06:26   layer  31: load-wait 1.17s compute 1.75s  wf_rows=95040
+01:06:26   pass done: 180 prefill rows (T=29), 95040 spawn rows, 99.5s
+01:06:28 chunk 0 done: {'chunk': 0, 'rows': 90, 'prefill': 180, 'spawn_rows': 95040, 'pass_s': 99.45281672477722, 'peak_GB': 12.447853088378906, 'mean_drop': 3.780555486679077, 'r_sum_heads_vs_attn_layer': 0.3453831062126355, 'head_dla_sum_mean': 3.822284698486328, 'candidates_not_routed_clean': 46, 'attn_row_sum_minmax': [0.9996228218078613, 1.0003747940063477], 'utc': '2026-10-17T01:06:28Z'}
+01:06:28 pass (chunk 1): 180 prefill rows (90 clean), 95040 spawn rows
+01:06:30   layer   0: load-wait 1.84s compute 0.14s  wf_rows=2970
+01:06:54   layer   8: load-wait 2.42s compute 0.55s  wf_rows=26730
+01:07:17   layer  16: load-wait 1.95s compute 0.96s  wf_rows=50490
+01:07:41   layer  24: load-wait 1.56s compute 1.39s  wf_rows=74250
+01:08:01   layer  31: load-wait 1.20s compute 1.74s  wf_rows=95040
+01:08:01   pass done: 180 prefill rows (T=29), 95040 spawn rows, 92.8s
+01:08:03 chunk 1 done: {'chunk': 1, 'rows': 90, 'prefill': 180, 'spawn_rows': 95040, 'pass_s': 92.80419754981995, 'peak_GB': 12.477422714233398, 'mean_drop': 3.6861112117767334, 'r_sum_heads_vs_attn_layer': 0.33695493636794743, 'head_dla_sum_mean': 3.898076295852661, 'candidates_not_routed_clean': 87, 'attn_row_sum_minmax': [0.9996159076690674, 1.000370979309082], 'utc': '2026-10-17T01:08:03Z'}
+01:08:03 ALL CHUNKS COMPLETE
+2026-10-17T01:08:10Z END   p6an-ci1-e1_a2e-mixtral_bos rc=0 (208s)

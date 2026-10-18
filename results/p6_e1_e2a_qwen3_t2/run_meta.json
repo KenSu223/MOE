@@ -1,0 +1,390 @@
+{
+ "sweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "pairs": "data/dial/pairs_e1_e2a_qwen3.parquet",
+  "case_sets": "data/dial/case_sets_e1_e2a_qwen3.json",
+  "families": {
+   "main": {
+    "discovery": 256,
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 512,
+  "max_rows": 60000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+   ],
+   [
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "metrics": true,
+  "agent": "p6-data",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --max-rows 60000",
+  "created_utc": "2026-10-17T00:33:08Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T00:34:50Z",
+  "pass_times_s": [
+   57.14337754249573,
+   41.144426107406616
+  ],
+  "n_rows": 74752
+ },
+ "joint": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "spans": {
+   "all": [
+    0,
+    47
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --max-rows 30000",
+  "created_utc": "2026-10-17T00:39:01Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T00:40:04Z",
+  "pass_times_s": [
+   61.324164152145386
+  ],
+  "n_rows": 3072
+ },
+ "dla": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --chunk 512",
+  "created_utc": "2026-10-17T00:57:47Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T00:58:50Z",
+  "pass_times_s": [
+   60.798139333724976
+  ]
+ },
+ "direct_split": {
+  "model": "qwen3",
+  "pairs": "data/dial/pairs_e1_e2a_qwen3.parquet",
+  "case_sets": "data/dial/case_sets_e1_e2a_qwen3.json",
+  "splits": "discovery,validation",
+  "n_rows": 512,
+  "seconds": 71.1804530620575,
+  "command": "python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --splits discovery,validation",
+  "completed_utc": "2026-10-17T01:04:11Z"
+ },
+ "grid_w1": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "resid"
+  ],
+  "window": 1,
+  "window_half": 0,
+  "n_cases": 512,
+  "n_units": 1440,
+  "n_suffix_rows": 207360,
+  "n_passes": 4,
+  "token_budget": 200000,
+  "max_rows": 60000,
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000",
+  "created_utc": "2026-10-17T01:08:18Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T01:12:02Z",
+  "pass_times_s": [
+   65.23543405532837,
+   46.37477684020996,
+   49.45800757408142,
+   43.04698824882507
+  ],
+  "n_rows": 207360
+ },
+ "heads": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "layers": [
+   36,
+   38,
+   42,
+   43,
+   45
+  ],
+  "null_layer": 36,
+  "n_heads": 32,
+  "n_cases": 512,
+  "chunks": [
+   [
+    36,
+    38
+   ],
+   [
+    42,
+    43
+   ],
+   [
+    45
+   ]
+  ],
+  "mentions": "pair columns mention_a_pos / mention_b_pos",
+  "agent": "p6-data",
+  "command": "python scripts/ext7_wino_heads.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --layers auto --max-rows 50000",
+  "created_utc": "2026-10-17T01:28:18Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T01:30:44Z",
+  "pass_times_s": [
+   61.09824323654175,
+   41.59415817260742,
+   38.52241086959839
+  ],
+  "n_rows": 89600
+ },
+ "t2": {
+  "cell": "e1_e2a",
+  "proto": "qwen3",
+  "base_run": "p6_e1_e2a_qwen3",
+  "pair_file": "data/dial/pairs_e1_e2a_qwen3.parquet",
+  "case_sets": "data/dial/case_sets_e1_e2a_qwen3.json",
+  "agent": "p6-analysis",
+  "note": "tier-2 mirror of the base run (symlinked inputs, own expert / add-back / circuit / knockout outputs)"
+ },
+ "expert": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 512,
+  "layers": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47
+  ],
+  "pairs_layers": [
+   39
+  ],
+  "only_scaled": false,
+  "corrupt_only": true,
+  "max_spawn": 60000,
+  "chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+   ],
+   [
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+   ],
+   [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+   ],
+   [
+    36,
+    37,
+    38,
+    39
+   ],
+   [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "agent": "p6-analysis",
+  "command": "python scripts/ext7_wino_expert.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_e2a_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 60000",
+  "created_utc": "2026-10-17T02:08:56Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T02:14:14Z",
+  "pass_times_s": [
+   66.14864206314087,
+   42.6635959148407,
+   54.081798791885376,
+   44.26843571662903,
+   47.07832884788513,
+   47.94306445121765
+  ]
+ }
+}

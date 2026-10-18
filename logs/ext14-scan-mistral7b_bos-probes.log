@@ -1,0 +1,13 @@
+2026-10-16T21:02:43Z START ext14-scan-mistral7b_bos-probes (waited 1375s): python scripts/ext14_scan.py mistral7b_bos --part probes --specs data/dial/build/probe_specs_full_mistral.parquet
+21:02:49 probes: 20728 rows, 2591 keys
+21:02:51   layer   0: load-wait 0.73s compute 1.45s  wf_rows=0
+21:03:01   layer   8: load-wait 0.20s compute 1.15s  wf_rows=0
+21:03:11   layer  16: load-wait 0.07s compute 1.15s  wf_rows=0
+21:03:21   layer  24: load-wait 0.06s compute 1.15s  wf_rows=0
+21:03:29   layer  31: load-wait 0.06s compute 1.15s  wf_rows=0
+21:03:29   pass done: 7777 prefill rows (T=18), 0 spawn rows, 40.5s
+21:03:29   pass 1/4 (7777 rows, 41s)
+21:04:08   pass 2/4 (5600 rows, 38s)
+21:04:46   pass 3/4 (5384 rows, 38s)
+21:05:02   pass 4/4 (1967 rows, 17s)
+2026-10-16T21:05:04Z END   ext14-scan-mistral7b_bos-probes rc=0 (141s)

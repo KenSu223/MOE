@@ -1,0 +1,16 @@
+2026-10-17T06:33:48Z START ext14-e1_e2a-qwen3_4b-sweep (waited 495s): python scripts/ext7_wino_sweep.py --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --agent p6-data --max-rows 40000
+06:33:50 qwen3_4b -> p6_e1_e2a_qwen3_4b: 476 directed cases (238 pairs), families {'main': {'discovery': 220, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 36 layers, 2 passes (51408 spawn rows), T max 20
+06:33:52 pass 1/2: layers 0..27, 952 prefill rows, 39984 spawn rows
+06:33:53   layer   0: load-wait 0.37s compute 0.43s  wf_rows=1428
+06:33:55   layer   8: load-wait 0.04s compute 0.18s  wf_rows=12852
+06:33:57   layer  16: load-wait 0.04s compute 0.26s  wf_rows=24276
+06:34:00   layer  24: load-wait 0.04s compute 0.34s  wf_rows=35700
+06:34:03   layer  32: load-wait 0.04s compute 0.37s  wf_rows=39984
+06:34:04   layer  35: load-wait 0.04s compute 0.37s  wf_rows=39984
+06:34:06   pass done: 952 prefill rows (T=20), 39984 spawn rows, 13.2s (metrics 1.6s)
+06:34:06 pass 2/2: layers 28..35, 952 prefill rows, 11424 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+06:34:12 family main: layer disc L28; attn_layer disc L23; block disc L23
+06:34:12 Δclean +2.63 Δcorrupt -2.63 drop +5.26; {"layer_discovery_argmax": 28, "layer_discovery_max": 0.919, "layer_discovery_top5": [[28, 0.919], [30, 0.735], [31, 0.642], [27, 0.518], [26, 0.495]], "layer_validation_argmax": 28, "layer_validation_max": 0.699, "layer_validation_top5": [[28, 0.699], [30, 0.669], [31, 0.547], [29, 0.491], [27, 0.463]], "attn_layer_discovery_argmax": 23, "attn_layer_discovery_max": 1.954, "attn_layer_discovery_top5": [[23, 1.954], [26, 1.19], [24, 0.692], [30, 0.653], [19, 0.43]], "attn_layer_validation_argmax": 23, "attn_layer_validation_max": 1.906, "attn_layer_validation_top5": [[23, 1.906], [26, 1.098], [
+2026-10-17T06:34:13Z END   ext14-e1_e2a-qwen3_4b-sweep rc=0 (25s)

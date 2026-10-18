@@ -1,0 +1,26 @@
+**e3_e2a W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| qwen3_4b | person-name options | True | 14 | 6.19 | 0.162 [0.111, 0.212] | 0.145 [0.120, 0.174] | 0.42 [0.38, 0.47] |
+| qwen3_4b | person-name options | False | 242 | 7.14 | 0.222 [0.210, 0.235] | 0.139 [0.127, 0.151] | 0.30 [0.28, 0.31] |
+| qwen3_4b | statement order 1 (entity of A mentioned first) | True | 182 | 7.23 | 0.213 [0.199, 0.227] | 0.129 [0.116, 0.143] | 0.30 [0.28, 0.32] |
+| qwen3_4b | statement order 1 (entity of A mentioned first) | False | 74 | 6.74 | 0.237 [0.212, 0.261] | 0.166 [0.141, 0.191] | 0.32 [0.30, 0.35] |
+| qwen3_4b | core-776 twin | True | 229 | 7.17 | 0.223 [0.211, 0.235] | 0.136 [0.125, 0.149] | 0.30 [0.28, 0.31] |
+| qwen3_4b | core-776 twin | False | 27 | 6.35 | 0.185 [0.149, 0.223] | 0.168 [0.135, 0.207] | 0.38 [0.35, 0.41] |
+| qwen3_4b | degree adverb in the blank clause (too / very / more ...) | True | 116 | 6.63 | 0.262 [0.242, 0.283] | 0.194 [0.178, 0.210] | 0.34 [0.32, 0.36] |
+| qwen3_4b | degree adverb in the blank clause (too / very / more ...) | False | 140 | 7.46 | 0.188 [0.175, 0.200] | 0.099 [0.088, 0.112] | 0.28 [0.26, 0.30] |
+| qwen3_4b | complementary antonym pair | True | 2 |  |  |  |  |
+| qwen3_4b | complementary antonym pair | False | 254 | 7.11 | 0.220 [0.208, 0.232] | 0.140 [0.129, 0.152] | 0.31 [0.29, 0.32] |
+| qwen3_4b | item built in both tokenizer families | True | 239 | 7.11 | 0.222 [0.210, 0.234] | 0.138 [0.126, 0.150] | 0.30 [0.29, 0.32] |
+| qwen3_4b | item built in both tokenizer families | False | 17 | 6.72 | 0.177 [0.136, 0.228] | 0.163 [0.114, 0.224] | 0.36 [0.32, 0.40] |
+| qwen3_4b | probe-neutral (both triggers |probe| < 1) | True | 256 | 7.09 | 0.219 [0.207, 0.232] | 0.139 [0.128, 0.152] | 0.31 [0.29, 0.32] |
+| qwen3_4b | probe-neutral (both triggers |probe| < 1) | False | 0 |  |  |  |  |
+| qwen3_4b | probe-associative | True | 0 |  |  |  |  |
+| qwen3_4b | probe-associative | False | 256 | 7.09 | 0.219 [0.207, 0.232] | 0.139 [0.128, 0.152] | 0.31 [0.29, 0.32] |
+| qwen3_4b | probe one-sided | True | 0 |  |  |  |  |
+| qwen3_4b | probe one-sided | False | 256 | 7.09 | 0.219 [0.207, 0.232] | 0.139 [0.128, 0.152] | 0.31 [0.29, 0.32] |
+| qwen3_4b | probe reverse | True | 0 |  |  |  |  |
+| qwen3_4b | probe reverse | False | 256 | 7.09 | 0.219 [0.207, 0.232] | 0.139 [0.128, 0.152] | 0.31 [0.29, 0.32] |
+| qwen3_4b | top-1 in both directions | True | 85 | 8.30 | 0.222 [0.207, 0.235] | 0.099 [0.081, 0.118] | 0.25 [0.23, 0.28] |
+| qwen3_4b | top-1 in both directions | False | 171 | 6.48 | 0.218 [0.200, 0.236] | 0.165 [0.153, 0.178] | 0.34 [0.33, 0.36] |

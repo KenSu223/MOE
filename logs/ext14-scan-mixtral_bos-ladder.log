@@ -1,0 +1,39 @@
+2026-10-16T20:19:26Z START ext14-scan-mixtral_bos-ladder (waited 1523s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells l_ind,l_bind,l_ant,l_prop
+20:19:33 l_ind [all]: 1600 pairs, 3200 rows
+20:19:41   layer   0: load-wait 6.07s compute 1.15s  wf_rows=0
+20:20:04   layer   8: load-wait 2.23s compute 0.63s  wf_rows=0
+20:20:26   layer  16: load-wait 2.24s compute 0.63s  wf_rows=0
+20:20:48   layer  24: load-wait 1.47s compute 0.63s  wf_rows=0
+20:21:07   layer  31: load-wait 2.51s compute 0.63s  wf_rows=0
+20:21:07   pass done: 3200 prefill rows (T=14), 0 spawn rows, 93.5s
+20:21:07   pass 1/1 (3200 rows, 93s)
+20:21:09 l_ind {"pairs": 1600, "margin": 166, "reverse_margin": 0, "margin_rate": 0.104, "by_order": {"1": 0.105, "2": 0.102}, "top1_both": 0.485, "passes": 1}
+20:21:11 l_bind [all]: 3200 pairs, 6400 rows
+20:21:15   layer   0: load-wait 1.98s compute 1.96s  wf_rows=0
+20:21:38   layer   8: load-wait 0.93s compute 1.95s  wf_rows=0
+20:22:01   layer  16: load-wait 0.86s compute 1.95s  wf_rows=0
+20:22:22   layer  24: load-wait 0.96s compute 1.96s  wf_rows=0
+20:22:42   layer  31: load-wait 0.99s compute 1.95s  wf_rows=0
+20:22:42   pass done: 6363 prefill rows (T=22), 0 spawn rows, 91.4s
+20:22:42   pass 1/2 (6363 rows, 91s)
+20:24:11   pass 2/2 (37 rows, 89s)
+20:24:11 l_bind {"pairs": 3200, "margin": 1621, "reverse_margin": 0, "margin_rate": 0.507, "by_order": {"1": 0.516, "2": 0.498}, "top1_both": 0.84, "passes": 2}
+20:24:11 l_ant [all]: 537 pairs, 1074 rows
+20:24:14   layer   0: load-wait 2.52s compute 0.20s  wf_rows=0
+20:24:37   layer   8: load-wait 2.90s compute 0.20s  wf_rows=0
+20:25:00   layer  16: load-wait 2.69s compute 0.20s  wf_rows=0
+20:25:23   layer  24: load-wait 2.76s compute 0.20s  wf_rows=0
+20:25:42   layer  31: load-wait 1.92s compute 0.20s  wf_rows=0
+20:25:42   pass done: 1074 prefill rows (T=13), 0 spawn rows, 90.6s
+20:25:42   pass 1/1 (1074 rows, 91s)
+20:25:42 l_ant {"pairs": 537, "margin": 497, "reverse_margin": 10, "margin_rate": 0.926, "by_order": {"1": 0.926}, "top1_both": 0.536, "passes": 1}
+20:25:42 l_prop [all]: 382 pairs, 764 rows
+20:25:44   layer   0: load-wait 2.09s compute 0.18s  wf_rows=0
+20:26:07   layer   8: load-wait 2.71s compute 0.18s  wf_rows=0
+20:26:30   layer  16: load-wait 2.53s compute 0.18s  wf_rows=0
+20:26:51   layer  24: load-wait 2.71s compute 0.18s  wf_rows=0
+20:27:08   layer  31: load-wait 1.86s compute 0.18s  wf_rows=0
+20:27:08   pass done: 764 prefill rows (T=16), 0 spawn rows, 86.3s
+20:27:08   pass 1/1 (764 rows, 86s)
+20:27:08 l_prop {"pairs": 382, "margin": 312, "reverse_margin": 0, "margin_rate": 0.817, "by_order": {"1": 0.817}, "top1_both": 0.262, "passes": 1}
+2026-10-16T20:27:12Z END   ext14-scan-mixtral_bos-ladder rc=0 (466s)

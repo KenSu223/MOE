@@ -1,0 +1,26 @@
+**e3p3_a2e W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| qwen3_14b | person-name options | True | 50 | 7.12 | 0.213 [0.199, 0.228] | 0.532 [0.486, 0.576] | 0.72 [0.70, 0.73] |
+| qwen3_14b | person-name options | False | 206 | 6.99 | 0.203 [0.195, 0.210] | 0.284 [0.270, 0.299] | 0.61 [0.60, 0.62] |
+| qwen3_14b | statement order 1 (entity of A mentioned first) | True | 193 | 7.11 | 0.208 [0.200, 0.215] | 0.346 [0.322, 0.370] | 0.65 [0.63, 0.66] |
+| qwen3_14b | statement order 1 (entity of A mentioned first) | False | 63 | 6.72 | 0.195 [0.183, 0.207] | 0.291 [0.263, 0.320] | 0.60 [0.58, 0.62] |
+| qwen3_14b | core-776 twin | True | 171 | 7.25 | 0.207 [0.200, 0.214] | 0.311 [0.291, 0.330] | 0.62 [0.61, 0.63] |
+| qwen3_14b | core-776 twin | False | 85 | 6.55 | 0.199 [0.187, 0.212] | 0.383 [0.342, 0.427] | 0.67 [0.65, 0.69] |
+| qwen3_14b | degree adverb in the blank clause (too / very / more ...) | True | 132 | 7.12 | 0.192 [0.183, 0.199] | 0.331 [0.303, 0.359] | 0.63 [0.61, 0.64] |
+| qwen3_14b | degree adverb in the blank clause (too / very / more ...) | False | 124 | 6.91 | 0.219 [0.210, 0.228] | 0.337 [0.310, 0.365] | 0.65 [0.63, 0.66] |
+| qwen3_14b | complementary antonym pair | True | 0 |  |  |  |  |
+| qwen3_14b | complementary antonym pair | False | 256 | 7.02 | 0.205 [0.198, 0.211] | 0.333 [0.314, 0.354] | 0.64 [0.63, 0.65] |
+| qwen3_14b | item built in both tokenizer families | True | 209 | 7.01 | 0.205 [0.198, 0.211] | 0.319 [0.300, 0.338] | 0.63 [0.61, 0.64] |
+| qwen3_14b | item built in both tokenizer families | False | 47 | 7.05 | 0.205 [0.189, 0.222] | 0.397 [0.340, 0.453] | 0.68 [0.65, 0.70] |
+| qwen3_14b | probe-neutral (both triggers |probe| < 1) | True | 256 | 7.02 | 0.205 [0.198, 0.211] | 0.333 [0.314, 0.354] | 0.64 [0.63, 0.65] |
+| qwen3_14b | probe-neutral (both triggers |probe| < 1) | False | 0 |  |  |  |  |
+| qwen3_14b | probe-associative | True | 0 |  |  |  |  |
+| qwen3_14b | probe-associative | False | 256 | 7.02 | 0.205 [0.198, 0.211] | 0.333 [0.314, 0.354] | 0.64 [0.63, 0.65] |
+| qwen3_14b | probe one-sided | True | 0 |  |  |  |  |
+| qwen3_14b | probe one-sided | False | 256 | 7.02 | 0.205 [0.198, 0.211] | 0.333 [0.314, 0.354] | 0.64 [0.63, 0.65] |
+| qwen3_14b | probe reverse | True | 0 |  |  |  |  |
+| qwen3_14b | probe reverse | False | 256 | 7.02 | 0.205 [0.198, 0.211] | 0.333 [0.314, 0.354] | 0.64 [0.63, 0.65] |
+| qwen3_14b | top-1 in both directions | True | 196 | 6.91 | 0.205 [0.198, 0.212] | 0.359 [0.337, 0.382] | 0.65 [0.64, 0.66] |
+| qwen3_14b | top-1 in both directions | False | 60 | 7.36 | 0.204 [0.192, 0.217] | 0.255 [0.227, 0.285] | 0.59 [0.57, 0.61] |

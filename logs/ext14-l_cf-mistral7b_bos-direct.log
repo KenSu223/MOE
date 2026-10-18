@@ -1,0 +1,7 @@
+10:33:09   layer   0: load-wait 0.62s compute 0.35s  wf_rows=0
+10:33:10   layer   8: load-wait 0.03s compute 0.06s  wf_rows=0
+10:33:11   layer  16: load-wait 0.04s compute 0.06s  wf_rows=0
+10:33:12   layer  24: load-wait 0.03s compute 0.06s  wf_rows=0
+10:33:12   layer  31: load-wait 0.04s compute 0.05s  wf_rows=0
+10:33:12   pass done: 392 prefill rows (T=16), 0 spawn rows, 3.9s
+10:33:13 p6_l_cf_mistral7b_bos: 392 directed cases; A_direct 0.571, M_direct 0.429, DLA attn share 0.570; fp32 vs engine Delta clean max |diff| 0.061

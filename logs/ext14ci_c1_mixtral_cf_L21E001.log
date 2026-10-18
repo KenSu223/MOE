@@ -1,0 +1,5 @@
+2026-10-16T23:29:32Z START p6ci-c1-mixtral_cf-L21E001 (waited 510s): python scripts/ext14ci_c1_run.py mixtral_cf patch --expert L21E001 --max-spawn 24000
+23:29:49 patch mixtral_cf L21E001: 309 rows (86 cases), 70 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 14336]
+23:31:30 pass 1/1: 395 prefill, 21630 spawns, 100s
+23:31:30 patch done
+2026-10-16T23:31:38Z END   p6ci-c1-mixtral_cf-L21E001 rc=0 (126s)

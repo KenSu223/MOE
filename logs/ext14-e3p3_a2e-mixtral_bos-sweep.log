@@ -1,0 +1,15 @@
+2026-10-17T06:09:15Z START ext14-e3p3_a2e-mixtral_bos-sweep (waited 1357s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e3p3_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mixtral_bos.json --out p6_e3p3_a2e_mixtral_bos --agent p6-data --max-rows 29268
+06:09:16 mixtral -> p6_e3p3_a2e_mixtral_bos: 320 directed cases (160 pairs), families {'main': {'discovery': 160, 'validation': 160}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 2 passes (30720 spawn rows), T max 41
+06:09:18 pass 1/2: layers 0..29, 640 prefill rows, 28800 spawn rows
+06:09:26   layer   0: load-wait 6.94s compute 0.79s  wf_rows=960
+06:09:49   layer   8: load-wait 2.38s compute 0.53s  wf_rows=8640
+06:10:12   layer  16: load-wait 2.23s compute 0.68s  wf_rows=16320
+06:10:36   layer  24: load-wait 2.08s compute 0.82s  wf_rows=24000
+06:10:56   layer  31: load-wait 1.96s compute 0.93s  wf_rows=28800
+06:10:56   pass done: 640 prefill rows (T=41), 28800 spawn rows, 98.0s (metrics 0.3s)
+06:10:58 pass 2/2: layers 30..31, 640 prefill rows, 1920 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+06:12:35 family main: layer disc L20; attn_layer disc L19; block disc L19
+06:12:35 Δclean +2.62 Δcorrupt -2.62 drop +5.24; {"layer_discovery_argmax": 20, "layer_discovery_max": 0.729, "layer_discovery_top5": [[20, 0.729], [17, 0.612], [19, 0.535], [18, 0.5], [16, 0.492]], "layer_validation_argmax": 20, "layer_validation_max": 0.7, "layer_validation_top5": [[20, 0.7], [17, 0.635], [19, 0.527], [16, 0.514], [18, 0.472]], "attn_layer_discovery_argmax": 19, "attn_layer_discovery_max": 1.188, "attn_layer_discovery_top5": [[19, 1.188], [16, 1.186], [21, 0.631], [15, 0.503], [12, 0.484]], "attn_layer_validation_argmax": 19, "attn_layer_validation_max": 1.257, "attn_layer_validation_top5": [[19, 1.257], [16, 1.22], [21, 0
+2026-10-17T06:12:42Z END   ext14-e3p3_a2e-mixtral_bos-sweep rc=0 (207s)

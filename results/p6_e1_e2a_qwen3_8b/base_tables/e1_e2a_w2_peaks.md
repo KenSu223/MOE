@@ -1,0 +1,10 @@
+**e1_e2a W2: final-position single-layer patches (pair bootstrap)**
+
+| Model | Family | Patched output | L* (disc.) | Disc. mean | Validation rescue at L* [95% CI] | Normalised | Discovery top 4 |
+|---|---|---|---|---|---|---|---|
+| qwen3_8b | main | layer | L30 | +0.67 | +0.661 [+0.570, +0.762] | 0.128 [0.111, 0.146] | L30 +0.67, L26 +0.66, L28 +0.59, L31 +0.56 |
+| qwen3_8b | main | attn_layer | L23 | +2.18 | +2.327 [+2.154, +2.503] | 0.449 [0.418, 0.481] | L23 +2.19, L26 +0.81, L24 +0.74, L19 +0.48 |
+| qwen3_8b | main | block | L23 | +2.27 | +2.473 [+2.306, +2.642] | 0.478 [0.449, 0.506] | L23 +2.27, L26 +1.48, L24 +1.12, L30 +1.11 |
+| qwen3_8b | main_interior | layer | L30 | +0.67 | +0.661 [+0.570, +0.762] | 0.128 [0.111, 0.146] | L30 +0.67, L26 +0.66, L28 +0.59, L31 +0.56 |
+| qwen3_8b | main_interior | attn_layer | L23 | +2.18 | +2.327 [+2.154, +2.503] | 0.449 [0.418, 0.481] | L23 +2.19, L26 +0.81, L24 +0.74, L19 +0.48 |
+| qwen3_8b | main_interior | block | L23 | +2.27 | +2.473 [+2.306, +2.642] | 0.478 [0.449, 0.506] | L23 +2.27, L26 +1.48, L24 +1.12, L30 +1.11 |

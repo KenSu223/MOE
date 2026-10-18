@@ -1,0 +1,20 @@
+**l_ind W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | person-name options | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | person-name options | False | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | True | 66 | 4.38 | 0.084 [0.059, 0.111] | 0.508 [0.458, 0.559] | 0.77 [0.71, 0.81] |
+| Qwen3-30B-A3B-Base | statement order 1 (entity of A mentioned first) | False | 66 | 4.22 | 0.090 [0.067, 0.118] | 0.526 [0.476, 0.575] | 0.76 [0.71, 0.79] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | True | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | item built in both tokenizer families | False | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-neutral (both triggers |probe| < 1) | False | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | probe-associative | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe-associative | False | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | probe one-sided | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe one-sided | False | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | probe reverse | True | 0 |  |  |  |  |
+| Qwen3-30B-A3B-Base | probe reverse | False | 132 | 4.30 | 0.087 [0.070, 0.106] | 0.517 [0.482, 0.552] | 0.77 [0.73, 0.80] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | True | 120 | 4.32 | 0.083 [0.067, 0.102] | 0.511 [0.473, 0.552] | 0.79 [0.74, 0.81] |
+| Qwen3-30B-A3B-Base | top-1 in both directions | False | 12 | 4.06 | 0.128 [0.039, 0.191] | 0.577 [0.514, 0.645] | 0.61 [0.56, 0.67] |

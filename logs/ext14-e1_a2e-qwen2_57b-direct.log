@@ -1,0 +1,7 @@
+11:55:56   layer   0: load-wait 30.46s compute 1.53s  wf_rows=0
+11:56:27   layer   8: load-wait 3.10s compute 0.93s  wf_rows=0
+11:56:59   layer  16: load-wait 3.14s compute 0.87s  wf_rows=0
+11:57:31   layer  24: load-wait 3.10s compute 0.87s  wf_rows=0
+11:57:43   layer  27: load-wait 3.12s compute 0.87s  wf_rows=0
+11:57:44   pass done: 512 prefill rows (T=29), 0 spawn rows, 140.0s
+11:57:45 p6_e1_a2e_qwen2_57b: 512 directed cases; A_direct 1.033, M_direct -0.033, DLA attn share 1.028; fp32 vs engine Delta clean max |diff| 0.000

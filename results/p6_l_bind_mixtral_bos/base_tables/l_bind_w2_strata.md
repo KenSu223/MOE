@@ -1,0 +1,20 @@
+**l_bind W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | person-name options | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | person-name options | False | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | statement order 1 (entity of A mentioned first) | True | 128 | 3.95 | 0.072 [0.065, 0.079] | 0.319 [0.308, 0.331] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | statement order 1 (entity of A mentioned first) | False | 128 | 3.92 | 0.075 [0.067, 0.082] | 0.318 [0.306, 0.331] | 0.70 [0.69, 0.72] |
+| Mixtral-8x7B, BOS | item built in both tokenizer families | True | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | item built in both tokenizer families | False | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-neutral (both triggers |probe| < 1) | False | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | probe-associative | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe-associative | False | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | probe one-sided | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe one-sided | False | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | probe reverse | True | 0 |  |  |  |  |
+| Mixtral-8x7B, BOS | probe reverse | False | 256 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.310, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | top-1 in both directions | True | 254 | 3.94 | 0.073 [0.068, 0.078] | 0.319 [0.311, 0.328] | 0.71 [0.70, 0.72] |
+| Mixtral-8x7B, BOS | top-1 in both directions | False | 2 |  |  |  |  |

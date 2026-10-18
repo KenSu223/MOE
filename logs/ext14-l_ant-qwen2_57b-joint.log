@@ -1,0 +1,20 @@
+15:03:43 qwen2_57b -> p6_l_ant_qwen2_57b: 504 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+15:03:53 pass 1/1: 1008 prefill rows, 3024 multi rows
+15:04:22   layer   0: load-wait 27.22s compute 1.63s  wf_rows=3024
+[W1017 15:04:28.598250782 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 15:04:32.575191007 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 15:04:36.577026236 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+15:04:54   layer   8: load-wait 3.18s compute 0.84s  wf_rows=3024
+[W1017 15:04:57.226775374 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 15:05:01.694241403 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+[W1017 15:05:05.716503490 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16187392, total: 23686938624).
+15:05:26   layer  16: load-wait 3.18s compute 0.83s  wf_rows=3024
+15:05:58   layer  24: load-wait 3.08s compute 0.84s  wf_rows=3024
+15:06:10   layer  27: load-wait 3.14s compute 0.84s  wf_rows=3024
+15:06:10   pass done: 1008 prefill rows (T=11), 3024 spawn rows, 137.3s
+15:06:15 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.92, drop 8.92)
+15:06:15 denoise  all_block all     : effect/drop +1.000 (mean effect +8.92, drop 8.92)
+15:06:15 denoise  all_moe   all     : effect/drop +1.048 (mean effect +9.35, drop 8.92)
+15:06:15 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.92, drop 8.92)
+15:06:15 noise    all_block all     : effect/drop +1.000 (mean effect +8.92, drop 8.92)
+15:06:15 noise    all_moe   all     : effect/drop +1.048 (mean effect +9.35, drop 8.92)

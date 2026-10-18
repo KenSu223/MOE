@@ -1,0 +1,5 @@
+**l_ind: pair sets (directed cases pooled; pair means)**
+
+| Model | Family | Pairs | Units | Mean Δ clean | Drop [95% CI] | Clean top-1 | Names | Probe strata neutral / assoc. / one-sided / reverse | Local assoc | Median T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | main | 256 | 128 items | +2.27 | +4.54 [+4.37, +4.71] | 0.92 | 0.00 | 0.00 / 0.00 / 0.00 / 0.00 | nan | 21 |

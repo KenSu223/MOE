@@ -1,0 +1,11 @@
+2026-10-17T08:40:18Z START ext14-e3_a2e-qwen3-t1 (waited 3779s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 e3_a2e e3_e2a
+2026-10-17T08:42:18Z ext14-e3_a2e-qwen3-sweep rc=0 (120s, in bundle job)
+2026-10-17T08:43:30Z ext14-e3_a2e-qwen3-joint rc=0 (72s, in bundle job)
+2026-10-17T08:44:36Z ext14-e3_a2e-qwen3-dla rc=0 (66s, in bundle job)
+2026-10-17T08:45:47Z ext14-e3_a2e-qwen3-direct rc=0 (71s, in bundle job)
+2026-10-17T08:47:46Z ext14-e3_e2a-qwen3-sweep rc=0 (118s, in bundle job)
+2026-10-17T08:48:53Z ext14-e3_e2a-qwen3-joint rc=0 (67s, in bundle job)
+2026-10-17T08:50:04Z ext14-e3_e2a-qwen3-dla rc=0 (71s, in bundle job)
+2026-10-17T08:51:11Z ext14-e3_e2a-qwen3-direct rc=0 (67s, in bundle job)
+2026-10-17T08:53:54Z ext14-e3_e2a-qwen3-heads rc=0 (163s, in bundle job)
+2026-10-17T08:53:54Z END   ext14-e3_a2e-qwen3-t1 rc=0 (816s)

@@ -1,0 +1,58 @@
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+{'task': 'ss_e3', 'concept': 'SIZE_STATE', 'n_sel_units': 172, 'n_eval_pairs': 48, 'head_layers': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'has_experts': True, 'n_effect_units': 172}
+{'task': 'ss_e1', 'concept': 'SIZE_STATE', 'n_sel_units': 72, 'n_eval_pairs': 36, 'head_layers': [13, 15, 16, 18, 19], 'has_experts': False, 'n_effect_units': 72}
+{'task': 'co_p17', 'concept': 'COUNTRY', 'n_sel_units': 96, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 96}
+{'task': 'co_nat', 'concept': 'COUNTRY', 'n_sel_units': 192, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 192}
+{'task': 'pr_ioi', 'concept': 'PERSON_ROLE', 'n_sel_units': 256, 'n_eval_pairs': 48, 'head_layers': [16, 19, 21, 22, 31], 'has_experts': False, 'n_effect_units': 256}
+{'task': 'pr_f1n', 'concept': 'PERSON_ROLE', 'n_sel_units': 24, 'n_eval_pairs': 11, 'head_layers': [15, 16, 19, 21, 27], 'has_experts': True, 'n_effect_units': 24}
+{'task': 'pr_e1n', 'concept': 'PERSON_ROLE', 'n_sel_units': 32, 'n_eval_pairs': 14, 'head_layers': [13, 16, 18, 19, 23], 'has_experts': True, 'n_effect_units': 32}
+{'task': 'ct_lang', 'concept': 'CONTROL', 'n_sel_units': 96, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 96}
+SIZE_STATE ['ss_e3', 'ss_e1'] heads ['L13H18', 'L13H4', 'L15H7', 'L19H13'] experts [] shared ['L15H8', 'L19H12']
+COUNTRY ['co_p17', 'co_nat'] heads ['L15H1', 'L15H3', 'L18H12', 'L18H14', 'L18H4', 'L19H29', 'L19H30', 'L24H21', 'L24H22', 'L24H23'] experts ['L19E002', 'L21E001', 'L22E001', 'L23E002', 'L25E003', 'L28E002'] shared ['L18E001']
+PERSON_ROLE ['pr_ioi', 'pr_f1n', 'pr_e1n'] heads ['L16H1', 'L16H12', 'L16H14'] experts ['L15E002', 'L15E006', 'L16E005', 'L17E007', 'L19E007', 'L20E006', 'L28E003'] shared ['L16H0', 'L19H8']
+report written mixtral_bos
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+/home/ubuntu/MOE/scripts/ext14ci_c3_existing.py:246: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mean = M.mean(0)
+{'task': 'ss_e3', 'concept': 'SIZE_STATE', 'n_sel_units': 172, 'n_eval_pairs': 48, 'head_layers': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 'has_experts': True, 'n_effect_units': 172}
+{'task': 'ss_e1', 'concept': 'SIZE_STATE', 'n_sel_units': 72, 'n_eval_pairs': 36, 'head_layers': [13, 15, 16, 18, 19], 'has_experts': True, 'n_effect_units': 72}
+{'task': 'co_p17', 'concept': 'COUNTRY', 'n_sel_units': 96, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 96}
+{'task': 'co_nat', 'concept': 'COUNTRY', 'n_sel_units': 192, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 192}
+{'task': 'pr_ioi', 'concept': 'PERSON_ROLE', 'n_sel_units': 256, 'n_eval_pairs': 48, 'head_layers': [16, 19, 21, 22, 31], 'has_experts': False, 'n_effect_units': 256}
+{'task': 'pr_f1n', 'concept': 'PERSON_ROLE', 'n_sel_units': 24, 'n_eval_pairs': 11, 'head_layers': [15, 16, 19, 21, 27], 'has_experts': True, 'n_effect_units': 24}
+{'task': 'pr_e1n', 'concept': 'PERSON_ROLE', 'n_sel_units': 32, 'n_eval_pairs': 14, 'head_layers': [13, 16, 18, 19, 23], 'has_experts': True, 'n_effect_units': 32}
+{'task': 'ct_lang', 'concept': 'CONTROL', 'n_sel_units': 96, 'n_eval_pairs': 48, 'head_layers': [13, 15, 16, 18, 19, 24], 'has_experts': True, 'n_effect_units': 96}
+SIZE_STATE ['ss_e3', 'ss_e1'] heads ['L13H18', 'L13H4', 'L15H7', 'L19H13'] experts ['L21E004', 'L21E006', 'L24E002', 'L25E002', 'L26E002', 'L26E007'] shared ['L15H8', 'L19E006', 'L19H12', 'L20E000']
+COUNTRY ['co_p17', 'co_nat'] heads ['L15H1', 'L15H3', 'L18H12', 'L18H14', 'L18H4', 'L19H29', 'L19H30', 'L24H21', 'L24H22', 'L24H23'] experts ['L19E002', 'L21E001', 'L22E001', 'L23E002', 'L25E003', 'L28E002'] shared ['L18E001']
+PERSON_ROLE ['pr_ioi', 'pr_f1n', 'pr_e1n'] heads ['L16H1', 'L16H12', 'L16H14'] experts ['L15E002', 'L15E006', 'L16E005', 'L17E007', 'L19E007', 'L20E006', 'L28E003'] shared ['L16H0', 'L19H8']
+report written mixtral_bos
+report written mixtral_bos
+report written mixtral_bos

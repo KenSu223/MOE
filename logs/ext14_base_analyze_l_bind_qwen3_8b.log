@@ -1,0 +1,5 @@
+10:32:36 l_bind qwen3_8b W2
+10:32:38 cluster bootstrap
+10:32:38 W4
+10:32:40 tables / figures written to /home/ubuntu/MOE/results/p6_l_bind_qwen3_8b
+10:32:40 registry updated {"status": {"cases": true, "base": true}, "headline": {"share_val": [0.6798695246971109, 0.667065439668535, 0.6905278799643684], "A_direct": [1.8472811002910487, 1.7426117084663626, 1.9539754395085667], "M_all_moe": [-0.01482979440512302, -0.08139472766955298, 0.04547575672086286], "n_pairs_val": 80, "n_units_val": 40}}

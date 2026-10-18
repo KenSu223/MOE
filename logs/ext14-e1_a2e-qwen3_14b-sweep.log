@@ -1,0 +1,17 @@
+2026-10-17T07:39:01Z START ext14-e1_a2e-qwen3_14b-sweep (waited 1779s): python scripts/ext7_wino_sweep.py --model qwen3_14b --pairs data/dial/pairs_e1_a2e_qwen3_14b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_14b.json --out p6_e1_a2e_qwen3_14b --agent p6-data --max-rows 30000
+07:39:02 qwen3_14b -> p6_e1_a2e_qwen3_14b: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 40 layers, 3 passes (61440 spawn rows), T max 29
+07:39:05 pass 1/3: layers 0..18, 1024 prefill rows, 29184 spawn rows
+07:39:08   layer   0: load-wait 1.72s compute 0.83s  wf_rows=1536
+07:39:13   layer   8: load-wait 0.12s compute 0.58s  wf_rows=13824
+07:39:19   layer  16: load-wait 0.10s compute 0.78s  wf_rows=26112
+07:39:27   layer  24: load-wait 0.13s compute 0.85s  wf_rows=29184
+07:39:35   layer  32: load-wait 0.12s compute 0.85s  wf_rows=29184
+07:39:42   layer  39: load-wait 0.14s compute 0.85s  wf_rows=29184
+07:39:43   pass done: 1024 prefill rows (T=29), 29184 spawn rows, 37.9s (metrics 1.6s)
+07:39:44 pass 2/3: layers 19..37, 1024 prefill rows, 29184 spawn rows
+07:40:09 pass 3/3: layers 38..39, 1024 prefill rows, 3072 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:40:26 family main: layer disc L31; attn_layer disc L28; block disc L28
+07:40:26 Δclean +4.76 Δcorrupt -4.76 drop +9.51; {"layer_discovery_argmax": 31, "layer_discovery_max": 1.929, "layer_discovery_top5": [[31, 1.929], [26, 1.076], [27, 0.878], [32, 0.699], [30, 0.685]], "layer_validation_argmax": 31, "layer_validation_max": 1.903, "layer_validation_top5": [[31, 1.903], [26, 0.948], [27, 0.847], [32, 0.681], [30, 0.668]], "attn_layer_discovery_argmax": 28, "attn_layer_discovery_max": 2.947, "attn_layer_discovery_top5": [[28, 2.947], [26, 1.9], [25, 1.844], [30, 1.635], [35, 1.139]], "attn_layer_validation_argmax": 28, "attn_layer_validation_max": 2.928, "attn_layer_validation_top5": [[28, 2.928], [26, 1.948], [
+2026-10-17T07:40:28Z END   ext14-e1_a2e-qwen3_14b-sweep rc=0 (87s)

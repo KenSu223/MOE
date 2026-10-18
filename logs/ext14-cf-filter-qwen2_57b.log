@@ -1,0 +1,15 @@
+2026-10-17T09:02:44Z START ext14-cf-filter-qwen2_57b (waited 1434s): python scripts/ext14_scan_cf.py qwen2_57b --out qwen2_57b_str --paper-key Qwen3
+09:03:03 qwen2_57b (special_tokens=True): 256 cases, 3883 symmetric candidates; cases with >= 1: 221; per case quartiles [2.0, 6.0, 18.25] max 106
+09:03:04 pass 1/2: 3072 prefill rows
+09:03:47   layer   0: load-wait 38.05s compute 3.92s  wf_rows=0
+[W1017 09:03:50.035262024 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 09:04:00.137694235 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 18284544, total: 23686938624).
+[W1017 09:04:04.820087532 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 22478848, total: 23686938624).
+09:04:19   layer   8: load-wait 1.06s compute 2.86s  wf_rows=0
+09:04:51   layer  16: load-wait 1.19s compute 2.79s  wf_rows=0
+09:05:23   layer  24: load-wait 1.21s compute 2.76s  wf_rows=0
+09:05:35   layer  27: load-wait 1.40s compute 2.81s  wf_rows=0
+09:05:36   pass done: 3072 prefill rows (T=16), 0 spawn rows, 151.0s
+09:05:36 pass 2/2: 1067 prefill rows
+09:07:43 summary: {"n_cases": 256, "n_candidates": 3883, "cases_with_candidate": 221, "cases_with_qualifying": 217, "cases_kept": 217, "kept_discovery": 109, "kept_validation": 108, "qualify_rate": 0.8920937419520989, "donor_top1_is_foil_rate": 0.3005408189544167, "donor_top1_is_foil_rate_selected": 0.3270588235294118, "n_selected": 850, "selected_per_case": {"1": 31, "2": 23, "3": 14, "4": 14, "5": 135}, "delta_donor_selected_mean": -6.506947314739227, "delta_donor_all_median": -5.7171630859375, "delta_clean_mean_kept": 5.923259044023154, "delta_clean_lt1_kept": 15, "top1_clean_is_true_kept": 78, "pass_times_s": [151.00404381752014, 112.58952689170837], "rejected_tokenizer": []}
+2026-10-17T09:07:59Z END   ext14-cf-filter-qwen2_57b rc=0 (315s)

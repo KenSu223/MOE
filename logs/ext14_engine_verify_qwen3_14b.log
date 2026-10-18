@@ -1,0 +1,47 @@
+22:25:46 qwen3_14b: qwen3, 6 units, dtype bf16
+22:25:46   186 configurations
+Loading weights:   0%|          | 0/443 [00:00<?, ?it/s]Loading weights:   0%|          | 2/443 [00:00<01:59,  3.71it/s]Loading weights:   1%|          | 4/443 [00:00<01:05,  6.67it/s]Loading weights:   1%|▏         | 6/443 [00:01<01:11,  6.15it/s]Loading weights:   3%|▎         | 12/443 [00:01<00:29, 14.46it/s]Loading weights:   3%|▎         | 15/443 [00:01<00:28, 15.22it/s]Loading weights:   4%|▍         | 18/443 [00:01<00:35, 12.14it/s]Loading weights:   5%|▍         | 22/443 [00:01<00:26, 16.05it/s]Loading weights:   6%|▌         | 26/443 [00:02<00:30, 13.85it/s]Loading weights:   6%|▋         | 28/443 [00:02<00:31, 13.21it/s]Loading weights:   8%|▊         | 34/443 [00:02<00:20, 20.15it/s]Loading weights:   8%|▊         | 37/443 [00:02<00:21, 18.94it/s]Loading weights:   9%|▉         | 40/443 [00:03<00:28, 14.28it/s]Loading weights:  10%|█         | 45/443 [00:03<00:20, 19.27it/s]Loading weights:  11%|█         | 48/443 [00:03<00:21, 18.34it/s]Loading weights:  12%|█▏        | 51/443 [00:03<00:30, 12.90it/s]Loading weights:  13%|█▎        | 59/443 [00:03<00:20, 18.79it/s]Loading weights:  14%|█▍        | 62/443 [00:04<00:25, 14.93it/s]Loading weights:  15%|█▍        | 66/443 [00:04<00:21, 17.84it/s]Loading weights:  16%|█▌        | 70/443 [00:04<00:24, 15.10it/s]Loading weights:  16%|█▋        | 72/443 [00:04<00:26, 14.25it/s]Loading weights:  18%|█▊        | 78/443 [00:05<00:17, 20.60it/s]Loading weights:  18%|█▊        | 81/443 [00:05<00:18, 19.31it/s]Loading weights:  19%|█▉        | 84/443 [00:05<00:24, 14.59it/s]Loading weights:  20%|█▉        | 88/443 [00:05<00:19, 17.98it/s]Loading weights:  21%|██        | 92/443 [00:05<00:18, 18.92it/s]Loading weights:  21%|██▏       | 95/443 [00:06<00:24, 14.38it/s]Loading weights:  22%|██▏       | 99/443 [00:06<00:19, 17.79it/s]Loading weights:  23%|██▎       | 103/443 [00:06<00:18, 18.77it/s]Loading weights:  24%|██▍       | 106/443 [00:06<00:23, 14.28it/s]Loading weights:  25%|██▍       | 109/443 [00:07<00:21, 15.70it/s]Loading weights:  26%|██▌       | 114/443 [00:07<00:17, 19.12it/s]Loading weights:  26%|██▋       | 117/443 [00:07<00:22, 14.70it/s]Loading weights:  27%|██▋       | 120/443 [00:07<00:19, 16.64it/s]Loading weights:  28%|██▊       | 125/443 [00:07<00:16, 19.45it/s]Loading weights:  29%|██▉       | 128/443 [00:08<00:21, 14.67it/s]Loading weights:  30%|███       | 133/443 [00:08<00:15, 19.49it/s]Loading weights:  31%|███       | 136/443 [00:08<00:16, 18.52it/s]Loading weights:  31%|███▏      | 139/443 [00:08<00:21, 14.17it/s]Loading weights:  32%|███▏      | 143/443 [00:09<00:17, 17.09it/s]Loading weights:  33%|███▎      | 147/443 [00:09<00:16, 18.43it/s]Loading weights:  34%|███▍      | 150/443 [00:09<00:20, 14.39it/s]Loading weights:  35%|███▍      | 155/443 [00:09<00:14, 19.26it/s]Loading weights:  36%|███▌      | 158/443 [00:09<00:15, 18.35it/s]Loading weights:  36%|███▋      | 161/443 [00:10<00:20, 14.07it/s]Loading weights:  37%|███▋      | 165/443 [00:10<00:15, 17.52it/s]Loading weights:  38%|███▊      | 169/443 [00:10<00:14, 18.57it/s]Loading weights:  39%|███▉      | 172/443 [00:10<00:19, 14.20it/s]Loading weights:  40%|███▉      | 176/443 [00:11<00:15, 17.63it/s]Loading weights:  41%|████      | 180/443 [00:11<00:17, 14.76it/s]Loading weights:  41%|████      | 182/443 [00:11<00:18, 13.96it/s]Loading weights:  42%|████▏     | 188/443 [00:11<00:12, 20.66it/s]Loading weights:  43%|████▎     | 191/443 [00:11<00:13, 19.31it/s]Loading weights:  44%|████▍     | 194/443 [00:12<00:17, 14.50it/s]Loading weights:  45%|████▍     | 198/443 [00:12<00:13, 17.98it/s]Loading weights:  46%|████▌     | 202/443 [00:12<00:12, 18.91it/s]Loading weights:  46%|████▋     | 205/443 [00:12<00:16, 14.35it/s]Loading weights:  47%|████▋     | 210/443 [00:12<00:12, 19.23it/s]Loading weights:  48%|████▊     | 213/443 [00:13<00:12, 18.33it/s]Loading weights:  49%|████▉     | 216/443 [00:13<00:16, 14.06it/s]Loading weights:  50%|████▉     | 221/443 [00:13<00:11, 18.95it/s]Loading weights:  51%|█████     | 224/443 [00:13<00:12, 18.13it/s]Loading weights:  51%|█████     | 227/443 [00:14<00:15, 13.96it/s]Loading weights:  52%|█████▏    | 232/443 [00:14<00:11, 18.87it/s]Loading weights:  53%|█████▎    | 235/443 [00:14<00:11, 18.05it/s]Loading weights:  54%|█████▎    | 238/443 [00:14<00:14, 13.91it/s]Loading weights:  55%|█████▍    | 243/443 [00:14<00:11, 18.02it/s]Loading weights: 100%|██████████| 443/443 [00:15<00:00, 29.51it/s]
+Some parameters are on the meta device because they were offloaded to the cpu.
+22:27:10   HF unit 1/6 done (68s)
+22:28:03   HF unit 2/6 done (121s)
+22:28:56   HF unit 3/6 done (174s)
+22:29:49   HF unit 4/6 done (227s)
+22:30:43   HF unit 5/6 done (280s)
+22:31:36   HF unit 6/6 done (333s)
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/ext14_engine_verify.py", line 1089, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/ext14_engine_verify.py", line 1066, in main
+    eres, pre, spawns, row_of, sp_of, extra, neur_diag = engine_full(eng, units, configs, masks, recs, rt)
+                                                         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/scripts/ext14_engine_verify.py", line 702, in engine_full
+    res = eng.run(pre, spawns, diag=diag, metrics=True)
+  File "/home/ubuntu/MOE/.venv/lib/python3.14/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/ubuntu/MOE/moetrace/engine.py", line 938, in run
+    assert all(steps[j][0] < steps[j + 1][0] for j in range(len(steps) - 1)), "multi: layers must increase"
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: multi: layers must increase
+22:31:47 qwen3_14b: qwen3, 6 units, dtype bf16
+22:31:57   engine identities 9.1s: {"layer": 20, "zero_vs_parent": {"n": 6, "maxabs": 0.125, "meanabs": 0.0625, "frac_exact": 0.3333333333333333}, "union_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 6, "maxabs": 0.125, "meanabs": 0.03125, "frac_exact": 0.6666666666666666}, "neurons_linearity_relerr_max": 2.903587414948561e-07, "expert_rescue_mean": 0.09375, "layer_rescue_mean": 0.09375, "clean_delta_pos_frac": 1.0, "drop_mean": 7.1875}
+22:32:00   engine pass 3.5s
+22:32:00   sanity: [{"prompt": "The capital of France is", "answer": " Paris", "rank": 1, "p": 0.2554718852043152}, {"prompt": "The Eiffel Tower is located in the city of", "answer": " Paris", "rank": 1, "p": 0.47564566135406494}, {"prompt": "Water is made of hydrogen and", "answer": " oxygen", "rank": 1, "p": 0.9804964661598206}, {"prompt": "The opposite of hot is", "answer": " cold", "rank": 1, "p": 0.5230997204780579}, {"prompt": "Monday, Tuesday, Wednesday,", "answer": " Thursday", "rank": 1, "p": 0.6666415333747864}]
+22:32:05   layer 1: update relerr max 0.00951 mean 0.007378
+22:32:07   layer 20: update relerr max 0.01386 mean 0.01209
+22:32:10   layer 39: update relerr max 0.01847 mean 0.008195
+22:32:10 wrote results/verify_ext14_qwen3_14b_perlayer.json
+22:32:10 model: "qwen3_14b"
+22:32:10 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-14B-Base/snapshots/0b0bd3732e2c374d483664439ea334928b65f304"
+22:32:10 family: "qwen3"
+22:32:10 dtype: "bf16"
+22:32:10 n_layers: 40
+22:32:10 n_experts: 1
+22:32:10 top_k: 1
+22:32:10 shared_inter: 0
+22:32:10 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+22:32:10 started: "2026-10-16T22:31:41Z"
+22:32:10 hf_offload: false
+22:32:10 light_plan: false
+22:32:10 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+22:32:10 total_s: 23.12739658355713

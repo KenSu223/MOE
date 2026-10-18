@@ -1,0 +1,20 @@
+**l_ioi W2 strata (main discovery + validation; layers fixed by the main discovery argmax; pair bootstrap)**
+
+| Model | Stratum | Value | Pairs | Mean drop | MoE at L*_MoE / drop | Attention at L*_attn / drop | Attention share |
+|---|---|---|---|---|---|---|---|
+| mistral7b_bos | person-name options | True | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | person-name options | False | 0 |  |  |  |  |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | True | 125 | 11.08 | 0.046 [0.041, 0.051] | 0.262 [0.251, 0.273] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | statement order 1 (entity of A mentioned first) | False | 131 | 10.82 | 0.046 [0.041, 0.051] | 0.255 [0.245, 0.265] | 0.79 [0.78, 0.80] |
+| mistral7b_bos | item built in both tokenizer families | True | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | item built in both tokenizer families | False | 0 |  |  |  |  |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | True | 0 |  |  |  |  |
+| mistral7b_bos | probe-neutral (both triggers |probe| < 1) | False | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | probe-associative | True | 0 |  |  |  |  |
+| mistral7b_bos | probe-associative | False | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | probe one-sided | True | 0 |  |  |  |  |
+| mistral7b_bos | probe one-sided | False | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | probe reverse | True | 0 |  |  |  |  |
+| mistral7b_bos | probe reverse | False | 256 | 10.94 | 0.046 [0.042, 0.050] | 0.259 [0.251, 0.266] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | top-1 in both directions | True | 166 | 11.86 | 0.047 [0.043, 0.052] | 0.268 [0.259, 0.277] | 0.79 [0.78, 0.79] |
+| mistral7b_bos | top-1 in both directions | False | 90 | 9.26 | 0.042 [0.037, 0.048] | 0.236 [0.224, 0.248] | 0.79 [0.78, 0.80] |

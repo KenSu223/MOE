@@ -1,0 +1,127 @@
+{
+ "model": "/opt/dlami/nvme/p6_tiny/qwen3",
+ "path": "/opt/dlami/nvme/p6_tiny/qwen3",
+ "family": "qwen3",
+ "dtype": "fp32",
+ "n_layers": 4,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-16T21:44:47Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "kind": "tiny_random",
+  "n": 4
+ },
+ "per_layer": {
+  "behaviour": {
+   "delta": [
+    -0.48107200860977173,
+    1.5595742464065552,
+    -0.16697219014167786,
+    1.0548975467681885
+   ],
+   "rank_true": [
+    798,
+    414,
+    330,
+    128
+   ],
+   "top1_is_true": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "sanity": []
+  },
+  "identities": {
+   "layer": 2,
+   "zero_vs_parent": {
+    "n": 4,
+    "maxabs": 5.364418029785156e-07,
+    "meanabs": 2.3096799850463867e-07,
+    "frac_exact": 0.0
+   },
+   "union_vs_layer": {
+    "n": 4,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "setall_vs_layer": {
+    "n": 4,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "neurons_all_vs_expert": {
+    "n": 4,
+    "maxabs": 3.2782554626464844e-07,
+    "meanabs": 2.1606683731079102e-07,
+    "frac_exact": 0.0
+   },
+   "neurons_linearity_relerr_max": 1.3625621875235083e-07,
+   "expert_rescue_mean": 0.01195371150970459,
+   "layer_rescue_mean": 0.01195371150970459,
+   "clean_delta_pos_frac": 0.5,
+   "drop_mean": -0.02248479425907135
+  },
+  "layers": {
+   "1": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 3.2594493859505747e-07,
+     "meanabs": 2.6921447116023955e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 1.1920928955078125e-06,
+     "meanabs": 8.940696716308594e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   },
+   "2": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 3.0179873533597856e-07,
+     "meanabs": 2.40408162710537e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 9.5367431640625e-07,
+     "meanabs": 8.046627044677734e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   },
+   "3": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 3.0364634540092084e-07,
+     "meanabs": 2.4601319381645226e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 9.5367431640625e-07,
+     "meanabs": 8.493661880493164e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": null,
+    "routing_set_agreement": null,
+    "routing_overlap": null
+   }
+  }
+ },
+ "total_s": 4.308486461639404
+}

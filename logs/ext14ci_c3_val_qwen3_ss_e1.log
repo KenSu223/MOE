@@ -1,0 +1,6 @@
+2026-10-17T05:18:41Z START p6ci-c3-val-qwen3-ss_e1 (waited 2192s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks ss_e1 --max-rows 2048 --max-spawn 16000
+05:18:49 qwen3: 3 circuits, 27 sets, tasks ['ss_e1']
+05:21:18 ss_e1: knockout 2688 rows (149s)
+05:22:04 ss_e1: add-back / edges 8160 spawns in 1 passes (46s)
+05:22:05 done
+2026-10-17T05:22:12Z END   p6ci-c3-val-qwen3-ss_e1 rc=0 (211s)

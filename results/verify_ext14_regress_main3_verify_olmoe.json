@@ -1,0 +1,126 @@
+{
+ "embed_std_engine": 0.009373849257826805,
+ "embed_std_hf": 0.009373849257826805,
+ "engine_pass_s": 4.469046354293823,
+ "delta_clean_maxdiff_vs_hf": 0.3828125,
+ "delta_noised_maxdiff_vs_hf": 0.61328125,
+ "delta_clean_frac_within_0.1": 0.72,
+ "delta_noised_frac_within_0.1": 0.46,
+ "delta_bmm_vs_fullmatmul_maxdiff": 0.0,
+ "delta_bmm_vs_fullmatmul_frac_equal": 1.0,
+ "top1_agreement_clean": 0.98,
+ "logit_true_clean_maxdiff_vs_hf": 0.28125,
+ "zero_on_noised_maxdiff": 0.40625,
+ "zero_on_clean_maxdiff": 0.125,
+ "layer_patch_vs_hf_n": 50,
+ "layer_patch_vs_hf_maxdiff": 0.578125,
+ "layer_patch_vs_hf_frac_within_0.1": 0.58,
+ "layer_rescue_vs_hf_maxdiff": 0.498046875,
+ "expert_patch_vs_hf_n": 221,
+ "expert_patch_vs_hf_maxdiff": 1.07421875,
+ "expert_patch_vs_hf_frac_within_0.1": 0.334841628959276,
+ "routing_set_agreement": "38/40",
+ "union_vs_layer_maxdiff": 0.0,
+ "union_vs_layer_frac_equal": 1.0,
+ "layer_times_first_pass": [
+  [
+   0,
+   1.455,
+   0.214
+  ],
+  [
+   1,
+   0.068,
+   0.102
+  ],
+  [
+   2,
+   0.087,
+   0.052
+  ],
+  [
+   3,
+   0.115,
+   0.068
+  ],
+  [
+   4,
+   0.106,
+   0.054
+  ],
+  [
+   5,
+   0.127,
+   0.039
+  ],
+  [
+   6,
+   0.32,
+   0.038
+  ],
+  [
+   7,
+   0.185,
+   0.119
+  ],
+  [
+   8,
+   0.068,
+   0.111
+  ],
+  [
+   9,
+   0.067,
+   0.051
+  ],
+  [
+   10,
+   0.112,
+   0.053
+  ],
+  [
+   11,
+   0.111,
+   0.052
+  ],
+  [
+   12,
+   0.109,
+   0.058
+  ],
+  [
+   13,
+   0.106,
+   0.055
+  ],
+  [
+   14,
+   0.111,
+   0.05
+  ],
+  [
+   15,
+   0.113,
+   0.031
+  ]
+ ],
+ "pass_total_s": 4.41669774055481,
+ "mean_layer_rescue_curve": [
+  -0.034,
+  0.084,
+  0.181,
+  0.111,
+  0.135,
+  0.018,
+  0.004,
+  0.075,
+  0.009,
+  0.054,
+  0.113,
+  0.561,
+  1.218,
+  1.063,
+  -0.543,
+  0.219
+ ]
+}

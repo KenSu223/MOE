@@ -1,0 +1,5 @@
+2026-10-16T23:05:30Z START p6ci-c1-mixtral_wino-L20E000 (waited 74s): python scripts/ext14ci_c1_run.py mixtral_wino patch --expert L20E000 --max-spawn 24000
+23:05:38 patch mixtral_wino L20E000: 246 rows (246 cases), 70 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 14336]
+23:07:17 pass 1/1: 492 prefill, 17220 spawns, 98s
+23:07:17 patch done
+2026-10-16T23:07:24Z END   p6ci-c1-mixtral_wino-L20E000 rc=0 (114s)

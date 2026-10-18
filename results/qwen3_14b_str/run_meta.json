@@ -1,0 +1,18 @@
+{
+ "filter": {
+  "model": "qwen3_14b",
+  "repo": "Qwen/Qwen3-14B-Base",
+  "special_tokens": true,
+  "k": 5,
+  "margin": 1.0,
+  "seed_base": 2000,
+  "command": "python scripts/ext14_scan_cf.py qwen3_14b --out qwen3_14b_str --paper-key Qwen3",
+  "created_utc": "2026-10-17T06:23:59Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T06:24:42Z",
+  "pass_times_s": [
+   32.069841623306274,
+   8.850810766220093
+  ]
+ }
+}

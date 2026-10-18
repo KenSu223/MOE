@@ -1,0 +1,10 @@
+2026-10-17T09:01:58Z START ext14-e1_e2a-qwen3_4b-direct (waited 4977s): python -m moetrace.ext7_controls direct --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --splits discovery,validation
+09:02:01   layer   0: load-wait 0.38s compute 0.34s  wf_rows=0
+09:02:02   layer   8: load-wait 0.07s compute 0.07s  wf_rows=0
+09:02:03   layer  16: load-wait 0.04s compute 0.05s  wf_rows=0
+09:02:05   layer  24: load-wait 0.15s compute 0.05s  wf_rows=0
+09:02:06   layer  32: load-wait 0.15s compute 0.05s  wf_rows=0
+09:02:07   layer  35: load-wait 0.15s compute 0.05s  wf_rows=0
+09:02:07   pass done: 476 prefill rows (T=20), 0 spawn rows, 6.5s
+09:02:07 p6_e1_e2a_qwen3_4b: 476 directed cases; A_direct 0.664, M_direct 0.336, DLA attn share 0.663; fp32 vs engine Delta clean max |diff| 0.122
+2026-10-17T09:02:08Z END   ext14-e1_e2a-qwen3_4b-direct rc=0 (10s)

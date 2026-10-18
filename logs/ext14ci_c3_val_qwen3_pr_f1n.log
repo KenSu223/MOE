@@ -1,0 +1,6 @@
+2026-10-17T06:57:42Z START p6ci-c3-val-qwen3-pr_f1n (waited 1489s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks pr_f1n --max-rows 2048 --max-spawn 16000
+06:57:45 qwen3: 3 circuits, 27 sets, tasks ['pr_f1n']
+07:00:17 pr_f1n: knockout 2688 rows (151s)
+07:01:02 pr_f1n: add-back / edges 4608 spawns in 1 passes (45s)
+07:01:02 done
+2026-10-17T07:01:09Z END   p6ci-c3-val-qwen3-pr_f1n rc=0 (207s)

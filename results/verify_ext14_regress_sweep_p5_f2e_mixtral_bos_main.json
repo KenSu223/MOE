@@ -1,0 +1,63 @@
+{
+ "run": "p5_f2e_mixtral_bos",
+ "model": "mixtral",
+ "n_rows_old": 7056,
+ "n_rows_new": 7056,
+ "unmatched": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "pass_s": 101.79216408729553,
+ "fields": {
+  "delta": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "logit_true": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "logit_foil": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "top1": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "vnorm": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "logp_true": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "logp_foil": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "p_true": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "p_foil": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "rank_true": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  },
+  "kl_to_clean": {
+   "n_differ": 0,
+   "maxabs": 0.0
+  }
+ },
+ "routing": {
+  "n": 9216,
+  "n_old": 9216,
+  "expert": 0,
+  "weight": 0,
+  "cnorm": 0
+ },
+ "identical": true
+}

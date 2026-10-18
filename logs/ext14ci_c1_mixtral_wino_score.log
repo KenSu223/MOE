@@ -1,0 +1,8 @@
+2026-10-16T23:02:15Z START p6ci-c1-mixtral_wino-score (waited 71s): python scripts/ext14ci_c1_run.py mixtral_wino score
+23:02:23 score mixtral_wino: 1024 prefill rows, 0 spawns, experts [(20, 0)]
+23:04:00 pass 98s
+/home/ubuntu/MOE/moetrace/ext14_circuit.py:179: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  t = torch.as_tensor(true_ids, device=head.device, dtype=torch.long)
+23:04:07 L20E000: active clean 493/512, corrupt 493; sum dla vs slot dla r=1.0000, max |diff| 0.0015
+23:04:07 score done
+2026-10-16T23:04:14Z END   p6ci-c1-mixtral_wino-score rc=0 (119s)

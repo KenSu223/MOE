@@ -1,0 +1,6 @@
+2026-10-17T06:18:41Z START p6ci-c3-val-qwen3-co_nat (waited 1332s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks co_nat --max-rows 2048 --max-spawn 16000
+06:18:43 qwen3: 3 circuits, 27 sets, tasks ['co_nat']
+06:21:14 co_nat: knockout 2688 rows (150s)
+06:22:04 co_nat: add-back / edges 11808 spawns in 1 passes (50s)
+06:22:04 done
+2026-10-17T06:22:11Z END   p6ci-c3-val-qwen3-co_nat rc=0 (210s)

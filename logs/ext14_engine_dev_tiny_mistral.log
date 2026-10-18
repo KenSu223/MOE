@@ -1,0 +1,65 @@
+19:39:20 mistral: mistral, 8 units, dtype fp32
+19:39:20   376 configurations
+Loading weights:   0%|          | 0/39 [00:00<?, ?it/s]Loading weights: 100%|██████████| 39/39 [00:00<00:00, 4626.07it/s]
+19:39:27   HF unit 1/8 done (3s)
+19:39:27   HF unit 2/8 done (4s)
+19:39:28   HF unit 3/8 done (4s)
+19:39:28   HF unit 4/8 done (4s)
+19:39:28   HF unit 5/8 done (5s)
+19:39:29   HF unit 6/8 done (5s)
+19:39:29   HF unit 7/8 done (5s)
+19:39:29   HF unit 8/8 done (6s)
+19:39:30   engine pass: 48 prefill rows, 424 spawns, 0.3s
+19:39:30 wrote results/verify_ext14_tiny_mistral.json
+19:39:30 model: "/opt/dlami/nvme/p6_tiny/mistral"
+19:39:30 path: "/opt/dlami/nvme/p6_tiny/mistral"
+19:39:30 family: "mistral"
+19:39:30 dtype: "fp32"
+19:39:30 n_layers: 4
+19:39:30 n_experts: 1
+19:39:30 top_k: 1
+19:39:30 shared_inter: 0
+19:39:30 engine_file: "/home/ubuntu/MOE_wt_p6engine/moetrace/engine.py"
+19:39:30 started: "2026-10-16T19:39:20Z"
+19:39:30 units: {"kind": "tiny_random", "n": 8}
+19:39:30 hf_s: 9.417222023010254
+19:39:30 n_configs: 376
+19:39:30 n_spawns: 424
+19:39:30 prefill_delta_vs_hf: {"C": {"n": 8, "maxabs": 2.0265579223632812e-06, "meanabs": 7.37607479095459e-07, "frac_exact": 0.125}, "X": {"n": 8, "maxabs": 1.2516975402832031e-06, "meanabs": 7.525086402893066e-07, "frac_exact": 0.0}, "CMz": {"n": 8, "maxabs": 1.6689300537109375e-06, "meanabs": 7.37607479095459e-07, "frac_exact": 0.125}, "XMz": {"n": 8, "maxabs": 2.2649765014648438e-06, "meanabs": 5.103647708892822e-07, "frac_exact": 0.125}, "CMm": {"n": 8, "maxabs": 1.6689300537109375e-06, "meanabs": 7.525086402893066e-07, "frac_exact": 0.125}, "XMm": {"n": 8, "maxabs": 8.344650268554688e-07, "meanabs": 5.587935447692871
+19:39:30 prefill_metrics_vs_hf: {"logp_true": {"n": 48, "maxabs": 1.9073486328125e-06, "meanabs": 5.76178232828776e-07, "frac_exact": 0.2916666666666667}, "logp_foil": {"n": 48, "maxabs": 9.5367431640625e-07, "meanabs": 4.569689432779948e-07, "frac_exact": 0.3333333333333333}, "p_true": {"n": 48, "maxabs": 4.6566128730773926e-09, "meanabs": 5.766196409240365e-10, "frac_exact": 0.2916666666666667}, "kl_to_clean": {"n": 48, "maxabs": 5.327165126800537e-07, "meanabs": 1.3380000988642374e-07, "frac_exact": 0.5}}
+19:39:30 prefill_rank_equal_frac: 1.0
+19:39:30 head_mask_effect_on_delta_hf: {"Mz": 0.6091247517615557, "Mm": 0.13012360222637653}
+19:39:30 spawn_delta_vs_hf: {"den_attn": {"n": 32, "maxabs": 1.5497207641601562e-06, "meanabs": 5.960464477539062e-07, "frac_exact": 0.0, "rescue_corr": 0.9999999999964001, "rescue_hf_meanabs": 0.20897470880299807}, "den_block": {"n": 32, "maxabs": 1.7881393432617188e-06, "meanabs": 6.342306733131409e-07, "frac_exact": 0.03125, "rescue_corr": 0.9999999999982321, "rescue_hf_meanabs": 0.33095424156636}, "den_expert0": {"n": 8, "maxabs": 1.0728836059570312e-06, "meanabs": 5.960464477539062e-07, "frac_exact": 0.125, "rescue_corr": 0.9999999999991465, "rescue_hf_meanabs": 0.286235298961401}, "den_head": {"n": 24, "maxabs": 1.
+19:39:30 spawn_rescue_corr_all: 0.999999999997175
+19:39:30 spawn_delta_maxabs_all: 2.175569534301758e-06
+19:39:30 spawn_metrics_vs_hf: {"logp_true": {"n": 376, "maxabs": 1.9073486328125e-06, "meanabs": 5.402463547726895e-07, "frac_exact": 0.3617021276595745}, "logp_foil": {"n": 376, "maxabs": 1.9073486328125e-06, "meanabs": 3.8425973121156083e-07, "frac_exact": 0.4601063829787234}, "p_true": {"n": 376, "maxabs": 6.05359673500061e-09, "meanabs": 5.231142611282461e-10, "frac_exact": 0.3617021276595745}, "kl_to_clean": {"n": 376, "maxabs": 7.338821887969971e-07, "meanabs": 2.2403978749265475e-07, "frac_exact": 0.010638297872340425}}
+19:39:30 spawn_rank_equal_frac: 1.0
+19:39:30 identities: {"neurons_linearity_relerr_max": 1.827579723112649e-07, "neurons_all_vs_expert_vec_relerr_max": 6.398975074262125e-07, "neurons_all_vs_expert_ddelta": {"n": 8, "maxabs": 7.152557373046875e-07, "meanabs": 2.7567148208618164e-07, "frac_exact": 0.125}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 24, "maxabs": 9.5367431640625e-07, "meanabs": 2.632538477579753e-07, "frac_exact": 0.08333333333333333}, "attn_head_on_masked_head_vs_parent": {"n": 16, "maxabs": 4.76837158203125e-07, "meanabs": 2.3469328880310059e-
+19:39:30 diag_attn_heads_mean_relerr: {"n": 32, "maxabs": 4.497810834891425e-07, "meanabs": 2.539430510317686e-07, "frac_exact": 0.0}
+19:39:30 diag_resid_layers_relerr: {"n": 32, "maxabs": 6.538907655340154e-07, "meanabs": 3.5570947787277873e-07, "frac_exact": 0.25}
+19:39:30 diag_expert_neurons_act_relerr: {"n": 8, "maxabs": 1.088180852093501e-06, "meanabs": 8.046316892773575e-07, "frac_exact": 0.0}
+19:39:30 diag_expert_neurons_w_abs: {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}
+19:39:30 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+19:39:30 diag_expert_neurons_routed_mismatch: 0
+19:39:30 head_mask_zero_heads_final_maxabs: 0.0
+19:39:30 total_s: 9.718968629837036
+19:39:32 mistral: mistral, 4 units, dtype fp32
+19:39:35   engine identities 0.5s: {"layer": 2, "zero_vs_parent": {"n": 4, "maxabs": 2.384185791015625e-07, "meanabs": 1.1920928955078125e-07, "frac_exact": 0.25}, "union_vs_layer": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 4, "maxabs": 7.152557373046875e-07, "meanabs": 2.682209014892578e-07, "frac_exact": 0.0}, "neurons_linearity_relerr_max": 1.614840385855132e-07, "expert_rescue_mean": -0.18424515426158905, "layer_rescue_mean": -0.18424515426158905, "clean_delta_pos_frac": 0.25, "drop_mean": -0.18982663750648499}
+19:39:35   engine pass 0.0s
+19:39:35   sanity: []
+19:39:36   layer 1: update relerr max 2.948e-07 mean 2.454e-07
+19:39:36   layer 2: update relerr max 2.796e-07 mean 2.322e-07
+19:39:37   layer 3: update relerr max 2.849e-07 mean 2.451e-07
+19:39:37 wrote results/verify_ext14_tiny_mistral_perlayer.json
+19:39:37 model: "/opt/dlami/nvme/p6_tiny/mistral"
+19:39:37 path: "/opt/dlami/nvme/p6_tiny/mistral"
+19:39:37 family: "mistral"
+19:39:37 dtype: "fp32"
+19:39:37 n_layers: 4
+19:39:37 n_experts: 1
+19:39:37 top_k: 1
+19:39:37 shared_inter: 0
+19:39:37 engine_file: "/home/ubuntu/MOE_wt_p6engine/moetrace/engine.py"
+19:39:37 started: "2026-10-16T19:39:32Z"
+19:39:37 units: {"kind": "tiny_random", "n": 4}
+19:39:37 total_s: 4.346872806549072

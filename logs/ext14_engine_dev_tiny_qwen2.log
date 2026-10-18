@@ -1,0 +1,65 @@
+19:39:39 qwen2: qwen2, 8 units, dtype fp32
+19:39:39   376 configurations
+Loading weights:   0%|          | 0/51 [00:00<?, ?it/s]Loading weights: 100%|██████████| 51/51 [00:00<00:00, 3962.53it/s]
+19:39:43   HF unit 1/8 done (1s)
+19:39:43   HF unit 2/8 done (1s)
+19:39:44   HF unit 3/8 done (2s)
+19:39:44   HF unit 4/8 done (2s)
+19:39:44   HF unit 5/8 done (2s)
+19:39:45   HF unit 6/8 done (3s)
+19:39:45   HF unit 7/8 done (3s)
+19:39:45   HF unit 8/8 done (3s)
+19:39:46   engine pass: 48 prefill rows, 424 spawns, 0.2s
+19:39:46 wrote results/verify_ext14_tiny_qwen2.json
+19:39:46 model: "/opt/dlami/nvme/p6_tiny/qwen2"
+19:39:46 path: "/opt/dlami/nvme/p6_tiny/qwen2"
+19:39:46 family: "qwen2"
+19:39:46 dtype: "fp32"
+19:39:46 n_layers: 4
+19:39:46 n_experts: 1
+19:39:46 top_k: 1
+19:39:46 shared_inter: 0
+19:39:46 engine_file: "/home/ubuntu/MOE_wt_p6engine/moetrace/engine.py"
+19:39:46 started: "2026-10-16T19:39:39Z"
+19:39:46 units: {"kind": "tiny_random", "n": 8}
+19:39:46 hf_s: 6.03921365737915
+19:39:46 n_configs: 376
+19:39:46 n_spawns: 424
+19:39:46 prefill_delta_vs_hf: {"C": {"n": 8, "maxabs": 1.6093254089355469e-06, "meanabs": 9.51811671257019e-07, "frac_exact": 0.0}, "X": {"n": 8, "maxabs": 1.0728836059570312e-06, "meanabs": 5.699694156646729e-07, "frac_exact": 0.0}, "CMz": {"n": 8, "maxabs": 1.7285346984863281e-06, "meanabs": 4.898756742477417e-07, "frac_exact": 0.125}, "XMz": {"n": 8, "maxabs": 6.556510925292969e-07, "meanabs": 5.289912223815918e-07, "frac_exact": 0.0}, "CMm": {"n": 8, "maxabs": 8.940696716308594e-07, "meanabs": 4.6566128730773926e-07, "frac_exact": 0.125}, "XMm": {"n": 8, "maxabs": 1.6093254089355469e-06, "meanabs": 6.724148988723755e-0
+19:39:46 prefill_metrics_vs_hf: {"logp_true": {"n": 48, "maxabs": 1.430511474609375e-06, "meanabs": 5.76178232828776e-07, "frac_exact": 0.20833333333333334}, "logp_foil": {"n": 48, "maxabs": 9.5367431640625e-07, "meanabs": 3.2782554626464844e-07, "frac_exact": 0.4583333333333333}, "p_true": {"n": 48, "maxabs": 5.587935447692871e-09, "meanabs": 8.185452315956354e-10, "frac_exact": 0.20833333333333334}, "kl_to_clean": {"n": 48, "maxabs": 7.599592208862305e-07, "meanabs": 1.2991949915885925e-07, "frac_exact": 0.5}}
+19:39:46 prefill_rank_equal_frac: 1.0
+19:39:46 head_mask_effect_on_delta_hf: {"Mz": 0.7443271493539214, "Mm": 0.15019842237234116}
+19:39:46 spawn_delta_vs_hf: {"den_attn": {"n": 32, "maxabs": 2.1457672119140625e-06, "meanabs": 7.962808012962341e-07, "frac_exact": 0.0625, "rescue_corr": 0.9999999999978831, "rescue_hf_meanabs": 0.25087038334459066}, "den_block": {"n": 32, "maxabs": 1.6093254089355469e-06, "meanabs": 8.195638656616211e-07, "frac_exact": 0.0, "rescue_corr": 0.9999999999976616, "rescue_hf_meanabs": 0.3595456350594759}, "den_expert0": {"n": 8, "maxabs": 1.4901161193847656e-06, "meanabs": 7.37607479095459e-07, "frac_exact": 0.0, "rescue_corr": 0.9999999999989583, "rescue_hf_meanabs": 0.278775691986084}, "den_head": {"n": 24, "maxabs": 2.08
+19:39:46 spawn_rescue_corr_all: 0.9999999999981238
+19:39:46 spawn_delta_maxabs_all: 2.682209014892578e-06
+19:39:46 spawn_metrics_vs_hf: {"logp_true": {"n": 376, "maxabs": 2.384185791015625e-06, "meanabs": 5.681464012632978e-07, "frac_exact": 0.31648936170212766}, "logp_foil": {"n": 376, "maxabs": 1.9073486328125e-06, "meanabs": 4.743007903403424e-07, "frac_exact": 0.3377659574468085}, "p_true": {"n": 376, "maxabs": 5.587935447692871e-09, "meanabs": 6.933058760663931e-10, "frac_exact": 0.31648936170212766}, "kl_to_clean": {"n": 376, "maxabs": 1.0281801223754883e-06, "meanabs": 2.4240542895536285e-07, "frac_exact": 0.007978723404255319}}
+19:39:46 spawn_rank_equal_frac: 1.0
+19:39:46 identities: {"neurons_linearity_relerr_max": 1.7635397853155155e-07, "neurons_all_vs_expert_vec_relerr_max": 6.209007210600248e-07, "neurons_all_vs_expert_ddelta": {"n": 8, "maxabs": 2.980232238769531e-07, "meanabs": 1.7881393432617188e-07, "frac_exact": 0.0}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 24, "maxabs": 1.0728836059570312e-06, "meanabs": 2.868473529815674e-07, "frac_exact": 0.125}, "attn_head_on_masked_head_vs_parent": {"n": 16, "maxabs": 1.0728836059570312e-06, "meanabs": 2.4028122425079346e-07, "frac_
+19:39:46 diag_attn_heads_mean_relerr: {"n": 32, "maxabs": 4.999230895919027e-07, "meanabs": 2.9672096113486646e-07, "frac_exact": 0.0}
+19:39:46 diag_resid_layers_relerr: {"n": 32, "maxabs": 6.966746468606289e-07, "meanabs": 4.0928143629770375e-07, "frac_exact": 0.25}
+19:39:46 diag_expert_neurons_act_relerr: {"n": 8, "maxabs": 1.2204270660731709e-06, "meanabs": 9.221350438792797e-07, "frac_exact": 0.0}
+19:39:46 diag_expert_neurons_w_abs: {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}
+19:39:46 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+19:39:46 diag_expert_neurons_routed_mismatch: 0
+19:39:46 head_mask_zero_heads_final_maxabs: 0.0
+19:39:46 total_s: 6.257974863052368
+19:39:48 qwen2: qwen2, 4 units, dtype fp32
+19:39:51   engine identities 0.5s: {"layer": 2, "zero_vs_parent": {"n": 4, "maxabs": 1.7881393432617188e-07, "meanabs": 1.341104507446289e-07, "frac_exact": 0.0}, "union_vs_layer": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 4, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 4, "maxabs": 7.152557373046875e-07, "meanabs": 3.129243850708008e-07, "frac_exact": 0.0}, "neurons_linearity_relerr_max": 1.1813116174153038e-07, "expert_rescue_mean": 0.2682011127471924, "layer_rescue_mean": 0.2682011127471924, "clean_delta_pos_frac": 0.5, "drop_mean": 0.4398112893104553}
+19:39:51   engine pass 0.0s
+19:39:51   sanity: []
+19:39:52   layer 1: update relerr max 3.209e-07 mean 2.449e-07
+19:39:52   layer 2: update relerr max 2.755e-07 mean 2.324e-07
+19:39:52   layer 3: update relerr max 2.849e-07 mean 2.404e-07
+19:39:53 wrote results/verify_ext14_tiny_qwen2_perlayer.json
+19:39:53 model: "/opt/dlami/nvme/p6_tiny/qwen2"
+19:39:53 path: "/opt/dlami/nvme/p6_tiny/qwen2"
+19:39:53 family: "qwen2"
+19:39:53 dtype: "fp32"
+19:39:53 n_layers: 4
+19:39:53 n_experts: 1
+19:39:53 top_k: 1
+19:39:53 shared_inter: 0
+19:39:53 engine_file: "/home/ubuntu/MOE_wt_p6engine/moetrace/engine.py"
+19:39:53 started: "2026-10-16T19:39:48Z"
+19:39:53 units: {"kind": "tiny_random", "n": 4}
+19:39:53 total_s: 4.336160659790039

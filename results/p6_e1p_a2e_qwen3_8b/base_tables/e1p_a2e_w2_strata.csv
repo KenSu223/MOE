@@ -1,0 +1,23 @@
+Model,Stratum,Value,Pairs,Mean drop,MoE at L*_MoE / drop,Attention at L*_attn / drop,Attention share
+qwen3_8b,person-name options,True,30,7.56,"0.098 [0.087, 0.109]","0.400 [0.383, 0.417]","0.73 [0.71, 0.74]"
+qwen3_8b,person-name options,False,226,5.69,"0.123 [0.116, 0.130]","0.230 [0.221, 0.240]","0.62 [0.61, 0.63]"
+qwen3_8b,statement order 1 (entity of A mentioned first),True,128,6.07,"0.122 [0.113, 0.130]","0.259 [0.243, 0.276]","0.64 [0.63, 0.66]"
+qwen3_8b,statement order 1 (entity of A mentioned first),False,128,5.75,"0.116 [0.108, 0.125]","0.252 [0.234, 0.270]","0.63 [0.62, 0.65]"
+qwen3_8b,core-776 twin,True,234,5.82,"0.120 [0.113, 0.126]","0.252 [0.240, 0.265]","0.64 [0.63, 0.65]"
+qwen3_8b,core-776 twin,False,22,6.89,"0.111 [0.097, 0.125]","0.285 [0.237, 0.332]","0.63 [0.59, 0.68]"
+qwen3_8b,degree adverb in the blank clause (too / very / more ...),True,140,6.01,"0.107 [0.101, 0.114]","0.263 [0.248, 0.279]","0.61 [0.60, 0.62]"
+qwen3_8b,degree adverb in the blank clause (too / very / more ...),False,116,5.79,"0.133 [0.123, 0.144]","0.246 [0.227, 0.265]","0.67 [0.66, 0.69]"
+qwen3_8b,complementary antonym pair,True,0,,,,
+qwen3_8b,complementary antonym pair,False,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,item built in both tokenizer families,True,248,5.83,"0.119 [0.113, 0.126]","0.252 [0.240, 0.264]","0.64 [0.63, 0.65]"
+qwen3_8b,item built in both tokenizer families,False,8,,,,
+qwen3_8b,probe-neutral (both triggers |probe| < 1),True,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,probe-neutral (both triggers |probe| < 1),False,0,,,,
+qwen3_8b,probe-associative,True,0,,,,
+qwen3_8b,probe-associative,False,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,probe one-sided,True,0,,,,
+qwen3_8b,probe one-sided,False,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,probe reverse,True,0,,,,
+qwen3_8b,probe reverse,False,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,top-1 in both directions,True,256,5.91,"0.119 [0.113, 0.125]","0.256 [0.244, 0.268]","0.64 [0.63, 0.65]"
+qwen3_8b,top-1 in both directions,False,0,,,,

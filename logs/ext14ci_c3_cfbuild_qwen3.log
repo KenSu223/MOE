@@ -1,0 +1,12 @@
+2026-10-17T02:49:33Z START p6ci-c3-cfbuild-qwen3 (waited 1888s): python scripts/ext14ci_c3_cf_build.py qwen3 --proto qwen3 --rels P17,P27,P495,P103 --max-per-rel 400 --cap 48
+02:49:48 P17: 467 tokenised, 400 with >= 1 symmetric donor
+02:49:50 P27: 509 tokenised, 400 with >= 1 symmetric donor
+02:49:51 P495: 454 tokenised, 400 with >= 1 symmetric donor
+02:49:57 P103: 448 tokenised, 400 with >= 1 symmetric donor
+02:50:47 pass rows 0-4096
+02:51:35 pass rows 4096-5807
+02:51:36 P17: 378 margin pairs -> 48 / 48
+02:51:36 P27: 369 margin pairs -> 48 / 48
+02:51:37 P495: 292 margin pairs -> 48 / 48
+02:51:37 P103: 360 margin pairs -> 48 / 48
+2026-10-17T02:51:44Z END   p6ci-c3-cfbuild-qwen3 rc=0 (131s)

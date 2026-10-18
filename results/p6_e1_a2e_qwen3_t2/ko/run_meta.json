@@ -1,0 +1,56 @@
+{
+ "cond": "e1_a2e",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "agent": "p5-expert",
+ "experiment": "ext13ko expert knockout (route masks on clean prompts), Phase 5 / Direction 9 per condition",
+ "source": {
+  "pairs": "data/dial/pairs_e1_a2e_qwen3.parquet",
+  "case_sets": "data/dial/case_sets_e1_a2e_qwen3.json",
+  "run": "p6_e1_a2e_qwen3_t2"
+ },
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "main": {
+   "created_utc": "2026-10-17T00:29:38Z",
+   "passes": [
+    {
+     "pass": "full_p000",
+     "rows": 2048,
+     "T": 26,
+     "pass_s": 67.3,
+     "peak_GB": 5.65
+    },
+    {
+     "pass": "ctl_p000",
+     "rows": 4836,
+     "T": 23,
+     "pass_s": 44.5,
+     "peak_GB": 9.32
+    },
+    {
+     "pass": "ctl_p001",
+     "rows": 4278,
+     "T": 26,
+     "pass_s": 51.0,
+     "peak_GB": 9.27
+    },
+    {
+     "pass": "ctl_p002",
+     "rows": 4198,
+     "T": 26,
+     "pass_s": 39.1,
+     "peak_GB": 9.14
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py (via ext14_t2_run.py ko) qwen3 --conds e1_a2e --with-wr --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-17T00:31:57Z",
+   "n_passes": 4,
+   "n_conditions": 66,
+   "n_rows": 15360
+  }
+ }
+}

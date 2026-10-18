@@ -1,0 +1,10 @@
+13:34:06 mixtral -> p6_sc_agree_a2e_mixtral_bos: 320 directed cases, families ['main'], 2 prefill-only passes
+13:34:20   layer   0: load-wait 6.41s compute 0.88s  wf_rows=0
+13:34:42   layer   8: load-wait 2.38s compute 0.44s  wf_rows=0
+13:35:04   layer  16: load-wait 2.08s compute 0.44s  wf_rows=0
+13:35:26   layer  24: load-wait 2.17s compute 0.44s  wf_rows=0
+13:35:44   layer  31: load-wait 2.15s compute 0.44s  wf_rows=0
+13:35:44   pass done: 502 prefill rows (T=61), 0 spawn rows, 91.7s
+13:35:45 pass 1/2: 92s; DLA total - drop: max |.| 0.211
+13:37:07 pass 2/2: 81s; DLA total - drop: max |.| 0.211
+13:37:07 direct effect / drop: attention +1.065, MoE -0.066, embedding +0.000

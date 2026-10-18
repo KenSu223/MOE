@@ -1,0 +1,17 @@
+2026-10-17T00:33:01Z START ext14-e1_e2a-qwen3-sweep (waited 256s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --max-rows 60000
+00:33:03 qwen3 -> p6_e1_e2a_qwen3: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 2 passes (73728 spawn rows), T max 20
+00:33:09 pass 1/2: layers 0..38, 1024 prefill rows, 59904 spawn rows
+00:33:13   layer   0: load-wait 3.00s compute 0.69s  wf_rows=1536
+00:33:19   layer   8: load-wait 0.60s compute 0.19s  wf_rows=13824
+00:33:28   layer  16: load-wait 0.98s compute 0.26s  wf_rows=26112
+00:33:37   layer  24: load-wait 0.44s compute 0.34s  wf_rows=38400
+00:33:46   layer  32: load-wait 0.42s compute 0.41s  wf_rows=50688
+00:33:55   layer  40: load-wait 0.71s compute 0.47s  wf_rows=59904
+00:34:04   layer  47: load-wait 0.49s compute 0.47s  wf_rows=59904
+00:34:06   pass done: 1024 prefill rows (T=20), 59904 spawn rows, 57.1s (metrics 2.3s)
+00:34:08 pass 2/2: layers 39..47, 1024 prefill rows, 13824 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+00:34:50 family main: layer disc L39; attn_layer disc L42; block disc L39
+00:34:50 Δclean +4.23 Δcorrupt -4.21 drop +8.44; {"layer_discovery_argmax": 39, "layer_discovery_max": 1.362, "layer_discovery_top5": [[39, 1.362], [43, 1.279], [41, 1.234], [38, 1.059], [42, 0.718]], "layer_validation_argmax": 39, "layer_validation_max": 1.759, "layer_validation_top5": [[39, 1.759], [41, 1.699], [38, 1.486], [43, 1.438], [34, 0.681]], "attn_layer_discovery_argmax": 42, "attn_layer_discovery_max": 0.567, "attn_layer_discovery_top5": [[42, 0.567], [38, 0.383], [43, 0.298], [45, 0.291], [35, 0.266]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.466, "attn_layer_validation_top5": [[42, 0.466], [31, 0.314],
+2026-10-17T00:34:56Z END   ext14-e1_e2a-qwen3-sweep rc=0 (115s)

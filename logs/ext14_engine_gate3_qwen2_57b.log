@@ -1,0 +1,20 @@
+  chain eng_bf16__hf_bf16: |dDelta| mean 0.805 max 1.78, rank equal 0.27, routing agreement mean 0.442 min 0.052
+  chain hf_bf16__hf_fp32: |dDelta| mean 3.86 max 7, rank equal 0.27, routing agreement mean 0.077 min 0.000
+  chain eng_bf16__hf_fp32: |dDelta| mean 3.99 max 6.95, rank equal 0.36, routing agreement mean 0.076 min 0.000
+  chain eng_fp32__hf_fp32: |dDelta| mean 3.28e-05 max 6.53e-05, rank equal 1.00, routing agreement mean 1.000 min 1.000
+  chain hf_bf16 sanity ranks [1, 1, 47, 1, 40874]
+  chain hf_fp32 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_bf16 sanity ranks [1, 1, 50, 1, 86]
+  chain eng_fp32 sanity ranks [1, 1, 1, 1, 1]
+  layer 1: update relerr max 0.00588, routing 0.079; vs fp32: engine 0.0102 / transformers 0.00899, routing vs fp32: engine 0.009 / transformers 0.016
+  layer 13: update relerr max 0.0649, routing 0.143; vs fp32: engine 0.0954 / transformers 0.0949, routing vs fp32: engine 0.128 / transformers 0.213
+  layer 27: update relerr max 0.014, routing 0.935; vs fp32: engine 0.0315 / transformers 0.0316, routing vs fp32: engine 0.899 / transformers 0.925
+  sanity 3/5 answers in the top 5: Paris#1, Paris#1, oxygen#50, cold#1, Thursday#86
+  clean Delta > 0 in 1.00 of the units, mean drop 1.32
+  [tiny32] rescue corr 1.00000, spawn max |dDelta| 4.17e-06
+  prefill max |dDelta| 3.99e-06
+  layer 1: update relerr max 3.46e-07, routing 1.000
+  layer 2: update relerr max 2.94e-07, routing 1.000
+  layer 3: update relerr max 2.89e-07, routing 1.000
+  clean Delta > 0 in 0.75 of the units, mean drop 0.22
+PASS

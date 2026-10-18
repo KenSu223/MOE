@@ -1,0 +1,21 @@
+{
+ "task": "mistral7b_cf",
+ "model": "mistral7b",
+ "items": [
+  "cf",
+  "mixtral",
+  "mixtral_bos_str"
+ ],
+ "experts": [
+  "L18E000",
+  "L19E000",
+  "L20E000",
+  "L21E000"
+ ],
+ "n_rows": 858,
+ "n_prefill": 1071,
+ "limit": null,
+ "pass_s": 34.3,
+ "command": "scripts/ext14ci_c1_run.py mistral7b_cf score",
+ "utc": "2026-10-17T00:40:55Z"
+}

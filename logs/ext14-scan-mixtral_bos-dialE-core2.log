@@ -1,0 +1,58 @@
+2026-10-16T20:32:11Z START ext14-scan-mixtral_bos-dialE-core2 (waited 1166s): python scripts/ext14_scan.py mixtral_bos --part cells --subset core --cells e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+20:32:16 e1p_a2e [core]: 936 pairs, 1872 rows
+20:32:27   layer   0: load-wait 9.54s compute 1.31s  wf_rows=0
+20:32:50   layer   8: load-wait 1.76s compute 0.95s  wf_rows=0
+20:33:13   layer  16: load-wait 2.13s compute 0.95s  wf_rows=0
+20:33:36   layer  24: load-wait 2.04s compute 0.95s  wf_rows=0
+20:33:56   layer  31: load-wait 1.94s compute 0.95s  wf_rows=0
+20:33:56   pass done: 1872 prefill rows (T=36), 0 spawn rows, 100.2s
+20:33:56   pass 1/1 (1872 rows, 100s)
+20:33:57 e1p_a2e {"pairs": 936, "margin": 140, "reverse_margin": 0, "margin_rate": 0.15, "by_order": {"1": 0.15, "2": 0.15}, "top1_both": 0.453, "passes": 1}
+20:33:58 e1p_e2a [core]: 936 pairs, 1872 rows
+20:34:01   layer   0: load-wait 2.10s compute 0.66s  wf_rows=0
+20:34:23   layer   8: load-wait 2.04s compute 0.66s  wf_rows=0
+20:34:46   layer  16: load-wait 2.23s compute 0.66s  wf_rows=0
+20:35:09   layer  24: load-wait 2.20s compute 0.66s  wf_rows=0
+20:35:30   layer  31: load-wait 2.29s compute 0.66s  wf_rows=0
+20:35:30   pass done: 1872 prefill rows (T=25), 0 spawn rows, 91.9s
+20:35:30   pass 1/1 (1872 rows, 92s)
+20:35:30 e1p_e2a {"pairs": 936, "margin": 167, "reverse_margin": 4, "margin_rate": 0.178, "by_order": {"1": 0.184, "2": 0.173}, "top1_both": 0.009, "passes": 1}
+20:35:34 e2_a2e [core]: 1142 pairs, 2284 rows
+20:35:37   layer   0: load-wait 2.06s compute 1.19s  wf_rows=0
+20:36:00   layer   8: load-wait 1.70s compute 1.19s  wf_rows=0
+20:36:24   layer  16: load-wait 2.11s compute 1.19s  wf_rows=0
+20:36:46   layer  24: load-wait 1.62s compute 1.19s  wf_rows=0
+20:37:07   layer  31: load-wait 1.76s compute 1.19s  wf_rows=0
+20:37:07   pass done: 2284 prefill rows (T=37), 0 spawn rows, 92.9s
+20:37:07   pass 1/1 (2284 rows, 93s)
+20:37:07 e2_a2e {"pairs": 1142, "margin": 7, "reverse_margin": 32, "margin_rate": 0.006, "by_order": {"1": 0.009, "2": 0.004}, "top1_both": 0.075, "passes": 1}
+20:37:07 e2_e2a [core]: 1142 pairs, 2284 rows
+20:37:10   layer   0: load-wait 2.05s compute 0.84s  wf_rows=0
+20:37:28   layer   8: load-wait 1.25s compute 0.84s  wf_rows=0
+20:37:46   layer  16: load-wait 1.30s compute 0.83s  wf_rows=0
+20:38:07   layer  24: load-wait 1.94s compute 0.84s  wf_rows=0
+20:38:27   layer  31: load-wait 1.99s compute 0.83s  wf_rows=0
+20:38:27   pass done: 2284 prefill rows (T=26), 0 spawn rows, 79.7s
+20:38:27   pass 1/1 (2284 rows, 80s)
+20:38:27 e2_e2a {"pairs": 1142, "margin": 44, "reverse_margin": 6, "margin_rate": 0.039, "by_order": {"1": 0.037, "2": 0.04}, "top1_both": 0.113, "passes": 1}
+20:38:27 sc_agree_a2e [core]: 1252 pairs, 2504 rows
+20:38:31   layer   0: load-wait 2.10s compute 1.97s  wf_rows=0
+20:38:55   layer   8: load-wait 0.26s compute 1.97s  wf_rows=0
+20:39:17   layer  16: load-wait 0.91s compute 1.97s  wf_rows=0
+20:39:40   layer  24: load-wait 0.83s compute 1.97s  wf_rows=0
+20:40:00   layer  31: load-wait 0.67s compute 1.97s  wf_rows=0
+20:40:00   pass done: 2496 prefill rows (T=56), 0 spawn rows, 92.2s
+20:40:00   pass 1/2 (2496 rows, 92s)
+20:41:26   pass 2/2 (8 rows, 86s)
+20:41:26 sc_agree_a2e {"pairs": 1252, "margin": 271, "reverse_margin": 0, "margin_rate": 0.216, "by_order": {"1": 0.227, "2": 0.206}, "top1_both": 0.568, "passes": 2}
+20:41:26 sc_conflict_a2e [core]: 1252 pairs, 2504 rows
+20:41:30   layer   0: load-wait 1.55s compute 1.97s  wf_rows=0
+20:41:50   layer   8: load-wait 0.74s compute 1.97s  wf_rows=0
+20:42:12   layer  16: load-wait 0.66s compute 1.97s  wf_rows=0
+20:42:34   layer  24: load-wait 0.75s compute 1.97s  wf_rows=0
+20:42:53   layer  31: load-wait 0.89s compute 1.97s  wf_rows=0
+20:42:53   pass done: 2496 prefill rows (T=56), 0 spawn rows, 87.3s
+20:42:53   pass 1/2 (2496 rows, 87s)
+20:44:33   pass 2/2 (8 rows, 100s)
+20:44:33 sc_conflict_a2e {"pairs": 1252, "margin": 7, "reverse_margin": 27, "margin_rate": 0.006, "by_order": {"1": 0.008, "2": 0.003}, "top1_both": 0.087, "passes": 2}
+2026-10-16T20:44:40Z END   ext14-scan-mixtral_bos-dialE-core2 rc=0 (749s)

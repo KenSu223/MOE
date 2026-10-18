@@ -1,0 +1,15 @@
+2026-10-17T07:33:12Z START ext14-e1_a2e-qwen2_7b-sweep (waited 2400s): python scripts/ext7_wino_sweep.py --model qwen2_7b --pairs data/dial/pairs_e1_a2e_qwen2_7b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen2_7b.json --out p6_e1_a2e_qwen2_7b --agent p6-data --max-rows 40000
+07:33:13 qwen2_7b -> p6_e1_a2e_qwen2_7b: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 28 layers, 2 passes (43008 spawn rows), T max 29
+07:33:21 pass 1/2: layers 0..25, 1024 prefill rows, 39936 spawn rows
+07:33:25   layer   0: load-wait 2.45s compute 1.20s  wf_rows=1536
+07:33:34   layer   8: load-wait 0.11s compute 1.26s  wf_rows=13824
+07:33:47   layer  16: load-wait 0.11s compute 1.67s  wf_rows=26112
+07:34:03   layer  24: load-wait 0.10s compute 2.05s  wf_rows=38400
+07:34:09   layer  27: load-wait 0.10s compute 2.12s  wf_rows=39936
+07:34:13   pass done: 1024 prefill rows (T=29), 39936 spawn rows, 51.7s (metrics 3.4s)
+07:34:13 pass 2/2: layers 26..27, 1024 prefill rows, 3072 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+07:34:40 family main: layer disc L19; attn_layer disc L19; block disc L19
+07:34:40 Δclean +3.10 Δcorrupt -3.10 drop +6.21; {"layer_discovery_argmax": 19, "layer_discovery_max": 2.268, "layer_discovery_top5": [[19, 2.268], [20, 2.146], [22, 0.674], [21, 0.665], [25, 0.638]], "layer_validation_argmax": 19, "layer_validation_max": 2.427, "layer_validation_top5": [[19, 2.427], [20, 2.15], [21, 0.658], [25, 0.649], [22, 0.631]], "attn_layer_discovery_argmax": 19, "attn_layer_discovery_max": 3.571, "attn_layer_discovery_top5": [[19, 3.571], [18, 3.333], [23, 1.341], [24, 1.314], [22, 0.996]], "attn_layer_validation_argmax": 19, "attn_layer_validation_max": 3.696, "attn_layer_validation_top5": [[19, 3.696], [18, 3.484], 
+2026-10-17T07:34:43Z END   ext14-e1_a2e-qwen2_7b-sweep rc=0 (91s)

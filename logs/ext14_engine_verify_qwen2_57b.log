@@ -1,0 +1,23 @@
+22:34:38 qwen2_57b: qwen2_moe, 6 units, dtype bf16
+22:38:37   engine identities 237.3s: {"layer": 14, "zero_vs_parent": {"n": 6, "maxabs": 0.0625, "meanabs": 0.0390625, "frac_exact": 0.0}, "union_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 6, "maxabs": 0.046875, "meanabs": 0.018229166666666668, "frac_exact": 0.5}, "neurons_linearity_relerr_max": 1.507273736933712e-07, "expert_rescue_mean": 0.0885416641831398, "layer_rescue_mean": 0.2434895783662796, "shared_expert_vs_set": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "shared_neurons_all_vs_expert": {"n": 6, "maxabs": 0.1875, "meanabs": 0.09098307291666667, "frac_exact": 0.0}, "shared_rescue_mean": 0.3644205629825592, "shared_w_final_mean_by_layer": [0.01619466207921505, 0.0231
+22:40:30   engine pass 112.1s
+22:40:30   sanity: [{"prompt": "The capital of France is", "answer": " Paris", "rank": 1, "p": 0.2949541509151459}, {"prompt": "The Eiffel Tower is located in the city of", "answer": " Paris", "rank": 1, "p": 0.679103672504425}, {"prompt": "Water is made of hydrogen and", "answer": " oxygen", "rank": 50, "p": 0.0021562138572335243}, {"prompt": "The opposite of hot is", "answer": " cold", "rank": 1, "p": 0.7155502438545227}, {"prompt": "Monday, Tuesday, Wednesday,", "answer": " Thursday", "rank": 86, "p": 0.00124887574929744}]
+[transformers] You tried to access the `ExpertsInterface` with a `config._experts_implementation` set to `None`. This is expected if you use an Expert Module as a standalone Module. If this is not the case, something went wrong with the dispatch of `config._experts_implementation`
+22:40:45   layer 1: update relerr max 0.005882 mean 0.004328, routing sets equal 0.079, overlap 0.725
+22:40:53   layer 13: update relerr max 0.06494 mean 0.02261, routing sets equal 0.143, overlap 0.715
+22:41:02   layer 27: update relerr max 0.014 mean 0.006769, routing sets equal 0.935, overlap 0.992
+22:41:03 wrote results/verify_ext14_qwen2_57b_perlayer.json
+22:41:03 model: "qwen2_57b"
+22:41:03 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-57B-A14B/snapshots/f29d6a182178ddf39f68f403361779b2d37fdce8"
+22:41:03 family: "qwen2_moe"
+22:41:03 dtype: "bf16"
+22:41:03 n_layers: 28
+22:41:03 n_experts: 64
+22:41:03 top_k: 8
+22:41:03 shared_inter: 20480
+22:41:03 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+22:41:03 started: "2026-10-16T22:34:33Z"
+22:41:03 hf_offload: false
+22:41:03 light_plan: false
+22:41:03 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+22:41:03 total_s: 384.206907749176

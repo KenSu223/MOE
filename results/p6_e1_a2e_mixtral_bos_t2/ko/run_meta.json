@@ -1,0 +1,49 @@
+{
+ "cond": "e1_a2e",
+ "proto": "mixtral_bos",
+ "model": "mixtral",
+ "repo": "mistralai/Mixtral-8x7B-v0.1",
+ "agent": "p5-expert",
+ "experiment": "ext13ko expert knockout (route masks on clean prompts), Phase 5 / Direction 9 per condition",
+ "source": {
+  "pairs": "data/dial/pairs_e1_a2e_mixtral_bos.parquet",
+  "case_sets": "data/dial/case_sets_e1_a2e_mixtral_bos.json",
+  "run": "p6_e1_a2e_mixtral_bos_t2"
+ },
+ "special_tokens": true,
+ "dtype": "bf16",
+ "phases": {
+  "main": {
+   "created_utc": "2026-10-17T01:49:41Z",
+   "passes": [
+    {
+     "pass": "full_p000",
+     "rows": 1800,
+     "T": 29,
+     "pass_s": 87.0,
+     "peak_GB": 7.62
+    },
+    {
+     "pass": "ctl_p000",
+     "rows": 3333,
+     "T": 26,
+     "pass_s": 86.0,
+     "peak_GB": 9.71
+    },
+    {
+     "pass": "ctl_p001",
+     "rows": 2967,
+     "T": 29,
+     "pass_s": 82.2,
+     "peak_GB": 9.65
+    }
+   ],
+   "command": "python scripts/ext13ko_run.py (via ext14_t2_run.py ko) mixtral_bos --conds e1_a2e --with-wr --time-budget 1320",
+   "complete": true,
+   "completed_utc": "2026-10-17T01:52:32Z",
+   "n_passes": 3,
+   "n_conditions": 51,
+   "n_rows": 8100
+  }
+ }
+}

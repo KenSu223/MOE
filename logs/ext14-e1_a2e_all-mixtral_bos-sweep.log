@@ -1,0 +1,15 @@
+2026-10-17T03:42:48Z START ext14-e1_a2e_all-mixtral_bos-sweep (waited 1246s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e1_a2e_all_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mixtral_bos.json --out p6_e1_a2e_all_mixtral_bos --agent p6-data --max-rows 37500
+03:42:49 mixtral -> p6_e1_a2e_all_mixtral_bos: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 2 passes (49152 spawn rows), T max 32
+03:42:51 pass 1/2: layers 0..23, 1024 prefill rows, 36864 spawn rows
+03:42:59   layer   0: load-wait 6.91s compute 0.82s  wf_rows=1536
+03:43:22   layer   8: load-wait 2.22s compute 0.70s  wf_rows=13824
+03:43:45   layer  16: load-wait 1.99s compute 0.92s  wf_rows=26112
+03:44:09   layer  24: load-wait 1.79s compute 1.13s  wf_rows=36864
+03:44:29   layer  31: load-wait 1.76s compute 1.13s  wf_rows=36864
+03:44:30   pass done: 1024 prefill rows (T=32), 36864 spawn rows, 98.5s (metrics 0.4s)
+03:44:31 pass 2/2: layers 24..31, 1024 prefill rows, 12288 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+03:46:01 family main: layer disc L17; attn_layer disc L16; block disc L16
+03:46:01 Δclean +2.03 Δcorrupt -2.04 drop +4.07; {"layer_discovery_argmax": 17, "layer_discovery_max": 0.454, "layer_discovery_top5": [[17, 0.454], [20, 0.414], [19, 0.4], [14, 0.345], [16, 0.34]], "layer_validation_argmax": 17, "layer_validation_max": 0.48, "layer_validation_top5": [[17, 0.48], [14, 0.442], [20, 0.437], [19, 0.367], [16, 0.367]], "attn_layer_discovery_argmax": 16, "attn_layer_discovery_max": 1.089, "attn_layer_discovery_top5": [[16, 1.089], [19, 0.958], [13, 0.887], [18, 0.451], [31, 0.325]], "attn_layer_validation_argmax": 16, "attn_layer_validation_max": 1.102, "attn_layer_validation_top5": [[16, 1.102], [19, 1.063], [13,
+2026-10-17T03:46:08Z END   ext14-e1_a2e_all-mixtral_bos-sweep rc=0 (200s)

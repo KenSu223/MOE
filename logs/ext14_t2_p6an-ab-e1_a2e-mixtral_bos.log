@@ -1,0 +1,65 @@
+2026-10-17T00:40:57Z START p6an-ab-e1_a2e-mixtral_bos (waited 107s): python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+00:41:00 e1_a2e_mixtral_bos: initialised {'eval_rows': 180, 'noise_rows': 180, 'pool': 64, 'queue_groups': 3274, 'queue_items': 56300}
+00:41:01 e1_a2e_mixtral_bos: 392 cases, 392 rows (180 validation), K=64; passes done 0, queue 0/3274, greedy left 180
+00:41:03 pass 0: tasks ['e1_a2e_mixtral_bos'], 784 prefill rows (T max 32), 49968 spawn rows (adaptive [11520], static groups [2306])
+00:41:12   layer   0: load-wait 7.52s compute 0.93s  wf_rows=10760
+00:41:35   layer   8: load-wait 2.06s compute 0.85s  wf_rows=25774
+00:41:59   layer  16: load-wait 1.80s compute 1.13s  wf_rows=39869
+00:42:21   layer  24: load-wait 0.92s compute 1.26s  wf_rows=46941
+00:42:40   layer  31: load-wait 1.65s compute 1.31s  wf_rows=49968
+00:42:41   pass done: 784 prefill rows (T=32), 49968 spawn rows, 97.1s (metrics 0.5s)
+00:42:43 e1_a2e_mixtral_bos first pass: ceilings for 392 rows (mean all-MoE rescue +1.244); DLA rows 25088 (152 candidate pairs not routed in this pass's clean run)
+00:42:43 e1_a2e_mixtral_bos pass 0 done: greedy left 180 (median step 2, median rescue/ceiling 0.67); queue 2306/3634
+00:42:43 group pass 0 done in 97s, peak 12.4 GB
+00:42:46 pass 1: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 34412 spawn rows (adaptive [11160], static groups [1328])
+00:44:08 e1_a2e_mixtral_bos: noise_oracle groups added for 180 rows
+00:44:08 e1_a2e_mixtral_bos pass 1 done: greedy left 180 (median step 3, median rescue/ceiling 0.91); queue 3634/3814
+00:44:08 group pass 1 done in 82s, peak 10.0 GB
+00:44:09 pass 2: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 13680 spawn rows (adaptive [10980], static groups [180])
+00:45:30 e1_a2e_mixtral_bos pass 2 done: greedy left 180 (median step 4, median rescue/ceiling 1.02); queue 3814/3814
+00:45:30 group pass 2 done in 80s, peak 8.7 GB
+00:45:31 pass 3: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 10800 spawn rows (adaptive [10800], static groups [0])
+00:46:47 e1_a2e_mixtral_bos pass 3 done: greedy left 180 (median step 5, median rescue/ceiling 1.14); queue 3814/3814
+00:46:47 group pass 3 done in 75s, peak 8.5 GB
+00:46:48 pass 4: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 10620 spawn rows (adaptive [10620], static groups [0])
+00:48:12 e1_a2e_mixtral_bos pass 4 done: greedy left 180 (median step 6, median rescue/ceiling 1.19); queue 3814/3814
+00:48:12 group pass 4 done in 83s, peak 8.5 GB
+00:48:13 pass 5: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 10440 spawn rows (adaptive [10440], static groups [0])
+00:49:36 e1_a2e_mixtral_bos pass 5 done: greedy left 180 (median step 7, median rescue/ceiling 1.28); queue 3814/3814
+00:49:36 group pass 5 done in 82s, peak 8.5 GB
+00:49:37 pass 6: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 10260 spawn rows (adaptive [10260], static groups [0])
+00:51:01 e1_a2e_mixtral_bos pass 6 done: greedy left 180 (median step 8, median rescue/ceiling 1.38); queue 3814/3814
+00:51:01 group pass 6 done in 84s, peak 8.5 GB
+00:51:02 pass 7: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 10080 spawn rows (adaptive [10080], static groups [0])
+00:52:32 e1_a2e_mixtral_bos pass 7 done: greedy left 180 (median step 9, median rescue/ceiling 1.44); queue 3814/3814
+00:52:32 group pass 7 done in 86s, peak 8.5 GB
+00:52:33 pass 8: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9900 spawn rows (adaptive [9900], static groups [0])
+00:53:54 e1_a2e_mixtral_bos pass 8 done: greedy left 180 (median step 10, median rescue/ceiling 1.44); queue 3814/3814
+00:53:54 group pass 8 done in 80s, peak 8.5 GB
+00:53:55 pass 9: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9720 spawn rows (adaptive [9720], static groups [0])
+00:55:03 e1_a2e_mixtral_bos pass 9 done: greedy left 180 (median step 11, median rescue/ceiling 1.50); queue 3814/3814
+00:55:03 group pass 9 done in 67s, peak 8.5 GB
+00:55:04 pass 10: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9540 spawn rows (adaptive [9540], static groups [0])
+00:56:15 e1_a2e_mixtral_bos pass 10 done: greedy left 180 (median step 12, median rescue/ceiling 1.56); queue 3814/3814
+00:56:15 group pass 10 done in 70s, peak 8.5 GB
+00:56:16 pass 11: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9360 spawn rows (adaptive [9360], static groups [0])
+00:57:32 e1_a2e_mixtral_bos pass 11 done: greedy left 180 (median step 13, median rescue/ceiling 1.55); queue 3814/3814
+00:57:32 group pass 11 done in 75s, peak 8.5 GB
+2026-10-17T00:57:39Z END   p6an-ab-e1_a2e-mixtral_bos rc=0 (1002s)
+2026-10-17T00:59:30Z START p6an-ab-e1_a2e-mixtral_bos (waited 111s): python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+00:59:34 e1_a2e_mixtral_bos: 392 cases, 392 rows (180 validation), K=64; passes done 12, queue 3814/3814, greedy left 180
+00:59:35 pass 0: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9180 spawn rows (adaptive [9180], static groups [0])
+00:59:46   layer   0: load-wait 10.32s compute 0.61s  wf_rows=1830
+01:00:09   layer   8: load-wait 2.62s compute 0.28s  wf_rows=6870
+01:00:32   layer  16: load-wait 2.54s compute 0.35s  wf_rows=9180
+01:00:56   layer  24: load-wait 2.55s compute 0.33s  wf_rows=9180
+01:01:16   layer  31: load-wait 2.57s compute 0.33s  wf_rows=9180
+01:01:16   pass done: 360 prefill rows (T=29), 9180 spawn rows, 100.6s (metrics 0.1s)
+01:01:17 e1_a2e_mixtral_bos pass 12 done: greedy left 180 (median step 14, median rescue/ceiling 1.61); queue 3814/3814
+01:01:17 group pass 0 done in 101s, peak 8.5 GB
+01:01:18 pass 1: tasks ['e1_a2e_mixtral_bos'], 360 prefill rows (T max 29), 9000 spawn rows (adaptive [9000], static groups [0])
+01:02:51 e1_a2e_mixtral_bos pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.67); queue 3814/3814
+01:02:51 e1_a2e_mixtral_bos: ALL PASSES COMPLETE
+01:02:51 group pass 1 done in 92s, peak 8.5 GB
+01:02:52 nothing left to run
+2026-10-17T01:02:59Z END   p6an-ab-e1_a2e-mixtral_bos rc=0 (209s)

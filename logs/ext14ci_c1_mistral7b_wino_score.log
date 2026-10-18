@@ -1,0 +1,11 @@
+2026-10-16T23:52:46Z START p6ci-c1-mistral7b_wino-score (waited 254s): python scripts/ext14ci_c1_run.py mistral7b_wino score
+23:52:54 score mistral7b_wino: 1024 prefill rows, 16384 spawns, experts [(18, 0), (19, 0), (20, 0), (21, 0)]
+23:53:11 pass 17s
+/home/ubuntu/MOE/moetrace/ext14_circuit.py:179: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  t = torch.as_tensor(true_ids, device=head.device, dtype=torch.long)
+23:53:15 L18E000: active clean 512/512, corrupt 512; sum dla vs slot dla r=1.0000, max |diff| 0.0014
+23:53:18 L19E000: active clean 512/512, corrupt 512; sum dla vs slot dla r=1.0000, max |diff| 0.0019
+23:53:20 L20E000: active clean 512/512, corrupt 512; sum dla vs slot dla r=1.0000, max |diff| 0.0015
+23:53:23 L21E000: active clean 512/512, corrupt 512; sum dla vs slot dla r=1.0000, max |diff| 0.0017
+23:53:23 score done
+2026-10-16T23:53:24Z END   p6ci-c1-mistral7b_wino-score rc=0 (38s)

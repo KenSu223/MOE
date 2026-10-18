@@ -1,0 +1,14 @@
+2026-10-17T02:45:04Z START ext14-e3p3_a2e-mistral7b_bos-sweep (waited 2184s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --agent p6-data --max-rows 27906
+02:45:05 mistral7b -> p6_e3p3_a2e_mistral7b_bos: 212 directed cases (106 pairs), families {'main': {'discovery': 212, 'validation': 212}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (20352 spawn rows), T max 43
+02:45:06 pass 1/1: layers 0..31, 424 prefill rows, 20352 spawn rows
+02:45:08   layer   0: load-wait 0.79s compute 0.47s  wf_rows=636
+02:45:10   layer   8: load-wait 0.06s compute 0.23s  wf_rows=5724
+02:45:14   layer  16: load-wait 0.15s compute 0.30s  wf_rows=10812
+02:45:17   layer  24: load-wait 0.08s compute 0.37s  wf_rows=15900
+02:45:20   layer  31: load-wait 0.06s compute 0.43s  wf_rows=20352
+02:45:21   pass done: 424 prefill rows (T=43), 20352 spawn rows, 14.0s (metrics 0.2s)
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+02:45:22 family main: layer disc L17; attn_layer disc L16; block disc L16
+02:45:22 Δclean +2.20 Δcorrupt -2.19 drop +4.39; {"layer_discovery_argmax": 17, "layer_discovery_max": 0.636, "layer_discovery_top5": [[17, 0.636], [20, 0.609], [19, 0.551], [18, 0.493], [16, 0.461]], "layer_validation_argmax": 17, "layer_validation_max": 0.636, "layer_validation_top5": [[17, 0.636], [20, 0.609], [19, 0.551], [18, 0.493], [16, 0.461]], "attn_layer_discovery_argmax": 16, "attn_layer_discovery_max": 1.346, "attn_layer_discovery_top5": [[16, 1.346], [19, 1.098], [13, 0.562], [20, 0.518], [15, 0.509]], "attn_layer_validation_argmax": 16, "attn_layer_validation_max": 1.346, "attn_layer_validation_top5": [[16, 1.346], [19, 1.098],
+2026-10-17T02:45:23Z END   ext14-e3p3_a2e-mistral7b_bos-sweep rc=0 (19s)

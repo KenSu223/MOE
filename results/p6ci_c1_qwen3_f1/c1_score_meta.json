@@ -1,0 +1,20 @@
+{
+ "task": "qwen3_f1",
+ "model": "qwen3",
+ "items": [
+  "wino",
+  "qwen3",
+  "p5_f1_qwen3",
+  "data/wino_ref/pairs_p5_f1_qwen3.parquet",
+  "data/wino_ref/case_sets_p5_f1_qwen3.json"
+ ],
+ "experts": [
+  "L37E032"
+ ],
+ "n_rows": 512,
+ "n_prefill": 1024,
+ "limit": null,
+ "pass_s": 53.0,
+ "command": "scripts/ext14ci_c1_run.py qwen3_f1 score",
+ "utc": "2026-10-16T22:58:34Z"
+}

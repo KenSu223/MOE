@@ -1,0 +1,62 @@
+2026-10-16T20:56:57Z chain start (pid 4136692); order [('e1_a2e', 'qwen3'), ('e1_a2e', 'mixtral_bos'), ('e1_e2a', 'qwen3'), ('e1_e2a', 'mixtral_bos'), ('e1_a2e', 'qwen2_57b'), ('e3_a2e', 'qwen2_57b')]
+2026-10-16T20:56:58Z waiting; BASE READY seen for []; tier-2 cells not finished: ['e1_a2e/qwen3', 'e1_a2e/mixtral_bos', 'e1_e2a/qwen3', 'e1_e2a/mixtral_bos', 'e1_a2e/qwen2_57b', 'e3_a2e/qwen2_57b']
+2026-10-16T21:27:16Z waiting; BASE READY seen for []; tier-2 cells not finished: ['e1_a2e/qwen3', 'e1_a2e/mixtral_bos', 'e1_e2a/qwen3', 'e1_e2a/mixtral_bos', 'e1_a2e/qwen2_57b', 'e3_a2e/qwen2_57b']
+2026-10-16T21:57:38Z waiting; BASE READY seen for []; tier-2 cells not finished: ['e1_a2e/qwen3', 'e1_a2e/mixtral_bos', 'e1_e2a/qwen3', 'e1_e2a/mixtral_bos', 'e1_a2e/qwen2_57b', 'e3_a2e/qwen2_57b']
+2026-10-16T22:27:51Z waiting; BASE READY seen for []; tier-2 cells not finished: ['e1_a2e/qwen3', 'e1_a2e/mixtral_bos', 'e1_e2a/qwen3', 'e1_e2a/mixtral_bos', 'e1_a2e/qwen2_57b', 'e3_a2e/qwen2_57b']
+2026-10-16T22:54:17Z cpu scripts/ext14_all.py rc=1
+2026-10-16T22:58:20Z waiting; BASE READY seen for ['l_bind/qwen3']; tier-2 cells not finished: ['e1_a2e/qwen3', 'e1_a2e/mixtral_bos', 'e1_e2a/qwen3', 'e1_e2a/mixtral_bos', 'e1_a2e/qwen2_57b', 'e3_a2e/qwen2_57b']
+2026-10-16T23:20:45Z cpu scripts/ext14_all.py rc=0
+2026-10-16T23:20:45Z e1_a2e/qwen3: mirror prepared
+2026-10-16T23:20:45Z submit p6an-expert-e1_a2e-qwen3: python scripts/ext7_wino_expert.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-16T23:29:32Z p6an-expert-e1_a2e-qwen3 rc=0 (527s incl. queue wait)
+2026-10-16T23:29:41Z cpu scripts/ext14_t2_select.py e1_a2e qwen3 rc=0
+2026-10-16T23:29:45Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3 rc=0
+2026-10-16T23:29:50Z cpu scripts/ext14_all.py rc=0
+2026-10-16T23:29:50Z submit p6an-ab-e1_a2e-qwen3: python scripts/ext14_t2_run.py ab qwen3 --tasks e1_a2e_qwen3 --max-passes 18 --budget 45000 --max-tasks 1
+2026-10-16T23:44:47Z p6an-ab-e1_a2e-qwen3 rc=0 (897s incl. queue wait)
+2026-10-16T23:45:26Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3 rc=0
+2026-10-16T23:45:39Z cpu scripts/ext14_all.py rc=0
+2026-10-16T23:45:39Z submit p6an-ci1-e1_a2e-qwen3: python scripts/ext14_t2_run.py ci1 e1_a2e qwen3 --max-passes 6
+2026-10-16T23:52:46Z p6an-ci1-e1_a2e-qwen3 rc=0 (427s incl. queue wait)
+2026-10-16T23:53:24Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3 rc=0
+2026-10-16T23:53:30Z cpu scripts/ext14_all.py rc=0
+2026-10-16T23:53:30Z submit p6an-ci2-e1_a2e-qwen3: python scripts/ext14_t2_run.py ci2 qwen3 --group e1_a2e --conds e1_a2e --max-passes 12
+2026-10-17T00:05:51Z p6an-ci2-e1_a2e-qwen3 rc=0 (741s incl. queue wait)
+2026-10-17T00:05:51Z submit p6an-ci2-e1_a2e-qwen3: python scripts/ext14_t2_run.py ci2 qwen3 --group e1_a2e --conds e1_a2e --max-passes 12
+2026-10-17T00:24:29Z p6an-ci2-e1_a2e-qwen3 rc=0 (1118s incl. queue wait)
+2026-10-17T00:25:22Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3 rc=0
+2026-10-17T00:25:33Z cpu scripts/ext14_all.py rc=0
+2026-10-17T00:25:33Z submit p6an-ko-e1_a2e-qwen3: python scripts/ext14_t2_run.py ko qwen3 --conds e1_a2e --with-wr --time-budget 1320
+2026-10-17T00:33:01Z p6an-ko-e1_a2e-qwen3 rc=0 (449s incl. queue wait)
+2026-10-17T00:34:05Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/qwen3 rc=0
+2026-10-17T00:34:18Z cpu scripts/ext14_all.py rc=1
+2026-10-17T00:34:34Z cpu scripts/ext14_all.py rc=1
+2026-10-17T00:34:34Z e1_a2e/mixtral_bos: mirror prepared
+2026-10-17T00:34:34Z submit p6an-expert-e1_a2e-mixtral_bos: python scripts/ext7_wino_expert.py --model mixtral --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-17T00:38:53Z p6an-expert-e1_a2e-mixtral_bos rc=0 (259s incl. queue wait)
+2026-10-17T00:39:00Z cpu scripts/ext14_t2_select.py e1_a2e mixtral_bos rc=0
+2026-10-17T00:39:06Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos rc=0
+2026-10-17T00:39:10Z cpu scripts/ext14_all.py rc=1
+2026-10-17T00:39:10Z submit p6an-ab-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+2026-10-17T00:57:39Z p6an-ab-e1_a2e-mixtral_bos rc=0 (1109s incl. queue wait)
+2026-10-17T00:57:39Z submit p6an-ab-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+2026-10-17T01:02:59Z p6an-ab-e1_a2e-mixtral_bos rc=0 (320s incl. queue wait)
+2026-10-17T01:03:28Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos rc=0
+2026-10-17T01:03:35Z cpu scripts/ext14_all.py rc=1
+2026-10-17T01:03:35Z submit p6an-ci1-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ci1 e1_a2e mixtral_bos --max-passes 4
+2026-10-17T01:08:10Z p6an-ci1-e1_a2e-mixtral_bos rc=0 (276s incl. queue wait)
+2026-10-17T01:08:47Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos rc=0
+2026-10-17T01:09:03Z cpu scripts/ext14_all.py rc=1
+2026-10-17T01:09:03Z submit p6an-ci2-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ci2 mixtral_bos --group e1_a2e --conds e1_a2e --max-passes 10
+2026-10-17T01:28:10Z p6an-ci2-e1_a2e-mixtral_bos rc=0 (1148s incl. queue wait)
+2026-10-17T01:28:10Z submit p6an-ci2-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ci2 mixtral_bos --group e1_a2e --conds e1_a2e --max-passes 10
+2026-10-17T01:46:19Z p6an-ci2-e1_a2e-mixtral_bos rc=0 (1088s incl. queue wait)
+2026-10-17T01:46:59Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos rc=0
+2026-10-17T01:47:28Z cpu scripts/ext14_all.py rc=1
+2026-10-17T01:47:39Z cpu scripts/ext14_all.py rc=1
+2026-10-17T01:47:39Z submit p6an-ko-e1_a2e-mixtral_bos: python scripts/ext14_t2_run.py ko mixtral_bos --conds e1_a2e --with-wr --time-budget 1320
+2026-10-17T01:54:21Z p6an-ko-e1_a2e-mixtral_bos rc=0 (401s incl. queue wait)
+2026-10-17T01:55:11Z cpu scripts/ext14_t2_analyze.py --cells e1_a2e/mixtral_bos rc=0
+2026-10-17T01:55:35Z cpu scripts/ext14_all.py rc=0
+2026-10-17T01:55:35Z stop file
+2026-10-17T01:55:35Z chain exit

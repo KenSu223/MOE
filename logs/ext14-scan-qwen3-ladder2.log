@@ -1,0 +1,24 @@
+2026-10-16T20:27:12Z START ext14-scan-qwen3-ladder2 (waited 1608s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_bind,l_ind
+20:27:20 l_bind [all]: 3200 pairs, 6400 rows
+20:27:24   layer   0: load-wait 2.87s compute 1.04s  wf_rows=0
+20:27:33   layer   8: load-wait 0.67s compute 0.57s  wf_rows=0
+20:27:43   layer  16: load-wait 0.67s compute 0.57s  wf_rows=0
+20:27:53   layer  24: load-wait 0.67s compute 0.57s  wf_rows=0
+20:28:03   layer  32: load-wait 0.67s compute 0.57s  wf_rows=0
+20:28:13   layer  40: load-wait 0.67s compute 0.57s  wf_rows=0
+20:28:22   layer  47: load-wait 1.17s compute 0.57s  wf_rows=0
+20:28:23   pass done: 6400 prefill rows (T=21), 0 spawn rows, 62.5s
+20:28:23   pass 1/1 (6400 rows, 63s)
+20:28:23 l_bind {"pairs": 3200, "margin": 781, "reverse_margin": 0, "margin_rate": 0.244, "by_order": {"1": 0.242, "2": 0.246}, "top1_both": 0.582, "passes": 1}
+20:28:23 l_ind [all]: 1600 pairs, 3200 rows
+20:28:24   layer   0: load-wait 0.91s compute 0.17s  wf_rows=0
+20:28:33   layer   8: load-wait 1.00s compute 0.17s  wf_rows=0
+20:28:41   layer  16: load-wait 0.62s compute 0.17s  wf_rows=0
+20:28:47   layer  24: load-wait 0.78s compute 0.17s  wf_rows=0
+20:28:56   layer  32: load-wait 0.89s compute 0.17s  wf_rows=0
+20:29:06   layer  40: load-wait 1.03s compute 0.17s  wf_rows=0
+20:29:12   layer  47: load-wait 0.56s compute 0.17s  wf_rows=0
+20:29:12   pass done: 3200 prefill rows (T=12), 0 spawn rows, 49.2s
+20:29:12   pass 1/1 (3200 rows, 49s)
+20:29:12 l_ind {"pairs": 1600, "margin": 622, "reverse_margin": 0, "margin_rate": 0.389, "by_order": {"1": 0.395, "2": 0.382}, "top1_both": 0.791, "passes": 1}
+2026-10-16T20:29:19Z END   ext14-scan-qwen3-ladder2 rc=0 (127s)

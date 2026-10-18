@@ -1,0 +1,58 @@
+2026-10-16T23:33:31Z START p6an-ab-e1_a2e-qwen3 (waited 221s): python scripts/ext14_t2_run.py ab qwen3 --tasks e1_a2e_qwen3 --max-passes 18 --budget 45000 --max-tasks 1
+23:33:40 e1_a2e_qwen3: initialised {'eval_rows': 256, 'noise_rows': 128, 'pool': 32, 'queue_groups': 4482, 'queue_items': 135424}
+23:33:40 e1_a2e_qwen3: 512 cases, 512 rows (256 validation), K=384; passes done 0, queue 0/4482, greedy left 256
+23:33:44 pass 0: tasks ['e1_a2e_qwen3'], 1024 prefill rows (T max 26), 44980 spawn rows (adaptive [8192], static groups [2020])
+23:33:49   layer   0: load-wait 2.88s compute 0.79s  wf_rows=17346
+23:33:58   layer   8: load-wait 0.86s compute 0.61s  wf_rows=27926
+23:34:08   layer  16: load-wait 0.82s compute 0.44s  wf_rows=32953
+23:34:18   layer  24: load-wait 0.80s compute 0.45s  wf_rows=34878
+23:34:27   layer  32: load-wait 0.79s compute 0.45s  wf_rows=36510
+23:34:37   layer  40: load-wait 0.74s compute 0.52s  wf_rows=43182
+23:34:47   layer  47: load-wait 1.32s compute 0.52s  wf_rows=44980
+23:34:49   pass done: 1024 prefill rows (T=26), 44980 spawn rows, 63.4s (metrics 1.7s)
+23:34:53 e1_a2e_qwen3 first pass: ceilings for 512 rows (mean all-MoE rescue -0.965); DLA rows 196608 (4852 candidate pairs not routed in this pass's clean run)
+23:34:54 e1_a2e_qwen3 pass 0 done: greedy left 256 (median step 2, median rescue/ceiling 1.05); queue 2020/4994
+23:34:54 group pass 0 done in 63s, peak 8.9 GB
+23:34:57 pass 1: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 44876 spawn rows (adaptive [7680], static groups [1092])
+23:35:42 e1_a2e_qwen3 pass 1 done: greedy left 256 (median step 3, median rescue/ceiling 1.44); queue 3112/4994
+23:35:42 group pass 1 done in 43s, peak 8.1 GB
+23:35:45 pass 2: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 44987 spawn rows (adaptive [7424], static groups [233])
+23:36:28 e1_a2e_qwen3: noise_oracle groups added for 128 rows
+23:36:28 e1_a2e_qwen3 pass 2 done: greedy left 256 (median step 4, median rescue/ceiling 1.32); queue 3345/5122
+23:36:28 group pass 2 done in 42s, peak 7.4 GB
+23:36:32 pass 3: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 44485 spawn rows (adaptive [7168], static groups [1777])
+23:37:24 e1_a2e_qwen3 pass 3 done: greedy left 256 (median step 5, median rescue/ceiling 1.55); queue 5122/5122
+23:37:24 group pass 3 done in 51s, peak 8.8 GB
+23:37:25 pass 4: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 6912 spawn rows (adaptive [6912], static groups [0])
+23:38:05 e1_a2e_qwen3 pass 4 done: greedy left 256 (median step 6, median rescue/ceiling 1.63); queue 5122/5122
+23:38:05 group pass 4 done in 39s, peak 5.5 GB
+23:38:06 pass 5: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 6656 spawn rows (adaptive [6656], static groups [0])
+23:38:52 e1_a2e_qwen3 pass 5 done: greedy left 256 (median step 7, median rescue/ceiling 1.68); queue 5122/5122
+23:38:52 group pass 5 done in 46s, peak 5.4 GB
+23:38:53 pass 6: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 6400 spawn rows (adaptive [6400], static groups [0])
+23:39:35 e1_a2e_qwen3 pass 6 done: greedy left 256 (median step 8, median rescue/ceiling 1.68); queue 5122/5122
+23:39:35 group pass 6 done in 42s, peak 5.3 GB
+23:39:36 pass 7: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 6144 spawn rows (adaptive [6144], static groups [0])
+23:40:20 e1_a2e_qwen3 pass 7 done: greedy left 256 (median step 9, median rescue/ceiling 1.90); queue 5122/5122
+23:40:20 group pass 7 done in 44s, peak 5.2 GB
+23:40:21 pass 8: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 5888 spawn rows (adaptive [5888], static groups [0])
+23:41:04 e1_a2e_qwen3 pass 8 done: greedy left 256 (median step 10, median rescue/ceiling 2.00); queue 5122/5122
+23:41:04 group pass 8 done in 42s, peak 5.1 GB
+23:41:05 pass 9: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 5632 spawn rows (adaptive [5632], static groups [0])
+23:41:49 e1_a2e_qwen3 pass 9 done: greedy left 256 (median step 11, median rescue/ceiling 1.84); queue 5122/5122
+23:41:49 group pass 9 done in 44s, peak 5.0 GB
+23:41:49 pass 10: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 5376 spawn rows (adaptive [5376], static groups [0])
+23:42:31 e1_a2e_qwen3 pass 10 done: greedy left 256 (median step 12, median rescue/ceiling 2.00); queue 5122/5122
+23:42:31 group pass 10 done in 41s, peak 4.9 GB
+23:42:32 pass 11: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 5120 spawn rows (adaptive [5120], static groups [0])
+23:43:13 e1_a2e_qwen3 pass 11 done: greedy left 256 (median step 13, median rescue/ceiling 1.95); queue 5122/5122
+23:43:13 group pass 11 done in 41s, peak 4.8 GB
+23:43:14 pass 12: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 4864 spawn rows (adaptive [4864], static groups [0])
+23:43:57 e1_a2e_qwen3 pass 12 done: greedy left 256 (median step 14, median rescue/ceiling 1.90); queue 5122/5122
+23:43:57 group pass 12 done in 43s, peak 4.7 GB
+23:43:58 pass 13: tasks ['e1_a2e_qwen3'], 512 prefill rows (T max 26), 4608 spawn rows (adaptive [4608], static groups [0])
+23:44:39 e1_a2e_qwen3 pass 13 done: greedy left 0 (median step 15, median rescue/ceiling 1.78); queue 5122/5122
+23:44:39 e1_a2e_qwen3: ALL PASSES COMPLETE
+23:44:39 group pass 13 done in 41s, peak 4.6 GB
+23:44:39 nothing left to run
+2026-10-16T23:44:47Z END   p6an-ab-e1_a2e-qwen3 rc=0 (676s)

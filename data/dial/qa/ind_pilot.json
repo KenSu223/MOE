@@ -1,0 +1,108 @@
+{
+ "metrics": {
+  "qwen3|I0": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.35,
+   "correct_both": 0.765,
+   "items_both_orders_margin": 0.15,
+   "order_gap": 0.02999999999999997,
+   "first_mention_bias": 0.5828125,
+   "drop_median": 2.75
+  },
+  "qwen3|I1": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.0275,
+   "correct_both": 0.18,
+   "items_both_orders_margin": 0.005,
+   "order_gap": 0.0049999999999999975,
+   "first_mention_bias": 0.17140625,
+   "drop_median": -0.25
+  },
+  "qwen3|I2": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.1175,
+   "correct_both": 0.475,
+   "items_both_orders_margin": 0.035,
+   "order_gap": -0.0049999999999999906,
+   "first_mention_bias": 0.26203125,
+   "drop_median": 1.25
+  },
+  "qwen3|I3": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.3425,
+   "correct_both": 0.6925,
+   "items_both_orders_margin": 0.145,
+   "order_gap": -0.034999999999999976,
+   "first_mention_bias": 0.774609375,
+   "drop_median": 3.25
+  },
+  "qwen3|I4": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.0,
+   "correct_both": 0.0475,
+   "items_both_orders_margin": 0.0,
+   "order_gap": 0.0,
+   "first_mention_bias": -0.10625,
+   "drop_median": -0.625
+  },
+  "mixtral_bos|I0": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.105,
+   "correct_both": 0.43,
+   "items_both_orders_margin": 0.01,
+   "order_gap": -0.009999999999999995,
+   "first_mention_bias": 0.74015625,
+   "drop_median": 1.375
+  },
+  "mixtral_bos|I1": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.3475,
+   "correct_both": 0.77,
+   "items_both_orders_margin": 0.2,
+   "order_gap": -0.034999999999999976,
+   "first_mention_bias": 0.2375,
+   "drop_median": 2.25
+  },
+  "mixtral_bos|I2": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.345,
+   "correct_both": 0.7675,
+   "items_both_orders_margin": 0.135,
+   "order_gap": -0.019999999999999962,
+   "first_mention_bias": 0.55015625,
+   "drop_median": 2.5
+  },
+  "mixtral_bos|I3": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.325,
+   "correct_both": 0.6825,
+   "items_both_orders_margin": 0.145,
+   "order_gap": 0.020000000000000018,
+   "first_mention_bias": 0.609453125,
+   "drop_median": 2.75
+  },
+  "mixtral_bos|I4": {
+   "pairs": 400,
+   "items": 200,
+   "margin": 0.55,
+   "correct_both": 0.86,
+   "items_both_orders_margin": 0.315,
+   "order_gap": -0.05999999999999994,
+   "first_mention_bias": 0.03375,
+   "drop_median": 3.125
+  }
+ },
+ "decision": {
+  "frame": "I2",
+  "rule": "no I1-I3 frame reaches 0.8 in both models: best I1-I3 frame anyway (highest minimum over models, |gap| <= 0.10 where possible)"
+ }
+}

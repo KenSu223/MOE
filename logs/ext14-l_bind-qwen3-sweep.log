@@ -1,0 +1,17 @@
+2026-10-16T20:59:50Z START ext14-l_bind-qwen3-sweep (waited 1658s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --max-rows 60000
+20:59:50 qwen3 -> p6_l_bind_qwen3: 512 directed cases (256 pairs), families {'main': {'discovery': 256, 'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 2 passes (73728 spawn rows), T max 21
+20:59:52 pass 1/2: layers 0..38, 1024 prefill rows, 59904 spawn rows
+20:59:57   layer   0: load-wait 3.43s compute 0.78s  wf_rows=1536
+21:00:03   layer   8: load-wait 0.84s compute 0.19s  wf_rows=13824
+21:00:11   layer  16: load-wait 0.40s compute 0.27s  wf_rows=26112
+21:00:17   layer  24: load-wait 0.48s compute 0.35s  wf_rows=38400
+21:00:26   layer  32: load-wait 1.08s compute 0.42s  wf_rows=50688
+21:00:35   layer  40: load-wait 0.75s compute 0.48s  wf_rows=59904
+21:00:43   layer  47: load-wait 1.02s compute 0.48s  wf_rows=59904
+21:00:45   pass done: 1024 prefill rows (T=21), 59904 spawn rows, 52.5s (metrics 2.3s)
+21:00:46 pass 2/2: layers 39..47, 1024 prefill rows, 13824 spawn rows
+/home/ubuntu/MOE/scripts/ext7_wino_sweep.py:134: Pandas4Warning: Starting with pandas version 4.0 all arguments of mean will be keyword-only.
+  mv = R.loc[v].mean(0)
+21:01:33 family main: layer disc L37; attn_layer disc L42; block disc L42
+21:01:33 Δclean +2.65 Δcorrupt -2.63 drop +5.28; {"layer_discovery_argmax": 37, "layer_discovery_max": 0.383, "layer_discovery_top5": [[37, 0.383], [39, 0.335], [44, 0.271], [41, 0.2], [43, 0.199]], "layer_validation_argmax": 37, "layer_validation_max": 0.4, "layer_validation_top5": [[37, 0.4], [39, 0.307], [44, 0.271], [43, 0.218], [41, 0.189]], "attn_layer_discovery_argmax": 42, "attn_layer_discovery_max": 1.564, "attn_layer_discovery_top5": [[42, 1.564], [43, 0.991], [45, 0.911], [39, 0.864], [41, 0.79]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 1.53, "attn_layer_validation_top5": [[42, 1.53], [45, 1.056], [43, 0.9
+2026-10-16T21:01:39Z END   ext14-l_bind-qwen3-sweep rc=0 (109s)

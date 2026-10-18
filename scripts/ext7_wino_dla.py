@@ -86,7 +86,7 @@ def main():
         tt, ff = tid[:n], fid[:n]
 
         def dlt(h):
-            hn = rmsnorm(h.to(eng.device).to(torch.bfloat16), wn, s.rms_eps)
+            hn = rmsnorm(h.to(eng.device).to(getattr(eng, 'dtype', torch.bfloat16)), wn, s.rms_eps)  # ext14: engine activation dtype (bf16 unless an fp32 protocol)
             return ((hn.float() * (head[tt].float() - head[ff].float())).sum(-1)).cpu()
         base_k, base_c = dlt(hk), dlt(hc)
         dir_rows = dict(den_attn=dlt(hk + dA) - base_k, den_moe=dlt(hk + dM) - base_k, noi_attn=base_c - dlt(hc - dA), noi_moe=base_c - dlt(hc - dM),

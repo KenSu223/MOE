@@ -1,0 +1,52 @@
+{
+ "cond": "e1_a2e",
+ "proto": "qwen3",
+ "model": "qwen3",
+ "repo": "Qwen/Qwen3-30B-A3B-Base",
+ "agent": "p5-expert",
+ "experiment": "ext13wr writer pass (contrib_dla, contrib_final_vectors, resid_final), Phase 5 / Direction 11",
+ "source": {
+  "pairs": "data/dial/pairs_e1_a2e_qwen3.parquet",
+  "case_sets": "data/dial/case_sets_e1_a2e_qwen3.json",
+  "run": "p6_e1_a2e_qwen3_t2"
+ },
+ "experts_of_interest": [
+  "L37E032",
+  "L41E117",
+  "L44E069",
+  "L42E115",
+  "L44E116",
+  "L43E070",
+  "L38E118",
+  "L41E062",
+  "L42E030",
+  "L42E068",
+  "L42E102",
+  "L37E107",
+  "L40E105"
+ ],
+ "layers": [
+  37,
+  38,
+  40,
+  41,
+  42,
+  43,
+  44
+ ],
+ "n_prompts": 512,
+ "created_utc": "2026-10-17T00:31:58Z",
+ "complete": true,
+ "dtype": "bf16",
+ "n_vectors": 8250,
+ "pass_s": 39.785001277923584,
+ "peak_GB": 3.7341127395629883,
+ "class_sizes": {
+  "attr_own": 69,
+  "ent_own": 165,
+  "wg_trigger": 1648,
+  "names": 65,
+  "cf_any": 826
+ },
+ "completed_utc": "2026-10-17T00:32:53Z"
+}

@@ -1,0 +1,13 @@
+2026-10-16T22:48:25Z START ext14-scan-qwen3-l_ind-I2 (waited 701s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind
+22:48:31 l_ind [all]: 1600 pairs, 3200 rows
+22:48:36   layer   0: load-wait 3.43s compute 0.68s  wf_rows=0
+22:48:45   layer   8: load-wait 0.97s compute 0.26s  wf_rows=0
+22:48:54   layer  16: load-wait 0.61s compute 0.26s  wf_rows=0
+22:49:02   layer  24: load-wait 0.99s compute 0.26s  wf_rows=0
+22:49:12   layer  32: load-wait 1.22s compute 0.26s  wf_rows=0
+22:49:24   layer  40: load-wait 1.24s compute 0.26s  wf_rows=0
+22:49:33   layer  47: load-wait 0.74s compute 0.26s  wf_rows=0
+22:49:33   pass done: 3200 prefill rows (T=19), 0 spawn rows, 61.2s
+22:49:33   pass 1/1 (3200 rows, 61s)
+22:49:33 l_ind {"pairs": 1600, "margin": 194, "reverse_margin": 0, "margin_rate": 0.121, "by_order": {"1": 0.116, "2": 0.126}, "top1_both": 0.333, "passes": 1}
+2026-10-16T22:49:39Z END   ext14-scan-qwen3-l_ind-I2 rc=0 (74s)

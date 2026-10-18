@@ -1054,3 +1054,592 @@
 2026-10-12T05:21:14Z END   ext13ab-mixtral-20 rc=0 (108s)
 2026-10-12T05:21:14Z START ext13ci-s2-g4-mixtral_bos (waited 862s): python scripts/ext13ci_circuit_run.py mixtral_bos --group g4 --conds f2e --max-passes 10
 2026-10-12T05:35:32Z END   ext13ci-s2-g4-mixtral_bos rc=0 (858s)
+2026-10-16T19:08:34Z START p6an-smoke-ab_q (waited 0s): python scripts/ext14_t2_run.py ab qwen3 --tasks e1_a2e_qwen3 --greedy-steps 2 --max-passes 4
+2026-10-16T19:10:40Z END   p6an-smoke-ab_q rc=0 (126s)
+2026-10-16T19:10:41Z START p6an-smoke-ci1_q (waited 0s): python scripts/ext14_t2_run.py ci1 e1_a2e qwen3 --limit 4 --max-passes 1
+2026-10-16T19:11:53Z END   p6an-smoke-ci1_q rc=0 (72s)
+2026-10-16T19:11:53Z START p6an-smoke-ci2_q (waited 0s): python scripts/ext14_t2_run.py ci2 qwen3 --group e1_a2e --conds e1_a2e --limit 4 --max-passes 2
+2026-10-16T19:13:51Z END   p6an-smoke-ci2_q rc=0 (118s)
+2026-10-16T19:13:51Z START p6an-smoke-ko_q (waited 0s): python scripts/ext14_t2_run.py ko qwen3 --conds e1_a2e --with-wr --limit 4 --time-budget 900
+2026-10-16T19:17:41Z END   p6an-smoke-ko_q rc=0 (230s)
+2026-10-16T19:17:41Z START p6an-smoke-ab_m (waited 0s): python scripts/ext14_t2_run.py ab mixtral --tasks e1_e2a_mixtral_bos --greedy-steps 2 --max-passes 3
+2026-10-16T19:21:00Z END   p6an-smoke-ab_m rc=0 (199s)
+2026-10-16T19:21:00Z START p6an-smoke-ko_m (waited 0s): python scripts/ext14_t2_run.py ko mixtral_bos --conds e1_e2a --with-wr --limit 4 --time-budget 900
+2026-10-16T19:25:57Z END   p6an-smoke-ko_m rc=0 (297s)
+2026-10-16T19:25:57Z START p6eng-dev-tiny-olmoe (waited 256s): bash -c cd /home/ubuntu/MOE_wt_p6engine && for f in mistral qwen2 qwen3 qwen2_moe; do python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 4 > /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 2 --per-layer 1,2,3 >> /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; done; python scripts/ext14_engine_verify.py --model olmoe --units 6 > /home/ubuntu/MOE/logs/ext14_engine_dev_olmoe.log 2>&1
+2026-10-16T19:26:14Z END   p6eng-dev-tiny-olmoe rc=1 (17s)
+2026-10-16T19:26:14Z START p6an-smoke-expert (waited 193s): python scripts/ext7_wino_expert.py --model qwen3 --pairs data/wino_ref/pairs_p5_dir_f1_qwen3.parquet --case-sets data/wino_ref/case_sets_p5_dir_f1_qwen3.json --out p6_e1_a2e_qwen3_t2_smoke2 --agent p6-analysis --families main --layers 43-44 --pairs-layers auto --max-spawn 60000
+2026-10-16T19:27:22Z END   p6an-smoke-expert rc=0 (68s)
+2026-10-16T19:27:22Z START ext14-scan-qwen3-dialE-core1 (waited 123s): python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1_a2e,e1_e2a,e3_a2e,e3_e2a,rsite_e1_a2e
+2026-10-16T19:31:38Z END   ext14-scan-qwen3-dialE-core1 rc=0 (256s)
+2026-10-16T19:31:39Z START p6eng-dev-regress (waited 325s): bash /home/ubuntu/MOE_wt_p6engine/scripts/ext14_engine_regress.sh /home/ubuntu/MOE_wt_p6engine dev
+2026-10-16T19:39:18Z END   p6eng-dev-regress rc=0 (459s)
+2026-10-16T19:39:18Z START p6eng-dev-tiny-olmoe (waited 689s): bash -c cd /home/ubuntu/MOE_wt_p6engine && for f in mistral qwen2 qwen3 qwen2_moe; do python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 4 > /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; python scripts/ext14_engine_verify.py --model /opt/dlami/nvme/p6_tiny/$f --dtype fp32 --units 2 --per-layer 1,2,3 >> /home/ubuntu/MOE/logs/ext14_engine_dev_tiny_$f.log 2>&1 || exit 1; done; python scripts/ext14_engine_verify.py --model olmoe --units 6 > /home/ubuntu/MOE/logs/ext14_engine_dev_olmoe.log 2>&1
+2026-10-16T19:42:08Z END   p6eng-dev-tiny-olmoe rc=0 (170s)
+2026-10-16T19:42:08Z START ext14-scan-qwen3-dialE-core2 (waited 629s): python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-16T19:47:29Z END   ext14-scan-qwen3-dialE-core2 rc=0 (321s)
+2026-10-16T19:47:29Z START ext14-scan-qwen3-pilot (waited 592s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells pilot_frames
+2026-10-16T19:48:34Z END   ext14-scan-qwen3-pilot rc=0 (65s)
+2026-10-16T19:48:34Z START ext14-scan-qwen3-probes (waited 484s): python scripts/ext14_scan.py qwen3 --part probes
+2026-10-16T19:50:27Z END   ext14-scan-qwen3-probes rc=0 (113s)
+2026-10-16T19:50:27Z START ext14-scan-qwen3-ladder (waited 506s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind,l_bind,l_ant,l_prop
+2026-10-16T19:54:03Z END   ext14-scan-qwen3-ladder rc=0 (216s)
+2026-10-16T19:54:03Z START p6eng-merge (waited 642s): bash scripts/ext14_engine_merge.sh
+2026-10-16T20:04:50Z END   p6eng-merge rc=0 (647s)
+2026-10-16T20:04:50Z START ext14-scan-mixtral_bos-dialE-core1 (waited 1040s): python scripts/ext14_scan.py mixtral_bos --part cells --subset core --cells e1_a2e,e1_e2a,e3_a2e,e3_e2a,rsite_e1_a2e
+2026-10-16T20:12:45Z END   ext14-scan-mixtral_bos-dialE-core1 rc=0 (475s)
+2026-10-16T20:12:45Z START ext14-scan-mixtral_bos-pilot (waited 1451s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells pilot_frames
+2026-10-16T20:16:02Z END   ext14-scan-mixtral_bos-pilot rc=0 (197s)
+2026-10-16T20:16:02Z START ext14-scan-mixtral_bos-probes (waited 1535s): python scripts/ext14_scan.py mixtral_bos --part probes
+2026-10-16T20:19:26Z END   ext14-scan-mixtral_bos-probes rc=0 (204s)
+2026-10-16T20:19:26Z START ext14-scan-mixtral_bos-ladder (waited 1523s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells l_ind,l_bind,l_ant,l_prop
+2026-10-16T20:27:12Z END   ext14-scan-mixtral_bos-ladder rc=0 (466s)
+2026-10-16T20:27:12Z START ext14-scan-qwen3-ladder2 (waited 1608s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_bind,l_ind
+2026-10-16T20:29:19Z END   ext14-scan-qwen3-ladder2 rc=0 (127s)
+2026-10-16T20:29:20Z START p6eng-verify-mistral7b (waited 1470s): bash -c cd /home/ubuntu/MOE && python scripts/ext14_engine_verify.py --model mistral7b --units 6 > logs/ext14_engine_verify_mistral7b.log 2>&1 && python scripts/ext14_engine_verify.py --model mistral7b --units 3 --per-layer 1,16,31 >> logs/ext14_engine_verify_mistral7b.log 2>&1
+2026-10-16T20:31:01Z END   p6eng-verify-mistral7b rc=0 (101s)
+2026-10-16T20:31:01Z START p6an-smoke-causal-none-sweep (waited 1536s): python scripts/ext14_causal_run.py e3_e2a qwen3 none sweep
+2026-10-16T20:32:11Z END   p6an-smoke-causal-none-sweep rc=0 (70s)
+2026-10-16T20:32:11Z START ext14-scan-mixtral_bos-dialE-core2 (waited 1166s): python scripts/ext14_scan.py mixtral_bos --part cells --subset core --cells e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-16T20:44:40Z END   ext14-scan-mixtral_bos-dialE-core2 rc=0 (749s)
+2026-10-16T20:44:40Z START ext14-scan-mixtral_bos-a2eP3 (waited 1145s): python scripts/ext14_scan.py mixtral_bos --part cells --subset core --cells e1_a2e,rsite_e1_a2e,e3p3_a2e
+2026-10-16T20:49:44Z END   ext14-scan-mixtral_bos-a2eP3 rc=0 (304s)
+2026-10-16T20:49:44Z START ext14-scan-qwen3-a2eP3 (waited 1449s): python scripts/ext14_scan.py qwen3 --part cells --subset core --cells e1_a2e,e1p_a2e,e2_a2e,rsite_e1_a2e,e3p3_a2e,sc_agree_a2e,sc_conflict_a2e
+2026-10-16T20:56:08Z END   ext14-scan-qwen3-a2eP3 rc=0 (384s)
+2026-10-16T20:56:08Z START ext14-scan-qwen3-dialA (waited 1728s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells dA_e1_a2e,dA_e1_e2a,e0_a2e,e0_e2a
+2026-10-16T20:59:47Z END   ext14-scan-qwen3-dialA rc=0 (219s)
+2026-10-16T20:59:47Z START p6an-smoke-causal-none-joint (waited 1656s): python scripts/ext14_causal_run.py e3_e2a qwen3 none joint
+2026-10-16T20:59:50Z END   p6an-smoke-causal-none-joint rc=1 (3s)
+2026-10-16T20:59:50Z START ext14-l_bind-qwen3-sweep (waited 1658s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --max-rows 60000
+2026-10-16T21:01:39Z END   ext14-l_bind-qwen3-sweep rc=0 (109s)
+2026-10-16T21:01:39Z START ext14-scan-qwen3-indpilot (waited 1484s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells pilot_ind
+2026-10-16T21:02:43Z END   ext14-scan-qwen3-indpilot rc=0 (64s)
+2026-10-16T21:02:43Z START ext14-scan-mistral7b_bos-probes (waited 1375s): python scripts/ext14_scan.py mistral7b_bos --part probes --specs data/dial/build/probe_specs_full_mistral.parquet
+2026-10-16T21:05:04Z END   ext14-scan-mistral7b_bos-probes rc=0 (141s)
+2026-10-16T21:05:04Z START ext14-cf-filter-mistral7b_bos (waited 1500s): python scripts/ext14_scan_cf.py mistral7b --out mistral7b_str --paper-key Mixtral
+2026-10-16T21:05:38Z END   ext14-cf-filter-mistral7b_bos rc=0 (34s)
+2026-10-16T21:05:38Z START p6ci-c1-smoke (waited 1480s): bash -c python scripts/ext14ci_c1_run.py qwen3_cf score --limit 3 --smoke && python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L44E069 --limit 3 --smoke && python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L42E115 --limit 3 --smoke
+2026-10-16T21:09:01Z END   p6ci-c1-smoke rc=0 (203s)
+2026-10-16T21:09:01Z START p6ci-relp-smoke-olmoe (waited 1036s): bash -c python scripts/ext14ci_relp_verify.py olmoe wino && python scripts/ext14ci_relp_run.py olmoe wino --smoke
+2026-10-16T21:10:03Z END   p6ci-relp-smoke-olmoe rc=1 (62s)
+2026-10-16T21:10:03Z START ext14-scan-mixtral_bos-dialE-ext2 (waited 967s): python scripts/ext14_scan.py mixtral_bos --part cells --subset ext --cells e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,rsite_e1_a2e
+2026-10-16T21:24:24Z END   ext14-scan-mixtral_bos-dialE-ext2 rc=0 (861s)
+2026-10-16T21:24:24Z START ext14-scan-mixtral_bos-dialE-ext1 (waited 1828s): python scripts/ext14_scan.py mixtral_bos --part cells --subset ext --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e1p_a2e,e1p_e2a
+2026-10-16T21:35:41Z END   ext14-scan-mixtral_bos-dialE-ext1 rc=0 (677s)
+2026-10-16T21:35:41Z START p6eng-merge2 (waited 2345s): bash scripts/ext14_engine_merge2.sh
+2026-10-16T21:44:52Z END   p6eng-merge2 rc=0 (551s)
+2026-10-16T21:44:52Z START ext14-scan-qwen3-dialE-ext1 (waited 2892s): python scripts/ext14_scan.py qwen3 --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e1p_a2e,e1p_e2a
+2026-10-16T21:50:04Z END   ext14-scan-qwen3-dialE-ext1 rc=0 (312s)
+2026-10-16T21:50:04Z START ext14-scan-qwen3-dialE-ext2 (waited 3204s): python scripts/ext14_scan.py qwen3 --part cells --subset ext --cells e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-16T21:56:03Z END   ext14-scan-qwen3-dialE-ext2 rc=0 (359s)
+2026-10-16T21:56:03Z START ext14-scan-mixtral_bos-dialA (waited 3376s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells dA_e1_a2e,dA_e1_e2a,e0_a2e,e0_e2a
+2026-10-16T22:02:34Z END   ext14-scan-mixtral_bos-dialA rc=0 (391s)
+2026-10-16T22:02:34Z START ext14-l_bind-qwen3-joint (waited 3655s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --families main --max-rows 30000
+2026-10-16T22:03:49Z END   ext14-l_bind-qwen3-joint rc=0 (75s)
+2026-10-16T22:03:49Z START ext14-scan-mixtral_bos-indpilot (waited 3666s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells pilot_ind
+2026-10-16T22:05:42Z END   ext14-scan-mixtral_bos-indpilot rc=0 (113s)
+2026-10-16T22:05:42Z START ext14-scan-mistral7b_bos-cells (waited 3638s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ioi
+2026-10-16T22:11:00Z END   ext14-scan-mistral7b_bos-cells rc=0 (318s)
+2026-10-16T22:11:00Z START p6an-smoke-causal (waited 3820s): bash /tmp/claude-1000/-home-ubuntu-MOE/49286045-4961-418b-b3fb-ec59666879ce/scratchpad/causal_smoke2.sh
+2026-10-16T22:13:27Z END   p6an-smoke-causal rc=1 (147s)
+2026-10-16T22:13:27Z START p6ci-c1-qwen3_cf-score (waited 3870s): python scripts/ext14ci_c1_run.py qwen3_cf score
+2026-10-16T22:14:45Z END   p6ci-c1-qwen3_cf-score rc=0 (78s)
+2026-10-16T22:14:45Z START p6ci-relp-smoke-olmoe (waited 3857s): bash -c python scripts/ext14ci_relp_verify.py olmoe wino && python scripts/ext14ci_relp_run.py olmoe wino --smoke
+2026-10-16T22:15:56Z END   p6ci-relp-smoke-olmoe rc=0 (71s)
+2026-10-16T22:15:56Z START p6eng-verify-dense (waited 3407s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen2_7b --units 6 > logs/ext14_engine_verify_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_7b --units 3 --per-layer 1,14,27 >> logs/ext14_engine_verify_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_4b --units 6 > logs/ext14_engine_verify_qwen3_4b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_4b --units 3 --per-layer 1,18,35 >> logs/ext14_engine_verify_qwen3_4b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_8b --units 6 > logs/ext14_engine_verify_qwen3_8b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_8b --units 3 --per-layer 1,18,35 >> logs/ext14_engine_verify_qwen3_8b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 6 > logs/ext14_engine_verify_qwen3_1p7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 3 --per-layer 1,14,27 >> logs/ext14_engine_verify_qwen3_1p7b.log 2>&1
+2026-10-16T22:20:55Z END   p6eng-verify-dense rc=0 (299s)
+2026-10-16T22:20:55Z START ext14-scan-mistral7b_bos-l_cf (waited 3522s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_cf
+2026-10-16T22:21:11Z END   ext14-scan-mistral7b_bos-l_cf rc=0 (16s)
+2026-10-16T22:21:11Z START ext14-scan-mixtral_bos-dialE-ext3 (waited 2646s): python scripts/ext14_scan.py mixtral_bos --part cells --subset ext --cells e1_e2a,e3_a2e,e1p_a2e,e1p_e2a,rsite_e1_a2e
+2026-10-16T22:23:00Z END   ext14-scan-mixtral_bos-dialE-ext3 rc=0 (109s)
+2026-10-16T22:23:00Z START ext14-l_bind-qwen3-dla (waited 1150s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --families main --chunk 512
+2026-10-16T22:24:20Z END   ext14-l_bind-qwen3-dla rc=0 (80s)
+2026-10-16T22:24:20Z START p6ci-c1-qwen3_cf-L44E069 (waited 574s): python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L44E069 --max-spawn 30000
+2026-10-16T22:25:32Z END   p6ci-c1-qwen3_cf-L44E069 rc=0 (72s)
+2026-10-16T22:25:32Z START p6eng-verify-qwen3_14b (waited 276s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen3_14b --units 3 --offload --light > logs/ext14_engine_verify_qwen3_14b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_14b --units 3 --per-layer 1,20,39 >> logs/ext14_engine_verify_qwen3_14b.log 2>&1
+2026-10-16T22:32:12Z END   p6eng-verify-qwen3_14b rc=0 (400s)
+2026-10-16T22:32:12Z START ext14-l_bind-qwen3-direct (waited 472s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --splits discovery,validation
+2026-10-16T22:33:22Z END   ext14-l_bind-qwen3-direct rc=0 (70s)
+2026-10-16T22:33:22Z START p6ci-c1-qwen3_cf-L42E115 (waited 467s): python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L42E115 --max-spawn 30000
+2026-10-16T22:34:29Z END   p6ci-c1-qwen3_cf-L42E115 rc=0 (67s)
+2026-10-16T22:34:29Z START p6eng-verify-qwen2_57b (waited 136s): bash -c cd /home/ubuntu/MOE; : > logs/ext14_engine_verify_qwen2_57b.log; python scripts/ext14_engine_verify.py --model qwen2_57b --units 3 --per-layer 1,13,27 >> logs/ext14_engine_verify_qwen2_57b.log 2>&1
+2026-10-16T22:41:12Z END   p6eng-verify-qwen2_57b rc=0 (403s)
+2026-10-16T22:41:12Z START ext14-l_bind-qwen3-grid (waited 470s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-16T22:47:15Z END   ext14-l_bind-qwen3-grid rc=0 (363s)
+2026-10-16T22:47:15Z START p6ci-c1-qwen3_wino-score (waited 763s): python scripts/ext14ci_c1_run.py qwen3_wino score
+2026-10-16T22:48:25Z END   p6ci-c1-qwen3_wino-score rc=0 (70s)
+2026-10-16T22:48:25Z START ext14-scan-qwen3-l_ind-I2 (waited 701s): python scripts/ext14_scan.py qwen3 --part cells --subset all --cells l_ind
+2026-10-16T22:49:39Z END   ext14-scan-qwen3-l_ind-I2 rc=0 (74s)
+2026-10-16T22:49:39Z START ext14-l_bind-qwen3-heads (waited 144s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/dial/pairs_l_bind_qwen3.parquet --case-sets data/dial/case_sets_l_bind_qwen3.json --out p6_l_bind_qwen3 --agent p6-data --families main --layers auto --max-rows 50000
+2026-10-16T22:52:19Z END   ext14-l_bind-qwen3-heads rc=0 (160s)
+2026-10-16T22:52:19Z START p6ci-c1-qwen3_wino-L41E117 (waited 233s): python scripts/ext14ci_c1_run.py qwen3_wino patch --expert L41E117 --max-spawn 30000
+2026-10-16T22:53:25Z END   p6ci-c1-qwen3_wino-L41E117 rc=0 (66s)
+2026-10-16T22:53:25Z START ext14-scan-mixtral_bos-l_ind-I2 (waited 224s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells l_ind
+2026-10-16T22:55:16Z END   ext14-scan-mixtral_bos-l_ind-I2 rc=0 (111s)
+2026-10-16T22:55:16Z START ext14-e1_a2e-qwen3-sweep (waited 151s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --max-rows 60000
+2026-10-16T22:57:31Z END   ext14-e1_a2e-qwen3-sweep rc=0 (135s)
+2026-10-16T22:57:31Z START p6ci-c1-qwen3_f1-score (waited 243s): python scripts/ext14ci_c1_run.py qwen3_f1 score
+2026-10-16T22:58:40Z END   p6ci-c1-qwen3_f1-score rc=0 (69s)
+2026-10-16T22:58:40Z START ext14-e1_a2e-qwen3-joint (waited 69s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --families main --max-rows 30000
+2026-10-16T22:59:48Z END   ext14-e1_a2e-qwen3-joint rc=0 (68s)
+2026-10-16T22:59:48Z START p6ci-c1-qwen3_f1-L37E032 (waited 67s): python scripts/ext14ci_c1_run.py qwen3_f1 patch --expert L37E032 --max-spawn 30000
+2026-10-16T23:01:00Z END   p6ci-c1-qwen3_f1-L37E032 rc=0 (72s)
+2026-10-16T23:01:00Z START ext14-e1_a2e-qwen3-dla (waited 72s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --families main --chunk 512
+2026-10-16T23:02:15Z END   ext14-e1_a2e-qwen3-dla rc=0 (75s)
+2026-10-16T23:02:15Z START p6ci-c1-mixtral_wino-score (waited 71s): python scripts/ext14ci_c1_run.py mixtral_wino score
+2026-10-16T23:04:14Z END   p6ci-c1-mixtral_wino-score rc=0 (119s)
+2026-10-16T23:04:14Z START ext14-e1_a2e-qwen3-direct (waited 119s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --splits discovery,validation
+2026-10-16T23:05:30Z END   ext14-e1_a2e-qwen3-direct rc=0 (76s)
+2026-10-16T23:05:30Z START p6ci-c1-mixtral_wino-L20E000 (waited 74s): python scripts/ext14ci_c1_run.py mixtral_wino patch --expert L20E000 --max-spawn 24000
+2026-10-16T23:07:24Z END   p6ci-c1-mixtral_wino-L20E000 rc=0 (114s)
+2026-10-16T23:07:24Z START ext14-e1_a2e-qwen3-grid (waited 114s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-16T23:13:51Z END   ext14-e1_a2e-qwen3-grid rc=0 (387s)
+2026-10-16T23:13:51Z START p6ci-c1-mixtral_cf-score (waited 382s): python scripts/ext14ci_c1_run.py mixtral_cf score
+2026-10-16T23:16:08Z END   p6ci-c1-mixtral_cf-score rc=0 (137s)
+2026-10-16T23:16:08Z START ext14-e1_a2e-qwen3-heads (waited 137s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3 --agent p6-data --families main --layers auto --max-rows 50000
+2026-10-16T23:18:54Z END   ext14-e1_a2e-qwen3-heads rc=0 (166s)
+2026-10-16T23:18:54Z START p6ci-c1-mixtral_cf-L19E002 (waited 164s): python scripts/ext14ci_c1_run.py mixtral_cf patch --expert L19E002 --max-spawn 24000
+2026-10-16T23:20:56Z END   p6ci-c1-mixtral_cf-L19E002 rc=0 (122s)
+2026-10-16T23:20:56Z START ext14-e1_a2e-mixtral_bos-sweep (waited 88s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --max-rows 37500
+2026-10-16T23:24:18Z END   ext14-e1_a2e-mixtral_bos-sweep rc=0 (202s)
+2026-10-16T23:24:18Z START p6an-expert-e1_a2e-qwen3 (waited 213s): python scripts/ext7_wino_expert.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_qwen3.json --out p6_e1_a2e_qwen3_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-16T23:29:32Z END   p6an-expert-e1_a2e-qwen3 rc=0 (314s)
+2026-10-16T23:29:32Z START p6ci-c1-mixtral_cf-L21E001 (waited 510s): python scripts/ext14ci_c1_run.py mixtral_cf patch --expert L21E001 --max-spawn 24000
+2026-10-16T23:31:38Z END   p6ci-c1-mixtral_cf-L21E001 rc=0 (126s)
+2026-10-16T23:31:38Z START ext14-e1_a2e-mixtral_bos-joint (waited 440s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --max-rows 28125
+2026-10-16T23:33:31Z END   ext14-e1_a2e-mixtral_bos-joint rc=0 (113s)
+2026-10-16T23:33:31Z START p6an-ab-e1_a2e-qwen3 (waited 221s): python scripts/ext14_t2_run.py ab qwen3 --tasks e1_a2e_qwen3 --max-passes 18 --budget 45000 --max-tasks 1
+2026-10-16T23:44:47Z END   p6an-ab-e1_a2e-qwen3 rc=0 (676s)
+2026-10-16T23:44:47Z START p6ci-c1-mixtral_cf-L18E001 (waited 782s): python scripts/ext14ci_c1_run.py mixtral_cf patch --expert L18E001 --max-spawn 24000
+2026-10-16T23:48:24Z END   p6ci-c1-mixtral_cf-L18E001 rc=0 (217s)
+2026-10-16T23:48:24Z START ext14-e1_a2e-mixtral_bos-dla (waited 893s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --chunk 480
+2026-10-16T23:50:18Z END   ext14-e1_a2e-mixtral_bos-dla rc=0 (114s)
+2026-10-16T23:50:18Z START p6an-ci1-e1_a2e-qwen3 (waited 279s): python scripts/ext14_t2_run.py ci1 e1_a2e qwen3 --max-passes 6
+2026-10-16T23:52:46Z END   p6an-ci1-e1_a2e-qwen3 rc=0 (148s)
+2026-10-16T23:52:46Z START p6ci-c1-mistral7b_wino-score (waited 254s): python scripts/ext14ci_c1_run.py mistral7b_wino score
+2026-10-16T23:53:24Z END   p6ci-c1-mistral7b_wino-score rc=0 (38s)
+2026-10-16T23:53:24Z START ext14-e1_a2e-mixtral_bos-direct (waited 186s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --splits discovery,validation
+2026-10-16T23:55:12Z END   ext14-e1_a2e-mixtral_bos-direct rc=0 (108s)
+2026-10-16T23:55:12Z START p6ci-c1-mistral7b_wino-L18E000 (waited 107s): python scripts/ext14ci_c1_run.py mistral7b_wino patch --expert L18E000 --max-spawn 30000
+2026-10-16T23:55:37Z END   p6ci-c1-mistral7b_wino-L18E000 rc=0 (25s)
+2026-10-16T23:55:37Z START p6an-ci2-e1_a2e-qwen3 (waited 127s): python scripts/ext14_t2_run.py ci2 qwen3 --group e1_a2e --conds e1_a2e --max-passes 12
+2026-10-17T00:05:51Z END   p6an-ci2-e1_a2e-qwen3 rc=0 (614s)
+2026-10-17T00:05:51Z START ext14-e1_a2e-mixtral_bos-grid (waited 639s): python scripts/ext7_wino_grid.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 56250 --token-budget 187500
+2026-10-17T00:17:41Z END   ext14-e1_a2e-mixtral_bos-grid rc=0 (710s)
+2026-10-17T00:17:41Z START p6ci-c1-mistral7b_wino-L19E000 (waited 1311s): python scripts/ext14ci_c1_run.py mistral7b_wino patch --expert L19E000 --max-spawn 30000
+2026-10-17T00:18:06Z END   p6ci-c1-mistral7b_wino-L19E000 rc=0 (25s)
+2026-10-17T00:18:06Z START p6an-ci2-e1_a2e-qwen3 (waited 735s): python scripts/ext14_t2_run.py ci2 qwen3 --group e1_a2e --conds e1_a2e --max-passes 12
+2026-10-17T00:24:29Z END   p6an-ci2-e1_a2e-qwen3 rc=0 (383s)
+2026-10-17T00:24:29Z START ext14-e1_a2e-mixtral_bos-heads (waited 408s): python scripts/ext7_wino_heads.py --model mixtral --pairs data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos --agent p6-data --families main --layers auto --max-rows 46875
+2026-10-17T00:27:59Z END   ext14-e1_a2e-mixtral_bos-heads rc=0 (210s)
+2026-10-17T00:27:59Z START p6ci-c1-mistral7b_wino-L20E000 (waited 582s): python scripts/ext14ci_c1_run.py mistral7b_wino patch --expert L20E000 --max-spawn 30000
+2026-10-17T00:28:26Z END   p6ci-c1-mistral7b_wino-L20E000 rc=0 (27s)
+2026-10-17T00:28:26Z START p6an-ko-e1_a2e-qwen3 (waited 173s): python scripts/ext14_t2_run.py ko qwen3 --conds e1_a2e --with-wr --time-budget 1320
+2026-10-17T00:33:01Z END   p6an-ko-e1_a2e-qwen3 rc=0 (275s)
+2026-10-17T00:33:01Z START ext14-e1_e2a-qwen3-sweep (waited 256s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --max-rows 60000
+2026-10-17T00:34:56Z END   ext14-e1_e2a-qwen3-sweep rc=0 (115s)
+2026-10-17T00:34:56Z START p6ci-c1-mistral7b_wino-L21E000 (waited 371s): python scripts/ext14ci_c1_run.py mistral7b_wino patch --expert L21E000 --max-spawn 30000
+2026-10-17T00:35:22Z END   p6ci-c1-mistral7b_wino-L21E000 rc=0 (26s)
+2026-10-17T00:35:22Z START p6an-expert-e1_a2e-mixtral_bos (waited 47s): python scripts/ext7_wino_expert.py --model mixtral --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_mixtral_bos.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_mixtral_bos.json --out p6_e1_a2e_mixtral_bos_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 40000
+2026-10-17T00:38:53Z END   p6an-expert-e1_a2e-mixtral_bos rc=0 (211s)
+2026-10-17T00:38:53Z START ext14-e1_e2a-qwen3-joint (waited 237s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --max-rows 30000
+2026-10-17T00:40:10Z END   ext14-e1_e2a-qwen3-joint rc=0 (77s)
+2026-10-17T00:40:10Z START p6ci-c1-mistral7b_cf-score (waited 274s): python scripts/ext14ci_c1_run.py mistral7b_cf score
+2026-10-17T00:40:57Z END   p6ci-c1-mistral7b_cf-score rc=0 (47s)
+2026-10-17T00:40:57Z START p6an-ab-e1_a2e-mixtral_bos (waited 107s): python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+2026-10-17T00:57:39Z END   p6an-ab-e1_a2e-mixtral_bos rc=0 (1002s)
+2026-10-17T00:57:39Z START ext14-e1_e2a-qwen3-dla (waited 1049s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --chunk 512
+2026-10-17T00:58:56Z END   ext14-e1_e2a-qwen3-dla rc=0 (77s)
+2026-10-17T00:58:56Z START p6ci-c1-mistral7b_cf-L18E000 (waited 1078s): python scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L18E000 --max-spawn 30000
+2026-10-17T00:59:30Z END   p6ci-c1-mistral7b_cf-L18E000 rc=0 (34s)
+2026-10-17T00:59:30Z START p6an-ab-e1_a2e-mixtral_bos (waited 111s): python scripts/ext14_t2_run.py ab mixtral --tasks e1_a2e_mixtral_bos --max-passes 12 --budget 50000 --max-tasks 1
+2026-10-17T01:02:59Z END   p6an-ab-e1_a2e-mixtral_bos rc=0 (209s)
+2026-10-17T01:02:59Z START ext14-e1_e2a-qwen3-direct (waited 243s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --splits discovery,validation
+2026-10-17T01:04:13Z END   ext14-e1_e2a-qwen3-direct rc=0 (74s)
+2026-10-17T01:04:13Z START p6ci-c1-mistral7b_cf-L19E000 (waited 260s): python scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L19E000 --max-spawn 30000
+2026-10-17T01:04:42Z END   p6ci-c1-mistral7b_cf-L19E000 rc=0 (29s)
+2026-10-17T01:04:42Z START p6an-ci1-e1_a2e-mixtral_bos (waited 67s): python scripts/ext14_t2_run.py ci1 e1_a2e mixtral_bos --max-passes 4
+2026-10-17T01:08:10Z END   p6an-ci1-e1_a2e-mixtral_bos rc=0 (208s)
+2026-10-17T01:08:10Z START ext14-e1_e2a-qwen3-grid (waited 237s): python scripts/ext7_wino_grid.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --kinds layer,attn_layer,resid --window 1 --max-rows 60000 --token-budget 200000
+2026-10-17T01:12:09Z END   ext14-e1_e2a-qwen3-grid rc=0 (239s)
+2026-10-17T01:12:09Z START p6ci-c1-mistral7b_cf-L20E000 (waited 417s): python scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L20E000 --max-spawn 30000
+2026-10-17T01:12:43Z END   p6ci-c1-mistral7b_cf-L20E000 rc=0 (34s)
+2026-10-17T01:12:43Z START p6an-ci2-e1_a2e-mixtral_bos (waited 220s): python scripts/ext14_t2_run.py ci2 mixtral_bos --group e1_a2e --conds e1_a2e --max-passes 10
+2026-10-17T01:28:10Z END   p6an-ci2-e1_a2e-mixtral_bos rc=0 (927s)
+2026-10-17T01:28:10Z START ext14-e1_e2a-qwen3-heads (waited 961s): python scripts/ext7_wino_heads.py --model qwen3 --pairs data/dial/pairs_e1_e2a_qwen3.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3 --agent p6-data --families main --layers auto --max-rows 50000
+2026-10-17T01:30:51Z END   ext14-e1_e2a-qwen3-heads rc=0 (161s)
+2026-10-17T01:30:51Z START p6ci-c1-mistral7b_cf-L21E000 (waited 1070s): python scripts/ext14ci_c1_run.py mistral7b_cf patch --expert L21E000 --max-spawn 30000
+2026-10-17T01:31:25Z END   p6ci-c1-mistral7b_cf-L21E000 rc=0 (34s)
+2026-10-17T01:31:25Z START p6an-ci2-e1_a2e-mixtral_bos (waited 195s): python scripts/ext14_t2_run.py ci2 mixtral_bos --group e1_a2e --conds e1_a2e --max-passes 10
+2026-10-17T01:46:19Z END   p6an-ci2-e1_a2e-mixtral_bos rc=0 (894s)
+2026-10-17T01:46:19Z START ext14-e1_e2a-mixtral_bos-sweep (waited 908s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e1_e2a_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_e2a_mixtral_bos.json --out p6_e1_e2a_mixtral_bos --agent p6-data --max-rows 40000
+2026-10-17T01:48:01Z END   ext14-e1_e2a-mixtral_bos-sweep rc=0 (102s)
+2026-10-17T01:48:01Z START p6an-ko-e1_a2e-mixtral_bos (waited 22s): python scripts/ext14_t2_run.py ko mixtral_bos --conds e1_a2e --with-wr --time-budget 1320
+2026-10-17T01:54:21Z END   p6an-ko-e1_a2e-mixtral_bos rc=0 (380s)
+2026-10-17T01:54:21Z START ext14-e1_e2a-mixtral_bos-joint (waited 380s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/dial/pairs_e1_e2a_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_e2a_mixtral_bos.json --out p6_e1_e2a_mixtral_bos --agent p6-data --families main --max-rows 30000
+2026-10-17T01:56:03Z END   ext14-e1_e2a-mixtral_bos-joint rc=0 (102s)
+2026-10-17T01:56:03Z START ext14-scan-mistral7b_bos-l_ind (waited 439s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset all --cells l_ind
+2026-10-17T01:56:30Z END   ext14-scan-mistral7b_bos-l_ind rc=0 (27s)
+2026-10-17T01:56:30Z START ext14-scan-qwen3_8b-probes (waited 466s): python scripts/ext14_scan.py qwen3_8b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T01:59:32Z END   ext14-scan-qwen3_8b-probes rc=0 (182s)
+2026-10-17T01:59:32Z START ext14-scan-qwen3_4b-probes (waited 648s): python scripts/ext14_scan.py qwen3_4b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T02:01:23Z END   ext14-scan-qwen3_4b-probes rc=0 (111s)
+2026-10-17T02:01:23Z START ext14-scan-mistral7b_bos-dialE-ext (waited 731s): python scripts/ext14_scan.py mistral7b_bos --part cells --subset ext --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-17T02:07:34Z END   ext14-scan-mistral7b_bos-dialE-ext rc=0 (371s)
+2026-10-17T02:07:34Z START p6ci-relp-smoke2-olmoe (waited 1058s): python scripts/ext14ci_relp_run.py olmoe wino --smoke
+2026-10-17T02:08:24Z END   p6ci-relp-smoke2-olmoe rc=0 (50s)
+2026-10-17T02:08:24Z START p6ci-c3-cfbuild-qwen3 (waited 1061s): python scripts/ext14ci_c3_cf_build.py qwen3 --proto qwen3
+2026-10-17T02:08:46Z END   p6ci-c3-cfbuild-qwen3 rc=143 (22s)
+2026-10-17T02:08:46Z START p6an-expert-e1_e2a-qwen3 (waited 780s): python scripts/ext7_wino_expert.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_e2a_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-17T02:14:21Z END   p6an-expert-e1_e2a-qwen3 rc=0 (335s)
+2026-10-17T02:14:21Z START p6an-smoke-causal (waited 1080s): bash /tmp/claude-1000/-home-ubuntu-MOE/49286045-4961-418b-b3fb-ec59666879ce/scratchpad/causal_smoke2.sh
+2026-10-17T02:18:41Z END   p6an-smoke-causal rc=0 (260s)
+2026-10-17T02:18:41Z START p6eng-v3-qwen2_57b (waited 1271s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen2_57b --units 3 --chain > logs/ext14_engine_verify3_qwen2_57b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_57b --units 3 --per-layer 1,13,27 >> logs/ext14_engine_verify3_qwen2_57b.log 2>&1
+2026-10-17T02:36:06Z END   p6eng-v3-qwen2_57b rc=0 (1045s)
+2026-10-17T02:36:06Z START ext14-scan-qwen3_8b-cells (waited 2194s): python scripts/ext14_scan.py qwen3_8b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T02:41:43Z END   ext14-scan-qwen3_8b-cells rc=0 (337s)
+2026-10-17T02:41:43Z START ext14-scan-qwen3_4b-cells (waited 2420s): python scripts/ext14_scan.py qwen3_4b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T02:45:04Z END   ext14-scan-qwen3_4b-cells rc=0 (201s)
+2026-10-17T02:45:04Z START ext14-e3p3_a2e-mistral7b_bos-sweep (waited 2184s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --agent p6-data --max-rows 27906
+2026-10-17T02:45:23Z END   ext14-e3p3_a2e-mistral7b_bos-sweep rc=0 (19s)
+2026-10-17T02:45:23Z START ext14-e1_e2a-mixtral_bos-dla (waited 2198s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/dial/pairs_e1_e2a_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_e2a_mixtral_bos.json --out p6_e1_e2a_mixtral_bos --agent p6-data --families main --chunk 512
+2026-10-17T02:47:13Z END   ext14-e1_e2a-mixtral_bos-dla rc=0 (110s)
+2026-10-17T02:47:13Z START p6ci-c2-cfbuild-olmoe (waited 2285s): python scripts/ext14ci_c3_cf_build.py olmoe --proto olmoe --rels P17,P27,P495,P103,P178,P1412,P364,P136,P30,P101 --max-per-rel 150 --merge-as mix
+2026-10-17T02:48:13Z END   p6ci-c2-cfbuild-olmoe rc=0 (60s)
+2026-10-17T02:48:13Z START p6an-causal-e1_a2e-qwen3 (waited 2019s): python scripts/ext14_causal_run.py e1_a2e qwen3 none sweep
+2026-10-17T02:49:33Z END   p6an-causal-e1_a2e-qwen3 rc=0 (80s)
+2026-10-17T02:49:33Z START p6ci-c3-cfbuild-qwen3 (waited 1888s): python scripts/ext14ci_c3_cf_build.py qwen3 --proto qwen3 --rels P17,P27,P495,P103 --max-per-rel 400 --cap 48
+2026-10-17T02:51:44Z END   p6ci-c3-cfbuild-qwen3 rc=0 (131s)
+2026-10-17T02:51:44Z START p6eng-q57-router (waited 814s): python scripts/ext14_engine_q57_router.py --units 3
+2026-10-17T02:59:28Z END   p6eng-q57-router rc=0 (464s)
+2026-10-17T02:59:28Z START p6eng-merge3 (waited 1128s): bash scripts/ext14_engine_merge3.sh
+2026-10-17T03:08:20Z END   p6eng-merge3 rc=0 (532s)
+2026-10-17T03:08:20Z START ext14-cf-filter-qwen3_8b (waited 1597s): python scripts/ext14_scan_cf.py qwen3_8b --out qwen3_8b_str --paper-key Qwen3
+2026-10-17T03:08:51Z END   ext14-cf-filter-qwen3_8b rc=0 (31s)
+2026-10-17T03:08:51Z START ext14-cf-filter-qwen3_4b (waited 1427s): python scripts/ext14_scan_cf.py qwen3_4b --out qwen3_4b_str --paper-key Qwen3
+2026-10-17T03:09:13Z END   ext14-cf-filter-qwen3_4b rc=0 (22s)
+2026-10-17T03:09:13Z START ext14-e3p3_a2e-mistral7b_bos-joint (waited 1430s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --agent p6-data --families main --max-rows 20930
+2026-10-17T03:09:30Z END   ext14-e3p3_a2e-mistral7b_bos-joint rc=0 (17s)
+2026-10-17T03:09:30Z START ext14-e1_e2a-mixtral_bos-direct (waited 1337s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/dial/pairs_e1_e2a_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_e2a_mixtral_bos.json --out p6_e1_e2a_mixtral_bos --splits discovery,validation
+2026-10-17T03:11:16Z END   ext14-e1_e2a-mixtral_bos-direct rc=0 (106s)
+2026-10-17T03:11:16Z START p6ci-c2-relp-olmoe-wino (waited 1383s): python scripts/ext14ci_relp_run.py olmoe wino --n-cases 48
+2026-10-17T03:15:19Z END   p6ci-c2-relp-olmoe-wino rc=0 (242s)
+2026-10-17T03:15:19Z START p6an-causal-e1_a2e-qwen3 (waited 1536s): python scripts/ext14_causal_run.py e1_a2e qwen3 BATCH sweep
+2026-10-17T03:23:24Z END   p6an-causal-e1_a2e-qwen3 rc=0 (485s)
+2026-10-17T03:23:24Z START p6ci-c3-cfc-heads-qwen3 (waited 1898s): python scripts/ext7_wino_heads.py --model qwen3 --pairs results/p6ci_c3_data/pairs_cfc_qwen3.parquet --case-sets results/p6ci_c3_data/case_sets_cfc_qwen3.json --out p6ci_c3_cfc_qwen3 --splits discovery --families main --layers 28,38,39,40,42,43 --max-rows 40000 --agent p6-circuit
+2026-10-17T03:26:12Z END   p6ci-c3-cfc-heads-qwen3 rc=0 (168s)
+2026-10-17T03:26:12Z START p6eng-v4-qwen2_57b (waited 1047s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen2_57b --units 3 --vs-fp32 > logs/ext14_engine_verify4_qwen2_57b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_57b --units 3 --vs-fp32 --router-fp32 >> logs/ext14_engine_verify4_qwen2_57b.log 2>&1
+2026-10-17T03:36:44Z END   p6eng-v4-qwen2_57b rc=0 (632s)
+2026-10-17T03:36:44Z START ext14-scan-qwen3_8b-l_cf (waited 1667s): python scripts/ext14_scan.py qwen3_8b --part cells --subset all --cells l_cf
+2026-10-17T03:37:08Z END   ext14-scan-qwen3_8b-l_cf rc=0 (24s)
+2026-10-17T03:37:08Z START ext14-scan-qwen3_4b-l_cf (waited 1669s): python scripts/ext14_scan.py qwen3_4b --part cells --subset all --cells l_cf
+2026-10-17T03:37:17Z END   ext14-scan-qwen3_4b-l_cf rc=0 (9s)
+2026-10-17T03:37:17Z START ext14-e3p3_a2e-mistral7b_bos-dla (waited 1667s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --agent p6-data --families main --chunk 357
+2026-10-17T03:37:37Z END   ext14-e3p3_a2e-mistral7b_bos-dla rc=0 (20s)
+2026-10-17T03:37:37Z START p6eng-prec-qwen2_7b (waited 1660s): python scripts/ext14_engine_verify.py --model qwen2_7b --units 32 --vs-fp32 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --tag _e1a2e
+2026-10-17T03:38:16Z END   p6eng-prec-qwen2_7b rc=0 (39s)
+2026-10-17T03:38:16Z START ext14-e3p3_a2e-qwen3-sweep (waited 1613s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e3p3_a2e_qwen3.parquet --case-sets data/dial/case_sets_e3p3_a2e_qwen3.json --out p6_e3p3_a2e_qwen3 --agent p6-data --max-rows 43902
+2026-10-17T03:39:28Z END   ext14-e3p3_a2e-qwen3-sweep rc=0 (72s)
+2026-10-17T03:39:28Z START p6ci-c2-relp-olmoe-cf (waited 1447s): python scripts/ext14ci_relp_run.py olmoe cf --n-cases 48
+2026-10-17T03:42:48Z END   p6ci-c2-relp-olmoe-cf rc=0 (200s)
+2026-10-17T03:42:48Z START ext14-e1_a2e_all-mixtral_bos-sweep (waited 1246s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e1_a2e_all_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mixtral_bos.json --out p6_e1_a2e_all_mixtral_bos --agent p6-data --max-rows 37500
+2026-10-17T03:46:08Z END   ext14-e1_a2e_all-mixtral_bos-sweep rc=0 (200s)
+2026-10-17T03:46:08Z START ext14-e1_a2e_all-mistral7b_bos-sweep (waited 1408s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e1_a2e_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mistral7b_bos.json --out p6_e1_a2e_all_mistral7b_bos --agent p6-data --max-rows 40000
+2026-10-17T03:46:32Z END   ext14-e1_a2e_all-mistral7b_bos-sweep rc=0 (24s)
+2026-10-17T03:46:32Z START p6an-causal-e1_a2e-qwen3 (waited 1359s): python scripts/ext14_causal_run.py e1_a2e qwen3 BATCH joint
+2026-10-17T03:55:05Z END   p6an-causal-e1_a2e-qwen3 rc=0 (513s)
+2026-10-17T03:55:05Z START p6ci-c3-cfc-dla-qwen3 (waited 1733s): python scripts/ext14ci_c3_country.py dla --proto qwen3
+2026-10-17T03:56:15Z END   p6ci-c3-cfc-dla-qwen3 rc=0 (70s)
+2026-10-17T03:56:15Z START p6eng-v4-qwen2_7b (waited 1170s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen2_7b --units 3 --chain > logs/ext14_engine_verify4_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_7b --units 2 --light >> logs/ext14_engine_verify4_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_7b --units 2 --light --dtype fp32 --offload >> logs/ext14_engine_verify4_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_7b --units 3 --vs-fp32 >> logs/ext14_engine_verify4_qwen2_7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen2_7b --units 3 --per-layer 1,14,27 >> logs/ext14_engine_verify4_qwen2_7b.log 2>&1
+2026-10-17T04:03:04Z END   p6eng-v4-qwen2_7b rc=0 (409s)
+2026-10-17T04:03:04Z START ext14-scan-qwen3_4b-dialE-ext (waited 1528s): python scripts/ext14_scan.py qwen3_4b --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-17T04:06:36Z END   ext14-scan-qwen3_4b-dialE-ext rc=0 (212s)
+2026-10-17T04:06:36Z START ext14-scan-qwen3_8b-dialE-ext (waited 1740s): python scripts/ext14_scan.py qwen3_8b --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-17T04:13:10Z END   ext14-scan-qwen3_8b-dialE-ext rc=0 (394s)
+2026-10-17T04:13:10Z START ext14-e3p3_a2e-mistral7b_bos-direct (waited 2133s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --splits discovery,validation
+2026-10-17T04:13:27Z END   ext14-e3p3_a2e-mistral7b_bos-direct rc=0 (17s)
+2026-10-17T04:13:27Z START p6eng-prec-qwen2_57b (waited 2111s): python scripts/ext14_engine_verify.py --model qwen2_57b --units 32 --vs-fp32 --pairs data/dial/pairs_e1_a2e_qwen3.parquet --tag _e1a2e
+2026-10-17T04:18:23Z END   p6eng-prec-qwen2_57b rc=0 (296s)
+2026-10-17T04:18:23Z START ext14-e3p3_a2e-qwen3-joint (waited 2335s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_e3p3_a2e_qwen3.parquet --case-sets data/dial/case_sets_e3p3_a2e_qwen3.json --out p6_e3p3_a2e_qwen3 --agent p6-data --families main --max-rows 21951
+2026-10-17T04:19:39Z END   ext14-e3p3_a2e-qwen3-joint rc=0 (76s)
+2026-10-17T04:19:39Z START p6ci-c1-qwen3_f1-L37E032-oracle (waited 2209s): python scripts/ext14ci_c1_run.py qwen3_f1 oracle --expert L37E032 --n-rows 96 --max-spawn 30000
+2026-10-17T04:23:18Z END   p6ci-c1-qwen3_f1-L37E032-oracle rc=0 (219s)
+2026-10-17T04:23:18Z START ext14-e1_a2e_all-mixtral_bos-joint (waited 2230s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/dial/pairs_e1_a2e_all_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mixtral_bos.json --out p6_e1_a2e_all_mixtral_bos --agent p6-data --families main --max-rows 28125
+2026-10-17T04:25:15Z END   ext14-e1_a2e_all-mixtral_bos-joint rc=0 (117s)
+2026-10-17T04:25:15Z START ext14-e1_a2e_all-mistral7b_bos-joint (waited 2323s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e1_a2e_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mistral7b_bos.json --out p6_e1_a2e_all_mistral7b_bos --agent p6-data --families main --max-rows 30000
+2026-10-17T04:25:38Z END   ext14-e1_a2e_all-mistral7b_bos-joint rc=0 (23s)
+2026-10-17T04:25:38Z START p6an-causal-e1_a2e-mixtral_bos (waited 1820s): python scripts/ext14_causal_run.py e1_a2e mixtral_bos BATCH sweep
+2026-10-17T04:38:24Z END   p6an-causal-e1_a2e-mixtral_bos rc=0 (766s)
+2026-10-17T04:38:24Z START p6ci-c3-val-qwen3-ss_e3 (waited 2525s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks ss_e3 --max-rows 2048 --max-spawn 16000
+2026-10-17T04:42:06Z END   p6ci-c3-val-qwen3-ss_e3 rc=0 (222s)
+2026-10-17T04:42:06Z START p6eng-v4-qwen3_14b (waited 2341s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen3_14b --units 3 --offload --light > logs/ext14_engine_verify4_qwen3_14b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_14b --units 3 --chain >> logs/ext14_engine_verify4_qwen3_14b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_14b --units 3 --per-layer 1,20,39 >> logs/ext14_engine_verify4_qwen3_14b.log 2>&1
+2026-10-17T04:50:23Z END   p6eng-v4-qwen3_14b rc=0 (497s)
+2026-10-17T04:50:23Z START ext14-scan-qwen2_7b-probes (waited 2809s): python scripts/ext14_scan.py qwen2_7b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T04:58:41Z END   ext14-scan-qwen2_7b-probes rc=0 (498s)
+2026-10-17T04:58:41Z START ext14-e1_a2e-qwen3_4b-sweep (waited 3118s): python scripts/ext7_wino_sweep.py --model qwen3_4b --pairs data/dial/pairs_e1_a2e_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_4b.json --out p6_e1_a2e_qwen3_4b --agent p6-data --max-rows 40000
+2026-10-17T04:59:11Z END   ext14-e1_a2e-qwen3_4b-sweep rc=0 (30s)
+2026-10-17T04:59:11Z START ext14-e1_a2e-qwen3_8b-sweep (waited 2752s): python scripts/ext7_wino_sweep.py --model qwen3_8b --pairs data/dial/pairs_e1_a2e_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_8b.json --out p6_e1_a2e_qwen3_8b --agent p6-data --max-rows 40000
+2026-10-17T04:59:54Z END   ext14-e1_a2e-qwen3_8b-sweep rc=0 (43s)
+2026-10-17T04:59:54Z START ext14-e3_a2e-mistral7b_bos-sweep (waited 2779s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_a2e_mistral7b_bos.json --out p6_e3_a2e_mistral7b_bos --agent p6-data --max-rows 30000
+2026-10-17T05:00:15Z END   ext14-e3_a2e-mistral7b_bos-sweep rc=0 (21s)
+2026-10-17T05:00:15Z START ext14-e3p3_a2e-qwen3-dla (waited 2436s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e3p3_a2e_qwen3.parquet --case-sets data/dial/case_sets_e3p3_a2e_qwen3.json --out p6_e3p3_a2e_qwen3 --agent p6-data --families main --chunk 374
+2026-10-17T05:01:29Z END   ext14-e3p3_a2e-qwen3-dla rc=0 (74s)
+2026-10-17T05:01:29Z START p6ci-c2-verify-mistral7b (waited 2259s): python scripts/ext14ci_relp_verify.py mistral7b wino
+2026-10-17T05:02:04Z END   p6ci-c2-verify-mistral7b rc=0 (35s)
+2026-10-17T05:02:04Z START ext14-e1_a2e_all-mixtral_bos-dla (waited 2209s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/dial/pairs_e1_a2e_all_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mixtral_bos.json --out p6_e1_a2e_all_mixtral_bos --agent p6-data --families main --chunk 480
+2026-10-17T05:05:27Z END   ext14-e1_a2e_all-mixtral_bos-dla rc=0 (203s)
+2026-10-17T05:05:27Z START ext14-e1_a2e_all-mistral7b_bos-dla (waited 2389s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e1_a2e_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mistral7b_bos.json --out p6_e1_a2e_all_mistral7b_bos --agent p6-data --families main --chunk 512
+2026-10-17T05:05:50Z END   ext14-e1_a2e_all-mistral7b_bos-dla rc=0 (23s)
+2026-10-17T05:05:50Z START p6an-causal-e1_a2e-mixtral_bos (waited 1597s): python scripts/ext14_causal_run.py e1_a2e mixtral_bos BATCH joint
+2026-10-17T05:18:41Z END   p6an-causal-e1_a2e-mixtral_bos rc=0 (771s)
+2026-10-17T05:18:41Z START p6ci-c3-val-qwen3-ss_e1 (waited 2192s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks ss_e1 --max-rows 2048 --max-spawn 16000
+2026-10-17T05:22:12Z END   p6ci-c3-val-qwen3-ss_e1 rc=0 (211s)
+2026-10-17T05:22:12Z START p6eng-v4-qwen3_1p7b (waited 1908s): bash -c cd /home/ubuntu/MOE; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 6 > logs/ext14_engine_verify4_qwen3_1p7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 3 --dtype fp32 >> logs/ext14_engine_verify4_qwen3_1p7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 3 --chain >> logs/ext14_engine_verify4_qwen3_1p7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 3 --vs-fp32 >> logs/ext14_engine_verify4_qwen3_1p7b.log 2>&1; python scripts/ext14_engine_verify.py --model qwen3_1p7b --units 3 --per-layer 1,14,27 >> logs/ext14_engine_verify4_qwen3_1p7b.log 2>&1
+2026-10-17T05:24:06Z END   p6eng-v4-qwen3_1p7b rc=0 (114s)
+2026-10-17T05:24:06Z START ext14-scan-qwen3_14b-probes (waited 1951s): python scripts/ext14_scan.py qwen3_14b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T05:29:24Z END   ext14-scan-qwen3_14b-probes rc=0 (318s)
+2026-10-17T05:29:24Z START ext14-scan-qwen2_7b-cells (waited 1843s): python scripts/ext14_scan.py qwen2_7b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T05:44:27Z END   ext14-scan-qwen2_7b-cells rc=0 (903s)
+2026-10-17T05:44:27Z START ext14-e1_a2e-qwen3_4b-joint (waited 2716s): python scripts/ext7_wino_joint.py --model qwen3_4b --pairs data/dial/pairs_e1_a2e_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_4b.json --out p6_e1_a2e_qwen3_4b --agent p6-data --families main --max-rows 30000
+2026-10-17T05:44:40Z END   ext14-e1_a2e-qwen3_4b-joint rc=0 (13s)
+2026-10-17T05:44:40Z START ext14-e1_a2e-qwen3_8b-joint (waited 2686s): python scripts/ext7_wino_joint.py --model qwen3_8b --pairs data/dial/pairs_e1_a2e_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_8b.json --out p6_e1_a2e_qwen3_8b --agent p6-data --families main --max-rows 30000
+2026-10-17T05:45:01Z END   ext14-e1_a2e-qwen3_8b-joint rc=0 (21s)
+2026-10-17T05:45:01Z START ext14-e3_a2e-mistral7b_bos-joint (waited 2686s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_a2e_mistral7b_bos.json --out p6_e3_a2e_mistral7b_bos --agent p6-data --families main --max-rows 22500
+2026-10-17T05:45:19Z END   ext14-e3_a2e-mistral7b_bos-joint rc=0 (18s)
+2026-10-17T05:45:19Z START ext14-e3p3_a2e-qwen3-direct (waited 2630s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_e3p3_a2e_qwen3.parquet --case-sets data/dial/case_sets_e3p3_a2e_qwen3.json --out p6_e3p3_a2e_qwen3 --splits discovery,validation
+2026-10-17T05:46:30Z END   ext14-e3p3_a2e-qwen3-direct rc=0 (71s)
+2026-10-17T05:46:30Z START p6ci-c2-relp-mistral7b-wino (waited 2666s): python scripts/ext14ci_relp_run.py mistral7b wino --n-cases 48
+2026-10-17T05:50:50Z END   p6ci-c2-relp-mistral7b-wino rc=0 (260s)
+2026-10-17T05:50:50Z START ext14-e1_a2e_all-mixtral_bos-direct (waited 2723s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/dial/pairs_e1_a2e_all_mixtral_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mixtral_bos.json --out p6_e1_a2e_all_mixtral_bos --splits discovery,validation
+2026-10-17T05:52:37Z END   ext14-e1_a2e_all-mixtral_bos-direct rc=0 (107s)
+2026-10-17T05:52:37Z START ext14-e1_a2e_all-mistral7b_bos-direct (waited 2807s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e1_a2e_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_a2e_all_mistral7b_bos.json --out p6_e1_a2e_all_mistral7b_bos --splits discovery,validation
+2026-10-17T05:53:00Z END   ext14-e1_a2e_all-mistral7b_bos-direct rc=0 (23s)
+2026-10-17T05:53:00Z START p6ci-c3-val-qwen3-co_p17 (waited 1845s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks co_p17 --max-rows 2048 --max-spawn 16000
+2026-10-17T05:56:25Z END   p6ci-c3-val-qwen3-co_p17 rc=0 (205s)
+2026-10-17T05:56:25Z START ext14-scan-qwen3_1p7b-probes (waited 1850s): python scripts/ext14_scan.py qwen3_1p7b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T05:57:22Z END   ext14-scan-qwen3_1p7b-probes rc=0 (57s)
+2026-10-17T05:57:22Z START ext14-scan-qwen3_14b-cells (waited 1678s): python scripts/ext14_scan.py qwen3_14b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T06:07:04Z END   ext14-scan-qwen3_14b-cells rc=0 (582s)
+2026-10-17T06:07:04Z START ext14-cf-filter-qwen2_7b (waited 1357s): python scripts/ext14_scan_cf.py qwen2_7b --out qwen2_7b_str --paper-key Qwen3
+2026-10-17T06:08:19Z END   ext14-cf-filter-qwen2_7b rc=0 (75s)
+2026-10-17T06:08:19Z START ext14-e1_a2e-qwen3_4b-dla (waited 1419s): python scripts/ext7_wino_dla.py --model qwen3_4b --pairs data/dial/pairs_e1_a2e_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_4b.json --out p6_e1_a2e_qwen3_4b --agent p6-data --families main --chunk 512
+2026-10-17T06:08:32Z END   ext14-e1_a2e-qwen3_4b-dla rc=0 (13s)
+2026-10-17T06:08:32Z START ext14-e1_a2e-qwen3_8b-dla (waited 1411s): python scripts/ext7_wino_dla.py --model qwen3_8b --pairs data/dial/pairs_e1_a2e_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_8b.json --out p6_e1_a2e_qwen3_8b --agent p6-data --families main --chunk 512
+2026-10-17T06:08:56Z END   ext14-e1_a2e-qwen3_8b-dla rc=0 (24s)
+2026-10-17T06:08:56Z START ext14-e3_a2e-mistral7b_bos-dla (waited 1417s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_a2e_mistral7b_bos.json --out p6_e3_a2e_mistral7b_bos --agent p6-data --families main --chunk 384
+2026-10-17T06:09:15Z END   ext14-e3_a2e-mistral7b_bos-dla rc=0 (19s)
+2026-10-17T06:09:15Z START ext14-e3p3_a2e-mixtral_bos-sweep (waited 1357s): python scripts/ext7_wino_sweep.py --model mixtral --pairs data/dial/pairs_e3p3_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mixtral_bos.json --out p6_e3p3_a2e_mixtral_bos --agent p6-data --max-rows 29268
+2026-10-17T06:12:42Z END   ext14-e3p3_a2e-mixtral_bos-sweep rc=0 (207s)
+2026-10-17T06:12:42Z START p6ci-c2-relp-mistral7b-cf (waited 1309s): python scripts/ext14ci_relp_run.py mistral7b cf --n-cases 48
+2026-10-17T06:16:16Z END   p6ci-c2-relp-mistral7b-cf rc=0 (214s)
+2026-10-17T06:16:16Z START ext14-e1_a2e_all-qwen3-sweep (waited 1407s): python scripts/ext7_wino_sweep.py --model qwen3 --pairs data/dial/pairs_e1_a2e_all_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_all_qwen3.json --out p6_e1_a2e_all_qwen3 --agent p6-data --max-rows 60000
+2026-10-17T06:18:17Z END   ext14-e1_a2e_all-qwen3-sweep rc=0 (121s)
+2026-10-17T06:18:17Z START ext14-e1_e2a_all-mistral7b_bos-sweep (waited 1510s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e1_e2a_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_e2a_all_mistral7b_bos.json --out p6_e1_e2a_all_mistral7b_bos --agent p6-data --max-rows 40000
+2026-10-17T06:18:41Z END   ext14-e1_e2a_all-mistral7b_bos-sweep rc=0 (24s)
+2026-10-17T06:18:41Z START p6ci-c3-val-qwen3-co_nat (waited 1332s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks co_nat --max-rows 2048 --max-spawn 16000
+2026-10-17T06:22:11Z END   p6ci-c3-val-qwen3-co_nat rc=0 (210s)
+2026-10-17T06:22:11Z START ext14-scan-qwen3_1p7b-cells (waited 1489s): python scripts/ext14_scan.py qwen3_1p7b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T06:23:48Z END   ext14-scan-qwen3_1p7b-cells rc=0 (97s)
+2026-10-17T06:23:48Z START ext14-cf-filter-qwen3_14b (waited 1004s): python scripts/ext14_scan_cf.py qwen3_14b --out qwen3_14b_str --paper-key Qwen3
+2026-10-17T06:24:47Z END   ext14-cf-filter-qwen3_14b rc=0 (59s)
+2026-10-17T06:24:47Z START ext14-scan-qwen2_7b-l_cf (waited 982s): python scripts/ext14_scan.py qwen2_7b --part cells --subset all --cells l_cf
+2026-10-17T06:25:09Z END   ext14-scan-qwen2_7b-l_cf rc=0 (22s)
+2026-10-17T06:25:09Z START ext14-e1_a2e-qwen3_4b-direct (waited 997s): python -m moetrace.ext7_controls direct --model qwen3_4b --pairs data/dial/pairs_e1_a2e_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_4b.json --out p6_e1_a2e_qwen3_4b --splits discovery,validation
+2026-10-17T06:25:20Z END   ext14-e1_a2e-qwen3_4b-direct rc=0 (11s)
+2026-10-17T06:25:20Z START ext14-e1_a2e-qwen3_8b-direct (waited 984s): python -m moetrace.ext7_controls direct --model qwen3_8b --pairs data/dial/pairs_e1_a2e_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_8b.json --out p6_e1_a2e_qwen3_8b --splits discovery,validation
+2026-10-17T06:25:40Z END   ext14-e1_a2e-qwen3_8b-direct rc=0 (20s)
+2026-10-17T06:25:40Z START ext14-e3_a2e-mistral7b_bos-direct (waited 985s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_a2e_mistral7b_bos.json --out p6_e3_a2e_mistral7b_bos --splits discovery,validation
+2026-10-17T06:25:58Z END   ext14-e3_a2e-mistral7b_bos-direct rc=0 (18s)
+2026-10-17T06:25:58Z START ext14-e3p3_a2e-mixtral_bos-joint (waited 796s): python scripts/ext7_wino_joint.py --model mixtral --pairs data/dial/pairs_e3p3_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mixtral_bos.json --out p6_e3p3_a2e_mixtral_bos --agent p6-data --families main --max-rows 21951
+2026-10-17T06:27:47Z END   ext14-e3p3_a2e-mixtral_bos-joint rc=0 (109s)
+2026-10-17T06:27:47Z START ext14-e1_a2e_all-qwen3-joint (waited 570s): python scripts/ext7_wino_joint.py --model qwen3 --pairs data/dial/pairs_e1_a2e_all_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_all_qwen3.json --out p6_e1_a2e_all_qwen3 --agent p6-data --families main --max-rows 30000
+2026-10-17T06:29:02Z END   ext14-e1_a2e_all-qwen3-joint rc=0 (75s)
+2026-10-17T06:29:02Z START ext14-e1_e2a_all-mistral7b_bos-joint (waited 621s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e1_e2a_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_e2a_all_mistral7b_bos.json --out p6_e1_e2a_all_mistral7b_bos --agent p6-data --families main --max-rows 30000
+2026-10-17T06:29:24Z END   ext14-e1_e2a_all-mistral7b_bos-joint rc=0 (22s)
+2026-10-17T06:29:24Z START p6ci-c3-val-qwen3-pr_ioi (waited 429s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks pr_ioi --max-rows 2048 --max-spawn 16000
+2026-10-17T06:32:49Z END   p6ci-c3-val-qwen3-pr_ioi rc=0 (205s)
+2026-10-17T06:32:49Z START ext14-cf-filter-qwen3_1p7b (waited 540s): python scripts/ext14_scan_cf.py qwen3_1p7b --out qwen3_1p7b_str --paper-key Qwen3
+2026-10-17T06:33:14Z END   ext14-cf-filter-qwen3_1p7b rc=0 (25s)
+2026-10-17T06:33:14Z START ext14-scan-qwen3_14b-l_cf (waited 496s): python scripts/ext14_scan.py qwen3_14b --part cells --subset all --cells l_cf
+2026-10-17T06:33:48Z END   ext14-scan-qwen3_14b-l_cf rc=0 (34s)
+2026-10-17T06:33:48Z START ext14-e1_e2a-qwen3_4b-sweep (waited 495s): python scripts/ext7_wino_sweep.py --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --agent p6-data --max-rows 40000
+2026-10-17T06:34:13Z END   ext14-e1_e2a-qwen3_4b-sweep rc=0 (25s)
+2026-10-17T06:34:13Z START ext14-scan-qwen2_7b-dialE-ext (waited 516s): python scripts/ext14_scan.py qwen2_7b --part cells --subset ext --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e
+2026-10-17T06:53:04Z END   ext14-scan-qwen2_7b-dialE-ext rc=0 (1131s)
+2026-10-17T06:53:04Z START ext14-e1_e2a-qwen3_8b-sweep (waited 1633s): python scripts/ext7_wino_sweep.py --model qwen3_8b --pairs data/dial/pairs_e1_e2a_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_8b.json --out p6_e1_e2a_qwen3_8b --agent p6-data --max-rows 40000
+2026-10-17T06:53:36Z END   ext14-e1_e2a-qwen3_8b-sweep rc=0 (32s)
+2026-10-17T06:53:36Z START ext14-e3_e2a-mistral7b_bos-sweep (waited 1650s): python scripts/ext7_wino_sweep.py --model mistral7b --pairs data/dial/pairs_e3_e2a_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_e2a_mistral7b_bos.json --out p6_e3_e2a_mistral7b_bos --agent p6-data --max-rows 37500
+2026-10-17T06:54:13Z END   ext14-e3_e2a-mistral7b_bos-sweep rc=0 (37s)
+2026-10-17T06:54:13Z START ext14-e3p3_a2e-mixtral_bos-dla (waited 1586s): python scripts/ext7_wino_dla.py --model mixtral --pairs data/dial/pairs_e3p3_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mixtral_bos.json --out p6_e3p3_a2e_mixtral_bos --agent p6-data --families main --chunk 374
+2026-10-17T06:56:02Z END   ext14-e3p3_a2e-mixtral_bos-dla rc=0 (109s)
+2026-10-17T06:56:02Z START ext14-e1_a2e_all-qwen3-dla (waited 1619s): python scripts/ext7_wino_dla.py --model qwen3 --pairs data/dial/pairs_e1_a2e_all_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_all_qwen3.json --out p6_e1_a2e_all_qwen3 --agent p6-data --families main --chunk 512
+2026-10-17T06:57:19Z END   ext14-e1_a2e_all-qwen3-dla rc=0 (77s)
+2026-10-17T06:57:19Z START ext14-e1_e2a_all-mistral7b_bos-dla (waited 1675s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e1_e2a_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_e2a_all_mistral7b_bos.json --out p6_e1_e2a_all_mistral7b_bos --agent p6-data --families main --chunk 512
+2026-10-17T06:57:42Z END   ext14-e1_e2a_all-mistral7b_bos-dla rc=0 (23s)
+2026-10-17T06:57:42Z START p6ci-c3-val-qwen3-pr_f1n (waited 1489s): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks pr_f1n --max-rows 2048 --max-spawn 16000
+2026-10-17T07:01:09Z END   p6ci-c3-val-qwen3-pr_f1n rc=0 (207s)
+2026-10-17T07:01:09Z START ext14-scan-qwen3_1p7b-l_cf (waited 1670s): python scripts/ext14_scan.py qwen3_1p7b --part cells --subset all --cells l_cf
+2026-10-17T07:01:20Z END   ext14-scan-qwen3_1p7b-l_cf rc=0 (11s)
+2026-10-17T07:01:20Z START ext14-e1_e2a-qwen3_4b-joint (waited 1627s): python scripts/ext7_wino_joint.py --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --agent p6-data --families main --max-rows 30000
+2026-10-17T07:01:31Z END   ext14-e1_e2a-qwen3_4b-joint rc=0 (11s)
+2026-10-17T07:01:31Z START ext14-scan-qwen3_14b-dialE-ext (waited 1614s): python scripts/ext14_scan.py qwen3_14b --part cells --subset ext --cells e1_e2a,e3p3_a2e,e3_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_conflict_a2e
+2026-10-17T07:09:16Z END   ext14-scan-qwen3_14b-dialE-ext rc=0 (465s)
+2026-10-17T07:09:16Z START ext14-scan-qwen2_57b-probes (waited 1300s): python scripts/ext14_scan.py qwen2_57b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet
+2026-10-17T07:33:12Z END   ext14-scan-qwen2_57b-probes rc=0 (1436s)
+2026-10-17T07:33:12Z START ext14-e1_a2e-qwen2_7b-sweep (waited 2400s): python scripts/ext7_wino_sweep.py --model qwen2_7b --pairs data/dial/pairs_e1_a2e_qwen2_7b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen2_7b.json --out p6_e1_a2e_qwen2_7b --agent p6-data --max-rows 40000
+2026-10-17T07:34:43Z END   ext14-e1_a2e-qwen2_7b-sweep rc=0 (91s)
+2026-10-17T07:34:43Z START ext14-e1_e2a-qwen3_8b-joint (waited 2467s): python scripts/ext7_wino_joint.py --model qwen3_8b --pairs data/dial/pairs_e1_e2a_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_8b.json --out p6_e1_e2a_qwen3_8b --agent p6-data --families main --max-rows 30000
+2026-10-17T07:35:02Z END   ext14-e1_e2a-qwen3_8b-joint rc=0 (19s)
+2026-10-17T07:35:02Z START ext14-e3_e2a-mistral7b_bos-joint (waited 2449s): python scripts/ext7_wino_joint.py --model mistral7b --pairs data/dial/pairs_e3_e2a_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_e2a_mistral7b_bos.json --out p6_e3_e2a_mistral7b_bos --agent p6-data --families main --max-rows 28125
+2026-10-17T07:35:23Z END   ext14-e3_e2a-mistral7b_bos-joint rc=0 (21s)
+2026-10-17T07:35:23Z START ext14-e3p3_a2e-mixtral_bos-direct (waited 2361s): python -m moetrace.ext7_controls direct --model mixtral --pairs data/dial/pairs_e3p3_a2e_mixtral_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mixtral_bos.json --out p6_e3p3_a2e_mixtral_bos --splits discovery,validation
+2026-10-17T07:37:11Z END   ext14-e3p3_a2e-mixtral_bos-direct rc=0 (108s)
+2026-10-17T07:37:11Z START ext14-e1_a2e_all-qwen3-direct (waited 2392s): python -m moetrace.ext7_controls direct --model qwen3 --pairs data/dial/pairs_e1_a2e_all_qwen3.parquet --case-sets data/dial/case_sets_e1_a2e_all_qwen3.json --out p6_e1_a2e_all_qwen3 --splits discovery,validation
+2026-10-17T07:38:26Z END   ext14-e1_a2e_all-qwen3-direct rc=0 (75s)
+2026-10-17T07:38:26Z START ext14-e1_e2a_all-mistral7b_bos-direct (waited 2444s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e1_e2a_all_mistral7b_bos.parquet --case-sets data/dial/case_sets_e1_e2a_all_mistral7b_bos.json --out p6_e1_e2a_all_mistral7b_bos --splits discovery,validation
+2026-10-17T07:38:49Z END   ext14-e1_e2a_all-mistral7b_bos-direct rc=0 (23s)
+2026-10-17T07:38:49Z START ext14-e1_e2a-qwen3_4b-dla (waited 2238s): python scripts/ext7_wino_dla.py --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --agent p6-data --families main --chunk 512
+2026-10-17T07:39:01Z END   ext14-e1_e2a-qwen3_4b-dla rc=0 (12s)
+2026-10-17T07:39:01Z START ext14-e1_a2e-qwen3_14b-sweep (waited 1779s): python scripts/ext7_wino_sweep.py --model qwen3_14b --pairs data/dial/pairs_e1_a2e_qwen3_14b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_14b.json --out p6_e1_a2e_qwen3_14b --agent p6-data --max-rows 30000
+2026-10-17T07:40:28Z END   ext14-e1_a2e-qwen3_14b-sweep rc=0 (87s)
+2026-10-17T07:40:28Z START ext14-scan-qwen2_57b-cells (waited 436s): python scripts/ext14_scan.py qwen2_57b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi
+2026-10-17T08:38:50Z END   ext14-scan-qwen2_57b-cells rc=0 (3502s)
+2026-10-17T08:38:50Z START ext14-e1_a2e-qwen2_7b-joint (waited 3847s): python scripts/ext7_wino_joint.py --model qwen2_7b --pairs data/dial/pairs_e1_a2e_qwen2_7b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen2_7b.json --out p6_e1_a2e_qwen2_7b --agent p6-data --families main --max-rows 30000
+2026-10-17T08:39:33Z END   ext14-e1_a2e-qwen2_7b-joint rc=0 (43s)
+2026-10-17T08:39:33Z START ext14-e1_e2a-qwen3_8b-dla (waited 3871s): python scripts/ext7_wino_dla.py --model qwen3_8b --pairs data/dial/pairs_e1_e2a_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_8b.json --out p6_e1_e2a_qwen3_8b --agent p6-data --families main --chunk 512
+2026-10-17T08:39:55Z END   ext14-e1_e2a-qwen3_8b-dla rc=0 (22s)
+2026-10-17T08:39:55Z START ext14-e3_e2a-mistral7b_bos-dla (waited 3872s): python scripts/ext7_wino_dla.py --model mistral7b --pairs data/dial/pairs_e3_e2a_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_e2a_mistral7b_bos.json --out p6_e3_e2a_mistral7b_bos --agent p6-data --families main --chunk 480
+2026-10-17T08:40:18Z END   ext14-e3_e2a-mistral7b_bos-dla rc=0 (23s)
+2026-10-17T08:40:18Z START ext14-e3_a2e-qwen3-t1 (waited 3779s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 e3_a2e e3_e2a
+2026-10-17T08:53:54Z END   ext14-e3_a2e-qwen3-t1 rc=0 (816s)
+2026-10-17T08:53:54Z START ext14-e1_e2a_all-mixtral_bos-t1 (waited 4512s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos e1_e2a_all
+2026-10-17T09:01:06Z END   ext14-e1_e2a_all-mixtral_bos-t1 rc=0 (432s)
+2026-10-17T09:01:06Z START ext14-e1p_e2a_all-mistral7b_bos-t1 (waited 4930s): bash scripts/ext14_chain_base_cell.sh 1.0 mistral7b_bos e1p_e2a_all
+2026-10-17T09:01:58Z END   ext14-e1p_e2a_all-mistral7b_bos-t1 rc=0 (52s)
+2026-10-17T09:01:58Z START ext14-e1_e2a-qwen3_4b-direct (waited 4977s): python -m moetrace.ext7_controls direct --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --splits discovery,validation
+2026-10-17T09:02:08Z END   ext14-e1_e2a-qwen3_4b-direct rc=0 (10s)
+2026-10-17T09:02:08Z START ext14-e1_a2e-qwen3_14b-joint (waited 4900s): python scripts/ext7_wino_joint.py --model qwen3_14b --pairs data/dial/pairs_e1_a2e_qwen3_14b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_14b.json --out p6_e1_a2e_qwen3_14b --agent p6-data --families main --max-rows 22500
+2026-10-17T09:02:44Z END   ext14-e1_a2e-qwen3_14b-joint rc=0 (36s)
+2026-10-17T09:02:44Z START ext14-cf-filter-qwen2_57b (waited 1434s): python scripts/ext14_scan_cf.py qwen2_57b --out qwen2_57b_str --paper-key Qwen3
+2026-10-17T09:07:59Z END   ext14-cf-filter-qwen2_57b rc=0 (315s)
+2026-10-17T09:07:59Z START ext14-e1_a2e-qwen2_7b-dla (waited 1707s): python scripts/ext7_wino_dla.py --model qwen2_7b --pairs data/dial/pairs_e1_a2e_qwen2_7b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen2_7b.json --out p6_e1_a2e_qwen2_7b --agent p6-data --families main --chunk 512
+2026-10-17T09:08:41Z END   ext14-e1_a2e-qwen2_7b-dla rc=0 (41s)
+2026-10-17T09:08:41Z START ext14-e1_e2a-qwen3_8b-direct (waited 1725s): python -m moetrace.ext7_controls direct --model qwen3_8b --pairs data/dial/pairs_e1_e2a_qwen3_8b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_8b.json --out p6_e1_e2a_qwen3_8b --splits discovery,validation
+2026-10-17T09:09:00Z END   ext14-e1_e2a-qwen3_8b-direct rc=0 (19s)
+2026-10-17T09:09:00Z START ext14-e3_e2a-mistral7b_bos-direct (waited 1722s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e3_e2a_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3_e2a_mistral7b_bos.json --out p6_e3_e2a_mistral7b_bos --splits discovery,validation
+2026-10-17T09:09:18Z END   ext14-e3_e2a-mistral7b_bos-direct rc=0 (18s)
+2026-10-17T09:09:18Z START ext14-e3_a2e-mixtral_bos-t1 (waited 914s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos e3_a2e e3_e2a
+2026-10-17T09:31:02Z END   ext14-e3_a2e-mixtral_bos-t1 rc=0 (1304s)
+2026-10-17T09:31:02Z START ext14-e1_e2a_all-qwen3-t1 (waited 1786s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 e1_e2a_all
+2026-10-17T09:36:51Z END   ext14-e1_e2a_all-qwen3-t1 rc=0 (349s)
+2026-10-17T09:36:51Z START ext14-e3p3_a2e-qwen3_4b-t1 (waited 2068s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_4b e3p3_a2e e3_a2e e3_e2a e1p_a2e
+2026-10-17T09:40:35Z END   ext14-e3p3_a2e-qwen3_4b-t1 rc=0 (224s)
+2026-10-17T09:40:35Z START ext14-e1_a2e-qwen3_14b-dla (waited 2271s): python scripts/ext7_wino_dla.py --model qwen3_14b --pairs data/dial/pairs_e1_a2e_qwen3_14b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_14b.json --out p6_e1_a2e_qwen3_14b --agent p6-data --families main --chunk 384
+2026-10-17T09:41:22Z END   ext14-e1_a2e-qwen3_14b-dla rc=0 (47s)
+2026-10-17T09:41:22Z START ext14-scan-qwen2_57b-l_cf (waited 1990s): python scripts/ext14_scan.py qwen2_57b --part cells --subset all --cells l_cf
+2026-10-17T09:43:56Z END   ext14-scan-qwen2_57b-l_cf rc=0 (154s)
+2026-10-17T09:43:56Z START ext14-e1_a2e-qwen2_7b-direct (waited 2115s): python -m moetrace.ext7_controls direct --model qwen2_7b --pairs data/dial/pairs_e1_a2e_qwen2_7b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen2_7b.json --out p6_e1_a2e_qwen2_7b --splits discovery,validation
+2026-10-17T09:44:25Z END   ext14-e1_a2e-qwen2_7b-direct rc=0 (29s)
+2026-10-17T09:44:25Z START ext14-e3p3_a2e-qwen3_8b-t1 (waited 2117s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_8b e3p3_a2e e3_a2e e3_e2a e1p_a2e
+2026-10-17T09:50:20Z END   ext14-e3p3_a2e-qwen3_8b-t1 rc=0 (354s)
+2026-10-17T09:50:20Z START ext14-l_ind-mistral7b_bos-t1 (waited 2451s): bash scripts/ext14_chain_base_cell.sh 1.0 mistral7b_bos l_ind l_bind l_ant l_prop
+2026-10-17T09:54:14Z END   ext14-l_ind-mistral7b_bos-t1 rc=0 (234s)
+2026-10-17T09:54:14Z START ext14-e1p_a2e-qwen3-t1 (waited 1320s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 e1p_a2e e1p_e2a
+2026-10-17T10:05:12Z END   ext14-e1p_a2e-qwen3-t1 rc=0 (658s)
+2026-10-17T10:05:12Z START ext14-e1p_e2a-qwen3_4b-t1 (waited 1432s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_4b e1p_e2a l_ind l_bind l_ant
+2026-10-17T10:08:26Z END   ext14-e1p_e2a-qwen3_4b-t1 rc=0 (194s)
+2026-10-17T10:08:26Z START ext14-e1_a2e-qwen3_14b-direct (waited 1624s): python -m moetrace.ext7_controls direct --model qwen3_14b --pairs data/dial/pairs_e1_a2e_qwen3_14b.parquet --case-sets data/dial/case_sets_e1_a2e_qwen3_14b.json --out p6_e1_a2e_qwen3_14b --splits discovery,validation
+2026-10-17T10:09:01Z END   ext14-e1_a2e-qwen3_14b-direct rc=0 (35s)
+2026-10-17T10:09:01Z START ext14-e1_e2a-qwen2_7b-t1 (waited 1465s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_7b e1_e2a e3p3_a2e e3_a2e e3_e2a
+2026-10-17T10:19:59Z END   ext14-e1_e2a-qwen2_7b-t1 rc=0 (658s)
+2026-10-17T10:19:59Z START ext14-scan-qwen2_57b-dialE-ext (waited 2119s): python scripts/ext14_scan.py qwen2_57b --part cells --subset ext --cells e1_e2a,e3p3_a2e
+2026-10-17T10:28:42Z END   ext14-scan-qwen2_57b-dialE-ext rc=0 (523s)
+2026-10-17T10:28:42Z START ext14-e1p_e2a-qwen3_8b-t1 (waited 2256s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_8b e1p_e2a l_bind l_ant l_prop
+2026-10-17T10:32:26Z END   ext14-e1p_e2a-qwen3_8b-t1 rc=0 (224s)
+2026-10-17T10:32:26Z START ext14-l_cf-mistral7b_bos-t1 (waited 2225s): bash scripts/ext14_chain_base_cell.sh 1.0 mistral7b_bos l_cf l_ioi
+2026-10-17T10:34:16Z END   ext14-l_cf-mistral7b_bos-t1 rc=0 (110s)
+2026-10-17T10:34:16Z START ext14-e1p_e2a-mixtral_bos-t1 (waited 1703s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos e1p_e2a l_ind
+2026-10-17T10:49:25Z END   ext14-e1p_e2a-mixtral_bos-t1 rc=0 (909s)
+2026-10-17T10:49:25Z START ext14-l_prop-qwen3_4b-t1 (waited 2413s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_4b l_prop l_cf l_ioi
+2026-10-17T10:51:33Z END   ext14-l_prop-qwen3_4b-t1 rc=0 (128s)
+2026-10-17T10:51:33Z START ext14-e1_e2a-qwen3_14b-t1 (waited 2540s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_14b e1_e2a e3p3_a2e e3_a2e e3_e2a
+2026-10-17T11:02:34Z END   ext14-e1_e2a-qwen3_14b-t1 rc=0 (661s)
+2026-10-17T11:02:34Z START ext14-e1p_a2e-qwen2_7b-t1 (waited 2035s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_7b e1p_a2e e1p_e2a l_ind l_ant
+2026-10-17T11:11:02Z END   ext14-e1p_a2e-qwen2_7b-t1 rc=0 (508s)
+2026-10-17T11:11:02Z START ext14-e1_a2e-qwen2_57b-t1 (waited 2535s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b e1_a2e
+2026-10-17T11:13:08Z END   ext14-e1_a2e-qwen2_57b-t1 rc=1 (126s)
+2026-10-17T11:13:08Z START ext14-l_cf-qwen3_8b-t1 (waited 2400s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_8b l_cf l_ioi
+2026-10-17T11:15:16Z END   ext14-l_cf-qwen3_8b-t1 rc=0 (128s)
+2026-10-17T11:15:16Z START ext14-l_ind-qwen3-t1 (waited 1543s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 l_ind l_ant
+2026-10-17T11:25:18Z END   ext14-l_ind-qwen3-t1 rc=0 (602s)
+2026-10-17T11:25:18Z START ext14-e1p_a2e-qwen3_14b-t1 (waited 1262s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_14b e1p_a2e e1p_e2a l_ind l_bind
+2026-10-17T11:33:17Z END   ext14-e1p_a2e-qwen3_14b-t1 rc=0 (479s)
+2026-10-17T11:33:18Z START ext14-e1_a2e-qwen2_57b-t1 (waited 1209s): bash scripts/ext14_chain_base_cell.sh 0.75 qwen2_57b e1_a2e
+2026-10-17T11:57:58Z END   ext14-e1_a2e-qwen2_57b-t1 rc=0 (1480s)
+2026-10-17T11:57:58Z START ext14-l_prop-qwen2_7b-t1 (waited 2678s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_7b l_prop l_cf l_ioi
+2026-10-17T12:04:08Z END   ext14-l_prop-qwen2_7b-t1 rc=0 (370s)
+2026-10-17T12:04:08Z START ext14-l_bind-mixtral_bos-t1 (waited 2309s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos l_bind l_ant
+2026-10-17T12:20:38Z END   ext14-l_bind-mixtral_bos-t1 rc=0 (990s)
+2026-10-17T12:20:38Z START ext14-l_ant-qwen3_14b-t1 (waited 2224s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3_14b l_ant l_prop l_cf l_ioi
+2026-10-17T12:27:35Z END   ext14-l_ant-qwen3_14b-t1 rc=0 (417s)
+2026-10-17T12:27:35Z START ext14-e1_e2a-qwen2_57b-t1 (waited 1765s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b e1_e2a
+2026-10-17T12:47:50Z END   ext14-e1_e2a-qwen2_57b-t1 rc=0 (1215s)
+2026-10-17T12:47:50Z START ext14-l_prop-qwen3-t1 (waited 1597s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 l_prop e0_a2e
+2026-10-17T12:58:50Z END   ext14-l_prop-qwen3-t1 rc=0 (660s)
+2026-10-17T12:58:50Z START ext14-e3p3_a2e-qwen2_57b-t1 (waited 650s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b e3p3_a2e
+2026-10-17T13:20:22Z END   ext14-e3p3_a2e-qwen2_57b-t1 rc=0 (1292s)
+2026-10-17T13:20:22Z START ext14-l_prop-mixtral_bos-t1 (waited 1192s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos l_prop sc_agree_a2e
+2026-10-17T13:38:53Z END   ext14-l_prop-mixtral_bos-t1 rc=0 (1111s)
+2026-10-17T13:38:53Z START ext14-e3_e2a-qwen2_57b-t1 (waited 1100s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b e3_e2a
+2026-10-17T13:41:13Z END   ext14-e3_e2a-qwen2_57b-t1 rc=1 (140s)
+2026-10-17T13:41:13Z START p6ci-c3-country-mixtral_bos (waited 24816s, low priority): bash -c 
+    set -e
+    [ -f results/p6ci_c3_data/.done_country_mixtral_bos ] || { python scripts/ext14ci_c3_cf_build.py mixtral --proto mixtral_bos --rels P17,P27,P495,P103 --max-per-rel 400 --cap 48; touch results/p6ci_c3_data/.done_country_mixtral_bos; }
+    python scripts/ext14ci_c3_country.py merge --proto mixtral_bos
+    [ -f results/p6ci_c3_cfc_mixtral_bos/.done_heads ] || { python scripts/ext7_wino_heads.py --model mixtral --pairs results/p6ci_c3_data/pairs_cfc_mixtral_bos.parquet --case-sets results/p6ci_c3_data/case_sets_cfc_mixtral_bos.json         --out p6ci_c3_cfc_mixtral_bos --splits discovery --families main --layers 13,15,16,18,19,24 --max-rows 40000 --agent p6-circuit; touch results/p6ci_c3_cfc_mixtral_bos/.done_heads; }
+    python scripts/ext14ci_c3_country.py dla --proto mixtral_bos
+2026-10-17T13:51:31Z END   p6ci-c3-country-mixtral_bos rc=0 (618s)
+2026-10-17T13:51:31Z START ext14-e3_e2a-qwen2_57b-t1 (waited 617s): bash scripts/ext14_chain_base_cell.sh 0.75 qwen2_57b e3_e2a
+2026-10-17T14:16:08Z END   ext14-e3_e2a-qwen2_57b-t1 rc=0 (1477s)
+2026-10-17T14:16:08Z START ext14-e0_e2a-qwen3-t1 (waited 2094s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 e0_e2a aagr_a2e
+2026-10-17T14:26:26Z END   ext14-e0_e2a-qwen3-t1 rc=0 (618s)
+2026-10-17T14:26:26Z START ext14-l_ind-qwen2_57b-t1 (waited 607s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b l_ind
+2026-10-17T14:45:58Z END   ext14-l_ind-qwen2_57b-t1 rc=0 (1172s)
+2026-10-17T14:45:58Z START ext14-aagr_e2a-qwen3-t1 (waited 963s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 aagr_e2a acon_a2e
+2026-10-17T14:56:20Z END   ext14-aagr_e2a-qwen3-t1 rc=0 (622s)
+2026-10-17T14:56:20Z START ext14-l_ant-qwen2_57b-t1 (waited 612s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b l_ant
+2026-10-17T15:16:47Z END   ext14-l_ant-qwen2_57b-t1 rc=0 (1226s)
+2026-10-17T15:16:47Z START ext14-e1_e2a-mixtral_bos-t1heads (waited 891s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos e1_e2a
+2026-10-17T15:18:43Z END   ext14-e1_e2a-mixtral_bos-t1heads rc=0 (116s)
+2026-10-17T15:18:44Z START ext14-sc_agree_a2e-qwen3-t1 (waited 893s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 sc_agree_a2e sc_conflict_stmt_a2e
+2026-10-17T15:33:40Z END   ext14-sc_agree_a2e-qwen3-t1 rc=0 (896s)
+2026-10-17T15:33:40Z START ext14-l_prop-qwen2_57b-t1 (waited 1004s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b l_prop
+2026-10-17T15:54:25Z END   ext14-l_prop-qwen2_57b-t1 rc=0 (1245s)
+2026-10-17T15:54:25Z START ext14-rsite_e1_a2e-qwen3-t1 (waited 776s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen3 rsite_e1_a2e
+2026-10-17T16:01:59Z END   ext14-rsite_e1_a2e-qwen3-t1 rc=0 (454s)
+2026-10-17T16:01:59Z START ext14-l_cf-qwen2_57b-t1 (waited 441s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b l_cf
+2026-10-17T16:19:43Z END   ext14-l_cf-qwen2_57b-t1 rc=0 (1064s)
+2026-10-17T16:19:43Z START ext14-rsite_e1_a2e-mixtral_bos-t1 (waited 1039s): bash scripts/ext14_chain_base_cell.sh 1.0 mixtral_bos rsite_e1_a2e
+2026-10-17T16:29:49Z END   ext14-rsite_e1_a2e-mixtral_bos-t1 rc=0 (606s)
+2026-10-17T16:29:49Z START ext14-l_ioi-qwen2_57b-t1 (waited 597s): bash scripts/ext14_chain_base_cell.sh 1.0 qwen2_57b l_ioi
+2026-10-17T16:50:37Z END   ext14-l_ioi-qwen2_57b-t1 rc=0 (1248s)
+2026-10-17T16:50:37Z START p6ci-c3-val-qwen3-pr_e1n (waited 35364s, low priority): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks pr_e1n --max-rows 2048 --max-spawn 16000
+2026-10-17T16:52:44Z END   p6ci-c3-val-qwen3-pr_e1n rc=0 (127s)
+2026-10-17T16:52:44Z START p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat (waited 5463s, low priority): bash -c for t in ss_e3 ss_e1 co_p17 co_nat ; do python scripts/ext14ci_c3_validate.py --proto mixtral_bos --tasks $t --max-rows 2048 --max-spawn 16000 || exit 1; done
+2026-10-17T17:13:36Z END   p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat rc=0 (1252s)
+2026-10-17T17:13:36Z START p6ci-c3-dla-ss_e1-mixtral_bos (waited 31245s, low priority): python scripts/ext14ci_c3_dla.py --proto mixtral_bos --task ss_e1
+2026-10-17T17:15:20Z END   p6ci-c3-dla-ss_e1-mixtral_bos rc=0 (104s)
+2026-10-17T17:15:20Z START p6ci-c3-val-qwen3-ct_lang (waited 1352s, low priority): python scripts/ext14ci_c3_validate.py --proto qwen3 --tasks ct_lang --max-rows 2048 --max-spawn 16000
+2026-10-17T17:18:46Z END   p6ci-c3-val-qwen3-ct_lang rc=0 (206s)
+2026-10-17T17:18:46Z START p6an-causal-e3_e2a-qwen3 (waited 27909s, low priority): python scripts/ext14_causal_run.py e3_e2a qwen3 BATCH sweep
+2026-10-17T17:27:35Z END   p6an-causal-e3_e2a-qwen3 rc=0 (529s)
+2026-10-17T17:27:35Z START p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat (waited 455s, low priority): bash -c for t in ss_e3 ss_e1 co_p17 co_nat ; do python scripts/ext14ci_c3_validate.py --proto mixtral_bos --tasks $t --max-rows 2048 --max-spawn 16000 || exit 1; done
+2026-10-17T17:48:18Z END   p6ci-c3-val-mixtral_bos-ss_e3+ss_e1+co_p17+co_nat rc=0 (1243s)
+2026-10-17T17:48:18Z START p6an-causal-e3_e2a-qwen3 (waited 851s, low priority): python scripts/ext14_causal_run.py e3_e2a qwen3 BATCH joint
+2026-10-17T17:56:59Z END   p6an-causal-e3_e2a-qwen3 rc=0 (521s)
+2026-10-17T17:56:59Z START p6ci-c3-val-mixtral_bos-pr_ioi+pr_f1n+pr_e1n+ct_lang (waited 516s, low priority): bash -c for t in pr_ioi pr_f1n pr_e1n ct_lang ; do python scripts/ext14ci_c3_validate.py --proto mixtral_bos --tasks $t --max-rows 2048 --max-spawn 16000 || exit 1; done
+2026-10-17T18:14:21Z END   p6ci-c3-val-mixtral_bos-pr_ioi+pr_f1n+pr_e1n+ct_lang rc=0 (1042s)
+2026-10-17T18:14:21Z START p6an-causal-e3_e2a-mixtral_bos (waited 893s, low priority): python scripts/ext14_causal_run.py e3_e2a mixtral_bos BATCH sweep
+2026-10-17T18:27:52Z END   p6an-causal-e3_e2a-mixtral_bos rc=0 (811s)
+2026-10-17T18:29:03Z START p6an-causal-e3_e2a-mixtral_bos (waited 0s, low priority): python scripts/ext14_causal_run.py e3_e2a mixtral_bos BATCH joint
+2026-10-17T18:41:49Z END   p6an-causal-e3_e2a-mixtral_bos rc=0 (766s)

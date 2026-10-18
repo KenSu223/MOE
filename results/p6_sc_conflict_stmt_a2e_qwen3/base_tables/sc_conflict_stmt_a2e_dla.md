@@ -1,0 +1,5 @@
+**sc_conflict_stmt_a2e W4 DLA: direct logit attribution of the final-position sublayer outputs (main family)**
+
+| Model | DLA attention / drop | DLA MoE / drop | Attention share of DLA | Top attention layers | Top MoE layers |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | 1.429 [1.380, 1.479] | -0.430 [-0.480, -0.381] | 1.43 [1.38, 1.48] | L45 +0.606, L42 +0.470, L43 +0.238 | L43 +0.084, L44 +0.058, L42 +0.035 |

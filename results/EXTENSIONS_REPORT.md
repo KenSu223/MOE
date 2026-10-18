@@ -1,6 +1,6 @@
 # Extensions of the expert-aware causal-tracing reproduction (arXiv 2606.03780)
 
-Assembled 2026-10-15 04:19 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
+Assembled 2026-10-18 00:12 UTC from results/sections/ by scripts/build_extensions_report.py. Plan and decisions: RESEARCH_PLAN.md. Base reproduction: REPORT.md. Timeline: logs/PROGRESS.md.
 
 ## Status
 
@@ -35,6 +35,12 @@ Assembled 2026-10-15 04:19 UTC from results/sections/ by scripts/build_extension
 | 13f | All tasks on one attention–MoE axis, with paired contrasts on identical items. | `results/sections/ext13_ladder.md` | included |
 | 13g | Overshoot of the all-MoE ceiling explained by late experts reacting to attention-written evidence. | `results/sections/ext13_curves.md` | included |
 | 13h | Do gradient-based estimates (AtP, AtP*, EAP-IG) reproduce activation patching for experts, heads and layers? | `results/sections/ext13_atp.md` | included |
+| 14 | Does stating the binding (vs inferring it) or the answer type set the attention / FFN split; do dense twins, capacity or MoE change it; do experts reduce to a few neurons; can circuit discovery on neurons be ported to MoE; were the pre-registered predictions right? | `results/sections/ext14_synthesis.md` | included |
+| 14a | Antonym, object property, binding, induction and four anchors on one axis in eight models, against pre-registered grades. | `results/sections/ext14_ladder.md` | included |
+| 14b | E1 / E1p / E2 / E3 / E0 in both directions, Dial A, Set C, frame pilot, robustness and causal checks, tier 2 on E1. | `results/sections/ext14_dial.md` | included |
+| 14c | Mistral-7B ↔ Mixtral-8x7B and Qwen2-7B ↔ Qwen2-57B-A14B on identical prompts; shared vs routed experts. | `results/sections/ext14_dense.md` | included |
+| 14d | Qwen3 4B → 8B → 14B → 30B-A3B, Mistral-7B → Mixtral, Qwen2-7B → Qwen2-57B; Mixtral-8x22B gated. | `results/sections/ext14_scale.md` | included |
+| 14e | How many neurons carry an expert; is Mixtral upcycled from Mistral-7B; does RelP add to forward patching; are there concept-specific head + expert circuits? | `results/sections/ext14_circuit.md` | included |
 
 
 ## Direction 1: Layer-then-expert versus joint layer × expert search
@@ -11993,3 +11999,1612 @@ metrics); scripts/ext13atp_build.py, ext13atp_engine.py (scan, truth, add-back),
 check), ext13atp_analyze.py, ext13atp_text.py, ext13atp_chain.sh; run dirs results/p5_atp_wino, results/p5_atp_ioi
 (truth_rows / truth_cases, hf_nodes / hf_cases, hf_fp32*_nodes, addback_rows, run_meta.json), results/p5_atp_data;
 results/ext13atp_summary.json; tables results/tables/ext13atp_*; figures results/figures/ext13atp_{scatter_atp,cut_curve,addback}.png.
+
+
+## Direction 14: Phase 6 synthesis: one dial on the same items, dense twins, capacity, circuits (Stage R)
+
+**Summary.** Phase 6 answers the team's feedback on Phase 5 with one pre-registered dial on the same WinoGrande items, a ladder of different tasks graded in advance, dense twins of both MoE families, a dense capacity series, and circuits down to neurons. Everything is Stage R, i.e. before the gated Mixtral-8x22B stage.
+
+**Setup**
+- 8 models, STR activation patching at the final token. Readout: the attention share of the repair = AUC+(attention) / (AUC+ attention + AUC+ MoE or MLP), the Phase-5 measure.
+  - MoE: Qwen3-30B-A3B, Mixtral-8x7B, Qwen2-57B-A14B (fp32).
+  - Dense: Mistral-7B, Qwen2-7B (fp32), Qwen3-4B / 8B / 14B.
+  - Qwen3-1.7B: behaviour only.
+- 102 analysed cells.
+- 45 predictions committed before any GPU run (4143e09).
+
+**1. The answer type sets the split, and stating the binding moves it — in every model except Qwen3-30B-A3B.** Same twins, frame held fixed:
+- **attribute → entity** (answer = an entity): attention-heavy at every level of evidence (0.48–0.83).
+- **entity → attribute** (answer = an attribute): MoE / MLP-heavy when the attribute must be inferred from the event (E3: 0.18–0.34).
+- When the attribute is stated next to its entity (E1), the entity → attribute share rises in 7 of 8 models:
+  - Qwen3-4B 0.31 → 0.58, Qwen3-8B 0.28 → 0.55, Qwen3-14B 0.21 → 0.46;
+  - Qwen2-7B 0.21 → 0.37, Qwen2-57B 0.21 → 0.38;
+  - Mistral-7B 0.31 → 0.49, Mixtral 0.34 → 0.50.
+  - The direction gap halves (e.g. Qwen3-4B +0.37 → +0.12).
+- Qwen3-30B-A3B does not move (0.18 → 0.22; gap +0.60 at E3, +0.59 at E1, own sets; +0.51 → +0.57 on common twins; H-type).
+- So the Phase-5 "direction" effect is partly answer type and partly the inference the attribute needs. The pre-registered best guess (the gap closes) fails for Qwen3-30B-A3B, where it was testable, and is approached by the other models.
+
+**2. Dense parent vs MoE child: no difference at matched architecture.**
+- Mistral-7B → Mixtral-8x7B: identical prompts in all 10 cells, |MoE − dense| ≤ 0.10, cell order Spearman 0.98.
+- Qwen2-7B → Qwen2-57B-A14B: 6 of 7 cells (antonym −0.11), Spearman 0.89.
+- MoE ≥ dense + 0.10 in no cell.
+- The division of labour between attention and the FFN is a property of the task, not of dense vs sparse FFNs (H-invariant, D0 / D1 / D4 held; D2 / D3 failed).
+- Inside Qwen2-57B the always-on shared expert carries 0.43–0.77 of the MoE rescue.
+- Mixtral's experts are Mistral-7B's MLP neuron for neuron (same index, top task neurons shared).
+
+**3. Capacity.**
+- The dense Qwen3 series 4B → 8B → 14B is flat (D5 held).
+- Qwen3-30B-A3B departs from it in both directions: copy cells higher (IOI 0.92 vs 0.73–0.74; E1 attribute → entity 0.81 vs 0.66–0.70), entity → attribute lower (0.18 vs 0.21–0.31).
+- With flat dense twins and no Qwen3 dense twin, this is a property of that model, not a capacity trend. The 8x22B test of the Mistral series is the gated Stage 3.
+
+**4. The ladder.**
+- The top of the predicted order holds: IOI 0.71–0.92, induction 0.67–0.77, explicit binding 0.65–0.79.
+- The bottom does not: antonyms (grade 1) sit at 0.35–0.59, above object property in 7 of 8 models. The cue word is one token before the answer, so "answer stored in the weights" does not imply a low final-token attention share.
+- Spearman(grade, share) is 0.55–0.87 (L9 failed); without antonyms 0.79–0.93.
+
+**5. Associativity is a weak dial.**
+- Qwen3 attribute → entity: conflict 0.83 ≥ neutral 0.81 > agree 0.79 > prior only 0.73 (A1 held, spread 0.10).
+- In conflict items the MoE writes the prior answer against the stated one (−0.30 of the drop) and attention overrides it.
+- An explicit statement beats event inference in 8 of 9 models (Set C; Mistral 0.57).
+
+**6. Circuits.**
+- **Neurons:** 1–4 neurons per case carry 80 % of a selected expert's effect (Qwen3 2.1–4.3 of 768; Mixtral 3.8–17 of 14,336; N1 / N2 held), but different neurons for different cases. The indirect Qwen3 L37E032 needs a magnitude ranking.
+- **RelP on MoE (OLMoE, Mistral pilot):** works, but adds little at the final position. Its value lies at the subject / relation positions (three quarters of CounterFact's effect).
+- **Concept circuits (C3):** knocking out a concept's heads + experts removes, on its own tasks vs other tasks:
+  - Qwen3: size / state 0.43 / 0.09, country 0.70 / 0.16, person role 0.21 / 0.04;
+  - Mixtral: 0.32 / 0.11, 0.69 / 0.25, 0.39 / 0.02.
+  - Experts are more concept-specific than heads in 3 of 6 concept × model comparisons (N3 partly): both size / state circuits and Qwen3 person role. In the country circuits the experts are less specific than the heads.
+
+**7. Robustness and causal checks.**
+- Shares are metric-invariant (R1, Spearman ≥ 0.97).
+- **Knockouts.** On E1 attribute → entity, knocking out the top-3 heads / experts lowers the attention / MoE repair 21–31 % beyond matched random sets. On E3 entity → attribute, where attention does little, they lower it 12–19 %, just under the pre-registered 20 % bar. R3 held 1 / 4, R4 2 / 4.
+- **Swapped evidence (R2 held):** moving the corruption into the evidence changes the share by only 0.03 / 0.05.
+- The share itself moves only −0.02 / −0.07: the split is a property of the computation, not of a few components.
+
+**8. Behaviour.**
+- The first explicit frame was at chance (a frame artefact; the frame pilot fixed it before any patching).
+- Negation fails everywhere (E2, behaviour only). In attribute → entity the copied word beats the correct entity: the Qwen3 family by margin in 0.41–0.60 of pairs, Mistral / Mixtral by sign in 0.29–0.30 (target ≤ 0.06).
+- Qwen2-57B-A14B is unusable in bf16 (flat routers flip under rounding; transformers bf16 vs fp32 routing agreement 0.08). It runs in fp32.
+
+**Feedback → answers**
+
+| # | Team feedback | Answer (section) |
+|---|---|---|
+| 1 | Expert-level circuits; can the ICML paper (Arora et al. 2026, RelP on neurons) be applied to MoE? | Yes, ported and verified (frozen routing). At the final token it adds little beyond forward neuron DLA. Its value is at non-final positions (C2, 14e). Neurons inside experts: 1–4 per case (C1). |
+| 2 | Bigger capacity in the same family? | Dense Qwen3 4B → 14B flat. Qwen3-30B-A3B departs in both directions. Mixtral-8x22B is the gated Stage 3 (14d). |
+| 3 | Dense counterparts? | Mistral-7B ↔ Mixtral and Qwen2-7B ↔ Qwen2-57B: invariant within ±0.10 on identical prompts (14c). |
+| 4 | Add-back plots: random ≈ greedy first k | Added to every Phase-3/4/5/6 add-back figure plus tables (P6-0). |
+| 5 | One principled dial, graded tasks, predictions before the experiment | Dial E / A on the same twins, ladder v2; 45 predictions committed before the runs; check table below (14a, 14b). |
+| 6 | Parallel MoE / dense plots: does attention's work move into a larger FFN? | Not between twins. Within Qwen3, the MoE model is more attention-heavy on copy tasks, not less (14c, 14d). |
+| 7 | Concept circuits of experts + heads; do we need the ICML paper? | Not for experts + heads: forward patching, DLA and knockout suffice (C3). RelP matters only for neurons at non-final positions (14e). |
+| 8 | Same instance, variations that change the distribution: novel? | Yes, as far as the literature scan found (`docs/phase6_literature_scan.md`): binary context-vs-memory contrasts exist in dense models, but not a ≥ 3-level dial on the same items with the attention / FFN share measured, nor in MoE. |
+
+**What was run.** Plan, decisions and deviations: RESEARCH_PLAN.md "Phase 6", its "Scope cut", and logs/PROGRESS.md.
+
+Agents:
+- p6-data: items, scans, case sets, tier 1;
+- p6-engine: dense / Qwen2 / Qwen2-MoE families, head masks, neuron kind, fp32 protocol;
+- p6-analysis: tier 2 on E1 attribute → entity, R-checks, cross-cell sections;
+- p6-circuit: C1–C3.
+
+Coordinator:
+- frame and induction pilots (rules fixed before the results);
+- QA blockers: P0 frame artefact; e3p3 truncation fixed before any scan;
+- pooled / behaviour-only rule; all-strata twin cells; Qwen2 fp32 decision;
+- GPU queue priorities and bundled jobs;
+- P6-0 figures and Phase-5 page fixes.
+
+Three usage limits stopped the agents. The detached chains kept the GPU busy, and nothing was lost.
+
+| Item | Models | Cells |
+|---|---|---|
+| Dial E (E1 stated, E1p paraphrase, E2 negation, E3 event; frame P3 for attribute → entity, frame-matched E3p3) | all 8 | 2–8 per model |
+| Dial A (agree / conflict / prior only) | Qwen3 (Mixtral behaviour only: too few strong-prior items) | 6 |
+| Set C (event + statement) | behaviour all, patching Qwen3 / Mixtral | 2 |
+| Ladder v2 (antonym, property, binding, induction + 4 anchors) | all 8 | 8 |
+| Twins / series on identical prompts (all-strata E1 cells where needed) | Mistral ↔ Mixtral, Qwen2-7B ↔ 57B, Qwen3 4B / 8B / 14B / 30B | — |
+| Tier 2 (experts, add-back with random-equivalent marks, mixed greedy, knockout, writers) | E1 attribute → entity, Qwen3 / Mixtral | 2 |
+| R-metric, R-causal, R-site | Qwen3 / Mixtral | — |
+| C1 neurons, C2 RelP pilot, C3 concept circuits | Qwen3, Mixtral, Mistral-7B, OLMoE | — |
+
+**Pre-registration check** (`results/tables/ext14_prereg_check.md`).
+- **Counts:** of 45 predictions, 21 held, 15 failed, 1 held partly (N3), 8 had too little data (pooled or behaviour-only cells).
+- **Informative failures:**
+  - L1 / L2 antonyms are not low;
+  - E7 / E13 entity → attribute stays MoE-heavy at E1 in Qwen3-30B-A3B (H-type), the opposite of our best guess;
+  - E2 the Mixtral share is lower than predicted;
+  - A3 prior-only attribute → entity is 0.73, not ≤ 0.35: retrieving an entity is attention-heavy even without evidence;
+  - D2 / D3 neither capacity nor sparsity moves the share between twins;
+  - L9 the ladder's rank correlation reaches 0.8 in 3 of 8 models;
+  - R3 / R4 at E3 entity → attribute: knockouts of the top heads / experts stay below the 20 % bar.
+- **Held:** the copy / look-up top of the ladder, E3 levels as in Phase 5, H-invariant for the twins, D5, D6, R1, R2, N1, N2, A1 / A2 (Qwen3), Set C in 8 of 9 models.
+
+**Results by question.**
+
+*Dial and ladder (sections 14a / 14b).* The figure `results/figures/ext14syn_answer_type.png` shows, per model and direction, the share with the binding implied by the event (E3) and stated (E1). A paraphrase (E1p) equals E1 in every model (|Δ| ≤ 0.07), so the copied word is not what matters; the stated binding is. Negation (E2) cannot be traced: models copy the stated word ("The jug was not full …, the _ was empty" → the jug's partner), the copy trap winning 0.41–0.60 of attribute → entity pairs by margin in the Qwen3 family and 0.29–0.30 by sign in Mistral / Mixtral (target ≤ 0.06). This reading explains the Phase-5 copy control. "Options: t1, t2" made the attribute copyable but not bound to an entity, and moved the share by only +0.04–0.07. Stating "the jug was empty" binds it, and the share rises (except in Qwen3-30B-A3B).
+
+*Dense vs MoE (14c).* Both twins are within bf16 / fp32 noise of each other on almost every cell, with the same cell order. MoE-ification of a dense model keeps attention and FFN doing the same share of the work. Prediction D6 held: Qwen2-57B's always-on shared expert carries most of the MoE rescue for entities and stored mappings (0.68–0.77) and about half for attributes (0.43–0.51). Upcycling evidence (C1): every Mixtral L20 expert matches the Mistral-7B L20 MLP neuron by neuron; L20E000's top-10 WinoGrande neurons are Mistral's top-ranked neurons at the same index (8 / 10).
+
+*Capacity (14d).* See the summary.
+- The paired values on common items agree with the own-set values: Qwen3 dense 14B − 4B within ±0.08 in every cell (largest: E3 entity → attribute −0.08); 30B-A3B vs dense on IOI +0.18 [0.16, 0.20].
+- Precision is part of the protocol: Qwen2-57B in bf16 gives an E1 attribute → entity share of 0.68, in fp32 0.58, with rescue correlation bf16 vs fp32 of −0.04.
+
+*Circuits (14e).* See the summary and `ext14_circuit.md`.
+- C2 / DP3: a reverse-streaming gradient engine (F3) for the 30B / 47B models is not needed for the questions asked. Neuron patches at non-final positions can be done forward. Building F3 is justified only for gradient-ranked all-position circuits at scale.
+- C3 (both models): see the summary. The country circuits overlap with general CounterFact machinery: the other-task loss is 0.16 / 0.25, the highest of the three concepts.
+
+*Tier 2 on E1 attribute → entity.*
+- Qwen3 selects L37E032 again, the Phase-5 attribute → entity expert: the same expert whether the binding is stated or inferred. Spec +0.21; knockout F +0.065; top-10 0.145 vs random 0.008. The all-MoE ceiling is −0.17, mixed greedy r(20) 0.93 with 9.6 heads among the first 10 picks.
+- Mixtral selects L17E007 (ceiling 0.33; 80 % of it with 2 greedy / 3 oracle / 48 random experts).
+
+*Robustness and causal (R1–R4).*
+- R1 held.
+- R3 / R4 on E1 attribute → entity are as in the summary.
+- R-causal on E3 entity → attribute: top heads lower the attention repair 12–16 % beyond random, top experts the MoE repair 15–19 %; the share moves ≤ 0.05.
+- R-site: the share changes by 0.03 (Qwen3) / 0.05 (Mixtral) when the corruption sits in the evidence instead of the question.
+
+**Method lessons**
+- **Frames decide competence.** The first explicit frame was at chance: Qwen3 0.39, Mixtral 0.05 correct in both directions. A one-word change of layout (P3) gave 0.99 / 0.80. Behaviour pilots with a pre-set decision rule caught it, and the induction format, before any patching.
+- **One bad cut is enough.** Cutting a WinoGrande sentence at the connective left "… because the one on." when the blank sat inside a prepositional phrase. String-wise reconstruction checks on 100 % of items are now part of every builder.
+- **Precision is model-specific.** Qwen2-57B-A14B's routers are nearly uniform; bf16 rounding flips most routed sets even in transformers. Every new MoE needs a bf16-vs-fp32 routing check before use.
+- **Logistics:**
+  - Small cells: a fixed pooled / behaviour-only rule instead of ad hoc relaxing.
+  - Priority classes and one GPU job per cell raised the tier-1 share of GPU time from 13 % to ≈ 80 %.
+  - Handshake watchers must anchor on the writer's tag at the start of the line (a quoted string once triggered one).
+
+**Caveats**
+- The Qwen3 dense series is not an architecture twin of Qwen3-30B-A3B.
+- E1-family cells of Mistral-7B, and the twin E1 comparisons, use all association strata, because the neutral sets were too small (labelled).
+- Several Mixtral / Mistral cells are pooled (marked †).
+- Dial A is Qwen3-only.
+- Qwen2-57B ran the trimmed 10-cell list in fp32.
+- Ladder grades are confounded with cue distance (partial Spearman reported).
+- All readouts are at the final token. Name-site attention (Phase 5 post-hoc) is not re-measured.
+
+**Decisions for the user**
+- **DP6:** run Stage 3 (Mixtral-8x22B: ladder + E1 / E3 tier 1, ≈ 14 GPU-h, needs deleting this phase's Qwen2 / Qwen3-dense checkpoints for disk), or stop here.
+- **DP3:** build F3 (reverse layer streaming), or not. Recommendation: not now.
+
+**Files**
+- Sections: `results/sections/ext14_{ladder,dial,dense,scale,circuit}.md`.
+- Tables: `results/tables/ext14_*` (`ext14_prereg_check.md`, `ext14_cells.md` with every cell's n and status).
+- Figures: `results/figures/ext14_*`, `ext14syn_answer_type.png`.
+- Numbers: `results/ext14_summary.json`, `ext14ci_summary.json`.
+- Data and QA: `data/dial/` (pre-registration, frames, completeness, build report).
+- Engine API: `logs/ext14_engine_api.md`.
+- Synthesis figure and check table: `scripts/ext14_synth.py`.
+
+
+## Direction 14a: Phase 6 ladder v2: different tasks graded in advance
+
+**Summary.** Ladder v2 (P6-1): four new tasks (antonym, object property, explicit binding, induction on unrelated word pairs) were placed on the dial before any run (grades 1–5 in `data/dial/preregistration.md`) and measured with the Phase-5 readout (attention share = AUC+ of the single-layer final-token attention patch / (AUC+ attention + AUC+ MoE or MLP), validation pairs, cluster-bootstrap CIs) together with the four anchors. Qwen3-30B-A3B-Base (7 of 8 tasks): antonym 0.51 [0.49, 0.54], object property 0.33 [0.30, 0.36], WG entity → attribute (E3) 0.18 [0.15, 0.21], CounterFact 0.54 [0.51, 0.57], WG attribute → entity (E3) 0.73 [0.70, 0.76], binding look-up 0.79 [0.77, 0.81], IOI 0.92 [0.90, 0.94], induction (word pairs) † 0.77 [0.73, 0.80]; Spearman(grade, share) +0.81 (CI over the cells' bootstrap draws 0.81 [0.72, 0.81]), partial Spearman given the cue distance +0.59. Mixtral-8x7B (BOS) (7 of 8 tasks): antonym 0.48 [0.45, 0.51], object property 0.42 [0.40, 0.44], WG entity → attribute (E3) 0.34 [0.33, 0.35], CounterFact 0.58 [0.55, 0.60], WG attribute → entity (E3) † 0.52 [0.50, 0.54], binding look-up 0.71 [0.70, 0.73], IOI 0.80 [0.79, 0.81], induction (word pairs) 0.71 [0.69, 0.73]; Spearman(grade, share) +0.75 (CI over the cells' bootstrap draws 0.75 [0.75, 0.80]), partial Spearman given the cue distance +0.72. Mistral-7B (BOS) (7 of 8 tasks): antonym 0.45 [0.42, 0.48], object property 0.37 [0.35, 0.39], WG entity → attribute (E3) 0.31 [0.30, 0.33], CounterFact 0.55 [0.52, 0.57], WG attribute → entity (E3) † 0.48 [0.46, 0.50], binding look-up 0.68 [0.66, 0.69], IOI 0.78 [0.78, 0.79], induction (word pairs) 0.68 [0.67, 0.70]; Spearman(grade, share) +0.80 (CI over the cells' bootstrap draws 0.80 [0.75, 0.80]), partial Spearman given the cue distance +0.78. Qwen2-7B (6 of 8 tasks): antonym 0.47 [0.45, 0.49], object property 0.35 [0.33, 0.37], WG entity → attribute (E3) 0.21 [0.19, 0.23], CounterFact 0.41 [0.38, 0.44], WG attribute → entity (E3) 0.50 [0.47, 0.53], IOI 0.71 [0.70, 0.72], induction (word pairs) † 0.68 [0.66, 0.70]; Spearman(grade, share) +0.55 (CI over the cells' bootstrap draws 0.55 [0.32, 0.55]), partial Spearman given the cue distance +0.06. Qwen2-57B-A14B (6 of 8 tasks): antonym 0.35 [0.33, 0.37], object property 0.35 [0.34, 0.37], WG entity → attribute (E3) 0.21 [0.19, 0.24], CounterFact 0.42 [0.40, 0.45], IOI 0.77 [0.76, 0.78], induction (word pairs) 0.70 [0.68, 0.72]; Spearman(grade, share) +0.74 (CI over the cells' bootstrap draws 0.74 [0.68, 0.74]), partial Spearman given the cue distance +0.71. Qwen3-4B-Base (8 of 8 tasks): antonym 0.55 [0.52, 0.59], object property 0.38 [0.36, 0.40], WG entity → attribute (E3) 0.31 [0.29, 0.33], CounterFact 0.56 [0.53, 0.58], WG attribute → entity (E3) 0.63 [0.61, 0.65], binding look-up 0.66 [0.65, 0.67], IOI 0.74 [0.74, 0.75], induction (word pairs) 0.68 [0.66, 0.70]; Spearman(grade, share) +0.87 (CI over the cells' bootstrap draws 0.87 [0.81, 0.87]), partial Spearman given the cue distance +0.85. Qwen3-8B-Base (6 of 8 tasks): antonym 0.54 [0.51, 0.57], object property 0.36 [0.34, 0.38], WG entity → attribute (E3) 0.28 [0.26, 0.30], CounterFact 0.52 [0.49, 0.55], WG attribute → entity (E3) 0.62 [0.60, 0.64], binding look-up † 0.68 [0.67, 0.69], IOI 0.73 [0.72, 0.74]; Spearman(grade, share) +0.55 (CI over the cells' bootstrap draws 0.55 [0.55, 0.70]), partial Spearman given the cue distance -0.03. Qwen3-14B-Base (7 of 8 tasks): antonym 0.59 [0.55, 0.62], object property 0.36 [0.34, 0.38], WG entity → attribute (E3) 0.21 [0.19, 0.23], CounterFact 0.50 [0.47, 0.53], WG attribute → entity (E3) 0.62 [0.61, 0.63], binding look-up 0.65 [0.65, 0.66], IOI 0.73 [0.72, 0.74], induction (word pairs) † 0.67 [0.65, 0.70]; Spearman(grade, share) +0.72 (CI over the cells' bootstrap draws 0.72 [0.58, 0.72]), partial Spearman given the cue distance +0.51. Pre-registered test L9 (Spearman ≥ 0.8 in every model): **failed**.
+
+**Reading.** The bottom of the pre-registered order does not hold: the antonym task (grade 1, predicted ≤ 0.30 / 0.40) has an attention share of 0.35–0.59 across the 8 models, above object property (0.33–0.42) in 7 of 8 models and above the WinoGrande entity → attribute anchor (0.18–0.34) in 8 of 8. Interpretation: the antonym cue is the word itself, one token before the answer, so part of the answer is read off the cue by late attention even though the mapping is stored in the weights; 'answer only in the weights' does not imply a low final-token attention share. The top of the order holds: IOI (0.71–0.92), induction (0.67–0.77) and explicit binding (0.65–0.79) are the most attention-heavy tasks; the three highest shares are copy / look-up tasks (or the attribute → entity anchor) in 5 of 8 models with ≥ 5 non-pooled ladder cells. Spearman(grade, share) per model: Qwen3-30B-A3B +0.81 (without antonym +0.90; 7 cells), Mixtral-8x7B +0.75 (without antonym +0.79; 7 cells), Mistral-7B +0.80 (without antonym +0.88; 7 cells), Qwen2-7B +0.55 (without antonym +0.82; 6 cells), Qwen2-57B-A14B +0.74 (without antonym +0.79; 6 cells), Qwen3-4B +0.87 (without antonym +0.93; 8 cells), Qwen3-8B +0.55 (without antonym +0.82; 6 cells), Qwen3-14B +0.72 (without antonym +0.90; 7 cells). The pre-registered threshold 0.8 is met only where the antonym cell is not too far out of place; dropping it raises the rank correlation in most models. CounterFact stays in the middle (0.41–0.58), between entity → attribute and attribute → entity, in every model that has it.
+
+
+### What was computed
+
+Tasks and grades (fixed in the pre-registration before any Phase-6 GPU job): L-ant antonym 1, L-prop object property 1.5, L-e2a (= Dial-E E3 entity → attribute) 2, L-cf CounterFact 2, L-a2e (= E3 attribute → entity) 3, L-bind explicit binding look-up 4, L-ioi IOI 5, L-ind induction on unrelated word pairs 5. Each task is an STR pair set (one swapped token, equal length, margin ≥ 1 both ways, both orders where two entities are named; RESEARCH_PLAN.md 'Common rules'), with the Phase-3 tier-1 runners. Per model: Spearman of the grade with the measured share; the cue distance (tokens between the swapped token and the final token, median per task) is recorded as a covariate because across tasks it is confounded with the dial (partial Spearman given the cue distance). The Spearman CI uses the cells' independent bootstrap draws (2,000 each). CounterFact for Qwen3 / Mixtral is the Phase-3 donor-level attention sweep (`results/<proto>_str_attnsweep`, no direct-path split or Δp), IOI the Phase-3 S2 → IO run.
+
+![Ladder v2](../figures/ext14_ladder.png)
+
+**Ladder v2: pre-registered grade vs measured attention share (validation; CIs: cluster bootstrap; Spearman CI over the cells' bootstrap draws)**
+
+| Model | Grade | Task | Pairs | Attention share | norm. LD | Δp | A_direct | All-MoE M | Cue distance (tokens) |
+|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | 1.0 | antonym | 126 | 0.51 [0.49, 0.54] | 0.52 [0.49, 0.54] | 0.54 [0.50, 0.58] | 0.14 [0.05, 0.21] | 0.83 [0.77, 0.91] | 1 |
+| Qwen3-30B-A3B | 1.5 | object property | 127 | 0.33 [0.30, 0.36] | 0.34 [0.31, 0.37] | 0.30 [0.25, 0.35] | 0.28 [0.24, 0.32] | 0.68 [0.63, 0.72] | 3 |
+| Qwen3-30B-A3B | 2.0 | WG entity → attribute (E3) | 128 | 0.18 [0.15, 0.21] | 0.18 [0.16, 0.22] | 0.15 [0.10, 0.21] | 0.03 [-0.00, 0.06] | 0.82 [0.81, 0.84] | 1 |
+| Qwen3-30B-A3B | 2.0 | CounterFact | 108 | 0.54 [0.51, 0.57] | 0.54 [0.51, 0.57] | n/a | n/a | n/a | 3 |
+| Qwen3-30B-A3B | 3.0 | WG attribute → entity (E3) | 84 | 0.73 [0.70, 0.76] | 0.74 [0.71, 0.76] | 0.77 [0.74, 0.79] | 1.15 [1.07, 1.23] | 0.16 [0.10, 0.23] | 4 |
+| Qwen3-30B-A3B | 4.0 | binding look-up | 128 | 0.79 [0.77, 0.81] | 0.80 [0.77, 0.81] | 0.82 [0.78, 0.85] | 1.73 [1.67, 1.79] | -0.43 [-0.50, -0.38] | 3 |
+| Qwen3-30B-A3B | 5.0 | induction (word pairs) † | 66 | 0.77 [0.73, 0.80] | 0.76 [0.72, 0.80] | 0.83 [0.78, 0.86] | 1.06 [0.98, 1.14] | -0.09 [-0.17, -0.01] | 1 |
+| Qwen3-30B-A3B | 5.0 | IOI | 128 | 0.92 [0.90, 0.94] | 0.93 [0.91, 0.94] | 0.96 [0.94, 0.98] | 1.40 [1.38, 1.43] | -0.27 [-0.29, -0.25] | 4 |
+| Qwen3-30B-A3B |  | Spearman(grade, share) = 0.81 (CI 0.81 [0.72, 0.81]), partial given cue distance 0.59; Spearman(cue distance, share) 0.76 |  |  |  |  |  |  |  |
+| Mixtral-8x7B | 1.0 | antonym | 126 | 0.48 [0.45, 0.51] | 0.47 [0.44, 0.50] | 0.47 [0.43, 0.51] | 0.20 [0.12, 0.28] | 0.85 [0.76, 0.94] | 1 |
+| Mixtral-8x7B | 1.5 | object property | 128 | 0.42 [0.40, 0.44] | 0.41 [0.39, 0.43] | 0.41 [0.38, 0.43] | 0.59 [0.56, 0.63] | 0.40 [0.36, 0.44] | 3 |
+| Mixtral-8x7B | 2.0 | WG entity → attribute (E3) | 128 | 0.34 [0.33, 0.35] | 0.34 [0.33, 0.36] | 0.31 [0.29, 0.33] | 0.27 [0.25, 0.29] | 0.79 [0.77, 0.81] | 2 |
+| Mixtral-8x7B | 2.0 | CounterFact | 106 | 0.58 [0.55, 0.60] | 0.59 [0.56, 0.62] | n/a | n/a | n/a | 3 |
+| Mixtral-8x7B | 3.0 | WG attribute → entity (E3) † | 113 | 0.52 [0.50, 0.54] | 0.52 [0.50, 0.54] | 0.55 [0.52, 0.58] | 0.86 [0.78, 0.94] | 0.42 [0.38, 0.47] | 6 |
+| Mixtral-8x7B | 4.0 | binding look-up | 128 | 0.71 [0.70, 0.73] | 0.71 [0.70, 0.73] | 0.73 [0.71, 0.74] | 1.75 [1.66, 1.84] | -0.72 [-0.79, -0.66] | 3 |
+| Mixtral-8x7B | 5.0 | induction (word pairs) | 128 | 0.71 [0.69, 0.73] | 0.72 [0.70, 0.73] | 0.79 [0.77, 0.81] | 1.39 [1.32, 1.46] | -0.03 [-0.09, 0.02] | 1 |
+| Mixtral-8x7B | 5.0 | IOI | 128 | 0.80 [0.79, 0.81] | 0.80 [0.79, 0.81] | 0.88 [0.87, 0.89] | 1.17 [1.14, 1.19] | -0.02 [-0.05, -0.00] | 4 |
+| Mixtral-8x7B |  | Spearman(grade, share) = 0.75 (CI 0.75 [0.75, 0.80]), partial given cue distance 0.72; Spearman(cue distance, share) 0.45 |  |  |  |  |  |  |  |
+| Mistral-7B | 1.0 | antonym | 126 | 0.45 [0.42, 0.48] | 0.45 [0.42, 0.48] | 0.42 [0.38, 0.47] | 0.26 [0.19, 0.32] | 0.80 [0.74, 0.87] | 1 |
+| Mistral-7B | 1.5 | object property | 128 | 0.37 [0.35, 0.39] | 0.37 [0.36, 0.39] | 0.34 [0.31, 0.36] | 0.44 [0.41, 0.47] | 0.56 [0.53, 0.59] | 3 |
+| Mistral-7B | 2.0 | WG entity → attribute (E3) | 128 | 0.31 [0.30, 0.33] | 0.32 [0.31, 0.33] | 0.28 [0.25, 0.30] | 0.22 [0.20, 0.24] | 0.85 [0.83, 0.87] | 2 |
+| Mistral-7B | 2.0 | CounterFact | 98 | 0.55 [0.52, 0.57] | 0.55 [0.53, 0.58] | 0.71 [0.62, 0.79] | 0.57 [0.54, 0.60] | 0.47 [0.43, 0.50] | 3 |
+| Mistral-7B | 3.0 | WG attribute → entity (E3) † | 111 | 0.48 [0.46, 0.50] | 0.49 [0.47, 0.51] | 0.51 [0.48, 0.53] | 0.74 [0.67, 0.81] | 0.56 [0.53, 0.59] | 6 |
+| Mistral-7B | 4.0 | binding look-up | 128 | 0.68 [0.66, 0.69] | 0.68 [0.66, 0.69] | 0.70 [0.69, 0.71] | 1.63 [1.55, 1.71] | -0.53 [-0.59, -0.47] | 3 |
+| Mistral-7B | 5.0 | induction (word pairs) | 128 | 0.68 [0.67, 0.70] | 0.69 [0.67, 0.70] | 0.74 [0.73, 0.76] | 1.32 [1.26, 1.39] | 0.25 [0.20, 0.29] | 1 |
+| Mistral-7B | 5.0 | IOI | 128 | 0.78 [0.78, 0.79] | 0.79 [0.78, 0.80] | 0.88 [0.87, 0.89] | 1.09 [1.07, 1.11] | 0.13 [0.11, 0.15] | 4 |
+| Mistral-7B |  | Spearman(grade, share) = 0.80 (CI 0.80 [0.75, 0.80]), partial given cue distance 0.78; Spearman(cue distance, share) 0.32 |  |  |  |  |  |  |  |
+| Qwen2-7B | 1.0 | antonym | 126 | 0.47 [0.45, 0.49] | 0.47 [0.44, 0.49] | 0.50 [0.46, 0.54] | 0.20 [0.13, 0.26] | 0.76 [0.71, 0.82] | 1 |
+| Qwen2-7B | 1.5 | object property | 128 | 0.35 [0.33, 0.37] | 0.36 [0.34, 0.37] | 0.30 [0.27, 0.32] | 0.24 [0.22, 0.27] | 0.76 [0.74, 0.78] | 3 |
+| Qwen2-7B | 2.0 | WG entity → attribute (E3) | 128 | 0.21 [0.19, 0.23] | 0.22 [0.20, 0.24] | 0.20 [0.15, 0.24] | 0.06 [0.05, 0.07] | 0.94 [0.93, 0.95] | 2 |
+| Qwen2-7B | 2.0 | CounterFact | 88 | 0.41 [0.38, 0.44] | 0.42 [0.40, 0.45] | 0.57 [0.52, 0.62] | 0.27 [0.25, 0.30] | 0.74 [0.72, 0.77] | 3 |
+| Qwen2-7B | 3.0 | WG attribute → entity (E3) | 68 | 0.50 [0.47, 0.53] | 0.50 [0.48, 0.53] | 0.54 [0.51, 0.56] | 0.78 [0.68, 0.88] | 0.71 [0.67, 0.74] | 4 |
+| Qwen2-7B | 5.0 | induction (word pairs) † | 92 | 0.68 [0.66, 0.70] | 0.69 [0.66, 0.71] | 0.70 [0.67, 0.73] | 0.84 [0.76, 0.92] | 0.15 [0.09, 0.20] | 1 |
+| Qwen2-7B | 5.0 | IOI | 128 | 0.71 [0.70, 0.72] | 0.71 [0.70, 0.72] | 0.80 [0.78, 0.82] | 1.04 [1.02, 1.07] | 0.39 [0.36, 0.41] | 4 |
+| Qwen2-7B |  | Spearman(grade, share) = 0.55 (CI 0.55 [0.32, 0.55]), partial given cue distance 0.06; Spearman(cue distance, share) 0.62 |  |  |  |  |  |  |  |
+| Qwen2-57B-A14B | 1.0 | antonym | 126 | 0.35 [0.33, 0.37] | 0.35 [0.32, 0.37] | 0.39 [0.35, 0.44] | -0.09 [-0.17, -0.02] | 1.05 [0.98, 1.12] | 1 |
+| Qwen2-57B-A14B | 1.5 | object property | 128 | 0.35 [0.34, 0.37] | 0.36 [0.34, 0.38] | 0.35 [0.32, 0.38] | 0.25 [0.23, 0.27] | 0.74 [0.72, 0.76] | 3 |
+| Qwen2-57B-A14B | 2.0 | WG entity → attribute (E3) | 128 | 0.21 [0.19, 0.24] | 0.22 [0.20, 0.25] | 0.21 [0.16, 0.26] | 0.05 [0.03, 0.06] | 0.92 [0.91, 0.93] | 2 |
+| Qwen2-57B-A14B | 2.0 | CounterFact | 98 | 0.42 [0.40, 0.45] | 0.43 [0.41, 0.46] | 0.59 [0.53, 0.65] | 0.31 [0.29, 0.33] | 0.70 [0.67, 0.72] | 3 |
+| Qwen2-57B-A14B | 5.0 | induction (word pairs) | 128 | 0.70 [0.68, 0.72] | 0.71 [0.70, 0.73] | 0.77 [0.75, 0.78] | 1.38 [1.27, 1.48] | 0.07 [-0.02, 0.15] | 1 |
+| Qwen2-57B-A14B | 5.0 | IOI | 128 | 0.77 [0.76, 0.78] | 0.77 [0.76, 0.78] | 0.86 [0.84, 0.88] | 1.28 [1.25, 1.32] | 0.09 [0.06, 0.12] | 4 |
+| Qwen2-57B-A14B |  | Spearman(grade, share) = 0.74 (CI 0.74 [0.68, 0.74]), partial given cue distance 0.71; Spearman(cue distance, share) 0.44 |  |  |  |  |  |  |  |
+| Qwen3-4B | 1.0 | antonym | 126 | 0.55 [0.52, 0.59] | 0.56 [0.52, 0.59] | 0.64 [0.60, 0.68] | 0.46 [0.40, 0.51] | 0.56 [0.49, 0.63] | 1 |
+| Qwen3-4B | 1.5 | object property | 128 | 0.38 [0.36, 0.40] | 0.39 [0.37, 0.41] | 0.39 [0.37, 0.41] | 0.48 [0.45, 0.52] | 0.56 [0.53, 0.60] | 3 |
+| Qwen3-4B | 2.0 | WG entity → attribute (E3) | 128 | 0.31 [0.29, 0.33] | 0.32 [0.30, 0.34] | 0.25 [0.22, 0.28] | 0.24 [0.22, 0.26] | 0.81 [0.79, 0.83] | 1 |
+| Qwen3-4B | 2.0 | CounterFact | 83 | 0.56 [0.53, 0.58] | 0.55 [0.52, 0.58] | 0.69 [0.62, 0.75] | 0.73 [0.68, 0.79] | 0.38 [0.31, 0.44] | 3 |
+| Qwen3-4B | 3.0 | WG attribute → entity (E3) | 78 | 0.63 [0.61, 0.65] | 0.64 [0.62, 0.66] | 0.68 [0.65, 0.70] | 1.30 [1.22, 1.39] | 0.40 [0.35, 0.44] | 4 |
+| Qwen3-4B | 4.0 | binding look-up | 128 | 0.66 [0.65, 0.67] | 0.66 [0.65, 0.67] | 0.69 [0.68, 0.70] | 1.54 [1.47, 1.60] | 0.13 [0.08, 0.17] | 3 |
+| Qwen3-4B | 5.0 | induction (word pairs) | 128 | 0.68 [0.66, 0.70] | 0.69 [0.67, 0.71] | 0.74 [0.71, 0.75] | 1.02 [0.95, 1.09] | 0.18 [0.12, 0.23] | 1 |
+| Qwen3-4B | 5.0 | IOI | 128 | 0.74 [0.74, 0.75] | 0.74 [0.74, 0.75] | 0.84 [0.82, 0.85] | 1.16 [1.14, 1.18] | 0.41 [0.39, 0.42] | 4 |
+| Qwen3-4B |  | Spearman(grade, share) = 0.87 (CI 0.87 [0.81, 0.87]), partial given cue distance 0.85; Spearman(cue distance, share) 0.44 |  |  |  |  |  |  |  |
+| Qwen3-8B | 1.0 | antonym | 126 | 0.54 [0.51, 0.57] | 0.54 [0.50, 0.57] | 0.62 [0.57, 0.68] | 0.46 [0.37, 0.54] | 0.58 [0.48, 0.67] | 1 |
+| Qwen3-8B | 1.5 | object property | 128 | 0.36 [0.34, 0.38] | 0.37 [0.35, 0.39] | 0.40 [0.38, 0.42] | 0.44 [0.41, 0.47] | 0.61 [0.57, 0.64] | 3 |
+| Qwen3-8B | 2.0 | WG entity → attribute (E3) | 128 | 0.28 [0.26, 0.30] | 0.29 [0.27, 0.31] | 0.21 [0.17, 0.25] | 0.21 [0.19, 0.23] | 0.82 [0.81, 0.84] | 1 |
+| Qwen3-8B | 2.0 | CounterFact | 95 | 0.52 [0.49, 0.55] | 0.51 [0.48, 0.54] | 0.72 [0.63, 0.79] | 0.71 [0.64, 0.76] | 0.39 [0.33, 0.45] | 3 |
+| Qwen3-8B | 3.0 | WG attribute → entity (E3) | 128 | 0.62 [0.60, 0.64] | 0.63 [0.60, 0.64] | 0.69 [0.67, 0.71] | 1.18 [1.11, 1.24] | 0.39 [0.36, 0.42] | 4 |
+| Qwen3-8B | 4.0 | binding look-up † | 80 | 0.68 [0.67, 0.69] | 0.68 [0.67, 0.69] | 0.69 [0.68, 0.71] | 1.85 [1.74, 1.95] | -0.01 [-0.08, 0.05] | 3 |
+| Qwen3-8B | 5.0 | IOI | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.82 [0.80, 0.83] | 1.20 [1.18, 1.23] | 0.41 [0.39, 0.42] | 4 |
+| Qwen3-8B |  | Spearman(grade, share) = 0.55 (CI 0.55 [0.55, 0.70]), partial given cue distance -0.03; Spearman(cue distance, share) 0.72 |  |  |  |  |  |  |  |
+| Qwen3-14B | 1.0 | antonym | 126 | 0.59 [0.55, 0.62] | 0.58 [0.54, 0.61] | 0.67 [0.62, 0.72] | 0.56 [0.47, 0.65] | 0.42 [0.33, 0.52] | 1 |
+| Qwen3-14B | 1.5 | object property | 128 | 0.36 [0.34, 0.38] | 0.36 [0.35, 0.38] | 0.29 [0.27, 0.31] | 0.45 [0.42, 0.48] | 0.62 [0.58, 0.65] | 3 |
+| Qwen3-14B | 2.0 | WG entity → attribute (E3) | 128 | 0.21 [0.19, 0.23] | 0.21 [0.20, 0.23] | 0.15 [0.14, 0.18] | 0.13 [0.11, 0.16] | 0.85 [0.83, 0.86] | 2 |
+| Qwen3-14B | 2.0 | CounterFact | 88 | 0.50 [0.47, 0.53] | 0.50 [0.47, 0.54] | 0.55 [0.45, 0.65] | 0.58 [0.54, 0.62] | 0.51 [0.47, 0.56] | 3 |
+| Qwen3-14B | 3.0 | WG attribute → entity (E3) | 128 | 0.62 [0.61, 0.63] | 0.62 [0.60, 0.63] | 0.68 [0.66, 0.70] | 1.26 [1.20, 1.32] | 0.40 [0.37, 0.43] | 4 |
+| Qwen3-14B | 4.0 | binding look-up | 128 | 0.65 [0.65, 0.66] | 0.66 [0.65, 0.66] | 0.69 [0.69, 0.70] | 1.43 [1.38, 1.49] | 0.11 [0.06, 0.15] | 3 |
+| Qwen3-14B | 5.0 | induction (word pairs) † | 64 | 0.67 [0.65, 0.70] | 0.68 [0.66, 0.70] | 0.73 [0.71, 0.75] | 1.23 [1.13, 1.33] | 0.05 [-0.02, 0.12] | 1 |
+| Qwen3-14B | 5.0 | IOI | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.74 [0.72, 0.76] | 1.14 [1.12, 1.16] | 0.38 [0.36, 0.39] | 4 |
+| Qwen3-14B |  | Spearman(grade, share) = 0.72 (CI 0.72 [0.58, 0.72]), partial given cue distance 0.51; Spearman(cue distance, share) 0.60 |  |  |  |  |  |  |  |
+
+
+### Pre-registered predictions
+
+| ID | Prediction | Observed | Verdict |
+|---|---|---|---|
+| L1 | L-ant: <= 0.30 | qwen3: 0.51 [0.49, 0.54] (failed) | **failed** |
+| L2 | L-ant: <= 0.40 | mixtral_bos: 0.48 [0.45, 0.51] (failed) | **failed** |
+| L3 | L-prop: 0.30-0.55 | qwen3: 0.33 [0.30, 0.36] (held) | **held** |
+| L4 | L-prop: 0.35-0.60 | mixtral_bos: 0.42 [0.40, 0.44] (held) | **held** |
+| L5 | L-bind: >= 0.75 | qwen3: 0.79 [0.77, 0.81] (held) | **held** |
+| L6 | L-bind: >= 0.65 | mixtral_bos: 0.71 [0.70, 0.73] (held) | **held** |
+| L7 | L-ind: >= 0.85 | qwen3: 0.77 [0.73, 0.80] (insufficient (pooled only)) | **insufficient (pooled only)** |
+| L8 | L-ind: >= 0.75 | mixtral_bos: 0.71 [0.69, 0.73] (failed) | **failed** |
+| L9 | ladder: >= 0.8 in every model | qwen3: 0.81 (held); mixtral_bos: 0.75 (failed); mistral7b_bos: 0.80 (held); qwen2_7b: 0.55 (failed); qwen2_57b: 0.74 (failed); qwen3_4b: 0.87 (held); qwen3_8b: 0.55 (failed); qwen3_14b: 0.72 (failed) | **failed** |
+
+
+### Caveats
+
+- Grades are ordinal and assigned by hand; ties (grade 2: L-e2a and L-cf; grade 5: L-ioi and L-ind) enter Spearman as ties.
+- Across tasks, prompt length, cue distance, answer type and item source change together with the dial; only the Dial-E contrasts (same WinoGrande twins, `ext14_dial.md`) hold the items fixed.
+- A task reaches the table only with ≥ 64 validation pairs (R5); smaller tasks are listed as insufficient in the registry.
+
+### Files
+
+`moetrace/ext14_analysis.py` (`ladder`, `CellData`, `summarise`), `scripts/ext14_all.py`; `results/ext14_summary.json` keys `ladder`, `cells`, `predictions`; `results/tables/ext14_ladder.md`, `results/figures/ext14_ladder.png`.
+
+
+## Direction 14b: Phase 6 dials on the same WinoGrande items (explicitness, associativity, statement vs event)
+
+**Summary.** Dial E (P6-2) turns one dial on the same WinoGrande twins: the evidence part of the sentence changes from the binding stated verbatim (E1) to a paraphrase (E1p), a negation (E2) and the original event (E3), while the question line, the STR position and the frame stay fixed. Attention share (validation): Qwen3-30B-A3B-Base: attribute → entity: E1 0.81 [0.78, 0.83], E1p 0.83 [0.80, 0.85], E3 (P3) 0.77 [0.74, 0.80], E3 (F1) 0.73 [0.70, 0.76]; entity → attribute: E1 0.22 [0.20, 0.26], E1p 0.24 [0.21, 0.29], E3 0.18 [0.15, 0.21]; direction gap (a→e − e→a, common twins, n = 48 / 26) at E1 +0.57 [+0.52, +0.60] vs E3 +0.51 [+0.44, +0.55] → **H-type**. Mixtral-8x7B (BOS): attribute → entity: E1 0.62 [0.60, 0.64], E3 (P3) 0.55 [0.53, 0.57], E3 (F1) 0.52 [0.50, 0.54]; entity → attribute: E1 0.50 [0.47, 0.53], E1p 0.47 [0.44, 0.50], E3 0.34 [0.33, 0.35]; direction gap (a→e − e→a, common twins, n = 6 / 48) at E1 +0.12 [+0.03, +0.19] vs E3 +0.21 [+0.19, +0.24] → **not tested: a pooled cell**. Pre-registered predictions: held E1, E5, E11, E12; failed E2, E7, E9, E13; insufficient data E3, E4, E10, E14.
+
+**Reading.** Qwen3: making the binding explicit barely moves the attention share within a direction — attribute → entity E1 0.81, E1p 0.83, E3 in the same frame 0.77, E3 in the F1 frame 0.73, and even with no evidence at all (E0, prior only) 0.73; entity → attribute E1 0.22, E1p 0.24, E3 0.18. The direction gap stays at E1: a→e − e→a = +0.57 [+0.52, +0.60] at E1 vs +0.51 [+0.44, +0.55] at E3 (pairwise (independent resamples of the two gaps); twins 48 / 26), gap(E1) − ½·gap(E3) = +0.32 [+0.26, +0.37]: H-type, not the best-guess H-inference (E13). The share follows the answer type (entity vs attribute), not the number of inference steps between the evidence and the answer. Mixtral: a→e E1 0.62, E3 (P3) 0.55; e→a E1 0.50 (pooled), E3 0.34; the gap shrinks from +0.21 [+0.19, +0.24] at E3 to +0.12 [+0.03, +0.19] at E1 (only 6 / 48 twins, a pooled cell: not usable for E13). Explicit statements raise Mixtral's entity → attribute share, so the two models differ in how much the explicit binding is moved by attention when the answer is an attribute. Direction gap at E1 vs E3 on the models' own sets (a→e − e→a): Qwen3-30B-A3B +0.59 [+0.54, +0.62] vs +0.60 [+0.54, +0.64]; Mixtral-8x7B +0.12 [+0.08, +0.15] vs +0.22 [+0.19, +0.24]; Mistral-7B +0.12 [+0.08, +0.16] vs +0.24 [+0.22, +0.26]; Qwen2-7B +0.25 [+0.22, +0.27] vs +0.35 [+0.33, +0.37]; Qwen2-57B-A14B +0.21 [+0.18, +0.24] vs +0.35 [+0.32, +0.38]; Qwen3-4B +0.12 [+0.09, +0.16] vs +0.37 [+0.34, +0.40]; Qwen3-8B +0.13 [+0.11, +0.16] vs +0.36 [+0.34, +0.39]; Qwen3-14B +0.20 [+0.17, +0.23] vs +0.44 [+0.41, +0.46]. In every model the gap is positive at both levels; whether it narrows at E1 depends on the model (ext14_direction_gap_models.md). E2 (negation) could not be patched in any model (too few pairs pass the margin rule); behaviourally the copy trap wins the attribute → entity cloze in the Qwen3 family (Qwen3-30B-A3B 0.59 [0.57, 0.61], Qwen3-4B 0.60 [0.58, 0.62], Qwen3-8B 0.41 [0.39, 0.43], Qwen3-14B 0.56 [0.54, 0.58], Qwen3-1.7B 0.04 [0.03, 0.05] of pairs by the margin rule, target 0.00), while Mistral / Mixtral / Qwen2 rarely pass either way. Dial A (Qwen3, attribute → entity): conflict 0.83 ≥ neutral 0.81 > agree 0.79 > E0 0.73 — the pre-registered order holds but spans only 0.10; in conflict items the MoE's direct write points against the stated answer (-0.30 [-0.35, -0.26], A2), i.e. the MoE writes the prior and attention overrides it.
+
+
+### What was computed
+
+Items: the Phase-3 776 WinoGrande twins (plus train_xl twins where a level had < 256 margin pairs), built once per tokenizer family by p6-data (`data/dial/`, `data/dial/build_report.md`). The discovery / validation split is fixed per twin, so a twin is in the same split at every level; paired contrasts use the twins common to the cells compared and the same cluster resamples (unit = twin, 5,000 resamples). Two-entity frames are built in both orders and an item counts only if both orders pass. Frames: attribute → entity, E1-family levels (E1, E1p, E2, E0, R-site, Dial A) and the frame-matched E3p3 = frame P3 `<evidence>. Fill in the blank: The _ was X.\nAnswer: the` (STR = the attribute X in the question; frame pilot below); the Phase-5 anchor E3 = the F1 cloze `Fill in the blank: <sentence>\nAnswer: the`; entity → attribute = the Phase-3 option-swap form at every level (STR = the entity before the copula). Readouts as Phase 5: attention share, A_direct, M_direct, all-MoE M, hand-off layers of the position × layer residual grid, head singles (`ext14_cells.md`).
+
+### Frame pilot (behaviour, before the Dial-E runs)
+
+The E1 attribute → entity cloze in the original frame P0 (`Fill in the blank: {A} and {B}, so the _ was X.`) gave chance-level behaviour, so before any Dial-E patching p6-data piloted five frames on the same 200 core twins (both statement orders, both models; `data/dial/qa/frame_pilot.md`). Frame P3 (`{A} and {B}. Fill in the blank: The _ was X.
+Answer: the`) was adopted for every E1-family a→e cell (E1, E1p, E2, E0, R-site, Dial A); `e3p3_a2e` puts the E3 event clause into the same frame and is the frame-matched E3 of the paired a→e dial, while the F1 `e3_a2e` remains the Phase-5 anchor. The low P0 competence is itself a behavioural finding (a frame artefact, not a property of the evidence). All items, both models:
+
+| Model | Frame | Stratum | Items | Margin both ways | Correct both directions | Items both orders margin | Order gap (o1 - o2) | First-mention bias | Median drop |
+|---|---|---|---|---|---|---|---|---|---|
+| qwen3 | P0 | all | 200 | 0.17 | 0.47 | 0.09 | +0.01 | +0.54 | 1.62 |
+| qwen3 | P1 | all | 200 | 0.14 | 0.50 | 0.04 | +0.02 | +0.01 | 1.38 |
+| qwen3 | P2 | all | 200 | 0.81 | 0.95 | 0.68 | -0.08 | +0.10 | 4.62 |
+| qwen3 | P3 | all | 200 | 0.96 | 0.98 | 0.93 | +0.00 | +0.11 | 7.06 |
+| qwen3 | P4 | all | 200 | 0.47 | 0.78 | 0.31 | -0.03 | -0.06 | 3.50 |
+| mixtral_bos | P0 | all | 200 | 0.01 | 0.05 | 0.01 | -0.01 | +0.18 | -0.38 |
+| mixtral_bos | P1 | all | 200 | 0.01 | 0.06 | 0.01 | +0.00 | +0.09 | -0.50 |
+| mixtral_bos | P2 | all | 200 | 0.03 | 0.21 | 0.01 | -0.01 | -0.18 | 0.25 |
+| mixtral_bos | P3 | all | 200 | 0.24 | 0.77 | 0.14 | -0.01 | +0.13 | 2.00 |
+| mixtral_bos | P4 | all | 200 | 0.29 | 0.61 | 0.16 | +0.05 | -0.37 | 2.12 |
+
+
+### Dial E: explicitness
+
+![Dial E](../figures/ext14_dial_e.png)
+
+**Direction gap a→e − e→a of the attention share per model and level (each cell's own validation set; independent cluster bootstraps)**
+
+| Model | E1 | E1p | E3 (a→e in P3) | E3 (a→e in F1) | E0 |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B | +0.59 [+0.54, +0.62] | +0.59 [+0.53, +0.63] | +0.60 [+0.54, +0.64] | +0.56 [+0.51, +0.59] | +0.29 [+0.26, +0.31] † |
+| Mixtral-8x7B | +0.12 [+0.08, +0.15] † |  | +0.22 [+0.19, +0.24] | +0.18 [+0.16, +0.20] † |  |
+| Mistral-7B | +0.12 [+0.08, +0.16] † (all strata) |  | +0.24 [+0.22, +0.26] † | +0.17 [+0.15, +0.19] † |  |
+| Qwen2-7B | +0.25 [+0.22, +0.27] | +0.27 [+0.24, +0.30] | +0.35 [+0.33, +0.37] | +0.29 [+0.26, +0.32] |  |
+| Qwen2-57B-A14B | +0.21 [+0.18, +0.24] |  | +0.35 [+0.32, +0.38] |  |  |
+| Qwen3-4B | +0.12 [+0.09, +0.16] | +0.14 [+0.12, +0.17] | +0.37 [+0.34, +0.40] | +0.32 [+0.29, +0.35] |  |
+| Qwen3-8B | +0.13 [+0.11, +0.16] | +0.11 [+0.08, +0.14] | +0.36 [+0.34, +0.39] | +0.34 [+0.31, +0.37] |  |
+| Qwen3-14B | +0.20 [+0.17, +0.23] | +0.27 [+0.24, +0.30] | +0.44 [+0.41, +0.46] | +0.41 [+0.38, +0.43] |  |
+
+Own sets, so the two directions are not on identical twins (paired contrasts for Qwen3 / Mixtral in ext14_dial_e_paired.md). † = pooled cell.
+
+
+**Dial E: attention share per level and direction (own validation sets)**
+
+| Model | Direction | Level | Pairs | Share | norm. LD | Δp | A_direct | M_direct | All-MoE M | Clean top-1 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | attribute → entity | E1 stated verbatim | 128 | 0.81 [0.78, 0.83] | 0.81 [0.78, 0.82] | 0.85 [0.82, 0.87] | 1.33 [1.29, 1.37] | -0.33 [-0.37, -0.29] | -0.16 [-0.20, -0.13] | 0.95 [0.90, 0.98] |
+| Qwen3-30B-A3B | attribute → entity | E1p paraphrase | 128 | 0.83 [0.80, 0.85] | 0.82 [0.80, 0.84] | 0.85 [0.83, 0.87] | 1.36 [1.31, 1.41] | -0.36 [-0.41, -0.31] | -0.15 [-0.21, -0.10] | 0.98 [0.96, 1.00] |
+| Qwen3-30B-A3B | attribute → entity | E3 event, P3 frame (frame-matched) | 70 | 0.77 [0.74, 0.80] | 0.78 [0.75, 0.81] | 0.82 [0.78, 0.84] | 1.23 [1.16, 1.30] | -0.23 [-0.30, -0.16] | 0.11 [0.05, 0.17] | 0.85 [0.78, 0.91] |
+| Qwen3-30B-A3B | attribute → entity | E3 event (original) | 84 | 0.73 [0.70, 0.76] | 0.74 [0.71, 0.76] | 0.77 [0.74, 0.79] | 1.15 [1.07, 1.23] | -0.15 [-0.23, -0.07] | 0.16 [0.10, 0.23] | 0.77 [0.69, 0.84] |
+| Qwen3-30B-A3B | attribute → entity | E0 prior only | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.76 [0.73, 0.78] | 0.97 [0.93, 1.02] | 0.03 [-0.02, 0.07] | 0.16 [0.12, 0.21] | 1.00 [1.00, 1.00] |
+| Qwen3-30B-A3B | entity → attribute | E1 stated verbatim | 128 | 0.22 [0.20, 0.26] | 0.24 [0.21, 0.29] | 0.27 [0.22, 0.33] | 0.06 [0.02, 0.11] | 0.94 [0.89, 0.98] | 0.82 [0.79, 0.84] | 0.29 [0.21, 0.37] |
+| Qwen3-30B-A3B | entity → attribute | E1p paraphrase | 128 | 0.24 [0.21, 0.29] | 0.28 [0.23, 0.33] | 0.26 [0.20, 0.32] | 0.14 [0.10, 0.18] | 0.86 [0.82, 0.90] | 0.84 [0.80, 0.87] | 0.18 [0.11, 0.24] |
+| Qwen3-30B-A3B | entity → attribute | E3 event (original) | 128 | 0.18 [0.15, 0.21] | 0.18 [0.16, 0.22] | 0.15 [0.10, 0.21] | 0.03 [-0.00, 0.06] | 0.97 [0.94, 1.00] | 0.82 [0.81, 0.84] | 0.48 [0.40, 0.55] |
+| Qwen3-30B-A3B | entity → attribute | E0 prior only † | 100 | 0.44 [0.42, 0.47] | 0.45 [0.42, 0.48] | 0.42 [0.36, 0.54] | 0.38 [0.35, 0.40] | 0.62 [0.60, 0.65] | 0.60 [0.58, 0.63] | 0.02 [0.00, 0.06] |
+| Mixtral-8x7B | attribute → entity | E1 stated verbatim | 90 | 0.62 [0.60, 0.64] | 0.62 [0.60, 0.64] | 0.65 [0.62, 0.67] | 1.04 [0.91, 1.17] | -0.04 [-0.17, 0.09] | 0.33 [0.25, 0.41] | 0.99 [0.98, 1.00] |
+| Mixtral-8x7B | attribute → entity | E3 event, P3 frame (frame-matched) | 80 | 0.55 [0.53, 0.57] | 0.56 [0.54, 0.58] | 0.59 [0.57, 0.62] | 0.84 [0.76, 0.91] | 0.16 [0.09, 0.24] | 0.46 [0.43, 0.50] | 0.82 [0.76, 0.89] |
+| Mixtral-8x7B | attribute → entity | E3 event (original) † | 113 | 0.52 [0.50, 0.54] | 0.52 [0.50, 0.54] | 0.55 [0.52, 0.58] | 0.86 [0.78, 0.94] | 0.14 [0.06, 0.22] | 0.42 [0.38, 0.47] | 0.68 [0.61, 0.75] |
+| Mixtral-8x7B | entity → attribute | E1 stated verbatim † | 80 | 0.50 [0.47, 0.53] | 0.50 [0.48, 0.53] | 0.48 [0.45, 0.51] | 0.69 [0.58, 0.80] | 0.31 [0.20, 0.42] | 0.29 [0.22, 0.36] | 0.70 [0.56, 0.82] |
+| Mixtral-8x7B | entity → attribute | E1p paraphrase † | 110 | 0.47 [0.44, 0.50] | 0.47 [0.44, 0.51] | 0.43 [0.41, 0.47] | 0.52 [0.47, 0.57] | 0.48 [0.43, 0.53] | 0.51 [0.46, 0.56] | 0.11 [0.06, 0.17] |
+| Mixtral-8x7B | entity → attribute | E3 event (original) | 128 | 0.34 [0.33, 0.35] | 0.34 [0.33, 0.36] | 0.31 [0.29, 0.33] | 0.27 [0.25, 0.29] | 0.73 [0.71, 0.75] | 0.79 [0.77, 0.81] | 0.50 [0.43, 0.58] |
+| Mistral-7B | attribute → entity | E3 event, P3 frame (frame-matched) † | 106 | 0.56 [0.54, 0.57] | 0.56 [0.54, 0.57] | 0.57 [0.55, 0.59] | 0.92 [0.86, 0.99] | 0.08 [0.01, 0.14] | 0.52 [0.48, 0.55] | 0.89 [0.84, 0.94] |
+| Mistral-7B | attribute → entity | E3 event (original) † | 111 | 0.48 [0.46, 0.50] | 0.49 [0.47, 0.51] | 0.51 [0.48, 0.53] | 0.74 [0.67, 0.81] | 0.26 [0.19, 0.33] | 0.56 [0.53, 0.59] | 0.68 [0.61, 0.76] |
+| Mistral-7B | entity → attribute | E3 event (original) | 128 | 0.31 [0.30, 0.33] | 0.32 [0.31, 0.33] | 0.28 [0.25, 0.30] | 0.22 [0.20, 0.24] | 0.78 [0.76, 0.80] | 0.85 [0.83, 0.87] | 0.45 [0.38, 0.52] |
+| Qwen2-7B | attribute → entity | E1 stated verbatim | 128 | 0.62 [0.61, 0.63] | 0.61 [0.60, 0.62] | 0.66 [0.65, 0.67] | 0.89 [0.85, 0.93] | 0.11 [0.07, 0.15] | 0.74 [0.72, 0.76] | 1.00 [1.00, 1.00] |
+| Qwen2-7B | attribute → entity | E1p paraphrase | 128 | 0.62 [0.61, 0.63] | 0.61 [0.59, 0.62] | 0.64 [0.62, 0.66] | 0.93 [0.88, 0.97] | 0.07 [0.03, 0.12] | 0.65 [0.62, 0.68] | 1.00 [1.00, 1.00] |
+| Qwen2-7B | attribute → entity | E3 event, P3 frame (frame-matched) | 96 | 0.56 [0.55, 0.58] | 0.56 [0.54, 0.57] | 0.59 [0.57, 0.60] | 0.92 [0.86, 0.98] | 0.08 [0.02, 0.14] | 0.66 [0.63, 0.69] | 0.92 [0.88, 0.96] |
+| Qwen2-7B | attribute → entity | E3 event (original) | 68 | 0.50 [0.47, 0.53] | 0.50 [0.48, 0.53] | 0.54 [0.51, 0.56] | 0.78 [0.68, 0.88] | 0.22 [0.12, 0.32] | 0.71 [0.67, 0.74] | 0.78 [0.69, 0.86] |
+| Qwen2-7B | entity → attribute | E1 stated verbatim | 128 | 0.37 [0.35, 0.40] | 0.38 [0.36, 0.41] | 0.41 [0.38, 0.44] | 0.34 [0.26, 0.41] | 0.66 [0.59, 0.74] | 0.68 [0.63, 0.73] | 0.60 [0.50, 0.71] |
+| Qwen2-7B | entity → attribute | E1p paraphrase | 128 | 0.35 [0.33, 0.37] | 0.36 [0.34, 0.38] | 0.36 [0.32, 0.40] | 0.23 [0.20, 0.26] | 0.77 [0.74, 0.80] | 0.82 [0.79, 0.84] | 0.24 [0.16, 0.31] |
+| Qwen2-7B | entity → attribute | E3 event (original) | 128 | 0.21 [0.19, 0.23] | 0.22 [0.20, 0.24] | 0.20 [0.15, 0.24] | 0.06 [0.05, 0.07] | 0.94 [0.93, 0.95] | 0.94 [0.93, 0.95] | 0.47 [0.40, 0.55] |
+| Qwen2-57B-A14B | attribute → entity | E1 stated verbatim | 128 | 0.60 [0.58, 0.61] | 0.60 [0.58, 0.61] | 0.63 [0.62, 0.65] | 1.08 [1.01, 1.16] | -0.08 [-0.16, -0.01] | 0.52 [0.48, 0.55] | 0.99 [0.98, 1.00] |
+| Qwen2-57B-A14B | attribute → entity | E3 event, P3 frame (frame-matched) | 128 | 0.57 [0.55, 0.58] | 0.56 [0.55, 0.58] | 0.61 [0.59, 0.63] | 1.00 [0.95, 1.05] | 0.00 [-0.05, 0.05] | 0.67 [0.65, 0.70] | 0.85 [0.79, 0.89] |
+| Qwen2-57B-A14B | entity → attribute | E1 stated verbatim | 128 | 0.38 [0.36, 0.41] | 0.40 [0.37, 0.42] | 0.43 [0.38, 0.47] | 0.23 [0.19, 0.28] | 0.77 [0.72, 0.81] | 0.81 [0.79, 0.83] | 0.12 [0.06, 0.19] |
+| Qwen2-57B-A14B | entity → attribute | E3 event (original) | 128 | 0.21 [0.19, 0.24] | 0.22 [0.20, 0.25] | 0.21 [0.16, 0.26] | 0.05 [0.03, 0.06] | 0.95 [0.94, 0.97] | 0.92 [0.91, 0.93] | 0.46 [0.39, 0.53] |
+| Qwen3-4B | attribute → entity | E1 stated verbatim | 128 | 0.70 [0.69, 0.71] | 0.70 [0.69, 0.71] | 0.77 [0.76, 0.79] | 1.48 [1.42, 1.56] | -0.48 [-0.56, -0.42] | 0.12 [0.06, 0.17] | 0.87 [0.80, 0.92] |
+| Qwen3-4B | attribute → entity | E1p paraphrase | 128 | 0.69 [0.67, 0.70] | 0.69 [0.67, 0.70] | 0.73 [0.71, 0.74] | 1.48 [1.41, 1.55] | -0.48 [-0.55, -0.41] | 0.18 [0.13, 0.23] | 0.96 [0.93, 0.99] |
+| Qwen3-4B | attribute → entity | E3 event, P3 frame (frame-matched) | 76 | 0.68 [0.66, 0.70] | 0.69 [0.67, 0.71] | 0.71 [0.68, 0.73] | 1.26 [1.19, 1.33] | -0.26 [-0.33, -0.19] | 0.32 [0.27, 0.37] | 0.78 [0.71, 0.85] |
+| Qwen3-4B | attribute → entity | E3 event (original) | 78 | 0.63 [0.61, 0.65] | 0.64 [0.62, 0.66] | 0.68 [0.65, 0.70] | 1.30 [1.22, 1.39] | -0.30 [-0.39, -0.22] | 0.40 [0.35, 0.44] | 0.78 [0.70, 0.85] |
+| Qwen3-4B | entity → attribute | E1 stated verbatim | 128 | 0.58 [0.55, 0.61] | 0.59 [0.56, 0.62] | 0.63 [0.61, 0.66] | 0.67 [0.58, 0.76] | 0.33 [0.24, 0.42] | 0.32 [0.26, 0.38] | 0.54 [0.44, 0.64] |
+| Qwen3-4B | entity → attribute | E1p paraphrase | 120 | 0.54 [0.52, 0.56] | 0.55 [0.53, 0.57] | 0.55 [0.53, 0.57] | 0.59 [0.54, 0.66] | 0.41 [0.34, 0.46] | 0.45 [0.41, 0.49] | 0.11 [0.06, 0.17] |
+| Qwen3-4B | entity → attribute | E3 event (original) | 128 | 0.31 [0.29, 0.33] | 0.32 [0.30, 0.34] | 0.25 [0.22, 0.28] | 0.24 [0.22, 0.26] | 0.76 [0.74, 0.78] | 0.81 [0.79, 0.83] | 0.52 [0.45, 0.59] |
+| Qwen3-8B | attribute → entity | E1 stated verbatim | 128 | 0.69 [0.67, 0.70] | 0.69 [0.67, 0.70] | 0.76 [0.75, 0.77] | 1.34 [1.28, 1.41] | -0.34 [-0.41, -0.28] | 0.14 [0.09, 0.19] | 0.99 [0.98, 1.00] |
+| Qwen3-8B | attribute → entity | E1p paraphrase | 128 | 0.62 [0.60, 0.64] | 0.62 [0.60, 0.64] | 0.66 [0.64, 0.68] | 1.31 [1.25, 1.38] | -0.31 [-0.38, -0.25] | 0.21 [0.17, 0.26] | 1.00 [1.00, 1.00] |
+| Qwen3-8B | attribute → entity | E3 event, P3 frame (frame-matched) | 110 | 0.64 [0.63, 0.66] | 0.65 [0.63, 0.67] | 0.70 [0.68, 0.72] | 1.20 [1.14, 1.26] | -0.20 [-0.26, -0.14] | 0.40 [0.37, 0.43] | 0.89 [0.84, 0.93] |
+| Qwen3-8B | attribute → entity | E3 event (original) | 128 | 0.62 [0.60, 0.64] | 0.63 [0.60, 0.64] | 0.69 [0.67, 0.71] | 1.18 [1.11, 1.24] | -0.18 [-0.24, -0.11] | 0.39 [0.36, 0.42] | 0.83 [0.77, 0.88] |
+| Qwen3-8B | entity → attribute | E1 stated verbatim | 118 | 0.55 [0.53, 0.58] | 0.55 [0.53, 0.57] | 0.61 [0.59, 0.64] | 0.64 [0.55, 0.74] | 0.36 [0.26, 0.45] | 0.28 [0.22, 0.35] | 0.63 [0.51, 0.73] |
+| Qwen3-8B | entity → attribute | E1p paraphrase | 120 | 0.51 [0.48, 0.53] | 0.52 [0.49, 0.54] | 0.56 [0.53, 0.59] | 0.51 [0.47, 0.56] | 0.49 [0.44, 0.53] | 0.49 [0.45, 0.52] | 0.08 [0.04, 0.14] |
+| Qwen3-8B | entity → attribute | E3 event (original) | 128 | 0.28 [0.26, 0.30] | 0.29 [0.27, 0.31] | 0.21 [0.17, 0.25] | 0.21 [0.19, 0.23] | 0.79 [0.77, 0.81] | 0.82 [0.81, 0.84] | 0.39 [0.31, 0.46] |
+| Qwen3-14B | attribute → entity | E1 stated verbatim | 128 | 0.66 [0.65, 0.68] | 0.66 [0.64, 0.67] | 0.74 [0.72, 0.76] | 1.39 [1.31, 1.48] | -0.39 [-0.48, -0.31] | 0.29 [0.23, 0.34] | 1.00 [1.00, 1.00] |
+| Qwen3-14B | attribute → entity | E1p paraphrase | 128 | 0.66 [0.64, 0.68] | 0.65 [0.64, 0.67] | 0.74 [0.72, 0.77] | 1.39 [1.31, 1.48] | -0.39 [-0.48, -0.31] | 0.31 [0.25, 0.36] | 1.00 [0.99, 1.00] |
+| Qwen3-14B | attribute → entity | E3 event, P3 frame (frame-matched) | 128 | 0.65 [0.63, 0.66] | 0.65 [0.63, 0.66] | 0.72 [0.70, 0.74] | 1.19 [1.13, 1.25] | -0.19 [-0.25, -0.13] | 0.44 [0.40, 0.48] | 0.88 [0.84, 0.92] |
+| Qwen3-14B | attribute → entity | E3 event (original) | 128 | 0.62 [0.61, 0.63] | 0.62 [0.60, 0.63] | 0.68 [0.66, 0.70] | 1.26 [1.20, 1.32] | -0.26 [-0.32, -0.20] | 0.40 [0.37, 0.43] | 0.83 [0.78, 0.88] |
+| Qwen3-14B | entity → attribute | E1 stated verbatim | 128 | 0.46 [0.44, 0.49] | 0.47 [0.45, 0.50] | 0.48 [0.44, 0.51] | 0.42 [0.35, 0.50] | 0.58 [0.50, 0.65] | 0.58 [0.53, 0.62] | 0.47 [0.39, 0.56] |
+| Qwen3-14B | entity → attribute | E1p paraphrase | 128 | 0.39 [0.37, 0.42] | 0.40 [0.37, 0.42] | 0.39 [0.28, 0.49] | 0.31 [0.27, 0.35] | 0.69 [0.65, 0.73] | 0.72 [0.68, 0.75] | 0.17 [0.11, 0.23] |
+| Qwen3-14B | entity → attribute | E3 event (original) | 128 | 0.21 [0.19, 0.23] | 0.21 [0.20, 0.23] | 0.15 [0.14, 0.18] | 0.13 [0.11, 0.16] | 0.87 [0.84, 0.89] | 0.85 [0.83, 0.86] | 0.46 [0.38, 0.53] |
+
+
+**Dial E: paired contrasts on the common WinoGrande twins (same cluster resamples for both cells)**
+
+| Model | Direction | Contrast | Common twins | Share a | Share b | Δ share | Δ A_direct | Δ M |
+|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | attribute → entity | E1p − E1 | 43 | 0.83 [0.80, 0.85] | 0.83 [0.80, 0.85] | +0.01 [-0.01, +0.02] | +0.04 [+0.01, +0.08] | -0.02 [-0.06, +0.02] |
+| Qwen3-30B-A3B | attribute → entity | E1 − E3 | 19 | 0.84 [0.80, 0.87] | 0.72 [0.67, 0.77] | +0.12 [+0.07, +0.18] | +0.16 [-0.01, +0.31] | -0.28 [-0.41, -0.15] |
+| Qwen3-30B-A3B | attribute → entity | E1p − E3 | 17 | 0.86 [0.81, 0.89] | 0.74 [0.69, 0.78] | +0.12 [+0.07, +0.17] | +0.23 [+0.09, +0.39] | -0.38 [-0.48, -0.28] |
+| Qwen3-30B-A3B | attribute → entity | E1 − E3p3 | 19 | 0.83 [0.77, 0.87] | 0.76 [0.69, 0.80] | +0.07 [+0.01, +0.13] | +0.09 [-0.04, +0.21] | -0.22 [-0.32, -0.12] |
+| Qwen3-30B-A3B | attribute → entity | E1p − E3p3 | 16 | 0.86 [0.80, 0.89] | 0.77 [0.71, 0.82] | +0.09 [+0.04, +0.14] | +0.03 [-0.07, +0.12] | -0.17 [-0.24, -0.09] |
+| Qwen3-30B-A3B | attribute → entity | E3p3 − E3 | 28 | 0.78 [0.73, 0.82] | 0.74 [0.69, 0.77] | +0.04 [-0.00, +0.09] | +0.09 [+0.02, +0.16] | -0.03 [-0.10, +0.04] |
+| Qwen3-30B-A3B | entity → attribute | E1p − E1 | 46 | 0.21 [0.18, 0.26] | 0.21 [0.19, 0.25] | +0.00 [-0.04, +0.04] | +0.07 [+0.03, +0.11] | +0.03 [+0.01, +0.05] |
+| Qwen3-30B-A3B | entity → attribute | E1 − E3 | 64 | 0.22 [0.20, 0.26] | 0.17 [0.14, 0.22] | +0.05 [+0.00, +0.10] | +0.00 [-0.04, +0.05] | -0.01 [-0.04, +0.01] |
+| Qwen3-30B-A3B | entity → attribute | E1p − E3 | 56 | 0.24 [0.20, 0.29] | 0.16 [0.12, 0.21] | +0.08 [+0.02, +0.13] | +0.08 [+0.04, +0.13] | +0.01 [-0.02, +0.04] |
+| Qwen3-30B-A3B | a→e − e→a | direction gap at E1 | 48 | 0.80 [0.76, 0.82] | 0.23 [0.20, 0.27] | +0.57 [+0.52, +0.60] | +1.27 [+1.19, +1.34] | -1.00 [-1.06, -0.95] |
+| Qwen3-30B-A3B | a→e − e→a | direction gap at E1p | 38 | 0.84 [0.81, 0.86] | 0.22 [0.19, 0.28] | +0.61 [+0.56, +0.64] | +1.23 [+1.15, +1.32] | -1.01 [-1.09, -0.93] |
+| Qwen3-30B-A3B | a→e − e→a | direction gap at E3 | 39 | 0.74 [0.70, 0.77] | 0.17 [0.14, 0.22] | +0.56 [+0.50, +0.61] | +1.21 [+1.07, +1.34] | -0.74 [-0.83, -0.64] |
+| Qwen3-30B-A3B | a→e − e→a | direction gap at E3p3 | 26 | 0.77 [0.71, 0.80] | 0.26 [0.22, 0.31] | +0.51 [+0.44, +0.55] | +1.19 [+1.06, +1.32] | -0.71 [-0.81, -0.62] |
+| Qwen3-30B-A3B | a→e − e→a | direction gap at E0 | 19 | 0.73 [0.70, 0.75] | 0.45 [0.42, 0.49] | +0.28 [+0.23, +0.31] | +0.61 [+0.53, +0.69] | -0.44 [-0.53, -0.36] |
+| Qwen3-30B-A3B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 1.12 [0.99, 1.31]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 48 / 26 | +0.57 [+0.52, +0.60] | +0.51 [+0.44, +0.55] | +0.32 [+0.26, +0.37] |  |  |
+| Qwen3-30B-A3B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 1.01 [0.90, 1.16]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 48 / 39 | +0.57 [+0.52, +0.60] | +0.56 [+0.50, +0.60] | +0.29 [+0.24, +0.34] |  |  |
+| Qwen3-30B-A3B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.98 [0.81, 1.19]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 7 | +0.54 [+0.42, +0.63] | +0.55 [+0.44, +0.57] | +0.27 [+0.16, +0.35] |  |  |
+| Qwen3-30B-A3B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 1.01 [0.87, 1.30]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 9 | +0.58 [+0.46, +0.65] | +0.57 [+0.44, +0.60] | +0.29 [+0.20, +0.39] |  |  |
+| Mixtral-8x7B | attribute → entity | E1 − E3 | 6 | 0.57 [0.51, 0.63] | 0.52 [0.47, 0.58] | +0.05 [-0.06, +0.14] | +0.13 [-0.25, +0.54] | -0.19 [-0.41, +0.06] |
+| Mixtral-8x7B | attribute → entity | E1 − E3p3 | 8 | 0.61 [0.56, 0.64] | 0.59 [0.51, 0.65] | +0.02 [-0.02, +0.08] | +0.19 [-0.12, +0.52] | -0.14 [-0.38, +0.08] |
+| Mixtral-8x7B | attribute → entity | E3p3 − E3 | 27 | 0.52 [0.49, 0.54] | 0.48 [0.45, 0.51] | +0.04 [+0.01, +0.07] | +0.15 [+0.06, +0.24] | -0.07 [-0.13, -0.01] |
+| Mixtral-8x7B | entity → attribute | E1p − E1 | 9 | 0.46 [0.39, 0.53] | 0.51 [0.45, 0.55] | -0.05 [-0.09, -0.00] | -0.17 [-0.34, +0.00] | +0.21 [+0.07, +0.32] |
+| Mixtral-8x7B | entity → attribute | E1 − E3 | 11 | 0.49 [0.44, 0.55] | 0.35 [0.31, 0.39] | +0.14 [+0.08, +0.20] | +0.41 [+0.14, +0.68] | -0.55 [-0.70, -0.42] |
+| Mixtral-8x7B | entity → attribute | E1p − E3 | 13 | 0.46 [0.40, 0.53] | 0.40 [0.35, 0.45] | +0.06 [+0.02, +0.10] | +0.10 [+0.03, +0.18] | -0.11 [-0.17, -0.04] |
+| Mixtral-8x7B | a→e − e→a | direction gap at E1 | 6 | 0.59 [0.54, 0.63] | 0.47 [0.44, 0.53] | +0.12 [+0.03, +0.19] | +0.24 [-0.01, +0.57] | +0.23 [-0.04, +0.50] |
+| Mixtral-8x7B | a→e − e→a | direction gap at E3 | 37 | 0.50 [0.46, 0.53] | 0.33 [0.31, 0.35] | +0.17 [+0.13, +0.20] | +0.57 [+0.44, +0.69] | -0.33 [-0.39, -0.26] |
+| Mixtral-8x7B | a→e − e→a | direction gap at E3p3 | 48 | 0.55 [0.53, 0.57] | 0.34 [0.32, 0.35] | +0.21 [+0.19, +0.23] | +0.56 [+0.48, +0.65] | -0.33 [-0.38, -0.28] |
+| Mixtral-8x7B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.54 [0.15, 0.89]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 6 / 48 | +0.12 [+0.03, +0.19] | +0.21 [+0.19, +0.24] | +0.01 [-0.08, +0.08] |  |  |
+| Mixtral-8x7B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.69 [0.18, 1.19]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 6 / 37 | +0.12 [+0.03, +0.19] | +0.17 [+0.13, +0.20] | +0.03 [-0.06, +0.11] |  |  |
+| Mixtral-8x7B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.78 [0.53, 0.78]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 2 | +0.22 [+0.11, +0.26] | +0.29 [+0.20, +0.36] | +0.08 [+0.01, +0.08] |  |  |
+| Mixtral-8x7B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 1.40 [1.40, 1.40]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 1 | +0.26 [+0.26, +0.26] | +0.18 [+0.18, +0.18] | +0.17 [+0.17, +0.17] |  |  |
+| Mistral-7B | attribute → entity | E3p3 − E3 | 57 | 0.55 [0.53, 0.57] | 0.49 [0.46, 0.51] | +0.06 [+0.04, +0.08] | +0.19 [+0.13, +0.25] | -0.03 [-0.07, +0.00] |
+| Mistral-7B | a→e − e→a | direction gap at E3 | 30 | 0.48 [0.45, 0.51] | 0.30 [0.28, 0.32] | +0.18 [+0.15, +0.22] | +0.68 [+0.55, +0.82] | -0.36 [-0.43, -0.29] |
+| Mistral-7B | a→e − e→a | direction gap at E3p3 | 41 | 0.56 [0.54, 0.59] | 0.32 [0.30, 0.34] | +0.24 [+0.22, +0.27] | +0.78 [+0.67, +0.88] | -0.34 [-0.38, -0.29] |
+| Qwen2-7B | attribute → entity | E1p − E1 | 38 | 0.63 [0.62, 0.64] | 0.62 [0.61, 0.63] | +0.01 [+0.00, +0.02] | +0.04 [+0.02, +0.06] | -0.06 [-0.07, -0.05] |
+| Qwen2-7B | attribute → entity | E1 − E3 | 11 | 0.62 [0.60, 0.63] | 0.56 [0.52, 0.60] | +0.06 [+0.02, +0.09] | +0.03 [-0.07, +0.11] | -0.02 [-0.07, +0.03] |
+| Qwen2-7B | attribute → entity | E1p − E3 | 11 | 0.60 [0.57, 0.62] | 0.52 [0.47, 0.56] | +0.08 [+0.05, +0.11] | +0.19 [+0.05, +0.36] | -0.12 [-0.21, -0.07] |
+| Qwen2-7B | attribute → entity | E1 − E3p3 | 29 | 0.62 [0.61, 0.63] | 0.60 [0.58, 0.62] | +0.02 [+0.00, +0.04] | -0.03 [-0.10, +0.03] | +0.02 [-0.01, +0.04] |
+| Qwen2-7B | attribute → entity | E1p − E3p3 | 25 | 0.62 [0.59, 0.63] | 0.58 [0.56, 0.60] | +0.03 [+0.02, +0.05] | -0.04 [-0.11, +0.03] | -0.04 [-0.07, -0.00] |
+| Qwen2-7B | attribute → entity | E3p3 − E3 | 26 | 0.55 [0.51, 0.58] | 0.49 [0.45, 0.53] | +0.06 [+0.03, +0.08] | +0.16 [+0.09, +0.24] | -0.07 [-0.11, -0.04] |
+| Qwen2-7B | entity → attribute | E1p − E1 | 27 | 0.33 [0.30, 0.37] | 0.33 [0.29, 0.36] | +0.01 [-0.01, +0.03] | -0.02 [-0.08, +0.03] | +0.07 [+0.03, +0.12] |
+| Qwen2-7B | entity → attribute | E1 − E3 | 35 | 0.39 [0.36, 0.42] | 0.23 [0.21, 0.26] | +0.16 [+0.12, +0.20] | +0.33 [+0.23, +0.44] | -0.30 [-0.36, -0.24] |
+| Qwen2-7B | entity → attribute | E1p − E3 | 16 | 0.33 [0.28, 0.38] | 0.26 [0.21, 0.30] | +0.08 [+0.01, +0.13] | +0.11 [+0.03, +0.17] | -0.12 [-0.18, -0.06] |
+| Qwen2-7B | a→e − e→a | direction gap at E1 | 19 | 0.62 [0.60, 0.64] | 0.30 [0.27, 0.33] | +0.32 [+0.28, +0.37] | +0.76 [+0.64, +0.87] | -0.11 [-0.16, -0.05] |
+| Qwen2-7B | a→e − e→a | direction gap at E1p | 32 | 0.62 [0.60, 0.64] | 0.34 [0.31, 0.37] | +0.28 [+0.23, +0.32] | +0.72 [+0.64, +0.81] | -0.17 [-0.21, -0.13] |
+| Qwen2-7B | a→e − e→a | direction gap at E3 | 31 | 0.50 [0.47, 0.54] | 0.20 [0.17, 0.24] | +0.31 [+0.24, +0.36] | +0.75 [+0.58, +0.94] | -0.25 [-0.32, -0.19] |
+| Qwen2-7B | a→e − e→a | direction gap at E3p3 | 27 | 0.55 [0.52, 0.58] | 0.20 [0.17, 0.25] | +0.35 [+0.29, +0.40] | +0.90 [+0.76, +1.05] | -0.34 [-0.41, -0.27] |
+| Qwen2-7B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.92 [0.76, 1.15]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 19 / 27 | +0.32 [+0.28, +0.37] | +0.35 [+0.29, +0.40] | +0.15 [+0.10, +0.20] |  |  |
+| Qwen2-7B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 1.06 [0.84, 1.38]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 19 / 31 | +0.32 [+0.28, +0.37] | +0.31 [+0.24, +0.36] | +0.17 [+0.12, +0.22] |  |  |
+| Qwen2-7B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 1.37 [1.37, 1.44]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 2 | +0.42 [+0.34, +0.46] | +0.31 [+0.25, +0.32] | +0.27 [+0.22, +0.30] |  |  |
+| Qwen2-57B-A14B | attribute → entity | E1 − E3p3 | 43 | 0.60 [0.58, 0.62] | 0.57 [0.54, 0.59] | +0.03 [+0.01, +0.05] | +0.05 [-0.03, +0.13] | -0.16 [-0.19, -0.12] |
+| Qwen2-57B-A14B | entity → attribute | E1 − E3 | 50 | 0.38 [0.36, 0.41] | 0.28 [0.24, 0.32] | +0.11 [+0.07, +0.14] | +0.15 [+0.09, +0.21] | -0.10 [-0.13, -0.07] |
+| Qwen2-57B-A14B | a→e − e→a | direction gap at E1 | 34 | 0.59 [0.57, 0.61] | 0.37 [0.34, 0.40] | +0.22 [+0.18, +0.25] | +0.83 [+0.70, +0.96] | -0.29 [-0.34, -0.24] |
+| Qwen2-57B-A14B | a→e − e→a | direction gap at E3p3 | 67 | 0.56 [0.54, 0.58] | 0.24 [0.22, 0.27] | +0.32 [+0.29, +0.35] | +0.97 [+0.89, +1.04] | -0.26 [-0.30, -0.22] |
+| Qwen2-57B-A14B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.86 [0.73, 1.07]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 21 | +0.24 [+0.20, +0.28] | +0.28 [+0.23, +0.33] | +0.10 [+0.07, +0.14] |  |  |
+| Qwen2-57B-A14B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.70 [0.57, 0.83]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 34 / 67 | +0.22 [+0.18, +0.25] | +0.32 [+0.29, +0.35] | +0.06 [+0.02, +0.10] |  |  |
+| Qwen3-4B | attribute → entity | E1p − E1 | 47 | 0.68 [0.67, 0.70] | 0.70 [0.69, 0.71] | -0.02 [-0.03, -0.01] | +0.06 [+0.02, +0.09] | +0.00 [-0.02, +0.02] |
+| Qwen3-4B | attribute → entity | E1 − E3 | 29 | 0.69 [0.68, 0.71] | 0.63 [0.59, 0.66] | +0.07 [+0.03, +0.10] | +0.08 [-0.04, +0.19] | -0.16 [-0.25, -0.08] |
+| Qwen3-4B | attribute → entity | E1p − E3 | 21 | 0.67 [0.66, 0.69] | 0.62 [0.58, 0.66] | +0.05 [+0.02, +0.08] | +0.16 [+0.00, +0.32] | -0.18 [-0.27, -0.09] |
+| Qwen3-4B | attribute → entity | E1 − E3p3 | 20 | 0.71 [0.69, 0.73] | 0.65 [0.61, 0.69] | +0.06 [+0.03, +0.10] | +0.09 [-0.04, +0.21] | -0.06 [-0.17, +0.04] |
+| Qwen3-4B | attribute → entity | E1p − E3p3 | 16 | 0.69 [0.66, 0.72] | 0.66 [0.62, 0.70] | +0.03 [-0.01, +0.06] | +0.07 [-0.06, +0.20] | +0.02 [-0.08, +0.13] |
+| Qwen3-4B | attribute → entity | E3p3 − E3 | 28 | 0.63 [0.61, 0.66] | 0.62 [0.59, 0.64] | +0.02 [-0.00, +0.04] | +0.02 [-0.05, +0.10] | -0.10 [-0.16, -0.05] |
+| Qwen3-4B | entity → attribute | E1p − E1 | 26 | 0.50 [0.48, 0.52] | 0.54 [0.50, 0.59] | -0.04 [-0.07, -0.00] | +0.03 [-0.05, +0.11] | +0.14 [+0.07, +0.21] |
+| Qwen3-4B | entity → attribute | E1 − E3 | 25 | 0.60 [0.57, 0.63] | 0.38 [0.35, 0.41] | +0.22 [+0.18, +0.26] | +0.39 [+0.27, +0.53] | -0.50 [-0.61, -0.40] |
+| Qwen3-4B | entity → attribute | E1p − E3 | 18 | 0.54 [0.51, 0.56] | 0.39 [0.35, 0.43] | +0.15 [+0.10, +0.20] | +0.22 [+0.14, +0.30] | -0.28 [-0.35, -0.21] |
+| Qwen3-4B | a→e − e→a | direction gap at E1 | 16 | 0.69 [0.66, 0.71] | 0.58 [0.51, 0.65] | +0.11 [+0.03, +0.18] | +0.70 [+0.44, +0.94] | -0.12 [-0.24, +0.01] |
+| Qwen3-4B | a→e − e→a | direction gap at E1p | 12 | 0.70 [0.66, 0.73] | 0.53 [0.48, 0.58] | +0.17 [+0.11, +0.23] | +0.67 [+0.41, +0.87] | -0.17 [-0.32, +0.01] |
+| Qwen3-4B | a→e − e→a | direction gap at E3 | 47 | 0.63 [0.60, 0.66] | 0.34 [0.31, 0.37] | +0.29 [+0.24, +0.34] | +1.10 [+0.99, +1.21] | -0.43 [-0.50, -0.37] |
+| Qwen3-4B | a→e − e→a | direction gap at E3p3 | 34 | 0.65 [0.63, 0.68] | 0.37 [0.33, 0.40] | +0.29 [+0.24, +0.34] | +1.06 [+0.94, +1.18] | -0.53 [-0.62, -0.43] |
+| Qwen3-4B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.38 [0.12, 0.66]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 16 / 34 | +0.11 [+0.03, +0.18] | +0.29 [+0.24, +0.34] | -0.04 [-0.11, +0.04] |  |  |
+| Qwen3-4B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.37 [0.12, 0.64]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 16 / 47 | +0.11 [+0.03, +0.18] | +0.29 [+0.24, +0.34] | -0.04 [-0.11, +0.04] |  |  |
+| Qwen3-4B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.26 [-0.02, 0.51]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 3 | +0.06 [-0.01, +0.12] | +0.22 [+0.14, +0.27] | -0.05 [-0.14, +0.00] |  |  |
+| Qwen3-4B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.50 [0.28, 0.73]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 9 | +0.10 [+0.05, +0.13] | +0.19 [+0.13, +0.26] | -0.00 [-0.04, +0.04] |  |  |
+| Qwen3-8B | attribute → entity | E1p − E1 | 45 | 0.63 [0.61, 0.66] | 0.69 [0.68, 0.71] | -0.06 [-0.08, -0.05] | -0.02 [-0.06, +0.02] | +0.03 [+0.01, +0.06] |
+| Qwen3-8B | attribute → entity | E1 − E3 | 49 | 0.69 [0.67, 0.70] | 0.61 [0.58, 0.63] | +0.08 [+0.05, +0.10] | +0.12 [+0.03, +0.22] | -0.18 [-0.25, -0.12] |
+| Qwen3-8B | attribute → entity | E1p − E3 | 41 | 0.63 [0.61, 0.66] | 0.61 [0.58, 0.64] | +0.02 [-0.00, +0.04] | +0.10 [+0.00, +0.20] | -0.14 [-0.22, -0.08] |
+| Qwen3-8B | attribute → entity | E1 − E3p3 | 37 | 0.68 [0.66, 0.70] | 0.61 [0.59, 0.64] | +0.07 [+0.05, +0.09] | +0.10 [+0.03, +0.18] | -0.19 [-0.24, -0.13] |
+| Qwen3-8B | attribute → entity | E1p − E3p3 | 27 | 0.61 [0.59, 0.64] | 0.63 [0.60, 0.65] | -0.01 [-0.03, +0.01] | +0.07 [-0.01, +0.14] | -0.13 [-0.18, -0.07] |
+| Qwen3-8B | attribute → entity | E3p3 − E3 | 77 | 0.64 [0.62, 0.66] | 0.63 [0.60, 0.64] | +0.01 [-0.00, +0.03] | +0.01 [-0.03, +0.06] | +0.00 [-0.03, +0.03] |
+| Qwen3-8B | entity → attribute | E1p − E1 | 18 | 0.51 [0.49, 0.54] | 0.54 [0.50, 0.58] | -0.03 [-0.06, +0.02] | -0.05 [-0.18, +0.08] | +0.16 [+0.04, +0.29] |
+| Qwen3-8B | entity → attribute | E1 − E3 | 34 | 0.55 [0.52, 0.58] | 0.31 [0.28, 0.34] | +0.25 [+0.21, +0.28] | +0.41 [+0.26, +0.56] | -0.55 [-0.65, -0.44] |
+| Qwen3-8B | entity → attribute | E1p − E3 | 23 | 0.51 [0.48, 0.53] | 0.30 [0.26, 0.35] | +0.21 [+0.16, +0.25] | +0.28 [+0.20, +0.35] | -0.32 [-0.37, -0.26] |
+| Qwen3-8B | a→e − e→a | direction gap at E1 | 18 | 0.66 [0.64, 0.68] | 0.56 [0.51, 0.60] | +0.10 [+0.05, +0.16] | +0.59 [+0.33, +0.85] | -0.09 [-0.24, +0.06] |
+| Qwen3-8B | a→e − e→a | direction gap at E1p | 11 | 0.60 [0.56, 0.65] | 0.53 [0.49, 0.56] | +0.07 [+0.02, +0.14] | +0.75 [+0.59, +0.91] | -0.23 [-0.30, -0.14] |
+| Qwen3-8B | a→e − e→a | direction gap at E3 | 81 | 0.62 [0.59, 0.64] | 0.27 [0.25, 0.30] | +0.34 [+0.30, +0.38] | +0.94 [+0.85, +1.03] | -0.44 [-0.48, -0.40] |
+| Qwen3-8B | a→e − e→a | direction gap at E3p3 | 60 | 0.63 [0.61, 0.65] | 0.26 [0.23, 0.29] | +0.37 [+0.33, +0.41] | +1.01 [+0.93, +1.09] | -0.44 [-0.48, -0.40] |
+| Qwen3-8B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.28 [0.14, 0.43]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 18 / 60 | +0.10 [+0.05, +0.16] | +0.37 [+0.33, +0.41] | -0.08 [-0.14, -0.02] |  |  |
+| Qwen3-8B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.30 [0.15, 0.48]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 18 / 81 | +0.10 [+0.05, +0.16] | +0.34 [+0.30, +0.38] | -0.07 [-0.12, -0.01] |  |  |
+| Qwen3-8B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.19 [-0.00, 0.36]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 8 | +0.06 [-0.00, +0.10] | +0.29 [+0.23, +0.34] | -0.09 [-0.15, -0.04] |  |  |
+| Qwen3-8B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.38 [0.20, 0.60]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 12 | +0.10 [+0.04, +0.17] | +0.26 [+0.18, +0.33] | -0.03 [-0.07, +0.03] |  |  |
+| Qwen3-14B | attribute → entity | E1p − E1 | 58 | 0.66 [0.64, 0.68] | 0.67 [0.65, 0.68] | -0.00 [-0.02, +0.01] | -0.01 [-0.04, +0.02] | +0.02 [+0.01, +0.03] |
+| Qwen3-14B | attribute → entity | E1 − E3 | 46 | 0.66 [0.64, 0.68] | 0.61 [0.59, 0.63] | +0.05 [+0.03, +0.06] | +0.06 [-0.03, +0.15] | -0.07 [-0.12, -0.01] |
+| Qwen3-14B | attribute → entity | E1p − E3 | 46 | 0.66 [0.63, 0.68] | 0.61 [0.59, 0.64] | +0.04 [+0.02, +0.06] | +0.03 [-0.05, +0.12] | -0.04 [-0.10, +0.02] |
+| Qwen3-14B | attribute → entity | E1 − E3p3 | 46 | 0.67 [0.65, 0.68] | 0.62 [0.60, 0.65] | +0.04 [+0.03, +0.06] | +0.08 [-0.00, +0.16] | -0.07 [-0.12, -0.02] |
+| Qwen3-14B | attribute → entity | E1p − E3p3 | 46 | 0.67 [0.64, 0.69] | 0.63 [0.61, 0.65] | +0.04 [+0.02, +0.06] | +0.05 [-0.03, +0.11] | -0.04 [-0.08, +0.01] |
+| Qwen3-14B | attribute → entity | E3p3 − E3 | 74 | 0.63 [0.61, 0.65] | 0.62 [0.60, 0.64] | +0.01 [-0.00, +0.02] | -0.04 [-0.09, +0.00] | +0.03 [-0.00, +0.06] |
+| Qwen3-14B | entity → attribute | E1p − E1 | 34 | 0.40 [0.38, 0.43] | 0.46 [0.43, 0.49] | -0.06 [-0.08, -0.03] | -0.07 [-0.15, -0.00] | +0.13 [+0.09, +0.17] |
+| Qwen3-14B | entity → attribute | E1 − E3 | 56 | 0.47 [0.44, 0.49] | 0.19 [0.16, 0.22] | +0.28 [+0.24, +0.31] | +0.34 [+0.25, +0.42] | -0.32 [-0.37, -0.27] |
+| Qwen3-14B | entity → attribute | E1p − E3 | 44 | 0.40 [0.38, 0.43] | 0.20 [0.17, 0.24] | +0.20 [+0.16, +0.24] | +0.17 [+0.11, +0.23] | -0.14 [-0.19, -0.10] |
+| Qwen3-14B | a→e − e→a | direction gap at E1 | 46 | 0.65 [0.64, 0.67] | 0.47 [0.45, 0.50] | +0.18 [+0.15, +0.22] | +1.05 [+0.92, +1.18] | -0.36 [-0.42, -0.29] |
+| Qwen3-14B | a→e − e→a | direction gap at E1p | 34 | 0.66 [0.63, 0.69] | 0.39 [0.36, 0.42] | +0.27 [+0.22, +0.31] | +1.11 [+1.00, +1.23] | -0.42 [-0.50, -0.34] |
+| Qwen3-14B | a→e − e→a | direction gap at E3 | 89 | 0.61 [0.59, 0.63] | 0.20 [0.18, 0.22] | +0.41 [+0.38, +0.44] | +1.17 [+1.10, +1.25] | -0.49 [-0.53, -0.45] |
+| Qwen3-14B | a→e − e→a | direction gap at E3p3 | 75 | 0.62 [0.60, 0.64] | 0.21 [0.18, 0.24] | +0.41 [+0.38, +0.44] | +1.10 [+1.03, +1.18] | -0.45 [-0.50, -0.40] |
+| Qwen3-14B | a→e − e→a | PRIMARY gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.40 [0.33, 0.50]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 30 | +0.16 [+0.13, +0.20] | +0.41 [+0.35, +0.45] | -0.04 [-0.07, -0.00] |  |  |
+| Qwen3-14B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3p3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.44 [0.36, 0.53]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 46 / 75 | +0.18 [+0.15, +0.22] | +0.41 [+0.38, +0.44] | -0.02 [-0.06, +0.01] |  |  |
+| Qwen3-14B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (pairwise (independent resamples of the two gaps)) (H-type if > 0); gap(E1)/gap(E3) = 0.44 [0.36, 0.53]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 46 / 89 | +0.18 [+0.15, +0.22] | +0.41 [+0.38, +0.44] | -0.02 [-0.06, +0.01] |  |  |
+| Qwen3-14B | a→e − e→a | gap(E1) − ½·gap(E3) with E3 a→e = e3_a2e (four cells on their common twins) (H-type if > 0); gap(E1)/gap(E3) = 0.40 [0.33, 0.50]; 'Share a' = gap(E1), 'Share b' = gap(E3) | 32 | +0.17 [+0.13, +0.20] | +0.41 [+0.36, +0.45] | -0.04 [-0.07, +0.00] |  |  |
+
+
+### E2 (negation) as a behavioural level
+
+E2 states each binding by negation ('The jug was not full and the pot was not empty'). Copying the stated word gives the wrong answer (the copy trap); the target needs elimination (a→e) or the antonym (e→a). Where too few pairs pass the margin rule in both directions, E2 is reported as a behavioural level only (no patching): Qwen3-30B-A3B attribute → entity (1789 twins, 3578 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.59 [0.57, 0.61] (sign level 0.00 [0.00, 0.00] vs 0.83 [0.82, 0.85]); twins with the copy trap in every order 827, target in every order 0; degree adv=True: trap 0.77 [0.74, 0.79], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.45 [0.43, 0.48], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.25 [0.10, 0.40], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.60 [0.58, 0.62], target 0.00 [0.00, 0.00]; Qwen3-30B-A3B entity → attribute (1789 twins, 3578 pairs): target by the margin rule 0.03 [0.03, 0.04], copy trap by the margin rule 0.02 [0.02, 0.03] (sign level 0.15 [0.14, 0.17] vs 0.13 [0.11, 0.14]); twins with the copy trap in every order 9, target in every order 12; degree adv=True: trap 0.04 [0.03, 0.05], target 0.02 [0.01, 0.03]; degree adv=False: trap 0.01 [0.01, 0.02], target 0.04 [0.03, 0.05]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.06 [0.00, 0.12]; antonym type=gradable: trap 0.02 [0.02, 0.03], target 0.03 [0.03, 0.04]; Mixtral-8x7B attribute → entity (1586 twins, 3172 pairs): target by the margin rule 0.00 [0.00, 0.01], copy trap by the margin rule 0.03 [0.02, 0.04] (sign level 0.06 [0.05, 0.07] vs 0.29 [0.27, 0.31]); twins with the copy trap in every order 15, target in every order 2; degree adv=True: trap 0.04 [0.03, 0.05], target 0.00 [0.00, 0.01]; degree adv=False: trap 0.02 [0.01, 0.03], target 0.00 [0.00, 0.01]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.03 [0.02, 0.04], target 0.00 [0.00, 0.01]; Mixtral-8x7B entity → attribute (1572 twins, 3144 pairs): target by the margin rule 0.02 [0.02, 0.03], copy trap by the margin rule 0.00 [0.00, 0.01] (sign level 0.18 [0.16, 0.19] vs 0.06 [0.05, 0.06]); twins with the copy trap in every order 2, target in every order 11; degree adv=True: trap 0.01 [0.00, 0.01], target 0.03 [0.02, 0.04]; degree adv=False: trap 0.00 [0.00, 0.01], target 0.02 [0.01, 0.02]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.03 [0.00, 0.08]; antonym type=gradable: trap 0.00 [0.00, 0.01], target 0.02 [0.02, 0.03]; Mistral-7B attribute → entity (1586 twins, 3172 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.02 [0.02, 0.03] (sign level 0.02 [0.01, 0.02] vs 0.30 [0.29, 0.32]); twins with the copy trap in every order 3, target in every order 0; degree adv=True: trap 0.02 [0.02, 0.03], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.02 [0.01, 0.03], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.02 [0.02, 0.03], target 0.00 [0.00, 0.00]; Mistral-7B entity → attribute (1572 twins, 3144 pairs): target by the margin rule 0.04 [0.03, 0.05], copy trap by the margin rule 0.00 [0.00, 0.00] (sign level 0.33 [0.31, 0.35] vs 0.04 [0.04, 0.05]); twins with the copy trap in every order 1, target in every order 25; degree adv=True: trap 0.00 [0.00, 0.00], target 0.04 [0.03, 0.05]; degree adv=False: trap 0.00 [0.00, 0.01], target 0.05 [0.04, 0.06]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.00 [0.00, 0.00], target 0.04 [0.04, 0.05]; Qwen2-7B attribute → entity (1789 twins, 3578 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.03 [0.02, 0.04] (sign level 0.02 [0.01, 0.02] vs 0.39 [0.38, 0.41]); twins with the copy trap in every order 15, target in every order 1; degree adv=True: trap 0.03 [0.02, 0.04], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.03 [0.02, 0.04], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.08 [0.00, 0.19], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.03 [0.02, 0.04], target 0.00 [0.00, 0.00]; Qwen2-7B entity → attribute (1789 twins, 3578 pairs): target by the margin rule 0.05 [0.04, 0.05], copy trap by the margin rule 0.00 [0.00, 0.01] (sign level 0.31 [0.29, 0.32] vs 0.05 [0.04, 0.06]); twins with the copy trap in every order 1, target in every order 13; degree adv=True: trap 0.01 [0.00, 0.01], target 0.02 [0.02, 0.03]; degree adv=False: trap 0.00 [0.00, 0.00], target 0.06 [0.05, 0.07]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.04 [0.00, 0.10]; antonym type=gradable: trap 0.00 [0.00, 0.01], target 0.05 [0.04, 0.05]; Qwen2-57B-A14B attribute → entity (589 twins, 1178 pairs): target by the margin rule 0.00 [0.00, 0.01], copy trap by the margin rule 0.08 [0.07, 0.10] (sign level 0.04 [0.03, 0.06] vs 0.54 [0.51, 0.57]); twins with the copy trap in every order 14, target in every order 0; degree adv=True: trap 0.09 [0.07, 0.12], target 0.00 [0.00, 0.01]; degree adv=False: trap 0.07 [0.05, 0.10], target 0.00 [0.00, 0.01]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.08 [0.07, 0.10], target 0.00 [0.00, 0.01]; Qwen2-57B-A14B entity → attribute (589 twins, 1178 pairs): target by the margin rule 0.08 [0.06, 0.09], copy trap by the margin rule 0.01 [0.00, 0.01] (sign level 0.31 [0.28, 0.33] vs 0.09 [0.07, 0.11]); twins with the copy trap in every order 1, target in every order 13; degree adv=True: trap 0.01 [0.00, 0.02], target 0.07 [0.05, 0.09]; degree adv=False: trap 0.00 [0.00, 0.00], target 0.08 [0.06, 0.11]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.10 [0.00, 0.30]; antonym type=gradable: trap 0.01 [0.00, 0.01], target 0.08 [0.06, 0.09]; Qwen3-4B attribute → entity (1789 twins, 3578 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.60 [0.58, 0.62] (sign level 0.00 [0.00, 0.00] vs 0.84 [0.83, 0.85]); twins with the copy trap in every order 785, target in every order 0; degree adv=True: trap 0.73 [0.71, 0.76], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.50 [0.48, 0.53], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.25 [0.12, 0.40], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.61 [0.59, 0.63], target 0.00 [0.00, 0.00]; Qwen3-4B entity → attribute (1789 twins, 3578 pairs): target by the margin rule 0.01 [0.01, 0.02], copy trap by the margin rule 0.02 [0.02, 0.03] (sign level 0.12 [0.10, 0.13] vs 0.11 [0.09, 0.12]); twins with the copy trap in every order 12, target in every order 4; degree adv=True: trap 0.03 [0.02, 0.04], target 0.01 [0.01, 0.02]; degree adv=False: trap 0.02 [0.01, 0.02], target 0.02 [0.01, 0.02]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.02 [0.02, 0.03], target 0.01 [0.01, 0.02]; Qwen3-8B attribute → entity (1789 twins, 3578 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.41 [0.39, 0.43] (sign level 0.01 [0.01, 0.01] vs 0.65 [0.63, 0.67]); twins with the copy trap in every order 526, target in every order 0; degree adv=True: trap 0.69 [0.66, 0.71], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.18 [0.16, 0.20], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.08 [0.02, 0.17], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.41 [0.39, 0.43], target 0.00 [0.00, 0.00]; Qwen3-8B entity → attribute (1789 twins, 3578 pairs): target by the margin rule 0.03 [0.02, 0.03], copy trap by the margin rule 0.01 [0.01, 0.01] (sign level 0.16 [0.15, 0.18] vs 0.06 [0.05, 0.07]); twins with the copy trap in every order 5, target in every order 6; degree adv=True: trap 0.01 [0.01, 0.02], target 0.01 [0.01, 0.02]; degree adv=False: trap 0.01 [0.00, 0.01], target 0.04 [0.03, 0.05]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.04 [0.00, 0.10]; antonym type=gradable: trap 0.01 [0.01, 0.01], target 0.03 [0.02, 0.03]; Qwen3-14B attribute → entity (1789 twins, 3578 pairs): target by the margin rule 0.00 [0.00, 0.01], copy trap by the margin rule 0.56 [0.54, 0.58] (sign level 0.02 [0.01, 0.02] vs 0.79 [0.78, 0.81]); twins with the copy trap in every order 714, target in every order 2; degree adv=True: trap 0.76 [0.73, 0.78], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.40 [0.38, 0.42], target 0.01 [0.00, 0.01]; antonym type=complementary: trap 0.08 [0.00, 0.19], target 0.02 [0.00, 0.06]; antonym type=gradable: trap 0.56 [0.55, 0.58], target 0.00 [0.00, 0.01]; Qwen3-14B entity → attribute (1789 twins, 3578 pairs): target by the margin rule 0.06 [0.05, 0.07], copy trap by the margin rule 0.01 [0.01, 0.01] (sign level 0.25 [0.23, 0.27] vs 0.09 [0.08, 0.10]); twins with the copy trap in every order 2, target in every order 19; degree adv=True: trap 0.02 [0.01, 0.02], target 0.05 [0.04, 0.06]; degree adv=False: trap 0.00 [0.00, 0.01], target 0.07 [0.06, 0.08]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.06 [0.00, 0.14]; antonym type=gradable: trap 0.01 [0.01, 0.01], target 0.06 [0.05, 0.07]; Qwen3-1.7B attribute → entity (589 twins, 1178 pairs): target by the margin rule 0.00 [0.00, 0.00], copy trap by the margin rule 0.04 [0.03, 0.05] (sign level 0.00 [0.00, 0.01] vs 0.26 [0.23, 0.28]); twins with the copy trap in every order 8, target in every order 0; degree adv=True: trap 0.04 [0.02, 0.06], target 0.00 [0.00, 0.00]; degree adv=False: trap 0.04 [0.02, 0.06], target 0.00 [0.00, 0.00]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.04 [0.03, 0.05], target 0.00 [0.00, 0.00]; Qwen3-1.7B entity → attribute (589 twins, 1178 pairs): target by the margin rule 0.09 [0.07, 0.10], copy trap by the margin rule 0.00 [0.00, 0.00] (sign level 0.36 [0.33, 0.39] vs 0.02 [0.01, 0.03]); twins with the copy trap in every order 0, target in every order 15; degree adv=True: trap 0.00 [0.00, 0.00], target 0.05 [0.03, 0.07]; degree adv=False: trap 0.00 [0.00, 0.01], target 0.13 [0.10, 0.17]; antonym type=complementary: trap 0.00 [0.00, 0.00], target 0.00 [0.00, 0.00]; antonym type=gradable: trap 0.00 [0.00, 0.00], target 0.09 [0.07, 0.10].
+
+**E2 (negation) and Dial-A conflict behaviour: target vs the other answer (copy trap / prior), all scanned pairs (twin-cluster bootstrap CIs)**
+
+| Model | Cell | Stratum | Pairs (items) | Target wins, margin both ways | Other answer wins, margin both ways | Target, sign both ways | Other, sign both ways | Items: target in every order / other in every order | Other answer = |
+|---|---|---|---|---|---|---|---|---|---|
+| Mistral-7B | E2 a→e | all | 3172 (1586) | 0.00 [0.00, 0.00] | 0.02 [0.02, 0.03] | 0.02 [0.01, 0.02] | 0.30 [0.29, 0.32] | 0 / 3 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 a→e | antonym_type=complementary | 38 (19) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.21 [0.11, 0.32] | 0 / 0 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 a→e | antonym_type=gradable | 3134 (1567) | 0.00 [0.00, 0.00] | 0.02 [0.02, 0.03] | 0.02 [0.01, 0.03] | 0.30 [0.29, 0.32] | 0 / 3 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 a→e | degree_adv=False | 1622 (811) | 0.00 [0.00, 0.00] | 0.02 [0.01, 0.03] | 0.03 [0.02, 0.04] | 0.28 [0.26, 0.30] | 0 / 3 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 a→e | degree_adv=True | 1550 (775) | 0.00 [0.00, 0.00] | 0.02 [0.02, 0.03] | 0.01 [0.01, 0.01] | 0.32 [0.30, 0.34] | 0 / 0 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 e→a | all | 3144 (1572) | 0.04 [0.03, 0.05] | 0.00 [0.00, 0.00] | 0.33 [0.31, 0.35] | 0.04 [0.04, 0.05] | 25 / 1 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 e→a | antonym_type=complementary | 38 (19) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.26 [0.13, 0.39] | 0.05 [0.00, 0.13] | 0 / 0 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 e→a | antonym_type=gradable | 3106 (1553) | 0.04 [0.04, 0.05] | 0.00 [0.00, 0.00] | 0.33 [0.31, 0.35] | 0.04 [0.04, 0.05] | 25 / 1 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 e→a | degree_adv=False | 1596 (798) | 0.05 [0.04, 0.06] | 0.00 [0.00, 0.01] | 0.35 [0.32, 0.37] | 0.03 [0.02, 0.04] | 13 / 1 | copy trap (word stated with the other entity) |
+| Mistral-7B | E2 e→a | degree_adv=True | 1548 (774) | 0.04 [0.03, 0.05] | 0.00 [0.00, 0.00] | 0.31 [0.28, 0.34] | 0.06 [0.05, 0.07] | 12 / 0 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 a→e | all | 3172 (1586) | 0.00 [0.00, 0.01] | 0.03 [0.02, 0.04] | 0.06 [0.05, 0.07] | 0.29 [0.27, 0.31] | 2 / 15 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 a→e | antonym_type=complementary | 38 (19) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.13 [0.03, 0.24] | 0.13 [0.03, 0.24] | 0 / 0 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 a→e | antonym_type=gradable | 3134 (1567) | 0.00 [0.00, 0.01] | 0.03 [0.02, 0.04] | 0.06 [0.05, 0.07] | 0.29 [0.27, 0.31] | 2 / 15 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 a→e | degree_adv=False | 1622 (811) | 0.00 [0.00, 0.01] | 0.02 [0.01, 0.03] | 0.08 [0.07, 0.10] | 0.23 [0.21, 0.26] | 1 / 7 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 a→e | degree_adv=True | 1550 (775) | 0.00 [0.00, 0.01] | 0.04 [0.03, 0.05] | 0.04 [0.03, 0.05] | 0.34 [0.32, 0.37] | 1 / 8 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | A-conflict a→e | all | 24 (12) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.46 [0.21, 0.71] | 0.08 [0.00, 0.21] | 0 / 0 | prior |
+| Mixtral-8x7B | E2 e→a | all | 3144 (1572) | 0.02 [0.02, 0.03] | 0.00 [0.00, 0.01] | 0.18 [0.16, 0.19] | 0.06 [0.05, 0.06] | 11 / 2 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 e→a | antonym_type=complementary | 38 (19) | 0.03 [0.00, 0.08] | 0.00 [0.00, 0.00] | 0.16 [0.05, 0.26] | 0.03 [0.00, 0.08] | 0 / 0 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 e→a | antonym_type=gradable | 3106 (1553) | 0.02 [0.02, 0.03] | 0.00 [0.00, 0.01] | 0.18 [0.16, 0.19] | 0.06 [0.05, 0.06] | 11 / 2 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 e→a | degree_adv=False | 1596 (798) | 0.02 [0.01, 0.02] | 0.00 [0.00, 0.01] | 0.19 [0.17, 0.21] | 0.03 [0.02, 0.04] | 1 / 0 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | E2 e→a | degree_adv=True | 1548 (774) | 0.03 [0.02, 0.04] | 0.01 [0.00, 0.01] | 0.16 [0.13, 0.18] | 0.08 [0.07, 0.10] | 10 / 2 | copy trap (word stated with the other entity) |
+| Mixtral-8x7B | A-conflict e→a | all | 24 (12) | 0.04 [0.00, 0.12] | 0.00 [0.00, 0.00] | 0.21 [0.04, 0.38] | 0.08 [0.00, 0.21] | 0 / 0 | prior |
+| Qwen2-57B-A14B | E2 a→e | all | 1178 (589) | 0.00 [0.00, 0.01] | 0.08 [0.07, 0.10] | 0.04 [0.03, 0.06] | 0.54 [0.51, 0.57] | 0 / 14 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 a→e | antonym_type=complementary | 10 (5) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.20 [0.00, 0.40] | 0.40 [0.00, 0.80] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 a→e | antonym_type=gradable | 1168 (584) | 0.00 [0.00, 0.01] | 0.08 [0.07, 0.10] | 0.04 [0.03, 0.05] | 0.54 [0.51, 0.58] | 0 / 14 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 a→e | degree_adv=False | 490 (245) | 0.00 [0.00, 0.01] | 0.07 [0.05, 0.10] | 0.06 [0.04, 0.08] | 0.46 [0.40, 0.51] | 0 / 5 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 a→e | degree_adv=True | 688 (344) | 0.00 [0.00, 0.01] | 0.09 [0.07, 0.12] | 0.03 [0.02, 0.05] | 0.60 [0.56, 0.64] | 0 / 9 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 e→a | all | 1178 (589) | 0.08 [0.06, 0.09] | 0.01 [0.00, 0.01] | 0.31 [0.28, 0.33] | 0.09 [0.07, 0.11] | 13 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 e→a | antonym_type=complementary | 10 (5) | 0.10 [0.00, 0.30] | 0.00 [0.00, 0.00] | 0.30 [0.00, 0.70] | 0.10 [0.00, 0.30] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 e→a | antonym_type=gradable | 1168 (584) | 0.08 [0.06, 0.09] | 0.01 [0.00, 0.01] | 0.31 [0.28, 0.33] | 0.09 [0.07, 0.11] | 13 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 e→a | degree_adv=False | 490 (245) | 0.08 [0.06, 0.11] | 0.00 [0.00, 0.00] | 0.34 [0.30, 0.39] | 0.03 [0.02, 0.05] | 7 / 0 | copy trap (word stated with the other entity) |
+| Qwen2-57B-A14B | E2 e→a | degree_adv=True | 688 (344) | 0.07 [0.05, 0.09] | 0.01 [0.00, 0.02] | 0.28 [0.25, 0.32] | 0.13 [0.10, 0.16] | 6 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 a→e | all | 3578 (1789) | 0.00 [0.00, 0.00] | 0.03 [0.02, 0.04] | 0.02 [0.01, 0.02] | 0.39 [0.38, 0.41] | 1 / 15 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 a→e | antonym_type=complementary | 48 (24) | 0.00 [0.00, 0.00] | 0.08 [0.00, 0.19] | 0.02 [0.00, 0.06] | 0.31 [0.17, 0.48] | 0 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 a→e | antonym_type=gradable | 3530 (1765) | 0.00 [0.00, 0.00] | 0.03 [0.02, 0.04] | 0.02 [0.01, 0.02] | 0.39 [0.38, 0.41] | 1 / 14 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 a→e | degree_adv=False | 1986 (993) | 0.00 [0.00, 0.00] | 0.03 [0.02, 0.04] | 0.03 [0.02, 0.03] | 0.37 [0.35, 0.40] | 1 / 7 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 a→e | degree_adv=True | 1592 (796) | 0.00 [0.00, 0.00] | 0.03 [0.02, 0.04] | 0.01 [0.01, 0.02] | 0.42 [0.39, 0.44] | 0 / 8 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 e→a | all | 3578 (1789) | 0.05 [0.04, 0.05] | 0.00 [0.00, 0.01] | 0.31 [0.29, 0.32] | 0.05 [0.04, 0.06] | 13 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 e→a | antonym_type=complementary | 50 (25) | 0.04 [0.00, 0.10] | 0.00 [0.00, 0.00] | 0.50 [0.36, 0.62] | 0.02 [0.00, 0.06] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 e→a | antonym_type=gradable | 3528 (1764) | 0.05 [0.04, 0.05] | 0.00 [0.00, 0.01] | 0.30 [0.29, 0.32] | 0.05 [0.04, 0.06] | 13 / 1 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 e→a | degree_adv=False | 1986 (993) | 0.06 [0.05, 0.07] | 0.00 [0.00, 0.00] | 0.38 [0.35, 0.40] | 0.02 [0.01, 0.03] | 8 / 0 | copy trap (word stated with the other entity) |
+| Qwen2-7B | E2 e→a | degree_adv=True | 1592 (796) | 0.02 [0.02, 0.03] | 0.01 [0.00, 0.01] | 0.22 [0.20, 0.24] | 0.09 [0.07, 0.10] | 5 / 1 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 a→e | all | 3578 (1789) | 0.00 [0.00, 0.00] | 0.59 [0.57, 0.61] | 0.00 [0.00, 0.00] | 0.83 [0.82, 0.85] | 0 / 827 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 a→e | antonym_type=complementary | 48 (24) | 0.00 [0.00, 0.00] | 0.25 [0.10, 0.40] | 0.00 [0.00, 0.00] | 0.46 [0.29, 0.65] | 0 / 4 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 a→e | antonym_type=gradable | 3530 (1765) | 0.00 [0.00, 0.00] | 0.60 [0.58, 0.62] | 0.00 [0.00, 0.00] | 0.84 [0.82, 0.85] | 0 / 823 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 a→e | degree_adv=False | 1986 (993) | 0.00 [0.00, 0.00] | 0.45 [0.43, 0.48] | 0.00 [0.00, 0.01] | 0.76 [0.73, 0.78] | 0 / 294 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 a→e | degree_adv=True | 1592 (796) | 0.00 [0.00, 0.00] | 0.77 [0.74, 0.79] | 0.00 [0.00, 0.00] | 0.92 [0.91, 0.94] | 0 / 533 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | A-conflict a→e | all | 340 (170) | 0.96 [0.94, 0.98] | 0.00 [0.00, 0.00] | 1.00 [0.99, 1.00] | 0.00 [0.00, 0.00] | 157 / 0 | prior |
+| Qwen3-30B-A3B | E2 e→a | all | 3578 (1789) | 0.03 [0.03, 0.04] | 0.02 [0.02, 0.03] | 0.15 [0.14, 0.17] | 0.13 [0.11, 0.14] | 12 / 9 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 e→a | antonym_type=complementary | 50 (25) | 0.06 [0.00, 0.12] | 0.00 [0.00, 0.00] | 0.22 [0.12, 0.34] | 0.00 [0.00, 0.00] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 e→a | antonym_type=gradable | 3528 (1764) | 0.03 [0.03, 0.04] | 0.02 [0.02, 0.03] | 0.15 [0.14, 0.16] | 0.13 [0.12, 0.14] | 12 / 9 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 e→a | degree_adv=False | 1986 (993) | 0.04 [0.03, 0.05] | 0.01 [0.01, 0.02] | 0.18 [0.16, 0.19] | 0.07 [0.06, 0.09] | 8 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | E2 e→a | degree_adv=True | 1592 (796) | 0.02 [0.01, 0.03] | 0.04 [0.03, 0.05] | 0.13 [0.11, 0.14] | 0.19 [0.17, 0.21] | 4 / 7 | copy trap (word stated with the other entity) |
+| Qwen3-30B-A3B | A-conflict e→a | all | 340 (170) | 0.30 [0.25, 0.36] | 0.01 [0.00, 0.01] | 0.44 [0.39, 0.51] | 0.05 [0.03, 0.07] | 22 / 0 | prior |
+| Qwen3-14B | E2 a→e | all | 3578 (1789) | 0.00 [0.00, 0.01] | 0.56 [0.54, 0.58] | 0.02 [0.01, 0.02] | 0.79 [0.78, 0.81] | 2 / 714 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 a→e | antonym_type=complementary | 48 (24) | 0.02 [0.00, 0.06] | 0.08 [0.00, 0.19] | 0.10 [0.02, 0.21] | 0.44 [0.29, 0.60] | 0 / 1 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 a→e | antonym_type=gradable | 3530 (1765) | 0.00 [0.00, 0.01] | 0.56 [0.55, 0.58] | 0.01 [0.01, 0.02] | 0.80 [0.78, 0.81] | 2 / 713 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 a→e | degree_adv=False | 1986 (993) | 0.01 [0.00, 0.01] | 0.40 [0.38, 0.42] | 0.02 [0.02, 0.03] | 0.70 [0.68, 0.73] | 2 / 213 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 a→e | degree_adv=True | 1592 (796) | 0.00 [0.00, 0.00] | 0.76 [0.73, 0.78] | 0.00 [0.00, 0.01] | 0.90 [0.89, 0.92] | 0 / 501 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 e→a | all | 3578 (1789) | 0.06 [0.05, 0.07] | 0.01 [0.01, 0.01] | 0.25 [0.23, 0.27] | 0.09 [0.08, 0.10] | 19 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 e→a | antonym_type=complementary | 50 (25) | 0.06 [0.00, 0.14] | 0.00 [0.00, 0.00] | 0.20 [0.08, 0.34] | 0.02 [0.00, 0.06] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 e→a | antonym_type=gradable | 3528 (1764) | 0.06 [0.05, 0.07] | 0.01 [0.01, 0.01] | 0.25 [0.24, 0.27] | 0.09 [0.08, 0.10] | 19 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 e→a | degree_adv=False | 1986 (993) | 0.07 [0.06, 0.08] | 0.00 [0.00, 0.01] | 0.28 [0.26, 0.30] | 0.04 [0.03, 0.05] | 11 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-14B | E2 e→a | degree_adv=True | 1592 (796) | 0.05 [0.04, 0.06] | 0.02 [0.01, 0.02] | 0.21 [0.19, 0.23] | 0.14 [0.12, 0.16] | 8 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 a→e | all | 1178 (589) | 0.00 [0.00, 0.00] | 0.04 [0.03, 0.05] | 0.00 [0.00, 0.01] | 0.26 [0.23, 0.28] | 0 / 8 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 a→e | antonym_type=complementary | 10 (5) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.10 [0.00, 0.30] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 a→e | antonym_type=gradable | 1168 (584) | 0.00 [0.00, 0.00] | 0.04 [0.03, 0.05] | 0.00 [0.00, 0.01] | 0.26 [0.23, 0.28] | 0 / 8 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 a→e | degree_adv=False | 490 (245) | 0.00 [0.00, 0.00] | 0.04 [0.02, 0.06] | 0.00 [0.00, 0.01] | 0.29 [0.25, 0.32] | 0 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 a→e | degree_adv=True | 688 (344) | 0.00 [0.00, 0.00] | 0.04 [0.02, 0.06] | 0.00 [0.00, 0.01] | 0.24 [0.20, 0.27] | 0 / 6 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 e→a | all | 1178 (589) | 0.09 [0.07, 0.10] | 0.00 [0.00, 0.00] | 0.36 [0.33, 0.39] | 0.02 [0.01, 0.03] | 15 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 e→a | antonym_type=complementary | 10 (5) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.20 [0.00, 0.40] | 0.00 [0.00, 0.00] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 e→a | antonym_type=gradable | 1168 (584) | 0.09 [0.07, 0.10] | 0.00 [0.00, 0.00] | 0.36 [0.33, 0.39] | 0.02 [0.01, 0.03] | 15 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 e→a | degree_adv=False | 490 (245) | 0.13 [0.10, 0.17] | 0.00 [0.00, 0.01] | 0.48 [0.44, 0.53] | 0.02 [0.01, 0.03] | 10 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-1.7B | E2 e→a | degree_adv=True | 688 (344) | 0.05 [0.03, 0.07] | 0.00 [0.00, 0.00] | 0.27 [0.24, 0.31] | 0.02 [0.01, 0.03] | 5 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 a→e | all | 3578 (1789) | 0.00 [0.00, 0.00] | 0.60 [0.58, 0.62] | 0.00 [0.00, 0.00] | 0.84 [0.83, 0.85] | 0 / 785 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 a→e | antonym_type=complementary | 48 (24) | 0.00 [0.00, 0.00] | 0.25 [0.12, 0.40] | 0.00 [0.00, 0.00] | 0.54 [0.40, 0.69] | 0 / 2 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 a→e | antonym_type=gradable | 3530 (1765) | 0.00 [0.00, 0.00] | 0.61 [0.59, 0.63] | 0.00 [0.00, 0.00] | 0.85 [0.83, 0.86] | 0 / 783 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 a→e | degree_adv=False | 1986 (993) | 0.00 [0.00, 0.00] | 0.50 [0.48, 0.53] | 0.00 [0.00, 0.00] | 0.79 [0.77, 0.81] | 0 / 307 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 a→e | degree_adv=True | 1592 (796) | 0.00 [0.00, 0.00] | 0.73 [0.71, 0.76] | 0.00 [0.00, 0.00] | 0.91 [0.89, 0.92] | 0 / 478 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 e→a | all | 3578 (1789) | 0.01 [0.01, 0.02] | 0.02 [0.02, 0.03] | 0.12 [0.10, 0.13] | 0.11 [0.09, 0.12] | 4 / 12 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 e→a | antonym_type=complementary | 50 (25) | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.06 [0.00, 0.12] | 0.12 [0.04, 0.22] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 e→a | antonym_type=gradable | 3528 (1764) | 0.01 [0.01, 0.02] | 0.02 [0.02, 0.03] | 0.12 [0.10, 0.13] | 0.11 [0.09, 0.12] | 4 / 12 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 e→a | degree_adv=False | 1986 (993) | 0.02 [0.01, 0.02] | 0.02 [0.01, 0.02] | 0.12 [0.11, 0.14] | 0.10 [0.08, 0.11] | 2 / 3 | copy trap (word stated with the other entity) |
+| Qwen3-4B | E2 e→a | degree_adv=True | 1592 (796) | 0.01 [0.01, 0.02] | 0.03 [0.02, 0.04] | 0.10 [0.09, 0.12] | 0.12 [0.10, 0.13] | 2 / 9 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 a→e | all | 3578 (1789) | 0.00 [0.00, 0.00] | 0.41 [0.39, 0.43] | 0.01 [0.01, 0.01] | 0.65 [0.63, 0.67] | 0 / 526 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 a→e | antonym_type=complementary | 48 (24) | 0.00 [0.00, 0.00] | 0.08 [0.02, 0.17] | 0.00 [0.00, 0.00] | 0.38 [0.23, 0.54] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 a→e | antonym_type=gradable | 3530 (1765) | 0.00 [0.00, 0.00] | 0.41 [0.39, 0.43] | 0.01 [0.01, 0.01] | 0.66 [0.64, 0.67] | 0 / 526 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 a→e | degree_adv=False | 1986 (993) | 0.00 [0.00, 0.00] | 0.18 [0.16, 0.20] | 0.01 [0.01, 0.02] | 0.50 [0.47, 0.52] | 0 / 64 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 a→e | degree_adv=True | 1592 (796) | 0.00 [0.00, 0.00] | 0.69 [0.66, 0.71] | 0.00 [0.00, 0.01] | 0.85 [0.83, 0.87] | 0 / 462 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 e→a | all | 3578 (1789) | 0.03 [0.02, 0.03] | 0.01 [0.01, 0.01] | 0.16 [0.15, 0.18] | 0.06 [0.05, 0.07] | 6 / 5 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 e→a | antonym_type=complementary | 50 (25) | 0.04 [0.00, 0.10] | 0.00 [0.00, 0.00] | 0.18 [0.08, 0.30] | 0.02 [0.00, 0.06] | 0 / 0 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 e→a | antonym_type=gradable | 3528 (1764) | 0.03 [0.02, 0.03] | 0.01 [0.01, 0.01] | 0.16 [0.15, 0.18] | 0.06 [0.05, 0.07] | 6 / 5 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 e→a | degree_adv=False | 1986 (993) | 0.04 [0.03, 0.05] | 0.01 [0.00, 0.01] | 0.21 [0.19, 0.22] | 0.05 [0.04, 0.06] | 5 / 1 | copy trap (word stated with the other entity) |
+| Qwen3-8B | E2 e→a | degree_adv=True | 1592 (796) | 0.01 [0.01, 0.02] | 0.01 [0.01, 0.02] | 0.11 [0.10, 0.13] | 0.08 [0.06, 0.09] | 1 / 4 | copy trap (word stated with the other entity) |
+
+Full table with every cell and stratum: ext14_behaviour_rates.md.
+
+
+E2 robustness: negating a gradable adjective with a degree adverb ('not too heavy') does not entail the antonym, so E2 is also reported without degree-adverb twins and by antonym type (complementary vs gradable) wherever patching ran (none so far: E2 is behaviour-only in every model):
+
+
+
+### Cells below the reporting threshold
+
+Rule (coordinator, 2026-10-16): a cell with < 64 validation pairs but ≥ 64 pairs overall runs tier 1 on the pooled set (marked †: no held-out selection, layers / heads chosen on the same items) and is not used for prediction tests that need validation pairs ('insufficient (pooled only)'); a cell with < 64 pairs overall is reported by its behaviour only.
+
+**Cells below the reporting threshold: behaviour only (< 64 pairs overall) and pooled (< 64 validation pairs, ≥ 64 overall)**
+
+| Model | Cell | Status | Scanned pairs | Margin pairs (both ways) | Margin rate | Pass rate by order | Top-1 rate | Split sizes (pairs) | Which answer wins |
+|---|---|---|---|---|---|---|---|---|---|
+| Mistral-7B | E1 a→e | behaviour only | 3172 | 527 | 0.17 | o1 0.18, o2 0.16 | 0.9474 | {"discovery": 20, "validation": 18} |  |
+| Mistral-7B | E1p a→e | behaviour only | 2220 | 184 | 0.08 | o1 0.08, o2 0.09 | 1.0 | {"discovery": 2, "validation": 2} |  |
+| Mistral-7B | E1p a→e (all strata) | behaviour only | 2220 | 184 | 0.08 | o1 0.08, o2 0.09 | 1.0 | {"discovery": 6, "validation": 4} |  |
+| Mistral-7B | E2 a→e | behaviour only | 3172 | 3 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Mistral-7B | E1 e→a | behaviour only | 3144 | 283 | 0.09 | o1 0.09, o2 0.09 | 0.3529 | {"discovery": 18, "validation": 16} |  |
+| Mistral-7B | E1p e→a | behaviour only | 2216 | 202 | 0.09 | o1 0.09, o2 0.09 | 0.02 | {"discovery": 30, "validation": 20} |  |
+| Mistral-7B | E2 e→a | behaviour only | 3144 | 135 | 0.04 | o1 0.04, o2 0.04 | 0.25 | {"discovery": 8, "validation": 12} |  |
+| Mistral-7B | Set C agree (a→e) | behaviour only | 3288 | 368 | 0.11 | o1 0.12, o2 0.10 | 0.9375 | {"discovery": 64, "validation": 64} |  |
+| Mistral-7B | sc_conflict_event_a2e | behaviour only | 3288 | 24 | 0.01 | o1 0.01, o2 0.01 | 1.0 | {"discovery": 4, "validation": 0} |  |
+| Mistral-7B | sc_conflict_stmt_a2e | behaviour only | 3288 | 54 | 0.02 | o1 0.02, o2 0.02 | 1.0 | {"discovery": 2, "validation": 2} |  |
+| Mixtral-8x7B | E1p a→e | behaviour only | 2220 | 277 | 0.12 | o1 0.12, o2 0.13 | 0.8636 | {"discovery": 16, "validation": 28} |  |
+| Mixtral-8x7B | E2 a→e | behaviour only | 3172 | 11 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Mixtral-8x7B | E0 prior only a→e | behaviour only | 64 | 19 | 0.30 | o1 0.34, o2 0.25 | 0.8 | {"discovery": 6, "validation": 4} |  |
+| Mixtral-8x7B | A-agree a→e | behaviour only | 62 | 27 | 0.44 | o1 0.45, o2 0.42 | 0.9 | {"discovery": 4, "validation": 16} |  |
+| Mixtral-8x7B | A-conflict a→e | behaviour only | 24 | 0 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Mixtral-8x7B | E2 e→a | behaviour only | 3144 | 70 | 0.02 | o1 0.02, o2 0.02 | 0.6667 | {"discovery": 8, "validation": 10} |  |
+| Mixtral-8x7B | E0 prior only e→a | behaviour only | 62 | 11 | 0.18 | o1 0.16, o2 0.19 | 0.0 | {"discovery": 4, "validation": 4} |  |
+| Mixtral-8x7B | A-agree e→a | behaviour only | 60 | 19 | 0.32 | o1 0.20, o2 0.43 | 0.3333 | {"discovery": 4, "validation": 8} |  |
+| Mixtral-8x7B | A-conflict e→a | behaviour only | 24 | 1 | 0.04 | o1 0.08, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Mixtral-8x7B | sc_conflict_event_a2e | behaviour only | 3288 | 30 | 0.01 | o1 0.01, o2 0.01 | 1.0 | {"discovery": 4, "validation": 0} |  |
+| Mixtral-8x7B | sc_conflict_stmt_a2e | behaviour only | 3288 | 84 | 0.03 | o1 0.03, o2 0.02 | 1.0 | {"discovery": 12, "validation": 8} |  |
+| Qwen2-57B-A14B | E1p a→e | behaviour only | 970 | 503 | 0.52 | o1 0.52, o2 0.52 | 0.9949 | {"discovery": 102, "validation": 94} |  |
+| Qwen2-57B-A14B | E1p a→e (all strata) | behaviour only | 970 | 503 | 0.52 | o1 0.52, o2 0.52 | 0.9922 | {"discovery": 128, "validation": 128} |  |
+| Qwen2-57B-A14B | E2 a→e | behaviour only | 1178 | 3 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen2-57B-A14B | E3 a→e (F1 frame, Phase-5 anchor) | behaviour only | 643 | 330 | 0.51 |  | 0.6738 | {"discovery": 97, "validation": 90} |  |
+| Qwen2-57B-A14B | E1p e→a | behaviour only | 970 | 515 | 0.53 | o1 0.55, o2 0.52 | 0.024 | {"discovery": 108, "validation": 100} |  |
+| Qwen2-57B-A14B | E1p e→a (all strata) | behaviour only | 970 | 515 | 0.53 | o1 0.55, o2 0.52 | 0.0117 | {"discovery": 128, "validation": 128} |  |
+| Qwen2-57B-A14B | E2 e→a | behaviour only | 1178 | 89 | 0.08 | o1 0.08, o2 0.07 | 0.0 | {"discovery": 10, "validation": 2} |  |
+| Qwen2-57B-A14B | L-bind binding | behaviour only | 3200 | 57 | 0.02 | o1 0.02, o2 0.01 | 1.0 | {"discovery": 6, "validation": 4} |  |
+| Qwen2-57B-A14B | Set C agree (a→e) | behaviour only | 1286 | 713 | 0.55 | o1 0.57, o2 0.54 | 0.9766 | {"discovery": 128, "validation": 128} |  |
+| Qwen2-57B-A14B | sc_conflict_event_a2e | behaviour only | 1286 | 36 | 0.03 | o1 0.02, o2 0.03 | 0.5 | {"discovery": 2, "validation": 4} |  |
+| Qwen2-57B-A14B | sc_conflict_stmt_a2e | behaviour only | 1286 | 90 | 0.07 | o1 0.07, o2 0.07 | 1.0 | {"discovery": 8, "validation": 8} |  |
+| Qwen2-7B | E2 a→e | behaviour only | 3578 | 3 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen2-7B | E2 e→a | behaviour only | 3578 | 164 | 0.05 | o1 0.05, o2 0.05 | 0.3636 | {"discovery": 12, "validation": 10} |  |
+| Qwen2-7B | L-bind binding | behaviour only | 3200 | 396 | 0.12 | o1 0.12, o2 0.12 | 1.0 | {"discovery": 28, "validation": 34} |  |
+| Qwen2-7B | Set C agree (a→e) | behaviour only | 3686 | 144 | 0.04 | o1 0.05, o2 0.03 | 0.9722 | {"discovery": 22, "validation": 14} |  |
+| Qwen2-7B | sc_conflict_event_a2e | behaviour only | 3686 | 1 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen2-7B | sc_conflict_stmt_a2e | behaviour only | 3686 | 22 | 0.01 | o1 0.01, o2 0.01 | 1.0 | {"discovery": 4, "validation": 2} |  |
+| Qwen3-30B-A3B | E2 a→e | behaviour only | 3578 | 0 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-30B-A3B | E2 e→a | behaviour only | 3578 | 122 | 0.03 | o1 0.03, o2 0.04 | 0.0 | {"discovery": 2, "validation": 4} |  |
+| Qwen3-30B-A3B | A-conflict e→a | behaviour only | 340 | 102 | 0.30 | o1 0.31, o2 0.29 | 0.0 | {"discovery": 20, "validation": 24} |  |
+| Qwen3-30B-A3B | sc_conflict_event_a2e | behaviour only | 3686 | 50 | 0.01 | o1 0.01, o2 0.02 | 1.0 | {"discovery": 4, "validation": 8} |  |
+| Qwen3-14B | E2 a→e | behaviour only | 3578 | 17 | 0.00 | o1 0.00, o2 0.01 | 1.0 | {"discovery": 0, "validation": 2} |  |
+| Qwen3-14B | E2 e→a | behaviour only | 3578 | 209 | 0.06 | o1 0.06, o2 0.06 | 0.1667 | {"discovery": 6, "validation": 6} |  |
+| Qwen3-14B | Set C agree (a→e) | behaviour only | 1286 | 1108 | 0.86 | o1 0.86, o2 0.86 | 0.9531 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-14B | sc_conflict_event_a2e | behaviour only | 3686 | 198 | 0.05 | o1 0.05, o2 0.05 | 0.9868 | {"discovery": 88, "validation": 64} |  |
+| Qwen3-14B | sc_conflict_stmt_a2e | behaviour only | 3686 | 1937 | 0.53 | o1 0.55, o2 0.50 | 0.9805 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-1.7B | E1 a→e | behaviour only | 1178 | 189 | 0.16 | o1 0.15, o2 0.17 | 0.8696 | {"discovery": 18, "validation": 28} |  |
+| Qwen3-1.7B | E1p a→e | behaviour only | 970 | 107 | 0.11 | o1 0.13, o2 0.09 | 0.8333 | {"discovery": 8, "validation": 16} |  |
+| Qwen3-1.7B | E2 a→e | behaviour only | 1178 | 0 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-1.7B | E3 a→e (P3 frame) | behaviour only | 624 | 32 | 0.05 |  | 0.4667 | {"discovery": 8, "validation": 7} |  |
+| Qwen3-1.7B | E3 a→e (F1 frame, Phase-5 anchor) | behaviour only | 643 | 30 | 0.05 |  | 0.3 | {"discovery": 7, "validation": 3} |  |
+| Qwen3-1.7B | E1 e→a | behaviour only | 1178 | 280 | 0.24 | o1 0.24, o2 0.23 | 0.2442 | {"discovery": 86, "validation": 86} |  |
+| Qwen3-1.7B | E1p e→a | behaviour only | 970 | 213 | 0.22 | o1 0.24, o2 0.20 | 0.1111 | {"discovery": 24, "validation": 30} |  |
+| Qwen3-1.7B | E2 e→a | behaviour only | 1178 | 101 | 0.09 | o1 0.08, o2 0.09 | 0.2 | {"discovery": 2, "validation": 8} |  |
+| Qwen3-1.7B | E3 e→a | behaviour only | 648 | 474 | 0.73 |  | 0.2986 | {"discovery": 90, "validation": 121} |  |
+| Qwen3-1.7B | L-ant antonym | behaviour only | 630 | 544 | 0.86 |  | 0.4484 | {"discovery": 126, "validation": 126} |  |
+| Qwen3-1.7B | L-prop object property | behaviour only | 845 | 589 | 0.70 |  | 0.3725 | {"discovery": 127, "validation": 128} |  |
+| Qwen3-1.7B | L-cf CounterFact | behaviour only | 198 | 146 | 0.74 |  | 0.2123 | {"discovery": 79, "validation": 67} |  |
+| Qwen3-1.7B | L-bind binding | behaviour only | 3200 | 892 | 0.28 | o1 0.28, o2 0.28 | 0.98 | {"discovery": 72, "validation": 78} |  |
+| Qwen3-1.7B | L-ioi IOI | behaviour only | 1600 | 1587 | 0.99 |  | 0.5898 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-1.7B | L-ind induction | behaviour only | 1600 | 350 | 0.22 | o1 0.21, o2 0.22 | 0.5568 | {"discovery": 82, "validation": 94} |  |
+| Qwen3-1.7B | Set C agree (a→e) | behaviour only | 1286 | 23 | 0.02 | o1 0.02, o2 0.02 | 1.0 | {"discovery": 6, "validation": 0} |  |
+| Qwen3-1.7B | sc_conflict_event_a2e | behaviour only | 1286 | 1 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-1.7B | sc_conflict_stmt_a2e | behaviour only | 1286 | 5 | 0.00 | o1 0.01, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-4B | E2 a→e | behaviour only | 3578 | 1 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-4B | E2 e→a | behaviour only | 3578 | 50 | 0.01 | o1 0.02, o2 0.01 | 0.0 | {"discovery": 2, "validation": 0} |  |
+| Qwen3-4B | Set C agree (a→e) | behaviour only | 3686 | 2113 | 0.57 | o1 0.60, o2 0.54 | 0.9492 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-4B | sc_conflict_event_a2e | behaviour only | 3686 | 8 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-4B | sc_conflict_stmt_a2e | behaviour only | 3686 | 1177 | 0.32 | o1 0.36, o2 0.28 | 0.9844 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-8B | E2 a→e | behaviour only | 3578 | 4 | 0.00 | o1 0.00, o2 0.00 | nan | {"discovery": 0, "validation": 0} |  |
+| Qwen3-8B | E2 e→a | behaviour only | 3578 | 97 | 0.03 | o1 0.02, o2 0.03 | 0.125 | {"discovery": 6, "validation": 2} |  |
+| Qwen3-8B | L-ind induction | behaviour only | 1600 | 81 | 0.05 | o1 0.05, o2 0.05 | 0.7778 | {"discovery": 6, "validation": 12} |  |
+| Qwen3-8B | Set C agree (a→e) | behaviour only | 3686 | 2334 | 0.63 | o1 0.66, o2 0.61 | 0.9805 | {"discovery": 128, "validation": 128} |  |
+| Qwen3-8B | sc_conflict_event_a2e | behaviour only | 3686 | 97 | 0.03 | o1 0.03, o2 0.03 | 1.0 | {"discovery": 22, "validation": 10} |  |
+| Qwen3-8B | sc_conflict_stmt_a2e | behaviour only | 3686 | 1070 | 0.29 | o1 0.32, o2 0.26 | 0.981 | {"discovery": 118, "validation": 92} |  |
+| Qwen3-30B-A3B | E0 prior only e→a † | pooled (tier 1 on all pairs) | 416 | 142 | 0.34 | o1 0.34, o2 0.34 | 0.02 | {"discovery": 100, "validation": 100} |  |
+| Mistral-7B | E1 a→e (all strata) † | pooled (tier 1 on all pairs) | 3172 | 527 | 0.17 | o1 0.18, o2 0.16 | 0.9468 | {"discovery": 94, "validation": 94} |  |
+| Mixtral-8x7B | E1 e→a † | pooled (tier 1 on all pairs) | 3144 | 457 | 0.15 | o1 0.13, o2 0.16 | 0.65 | {"discovery": 80, "validation": 80} |  |
+| Mistral-7B | E1 e→a (all strata) † | pooled (tier 1 on all pairs) | 3144 | 283 | 0.09 | o1 0.09, o2 0.09 | 0.4904 | {"discovery": 104, "validation": 104} |  |
+| Mixtral-8x7B | E1p e→a † | pooled (tier 1 on all pairs) | 2216 | 365 | 0.16 | o1 0.17, o2 0.16 | 0.0273 | {"discovery": 110, "validation": 110} |  |
+| Mistral-7B | E1p e→a (all strata) † | pooled (tier 1 on all pairs) | 2216 | 202 | 0.09 | o1 0.09, o2 0.09 | 0.0431 | {"discovery": 116, "validation": 116} |  |
+| Mistral-7B | E3 a→e (F1 frame, Phase-5 anchor) † | pooled (tier 1 on all pairs) | 1642 | 258 | 0.16 |  | 0.5856 | {"discovery": 111, "validation": 111} |  |
+| Mixtral-8x7B | E3 a→e (F1 frame, Phase-5 anchor) † | pooled (tier 1 on all pairs) | 1642 | 263 | 0.16 |  | 0.5398 | {"discovery": 113, "validation": 113} |  |
+| Mistral-7B | E3 a→e (P3 frame) † | pooled (tier 1 on all pairs) | 1572 | 252 | 0.16 |  | 0.8302 | {"discovery": 106, "validation": 106} |  |
+| Qwen3-8B | L-bind binding † | pooled (tier 1 on all pairs) | 3200 | 652 | 0.20 | o1 0.21, o2 0.20 | 1.0 | {"discovery": 80, "validation": 80} |  |
+| Qwen2-7B | L-ind induction † | pooled (tier 1 on all pairs) | 1600 | 215 | 0.13 | o1 0.13, o2 0.14 | 0.8804 | {"discovery": 92, "validation": 92} |  |
+| Qwen3-30B-A3B | L-ind induction † | pooled (tier 1 on all pairs) | 1600 | 194 | 0.12 | o1 0.12, o2 0.13 | 0.9091 | {"discovery": 66, "validation": 66} |  |
+| Qwen3-14B | L-ind induction † | pooled (tier 1 on all pairs) | 1600 | 220 | 0.14 | o1 0.14, o2 0.14 | 0.8125 | {"discovery": 64, "validation": 64} |  |
+
+Margin = logit(answer) − logit(contrast) ≥ 1 in both directions of the pair (for Dial A conflict cells the answer is the STATED one, so the margin rate is the rate at which the statement beats the prior in both directions).
+
+
+### Dial A: prior support (associativity) and E0
+
+Qwen3-30B-A3B attribute → entity: E0 0.73 [0.72, 0.74], agree 0.79 [0.77, 0.80], neutral 0.81 [0.78, 0.83], conflict 0.83 [0.81, 0.85]; conflict-cell MoE direct contribution toward the stated answer -0.30 [-0.35, -0.26]; dose–response Spearman over 5 prior bins -0.80; Qwen3-30B-A3B entity → attribute: E0 0.44 [0.42, 0.47], agree 0.34 [0.28, 0.42], neutral 0.22 [0.20, 0.26]; dose–response Spearman over 5 prior bins +0.70; Mixtral-8x7B attribute → entity: neutral 0.62 [0.60, 0.64]; Mixtral-8x7B entity → attribute: neutral 0.50 [0.47, 0.53].
+
+
+![Dial A](../figures/ext14_dial_a.png)
+
+**Dial A: attention share by prior class and five prior-support bins (validation)**
+
+| Model | Direction | Prior class | Cell | Pairs | Share | A_direct | M_direct (toward stated answer) | DLA MoE | All-MoE M | Prior support (mean) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | attribute → entity | E0 | e0_a2e | 128 | 0.73 [0.72, 0.74] | 0.97 [0.93, 1.02] | +0.03 [-0.02, +0.07] | +0.03 [-0.02, +0.07] | 0.16 [0.12, 0.21] | +1.76 |
+| Qwen3-30B-A3B | attribute → entity | agree | aagr_a2e | 128 | 0.79 [0.77, 0.80] | 1.09 [1.07, 1.12] | -0.09 [-0.12, -0.07] | -0.09 [-0.12, -0.06] | 0.02 [-0.00, 0.05] | +1.70 |
+| Qwen3-30B-A3B | attribute → entity | neutral | e1_a2e | 128 | 0.81 [0.78, 0.83] | 1.33 [1.29, 1.37] | -0.33 [-0.37, -0.29] | -0.33 [-0.37, -0.28] | -0.16 [-0.20, -0.13] | +0.00 |
+| Qwen3-30B-A3B | attribute → entity | conflict | acon_a2e | 128 | 0.83 [0.81, 0.85] | 1.30 [1.26, 1.35] | -0.30 [-0.35, -0.26] | -0.30 [-0.35, -0.25] | -0.10 [-0.15, -0.06] | -1.69 |
+| Qwen3-30B-A3B | entity → attribute | E0 † | e0_e2a | 100 | 0.44 [0.42, 0.47] | 0.38 [0.35, 0.40] | +0.62 [+0.60, +0.65] | +0.63 [+0.60, +0.65] | 0.60 [0.58, 0.63] | +1.81 |
+| Qwen3-30B-A3B | entity → attribute | agree | aagr_e2a | 74 | 0.34 [0.28, 0.42] | 0.19 [0.13, 0.26] | +0.81 [+0.74, +0.87] | +0.82 [+0.75, +0.88] | 0.67 [0.63, 0.72] | +1.71 |
+| Qwen3-30B-A3B | entity → attribute | neutral | e1_e2a | 128 | 0.22 [0.20, 0.26] | 0.06 [0.02, 0.11] | +0.94 [+0.89, +0.98] | +0.94 [+0.90, +0.98] | 0.82 [0.79, 0.84] | -0.03 |
+| Qwen3-30B-A3B | attribute → entity | bin 1 (prior -2.26) | aagr + acon | 52 | 0.82 [0.80, 0.85] |  |  |  |  |  |
+| Qwen3-30B-A3B | attribute → entity | bin 2 (prior -1.39) | aagr + acon | 54 | 0.84 [0.81, 0.85] |  |  |  |  |  |
+| Qwen3-30B-A3B | attribute → entity | bin 3 (prior +0.19) | aagr + acon | 52 | 0.80 [0.77, 0.82] |  |  |  |  |  |
+| Qwen3-30B-A3B | attribute → entity | bin 4 (prior +1.48) | aagr + acon | 52 | 0.78 [0.76, 0.80] |  |  |  |  |  |
+| Qwen3-30B-A3B | attribute → entity | bin 5 (prior +2.32) | aagr + acon | 46 | 0.80 [0.77, 0.81] |  |  |  |  | Spearman over bins -0.80 |
+| Qwen3-30B-A3B | entity → attribute | bin 1 (prior +1.11) | aagr + acon | 16 | 0.23 [0.15, 0.35] |  |  |  |  |  |
+| Qwen3-30B-A3B | entity → attribute | bin 2 (prior +1.35) | aagr + acon | 14 | 0.44 [0.37, 0.50] |  |  |  |  |  |
+| Qwen3-30B-A3B | entity → attribute | bin 3 (prior +1.68) | aagr + acon | 14 | 0.31 [0.22, 0.42] |  |  |  |  |  |
+| Qwen3-30B-A3B | entity → attribute | bin 4 (prior +1.95) | aagr + acon | 16 | 0.36 [0.28, 0.51] |  |  |  |  |  |
+| Qwen3-30B-A3B | entity → attribute | bin 5 (prior +2.49) | aagr + acon | 14 | 0.44 [0.36, 0.55] |  |  |  |  | Spearman over bins +0.70 |
+| Mixtral-8x7B | attribute → entity | neutral | e1_a2e | 90 | 0.62 [0.60, 0.64] | 1.04 [0.91, 1.17] | -0.04 [-0.17, +0.09] | -0.04 [-0.17, +0.09] | 0.33 [0.25, 0.41] | +0.02 |
+| Mixtral-8x7B | entity → attribute | neutral † | e1_e2a | 80 | 0.50 [0.47, 0.53] | 0.69 [0.58, 0.80] | +0.31 [+0.20, +0.42] | +0.31 [+0.20, +0.41] | 0.29 [0.22, 0.36] | +0.08 |
+| Qwen2-7B | attribute → entity | neutral | e1_a2e | 128 | 0.62 [0.61, 0.63] | 0.89 [0.85, 0.93] | +0.11 [+0.07, +0.15] | +0.11 [+0.07, +0.15] | 0.74 [0.72, 0.76] | +0.01 |
+| Qwen2-7B | entity → attribute | neutral | e1_e2a | 128 | 0.37 [0.35, 0.40] | 0.34 [0.26, 0.41] | +0.66 [+0.59, +0.74] | +0.67 [+0.59, +0.74] | 0.68 [0.63, 0.73] | -0.01 |
+| Qwen2-57B-A14B | attribute → entity | neutral | e1_a2e | 128 | 0.60 [0.58, 0.61] | 1.08 [1.01, 1.16] | -0.08 [-0.16, -0.01] | -0.08 [-0.15, -0.01] | 0.52 [0.48, 0.55] | -0.05 |
+| Qwen2-57B-A14B | entity → attribute | neutral | e1_e2a | 128 | 0.38 [0.36, 0.41] | 0.23 [0.19, 0.28] | +0.77 [+0.72, +0.81] | +0.78 [+0.73, +0.82] | 0.81 [0.79, 0.83] | -0.04 |
+| Qwen3-4B | attribute → entity | neutral | e1_a2e | 128 | 0.70 [0.69, 0.71] | 1.48 [1.42, 1.56] | -0.48 [-0.56, -0.42] | -0.48 [-0.55, -0.41] | 0.12 [0.06, 0.17] | +0.03 |
+| Qwen3-4B | entity → attribute | neutral | e1_e2a | 128 | 0.58 [0.55, 0.61] | 0.67 [0.58, 0.76] | +0.33 [+0.24, +0.42] | +0.33 [+0.24, +0.42] | 0.32 [0.26, 0.38] | +0.06 |
+| Qwen3-8B | attribute → entity | neutral | e1_a2e | 128 | 0.69 [0.67, 0.70] | 1.34 [1.28, 1.41] | -0.34 [-0.41, -0.28] | -0.34 [-0.41, -0.28] | 0.14 [0.09, 0.19] | +0.06 |
+| Qwen3-8B | entity → attribute | neutral | e1_e2a | 118 | 0.55 [0.53, 0.58] | 0.64 [0.55, 0.74] | +0.36 [+0.26, +0.45] | +0.36 [+0.26, +0.45] | 0.28 [0.22, 0.35] | +0.04 |
+| Qwen3-14B | attribute → entity | neutral | e1_a2e | 128 | 0.66 [0.65, 0.68] | 1.39 [1.31, 1.48] | -0.39 [-0.48, -0.31] | -0.39 [-0.47, -0.31] | 0.29 [0.23, 0.34] | -0.02 |
+| Qwen3-14B | entity → attribute | neutral | e1_e2a | 128 | 0.46 [0.44, 0.49] | 0.42 [0.35, 0.50] | +0.58 [+0.50, +0.65] | +0.60 [+0.52, +0.67] | 0.58 [0.53, 0.62] | -0.04 |
+
+
+### Set C: event + statement (which source wins)
+
+Qwen3-30B-A3B Set C agree (a→e): behaviour in the registry, share 0.83 [0.81, 0.85]; Qwen3-30B-A3B sc_conflict_stmt_a2e: statement followed in 94% of margin items, share 0.87 [0.84, 0.89]; Qwen3-30B-A3B sc_conflict_event_a2e: statement followed in 94% of margin items; Mixtral-8x7B Set C agree (a→e): behaviour in the registry, share 0.61 [0.59, 0.63]; Mixtral-8x7B sc_conflict_stmt_a2e: statement followed in 76% of margin items; Mixtral-8x7B sc_conflict_event_a2e: statement followed in 76% of margin items; Mistral-7B Set C agree (a→e): behaviour in the registry; Mistral-7B sc_conflict_stmt_a2e: statement followed in 57% of margin items; Mistral-7B sc_conflict_event_a2e: statement followed in 57% of margin items; Qwen2-7B Set C agree (a→e): behaviour in the registry; Qwen2-7B sc_conflict_stmt_a2e: statement followed in 100% of margin items; Qwen2-7B sc_conflict_event_a2e: statement followed in 100% of margin items; Qwen2-57B-A14B Set C agree (a→e): behaviour in the registry; Qwen2-57B-A14B sc_conflict_stmt_a2e: statement followed in 61% of margin items; Qwen2-57B-A14B sc_conflict_event_a2e: statement followed in 61% of margin items; Qwen3-4B Set C agree (a→e): behaviour in the registry; Qwen3-4B sc_conflict_stmt_a2e: statement followed in 100% of margin items; Qwen3-4B sc_conflict_event_a2e: statement followed in 100% of margin items; Qwen3-8B Set C agree (a→e): behaviour in the registry; Qwen3-8B sc_conflict_stmt_a2e: statement followed in 92% of margin items; Qwen3-8B sc_conflict_event_a2e: statement followed in 92% of margin items; Qwen3-14B Set C agree (a→e): behaviour in the registry; Qwen3-14B sc_conflict_stmt_a2e: statement followed in 90% of margin items; Qwen3-14B sc_conflict_event_a2e: statement followed in 90% of margin items; Qwen3-1.7B Set C agree (a→e): behaviour in the registry; Qwen3-1.7B sc_conflict_stmt_a2e: statement followed in 100% of margin items; Qwen3-1.7B sc_conflict_event_a2e: statement followed in 100% of margin items.
+
+
+**Set C (event + statement): behaviour and attention share per subset**
+
+| Model | Cell | Behaviour | Pairs | Share | Reference | Δ share vs reference |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | Set C agree (a→e) | n_pool 3686, n_margin 1609, top1_rate 0.9336 | 128 | 0.83 [0.81, 0.85] | e1_a2e | +0.01 [-0.03, +0.05] |
+| Qwen3-30B-A3B | sc_conflict_stmt_a2e | statement 167 / event 10 of 1843 items (statement rate among margin items 0.94) | 72 | 0.87 [0.84, 0.89] | e1_a2e | -0.04 [-0.12, +0.03] |
+| Qwen3-30B-A3B | sc_conflict_event_a2e | statement 167 / event 10 of 1843 items (statement rate among margin items 0.94) |  |  |  |  |
+| Mixtral-8x7B | Set C agree (a→e) | n_pool 3288, n_margin 639, top1_rate 0.9563 | 86 | 0.61 [0.59, 0.63] | e1_a2e | -0.03 [-0.13, +0.04] |
+| Mixtral-8x7B | sc_conflict_stmt_a2e | statement 19 / event 6 of 1644 items (statement rate among margin items 0.76) |  |  |  |  |
+| Mixtral-8x7B | sc_conflict_event_a2e | statement 19 / event 6 of 1644 items (statement rate among margin items 0.76) |  |  |  |  |
+| Mistral-7B | Set C agree (a→e) | n_pool 3288, n_margin 368, top1_rate 0.9375 |  |  |  |  |
+| Mistral-7B | sc_conflict_stmt_a2e | statement 4 / event 3 of 1644 items (statement rate among margin items 0.57) |  |  |  |  |
+| Mistral-7B | sc_conflict_event_a2e | statement 4 / event 3 of 1644 items (statement rate among margin items 0.57) |  |  |  |  |
+| Qwen2-7B | Set C agree (a→e) | n_pool 3686, n_margin 144, top1_rate 0.9722 |  |  |  |  |
+| Qwen2-7B | sc_conflict_stmt_a2e | statement 3 / event 0 of 1843 items (statement rate among margin items 1.00) |  |  |  |  |
+| Qwen2-7B | sc_conflict_event_a2e | statement 3 / event 0 of 1843 items (statement rate among margin items 1.00) |  |  |  |  |
+| Qwen2-57B-A14B | Set C agree (a→e) | n_pool 1286, n_margin 713, top1_rate 0.9766 |  |  |  |  |
+| Qwen2-57B-A14B | sc_conflict_stmt_a2e | statement 11 / event 7 of 643 items (statement rate among margin items 0.61) |  |  |  |  |
+| Qwen2-57B-A14B | sc_conflict_event_a2e | statement 11 / event 7 of 643 items (statement rate among margin items 0.61) |  |  |  |  |
+| Qwen3-4B | Set C agree (a→e) | n_pool 3686, n_margin 2113, top1_rate 0.9492 |  |  |  |  |
+| Qwen3-4B | sc_conflict_stmt_a2e | statement 350 / event 1 of 1843 items (statement rate among margin items 1.00) |  |  |  |  |
+| Qwen3-4B | sc_conflict_event_a2e | statement 350 / event 1 of 1843 items (statement rate among margin items 1.00) |  |  |  |  |
+| Qwen3-8B | Set C agree (a→e) | n_pool 3686, n_margin 2334, top1_rate 0.9805 |  |  |  |  |
+| Qwen3-8B | sc_conflict_stmt_a2e | statement 306 / event 28 of 1843 items (statement rate among margin items 0.92) |  |  |  |  |
+| Qwen3-8B | sc_conflict_event_a2e | statement 306 / event 28 of 1843 items (statement rate among margin items 0.92) |  |  |  |  |
+| Qwen3-14B | Set C agree (a→e) | n_pool 1286, n_margin 1108, top1_rate 0.9531 |  |  |  |  |
+| Qwen3-14B | sc_conflict_stmt_a2e | statement 768 / event 88 of 1843 items (statement rate among margin items 0.90) |  |  |  |  |
+| Qwen3-14B | sc_conflict_event_a2e | statement 768 / event 88 of 1843 items (statement rate among margin items 0.90) |  |  |  |  |
+| Qwen3-1.7B | Set C agree (a→e) | n_pool 1286, n_margin 23, top1_rate 1.0 |  |  |  |  |
+| Qwen3-1.7B | sc_conflict_stmt_a2e | statement 1 / event 0 of 643 items (statement rate among margin items 1.00) |  |  |  |  |
+| Qwen3-1.7B | sc_conflict_event_a2e | statement 1 / event 0 of 643 items (statement rate among margin items 1.00) |  |  |  |  |
+
+
+### Hand-off layers
+
+![Hand-off layers](../figures/ext14_handoff.png)
+
+**Hand-off layers from the position × layer residual grid (validation; CIs: cluster bootstrap of the layer index, 1,000 resamples)**
+
+| Model | Cell | L | Swapped token ≥ 0.5 until | Final ≥ 0.1 from | Final ≥ 0.5 from | Final ≥ 0.9 from | Crossing |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | E1 a→e | 48 | 34 [34, 34] | 30 [30, 33] | 37 [37, 37] | 42 [41, 42] | 36 [36, 36] |
+| Qwen3-30B-A3B | E1 e→a | 48 | 28 [28, 28] | 23 [23, 23] | 29 [29, 31] | 40 [38, 41] | 29 [29, 29] |
+| Qwen3-30B-A3B | L-bind binding | 48 | 34 [34, 34] | 32 [31, 33] | 37 [37, 37] | 41 [41, 41] | 35 [35, 37] |
+| Mixtral-8x7B | E1 a→e | 32 | 12 [12, 12] | 13 [12, 13] | 14 [13, 15] | 21 [20, 24] | 13 [13, 13] |
+
+
+### Robustness: metric (R-metric) and corruption site (R-site)
+
+R-metric. Qwen3-30B-A3B: Spearman of the cell ranking LD vs normalised LD +0.99, LD vs Δp +0.97 (22 cells; largest |share difference| 0.04 / 0.12); Mixtral-8x7B: Spearman of the cell ranking LD vs normalised LD +0.99, LD vs Δp +1.00 (15 cells; largest |share difference| 0.01 / 0.08).
+
+
+R-site (corruption in the evidence: the two entity mentions swapped, which flips the answer; two swapped tokens, a documented exception to R2). Qwen3-30B-A3B: evidence-site share 0.83 [0.81, 0.85], question-site 0.81 [0.78, 0.83], difference on 59 common twins +0.03 [+0.00, +0.05]; Mixtral-8x7B: evidence-site share 0.67 [0.65, 0.69], question-site 0.63 [0.60, 0.65], difference on 23 common twins +0.05 [+0.02, +0.07].
+
+
+![R-metric](../figures/ext14_r_metric.png)
+
+**R-metric: attention share under LD, normalised LD and Δp (validation)**
+
+| Model | Cell | Pairs | Share (LD) | Share (norm. LD) | Share (Δp) |
+|---|---|---|---|---|---|
+| Qwen3-30B-A3B | E1 a→e | 128 | 0.81 [0.78, 0.83] | 0.81 [0.78, 0.82] | 0.85 [0.82, 0.87] |
+| Qwen3-30B-A3B | E1 a→e (all strata) | 128 | 0.80 [0.78, 0.82] | 0.79 [0.77, 0.81] | 0.84 [0.82, 0.87] |
+| Qwen3-30B-A3B | E1p a→e | 128 | 0.83 [0.81, 0.85] | 0.82 [0.80, 0.84] | 0.85 [0.83, 0.87] |
+| Qwen3-30B-A3B | E3 a→e (P3 frame) | 70 | 0.77 [0.74, 0.80] | 0.78 [0.75, 0.81] | 0.82 [0.78, 0.84] |
+| Qwen3-30B-A3B | E3 a→e (F1 frame, Phase-5 anchor) | 84 | 0.73 [0.70, 0.76] | 0.74 [0.71, 0.76] | 0.77 [0.74, 0.79] |
+| Qwen3-30B-A3B | E0 prior only a→e | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.76 [0.73, 0.78] |
+| Qwen3-30B-A3B | A-agree a→e | 128 | 0.79 [0.77, 0.80] | 0.79 [0.77, 0.80] | 0.87 [0.84, 0.89] |
+| Qwen3-30B-A3B | A-conflict a→e | 128 | 0.83 [0.81, 0.85] | 0.84 [0.82, 0.85] | 0.89 [0.86, 0.90] |
+| Qwen3-30B-A3B | E1 e→a | 128 | 0.22 [0.20, 0.26] | 0.24 [0.21, 0.29] | 0.27 [0.22, 0.33] |
+| Qwen3-30B-A3B | E1 e→a (all strata) | 128 | 0.28 [0.24, 0.32] | 0.31 [0.26, 0.35] | 0.34 [0.27, 0.38] |
+| Qwen3-30B-A3B | E1p e→a | 128 | 0.24 [0.21, 0.29] | 0.28 [0.24, 0.33] | 0.26 [0.20, 0.32] |
+| Qwen3-30B-A3B | E3 e→a | 128 | 0.18 [0.15, 0.21] | 0.18 [0.16, 0.22] | 0.15 [0.11, 0.21] |
+| Qwen3-30B-A3B | E0 prior only e→a | 100 | 0.44 [0.42, 0.47] | 0.45 [0.42, 0.48] | 0.42 [0.36, 0.54] |
+| Qwen3-30B-A3B | A-agree e→a | 74 | 0.34 [0.28, 0.41] | 0.33 [0.26, 0.41] | 0.46 [0.40, 0.58] |
+| Qwen3-30B-A3B | L-ant antonym | 126 | 0.51 [0.49, 0.54] | 0.52 [0.49, 0.54] | 0.54 [0.50, 0.58] |
+| Qwen3-30B-A3B | L-prop object property | 127 | 0.33 [0.30, 0.36] | 0.34 [0.31, 0.37] | 0.30 [0.25, 0.35] |
+| Qwen3-30B-A3B | L-bind binding | 128 | 0.79 [0.77, 0.80] | 0.80 [0.77, 0.81] | 0.82 [0.78, 0.85] |
+| Qwen3-30B-A3B | L-ioi IOI | 128 | 0.92 [0.90, 0.94] | 0.93 [0.91, 0.94] | 0.96 [0.94, 0.98] |
+| Qwen3-30B-A3B | L-ind induction | 66 | 0.77 [0.72, 0.80] | 0.76 [0.71, 0.80] | 0.83 [0.78, 0.86] |
+| Qwen3-30B-A3B | R-site E1 a→e (evidence swap) | 128 | 0.83 [0.81, 0.85] | 0.83 [0.81, 0.84] | 0.88 [0.85, 0.90] |
+| Qwen3-30B-A3B | Set C agree (a→e) | 128 | 0.83 [0.81, 0.85] | 0.83 [0.81, 0.85] | 0.86 [0.81, 0.90] |
+| Qwen3-30B-A3B | sc_conflict_stmt_a2e | 72 | 0.87 [0.84, 0.89] | 0.87 [0.85, 0.89] | 0.90 [0.88, 0.91] |
+| Qwen3-30B-A3B | Spearman of the cell ranking: LD vs norm. LD 0.99, LD vs Δp 0.97 |  |  |  |  |
+| Mixtral-8x7B | E1 a→e | 90 | 0.62 [0.59, 0.64] | 0.62 [0.59, 0.64] | 0.65 [0.62, 0.67] |
+| Mixtral-8x7B | E1 a→e (all strata) | 128 | 0.58 [0.56, 0.60] | 0.58 [0.56, 0.60] | 0.61 [0.58, 0.64] |
+| Mixtral-8x7B | E3 a→e (P3 frame) | 80 | 0.55 [0.54, 0.57] | 0.56 [0.54, 0.58] | 0.59 [0.57, 0.62] |
+| Mixtral-8x7B | E3 a→e (F1 frame, Phase-5 anchor) | 113 | 0.52 [0.50, 0.54] | 0.52 [0.50, 0.54] | 0.55 [0.52, 0.58] |
+| Mixtral-8x7B | E1 e→a | 80 | 0.50 [0.48, 0.53] | 0.50 [0.48, 0.53] | 0.48 [0.45, 0.51] |
+| Mixtral-8x7B | E1 e→a (all strata) | 110 | 0.51 [0.49, 0.53] | 0.51 [0.49, 0.53] | 0.50 [0.48, 0.52] |
+| Mixtral-8x7B | E1p e→a | 110 | 0.47 [0.45, 0.50] | 0.47 [0.44, 0.51] | 0.43 [0.41, 0.47] |
+| Mixtral-8x7B | E3 e→a | 128 | 0.34 [0.33, 0.35] | 0.34 [0.33, 0.36] | 0.31 [0.29, 0.33] |
+| Mixtral-8x7B | L-ant antonym | 126 | 0.48 [0.45, 0.51] | 0.47 [0.44, 0.50] | 0.47 [0.43, 0.51] |
+| Mixtral-8x7B | L-prop object property | 128 | 0.42 [0.40, 0.44] | 0.41 [0.39, 0.43] | 0.41 [0.38, 0.43] |
+| Mixtral-8x7B | L-bind binding | 128 | 0.71 [0.70, 0.73] | 0.71 [0.70, 0.73] | 0.73 [0.71, 0.74] |
+| Mixtral-8x7B | L-ioi IOI | 128 | 0.80 [0.79, 0.81] | 0.80 [0.79, 0.81] | 0.88 [0.87, 0.89] |
+| Mixtral-8x7B | L-ind induction | 128 | 0.71 [0.69, 0.73] | 0.72 [0.70, 0.73] | 0.79 [0.77, 0.81] |
+| Mixtral-8x7B | R-site E1 a→e (evidence swap) | 128 | 0.67 [0.65, 0.69] | 0.67 [0.65, 0.70] | 0.70 [0.67, 0.73] |
+| Mixtral-8x7B | Set C agree (a→e) | 86 | 0.61 [0.59, 0.63] | 0.61 [0.59, 0.63] | 0.64 [0.62, 0.67] |
+| Mixtral-8x7B | Spearman of the cell ranking: LD vs norm. LD 0.99, LD vs Δp 1.00 |  |  |  |  |
+| Mistral-7B | E1 a→e (all strata) | 94 | 0.61 [0.60, 0.63] | 0.62 [0.60, 0.63] | 0.65 [0.63, 0.67] |
+| Mistral-7B | E3 a→e (P3 frame) | 106 | 0.56 [0.54, 0.57] | 0.56 [0.54, 0.57] | 0.57 [0.55, 0.59] |
+| Mistral-7B | E3 a→e (F1 frame, Phase-5 anchor) | 111 | 0.48 [0.46, 0.50] | 0.49 [0.47, 0.51] | 0.51 [0.49, 0.53] |
+| Mistral-7B | E1 e→a (all strata) | 104 | 0.49 [0.46, 0.52] | 0.49 [0.46, 0.52] | 0.49 [0.45, 0.52] |
+| Mistral-7B | E1p e→a (all strata) | 116 | 0.41 [0.39, 0.43] | 0.41 [0.39, 0.43] | 0.39 [0.35, 0.43] |
+| Mistral-7B | E3 e→a | 128 | 0.31 [0.30, 0.32] | 0.32 [0.31, 0.33] | 0.28 [0.25, 0.31] |
+| Mistral-7B | L-ant antonym | 126 | 0.45 [0.43, 0.48] | 0.45 [0.43, 0.49] | 0.42 [0.38, 0.46] |
+| Mistral-7B | L-prop object property | 128 | 0.37 [0.35, 0.39] | 0.37 [0.36, 0.39] | 0.34 [0.31, 0.36] |
+| Mistral-7B | L-cf CounterFact | 98 | 0.55 [0.52, 0.57] | 0.55 [0.53, 0.57] | 0.71 [0.62, 0.79] |
+| Mistral-7B | L-bind binding | 128 | 0.68 [0.66, 0.69] | 0.68 [0.66, 0.69] | 0.70 [0.68, 0.71] |
+| Mistral-7B | L-ioi IOI | 128 | 0.78 [0.77, 0.79] | 0.79 [0.78, 0.80] | 0.88 [0.87, 0.89] |
+| Mistral-7B | L-ind induction | 128 | 0.68 [0.67, 0.70] | 0.69 [0.67, 0.71] | 0.74 [0.72, 0.76] |
+| Mistral-7B | Spearman of the cell ranking: LD vs norm. LD 0.99, LD vs Δp 0.95 |  |  |  |  |
+| Qwen2-7B | E1 a→e | 128 | 0.62 [0.61, 0.63] | 0.61 [0.60, 0.62] | 0.66 [0.65, 0.67] |
+| Qwen2-7B | E1p a→e | 128 | 0.62 [0.61, 0.63] | 0.61 [0.59, 0.62] | 0.64 [0.62, 0.66] |
+| Qwen2-7B | E3 a→e (P3 frame) | 96 | 0.56 [0.55, 0.58] | 0.56 [0.54, 0.57] | 0.59 [0.57, 0.60] |
+| Qwen2-7B | E3 a→e (F1 frame, Phase-5 anchor) | 68 | 0.50 [0.47, 0.53] | 0.50 [0.48, 0.53] | 0.54 [0.51, 0.56] |
+| Qwen2-7B | E1 e→a | 128 | 0.37 [0.35, 0.40] | 0.38 [0.36, 0.41] | 0.41 [0.38, 0.44] |
+| Qwen2-7B | E1p e→a | 128 | 0.35 [0.33, 0.37] | 0.36 [0.34, 0.38] | 0.36 [0.32, 0.40] |
+| Qwen2-7B | E3 e→a | 128 | 0.21 [0.19, 0.23] | 0.22 [0.20, 0.24] | 0.20 [0.15, 0.24] |
+| Qwen2-7B | L-ant antonym | 126 | 0.47 [0.45, 0.49] | 0.47 [0.44, 0.49] | 0.50 [0.46, 0.54] |
+| Qwen2-7B | L-prop object property | 128 | 0.35 [0.33, 0.37] | 0.36 [0.34, 0.37] | 0.30 [0.27, 0.32] |
+| Qwen2-7B | L-cf CounterFact | 88 | 0.41 [0.39, 0.44] | 0.42 [0.40, 0.45] | 0.57 [0.52, 0.61] |
+| Qwen2-7B | L-ioi IOI | 128 | 0.71 [0.70, 0.72] | 0.71 [0.70, 0.72] | 0.80 [0.78, 0.82] |
+| Qwen2-7B | L-ind induction | 92 | 0.68 [0.66, 0.70] | 0.69 [0.67, 0.71] | 0.70 [0.67, 0.73] |
+| Qwen2-7B | Spearman of the cell ranking: LD vs norm. LD 0.99, LD vs Δp 0.97 |  |  |  |  |
+| Qwen2-57B-A14B | E1 a→e | 128 | 0.60 [0.58, 0.61] | 0.60 [0.58, 0.61] | 0.63 [0.62, 0.65] |
+| Qwen2-57B-A14B | E3 a→e (P3 frame) | 128 | 0.57 [0.55, 0.58] | 0.56 [0.55, 0.58] | 0.61 [0.59, 0.63] |
+| Qwen2-57B-A14B | E1 e→a | 128 | 0.38 [0.36, 0.41] | 0.40 [0.37, 0.42] | 0.43 [0.38, 0.47] |
+| Qwen2-57B-A14B | E3 e→a | 128 | 0.21 [0.19, 0.24] | 0.22 [0.21, 0.25] | 0.21 [0.16, 0.26] |
+| Qwen2-57B-A14B | L-ant antonym | 126 | 0.35 [0.33, 0.37] | 0.35 [0.32, 0.37] | 0.39 [0.34, 0.44] |
+| Qwen2-57B-A14B | L-prop object property | 128 | 0.35 [0.34, 0.37] | 0.36 [0.34, 0.38] | 0.35 [0.32, 0.38] |
+| Qwen2-57B-A14B | L-cf CounterFact | 98 | 0.42 [0.40, 0.45] | 0.43 [0.41, 0.46] | 0.59 [0.54, 0.65] |
+| Qwen2-57B-A14B | L-ioi IOI | 128 | 0.77 [0.76, 0.78] | 0.77 [0.76, 0.78] | 0.86 [0.84, 0.88] |
+| Qwen2-57B-A14B | L-ind induction | 128 | 0.70 [0.69, 0.72] | 0.71 [0.70, 0.73] | 0.77 [0.75, 0.78] |
+| Qwen2-57B-A14B | Spearman of the cell ranking: LD vs norm. LD 1.00, LD vs Δp 0.98 |  |  |  |  |
+| Qwen3-4B | E1 a→e | 128 | 0.70 [0.69, 0.71] | 0.70 [0.69, 0.71] | 0.77 [0.76, 0.79] |
+| Qwen3-4B | E1p a→e | 128 | 0.69 [0.67, 0.70] | 0.69 [0.67, 0.70] | 0.73 [0.71, 0.74] |
+| Qwen3-4B | E3 a→e (P3 frame) | 76 | 0.68 [0.66, 0.70] | 0.69 [0.67, 0.71] | 0.71 [0.68, 0.73] |
+| Qwen3-4B | E3 a→e (F1 frame, Phase-5 anchor) | 78 | 0.63 [0.61, 0.65] | 0.64 [0.62, 0.66] | 0.68 [0.65, 0.70] |
+| Qwen3-4B | E1 e→a | 128 | 0.58 [0.55, 0.61] | 0.59 [0.56, 0.62] | 0.63 [0.60, 0.66] |
+| Qwen3-4B | E1p e→a | 120 | 0.54 [0.52, 0.56] | 0.55 [0.53, 0.57] | 0.55 [0.53, 0.57] |
+| Qwen3-4B | E3 e→a | 128 | 0.31 [0.29, 0.33] | 0.32 [0.30, 0.34] | 0.25 [0.23, 0.28] |
+| Qwen3-4B | L-ant antonym | 126 | 0.55 [0.52, 0.58] | 0.56 [0.52, 0.59] | 0.64 [0.60, 0.68] |
+| Qwen3-4B | L-prop object property | 128 | 0.38 [0.36, 0.40] | 0.39 [0.37, 0.41] | 0.39 [0.37, 0.41] |
+| Qwen3-4B | L-cf CounterFact | 83 | 0.56 [0.53, 0.58] | 0.55 [0.52, 0.58] | 0.69 [0.62, 0.75] |
+| Qwen3-4B | L-bind binding | 128 | 0.66 [0.65, 0.67] | 0.66 [0.65, 0.67] | 0.69 [0.68, 0.70] |
+| Qwen3-4B | L-ioi IOI | 128 | 0.74 [0.74, 0.75] | 0.74 [0.74, 0.75] | 0.84 [0.82, 0.85] |
+| Qwen3-4B | L-ind induction | 128 | 0.68 [0.66, 0.70] | 0.69 [0.67, 0.71] | 0.74 [0.71, 0.75] |
+| Qwen3-4B | Spearman of the cell ranking: LD vs norm. LD 0.97, LD vs Δp 0.97 |  |  |  |  |
+| Qwen3-8B | E1 a→e | 128 | 0.69 [0.67, 0.70] | 0.69 [0.68, 0.70] | 0.76 [0.75, 0.77] |
+| Qwen3-8B | E1p a→e | 128 | 0.62 [0.60, 0.64] | 0.62 [0.60, 0.64] | 0.66 [0.64, 0.68] |
+| Qwen3-8B | E3 a→e (P3 frame) | 110 | 0.64 [0.63, 0.66] | 0.65 [0.63, 0.67] | 0.70 [0.68, 0.72] |
+| Qwen3-8B | E3 a→e (F1 frame, Phase-5 anchor) | 128 | 0.62 [0.60, 0.64] | 0.63 [0.60, 0.64] | 0.69 [0.67, 0.71] |
+| Qwen3-8B | E1 e→a | 118 | 0.55 [0.53, 0.58] | 0.55 [0.53, 0.57] | 0.61 [0.59, 0.64] |
+| Qwen3-8B | E1p e→a | 120 | 0.51 [0.48, 0.53] | 0.52 [0.49, 0.54] | 0.56 [0.53, 0.59] |
+| Qwen3-8B | E3 e→a | 128 | 0.28 [0.26, 0.30] | 0.29 [0.27, 0.31] | 0.21 [0.17, 0.25] |
+| Qwen3-8B | L-ant antonym | 126 | 0.54 [0.51, 0.57] | 0.54 [0.50, 0.57] | 0.62 [0.56, 0.68] |
+| Qwen3-8B | L-prop object property | 128 | 0.36 [0.34, 0.38] | 0.37 [0.35, 0.39] | 0.40 [0.38, 0.41] |
+| Qwen3-8B | L-cf CounterFact | 95 | 0.52 [0.49, 0.55] | 0.51 [0.48, 0.54] | 0.72 [0.63, 0.79] |
+| Qwen3-8B | L-bind binding | 80 | 0.68 [0.67, 0.69] | 0.68 [0.67, 0.69] | 0.69 [0.68, 0.71] |
+| Qwen3-8B | L-ioi IOI | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.82 [0.81, 0.83] |
+| Qwen3-8B | Spearman of the cell ranking: LD vs norm. LD 0.99, LD vs Δp 0.83 |  |  |  |  |
+| Qwen3-14B | E1 a→e | 128 | 0.66 [0.65, 0.68] | 0.66 [0.64, 0.67] | 0.74 [0.72, 0.76] |
+| Qwen3-14B | E1p a→e | 128 | 0.66 [0.64, 0.68] | 0.65 [0.64, 0.67] | 0.74 [0.72, 0.76] |
+| Qwen3-14B | E3 a→e (P3 frame) | 128 | 0.65 [0.63, 0.66] | 0.65 [0.63, 0.66] | 0.72 [0.70, 0.74] |
+| Qwen3-14B | E3 a→e (F1 frame, Phase-5 anchor) | 128 | 0.62 [0.61, 0.63] | 0.62 [0.60, 0.63] | 0.68 [0.66, 0.70] |
+| Qwen3-14B | E1 e→a | 128 | 0.46 [0.44, 0.49] | 0.47 [0.45, 0.50] | 0.48 [0.44, 0.51] |
+| Qwen3-14B | E1p e→a | 128 | 0.39 [0.37, 0.42] | 0.40 [0.37, 0.42] | 0.39 [0.28, 0.49] |
+| Qwen3-14B | E3 e→a | 128 | 0.21 [0.19, 0.23] | 0.21 [0.20, 0.23] | 0.15 [0.13, 0.18] |
+| Qwen3-14B | L-ant antonym | 126 | 0.59 [0.56, 0.62] | 0.58 [0.55, 0.62] | 0.67 [0.62, 0.72] |
+| Qwen3-14B | L-prop object property | 128 | 0.36 [0.34, 0.38] | 0.36 [0.35, 0.38] | 0.29 [0.27, 0.31] |
+| Qwen3-14B | L-cf CounterFact | 88 | 0.50 [0.47, 0.53] | 0.50 [0.47, 0.54] | 0.55 [0.45, 0.65] |
+| Qwen3-14B | L-bind binding | 128 | 0.65 [0.65, 0.66] | 0.66 [0.65, 0.66] | 0.69 [0.69, 0.70] |
+| Qwen3-14B | L-ioi IOI | 128 | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.74 [0.72, 0.76] |
+| Qwen3-14B | L-ind induction | 64 | 0.67 [0.65, 0.70] | 0.68 [0.66, 0.70] | 0.73 [0.71, 0.75] |
+| Qwen3-14B | Spearman of the cell ranking: LD vs norm. LD 0.98, LD vs Δp 0.95 |  |  |  |  |
+
+
+**R-site: corruption in the evidence (two entity mentions swapped) vs in the question (E1 a→e)**
+
+| Model | Evidence-site share | Question-site share (E1 a→e) | Δ (evidence − question), common twins | Common twins | Hand-off evidence site | Hand-off question site |
+|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | 0.83 [0.81, 0.85] | 0.81 [0.78, 0.83] | +0.03 [+0.00, +0.05] | 59 |  | L34.0 → L37.0 |
+| Mixtral-8x7B | 0.67 [0.65, 0.69] | 0.63 [0.60, 0.65] | +0.05 [+0.02, +0.07] | 23 |  | L12.0 → L14.0 |
+
+
+### Causal handle on the share (R-causal)
+
+e1_a2e/qwen3 heads (L42H10, L39H27, L43H24): attention AUC+ change -0.17 [-0.22, -0.13] (random +0.05 [+0.02, +0.08]), MoE AUC+ change -0.00 [-0.17, +0.17] (random +0.13 [+0.00, +0.25]), share change -0.03 [-0.05, -0.01] (random -0.01 [-0.02, +0.00]), task margin change -0.23 [-0.25, -0.22]; e1_a2e/qwen3 experts (L37E032, L44E116, L43E070): attention AUC+ change -0.12 [-0.16, -0.07] (random -0.01 [-0.05, +0.02]), MoE AUC+ change -0.21 [-0.34, -0.04] (random +0.00 [-0.12, +0.11]), share change +0.01 [-0.01, +0.04] (random -0.00 [-0.01, +0.01]), task margin change -0.10 [-0.11, -0.08]; e1_a2e/mixtral_bos heads (L13H11, L19H8, L16H0): attention AUC+ change -0.37 [-0.44, -0.31] (random -0.06 [-0.10, -0.02]), MoE AUC+ change -0.21 [-0.30, -0.11] (random -0.11 [-0.16, -0.05]), share change -0.06 [-0.07, -0.04] (random +0.01 [+0.00, +0.02]), task margin change -0.43 [-0.47, -0.38]; e1_a2e/mixtral_bos experts (L17E007, L15E006, L14E005): attention AUC+ change -0.21 [-0.26, -0.15] (random -0.01 [-0.06, +0.04]), MoE AUC+ change -0.30 [-0.37, -0.22] (random -0.03 [-0.10, +0.04]), share change +0.03 [+0.01, +0.04] (random +0.01 [-0.00, +0.01]), task margin change -0.21 [-0.25, -0.18]; e3_e2a/qwen3 heads (L42H30, L39H5, L42H29): attention AUC+ change -0.05 [-0.22, +0.17] (random +0.07 [-0.06, +0.21]), MoE AUC+ change +0.04 [-0.00, +0.09] (random +0.01 [-0.02, +0.04]), share change -0.01 [-0.03, +0.01] (random +0.01 [-0.01, +0.02]), task margin change +0.01 [-0.00, +0.01]; e3_e2a/qwen3 experts (L43E081, L41E117, L31E124): attention AUC+ change +0.12 [-0.13, +0.43] (random +0.09 [-0.11, +0.38]), MoE AUC+ change -0.13 [-0.20, -0.04] (random +0.02 [-0.02, +0.08]), share change +0.04 [+0.01, +0.06] (random +0.01 [-0.01, +0.03]), task margin change -0.10 [-0.12, -0.08]; e3_e2a/mixtral_bos heads (L25H9, L19H13, L13H18): attention AUC+ change -0.15 [-0.21, -0.10] (random +0.01 [-0.03, +0.04]), MoE AUC+ change -0.02 [-0.04, +0.01] (random +0.00 [-0.01, +0.02]), share change -0.03 [-0.04, -0.02] (random +0.00 [-0.00, +0.00]), task margin change -0.10 [-0.11, -0.09]; e3_e2a/mixtral_bos experts (L20E000, L19E006, L21E006): attention AUC+ change +0.01 [-0.04, +0.06] (random +0.02 [-0.02, +0.06]), MoE AUC+ change -0.19 [-0.21, -0.16] (random +0.00 [-0.02, +0.02]), share change +0.05 [+0.04, +0.06] (random +0.00 [-0.00, +0.01]), task margin change -0.10 [-0.12, -0.08].
+
+![R-causal](../figures/ext14_r_causal.png)
+**R-causal: zero-mode knockout of the top-3 mover heads (discovery single-head rescue) or the top-3 experts (discovery all-case single-expert rescue) in both prefill rows and every spawned row, then the T2 sweep and the T3 all-MoE joint re-run; relative changes vs the unmasked baseline in the same code path; random = mean of 3 matched draws (heads: same layers; experts: same layer, nearest final-position routing frequency); paired cluster bootstrap over twins (validation pairs)**
+
+| Cell | Model | Knockout | Attention AUC+ change (top / random) | MoE AUC+ change (top / random) | Share change (top / random) | Top − random: attention / MoE / share | Clean margin change (top / random) | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| E1 a→e | Qwen3-30B-A3B | top-3 heads: L42H10, L39H27, L43H24 | -0.17 [-0.22, -0.13] / +0.05 [+0.02, +0.08] | -0.00 [-0.17, +0.17] / +0.13 [+0.00, +0.25] | -0.03 [-0.05, -0.01] / -0.01 [-0.02, +0.00] | -0.23 [-0.27, -0.18] / -0.13 [-0.27, +0.01] / -0.02 [-0.04, -0.00] | -0.23 [-0.25, -0.22] / +0.04 [+0.03, +0.05] | failed |
+| E1 a→e | Qwen3-30B-A3B | top-3 experts: L37E032, L44E116, L43E070 | -0.12 [-0.16, -0.07] / -0.01 [-0.05, +0.02] | -0.21 [-0.34, -0.04] / +0.00 [-0.12, +0.11] | +0.01 [-0.01, +0.04] / -0.00 [-0.01, +0.01] | -0.11 [-0.14, -0.07] / -0.21 [-0.32, -0.07] / +0.02 [-0.00, +0.03] | -0.10 [-0.11, -0.08] / -0.01 [-0.02, -0.01] | held |
+| E1 a→e | Mixtral-8x7B | top-3 heads: L13H11, L19H8, L16H0 | -0.37 [-0.44, -0.31] / -0.06 [-0.10, -0.02] | -0.21 [-0.30, -0.11] / -0.11 [-0.16, -0.05] | -0.06 [-0.07, -0.04] / +0.01 [+0.00, +0.02] | -0.31 [-0.38, -0.25] / -0.09 [-0.18, -0.01] / -0.07 [-0.08, -0.06] | -0.43 [-0.47, -0.38] / -0.08 [-0.09, -0.07] | held |
+| E1 a→e | Mixtral-8x7B | top-3 experts: L17E007, L15E006, L14E005 | -0.21 [-0.26, -0.15] / -0.01 [-0.06, +0.04] | -0.30 [-0.37, -0.22] / -0.03 [-0.10, +0.04] | +0.03 [+0.01, +0.04] / +0.01 [-0.00, +0.01] | -0.20 [-0.26, -0.14] / -0.27 [-0.34, -0.18] / +0.02 [+0.01, +0.04] | -0.21 [-0.25, -0.18] / -0.01 [-0.03, +0.00] | held |
+| E3 e→a | Qwen3-30B-A3B | top-3 heads: L42H30, L39H5, L42H29 | -0.05 [-0.22, +0.17] / +0.07 [-0.06, +0.21] | +0.04 [-0.00, +0.09] / +0.01 [-0.02, +0.04] | -0.01 [-0.03, +0.01] / +0.01 [-0.01, +0.02] | -0.12 [-0.28, +0.08] / +0.03 [-0.01, +0.08] / -0.02 [-0.04, +0.00] | +0.01 [-0.00, +0.01] / -0.00 [-0.00, +0.00] | failed |
+| E3 e→a | Qwen3-30B-A3B | top-3 experts: L43E081, L41E117, L31E124 | +0.12 [-0.13, +0.43] / +0.09 [-0.11, +0.38] | -0.13 [-0.20, -0.04] / +0.02 [-0.02, +0.08] | +0.04 [+0.01, +0.06] / +0.01 [-0.01, +0.03] | +0.03 [-0.26, +0.31] / -0.15 [-0.23, -0.06] / +0.03 [-0.00, +0.05] | -0.10 [-0.12, -0.08] / -0.00 [-0.01, +0.00] | failed |
+| E3 e→a | Mixtral-8x7B | top-3 heads: L25H9, L19H13, L13H18 | -0.15 [-0.21, -0.10] / +0.01 [-0.03, +0.04] | -0.02 [-0.04, +0.01] / +0.00 [-0.01, +0.02] | -0.03 [-0.04, -0.02] / +0.00 [-0.00, +0.00] | -0.16 [-0.20, -0.12] / -0.02 [-0.04, +0.00] / -0.03 [-0.04, -0.03] | -0.10 [-0.11, -0.09] / +0.01 [+0.01, +0.01] | failed |
+| E3 e→a | Mixtral-8x7B | top-3 experts: L20E000, L19E006, L21E006 | +0.01 [-0.04, +0.06] / +0.02 [-0.02, +0.06] | -0.19 [-0.21, -0.16] / +0.00 [-0.02, +0.02] | +0.05 [+0.04, +0.06] / +0.00 [-0.00, +0.01] | -0.01 [-0.05, +0.03] / -0.19 [-0.22, -0.16] / +0.05 [+0.04, +0.05] | -0.10 [-0.12, -0.08] / -0.00 [-0.00, +0.00] | failed |
+
+
+### Tier 2 on E1 (selected experts, add-back, mixed circuit, knockout, writers)
+
+e1_a2e/qwen3: selected L37E032 (pattern A, Spec +0.21 [+0.16, +0.27]); all-MoE ceiling -0.17 [-0.21, -0.14], k80 greedy / oracle / random 1 / 1 / 1; mixed head + expert greedy r(20) 0.93 [0.92, 0.95], heads among the first 10 picks 9.6; knockout F of the selected expert +0.065 [+0.054, +0.075]; e1_a2e/mixtral_bos: selected L17E007 (pattern A, Spec +0.21 [+0.13, +0.28]); all-MoE ceiling 0.33 [0.28, 0.39], k80 greedy / oracle / random 2 / 3 / 48; mixed head + expert greedy r(20) 1.17 [1.11, 1.25], heads among the first 10 picks 7.1; knockout F of the selected expert -0.008 [-0.028, +0.011].
+
+**Tier 2 at E1 (Phase 6) next to E3 (the Phase-5 dir_f1 / dir_opt runs on the Phase-5 item set; not paired)**
+
+| Model | Direction | Level | Selected expert | Spec | All-MoE ceiling | k80 greedy / random | Mixed r(20) | Heads in first 10 | KO F selected | Writer D/T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | attribute → entity | E1 (Phase 6) | L37E032 (A) | +0.21 [+0.16, +0.27] | -0.17 [-0.21, -0.14] | own-max k80 4 / never | 0.93 [0.92, 0.95] | 9.6 | +0.065 [+0.054, +0.075] | -0.01 [-0.03, 0.01] |
+| Qwen3-30B-A3B | attribute → entity | E3 (Phase 5 dir_f1) | L44E116 (A) | +0.17 [+0.11, +0.24] | 0.10 [0.03, 0.16] | 1 / 384 | 0.87 [0.84, 0.89] | 8.2 | +0.021 [+0.007, +0.036] | 2.25 [1.93, 2.63] |
+| Qwen3-30B-A3B | entity → attribute | E3 (Phase 5 dir_opt) | L41E117 (A) | +0.46 [+0.29, +0.66] | 0.81 [0.80, 0.83] | 11 / 320 | 0.88 [0.86, 0.92] | 3.6 | +0.025 [+0.011, +0.041] | 0.99 [0.91, 1.08] |
+| Mixtral-8x7B | attribute → entity | E1 (Phase 6) | L17E007 (A) | +0.21 [+0.13, +0.28] | 0.33 [0.28, 0.39] | 2 / 48 | 1.17 [1.11, 1.25] | 7.1 | -0.008 [-0.028, +0.011] | 0.04 [-0.00, 0.10] |
+| Mixtral-8x7B | attribute → entity | E3 (Phase 5 dir_f1) | L20E001 (A) | +0.11 [+0.02, +0.20] | 0.41 [0.36, 0.46] | 3 / 64 | 1.00 [0.97, 1.04] | 5.9 | -0.005 [-0.021, +0.011] | 0.84 [0.73, 0.99] |
+| Mixtral-8x7B | entity → attribute | E3 (Phase 5 dir_opt) | L20E000 (A) | +0.90 [+0.79, +1.02] | 0.75 [0.73, 0.78] | 8 / 48 | 0.89 [0.88, 0.90] | 2.6 | +0.025 [+0.016, +0.034] | 0.74 [0.67, 0.81] |
+
+**Phase 6 tier 2: selected expert, add-back, mixed head + expert greedy, knockout, writer (validation; cluster bootstrap)**
+
+| Cell | Model | Selected expert | Pattern | Spec [95% CI] | All-MoE ceiling | k80 greedy / oracle / random | random k for greedy 1·5·10·15 | Mixed r(20) | Heads in first 10 | KO F selected | KO top-10 vs random | Writer D/T selected |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| E1 a→e | Qwen3-30B-A3B-Base | L37E032 | A | +0.21 [+0.16, +0.27] | -0.17 [-0.21, -0.14] | own-max k80: 4 / 192 / n/a | 1→never · 5→never · 10→never · 15→never | 0.93 [0.92, 0.95] | 9.6 | +0.065 [+0.054, +0.075] | +0.145 vs +0.008 | -0.01 [-0.03, 0.01] |
+| E1 a→e | Mixtral-8x7B (BOS) | L17E007 | A | +0.21 [+0.13, +0.28] | 0.33 [0.28, 0.39] | 2 / 3 / 48 | 1→21 · 5→never · 10→never · 15→never | 1.17 [1.11, 1.25] | 7.1 | -0.008 [-0.028, +0.011] | +0.192 vs -0.004 | 0.04 [-0.00, 0.10] |
+
+**Random-order k that reaches greedy's (oracle's) r at k = 1, 5, 10, 15 (P6-0 definition, interpolated in log k)**
+
+| Cell | Model | Curve | k=1 | k=5 | k=10 | k=15 |
+|---|---|---|---|---|---|---|
+| E1 a→e | Qwen3-30B-A3B-Base | greedy | never | never | never | never |
+| E1 a→e | Qwen3-30B-A3B-Base | oracle | never | never | never | never |
+| E1 a→e | Mixtral-8x7B (BOS) | greedy | 21 | never | never | never |
+| E1 a→e | Mixtral-8x7B (BOS) | oracle | 21 | never | never | never |
+
+'never' = the random order (which ends at the all-MoE ceiling) never reaches that value.
+
+![Add-back E1 a2e](../figures/ext14_t2_ab_e1_a2e_addback.png)
+
+
+### Pre-registered predictions
+
+| ID | Prediction | Observed | Verdict |
+|---|---|---|---|
+| E1 | E1-a2e: >= 0.80 | qwen3: 0.81 [0.78, 0.83] (held) | **held** |
+| E2 | E1-a2e: >= 0.70 | mixtral_bos: 0.62 [0.60, 0.64] (failed) | **failed** |
+| E3 | E1p-a2e vs E1-a2e: |E1p - E1| <= 0.10 | qwen3: 0.01 [-0.01, 0.02] (held); mixtral_bos: insufficient data | **insufficient data** |
+| E4 | E2-a2e vs E1-a2e: E1 - E2 >= 0.10 | qwen3: insufficient data; mixtral_bos: insufficient data | **insufficient data** |
+| E5 | E3-a2e: 0.65-0.80 (= Phase-5 F1 level) | qwen3: 0.73 [0.70, 0.76] (held) | **held** |
+| E6 | E3-a2e: 0.45-0.65 | mixtral_bos: 0.52 [0.50, 0.54] (insufficient (pooled only)) | **insufficient (pooled only)** |
+| E7 | E1-e2a: >= 0.70 | qwen3: 0.22 [0.20, 0.26] (failed) | **failed** |
+| E8 | E1-e2a: >= 0.65 | mixtral_bos: 0.50 [0.47, 0.53] (insufficient (pooled only)) | **insufficient (pooled only)** |
+| E9 | E1p-e2a vs E1-e2a: E1 - E1p >= 0.10 | qwen3: 0.00 [-0.04, 0.04] (failed); mixtral_bos: -0.05 [-0.09, -0.00] (insufficient (pooled only)) | **failed** |
+| E10 | E2-e2a vs E1p-e2a: E1p - E2 > 0 | qwen3: insufficient data; mixtral_bos: insufficient data | **insufficient data** |
+| E11 | E3-e2a: 0.10-0.30 (= option swap level) | qwen3: 0.18 [0.15, 0.21] (held) | **held** |
+| E12 | E3-e2a: 0.25-0.45 | mixtral_bos: 0.34 [0.33, 0.35] (held) | **held** |
+| E13 | direction gap a2e - e2a at E1: H-inference (best guess): |gap(E1)| <= 0.10; H-type: gap(E1) >= 0.5 * gap(E3) | qwen3:  → H-type (failed); mixtral_bos: insufficient (pooled only) | **failed** |
+| E14 | dial E monotonicity: a2e: E1 >= E1p > E2 and E1 > E3; e2a: E1 > E1p > E2 >= E3 | qwen3:a2e: e1 0.81, e1p 0.83, e2 , e3p3 0.77 (insufficient data); qwen3:e2a: e1 0.22, e1p 0.24, e2 , e3 0.18 (insufficient data); mixtral_bos:a2e: e1 0.62, e1p , e2 , e3p3 0.55 (insufficient data); mixtral_bos:e2a: e1 0.50, e1p 0.47, e2 , e3 0.34 (insufficient data) | **insufficient data** |
+| A1 | Dial A (a2e and e2a): conflict >= neutral(E1) > agree > E0 | qwen3:a2e: conflict 0.83, neutral 0.81, agree 0.79, E0 0.73 (held); qwen3:e2a: conflict , neutral 0.22, agree 0.34, E0 0.44 (insufficient data); mixtral_bos:a2e: conflict , neutral 0.62, agree , E0  (insufficient data); mixtral_bos:e2a: conflict , neutral 0.50, agree , E0  (insufficient data) | **insufficient data** |
+| A2 | A-conf: < 0 | qwen3:a2e: -0.30 [-0.35, -0.26] (held); qwen3:e2a: insufficient data; mixtral_bos:a2e: insufficient data; mixtral_bos:e2a: insufficient data | **insufficient data** |
+| A3 | E0: <= 0.35 | qwen3:e0_a2e: 0.73 [0.72, 0.74] (failed); qwen3:e0_e2a: 0.44 [0.42, 0.47] (insufficient (pooled only)) | **failed** |
+| A4 | E0: <= 0.45 | mixtral_bos:e0_a2e: insufficient data; mixtral_bos:e0_e2a: insufficient data | **insufficient data** |
+| A5 | Dial A dose-response: monotone decreasing with prior support (5 bins) | qwen3:a2e: -0.80 (held); qwen3:e2a: 0.70 (failed); mixtral_bos:a2e: insufficient data; mixtral_bos:e2a: insufficient data | **failed** |
+| C1 | Set C conflict (E3 + contradicting statement): the explicit statement wins in >= 60 % of margin items | qwen3: 0.94 (held); mixtral_bos: 0.76 (held); mistral7b_bos: 0.57 (failed); qwen2_7b: 1.00 (held); qwen2_57b: 0.61 (held); qwen3_4b: 1.00 (held); qwen3_8b: 0.92 (held); qwen3_14b: 0.90 (held); qwen3_1p7b: 1.00 (held) | **failed** |
+| C2 | Set C statement-following subset: within 0.10 of E1-a2e | qwen3: -0.04 [-0.12, 0.03] (held); mixtral_bos: insufficient data | **insufficient data** |
+| C3 | Set C event-following subset (if >= 64 val pairs): within 0.10 of E3-a2e | qwen3: insufficient data; mixtral_bos: insufficient data | **insufficient data** |
+| R1 | all Stage-1 cells: >= 0.8 | qwen3: nld 0.99, dp 0.97 (held); mixtral_bos: nld 0.99, dp 1.00 (held) | **held** |
+| R2 | E1-a2e evidence-site vs question-site: |diff| <= 0.15 | qwen3: 0.03 [0.00, 0.05] (held); mixtral_bos: 0.05 [0.02, 0.07] (held) | **held** |
+| R3 | E1-a2e, E3-e2a: knockout top-3 mover heads: attention AUC+ drops >= 20 % and share drops >= 0.05 more than with matched random heads | R3:e1_a2e/qwen3: rel_attn_vs_rand -0.23 [-0.27, -0.18], d_share_vs_rand -0.02 [-0.04, -0.00] (failed); R3:e1_a2e/mixtral_bos: rel_attn_vs_rand -0.31 [-0.38, -0.25], d_share_vs_rand -0.07 [-0.08, -0.06] (held); R3:e3_e2a/qwen3: rel_attn_vs_rand -0.12 [-0.28, 0.08], d_share_vs_rand -0.02 [-0.04, 0.00] (failed); R3:e3_e2a/mixtral_bos: rel_attn_vs_rand -0.16 [-0.20, -0.12], d_share_vs_rand -0.03 [-0.04, -0.03] (failed) | **failed** |
+| R4 | E1-a2e, E3-e2a: knockout top-3 experts: drops >= 20 % more than with matched random experts | R4:e1_a2e/qwen3: rel_moe_vs_rand -0.21 [-0.32, -0.07] (held); R4:e1_a2e/mixtral_bos: rel_moe_vs_rand -0.27 [-0.34, -0.18] (held); R4:e3_e2a/qwen3: rel_moe_vs_rand -0.15 [-0.23, -0.06] (failed); R4:e3_e2a/mixtral_bos: rel_moe_vs_rand -0.19 [-0.22, -0.16] (failed) | **failed** |
+
+
+### Caveats
+
+- E1p and E2 exclude twins without an acceptable paraphrase / without a `_ was [too] X` blank clause (counts in `data/dial/build_report.md`), so their own sets are subsets of E1; paired contrasts restrict to the common twins.
+- Shares are ratios of AUC+ over layers; they are descriptions of where single-layer patches restore the drop, not additive decompositions (block ≈ attention + MoE only to bf16 noise, Phase 3).
+- The direction comparison changes the readout token type (entity vs attribute) together with the direction; Dial E holds the items fixed but not the answer vocabulary.
+- Dial-A strong-prior items come partly from a controlled noun-pair set, not only from WinoGrande twins; its comparison with E1 (neutral) is therefore not paired unless the twins overlap (the paired rows list the overlap).
+
+### Files
+
+`moetrace/ext14_analysis.py` (`dial_e`, `dial_a`, `set_c`, `r_metric`, `r_site`, `grid_summary`, `evaluate_predictions`), `scripts/ext14_all.py`, tier 2 `scripts/ext14_t2_*.py` (results `results/p6_<cell>_<proto>_t2/`), R-causal `scripts/ext14_causal_*.py` (results `results/p6_causal_*`); `results/ext14_summary.json` keys `dial_e`, `dial_a`, `set_c`, `r_metric`, `r_site`, `handoff`, `r_causal`, `tier2`, `predictions`.
+
+
+## Direction 14c: Phase 6 dense parent vs MoE child
+
+**Summary.** Dense parent vs MoE child (P6-3) on identical prompts (validation pairs common to both models; paired cluster bootstrap). Mistral-7B → Mixtral-8x7B (10 cells, identical prompts): |MoE − dense| ≤ 0.10 in 100% of the cells, MoE ≥ dense + 0.10 in 0%, cell order Spearman +0.98; knowledge cells L-ant antonym +0.03 [+0.01, +0.05], L-prop object property +0.06 [+0.04, +0.07], E3 e→a +0.03 [+0.01, +0.04]; copy cells L-ind induction +0.03 [-0.00, +0.07], L-ioi IOI +0.02 [+0.01, +0.03], L-bind binding +0.04 [+0.02, +0.06], E1 a→e -0.03 [-0.06, +0.01], E1 e→a +0.02 [-0.02, +0.06]. Qwen2-7B → Qwen2-57B-A14B (9 cells, identical prompts): |MoE − dense| ≤ 0.10 in 89% of the cells, MoE ≥ dense + 0.10 in 0%, cell order Spearman +0.90; knowledge cells L-ant antonym -0.11 [-0.13, -0.09], L-prop object property +0.00 [-0.01, +0.02], L-cf CounterFact +0.01 [-0.00, +0.03], E3 e→a -0.01 [-0.04, +0.02]; copy cells L-ind induction +0.02 [-0.01, +0.05], L-ioi IOI +0.06 [+0.05, +0.08], E1 a→e -0.02 [-0.04, -0.00], E1 e→a -0.03 [-0.07, +0.02]. Pre-registered predictions: held D0, D1, D4; failed D2, D3. The hypotheses are H-invariant (D1, best guess D0: the share is a property of the task), H-capacity (D2: more FFN capacity lowers the attention share in knowledge cells only) and H-sparsity (D3: sparse routing raises the attention share).
+
+**Reading.** Mistral-7B → Mixtral-8x7B: 10 cells, MoE − dense between -0.03 and +0.06 (positive in 8), |Δ| > 0.10 only in no cell; the cell order is preserved (Spearman 0.98). Qwen2-7B → Qwen2-57B-A14B: 9 cells, MoE − dense between -0.11 and +0.06 (positive in 5), |Δ| > 0.10 only in L-ant antonym -0.11; the cell order is preserved (Spearman 0.90). Inside Qwen2-57B-A14B the always-on shared expert carries most of the MoE rescue where the answer is an entity or a stored antonym and about half where the answer is an attribute (shared / (shared + routed): L-ant antonym 0.75 [0.72, 0.78], L-prop object property 0.68 [0.66, 0.69], L-cf CounterFact 0.75 [0.72, 0.77], E1 a→e 0.76 [0.72, 0.79], E1 e→a 0.43 [0.40, 0.47], E3 e→a 0.51 [0.48, 0.54], E3 a→e (P3 frame) 0.77 [0.75, 0.80]). Over both twins 18 of 19 cell contrasts are within ±0.10 (H-invariant, D1 / D0); MoE ≥ dense + 0.10 in no cell (H-sparsity, D3); MoE ≤ dense − 0.10 in L-ant antonym (qwen2_57b) (the H-capacity direction, D2). At matched architecture the attention share is a property of the task far more than of the MLP / MoE type.
+
+
+### What was computed
+
+Twins: Mistral-7B-v0.1 ↔ Mixtral-8x7B-v0.1 (same 32 layers, d 4096, same attention geometry and tokenizer; Mixtral likely upcycled) and Qwen2-7B ↔ Qwen2-57B-A14B (28 layers, d 3584; officially upscaled from Qwen2-7B; one always-on shared expert + 64 routed). The Set-A cells are built once per tokenizer family, so both twins see the same prompts; each cell's comparison uses the pairs that pass the margin rule in both models (R6), with each model's own set reported in `ext14_cells.md`. Dense models: the MLP output plays the role of the MoE output in every readout (single-layer patch, all-MLP M, direct split). Curves on a depth-normalised axis l / (L − 1).
+
+![Share shift dense to MoE](../figures/ext14_dense_arrows.png)
+
+![Mistral vs Mixtral curves](../figures/ext14_dense_curves_mixtral_bos.png)
+
+![Qwen2 dense vs MoE curves](../figures/ext14_dense_curves_qwen2_57b.png)
+
+**Dense parent vs MoE child (validation; own sets and paired on the common pairs, which are identical prompts)**
+
+| Twin (dense → MoE) | Cell | Dense, own set | MoE, own set | MoE − dense (own sets) | Common pairs | MoE − dense (paired) | paired, without the last ⌈L/12⌉ layers | Δ A_direct (paired) | Δ M, MoE vs MLP (paired) | Contrast used for D1–D4 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Mistral-7B → Mixtral-8x7B | E1 a→e (all strata) † | 0.61 [0.59, 0.63] | 0.58 [0.56, 0.60] | -0.03 [-0.06, -0.01] | 34.0 | -0.03 [-0.06, +0.01] | -0.04 [-0.07, -0.00] | -0.26 [-0.42, -0.10] | -0.09 [-0.18, -0.01] | -0.03 [-0.06, +0.01] (paired (34 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | E3 a→e (P3 frame) † | 0.56 [0.54, 0.57] | 0.55 [0.53, 0.57] | -0.00 [-0.03, +0.02] | 19.0 | -0.01 [-0.05, +0.03] | -0.01 [-0.05, +0.02] | -0.11 [-0.25, +0.02] | -0.07 [-0.14, +0.02] | -0.00 [-0.03, +0.02] (own sets (only 19 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | E3 a→e (F1 frame, Phase-5 anchor) † | 0.48 [0.46, 0.50] | 0.52 [0.50, 0.54] | +0.04 [+0.01, +0.06] | 36.0 | +0.02 [-0.00, +0.05] | +0.02 [-0.00, +0.05] | +0.12 [+0.01, +0.23] | -0.14 [-0.21, -0.08] | +0.02 [-0.00, +0.05] (paired (36 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | E1 e→a (all strata) † | 0.49 [0.46, 0.52] | 0.51 [0.49, 0.53] | +0.02 [-0.02, +0.06] | 26.0 | -0.00 [-0.03, +0.03] | -0.01 [-0.04, +0.02] | +0.01 [-0.10, +0.12] | -0.16 [-0.26, -0.05] | +0.02 [-0.02, +0.06] (own sets (only 26 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | E3 e→a | 0.31 [0.30, 0.33] | 0.34 [0.33, 0.35] | +0.03 [+0.01, +0.04] | 59.0 | +0.03 [+0.01, +0.04] | +0.02 [+0.00, +0.03] | +0.08 [+0.06, +0.10] | -0.08 [-0.10, -0.07] | +0.03 [+0.01, +0.04] (paired (59 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | L-ant antonym | 0.45 [0.42, 0.48] | 0.48 [0.45, 0.51] | +0.03 [-0.01, +0.07] | 123.0 | +0.03 [+0.01, +0.05] | +0.05 [+0.03, +0.07] | -0.04 [-0.08, -0.01] | +0.03 [-0.00, +0.06] | +0.03 [+0.01, +0.05] (paired (123 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | L-prop object property | 0.37 [0.35, 0.39] | 0.42 [0.40, 0.44] | +0.05 [+0.02, +0.08] | 122.0 | +0.06 [+0.04, +0.07] | +0.03 [+0.02, +0.04] | +0.16 [+0.13, +0.19] | -0.17 [-0.20, -0.15] | +0.06 [+0.04, +0.07] (paired (122 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | L-bind binding | 0.68 [0.66, 0.69] | 0.71 [0.70, 0.73] | +0.04 [+0.02, +0.06] | 14.0 | +0.04 [+0.02, +0.08] | +0.04 [+0.01, +0.08] | +0.22 [+0.06, +0.40] | -0.21 [-0.36, -0.10] | +0.04 [+0.02, +0.06] (own sets (only 14 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | L-ioi IOI | 0.78 [0.78, 0.79] | 0.80 [0.79, 0.81] | +0.02 [+0.00, +0.03] | 128.0 | +0.02 [+0.01, +0.03] | +0.02 [+0.01, +0.03] | +0.08 [+0.06, +0.09] | -0.15 [-0.17, -0.14] | +0.02 [+0.01, +0.03] (paired (128 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | L-ind induction | 0.68 [0.67, 0.70] | 0.71 [0.69, 0.73] | +0.03 [+0.01, +0.06] | 50.0 | +0.03 [-0.00, +0.07] | +0.02 [-0.01, +0.06] | +0.11 [+0.02, +0.20] | -0.30 [-0.38, -0.23] | +0.03 [-0.00, +0.07] (paired (50 common pairs)) |
+| Mistral-7B → Mixtral-8x7B | D1: \|Δ\| ≤ 0.10 in 100% of 10 cells; D3: Δ ≥ +0.10 in 0%; D4: Spearman of the own-set cell order 0.98 |  |  |  |  |  |  |  |  |  |
+| Qwen2-7B → Qwen2-57B-A14B | E1 a→e | 0.62 [0.61, 0.63] | 0.60 [0.58, 0.61] | -0.02 [-0.04, -0.00] | 18.0 | +0.02 [+0.00, +0.05] | +0.04 [+0.02, +0.06] | +0.36 [+0.21, +0.52] | -0.29 [-0.37, -0.20] | -0.02 [-0.04, -0.00] (own sets (only 18 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | E3 a→e (P3 frame) | 0.56 [0.55, 0.58] | 0.57 [0.55, 0.58] | +0.00 [-0.02, +0.03] | 35.0 | +0.02 [-0.01, +0.04] | +0.01 [-0.01, +0.04] | -0.04 [-0.12, +0.04] | +0.05 [+0.00, +0.10] | +0.02 [-0.01, +0.04] (paired (35 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | E1 e→a | 0.37 [0.35, 0.40] | 0.38 [0.36, 0.41] | +0.01 [-0.02, +0.05] | 32.0 | -0.03 [-0.07, +0.02] | +0.02 [-0.02, +0.06] | -0.18 [-0.31, -0.05] | +0.17 [+0.07, +0.25] | -0.03 [-0.07, +0.02] (paired (32 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | E3 e→a | 0.21 [0.19, 0.23] | 0.21 [0.19, 0.24] | +0.01 [-0.02, +0.03] | 65.0 | -0.01 [-0.04, +0.02] | +0.03 [-0.01, +0.06] | -0.00 [-0.02, +0.01] | -0.02 [-0.03, -0.01] | -0.01 [-0.04, +0.02] (paired (65 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | L-ant antonym | 0.47 [0.45, 0.49] | 0.35 [0.33, 0.37] | -0.12 [-0.15, -0.09] | 96.0 | -0.11 [-0.13, -0.09] | -0.03 [-0.05, -0.01] | -0.26 [-0.32, -0.19] | +0.25 [+0.19, +0.31] | -0.11 [-0.13, -0.09] (paired (96 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | L-prop object property | 0.35 [0.33, 0.37] | 0.35 [0.34, 0.37] | +0.00 [-0.02, +0.02] | 110.0 | +0.00 [-0.01, +0.02] | +0.05 [+0.02, +0.07] | +0.01 [-0.01, +0.02] | -0.02 [-0.04, -0.00] | +0.00 [-0.01, +0.02] (paired (110 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | L-cf CounterFact | 0.41 [0.38, 0.44] | 0.42 [0.40, 0.45] | +0.01 [-0.02, +0.05] | 85.0 | +0.01 [-0.00, +0.03] | +0.07 [+0.05, +0.09] | +0.03 [+0.02, +0.05] | -0.04 [-0.06, -0.03] | +0.01 [-0.00, +0.03] (paired (85 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | L-ioi IOI | 0.71 [0.70, 0.72] | 0.77 [0.76, 0.78] | +0.06 [+0.05, +0.08] | 127.0 | +0.06 [+0.05, +0.08] | +0.12 [+0.10, +0.13] | +0.24 [+0.20, +0.28] | -0.30 [-0.33, -0.27] | +0.06 [+0.05, +0.08] (paired (127 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | L-ind induction † | 0.68 [0.66, 0.70] | 0.70 [0.68, 0.72] | +0.02 [-0.01, +0.05] | 14.0 | +0.01 [-0.06, +0.09] | +0.01 [-0.05, +0.09] | +0.39 [+0.11, +0.83] | +0.02 [-0.24, +0.20] | +0.02 [-0.01, +0.05] (own sets (only 14 common pairs)) |
+| Qwen2-7B → Qwen2-57B-A14B | D1: \|Δ\| ≤ 0.10 in 89% of 9 cells; D3: Δ ≥ +0.10 in 0%; D4: Spearman of the own-set cell order 0.90 |  |  |  |  |  |  |  |  |  |
+
+Contrast used for the D predictions: paired on the common pairs when there are ≥ 32, else the difference of the two own validation sets (independent cluster bootstraps). E1-family cells use the all-association-strata variant when it exists for both models (coordinator 2026-10-17 03:19Z). Dense models are tier 1 only (no expert tables, Spec, controls or expert knockouts; the MLP output plays the MoE output's role). The depth-normalised interior variant drops the last ⌈L/12⌉ layers of both models (48 → 4, 32 → 3, 28 → 3, 36 → 3, 40 → 4). † = pooled cell in at least one model.
+
+
+### Pre-registered predictions
+
+| ID | Prediction | Observed | Verdict |
+|---|---|---|---|
+| D0 | all Set-A cells: H-invariant for Mistral-7B <-> Mixtral (prior: Li et al. ACL 2025) | mistral7b_bos->mixtral_bos: 1.00 (held) | **held** |
+| D1 | Set A: |share_dense - share_MoE| <= 0.10 in >= 80 % of cells | mistral7b_bos->mixtral_bos: 1.00 (held); qwen2_7b->qwen2_57b: 0.89 (held) | **held** |
+| D2 | Set A: share_MoE - share_dense <= -0.10 in knowledge cells (L-ant, L-prop, L-cf, E3-e2a) and |diff| <= 0.10 in copy cells (L-ind, L-ioi, L-bind, E1-*) | mistral7b_bos->mixtral_bos: failed; qwen2_7b->qwen2_57b: failed | **failed** |
+| D3 | Set A: share_MoE - share_dense >= +0.10 in most cells | mistral7b_bos->mixtral_bos: 0.00 (failed); qwen2_7b->qwen2_57b: 0.00 (failed) | **failed** |
+| D4 | Set A: >= 0.8 | mistral7b_bos->mixtral_bos: 0.98 (held); qwen2_7b->qwen2_57b: 0.90 (held) | **held** |
+
+
+### Caveats
+
+- The twins change capacity and sparsity together; the Qwen3 dense series (`ext14_scale.md`) and the Qwen2-57B shared-vs-routed split separate them only partly.
+- Choe et al. (EMNLP 2025) report unusually strong early attention in Qwen dense models: compare the per-layer curves, not only the shares.
+- The Mixtral-8x7B upcycling from Mistral-7B is likely (Lo et al. 2024) but not confirmed by Mistral.
+
+### Files
+
+`moetrace/ext14_analysis.py` (`twin_compare`), `scripts/ext14_all.py`; `results/ext14_summary.json` key `twins`; `results/tables/ext14_dense_twins.md`, `results/figures/ext14_dense_*.png`.
+
+
+## Direction 14d: Phase 6 capacity series
+
+**Summary.** Capacity (P6-4 before the Stage-3 gate): attention share along the families' capacity series, each model on its own validation set (paired values on the common pairs in the tables). series qwen3 (Qwen3-4B → Qwen3-8B → Qwen3-14B → Qwen3-30B-A3B): E1 a→e 0.70 [0.69, 0.71] → 0.69 [0.67, 0.70] → 0.66 [0.65, 0.68] → 0.81 [0.78, 0.83]; E1p a→e 0.69 [0.67, 0.70] → 0.62 [0.60, 0.64] → 0.66 [0.64, 0.68] → 0.83 [0.80, 0.85]; E3 a→e (F1 frame, Phase-5 anchor) 0.63 [0.61, 0.65] → 0.62 [0.60, 0.64] → 0.62 [0.61, 0.63] → 0.73 [0.70, 0.76]; E3 e→a 0.31 [0.29, 0.33] → 0.28 [0.26, 0.30] → 0.21 [0.19, 0.23] → 0.18 [0.15, 0.21]; E3 a→e (P3 frame) 0.68 [0.66, 0.70] → 0.64 [0.63, 0.66] → 0.65 [0.63, 0.66] → 0.77 [0.74, 0.80]; L-ant antonym 0.55 [0.52, 0.59] → 0.54 [0.51, 0.57] → 0.59 [0.55, 0.62] → 0.51 [0.49, 0.54]; L-bind binding 0.66 [0.65, 0.67] → 0.68 [0.67, 0.69] → 0.65 [0.65, 0.66] → 0.79 [0.77, 0.81]; L-ind induction 0.68 [0.66, 0.70] → 0.67 [0.65, 0.70] → 0.77 [0.73, 0.80]; L-ioi IOI 0.74 [0.74, 0.75] → 0.73 [0.72, 0.74] → 0.73 [0.72, 0.74] → 0.92 [0.90, 0.94]; L-prop object property 0.38 [0.36, 0.40] → 0.36 [0.34, 0.38] → 0.36 [0.34, 0.38] → 0.33 [0.30, 0.36]. series mistral (Mistral-7B → Mixtral-8x7B): E1 a→e (all strata) 0.61 [0.59, 0.63] → 0.58 [0.56, 0.60]; E1 e→a (all strata) 0.49 [0.46, 0.52] → 0.51 [0.49, 0.53]; E3 a→e (F1 frame, Phase-5 anchor) 0.48 [0.46, 0.50] → 0.52 [0.50, 0.54]; E3 e→a 0.31 [0.30, 0.33] → 0.34 [0.33, 0.35]; E3 a→e (P3 frame) 0.56 [0.54, 0.57] → 0.55 [0.53, 0.57]; L-ant antonym 0.45 [0.42, 0.48] → 0.48 [0.45, 0.51]; L-bind binding 0.68 [0.66, 0.69] → 0.71 [0.70, 0.73]; L-ind induction 0.68 [0.67, 0.70] → 0.71 [0.69, 0.73]; L-ioi IOI 0.78 [0.78, 0.79] → 0.80 [0.79, 0.81]; L-prop object property 0.37 [0.35, 0.39] → 0.42 [0.40, 0.44]. series qwen2 (Qwen2-7B → Qwen2-57B-A14B): E1 a→e 0.62 [0.61, 0.63] → 0.60 [0.58, 0.61]; E1 e→a 0.37 [0.35, 0.40] → 0.38 [0.36, 0.41]; E3 e→a 0.21 [0.19, 0.23] → 0.21 [0.19, 0.24]; E3 a→e (P3 frame) 0.56 [0.55, 0.58] → 0.57 [0.55, 0.58]; L-ant antonym 0.47 [0.45, 0.49] → 0.35 [0.33, 0.37]; L-cf CounterFact 0.41 [0.38, 0.44] → 0.42 [0.40, 0.45]; L-ind induction 0.68 [0.66, 0.70] → 0.70 [0.68, 0.72]; L-ioi IOI 0.71 [0.70, 0.72] → 0.77 [0.76, 0.78]; L-prop object property 0.35 [0.33, 0.37] → 0.35 [0.34, 0.37]. Pre-registered predictions: held D5, D6; failed none.
+
+**Reading.** Qwen3 dense 4B → 8B → 14B: the share is flat with capacity in 9 of 10 cells (range ≤ 0.10 across the three dense models; D5). The 30B-A3B MoE departs from the dense series: higher on L-ioi IOI 0.73–0.74 → 0.92, L-bind binding 0.65–0.68 → 0.79, L-ind induction 0.67–0.68 → 0.77, E1 a→e 0.66–0.70 → 0.81, E1p a→e 0.62–0.69 → 0.83, E3 a→e (F1 frame, Phase-5 anchor) 0.62–0.63 → 0.73, E3 a→e (P3 frame) 0.64–0.68 → 0.77; lower on L-prop object property 0.36–0.38 → 0.33, E3 e→a 0.21–0.31 → 0.18 (own validation sets). Because the dense Qwen3 series is mostly flat, the 30B-A3B departure is not a capacity trend: it comes with the MoE model (different depth, width, training run and sparsity together; there is no Qwen3 dense twin), and it goes in opposite directions for the cells listed as higher and lower.
+
+
+### What was computed
+
+Series: Qwen3-4B → 8B → 14B-Base (dense, same tokenizer and generation as Qwen3-30B-A3B; 36 / 36 / 40 layers) → Qwen3-30B-A3B (MoE, 48 layers); Mistral-7B → Mixtral-8x7B; Qwen2-7B → Qwen2-57B-A14B. Qwen3-1.7B enters the competence scan only. D5 = per cell |share(14B) − share(4B)| ≤ 0.10 (paired on common pairs) and the dense models' cell order vs Qwen3-30B-A3B (Spearman ≥ 0.8). Mixtral-8x22B (Stage 3) is gated by the user's decision after Stage R and is not part of this section yet.
+
+![Qwen3 series](../figures/ext14_capacity_qwen3.png)
+
+![Mistral series](../figures/ext14_capacity_mistral.png)
+
+![Qwen2 series](../figures/ext14_capacity_qwen2.png)
+
+**Capacity series 'qwen3' (Qwen3-4B → Qwen3-8B → Qwen3-14B → Qwen3-30B-A3B): attention share on each model's own validation set and on the pairs common to every member present (validation)**
+
+| Cell | Qwen3-4B (own set) | Qwen3-8B (own set) | Qwen3-14B (own set) | Qwen3-30B-A3B (own set) | Common pairs | paired shares (common pairs) Qwen3-4B → Qwen3-8B → Qwen3-14B → Qwen3-30B-A3B | last − first (paired) | interior variant, paired | 14B − 4B (paired on their common pairs) | paired shares (common pairs) Qwen3-4B → Qwen3-14B → Qwen3-30B-A3B |
+|---|---|---|---|---|---|---|---|---|---|---|
+| E1 a→e | 0.70 [0.69, 0.71] | 0.69 [0.67, 0.70] | 0.66 [0.65, 0.68] | 0.81 [0.78, 0.83] | 26 | 0.71 → 0.71 → 0.67 → 0.86 | +0.14 [+0.10, +0.17] | 0.69 → 0.69 → 0.66 → 0.86 | -0.04 [-0.06, -0.02] |  |
+| E1p a→e | 0.69 [0.67, 0.70] | 0.62 [0.60, 0.64] | 0.66 [0.64, 0.68] | 0.83 [0.80, 0.85] | 18 | 0.71 → 0.66 → 0.70 → 0.83 | +0.13 [+0.07, +0.17] | 0.68 → 0.63 → 0.69 → 0.82 | -0.02 [-0.04, -0.00] |  |
+| E3 a→e (P3 frame) | 0.68 [0.66, 0.70] | 0.64 [0.63, 0.66] | 0.65 [0.63, 0.66] | 0.77 [0.74, 0.80] | 7 | 0.74 → 0.67 → 0.71 → 0.82 | +0.08 [+0.04, +0.12] | 0.71 → 0.65 → 0.70 → 0.82 | -0.01 [-0.03, +0.01] |  |
+| E3 a→e (F1 frame, Phase-5 anchor) | 0.63 [0.61, 0.65] | 0.62 [0.60, 0.64] | 0.62 [0.61, 0.63] | 0.73 [0.70, 0.76] | 6 | 0.64 → 0.61 → 0.62 → 0.68 | +0.04 [-0.06, +0.14] | 0.61 → 0.58 → 0.60 → 0.66 | -0.03 [-0.05, -0.01] |  |
+| E3 e→a | 0.31 [0.29, 0.33] | 0.28 [0.26, 0.30] | 0.21 [0.19, 0.23] | 0.18 [0.15, 0.21] | 23 | 0.29 → 0.25 → 0.22 → 0.19 | -0.10 [-0.14, -0.04] | 0.26 → 0.24 → 0.23 → 0.20 | -0.08 [-0.12, -0.04] |  |
+| L-ant antonym | 0.55 [0.52, 0.59] | 0.54 [0.51, 0.57] | 0.59 [0.55, 0.62] | 0.51 [0.49, 0.54] | 111 | 0.55 → 0.54 → 0.58 → 0.52 | -0.03 [-0.06, -0.01] | 0.51 → 0.50 → 0.55 → 0.51 | +0.03 [-0.00, +0.05] |  |
+| L-prop object property | 0.38 [0.36, 0.40] | 0.36 [0.34, 0.38] | 0.36 [0.34, 0.38] | 0.33 [0.30, 0.36] | 97 | 0.38 → 0.36 → 0.35 → 0.32 | -0.06 [-0.08, -0.03] | 0.36 → 0.33 → 0.31 → 0.35 | -0.03 [-0.05, -0.01] |  |
+| L-bind binding † | 0.66 [0.65, 0.67] | 0.68 [0.67, 0.69] | 0.65 [0.65, 0.66] | 0.79 [0.77, 0.81] | 2 | 0.68 → 0.72 → 0.63 → 0.79 | +0.11 [+0.11, +0.11] | 0.66 → 0.72 → 0.63 → 0.78 | -0.02 [-0.03, -0.00] |  |
+| L-ioi IOI | 0.74 [0.74, 0.75] | 0.73 [0.72, 0.74] | 0.73 [0.72, 0.74] | 0.92 [0.90, 0.94] | 128 | 0.74 → 0.73 → 0.73 → 0.92 | +0.18 [+0.16, +0.20] | 0.68 → 0.68 → 0.69 → 0.90 | -0.01 [-0.02, -0.00] |  |
+| L-ind induction † | 0.68 [0.66, 0.70] | – | 0.67 [0.65, 0.70] | 0.77 [0.73, 0.80] | 4 |  | +0.24 [+0.23, +0.26] | 0.58 → 0.67 → 0.81 | +0.04 [-0.01, +0.08] | 0.58 → 0.67 → 0.81 |
+
+Own sets differ in items between models; the paired columns use the common pairs only (few for cells whose models select different twins). † = pooled cell in at least one model.
+
+
+**Capacity series 'mistral' (Mistral-7B → Mixtral-8x7B): attention share on each model's own validation set and on the pairs common to every member present (validation)**
+
+| Cell | Mistral-7B (own set) | Mixtral-8x7B (own set) | Common pairs | paired shares (common pairs) Mistral-7B → Mixtral-8x7B | last − first (paired) | interior variant, paired |
+|---|---|---|---|---|---|---|
+| E1 a→e (all strata) † | 0.61 [0.59, 0.63] | 0.58 [0.56, 0.60] | 34 | 0.61 → 0.59 | -0.03 [-0.06, +0.01] | 0.60 → 0.56 |
+| E3 a→e (P3 frame) † | 0.56 [0.54, 0.57] | 0.55 [0.53, 0.57] | 19 | 0.57 → 0.57 | -0.01 [-0.05, +0.03] | 0.55 → 0.54 |
+| E3 a→e (F1 frame, Phase-5 anchor) † | 0.48 [0.46, 0.50] | 0.52 [0.50, 0.54] | 36 | 0.50 → 0.52 | +0.02 [-0.00, +0.05] | 0.47 → 0.49 |
+| E1 e→a (all strata) † | 0.49 [0.46, 0.52] | 0.51 [0.49, 0.53] | 26 | 0.54 → 0.54 | -0.00 [-0.03, +0.03] | 0.52 → 0.51 |
+| E3 e→a | 0.31 [0.30, 0.33] | 0.34 [0.33, 0.35] | 59 | 0.31 → 0.34 | +0.03 [+0.01, +0.04] | 0.30 → 0.32 |
+| L-ant antonym | 0.45 [0.42, 0.48] | 0.48 [0.45, 0.51] | 123 | 0.45 → 0.48 | +0.03 [+0.01, +0.05] | 0.37 → 0.42 |
+| L-prop object property | 0.37 [0.35, 0.39] | 0.42 [0.40, 0.44] | 122 | 0.37 → 0.42 | +0.06 [+0.04, +0.07] | 0.33 → 0.36 |
+| L-bind binding | 0.68 [0.66, 0.69] | 0.71 [0.70, 0.73] | 14 | 0.65 → 0.69 | +0.04 [+0.02, +0.08] | 0.63 → 0.67 |
+| L-ioi IOI | 0.78 [0.78, 0.79] | 0.80 [0.79, 0.81] | 128 | 0.78 → 0.80 | +0.02 [+0.01, +0.03] | 0.72 → 0.74 |
+| L-ind induction | 0.68 [0.67, 0.70] | 0.71 [0.69, 0.73] | 50 | 0.69 → 0.72 | +0.03 [-0.00, +0.07] | 0.66 → 0.69 |
+
+Own sets differ in items between models; the paired columns use the common pairs only (few for cells whose models select different twins). † = pooled cell in at least one model.
+
+
+**Capacity series 'qwen2' (Qwen2-7B → Qwen2-57B-A14B): attention share on each model's own validation set and on the pairs common to every member present (validation)**
+
+| Cell | Qwen2-7B (own set) | Qwen2-57B-A14B (own set) | Common pairs | paired shares (common pairs) Qwen2-7B → Qwen2-57B-A14B | last − first (paired) | interior variant, paired |
+|---|---|---|---|---|---|---|
+| E1 a→e | 0.62 [0.61, 0.63] | 0.60 [0.58, 0.61] | 18 | 0.64 → 0.66 | +0.02 [+0.00, +0.05] | 0.64 → 0.68 |
+| E3 a→e (P3 frame) | 0.56 [0.55, 0.58] | 0.57 [0.55, 0.58] | 35 | 0.56 → 0.58 | +0.02 [-0.01, +0.04] | 0.56 → 0.57 |
+| E1 e→a | 0.37 [0.35, 0.40] | 0.38 [0.36, 0.41] | 32 | 0.41 → 0.38 | -0.03 [-0.07, +0.02] | 0.45 → 0.47 |
+| E3 e→a | 0.21 [0.19, 0.23] | 0.21 [0.19, 0.24] | 65 | 0.22 → 0.22 | -0.01 [-0.04, +0.02] | 0.25 → 0.27 |
+| L-ant antonym | 0.47 [0.45, 0.49] | 0.35 [0.33, 0.37] | 96 | 0.48 → 0.37 | -0.11 [-0.13, -0.09] | 0.49 → 0.46 |
+| L-prop object property | 0.35 [0.33, 0.37] | 0.35 [0.34, 0.37] | 110 | 0.35 → 0.35 | +0.00 [-0.01, +0.02] | 0.40 → 0.44 |
+| L-cf CounterFact | 0.41 [0.38, 0.44] | 0.42 [0.40, 0.45] | 85 | 0.41 → 0.42 | +0.01 [-0.00, +0.03] | 0.50 → 0.58 |
+| L-ioi IOI | 0.71 [0.70, 0.72] | 0.77 [0.76, 0.78] | 127 | 0.71 → 0.77 | +0.06 [+0.05, +0.08] | 0.62 → 0.73 |
+| L-ind induction † | 0.68 [0.66, 0.70] | 0.70 [0.68, 0.72] | 14 | 0.64 → 0.64 | +0.01 [-0.06, +0.09] | 0.68 → 0.69 |
+
+Own sets differ in items between models; the paired columns use the common pairs only (few for cells whose models select different twins). † = pooled cell in at least one model.
+
+
+### Qwen2-57B-A14B: shared vs routed experts
+
+Shared expert's share of the MoE rescue (shared-only / (shared-only + routed-only) joint patches, denoising): L-ant antonym 0.75 [0.72, 0.78], L-prop object property 0.68 [0.66, 0.69], L-cf CounterFact 0.75 [0.72, 0.77], E3 e→a 0.51 [0.48, 0.54].
+
+
+**Qwen2-57B-A14B: every layer's whole MoE output vs only its routed experts vs only the shared expert patched at the final token (joint patches, validation pairs; cluster bootstrap)**
+
+| Cell | Pairs | All-MoE / drop (routed + shared) | Routed only / drop | Shared only / drop | Shared / (shared + routed) | Shared / all-MoE | Routed / all-MoE | All − (shared + routed) / drop |
+|---|---|---|---|---|---|---|---|---|
+| E1 a→e | 128 | 0.52 [0.48, 0.55] | 0.13 [0.11, 0.15] | 0.42 [0.38, 0.46] | 0.76 [0.72, 0.79] | 0.81 [0.77, 0.85] | 0.26 [0.22, 0.30] | -0.04 [-0.05, -0.02] |
+| E3 a→e (P3 frame) | 128 | 0.67 [0.65, 0.70] | 0.17 [0.15, 0.19] | 0.57 [0.54, 0.60] | 0.77 [0.75, 0.80] | 0.85 [0.82, 0.87] | 0.25 [0.22, 0.28] | -0.06 [-0.08, -0.05] |
+| E1 e→a | 128 | 0.81 [0.79, 0.83] | 0.54 [0.51, 0.58] | 0.41 [0.37, 0.46] | 0.43 [0.40, 0.47] | 0.51 [0.46, 0.56] | 0.67 [0.63, 0.71] | -0.15 [-0.18, -0.11] |
+| E3 e→a | 128 | 0.92 [0.91, 0.93] | 0.57 [0.54, 0.59] | 0.59 [0.54, 0.64] | 0.51 [0.48, 0.54] | 0.64 [0.59, 0.69] | 0.61 [0.59, 0.64] | -0.24 [-0.27, -0.20] |
+| L-ant antonym | 126 | 1.05 [0.98, 1.12] | 0.28 [0.24, 0.31] | 0.83 [0.75, 0.91] | 0.75 [0.72, 0.78] | 0.79 [0.75, 0.83] | 0.26 [0.23, 0.30] | -0.06 [-0.08, -0.03] |
+| L-prop object property | 128 | 0.74 [0.72, 0.76] | 0.28 [0.26, 0.30] | 0.57 [0.54, 0.60] | 0.68 [0.66, 0.69] | 0.78 [0.75, 0.80] | 0.37 [0.35, 0.40] | -0.11 [-0.13, -0.09] |
+| L-cf CounterFact | 98 | 0.70 [0.67, 0.72] | 0.21 [0.18, 0.23] | 0.61 [0.58, 0.64] | 0.75 [0.72, 0.77] | 0.87 [0.85, 0.89] | 0.30 [0.27, 0.33] | -0.12 [-0.14, -0.10] |
+| L-ioi IOI | 128 | 0.09 [0.06, 0.12] | 0.03 [0.02, 0.03] | 0.05 [0.02, 0.08] | n/a | n/a | n/a | +0.01 [+0.00, +0.02] |
+| L-ind induction | 128 | 0.07 [-0.02, 0.15] | 0.06 [0.04, 0.08] | 0.00 [-0.08, 0.08] | n/a | n/a | n/a | +0.01 [-0.01, +0.03] |
+
+Denoising direction (the noising direction is identical after averaging the two directed cases of each symmetric pair). Routed-only numbers cover the 64 routed experts only; the all-MoE column is the only 'all experts' value. Ratios are n/a where the all-MoE effect is < 0.1 of the drop.
+
+
+### Pre-registered predictions
+
+| ID | Prediction | Observed | Verdict |
+|---|---|---|---|
+| D5 | Set A: |trend| <= 0.10 per cell; ordering preserved (Spearman >= 0.8 with Qwen3-30B-A3B) | qwen3 series: held | **held** |
+| D6 | Set A knowledge cells: >= 0.5 | qwen2_57b: l_ant 0.75 [0.72, 0.78], l_prop 0.68 [0.66, 0.69], l_cf 0.75 [0.72, 0.77], e3_e2a 0.51 [0.48, 0.54] (held) | **held** |
+
+
+### Caveats
+
+- Model size changes depth (36–48 layers) and width together; the shares are layer sums, compare the depth-normalised curves.
+- The Qwen3 dense series has no architecture twin of Qwen3-30B-A3B (no Qwen3-32B-Base).
+- For Qwen3-30B-A3B and Mixtral the IOI and CounterFact cells are the Phase-3 anchors (IOI S2 → IO run; CounterFact donor-level attention sweep); the Stage-2 models have their own runs built the same way, so these two cells are comparable in protocol but not item for item.
+- Own validation sets differ in items between models; the paired values on the common pairs are in the tables (few common pairs for cells whose case sets prioritise different twins).
+
+### Files
+
+`moetrace/ext14_analysis.py` (`series_compare`), `scripts/ext14_all.py`; `results/ext14_summary.json` keys `series`, `qwen2_shared`; `results/tables/ext14_capacity_series.md`, `results/figures/ext14_capacity_*.png`.
+
+
+## Direction 14e: Phase 6 circuits: neurons inside experts, RelP on MoE, concept circuits
+
+**Summary.** P6-5 asks whether the expert-level picture goes down to neurons, whether gradient circuit discovery on the neuron basis (RelP; Arora et al. 2026) can be ported to an MoE and adds something, and whether heads and experts form circuits that belong to a concept rather than a task.
+- **C1: a handful of neurons carry a selected expert's effect.** Patching the top neurons of an expert (by their own direct logit attribution, final position) restores 80 % of the expert's own patch with L44E069 2.1, L42E115 4.3, L41E117 2.7 of 768 neurons (Qwen3) and L19E002 6.7, L21E001 3.8, L18E001 9.9, L20E000 17 of 14,336 (Mixtral); a random order needs ~590 / ~10,300. Pre-registered N1 (≤ 50 of 768, Qwen3) holds (for L37E032 only with the magnitude score), N2 (≤ 200 of 14,336, Mixtral) holds.
+- **The indirect expert is the exception.** Qwen3 L37E032 (attribute → entity) writes almost nothing to the logits (direct share 0.01), so its neuron DLA is uninformative (k80 511); ranking by activation change × |W_down| needs 33, the exact single-neuron oracle 36.
+- **Dense analogue: Mistral-7B's MLP is as sparse.** On the same items, 80 % of an MLP layer's rescue (L18–L21) takes L18 1.2, L19 2.9, L20 3.4, L21 3.0 neurons on CounterFact and L18 19, L19 10, L20 14, L21 7.0 on WinoGrande.
+- **Mixtral's experts are upcycled Mistral-7B MLPs, neuron for neuron.** Every Mixtral L20 expert's neuron i best matches Mistral-7B L20 MLP neuron i (100 % of 14,336, mutual), and the experts' top task neurons are the dense model's top neurons: L20E000's top-10 WinoGrande neurons hold Mistral ranks 1, 2, 3, 5, 15, 14311, 8, 9, 7, 4.
+- **C2 (RelP pilot, OLMoE and Mistral-7B, 48 STR cases per task): the port works, and its value is at positions C1 cannot see.** At the final position RelP ranks a focal expert's / MLP's neurons about as well as forward DLA (k80 1–8 vs 1–19 neurons; it is clearly better only where the MLP acts indirectly, Mistral WinoGrande subset r 0.95–0.96 vs 0.61–0.78). But on CounterFact three quarters of the exact MLP / MoE-output effect sits at the subject and relation positions (final-position share 0.24 / 0.26), and neuron circuits restricted to the final (+ swapped) position recover at most 0.23 (OLMoE) / 0.50 (Mistral) of the drop at 10,000 nodes, while all-position circuits reach 80 % with 997 / 478 nodes. On WinoGrande the final position dominates (share 0.60–0.67; final-only circuits 0.80–0.87). RelP is only moderately accurate off the final position (r vs exact 0.17–0.65), and in OLMoE 54–56 % of single sublayer patches switch a later top-k set (errors double there).
+- **DP3 evidence (user decision):** a gradient method adds (i) the non-final positions, essential for factual recall, and (ii) joint multi-layer sets; it does not add much at the final position. A forward alternative for (i) exists without F3: neuron-level patches at non-final positions in the position executor (`ext5_subject`), ranked by forward scores. Recommendation in the C2 reading below.
+- **C3 Qwen3:** SIZE_STATE (3 heads + 8 experts): own tasks lose 0.43 of the clean margin (net of random sets), other tasks 0.09 on average, the CounterFact control 0.05; add-back restores 0.63/0.52 of the drop; COUNTRY (8 heads + 7 experts): own tasks lose 0.70 of the clean margin (net of random sets), other tasks 0.16 on average, the CounterFact control 0.73 (as much as its own tasks: a CounterFact-recall circuit, not a country circuit); add-back restores 0.85/0.80 of the drop; PERSON_ROLE (4 heads + 3 experts): own tasks lose 0.21 of the clean margin (net of random sets), other tasks 0.04 on average, the CounterFact control 0.04; add-back restores 0.56/0.55/0.04 of the drop.
+- **C3 Mixtral:** SIZE_STATE (4 heads + 6 experts): own tasks lose 0.32 of the clean margin (net of random sets), other tasks 0.11 on average, the CounterFact control 0.07; add-back restores 0.59/0.48 of the drop; COUNTRY (10 heads + 6 experts): own tasks lose 0.69 of the clean margin (net of random sets), other tasks 0.25 on average, the CounterFact control 0.75 (as much as its own tasks: a CounterFact-recall circuit, not a country circuit); add-back restores 0.91/0.81 of the drop; PERSON_ROLE (3 heads + 7 experts): own tasks lose 0.39 of the clean margin (net of random sets), other tasks 0.02 on average, the CounterFact control 0.02; add-back restores 0.90/0.52/0.03 of the drop.
+- **N3 (experts more concept-specific than heads): fails** in 3 of 6 circuit comparisons (selectivity F_own / (|F_own| + mean |F_other|), experts vs heads: Qwen3 SIZE_STATE 0.98 vs 0.56; Qwen3 COUNTRY 0.71 vs 0.82; Qwen3 PERSON_ROLE 0.95 vs 0.82; Mixtral SIZE_STATE 0.93 vs 0.69; Mixtral COUNTRY -0.35 vs 0.74; Mixtral PERSON_ROLE 0.82 vs 0.88). The descriptive AUROC of single-patch effects (in-sample, only where a component was measured) points the other way: Qwen3 heads 0.79 vs experts 0.67; Mixtral heads 0.79 vs experts 0.79 — heads rank higher within their home tasks, but knocking them out also hurts other tasks.
+
+#### C1 Neurons inside the selected experts
+
+**Method.** For each selected expert on its own task (STR rows, validation split; CounterFact rows = (case, donor), averaged per case; WinoGrande rows = directed cases), the engine records the expert's intermediate activations a = SiLU(W_gate x) ⊙ (W_up x) at the final position in the clean and corrupted runs (`DiagSpec.expert_neurons`). Scores per neuron: d_i = w_clean a_i,clean − w_corrupt a_i,corrupt (w = the routing weight, 0 when not routed); DLA_i = d_i (W_down[:, i] · u) / rms(h_final, corrupted), u = γ ⊙ (W_U[answer] − W_U[contrast]) (final norm frozen, as the expert DLA of Phase 3/4; Σ_i DLA_i = the slot DLA, r = 1.0000); magnitude_i = |d_i| · ‖W_down[:, i]‖. Validation is exact: kind `expert_neurons` sets a neuron subset to its clean values inside the corrupted run, everything downstream recomputed; the expert's own single-expert patch is 100 %. Rankings: the row's own DLA (per case), magnitude, one fixed order from the discovery-split mean DLA, two random orders. Rows where the expert is routed in neither run contribute 0 to numerator and denominator.
+
+| model, task | expert | neurons | cases (active rows) | expert rescue T [95% CI] | T / drop | direct share (sum DLA / T) | k50 DLA | k80 DLA [95% CI] | k80 fixed set | k80 magnitude | k80 random | per-case k80 median (IQR; n) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B, CounterFact STR | L44E069 | 768 | 108 (406) | +1.084 [+0.822, +1.380] | 0.093 | 1.31 | 1.0 | 2.1 [2, 3] | 247 | 22 | 589 | 2.1 (1.5-3.7; 62) |
+| Qwen3-30B-A3B, CounterFact STR | L42E115 | 768 | 108 (425) | +0.829 [+0.670, +0.987] | 0.071 | 0.97 | 1.3 | 4.3 [3, 6] | 79 | 38 | 596 | 5.5 (2.3-11; 75) |
+| Qwen3-30B-A3B, WinoGrande option swap (Phase 3) | L41E117 | 768 | 256 (229) | +0.987 [+0.835, +1.153] | 0.121 | 1.05 | 1.1 | 2.7 [2, 3] | 7.5 | 11 | 597 | 2.9 (1.7-5.0; 190) |
+| Qwen3-30B-A3B, WinoGrande attribute -> entity (F1) | L37E032 | 768 | 256 (254) | +0.502 [+0.423, +0.590] | 0.109 | 0.01 | 25 | 511 [431, 567] | 575 | 33 | 589 | 142 (11-592; 177) |
+| Mixtral-8x7B (BOS), CounterFact STR | L19E002 | 14336 | 106 (288) | +0.593 [+0.389, +0.839] | 0.046 | 0.75 | 1.6 | 6.7 [4, 11] | 1239 | 80 | 10030 | 11 (3.2-23; 51) |
+| Mixtral-8x7B (BOS), CounterFact STR | L21E001 | 14336 | 106 (309) | +0.663 [+0.506, +0.830] | 0.051 | 0.91 | 1.2 | 3.8 [3, 5] | 3323 | 34 | 10524 | 4.0 (1.8-10; 58) |
+| Mixtral-8x7B (BOS), CounterFact STR | L18E001 | 14336 | 106 (345) | +0.396 [+0.304, +0.494] | 0.031 | 0.52 | 3.2 | 9.9 [6, 15] | 6145 | 565 | 10479 | 23 (5.6-55; 53) |
+| Mixtral-8x7B (BOS), WinoGrande option swap (Phase 3) | L20E000 | 14336 | 256 (246) | +1.112 [+1.017, +1.211] | 0.145 | 0.56 | 4.1 | 17 [13, 21] | 291 | 60 | 10324 | 17 (5.7-43; 238) |
+| Mistral-7B (BOS), CounterFact STR (Mixtral items) | L18E000 | 14336 | 98 (369) | +0.178 [+0.091, +0.275] | 0.015 | 0.64 | 1.0 | 1.2 [1, 2] | 26 | 15 | 10526 | 6.6 (2.6-28; 33) |
+| Mistral-7B (BOS), CounterFact STR (Mixtral items) | L19E000 | 14336 | 98 (369) | +0.910 [+0.743, +1.083] | 0.074 | 0.67 | 1.0 | 2.9 [2, 4] | 271 | 17 | 10396 | 4.3 (1.8-8.4; 73) |
+| Mistral-7B (BOS), CounterFact STR (Mixtral items) | L20E000 | 14336 | 98 (369) | +1.093 [+0.874, +1.324] | 0.089 | 0.75 | 1.2 | 3.4 [3, 4] | 220 | 17 | 10471 | 4.7 (2.1-9.2; 78) |
+| Mistral-7B (BOS), CounterFact STR (Mixtral items) | L21E000 | 14336 | 98 (369) | +1.299 [+1.095, +1.500] | 0.106 | 0.81 | 1.0 | 3.0 [2, 4] | 269 | 13 | 10659 | 3.3 (1.7-6.8; 80) |
+| Mistral-7B (BOS), WinoGrande option swap (Mixtral items) | L18E000 | 14336 | 228 (228) | +1.036 [+0.939, +1.130] | 0.143 | 0.35 | 4.4 | 19 [15, 23] | 298 | 52 | 10425 | 23 (8.5-50; 223) |
+| Mistral-7B (BOS), WinoGrande option swap (Mixtral items) | L19E000 | 14336 | 228 (228) | +0.692 [+0.605, +0.779] | 0.096 | 0.36 | 3.5 | 10 [8, 12] | 92 | 49 | 10558 | 13 (5.7-25; 194) |
+| Mistral-7B (BOS), WinoGrande option swap (Mixtral items) | L20E000 | 14336 | 228 (228) | +1.038 [+0.923, +1.150] | 0.144 | 0.35 | 3.6 | 14 [10, 20] | 441 | 71 | 10368 | 20 (6.1-42; 207) |
+| Mistral-7B (BOS), WinoGrande option swap (Mixtral items) | L21E000 | 14336 | 228 (228) | +1.361 [+1.236, +1.495] | 0.189 | 0.54 | 2.2 | 7.0 [6, 8] | 53 | 36 | 10465 | 6.9 (3.8-12; 218) |
+
+k50 / k80 = the number of neurons whose joint patch (set to the clean values inside the corrupted run, final position, downstream recomputed) restores 50 / 80 % of the expert's own single-expert patch (ratio of case means, validation split; log-k interpolation; 'never' = not reached before all neurons). DLA = the row's own neuron DLA ranking; fixed set = one neuron order from the discovery-split mean DLA; magnitude = |w a change| x |W_down column|.
+Per-case k80 on cases with T >= 0.25 logits.
+
+![neurons per expert](../figures/ext14ci_c1_curves.png)
+
+**DLA vs exact patching, and how shared the neurons are across cases.**
+
+| expert | task | sum DLA vs expert patch r | subset DLA vs patch r (slope) | single-neuron r (slope; sign agree; n) | top-10 Jaccard across cases (random) | top-50 Jaccard | neurons in >= half of cases' top-10 | pos. DLA mass in top-10 / 50 neurons |
+|---|---|---|---|---|---|---|---|---|
+| L44E069 | qwen3_cf | 0.93 | 0.95 (0.67) | 0.89 (0.64; 0.74; 3248) | 0.02 (0.0066) | 0.05 | 0 | 0.24 / 0.51 |
+| L42E115 | qwen3_cf | 0.80 | 0.87 (0.90) | 0.74 (0.84; 0.64; 3400) | 0.03 (0.0066) | 0.06 | 0 | 0.27 / 0.44 |
+| L41E117 | qwen3_wino | 0.86 | 0.90 (0.84) | 0.87 (0.80; 0.69; 1832) | 0.14 (0.0066) | 0.12 | 3 | 0.56 / 0.70 |
+| L37E032 | qwen3_f1 | 0.19 | 0.14 (0.72) | 0.09 (1.03; 0.38; 2032) | 0.05 (0.0066) | 0.08 | 0 | 0.15 / 0.30 |
+| L19E002 | mixtral_cf | 0.59 | 0.77 (1.08) | 0.53 (1.03; 0.57; 2304) | 0.01 (0.0003) | 0.02 | 0 | 0.07 / 0.14 |
+| L21E001 | mixtral_cf | 0.65 | 0.88 (1.00) | 0.62 (0.73; 0.66; 2472) | 0.01 (0.0003) | 0.01 | 0 | 0.08 / 0.16 |
+| L18E001 | mixtral_cf | 0.45 | 0.85 (0.98) | 0.40 (0.99; 0.60; 2760) | 0.02 (0.0003) | 0.02 | 0 | 0.04 / 0.08 |
+| L20E000 | mixtral_wino | 0.54 | 0.87 (0.85) | 0.69 (0.91; 0.68; 1968) | 0.07 (0.0003) | 0.05 | 1 | 0.08 / 0.15 |
+| L18E000 | mistral7b_cf | 0.41 | 0.84 (0.83) | 0.61 (1.08; 0.82; 2952) | 0.02 (0.0003) | 0.02 | 0 | 0.03 / 0.07 |
+| L19E000 | mistral7b_cf | 0.62 | 0.85 (1.00) | 0.69 (1.09; 0.80; 2952) | 0.02 (0.0003) | 0.02 | 0 | 0.07 / 0.14 |
+| L20E000 | mistral7b_cf | 0.77 | 0.89 (1.09) | 0.77 (1.13; 0.81; 2952) | 0.02 (0.0003) | 0.02 | 0 | 0.06 / 0.14 |
+| L21E000 | mistral7b_cf | 0.70 | 0.89 (1.02) | 0.67 (0.90; 0.81; 2952) | 0.02 (0.0003) | 0.02 | 0 | 0.09 / 0.16 |
+| L18E000 | mistral7b_wino | 0.75 | 0.82 (0.83) | 0.62 (1.29; 0.83; 1824) | 0.09 (0.0003) | 0.06 | 0 | 0.07 / 0.12 |
+| L19E000 | mistral7b_wino | 0.59 | 0.86 (0.82) | 0.72 (1.45; 0.83; 1824) | 0.05 (0.0003) | 0.05 | 0 | 0.03 / 0.07 |
+| L20E000 | mistral7b_wino | 0.54 | 0.83 (0.88) | 0.73 (1.51; 0.80; 1824) | 0.05 (0.0003) | 0.05 | 1 | 0.05 / 0.09 |
+| L21E000 | mistral7b_wino | 0.64 | 0.87 (0.90) | 0.77 (1.22; 0.84; 1824) | 0.08 (0.0003) | 0.06 | 2 | 0.09 / 0.15 |
+
+Reading:
+- One or two neurons already carry half of a direct expert's effect (k50 ≈ 1–4); a positive-DLA ordering then overshoots the expert's net effect (curves above 1) because the expert's remaining neurons write against the answer — the expert's patch is a sum of a few large positive and many small negative terms.
+- The top neurons are case-specific: the mean Jaccard overlap of two cases' top-10 sets is 0.01–0.14 (random 0.0003–0.007), and one fixed neuron set chosen on the discovery split needs far more neurons for 80 % (column 'fixed set'). The exception is Qwen3 L41E117 on the option swap (fixed set 7.5; three neurons sit in at least half of the cases' top-10), the most 'single-function' expert of the set.
+- Neuron DLA predicts subset patches well for experts that write (r 0.77–0.95, slopes 0.7–1.1) and not for the indirect L37E032 (r 0.14).
+
+**Exact single-neuron oracle (Qwen3 L37E032, the indirect expert).** Every one of the 768 neurons patched alone on 96 validation rows, then top-k sets ordered by these exact single effects ('oracle'); the other rankings on the same rows were measured up to k = 400 only ('never' = below 80 % at k = 400).
+
+| task | expert | rows (cases) | k80 oracle | k80 DLA | k80 magnitude | k80 fixed set | k80 random | single-neuron DLA vs exact r (slope) | sum of singles / expert patch | neurons for 80 % of summed abs. single effects (median) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| qwen3_f1 | L37E032 | 96 (96) | 36 | never | 17 | never | never | 0.01 (0.66) | -3.16 | 300.0 |
+
+The exact single-neuron effects of L37E032 do not add up (their sum is −3.2× the expert's own patch) and are spread over ~300 neurons per row, so ordering by them is no better than ordering by the activation change × |W_down| (k80 36 vs 17): an expert that acts through later layers is a collective, not a sum of independent neurons.
+
+**Dense analogue (Mistral-7B, BOS).** Items: the Mixtral CounterFact / WinoGrande STR rows (identical tokenizer), kept where Mistral passes its own margin (clean Δ ≥ 1, corrupted Δ ≤ −1; cf 98 of 106 validation cases, wino 228 of 256 validation cases). The MLP-layer patch peaks at L21 (cf), L21 (wino) (normalised MLP rescue at L18–L21: cf 0.01, 0.07, 0.09, 0.11; wino 0.14, 0.10, 0.14, 0.19). The neuron counts are in the table above (rows Mistral-7B; 'E000' = the dense MLP): the dense MLP of one layer is as sparse as a Mixtral expert on the same items (CounterFact 1.2–3.4 neurons for 80 % vs 3.8–9.9; WinoGrande 7–19 vs 17).
+
+**Upcycling cross-check (weights only, CPU).**
+- Attention: per-layer cosine Mistral-7B ↔ Mixtral q 0.66, k 0.76, v 0.85, o 0.77 (medians over 32 layers; minima 0.50–0.54; highest in L7–L16, lowest in the first and last layers); RMSNorm weights 0.999 / 0.999; embeddings 0.60, LM head 0.75, final norm 0.999. Mixtral's attention matrices are ≈ 2.8× larger in norm (relative difference ≈ 2.1) but point the same way: continued training from a common parent, not independent models.
+- Expert FFNs: the cosine between expert e's neuron i and the dense MLP's neuron i (gate rows, up rows, down columns) is 0.26–0.51 (median over neurons, gate rows, by layer; highest mid-depth). At L20, for all 8 experts the best-matching Mistral neuron of every Mixtral neuron is the SAME index (1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00; mutual best matches 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00), matched cosine 0.38–0.45 vs 0.16–0.19 for shuffled weights. Every expert is a copy of the dense MLP that drifted, with the neuron order kept (Lo et al. 2024 report cos ≈ 0.6 at the matrix level).
+- Function: under that identity map the experts' top task neurons are the dense model's top neurons (per-neuron population DLA on the same items):
+
+| Mixtral expert ~ Mistral MLP | common cases | Pearson r (Spearman) | top-10 / top-50 / top-200 overlap (chance) | Mistral rank of the expert's top-10 |
+|---|---|---|---|---|
+| L20E000 ~ L20E000 | 228 | 0.71 (0.14) | 8 / 27 / 79 (0.01 / 0.17 / 2.79) | 1, 2, 3, 5, 15, 14311, 8, 9, 7, 4 |
+| L19E002 ~ L19E000 | 98 | 0.73 (0.13) | 7 / 37 / 117 (0.01 / 0.17 / 2.79) | 4, 5, 18, 3, 14, 8, 7, 20, 2, 1 |
+| L21E001 ~ L21E000 | 98 | 0.84 (0.14) | 5 / 35 / 103 (0.01 / 0.17 / 2.79) | 1, 7, 5, 2, 8, 12, 23, 15, 20, 13 |
+| L18E001 ~ L18E000 | 98 | 0.76 (0.10) | 6 / 32 / 103 (0.01 / 0.17 / 2.79) | 2, 3, 4, 1, 5, 51, 28, 36, 7, 27 |
+
+Low Spearman with high Pearson: most neurons have DLA ≈ 0 in both models (ties in the bulk); the large-effect neurons coincide.
+
+#### C2 RelP on the neuron basis (pilot: OLMoE-1B-7B, Mistral-7B)
+
+**Method.** `moetrace/ext14_circuit_relp.py` re-implements the forward pass over the transformers weights (verified: = HF in fp32 on tiny checkpoints; plain gradients = finite differences; bf16 Δ within the engine's noise of HF) with RelP's linearisation for the backward pass (Arora et al. 2026; Rezaei Jafari et al. 2025): RMSNorm denominators frozen (incl. OLMoE's q/k norms), attention pattern frozen, SiLU's sigmoid gate frozen (identity rule), half rule on SiLU(g) ⊙ u. MoE port: top-k set and routing weights frozen (q_e = w_e a_e, w_e a constant), so experts routed in only one run of a pair are scored through the residual gradient W_down_eᵀ ∂Δ/∂h (the gradient exists for every expert). Nodes = neuron × position (positions from the swapped token on for STR; OLMoE: all 64 experts, Mistral: the MLP). Scores: relp_o = (q_clean − q_corrupt) · ∇_RelP Δ at the corrupted run, relp_c at the clean run, atp_o = plain gradient, mean_c = (q_clean − q̄) · ∇_RelP Δ at the clean run (Arora's mean-ablation baseline; MoE: q̄ = the mean where the expert is routed, applied only to experts routed in the live run). Exact checks in the same forward: (V3) the MLP / MoE output at every (layer, position ≥ swap) set to its clean value; (V1) top-k neuron sets of a focal expert / MLP layer at the final position (OLMoE WinoGrande L12E011 / L13E040, CounterFact L13E056; Mistral L18–L21); (V5) top-k final-position nodes over all layers patched jointly; circuits = top-N nodes by |score| per case, evaluated by STR denoising (corrupted input, circuit := clean) and Arora's mean-ablation faithfulness / completeness, with node pools all positions / final + swap position / final position only. Routing switches (OLMoE) = a later layer's final-position top-k set differs from the unpatched corrupted run.
+
+| model / task | cases | exact vs RelP r (all cells; final; non-final) | vs AtP r (all; non-final) | RelP slope | routing switch rate | final-pos share of exact sublayer mass | focal k80: RelP / DLA / AtP / mag / rand | single-neuron r RelP / DLA | multi-layer final-pos k80 of drop (RelP / DLA) |
+|---|---|---|---|---|---|---|---|---|---|
+| mistral7b / cf | 48 | 0.56; 0.88; 0.60 | 0.37; 0.20 | 1.46 | – | 0.26 | L18E000: 1 / 1 / 1 / 45 / 8817<br>L19E000: 2 / 2 / 1 / 20 / 9040<br>L20E000: 3 / 4 / 2 / 21 / 10264<br>L21E000: 2 / 3 / 2 / 15 / 9820 | L18E000: 0.83 / 0.64; L19E000: 0.92 / 0.73; L20E000: 0.96 / 0.83; L21E000: 0.94 / 0.76 | 276 / 296 |
+| mistral7b / wino | 48 | 0.55; 0.93; 0.17 | 0.58; 0.14 | 0.98 | – | 0.60 | L18E000: 8 / 19 / 7 / 46 / 10542<br>L19E000: 4 / 9 / 4 / 43 / 10541<br>L20E000: 6 / 12 / 5 / 45 / 10405<br>L21E000: 5 / 7 / 5 / 35 / 10409 | L18E000: 0.89 / 0.69; L19E000: 0.93 / 0.73; L20E000: 0.93 / 0.76; L21E000: 0.96 / 0.79 | 53 / 62 |
+| olmoe / cf | 48 | 0.69; 0.89; 0.65 | 0.60; 0.47 | 1.27 | 0.54 | 0.24 | L13E056: 2 / 2 / 1 / 32 / 738 | L13E056: 0.94 / 0.84 | 141 / 154 |
+| olmoe / wino | 48 | 0.89; 0.93; 0.61 | 0.93; 0.67 | 1.04 | 0.56 | 0.67 | L12E011: 3 / 4 / 3 / 9 / 741<br>L13E040: 3 / 3 / 3 / 14 / 743 | L12E011: 0.95 / 0.89; L13E040: 0.96 / 0.92 | 43 / 49 |
+
+| model / task | pool | STR denoise frac. of drop at N = 10 / 100 / 1000 / 10000 | N for 80 % (denoise) | mean-ablation faithfulness at N = 10 / 100 / 1000 / 10000 | N for F = 0.8 | completeness at N = 100 / 1000 |
+|---|---|---|---|---|---|---|
+| mistral7b / cf | all | 0.17 / 0.61 / 0.87 / 0.97 | 478 | -0.02 / -0.04 / -0.00 / 0.07 | 180161 | 0.34 / 0.10 |
+| mistral7b / cf | final_swap | 0.10 / 0.29 / 0.42 / 0.50 | never | -0.02 / -0.04 / -0.03 / -0.02 | never | 0.84 / 0.70 |
+| mistral7b / cf | final | 0.10 / 0.27 / 0.37 / 0.42 | never | -0.02 / -0.04 / -0.03 / -0.02 | never | 0.85 / 0.73 |
+| mistral7b / wino | all | 0.15 / 0.63 / 0.88 / 0.96 | 388 | 0.01 / -0.00 / 0.03 / 0.22 | never | 0.38 / 0.09 |
+| mistral7b / wino | final_swap | 0.15 / 0.61 / 0.84 / 0.93 | 580 | 0.01 / -0.01 / 0.00 / 0.15 | never | 0.44 / 0.23 |
+| mistral7b / wino | final | 0.15 / 0.59 / 0.76 / 0.80 | 8600 | 0.01 / -0.01 / -0.00 / 0.11 | never | 0.50 / 0.37 |
+| olmoe / cf | all | 0.17 / 0.57 / 0.80 / 0.92 | 997 | -0.00 / 0.02 / 0.13 / 0.41 | 155041 | 0.42 / 0.23 |
+| olmoe / cf | final_swap | -0.03 / 0.10 / 0.19 / 0.25 | never | -0.01 / -0.01 / -0.02 / -0.01 | never | 0.92 / 0.82 |
+| olmoe / cf | final | -0.03 / 0.09 / 0.18 / 0.23 | never | -0.01 / -0.01 / -0.02 / -0.02 | never | 0.93 / 0.82 |
+| olmoe / wino | all | 0.33 / 0.71 / 0.92 / 0.98 | 215 | 0.02 / 0.01 / 0.08 / 0.32 | 381589 | 0.27 / 0.03 |
+| olmoe / wino | final_swap | 0.32 / 0.70 / 0.89 / 0.96 | 258 | 0.01 / 0.02 / 0.10 / 0.15 | never | 0.32 / 0.11 |
+| olmoe / wino | final | 0.32 / 0.66 / 0.82 / 0.87 | 685 | 0.01 / 0.03 / 0.08 / 0.11 | never | 0.44 / 0.28 |
+
+Where the top nodes sit:
+
+| model / task | mode | top-N | at final position | at swap position | in between | before swap | mean layer | share of |attr| |
+|---|---|---|---|---|---|---|---|---|
+| mistral7b / cf | mean | 10 | 0.74 | 0.03 | 0.23 | 0.00 | 20.6 | 0.01 |
+| mistral7b / cf | mean | 100 | 0.70 | 0.02 | 0.27 | 0.00 | 18.7 | 0.03 |
+| mistral7b / cf | mean | 1000 | 0.74 | 0.01 | 0.25 | 0.00 | 19.6 | 0.07 |
+| mistral7b / cf | str | 10 | 0.80 | 0.02 | 0.18 | 0.00 | 23.1 | 0.01 |
+| mistral7b / cf | str | 100 | 0.67 | 0.02 | 0.31 | 0.00 | 19.7 | 0.04 |
+| mistral7b / cf | str | 1000 | 0.68 | 0.01 | 0.31 | 0.00 | 19.5 | 0.08 |
+| mistral7b / wino | mean | 10 | 0.98 | 0.00 | 0.00 | 0.02 | 24.9 | 0.01 |
+| mistral7b / wino | mean | 100 | 0.87 | 0.03 | 0.01 | 0.09 | 21.2 | 0.03 |
+| mistral7b / wino | mean | 1000 | 0.83 | 0.04 | 0.02 | 0.11 | 20.9 | 0.07 |
+| mistral7b / wino | str | 10 | 1.00 | 0.00 | 0.00 | 0.00 | 26.0 | 0.03 |
+| mistral7b / wino | str | 100 | 0.94 | 0.04 | 0.02 | 0.00 | 23.2 | 0.07 |
+| mistral7b / wino | str | 1000 | 0.90 | 0.07 | 0.03 | 0.00 | 22.4 | 0.13 |
+| olmoe / cf | mean | 10 | 0.64 | 0.01 | 0.35 | 0.00 | 10.9 | 0.02 |
+| olmoe / cf | mean | 100 | 0.68 | 0.00 | 0.30 | 0.01 | 10.9 | 0.04 |
+| olmoe / cf | mean | 1000 | 0.66 | 0.00 | 0.33 | 0.00 | 10.4 | 0.13 |
+| olmoe / cf | str | 10 | 0.57 | 0.08 | 0.34 | 0.00 | 10.6 | 0.02 |
+| olmoe / cf | str | 100 | 0.58 | 0.07 | 0.35 | 0.00 | 10.2 | 0.05 |
+| olmoe / cf | str | 1000 | 0.58 | 0.04 | 0.38 | 0.00 | 10.0 | 0.13 |
+| olmoe / wino | mean | 10 | 0.93 | 0.03 | 0.00 | 0.04 | 12.7 | 0.01 |
+| olmoe / wino | mean | 100 | 0.87 | 0.04 | 0.01 | 0.08 | 12.0 | 0.04 |
+| olmoe / wino | mean | 1000 | 0.84 | 0.05 | 0.01 | 0.09 | 11.9 | 0.11 |
+| olmoe / wino | str | 10 | 0.98 | 0.01 | 0.01 | 0.00 | 13.1 | 0.04 |
+| olmoe / wino | str | 100 | 0.93 | 0.06 | 0.02 | 0.00 | 12.5 | 0.09 |
+| olmoe / wino | str | 1000 | 0.91 | 0.07 | 0.02 | 0.00 | 12.5 | 0.21 |
+
+![RelP circuits](../figures/ext14ci_relp_circuits.png)
+
+**Reading and DP3 evidence.**
+- *Validity of the port.* The functional forward equals transformers (tiny fp32 exact; bf16 max |ΔΔ| 0.05 Mistral, 0.16 OLMoE (one routing flip)); RelP leaves the forward values unchanged. Against exact sublayer patches, RelP is accurate at the final position (r 0.88–0.93; per-layer curves r 0.96–0.99) and moderately accurate elsewhere (r 0.60–0.65 CounterFact, 0.17–0.61 WinoGrande; slopes 1.0–1.9, i.e. it over-states). Plain AtP is as good at the final position and worse off it on CounterFact (0.20 / 0.47 vs 0.60 / 0.65). Freezing routing costs little on average (OLMoE r 0.87 on cells that switch a later top-k set vs 0.93 on cells that do not) although 54–56 % of cells switch.
+- *What C1 already gives.* For one expert / MLP layer at the final position the forward scores are nearly enough: RelP k80 1–8, DLA 1–19, magnitude 9–46 (random 740 / 10,500). RelP helps where the component acts through later layers (Mistral WinoGrande: DLA covers 0.32–0.50 of the MLP's patch, RelP 0.59–0.78; neuron-subset r 0.95–0.96 vs 0.61–0.78). For the most indirect expert we have (Qwen3 L37E032) the exact single-neuron oracle does not beat the magnitude ranking (k80 36 vs 17 on 96 rows): single-neuron effects are not additive there (their sum is −3.2× the expert's patch), so no per-neuron score, gradient or exact, ranks them well.
+- *What C1 cannot give.* (a) Non-final positions: CounterFact's neuron circuit lives mostly at the subject (top-1000 RelP nodes: 31–38 % between the swapped token and the final token, mean layer 10 / 20 of 16 / 32); final-position circuits cap at 0.23 / 0.50 of the drop. (b) Joint multi-layer sets at the final position: 43–296 nodes for 80 % of the drop, with RelP and DLA rankings within 10 % of each other.
+- *Mean-ablation faithfulness (Arora et al.'s criterion)* is not reached by per-case circuits of practical size in either model (F ≤ 0.41 at 10,000 nodes; 0.8 at 155k–382k nodes or never), while completeness is high (removing the top 1,000 nodes leaves 0.03–0.23 of the effect). Mean-ablating every other neuron at every position takes the model off-distribution; the STR criterion, which only replaces what differs between the twins, is the one our project uses and there the circuits are compact.
+- *Recommendation for DP3.* Building F3 (reverse layer streaming for Qwen3-30B / Mixtral) is justified only if the goal is gradient-ranked circuits over ALL positions at scale. For the questions asked so far (which neurons of a known expert, which position carries what), a forward extension is cheaper and exact: neuron-subset patches at a chosen non-final position (the `expert_neurons` vector applied by the position executor), with candidates from forward scores (DLA / magnitude) or from layer-level position grids that already exist (Direction 6b, Phase-6 T4). F3 would add speed of discovery, not new kinds of evidence, and its estimates off the final position need exact validation anyway (r 0.17–0.65 here).
+
+#### C3 Concept circuits (existing rows; scope cut 2026-10-17)
+
+**Design.** Concepts and tasks (≥ 2 tasks per concept, the smallest set the existing rows allow): SIZE / STATE = the Phase-3 WinoGrande option swap (≈ Dial-E E3 entity → attribute) and Phase-6 E1 entity → attribute, both restricted to size / state answers; COUNTRY = CounterFact P17 and P27 + P495 (new STR pair sets, NEED HEADS cf_country); PERSON-ROLE = IOI (S2 → IO), Phase-5 F1 and Phase-6 E1 attribute → entity on name items; control = CounterFact language relations. Component effects = existing single head / expert patches at the final position (rescue / drop) on the source VALIDATION split (where the Phase-4 all-layer head runs live; COUNTRY experts by per-expert DLA); top set of a task = top-10 heads + top-10 experts; concept circuit = in the top sets of ≥ 2 of the concept's tasks and in no top set of another concept's task. Held-out test on the source DISCOVERY split (GPU): knockout of the circuit (all / heads only / experts only; heads zeroed by `head_mask`, experts rerouted by `route_mask`) in the clean run of every task, F = fraction of the clean margin lost, minus the mean of 2 matched random sets (same layers, same counts); add-back of the set (one multi spawn per case, denoising); edges A → B = rescue(A) + rescue(B) − rescue(A ∪ B) (the part of A's effect that runs through B). Head layers measured differ between runs (IOI, CounterFact, option swap: all layers; Phase-5/6 cells: their 5 top attention layers), and IOI has no expert singles, so a component can only enter the top sets where it was measured.
+
+### qwen3: concept circuits from existing rows (selection: source validation split; evaluation: source discovery split)
+
+| task | concept | selection units | evaluation pairs | head layers measured | expert rows |
+|---|---|---|---|---|---|
+| ss_e3 | SIZE_STATE | 172 | 48 | all | yes |
+| ss_e1 | SIZE_STATE | 188 | 48 | 36,38,42,43,45 | yes |
+| co_p17 | COUNTRY | 96 | 48 | 28,38,39,40,42,43 | yes |
+| co_nat | COUNTRY | 192 | 48 | 28,38,39,40,42,43 | yes |
+| pr_ioi | PERSON_ROLE | 256 | 48 | all | no |
+| pr_f1n | PERSON_ROLE | 140 | 48 | 33,39,42,43,45 | yes |
+| pr_e1n | PERSON_ROLE | 32 | 22 | 27,39,42,43,45 | yes |
+| ct_lang | CONTROL | 96 | 48 | 28,38,39,40,42,43 | yes |
+
+| concept | tasks | circuit heads | circuit experts | in top sets of other concepts (excluded) | also in the control's top set |
+|---|---|---|---|---|---|
+| SIZE_STATE | ss_e3, ss_e1 | L38H18, L38H20, L38H21 | L34E119, L38E021, L39E071, L41E053, L41E117, L43E081, L43E114, L44E122 | – | – |
+| COUNTRY | co_p17, co_nat | L28H13, L28H15, L40H11, L40H12, L40H13, L40H14, L40H15, L43H11 | L40E030, L40E127, L41E001, L42E115, L43E005, L44E052, L44E069 | L43H15 | L28H13, L28H15, L40E127, L40H11, L40H12, L40H13, L40H14, L40H15, L41E001, L42E115, L43H11, L44E052, L44E069 |
+| PERSON_ROLE | pr_ioi, pr_f1n, pr_e1n | L39H27, L39H29, L39H31, L43H22 | L37E032, L37E033, L39E036 | L42H10, L43H15, L43H24 | – |
+
+| task | top heads (mean effect = rescue / drop) | top experts |
+|---|---|---|
+| ss_e3 | L46H24 +0.119, L41H27 +0.074, L38H18 +0.047, L29H0 +0.043, L38H21 +0.037 | L41E117 +0.145, L43E081 +0.098, L39E071 +0.076, L34E119 +0.054, L44E122 +0.043 |
+| ss_e1 | L38H18 +0.051, L36H28 +0.034, L38H21 +0.025, L42H18 +0.022, L43H24 +0.013 | L39E071 +0.115, L38E021 +0.107, L43E081 +0.103, L41E117 +0.100, L34E119 +0.074 |
+| co_p17 | L40H13 +0.219, L43H15 +0.067, L43H11 +0.067, L40H15 +0.065, L40H14 +0.057 | L44E069 +0.112, L42E115 +0.083, L43E005 +0.055, L44E052 +0.029, L40E127 +0.023 |
+| co_nat | L40H13 +0.267, L43H11 +0.090, L40H15 +0.090, L40H14 +0.069, L43H15 +0.062 | L44E069 +0.186, L42E115 +0.088, L44E052 +0.032, L43E005 +0.029, L41E001 +0.023 |
+| pr_ioi | L42H11 +0.180, L43H24 +0.102, L40H2 +0.071, L42H10 +0.069, L43H29 +0.063 | – (no expert rows) |
+| pr_f1n | L42H10 +0.283, L39H29 +0.166, L43H24 +0.145, L39H27 +0.093, L39H31 +0.087 | L37E032 +0.176, L39E103 +0.044, L40E115 +0.021, L42E031 +0.018, L33E045 +0.015 |
+| pr_e1n | L42H10 +0.294, L43H24 +0.160, L39H27 +0.136, L39H29 +0.119, L39H31 +0.116 | L37E032 +0.098, L37E033 +0.018, L39E036 +0.016, L43E041 +0.014, L45E002 +0.014 |
+| ct_lang | L40H13 +0.299, L43H11 +0.098, L40H15 +0.094, L43H15 +0.080, L40H14 +0.069 | L42E115 +0.156, L44E069 +0.129, L41E001 +0.021, L40E127 +0.017, L33E076 +0.015 |
+
+AUROC of each top component for its home concept (selection cases of the tasks where it was measured): heads median 0.786 (n 44), experts median 0.665 (n 42); Mann-Whitney experts > heads p = 0.982
+
+#### Knockout matrix: fraction of the clean margin lost F (circuit) minus the mean of 2 matched random sets; evaluation cases
+
+| circuit (part) | ss_e3 (SIZE) | ss_e1 (SIZE) | co_p17 (COUN) | co_nat (COUN) | pr_ioi (PERS) | pr_f1n (PERS) | pr_e1n (PERS) | ct_lang (CONT) | own − other |
+|---|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | -0.037 | -0.042 | +0.664 | +0.735 | +0.042 | +0.061 | +0.034 | +0.726 | +0.569 |
+| COUNTRY (experts) | -0.022 | -0.006 | +0.126 | +0.102 | -0.032 | +0.000 | -0.010 | +0.210 | +0.091 |
+| COUNTRY (heads) | -0.013 | -0.041 | +0.605 | +0.687 | +0.086 | +0.043 | +0.052 | +0.641 | +0.518 |
+| PERSON_ROLE (all) | +0.018 | +0.081 | +0.011 | +0.036 | -0.012 | +0.327 | +0.321 | +0.040 | +0.174 |
+| PERSON_ROLE (experts) | -0.011 | -0.002 | -0.002 | -0.002 | -0.004 | +0.099 | +0.104 | +0.001 | +0.070 |
+| PERSON_ROLE (heads) | +0.023 | +0.083 | +0.013 | +0.034 | -0.009 | +0.287 | +0.253 | +0.038 | +0.139 |
+| SIZE_STATE (all) | +0.369 | +0.488 | +0.003 | +0.000 | -0.007 | +0.234 | +0.241 | +0.048 | +0.342 |
+| SIZE_STATE (experts) | +0.246 | +0.362 | -0.002 | -0.003 | -0.003 | -0.005 | +0.006 | +0.022 | +0.301 |
+| SIZE_STATE (heads) | +0.125 | +0.101 | +0.005 | +0.003 | -0.007 | +0.239 | +0.246 | +0.026 | +0.027 |
+
+Raw F of the circuits (draw 0) and of the random sets (mean of draws 1-2):
+
+| circuit (part) | ss_e3 | ss_e1 | co_p17 | co_nat | pr_ioi | pr_f1n | pr_e1n | ct_lang |
+|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | -0.001 (0.035) | 0.009 (0.051) | 0.666 (0.002) | 0.740 (0.005) | -0.035 (-0.077) | -0.013 (-0.074) | -0.013 (-0.047) | 0.721 (-0.005) |
+| COUNTRY (experts) | -0.010 (0.012) | 0.001 (0.007) | 0.126 (-0.001) | 0.106 (0.005) | -0.025 (0.007) | -0.012 (-0.012) | 0.003 (0.014) | 0.208 (-0.002) |
+| COUNTRY (heads) | 0.002 (0.015) | 0.007 (0.048) | 0.608 (0.004) | 0.690 (0.003) | 0.003 (-0.083) | -0.011 (-0.054) | -0.006 (-0.058) | 0.640 (-0.002) |
+| PERSON_ROLE (all) | 0.015 (-0.003) | 0.067 (-0.013) | 0.012 (0.001) | 0.033 (-0.002) | -0.008 (0.004) | 0.319 (-0.008) | 0.334 (0.013) | 0.040 (-0.000) |
+| PERSON_ROLE (experts) | -0.008 (0.003) | 0.008 (0.010) | -0.001 (0.001) | 0.000 (0.002) | -0.001 (0.003) | 0.089 (-0.010) | 0.109 (0.005) | 0.002 (0.001) |
+| PERSON_ROLE (heads) | 0.014 (-0.009) | 0.062 (-0.020) | 0.015 (0.002) | 0.033 (-0.001) | -0.009 (0.000) | 0.283 (-0.003) | 0.268 (0.016) | 0.037 (-0.002) |
+| SIZE_STATE (all) | 0.364 (-0.005) | 0.474 (-0.013) | 0.002 (-0.002) | -0.005 (-0.005) | -0.011 (-0.004) | 0.226 (-0.008) | 0.239 (-0.002) | 0.032 (-0.016) |
+| SIZE_STATE (experts) | 0.242 (-0.003) | 0.359 (-0.002) | -0.001 (0.001) | -0.000 (0.003) | -0.001 (0.002) | 0.002 (0.007) | 0.002 (-0.004) | 0.020 (-0.002) |
+| SIZE_STATE (heads) | 0.116 (-0.008) | 0.086 (-0.015) | 0.001 (-0.004) | -0.003 (-0.006) | -0.010 (-0.004) | 0.226 (-0.014) | 0.242 (-0.003) | 0.012 (-0.014) |
+
+Specificity per circuit part (N3): F_own = mean net F on the concept's own tasks, F_other = mean |net F| on every other task (other concepts and the control), selectivity = F_own / (|F_own| + F_other):
+
+| circuit (part) | F_own | F_other (mean abs) | F on the control task | selectivity |
+|---|---|---|---|---|
+| COUNTRY (all) | +0.700 | 0.157 | +0.726 | 0.82 |
+| COUNTRY (experts) | +0.114 | 0.047 | +0.210 | 0.71 |
+| COUNTRY (heads) | +0.646 | 0.146 | +0.641 | 0.82 |
+| PERSON_ROLE (all) | +0.212 | 0.037 | +0.040 | 0.85 |
+| PERSON_ROLE (experts) | +0.066 | 0.004 | +0.001 | 0.95 |
+| PERSON_ROLE (heads) | +0.177 | 0.038 | +0.038 | 0.82 |
+| SIZE_STATE (all) | +0.429 | 0.089 | +0.048 | 0.83 |
+| SIZE_STATE (experts) | +0.304 | 0.007 | +0.022 | 0.98 |
+| SIZE_STATE (heads) | +0.113 | 0.087 | +0.026 | 0.56 |
+
+#### Add-back of the concept set (fraction of the drop restored; matched random sets in parentheses)
+
+| circuit (part) | ss_e3 | ss_e1 | co_p17 | co_nat | pr_ioi | pr_f1n | pr_e1n | ct_lang |
+|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | 0.015 (0.031) | 0.005 (0.015) | 0.801 (0.020) | 0.852 (0.013) | 0.004 (-0.020) | 0.006 (-0.043) | 0.008 (-0.013) | 0.814 (0.026) |
+| COUNTRY (experts) | -0.001 (0.028) | -0.001 (0.010) | 0.276 (0.001) | 0.329 (0.000) | 0.006 (0.002) | 0.010 (0.002) | 0.008 (0.006) | 0.329 (0.005) |
+| COUNTRY (heads) | 0.015 (0.003) | 0.005 (0.006) | 0.795 (0.018) | 0.823 (0.011) | -0.001 (-0.024) | -0.004 (-0.048) | 0.002 (-0.015) | 0.783 (0.021) |
+| PERSON_ROLE (all) | 0.003 (0.007) | 0.050 (-0.007) | 0.003 (-0.000) | 0.007 (-0.000) | 0.043 (0.006) | 0.554 (-0.007) | 0.557 (-0.000) | 0.010 (0.001) |
+| PERSON_ROLE (experts) | -0.001 (0.005) | 0.001 (0.003) | -0.001 (-0.000) | -0.001 (-0.001) | 0.001 (0.002) | 0.173 (-0.003) | 0.154 (0.001) | -0.000 (0.001) |
+| PERSON_ROLE (heads) | 0.004 (0.002) | 0.049 (-0.010) | 0.004 (-0.000) | 0.008 (-0.000) | 0.043 (0.004) | 0.443 (-0.005) | 0.455 (0.001) | 0.012 (0.002) |
+| SIZE_STATE (all) | 0.523 (-0.002) | 0.626 (-0.002) | 0.001 (0.001) | 0.001 (0.001) | -0.003 (0.001) | 0.280 (-0.021) | 0.290 (-0.014) | 0.004 (0.000) |
+| SIZE_STATE (experts) | 0.446 (0.000) | 0.527 (0.001) | -0.000 (0.001) | -0.001 (0.002) | 0.000 (0.000) | -0.002 (-0.004) | 0.001 (0.003) | 0.002 (0.002) |
+| SIZE_STATE (heads) | 0.102 (-0.001) | 0.100 (-0.002) | 0.001 (0.000) | -0.000 (-0.003) | -0.002 (0.001) | 0.275 (-0.018) | 0.293 (-0.015) | 0.003 (-0.001) |
+
+#### Edges A -> B among circuit components (mediated effect rescue(A) + rescue(B) - rescue(A u B) / drop; top 12)
+
+| concept | A | B | edge / drop | share of A's rescue through B |
+|---|---|---|---|---|
+| COUNTRY | L40H13 | L44E069 | +0.034 | 0.14 |
+| SIZE_STATE | L34E119 | L43E081 | +0.011 | 0.15 |
+| PERSON_ROLE | L39H29 | L43H22 | +0.009 | 0.14 |
+| PERSON_ROLE | L39H27 | L43H22 | +0.009 | 0.19 |
+| SIZE_STATE | L34E119 | L41E117 | +0.009 | 0.12 |
+| PERSON_ROLE | L39H31 | L43H22 | +0.008 | 0.18 |
+| COUNTRY | L40H13 | L42E115 | +0.008 | 0.03 |
+| PERSON_ROLE | L37E032 | L43H22 | +0.008 | 0.15 |
+| COUNTRY | L40H15 | L44E069 | +0.006 | 0.09 |
+| SIZE_STATE | L38E021 | L43E081 | +0.006 | 0.10 |
+| SIZE_STATE | L39E071 | L43E081 | +0.005 | 0.05 |
+| COUNTRY | L40H14 | L44E069 | +0.005 | 0.08 |
+
+### mixtral_bos: concept circuits from existing rows (selection: source validation split; evaluation: source discovery split)
+
+| task | concept | selection units | evaluation pairs | head layers measured | expert rows |
+|---|---|---|---|---|---|
+| ss_e3 | SIZE_STATE | 172 | 48 | all | yes |
+| ss_e1 | SIZE_STATE | 72 | 36 | 13,15,16,18,19 | yes |
+| co_p17 | COUNTRY | 96 | 48 | 13,15,16,18,19,24 | yes |
+| co_nat | COUNTRY | 192 | 48 | 13,15,16,18,19,24 | yes |
+| pr_ioi | PERSON_ROLE | 256 | 48 | 16,19,21,22,31 | no |
+| pr_f1n | PERSON_ROLE | 24 | 11 | 15,16,19,21,27 | yes |
+| pr_e1n | PERSON_ROLE | 32 | 14 | 13,16,18,19,23 | yes |
+| ct_lang | CONTROL | 96 | 48 | 13,15,16,18,19,24 | yes |
+
+| concept | tasks | circuit heads | circuit experts | in top sets of other concepts (excluded) | also in the control's top set |
+|---|---|---|---|---|---|
+| SIZE_STATE | ss_e3, ss_e1 | L13H18, L13H4, L15H7, L19H13 | L21E004, L21E006, L24E002, L25E002, L26E002, L26E007 | L15H8, L19E006, L19H12, L20E000 | L15H7, L21E006, L26E007 |
+| COUNTRY | co_p17, co_nat | L15H1, L15H3, L18H12, L18H14, L18H4, L19H29, L19H30, L24H21, L24H22, L24H23 | L19E002, L21E001, L22E001, L23E002, L25E003, L28E002 | L18E001 | L15H1, L15H3, L18H12, L18H4, L19H29, L19H30, L21E001, L22E001, L24H21, L24H22, L24H23 |
+| PERSON_ROLE | pr_ioi, pr_f1n, pr_e1n | L16H1, L16H12, L16H14 | L15E002, L15E006, L16E005, L17E007, L19E007, L20E006, L28E003 | L16H0, L19H8 | – |
+
+| task | top heads (mean effect = rescue / drop) | top experts |
+|---|---|---|
+| ss_e3 | L25H9 +0.084, L22H20 +0.068, L19H13 +0.059, L13H18 +0.034, L19H12 +0.029 | L20E000 +0.154, L19E006 +0.134, L21E006 +0.101, L24E002 +0.091, L26E002 +0.088 |
+| ss_e1 | L19H13 +0.108, L15H8 +0.085, L19H12 +0.079, L16H0 +0.075, L15H7 +0.068 | L21E004 +0.112, L25E002 +0.104, L26E002 +0.101, L20E000 +0.083, L22E000 +0.080 |
+| co_p17 | L24H22 +0.168, L18H4 +0.168, L19H29 +0.064, L24H23 +0.041, L24H21 +0.019 | L19E002 +0.065, L21E001 +0.045, L22E001 +0.028, L20E000 +0.025, L18E001 +0.018 |
+| co_nat | L18H4 +0.273, L24H22 +0.233, L19H29 +0.111, L24H23 +0.071, L24H21 +0.061 | L21E001 +0.063, L19E002 +0.051, L25E003 +0.036, L22E001 +0.036, L20E005 +0.026 |
+| pr_ioi | L21H6 +0.108, L19H10 +0.065, L31H5 +0.064, L16H15 +0.051, L19H8 +0.050 | – (no expert rows) |
+| pr_f1n | L16H1 +0.145, L19H8 +0.136, L19H18 +0.121, L16H14 +0.116, L19H14 +0.090 | L17E007 +0.125, L16E005 +0.115, L18E001 +0.057, L15E002 +0.053, L15E006 +0.044 |
+| pr_e1n | L16H1 +0.481, L19H8 +0.332, L13H11 +0.299, L16H0 +0.230, L18H10 +0.116 | L17E007 +0.239, L16E005 +0.101, L15E006 +0.096, L28E003 +0.084, L19E007 +0.043 |
+| ct_lang | L18H4 +0.307, L24H22 +0.248, L19H29 +0.105, L24H21 +0.080, L24H23 +0.059 | L22E005 +0.036, L20E005 +0.035, L19E006 +0.029, L21E006 +0.025, L21E001 +0.023 |
+
+AUROC of each top component for its home concept (selection cases of the tasks where it was measured): heads median 0.792 (n 41), experts median 0.794 (n 35); Mann-Whitney experts > heads p = 0.426
+
+#### Knockout matrix: fraction of the clean margin lost F (circuit) minus the mean of 2 matched random sets; evaluation cases
+
+| circuit (part) | ss_e3 (SIZE) | ss_e1 (SIZE) | co_p17 (COUN) | co_nat (COUN) | pr_ioi (PERS) | pr_f1n (PERS) | pr_e1n (PERS) | ct_lang (CONT) | own − other |
+|---|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | -0.059 | -0.159 | +0.613 | +0.776 | -0.132 | -0.241 | -0.164 | +0.754 | +0.695 |
+| COUNTRY (experts) | -0.036 | -0.066 | -0.016 | -0.007 | +0.004 | -0.012 | +0.002 | +0.005 | +0.006 |
+| COUNTRY (heads) | -0.029 | -0.106 | +0.610 | +0.766 | -0.140 | -0.256 | -0.170 | +0.743 | +0.681 |
+| PERSON_ROLE (all) | +0.003 | +0.054 | +0.005 | +0.010 | +0.007 | +0.509 | +0.658 | +0.015 | +0.374 |
+| PERSON_ROLE (experts) | -0.011 | -0.095 | -0.020 | -0.012 | -0.014 | +0.179 | +0.226 | -0.003 | +0.158 |
+| PERSON_ROLE (heads) | +0.017 | +0.173 | +0.024 | +0.016 | +0.032 | +0.483 | +0.586 | +0.022 | +0.317 |
+| SIZE_STATE (all) | +0.228 | +0.409 | +0.040 | +0.062 | +0.026 | +0.307 | +0.134 | +0.065 | +0.212 |
+| SIZE_STATE (experts) | +0.107 | +0.162 | +0.005 | +0.005 | -0.001 | +0.044 | +0.000 | -0.004 | +0.126 |
+| SIZE_STATE (heads) | +0.125 | +0.303 | +0.038 | +0.055 | +0.027 | +0.254 | +0.135 | +0.066 | +0.118 |
+
+Raw F of the circuits (draw 0) and of the random sets (mean of draws 1-2):
+
+| circuit (part) | ss_e3 | ss_e1 | co_p17 | co_nat | pr_ioi | pr_f1n | pr_e1n | ct_lang |
+|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | 0.004 (0.063) | 0.003 (0.162) | 0.613 (0.000) | 0.768 (-0.008) | -0.030 (0.102) | -0.014 (0.227) | -0.011 (0.153) | 0.746 (-0.008) |
+| COUNTRY (experts) | -0.002 (0.035) | -0.001 (0.065) | -0.011 (0.005) | -0.003 (0.004) | 0.009 (0.005) | 0.007 (0.019) | 0.016 (0.014) | 0.004 (-0.001) |
+| COUNTRY (heads) | 0.008 (0.037) | -0.008 (0.098) | 0.606 (-0.004) | 0.757 (-0.009) | -0.042 (0.098) | -0.038 (0.218) | -0.021 (0.149) | 0.734 (-0.008) |
+| PERSON_ROLE (all) | 0.031 (0.027) | 0.071 (0.018) | 0.028 (0.023) | 0.009 (-0.000) | 0.020 (0.013) | 0.601 (0.092) | 0.642 (-0.016) | 0.021 (0.006) |
+| PERSON_ROLE (experts) | 0.028 (0.039) | 0.002 (0.097) | 0.004 (0.024) | -0.002 (0.010) | -0.012 (0.002) | 0.300 (0.121) | 0.232 (0.006) | 0.004 (0.007) |
+| PERSON_ROLE (heads) | 0.007 (-0.010) | 0.074 (-0.098) | 0.024 (0.000) | 0.009 (-0.007) | 0.037 (0.005) | 0.454 (-0.029) | 0.585 (-0.001) | 0.022 (0.000) |
+| SIZE_STATE (all) | 0.242 (0.015) | 0.452 (0.043) | 0.037 (-0.004) | 0.061 (-0.000) | 0.055 (0.028) | 0.328 (0.020) | 0.188 (0.054) | 0.068 (0.003) |
+| SIZE_STATE (experts) | 0.106 (-0.001) | 0.149 (-0.013) | -0.000 (-0.006) | 0.001 (-0.004) | 0.003 (0.004) | 0.044 (0.000) | 0.014 (0.014) | -0.003 (0.001) |
+| SIZE_STATE (heads) | 0.141 (0.016) | 0.352 (0.049) | 0.038 (0.000) | 0.060 (0.005) | 0.053 (0.027) | 0.276 (0.022) | 0.183 (0.048) | 0.070 (0.004) |
+
+Specificity per circuit part (N3): F_own = mean net F on the concept's own tasks, F_other = mean |net F| on every other task (other concepts and the control), selectivity = F_own / (|F_own| + F_other):
+
+| circuit (part) | F_own | F_other (mean abs) | F on the control task | selectivity |
+|---|---|---|---|---|
+| COUNTRY (all) | +0.695 | 0.251 | +0.754 | 0.73 |
+| COUNTRY (experts) | -0.011 | 0.021 | +0.005 | -0.35 |
+| COUNTRY (heads) | +0.688 | 0.240 | +0.743 | 0.74 |
+| PERSON_ROLE (all) | +0.391 | 0.017 | +0.015 | 0.96 |
+| PERSON_ROLE (experts) | +0.130 | 0.028 | -0.003 | 0.82 |
+| PERSON_ROLE (heads) | +0.367 | 0.050 | +0.022 | 0.88 |
+| SIZE_STATE (all) | +0.318 | 0.106 | +0.065 | 0.75 |
+| SIZE_STATE (experts) | +0.135 | 0.010 | -0.004 | 0.93 |
+| SIZE_STATE (heads) | +0.214 | 0.096 | +0.066 | 0.69 |
+
+#### Add-back of the concept set (fraction of the drop restored; matched random sets in parentheses)
+
+| circuit (part) | ss_e3 | ss_e1 | co_p17 | co_nat | pr_ioi | pr_f1n | pr_e1n | ct_lang |
+|---|---|---|---|---|---|---|---|---|
+| COUNTRY (all) | 0.009 (0.158) | 0.030 (0.145) | 0.806 (-0.002) | 0.911 (-0.001) | 0.041 (0.058) | 0.060 (0.140) | 0.048 (0.125) | 0.824 (0.061) |
+| COUNTRY (experts) | 0.006 (0.124) | 0.019 (0.106) | 0.180 (0.006) | 0.269 (0.013) | 0.033 (0.013) | 0.033 (0.037) | 0.017 (0.048) | 0.079 (0.073) |
+| COUNTRY (heads) | 0.003 (0.037) | 0.013 (0.051) | 0.799 (-0.007) | 0.891 (-0.014) | 0.009 (0.046) | 0.041 (0.109) | 0.027 (0.075) | 0.815 (-0.012) |
+| PERSON_ROLE (all) | 0.034 (0.095) | -0.012 (0.132) | 0.012 (0.041) | 0.014 (0.073) | 0.027 (0.013) | 0.519 (0.029) | 0.899 (0.022) | 0.013 (0.037) |
+| PERSON_ROLE (experts) | 0.035 (0.087) | -0.026 (0.113) | 0.009 (0.041) | 0.013 (0.073) | 0.033 (0.012) | 0.368 (0.027) | 0.628 (0.002) | 0.010 (0.038) |
+| PERSON_ROLE (heads) | 0.001 (0.009) | 0.015 (0.016) | 0.003 (-0.001) | 0.003 (-0.001) | -0.006 (0.001) | 0.313 (0.010) | 0.619 (0.019) | 0.004 (0.001) |
+| SIZE_STATE (all) | 0.481 (0.004) | 0.587 (0.018) | 0.006 (0.019) | 0.026 (0.083) | 0.009 (0.011) | 0.129 (0.025) | 0.101 (0.028) | 0.050 (0.036) |
+| SIZE_STATE (experts) | 0.369 (0.002) | 0.350 (0.005) | -0.000 (0.014) | 0.005 (0.073) | 0.003 (0.012) | 0.012 (0.025) | 0.008 (0.028) | 0.031 (0.031) |
+| SIZE_STATE (heads) | 0.206 (0.003) | 0.391 (0.013) | 0.003 (0.003) | 0.020 (0.008) | 0.007 (-0.000) | 0.113 (0.003) | 0.093 (-0.002) | 0.020 (0.006) |
+
+#### Edges A -> B among circuit components (mediated effect rescue(A) + rescue(B) - rescue(A u B) / drop; top 12)
+
+| concept | A | B | edge / drop | share of A's rescue through B |
+|---|---|---|---|---|
+| COUNTRY | L18H4 | L24H22 | +0.035 | 0.15 |
+| COUNTRY | L18H4 | L24H23 | +0.013 | 0.05 |
+| COUNTRY | L18H4 | L21E001 | +0.011 | 0.05 |
+| SIZE_STATE | L21E006 | L26E002 | +0.009 | 0.09 |
+| COUNTRY | L18H4 | L23E002 | +0.009 | 0.04 |
+| COUNTRY | L18H4 | L25E003 | +0.008 | 0.03 |
+| COUNTRY | L18H4 | L28E002 | +0.007 | 0.03 |
+| SIZE_STATE | L19H13 | L21E004 | +0.006 | 0.09 |
+| SIZE_STATE | L19H13 | L24E002 | +0.006 | 0.09 |
+| SIZE_STATE | L19H13 | L25E002 | +0.005 | 0.08 |
+| SIZE_STATE | L24E002 | L26E002 | +0.005 | 0.06 |
+| SIZE_STATE | L19H13 | L21E006 | +0.005 | 0.07 |
+
+**Reading.** The knockout matrix is the held-out test: circuits are chosen on the source validation split and knocked out on the discovery split, every circuit in every task. A circuit is concept-specific when its own tasks lose much of the clean margin and the other concepts' tasks (and the control) lose about what matched random sets lose. N3 is tested by knocking out the heads and the experts of each circuit separately (selectivity table). Edges are small compared with the components' own effects: the components act mostly in parallel on the final residual (a mover head → late expert path, e.g. Qwen3 L40H13 → L44E069, carries ≈ 0.03 of the drop).
+
+**Caveats.**
+- C1 is final-position only (as the engine's `expert_neurons` kind); CounterFact values are donor means; Mistral-7B uses the Mixtral items filtered by its own margin, so its case sets are subsets of Mixtral's. Neuron rankings are per case; a fixed population set is much less efficient (case-specific neurons).
+- C2 is a pilot (48 cases per task, two small models): the RelP rules are our re-implementation from the paper's description, not Transluce's code; circuits are per case (no dataset-level aggregation, prompts differ in length); MoE mean ablation uses the routed-token mean (unconditional means wreck OLMoE); gradients use frozen routing while every exact check routes live.
+- C3 uses existing rows (scope cut): head layers measured differ between runs (IOI, CounterFact Phase-4, option swap: all layers; Phase-5/6 cells and the new COUNTRY sets: 5–6 top attention layers), IOI has no expert singles, COUNTRY experts are scored by DLA, selection is on the source validation split and evaluation on the discovery split; some sets are small (Phase-6 E1 names 16–22 pairs); 2 random draws per set; knockouts act on the clean run only (heads zeroed, experts rerouted at every position). The concept rule excludes components that also rank high for another concept, which can remove a task's strongest components (IOI's L42H10 / L43H24 are shared with the size / state tasks, so the PERSON-ROLE circuit is the name-attribute part, not IOI's).
+
+**Files.** `moetrace/ext14_circuit.py`, `ext14_circuit_an.py`, `ext14_circuit_relp.py`, `ext14_circuit_c3.py`; `scripts/ext14ci_*` (`ext14ci_all.py` re-runs every analysis and this section); runs `results/p6ci_c1_<task>/`, `results/p6ci_relp_<model>_<task>/`, `results/p6ci_c3_*`, `results/p6ci_upcycle/`; tables `results/tables/ext14ci_*`; summary `results/ext14ci_summary.json`.

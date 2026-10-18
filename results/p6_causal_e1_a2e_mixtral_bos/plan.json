@@ -1,0 +1,371 @@
+{
+ "cell": "e1_a2e",
+ "proto": "mixtral_bos",
+ "heads": {
+  "top3": [
+   [
+    13,
+    11
+   ],
+   [
+    19,
+    8
+   ],
+   [
+    16,
+    0
+   ]
+  ],
+  "top3_disc_val": [
+   [
+    13,
+    11,
+    0.6273584905660378,
+    0.75625
+   ],
+   [
+    19,
+    8,
+    0.5454009433962265,
+    0.65
+   ],
+   [
+    16,
+    0,
+    0.3290094339622642,
+    0.4166666666666667
+   ]
+  ],
+  "layers_scanned": [
+   13,
+   16,
+   18,
+   19,
+   23
+  ],
+  "nH": 32,
+  "r0": [
+   [
+    13,
+    1
+   ],
+   [
+    19,
+    23
+   ],
+   [
+    16,
+    10
+   ]
+  ],
+  "r1": [
+   [
+    13,
+    31
+   ],
+   [
+    19,
+    26
+   ],
+   [
+    16,
+    2
+   ]
+  ],
+  "r2": [
+   [
+    13,
+    31
+   ],
+   [
+    19,
+    10
+   ],
+   [
+    16,
+    7
+   ]
+  ]
+ },
+ "experts": {
+  "top3": [
+   [
+    17,
+    7
+   ],
+   [
+    15,
+    6
+   ],
+   [
+    14,
+    5
+   ]
+  ],
+  "pop_top10": [
+   [
+    17,
+    7,
+    0.31721698113207547
+   ],
+   [
+    15,
+    6,
+    0.27476415094339623
+   ],
+   [
+    14,
+    5,
+    0.21757075471698112
+   ],
+   [
+    19,
+    4,
+    0.21403301886792453
+   ],
+   [
+    20,
+    5,
+    0.1821933962264151
+   ],
+   [
+    17,
+    5,
+    0.1420990566037736
+   ],
+   [
+    16,
+    3,
+    0.1403301886792453
+   ],
+   [
+    21,
+    0,
+    0.1320754716981132
+   ],
+   [
+    18,
+    0,
+    0.11379716981132075
+   ],
+   [
+    23,
+    4,
+    0.10908018867924528
+   ]
+  ],
+  "source": "p6_e1_a2e_mixtral_bos_t2",
+  "freq_top3": [
+   0.9846938775510204,
+   1.0,
+   0.9107142857142857
+  ],
+  "r0": [
+   [
+    17,
+    3
+   ],
+   [
+    15,
+    5
+   ],
+   [
+    14,
+    7
+   ]
+  ],
+  "freq_r0": [
+   0.015306122448979591,
+   0.44387755102040816,
+   0.7933673469387755
+  ],
+  "r1": [
+   [
+    17,
+    3
+   ],
+   [
+    15,
+    2
+   ],
+   [
+    14,
+    6
+   ]
+  ],
+  "freq_r1": [
+   0.015306122448979591,
+   0.15306122448979592,
+   0.03316326530612245
+  ],
+  "r2": [
+   [
+    17,
+    1
+   ],
+   [
+    15,
+    0
+   ],
+   [
+    14,
+    7
+   ]
+  ],
+  "freq_r2": [
+   0.15816326530612246,
+   0.2576530612244898,
+   0.7933673469387755
+  ]
+ },
+ "masks": {
+  "none": {},
+  "heads_top3": {
+   "head_mask": [
+    [
+     13,
+     11
+    ],
+    [
+     19,
+     8
+    ],
+    [
+     16,
+     0
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_top3": {
+   "route_mask": [
+    [
+     17,
+     7
+    ],
+    [
+     15,
+     6
+    ],
+    [
+     14,
+     5
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r0": {
+   "head_mask": [
+    [
+     13,
+     1
+    ],
+    [
+     19,
+     23
+    ],
+    [
+     16,
+     10
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r0": {
+   "route_mask": [
+    [
+     17,
+     3
+    ],
+    [
+     15,
+     5
+    ],
+    [
+     14,
+     7
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r1": {
+   "head_mask": [
+    [
+     13,
+     31
+    ],
+    [
+     19,
+     26
+    ],
+    [
+     16,
+     2
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r1": {
+   "route_mask": [
+    [
+     17,
+     3
+    ],
+    [
+     15,
+     2
+    ],
+    [
+     14,
+     6
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  },
+  "heads_r2": {
+   "head_mask": [
+    [
+     13,
+     31
+    ],
+    [
+     19,
+     10
+    ],
+    [
+     16,
+     7
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "experts_r2": {
+   "route_mask": [
+    [
+     17,
+     1
+    ],
+    [
+     15,
+     0
+    ],
+    [
+     14,
+     7
+    ]
+   ],
+   "route_mask_mode": "zero",
+   "route_mask_pos": "all",
+   "route_mask_inherit": true
+  }
+ },
+ "splits": "validation",
+ "created_utc": "2026-10-17T03:55:18Z",
+ "note": "heads ranked by discovery single-head rescue (tier-1 W5 layers); experts by discovery all-case single-expert rescue; random heads: same layers, excluding the top-10 heads; random experts: same layer, nearest final-position routing frequency (3 candidates), excluding the population top-10"
+}

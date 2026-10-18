@@ -17,8 +17,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+sys.path.insert(0, "/home/ubuntu/MOE")
+from moetrace.ext14_plotutil import draw_random_equivalent, random_equivalent, fmt_equiv  # Phase 6: random-equivalent marks
 
 R = "/home/ubuntu/MOE/results"
+EQUIV = []  # rows for results/tables/ext13ab_random_equiv.md
 COL = {"greedy": "#eb6834", "oracle": "#2a78d6", "noise_oracle": "#2a78d6", "rand": "#8a8984"}
 MCOL = {"qwen3": "#2a78d6", "mixtral": "#eb6834"}
 BARCOL = ("#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4")
@@ -89,13 +93,22 @@ def curve_panel(ax, r, kind):
         lo_all += [np.nanmin(np.r_[rr, lo, ceil])]
         hi_all += [np.nanmax(np.r_[rr, hi, ceil])]
         k80[o] = (num(e["k80"][0]), num(e.get("k80max", [np.nan])[0]))
+    eq_txt = ""
+    if kind == "addback" and blk.get("greedy") and blk.get("rand"):
+        g, rd = blk["greedy"], blk["rand"]
+        d = draw_random_equivalent(ax, arr(g["k"]), arr(g["r_curve"]), arr(rd["k"]), arr(rd["r_curve"]), color=INK2, kmax=r["K"])
+        eq_txt = "\nrandom-order k that matches greedy's first k: " + fmt_equiv(d)
+        row = {"label": r.get("label"), "tlabel": r.get("tlabel"), "cond": r.get("cond"), "family": r.get("family"), "K": r["K"], "greedy": d}
+        if blk.get("oracle"):
+            row["oracle"] = random_equivalent(arr(blk["oracle"]["k"]), arr(blk["oracle"]["r_curve"]), arr(rd["k"]), arr(rd["r_curve"]))
+        EQUIV.append(row)
     ax.axhline(ceil, color=INK2, linewidth=1.0, linestyle=(0, (4, 3)), zorder=1)
     ax.text(1.05, ceil + 0.015, f"{ctext}: {ceil:.2f}", color=INK2, fontsize=8.5, va="bottom", zorder=4)
     if ceil > CEIL_MIN:
         txt = "experts for 80 % of the ceiling: " + " · ".join(f"{short[o]} {fk(k80[o][0])}" for o in orders if o in k80)
     else:
         txt = f"ceiling ≤ {CEIL_MIN}; experts for 80 % of each curve's maximum: " + " · ".join(f"{short[o]} {fk(k80[o][1])}" for o in orders if o in k80)
-    ax.text(0.0, 1.02, txt, transform=ax.transAxes, ha="left", va="bottom", fontsize=8.3, color=INK2)
+    ax.text(0.0, 1.02, txt + eq_txt, transform=ax.transAxes, ha="left", va="bottom", fontsize=8.3, color=INK2)
     K = r["K"]
     ax.set_xscale("log")
     ax.set_xlim(0.9, K * 1.1)
@@ -121,7 +134,7 @@ def cond_figs(S, outdir):
             lims = []
             for ax, r in zip(axes[0], rs):
                 lims.append(curve_panel(ax, r, kind))
-                ax.set_title(f"{r['label']}  (K = {r['K']}, {r['n_units']} pairs)", fontsize=10, loc="left", pad=20)
+                ax.set_title(f"{r['label']}  (K = {r['K']}, {r['n_units']} pairs)", fontsize=10, loc="left", pad=32 if kind == "addback" else 20)
                 ax.set_xlabel(xlab)
             axes[0][0].set_ylim(min(a for a, _ in lims), max(b for _, b in lims))
             axes[0][0].set_ylabel(ylab)
@@ -256,6 +269,23 @@ def overview(S, outdir):
         save(fig, outdir, f"ext13ab_split_all_{m}")
 
 
+def write_equiv_table(path):
+    """Phase 6 (P6-0): random-order k that matches greedy's (and the oracle's) first k, every condition and model."""
+    from moetrace.ext14_plotutil import fmt_k
+    ks = (1, 5, 10, 15)
+    L = ["# Random-order experts needed to match greedy's / the oracle's first k (Phase-5 add-back, validation)", "",
+         "k_rand(k) = smallest k' with r_random(k') >= r_greedy(k) (log-k interpolation); 'never' = random order never reaches it",
+         "(greedy above the all-MoE ceiling, where random ends). Written by scripts/ext13ab_plot.py (Phase 6, P6-0).", "",
+         "| Condition | Family | Model | K | greedy 1 | greedy 5 | greedy 10 | greedy 15 | oracle 1 | oracle 5 | oracle 10 | oracle 15 |",
+         "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for e in EQUIV:
+        g, o = e.get("greedy", {}), e.get("oracle", {})
+        L.append(f"| {e['tlabel']} | {e['family']} | {e['label']} | {e['K']} | " + " | ".join(fmt_k(g.get(k)) if k in g else "–" for k in ks)
+                 + " | " + " | ".join(fmt_k(o.get(k)) if k in o else "–" for k in ks) + " |")
+    open(path, "w").write("\n".join(L) + "\n")
+    print(f"written {path}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--summary", default=os.path.join(R, "ext13ab_summary.json"))
@@ -267,6 +297,7 @@ def main():
     S = json.load(open(args.summary))
     cond_figs(S, args.outdir)
     overview(S, args.outdir)
+    write_equiv_table(os.path.join(R, "tables", "ext13ab_random_equiv.md"))
     if args.section and args.summary == os.path.join(R, "ext13ab_summary.json"):
         # refresh results/sections/ext13_addback.md (the chains call this script after every job)
         import sys

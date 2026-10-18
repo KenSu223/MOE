@@ -1,0 +1,12 @@
+2026-10-16T21:05:04Z START ext14-cf-filter-mistral7b_bos (waited 1500s): python scripts/ext14_scan_cf.py mistral7b --out mistral7b_str --paper-key Mixtral
+21:05:15 mistral7b (special_tokens=True): 256 cases, 3397 symmetric candidates; cases with >= 1: 218; per case quartiles [2.0, 6.0, 18.0] max 166
+21:05:16 pass 1/2: 3072 prefill rows
+21:05:17   layer   0: load-wait 0.61s compute 0.76s  wf_rows=0
+21:05:21   layer   8: load-wait 0.04s compute 0.48s  wf_rows=0
+21:05:26   layer  16: load-wait 0.04s compute 0.48s  wf_rows=0
+21:05:30   layer  24: load-wait 0.03s compute 0.48s  wf_rows=0
+21:05:33   layer  31: load-wait 0.03s compute 0.48s  wf_rows=0
+21:05:33   pass done: 3072 prefill rows (T=19), 0 spawn rows, 17.4s
+21:05:33 pass 2/2: 581 prefill rows
+21:05:36 summary: {"n_cases": 256, "n_candidates": 3397, "cases_with_candidate": 218, "cases_with_qualifying": 212, "cases_kept": 212, "kept_discovery": 106, "kept_validation": 106, "qualify_rate": 0.8401530762437445, "donor_top1_is_foil_rate": 0.27553723874006475, "donor_top1_is_foil_rate_selected": 0.2800953516090584, "n_selected": 839, "selected_per_case": {"1": 25, "2": 23, "3": 17, "4": 18, "5": 129}, "delta_donor_selected_mean": -5.416391293113081, "delta_donor_all_median": -4.4375, "delta_clean_mean_kept": 5.620099337595813, "delta_clean_lt1_kept": 16, "top1_clean_is_true_kept": 60, "pass_times_s": [17.405641317367554, 3.019763946533203], "rejected_tokenizer": []}
+2026-10-16T21:05:38Z END   ext14-cf-filter-mistral7b_bos rc=0 (34s)

@@ -1,0 +1,11 @@
+15:31:11 qwen3 -> p6_sc_conflict_stmt_a2e_qwen3: 268 directed cases, families ['main'], 1 prefill-only passes
+15:31:25   layer   0: load-wait 5.41s compute 1.06s  wf_rows=0
+15:31:34   layer   8: load-wait 1.26s compute 0.14s  wf_rows=0
+15:31:42   layer  16: load-wait 0.64s compute 0.14s  wf_rows=0
+15:31:49   layer  24: load-wait 0.75s compute 0.16s  wf_rows=0
+15:32:05   layer  32: load-wait 0.98s compute 0.13s  wf_rows=0
+15:32:15   layer  40: load-wait 1.37s compute 0.13s  wf_rows=0
+15:32:23   layer  47: load-wait 0.95s compute 0.13s  wf_rows=0
+15:32:23   pass done: 536 prefill rows (T=51), 0 spawn rows, 64.2s
+15:32:23 pass 1/1: 64s; DLA total - drop: max |.| 0.202
+15:32:24 direct effect / drop: attention +1.429, MoE -0.430, embedding +0.000

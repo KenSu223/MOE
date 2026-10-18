@@ -1,0 +1,7 @@
+Model,Family,Patched output,L* (disc.),Disc. mean,Validation rescue at L* [95% CI],Normalised,Discovery top 4
+"Mixtral-8x7B, BOS",main,layer,L15,+0.82,"+0.596 [+0.520, +0.679]","0.151 [0.132, 0.172]","L15 +0.82, L17 +0.52, L16 +0.50, L20 +0.45"
+"Mixtral-8x7B, BOS",main,attn_layer,L16,+1.74,"+1.533 [+1.411, +1.656]","0.389 [0.364, 0.415]","L16 +1.74, L19 +1.43, L15 +0.78, L13 +0.74"
+"Mixtral-8x7B, BOS",main,block,L16,+2.11,"+1.848 [+1.719, +1.979]","0.469 [0.444, 0.495]","L16 +2.11, L19 +1.71, L15 +1.22, L13 +0.84"
+"Mixtral-8x7B, BOS",main_interior,layer,L15,+0.82,"+0.596 [+0.520, +0.679]","0.151 [0.132, 0.172]","L15 +0.82, L17 +0.52, L16 +0.50, L20 +0.45"
+"Mixtral-8x7B, BOS",main_interior,attn_layer,L16,+1.74,"+1.533 [+1.411, +1.656]","0.389 [0.364, 0.415]","L16 +1.74, L19 +1.43, L15 +0.78, L13 +0.74"
+"Mixtral-8x7B, BOS",main_interior,block,L16,+2.11,"+1.848 [+1.719, +1.979]","0.469 [0.444, 0.495]","L16 +2.11, L19 +1.71, L15 +1.22, L13 +0.84"

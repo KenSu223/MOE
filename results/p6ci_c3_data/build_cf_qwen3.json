@@ -1,0 +1,36 @@
+{
+ "model": "qwen3",
+ "proto": "qwen3",
+ "special_tokens": true,
+ "relations": {
+  "P17": {
+   "tokenised": 467,
+   "with_donor": 400,
+   "pairs_margin": 378,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P27": {
+   "tokenised": 509,
+   "with_donor": 400,
+   "pairs_margin": 369,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P495": {
+   "tokenised": 454,
+   "with_donor": 400,
+   "pairs_margin": 292,
+   "discovery": 48,
+   "validation": 48
+  },
+  "P103": {
+   "tokenised": 448,
+   "with_donor": 400,
+   "pairs_margin": 360,
+   "discovery": 48,
+   "validation": 48
+  }
+ },
+ "utc": "2026-10-17T02:51:37Z"
+}

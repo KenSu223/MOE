@@ -1,0 +1,14 @@
+10:33:43 mistral7b -> p6_l_ioi_mistral7b_bos: 512 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+10:33:44 pass 1/1: 1024 prefill rows, 3072 multi rows
+10:33:46   layer   0: load-wait 0.62s compute 0.50s  wf_rows=3072
+10:33:48   layer   8: load-wait 0.03s compute 0.22s  wf_rows=3072
+10:33:50   layer  16: load-wait 0.04s compute 0.22s  wf_rows=3072
+10:33:52   layer  24: load-wait 0.03s compute 0.22s  wf_rows=3072
+10:33:53   layer  31: load-wait 0.04s compute 0.22s  wf_rows=3072
+10:33:53   pass done: 1024 prefill rows (T=21), 3072 spawn rows, 9.0s
+10:33:54 denoise  all_attn  all     : effect/drop +1.000 (mean effect +10.94, drop 10.94)
+10:33:54 denoise  all_block all     : effect/drop +1.000 (mean effect +10.94, drop 10.94)
+10:33:54 denoise  all_moe   all     : effect/drop +0.119 (mean effect +1.30, drop 10.94)
+10:33:54 noise    all_attn  all     : effect/drop +1.000 (mean effect +10.94, drop 10.94)
+10:33:54 noise    all_block all     : effect/drop +1.000 (mean effect +10.94, drop 10.94)
+10:33:54 noise    all_moe   all     : effect/drop +0.119 (mean effect +1.30, drop 10.94)

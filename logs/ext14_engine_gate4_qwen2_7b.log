@@ -1,0 +1,18 @@
+  [real32] rescue corr 1.00000, spawn max |dDelta| 3.24e-05, competent units r 1.00000
+  prefill max |dDelta| 2.67e-05
+  noise compare: corr vs fp32 transformers bf16 0.9705 / engine bf16 0.9788; mean |d| 0.213 / 0.185; engine fp32 vs transformers fp32 r 1.000000 -> noise
+  chain eng_bf16__hf_bf16: |dDelta| mean 0.203 max 0.688, rank equal 0.64
+  chain hf_bf16__hf_fp32: |dDelta| mean 0.559 max 1.19, rank equal 0.64
+  chain eng_bf16__hf_fp32: |dDelta| mean 0.429 max 1.34, rank equal 0.82
+  chain eng_fp32__hf_fp32: |dDelta| mean 3.5e-06 max 7.63e-06, rank equal 1.00
+  chain hf_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain hf_fp32 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_fp32 sanity ranks [1, 1, 1, 1, 1]
+  layer 1: update relerr max 0.0104; vs fp32: engine 0.0125 / transformers 0.013
+  layer 14: update relerr max 0.00995; vs fp32: engine 0.685 / transformers 0.685
+  layer 27: update relerr max 0.0963; vs fp32: engine 0.144 / transformers 0.143
+  sanity 5/5 answers in the top 5: Paris#1, Paris#1, oxygen#1, cold#1, Thursday#1
+  clean Delta > 0 in 1.00 of the units, mean drop 6.69
+  engine {'model_key': 'qwen2_7b', 'dtype': 'bfloat16', 'router_fp32': False} vs engine fp32: rescue r 0.9480, |d rescue| mean 0.19, attention share 0.226 vs 0.227
+PASS

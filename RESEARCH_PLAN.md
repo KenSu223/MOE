@@ -1384,6 +1384,11 @@ Predictions (written into the pre-registration in Stage 0):
   - H-type: the gap persists at E1, i.e. entities are moved by attention and attributes are written by the MoE whatever the evidence.
 - "From level 5 to level 3": E1 is the copy level, and every step adds exactly one transformation.
 
+**Frame update (2026-10-16, before any share was measured).** A behaviour-only frame pilot (`data/dial/qa/frame_pilot.md`; 200 core twins, both orders) showed that the first a2e frame `Fill in the blank: {A} and {B}, so the _ was X.` is a frame artefact: neutral objects correct-both 0.39 (Qwen3) / 0.05 (Mixtral). All E1-family a2e cells therefore use P3: `{A} and {B}. Fill in the blank: The _ was X.\nAnswer: the` (0.99 / 0.80, order gap ≤ 0.01).
+- New cell `e3p3_a2e`: the E3 content in the same frame (`{event clause}. Fill in the blank: The _ was X.`), so the a2e dial E1 → E1p → E2 → E3p3 is frame-matched. The F1 `e3_a2e` stays as the Phase-5 anchor.
+- Set C puts the statement before the wrapper.
+- E2 items carry `degree_adv` / `antonym_type` strata. Negation of gradable adjectives with too / very is only pragmatically informative; a2e still works by elimination.
+
 **Dial A (associativity / prior support, the team's example).**
 - At level E1, the stated binding either agrees with a strong lexical prior, is neutral (the E1 main set), or conflicts with it (the two statements reversed); E0 gives the prior alone.
 - Prior strength = the Phase-5 v2 probe.
@@ -1553,7 +1558,7 @@ Pattern of Phase 5 (PLAYBOOK section 7): sub-agents own disjoint files; detached
 | coordinator (this session) | plan, `data/dial/preregistration.md` / `predictions.json`, P6-0, disk and downloads, `moetrace/models.py` entries, queue order, monitoring, synthesis | `results/sections/ext14_synthesis.md`, prediction check, team page, CLAUDE.md / README / PLAYBOOK / memory |
 | p6-engine | `moetrace/arch.py`, `weights.py`, `engine.py` (additive), `scripts/ext14_engine_verify*.py`, `logs/ext14_engine_api.md` | dense / qwen2 / qwen2_moe families, `expert_neurons`, verification JSONs, regression identity |
 | p6-data | `moetrace/ext14_data.py`, `scripts/ext14_build_*.py`, `ext14_scan*.py`, `ext14_casesets.py`, `data/dial/` (except the pre-registration) | condition registry `data/dial/p6_conditions.json`, pair parquets per tokenizer, case sets, QA samples, PROGRESS lines `[p6-data] BASE READY <cell>/<model>` |
-| p6-run | `scripts/ext14_run_*`, `ext14_analyze*.py`, `moetrace/ext14_analysis.py` | tier-1 / tier-2 chains, figures `results/figures/ext14_*`, sections `ext14_{ladder,dial,dense,scale}.md` |
+| p6-analysis | `scripts/ext14_run_*`, `ext14_analyze*.py`, `moetrace/ext14_analysis.py` | tier-1 / tier-2 chains, figures `results/figures/ext14_*`, sections `ext14_{ladder,dial,dense,scale}.md` |
 | p6-circuit | `moetrace/ext14_circuit*.py`, `scripts/ext14ci_*` | C1 / C2 pilot / C3, section `ext14_circuit.md` |
 
 - Run dirs: `results/p6_<cell>_<model>` (tier 1), `results/p6_<cell>_<model>_t2` (tier 2), `results/p6ci_*`.
@@ -1581,6 +1586,19 @@ Decision points:
 - DP4 (fixed rule): Set B on the twins if Stage-1 Dial A shows a dose–response: share(conflict) − share(agree) ≥ 0.10 with the 95 % CI excluding 0 in either model.
 - DP5 (coordinator, only if DP6 = go): before Stage 3, delete this phase's own Stage-2 downloads (disk plan); anything else needs the user.
 - **DP6 (user): after Stage R, run Stage 3 (Mixtral-8x22B) or stop.** Nothing for Stage 3 (deletions, download, jobs) happens before this decision.
+
+## Scope cut (user instruction, 2026-10-17 ~02:00Z)
+
+Only what the attention vs MoE / dense question needs runs by default:
+- **Tier 1 per cell** = scan + single-layer attention / MoE (MLP) sweep (metrics on) + joint all-MoE / all-MLP M + direct split (DLA).
+- **No position grid and no head singles by default.** The grids that already ran stay: e1_a2e (both models), e1_e2a and l_bind (Qwen3).
+- **Head singles only** for R-causal (e3_e2a; e1_a2e already has them) and for at most 2 cells per model requested by C3.
+- **Tier 2 (experts, add-back, mixed greedy, knockout, writers)** stays only for the already finished e1_a2e cells (Qwen3, Mixtral). It is cancelled for e1_e2a and Qwen2-57B.
+- **Qwen2-57B shared vs routed (D6)** comes from three joint patches in T3 (all-MoE, routed-only, shared-only) plus DLA.
+- **R-causal stays minimal:** e1_a2e and e3_e2a, top-3 heads / experts, 3 random draws, T2 + T3 only.
+- C1 is done. The C2 pilot stays small.
+
+Expected saving: roughly 40 % of the tier-1 GPU time (grid + heads), plus all remaining tier-2 jobs. The ETA is re-estimated from the measured times after the change.
 
 ## Deliverables
 

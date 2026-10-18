@@ -1,0 +1,161 @@
+{
+ "model": "/opt/dlami/nvme/p6_tiny/qwen2_moe",
+ "path": "/opt/dlami/nvme/p6_tiny/qwen2_moe",
+ "family": "qwen2_moe",
+ "dtype": "fp32",
+ "n_layers": 4,
+ "n_experts": 8,
+ "top_k": 2,
+ "shared_inter": 160,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-16T21:43:59Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "kind": "tiny_random",
+  "n": 4
+ },
+ "per_layer": {
+  "behaviour": {
+   "delta": [
+    -0.5776707530021667,
+    0.9644675254821777,
+    0.08331549167633057,
+    1.466681957244873
+   ],
+   "rank_true": [
+    782,
+    155,
+    240,
+    33
+   ],
+   "top1_is_true": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "sanity": []
+  },
+  "identities": {
+   "layer": 2,
+   "zero_vs_parent": {
+    "n": 4,
+    "maxabs": 4.76837158203125e-07,
+    "meanabs": 1.6391277313232422e-07,
+    "frac_exact": 0.25
+   },
+   "union_vs_layer": {
+    "n": 4,
+    "maxabs": 2.384185791015625e-07,
+    "meanabs": 1.043081283569336e-07,
+    "frac_exact": 0.5
+   },
+   "setall_vs_layer": {
+    "n": 4,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "neurons_all_vs_expert": {
+    "n": 4,
+    "maxabs": 3.5762786865234375e-07,
+    "meanabs": 1.341104507446289e-07,
+    "frac_exact": 0.25
+   },
+   "neurons_linearity_relerr_max": 1.2249068959135911e-07,
+   "expert_rescue_mean": -0.023285850882530212,
+   "layer_rescue_mean": 0.036857835948467255,
+   "shared_expert_vs_set": {
+    "n": 4,
+    "maxabs": 0.0,
+    "meanabs": 0.0,
+    "frac_exact": 1.0
+   },
+   "shared_neurons_all_vs_expert": {
+    "n": 4,
+    "maxabs": 7.748603820800781e-07,
+    "meanabs": 2.8312206268310547e-07,
+    "frac_exact": 0.25
+   },
+   "shared_rescue_mean": 0.14888185262680054,
+   "shared_w_final_mean_by_layer": [
+    0.7251268625259399,
+    0.6152647733688354,
+    0.7487725019454956,
+    0.5048074722290039
+   ],
+   "clean_delta_pos_frac": 0.75,
+   "drop_mean": 0.2212495654821396
+  },
+  "layers": {
+   "1": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 3.463305802142713e-07,
+     "meanabs": 2.6011300491290967e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 1.430511474609375e-06,
+     "meanabs": 9.08970832824707e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 4,
+     "maxabs": 3.463305802142713e-07,
+     "meanabs": 2.6011300491290967e-07,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 1.0,
+    "routing_overlap": 1.0
+   },
+   "2": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 2.9406612611637684e-07,
+     "meanabs": 2.182690952423627e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 8.940696716308594e-07,
+     "meanabs": 7.003545761108398e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 4,
+     "maxabs": 2.9406612611637684e-07,
+     "meanabs": 2.182690952423627e-07,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 1.0,
+    "routing_overlap": 1.0
+   },
+   "3": {
+    "update_relerr": {
+     "n": 4,
+     "maxabs": 2.8948400654371653e-07,
+     "meanabs": 2.1810200223626452e-07,
+     "frac_exact": 0.0
+    },
+    "out_maxabs": {
+     "n": 4,
+     "maxabs": 1.1920928955078125e-06,
+     "meanabs": 8.344650268554688e-07,
+     "frac_exact": 0.0
+    },
+    "update_relerr_routing_equal": {
+     "n": 4,
+     "maxabs": 2.8948400654371653e-07,
+     "meanabs": 2.1810200223626452e-07,
+     "frac_exact": 0.0
+    },
+    "routing_set_agreement": 1.0,
+    "routing_overlap": 1.0
+   }
+  }
+ },
+ "total_s": 4.481438636779785
+}

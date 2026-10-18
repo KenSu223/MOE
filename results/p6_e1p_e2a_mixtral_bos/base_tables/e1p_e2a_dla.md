@@ -1,0 +1,5 @@
+**e1p_e2a W4 DLA: direct logit attribution of the final-position sublayer outputs (main family)**
+
+| Model | DLA attention / drop | DLA MoE / drop | Attention share of DLA | Top attention layers | Top MoE layers |
+|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | 0.518 [0.479, 0.559] | 0.482 [0.441, 0.521] | 0.52 [0.48, 0.56] | L25 +0.128, L15 +0.058, L19 +0.057 | L20 +0.101, L19 +0.101, L25 +0.085 |

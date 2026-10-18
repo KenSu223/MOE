@@ -1,0 +1,10 @@
+**e3_e2a W2: final-position single-layer patches (pair bootstrap)**
+
+| Model | Family | Patched output | L* (disc.) | Disc. mean | Validation rescue at L* [95% CI] | Normalised | Discovery top 4 |
+|---|---|---|---|---|---|---|---|
+| Mixtral-8x7B, BOS | main | layer | L20 | +1.45 | +1.377 [+1.268, +1.490] | 0.172 [0.161, 0.183] | L20 +1.45, L21 +1.25, L19 +1.23, L26 +1.12 |
+| Mixtral-8x7B, BOS | main | attn_layer | L13 | +1.21 | +1.155 [+1.040, +1.272] | 0.144 [0.131, 0.158] | L13 +1.21, L19 +0.92, L25 +0.71, L15 +0.58 |
+| Mixtral-8x7B, BOS | main | block | L19 | +2.06 | +1.985 [+1.852, +2.123] | 0.248 [0.234, 0.262] | L19 +2.06, L20 +1.71, L13 +1.50, L25 +1.36 |
+| Mixtral-8x7B, BOS | main_interior | layer | L20 | +1.45 | +1.377 [+1.268, +1.490] | 0.172 [0.161, 0.183] | L20 +1.45, L21 +1.25, L19 +1.23, L26 +1.12 |
+| Mixtral-8x7B, BOS | main_interior | attn_layer | L13 | +1.21 | +1.155 [+1.040, +1.272] | 0.144 [0.131, 0.158] | L13 +1.21, L19 +0.92, L25 +0.71, L15 +0.58 |
+| Mixtral-8x7B, BOS | main_interior | block | L19 | +2.06 | +1.985 [+1.852, +2.123] | 0.248 [0.234, 0.262] | L19 +2.06, L20 +1.71, L13 +1.50, L25 +1.36 |

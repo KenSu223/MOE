@@ -1,0 +1,17 @@
+  bf16 thresholds scaled by the transformers bf16-vs-fp32 noise floor 0.085: max 1.02, mean 0.21, overall r >= 0.98
+  [bf16] rescue corr 0.99728, spawn max |dDelta| 0.375, competent units r 0.99728
+  prefill max |dDelta| 0.25
+  chain eng_bf16__hf_bf16: |dDelta| mean 0.0625 max 0.125, rank equal 0.91
+  chain hf_bf16__hf_fp32: |dDelta| mean 0.0848 max 0.231, rank equal 0.82
+  chain eng_bf16__hf_fp32: |dDelta| mean 0.0623 max 0.106, rank equal 0.82
+  chain eng_fp32__hf_fp32: |dDelta| mean 7.15e-06 max 1.43e-05, rank equal 1.00
+  chain hf_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain hf_fp32 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_bf16 sanity ranks [1, 1, 1, 1, 1]
+  chain eng_fp32 sanity ranks [1, 1, 1, 1, 1]
+  layer 1: update relerr max 0.00951; vs fp32: engine 0.00963 / transformers 0.00918
+  layer 20: update relerr max 0.0139; vs fp32: engine 0.11 / transformers 0.11
+  layer 39: update relerr max 0.0185; vs fp32: engine 0.0164 / transformers 0.00685
+  sanity 5/5 answers in the top 5: Paris#1, Paris#1, oxygen#1, cold#1, Thursday#1
+  clean Delta > 0 in 1.00 of the units, mean drop 7.19
+PASS

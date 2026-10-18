@@ -1,0 +1,12 @@
+2026-10-16T20:12:45Z START ext14-scan-mixtral_bos-pilot (waited 1451s): python scripts/ext14_scan.py mixtral_bos --part cells --subset all --cells pilot_frames
+20:12:52 pilot_frames [all]: 2000 pairs, 4000 rows
+20:13:01   layer   0: load-wait 6.32s compute 2.39s  wf_rows=0
+20:13:24   layer   8: load-wait 0.93s compute 1.96s  wf_rows=0
+20:13:45   layer  16: load-wait 0.39s compute 1.96s  wf_rows=0
+20:14:04   layer  24: load-wait 0.28s compute 1.96s  wf_rows=0
+20:14:23   layer  31: load-wait 0.94s compute 1.96s  wf_rows=0
+20:14:23   pass done: 3996 prefill rows (T=35), 0 spawn rows, 90.0s
+20:14:23   pass 1/2 (3996 rows, 90s)
+20:15:54   pass 2/2 (4 rows, 92s)
+20:15:55 pilot_frames {"pairs": 2000, "margin": 231, "reverse_margin": 3, "margin_rate": 0.116, "by_order": {"1": 0.118, "2": 0.113}, "top1_both": 0.207, "passes": 2}
+2026-10-16T20:16:02Z END   ext14-scan-mixtral_bos-pilot rc=0 (197s)

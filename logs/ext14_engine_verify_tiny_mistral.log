@@ -1,0 +1,57 @@
+03:07:55 mistral: mistral, 8 units, dtype fp32
+03:07:55   376 configurations
+Loading weights:   0%|          | 0/39 [00:00<?, ?it/s]Loading weights: 100%|██████████| 39/39 [00:00<00:00, 4457.16it/s]
+03:07:58   HF unit 1/8 done (1s)
+03:07:59   HF unit 2/8 done (1s)
+03:07:59   HF unit 3/8 done (2s)
+03:07:59   HF unit 4/8 done (2s)
+03:08:00   HF unit 5/8 done (2s)
+03:08:00   HF unit 6/8 done (3s)
+03:08:00   HF unit 7/8 done (3s)
+03:08:01   HF unit 8/8 done (3s)
+03:08:01   engine pass: 48 prefill rows, 424 spawns, 0.2s
+03:08:01 wrote results/verify_ext14_tiny_mistral.json
+03:08:01 model: "/opt/dlami/nvme/p6_tiny/mistral"
+03:08:01 path: "/opt/dlami/nvme/p6_tiny/mistral"
+03:08:01 family: "mistral"
+03:08:01 dtype: "fp32"
+03:08:01 n_layers: 4
+03:08:01 n_experts: 1
+03:08:01 top_k: 1
+03:08:01 shared_inter: 0
+03:08:01 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+03:08:01 started: "2026-10-17T03:07:55Z"
+03:08:01 hf_offload: false
+03:08:01 light_plan: false
+03:08:01 units: {"kind": "tiny_random", "n": 8}
+03:08:01 router_fp32_flag: false
+03:08:01 hf_s: 6.166142702102661
+03:08:01 n_configs: 376
+03:08:01 n_spawns: 424
+03:08:01 prefill_delta_vs_hf: {"C": {"n": 8, "maxabs": 2.0265579223632812e-06, "meanabs": 7.37607479095459e-07, "frac_exact": 0.125}, "X": {"n": 8, "maxabs": 1.2516975402832031e-06, "meanabs": 7.525086402893066e-07, "frac_exact": 0.0}, "CMz": {"n": 8, "maxabs": 1.6689300537109375e-06, "meanabs": 7.37607479095459e-07, "frac_exact": 0.125}, "XMz": {"n": 8, "maxabs": 2.2649765014648438e-06, "meanabs": 5.103647708892822e-07, "frac_exact": 0.125}, "CMm": {"n": 8, "maxabs": 1.6689300537109375e-06, "meanabs": 7.525086402893066e-07, "frac_exact": 0.125}, "XMm": {"n": 8, "maxabs": 8.344650268554688e-07, "meanabs": 5.587935447692871
+03:08:01 prefill_metrics_vs_hf: {"logp_true": {"n": 48, "maxabs": 1.9073486328125e-06, "meanabs": 5.76178232828776e-07, "frac_exact": 0.2916666666666667}, "logp_foil": {"n": 48, "maxabs": 9.5367431640625e-07, "meanabs": 4.569689432779948e-07, "frac_exact": 0.3333333333333333}, "p_true": {"n": 48, "maxabs": 4.6566128730773926e-09, "meanabs": 5.766196409240365e-10, "frac_exact": 0.2916666666666667}, "kl_to_clean": {"n": 48, "maxabs": 5.327165126800537e-07, "meanabs": 1.3380000988642374e-07, "frac_exact": 0.5}}
+03:08:01 prefill_rank_equal_frac: 1.0
+03:08:01 head_mask_effect_on_delta_hf: {"Mz": 0.6091247517615557, "Mm": 0.13012360222637653}
+03:08:01 spawn_delta_vs_hf: {"den_attn": {"n": 32, "maxabs": 1.5497207641601562e-06, "meanabs": 5.960464477539062e-07, "frac_exact": 0.0, "rescue_corr": 0.9999999999964001, "rescue_hf_meanabs": 0.20897470880299807}, "den_block": {"n": 32, "maxabs": 1.7881393432617188e-06, "meanabs": 6.342306733131409e-07, "frac_exact": 0.03125, "rescue_corr": 0.9999999999982321, "rescue_hf_meanabs": 0.33095424156636}, "den_expert0": {"n": 8, "maxabs": 1.0728836059570312e-06, "meanabs": 5.960464477539062e-07, "frac_exact": 0.125, "rescue_corr": 0.9999999999991465, "rescue_hf_meanabs": 0.286235298961401}, "den_head": {"n": 24, "maxabs": 1.
+03:08:01 spawn_rescue_corr_all: 0.999999999997175
+03:08:01 competent_units: [2, 7]
+03:08:01 spawn_rescue_corr_competent: 0.9999999999994751
+03:08:01 spawn_delta_maxabs_all: 2.175569534301758e-06
+03:08:01 spawn_metrics_vs_hf: {"logp_true": {"n": 376, "maxabs": 1.9073486328125e-06, "meanabs": 5.402463547726895e-07, "frac_exact": 0.3617021276595745}, "logp_foil": {"n": 376, "maxabs": 1.9073486328125e-06, "meanabs": 3.8425973121156083e-07, "frac_exact": 0.4601063829787234}, "p_true": {"n": 376, "maxabs": 6.05359673500061e-09, "meanabs": 5.231142611282461e-10, "frac_exact": 0.3617021276595745}, "kl_to_clean": {"n": 376, "maxabs": 7.338821887969971e-07, "meanabs": 2.2403978749265475e-07, "frac_exact": 0.010638297872340425}}
+03:08:01 spawn_rank_equal_frac: 1.0
+03:08:01 identities: {"neurons_linearity_relerr_max": 1.827579723112649e-07, "neurons_all_vs_expert_vec_relerr_max": 6.398975074262125e-07, "neurons_all_vs_expert_ddelta": {"n": 8, "maxabs": 7.152557373046875e-07, "meanabs": 2.7567148208618164e-07, "frac_exact": 0.125}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 24, "maxabs": 9.5367431640625e-07, "meanabs": 2.632538477579753e-07, "frac_exact": 0.08333333333333333}, "attn_head_on_masked_head_vs_parent": {"n": 16, "maxabs": 4.76837158203125e-07, "meanabs": 2.3469328880310059e-
+03:08:01 diag_attn_heads_mean_relerr: {"n": 32, "maxabs": 4.497810834891425e-07, "meanabs": 2.539430510317686e-07, "frac_exact": 0.0}
+03:08:01 diag_resid_layers_relerr: {"n": 32, "maxabs": 6.538907655340154e-07, "meanabs": 3.5570947787277873e-07, "frac_exact": 0.25}
+03:08:01 diag_expert_neurons_act_relerr: {"n": 8, "maxabs": 1.088180852093501e-06, "meanabs": 8.046316892773575e-07, "frac_exact": 0.0}
+03:08:01 diag_expert_neurons_w_abs: {"n": 8, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}
+03:08:01 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+03:08:01 diag_expert_neurons_routed_mismatch: 0
+03:08:01 head_mask_zero_heads_final_maxabs: 0.0
+03:08:01 total_s: 6.38866114616394
+  [tiny32] rescue corr 1.00000, spawn max |dDelta| 2.18e-06, competent units r 1.00000
+  prefill max |dDelta| 2.26e-06
+  layer 1: update relerr max 2.95e-07
+  layer 2: update relerr max 2.8e-07
+  layer 3: update relerr max 2.85e-07
+  clean Delta > 0 in 0.25 of the units, mean drop -0.19
+PASS

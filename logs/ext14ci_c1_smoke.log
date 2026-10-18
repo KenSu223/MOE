@@ -1,0 +1,15 @@
+2026-10-16T21:05:38Z START p6ci-c1-smoke (waited 1480s): bash -c python scripts/ext14ci_c1_run.py qwen3_cf score --limit 3 --smoke && python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L44E069 --limit 3 --smoke && python scripts/ext14ci_c1_run.py qwen3_cf patch --expert L42E115 --limit 3 --smoke
+21:05:44 score qwen3_cf: 22 prefill rows, 0 spawns, experts [(44, 69), (42, 115)]
+21:06:41 pass 56s
+/home/ubuntu/MOE/moetrace/ext14_circuit.py:179: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  t = torch.as_tensor(true_ids, device=head.device, dtype=torch.long)
+21:06:41 L44E069: active clean 11/16, corrupt 15; sum dla vs slot dla r=1.0000, max |diff| 0.0021
+21:06:41 L42E115: active clean 16/16, corrupt 16; sum dla vs slot dla r=1.0000, max |diff| 0.0009
+21:06:41 score done
+21:06:57 patch qwen3_cf L44E069: 5 rows (3 cases), 55 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 400, 768]
+21:07:55 pass 1/1: 8 prefill, 275 spawns, 57s
+21:07:55 patch done
+21:08:04 patch qwen3_cf L42E115: 5 rows (3 cases), 55 spawns/row, 1 passes, k grid [1, 2, 5, 10, 20, 50, 100, 200, 400, 768]
+21:08:54 pass 1/1: 8 prefill, 275 spawns, 49s
+21:08:54 patch done
+2026-10-16T21:09:01Z END   p6ci-c1-smoke rc=0 (203s)

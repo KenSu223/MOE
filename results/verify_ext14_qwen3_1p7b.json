@@ -1,0 +1,5323 @@
+{
+ "model": "qwen3_1p7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+ "family": "qwen3",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T05:22:19Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 6,
+  "pairs_tokenizer_identical": 6,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 12
+ },
+ "router_fp32_flag": false,
+ "hf_s": 36.21944761276245,
+ "n_configs": 612,
+ "n_spawns": 684,
+ "prefill_delta_vs_hf": {
+  "C": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.5
+  },
+  "X": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.5
+  },
+  "CMz": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.09375,
+   "frac_exact": 0.4166666666666667
+  },
+  "XMz": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.5833333333333334
+  },
+  "CMm": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.041666666666666664,
+   "frac_exact": 0.6666666666666666
+  },
+  "XMm": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.041666666666666664,
+   "frac_exact": 0.6666666666666666
+  }
+ },
+ "prefill_metrics_vs_hf": {
+  "logp_true": {
+   "n": 72,
+   "maxabs": 0.18063592910766602,
+   "meanabs": 0.05562810351451238,
+   "frac_exact": 0.0
+  },
+  "logp_foil": {
+   "n": 72,
+   "maxabs": 0.21222198009490967,
+   "meanabs": 0.0604427018099361,
+   "frac_exact": 0.0
+  },
+  "p_true": {
+   "n": 72,
+   "maxabs": 0.027337193489074707,
+   "meanabs": 0.002265958187005405,
+   "frac_exact": 0.0
+  },
+  "kl_to_clean": {
+   "n": 72,
+   "maxabs": 0.07048368453979492,
+   "meanabs": 0.010844062910311751,
+   "frac_exact": 0.5
+  }
+ },
+ "prefill_rank_equal_frac": 0.5277777777777778,
+ "head_mask_effect_on_delta_hf": {
+  "Mz": 0.2604166666666667,
+  "Mm": 0.1875
+ },
+ "spawn_delta_vs_hf": {
+  "den_attn": {
+   "n": 60,
+   "maxabs": 0.25,
+   "meanabs": 0.06875,
+   "frac_exact": 0.5333333333333333,
+   "rescue_corr": 0.6373530233124356,
+   "rescue_hf_meanabs": 0.09166666666666666
+  },
+  "den_block": {
+   "n": 60,
+   "maxabs": 0.25,
+   "meanabs": 0.06666666666666667,
+   "frac_exact": 0.55,
+   "rescue_corr": 0.9770568097860363,
+   "rescue_hf_meanabs": 0.3541666666666667
+  },
+  "den_expert0": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.5833333333333334,
+   "rescue_corr": 0.9642495566295801,
+   "rescue_hf_meanabs": 0.17708333333333334
+  },
+  "den_head": {
+   "n": 36,
+   "maxabs": 0.25,
+   "meanabs": 0.0625,
+   "frac_exact": 0.5277777777777778,
+   "rescue_corr": -0.07537783614444094,
+   "rescue_hf_meanabs": 0.041666666666666664
+  },
+  "den_layer": {
+   "n": 60,
+   "maxabs": 0.25,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.45,
+   "rescue_corr": 0.9811195188313006,
+   "rescue_hf_meanabs": 0.3375
+  },
+  "den_multi_allmlp": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": 0.9964676382737941,
+   "rescue_hf_meanabs": 2.40625
+  },
+  "den_multi_attn_mlp": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.11458333333333333,
+   "frac_exact": 0.16666666666666666,
+   "rescue_corr": 0.8174414513075473,
+   "rescue_hf_meanabs": 0.19791666666666666
+  },
+  "den_multi_heads": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.5,
+   "rescue_corr": 0.979218779833853,
+   "rescue_hf_meanabs": 0.7916666666666666
+  },
+  "den_multi_mlp_block_attn": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.5,
+   "rescue_corr": 0.9169169690111925,
+   "rescue_hf_meanabs": 0.2916666666666667
+  },
+  "den_neur_all": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.5,
+   "rescue_corr": 0.9057148735229397,
+   "rescue_hf_meanabs": 0.20833333333333334
+  },
+  "den_neur_half": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.4166666666666667,
+   "rescue_corr": 0.5114503816793893,
+   "rescue_hf_meanabs": 0.11458333333333333
+  },
+  "den_resid": {
+   "n": 60,
+   "maxabs": 0.25,
+   "meanabs": 0.06875,
+   "frac_exact": 0.55,
+   "rescue_corr": 0.9966676696277064,
+   "rescue_hf_meanabs": 1.275
+  },
+  "den_zero": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.09375,
+   "frac_exact": 0.4166666666666667,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmm_attn": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.5833333333333334,
+   "rescue_corr": 0.8110780362580282,
+   "rescue_hf_meanabs": 0.11458333333333333
+  },
+  "hmm_headfree": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.10416666666666667,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": -0.14744195615489714,
+   "rescue_hf_meanabs": 0.0625
+  },
+  "hmm_headmasked": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.4166666666666667,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmm_layer": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.4166666666666667,
+   "rescue_corr": -0.2842773889438992,
+   "rescue_hf_meanabs": 0.052083333333333336
+  },
+  "hmm_multi": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.5833333333333334,
+   "rescue_corr": 0.8840820445395452,
+   "rescue_hf_meanabs": 0.15625
+  },
+  "hmm_none": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.07291666666666667,
+   "frac_exact": 0.4166666666666667,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmz_attn": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.6666666666666666,
+   "rescue_corr": 0.669455548716505,
+   "rescue_hf_meanabs": 0.125
+  },
+  "hmz_headfree": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmz_headmasked": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.09375,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "hmz_layer": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.08333333333333333,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": 0.0,
+   "rescue_hf_meanabs": 0.020833333333333332
+  },
+  "hmz_multi": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.0625,
+   "frac_exact": 0.6666666666666666,
+   "rescue_corr": 0.7744108329392589,
+   "rescue_hf_meanabs": 0.17708333333333334
+  },
+  "hmz_none": {
+   "n": 12,
+   "maxabs": 0.25,
+   "meanabs": 0.09375,
+   "frac_exact": 0.3333333333333333,
+   "rescue_corr": null,
+   "rescue_hf_meanabs": 0.0
+  },
+  "noi_attn": {
+   "n": 24,
+   "maxabs": 0.125,
+   "meanabs": 0.046875,
+   "frac_exact": 0.625,
+   "rescue_corr": 0.6347129652620564,
+   "rescue_hf_meanabs": 0.08333333333333333
+  },
+  "noi_block": {
+   "n": 24,
+   "maxabs": 0.25,
+   "meanabs": 0.06770833333333333,
+   "frac_exact": 0.5833333333333334,
+   "rescue_corr": 0.8633849022877,
+   "rescue_hf_meanabs": 0.15104166666666666
+  },
+  "noi_layer": {
+   "n": 24,
+   "maxabs": 0.125,
+   "meanabs": 0.078125,
+   "frac_exact": 0.375,
+   "rescue_corr": 0.8660511488504785,
+   "rescue_hf_meanabs": 0.13541666666666666
+  },
+  "noi_resid": {
+   "n": 24,
+   "maxabs": 0.25,
+   "meanabs": 0.06770833333333333,
+   "frac_exact": 0.5416666666666666,
+   "rescue_corr": 0.9582360026112431,
+   "rescue_hf_meanabs": 0.2916666666666667
+  }
+ },
+ "spawn_rescue_corr_all": 0.9893515461367909,
+ "rows": [
+  {
+   "tag": "den_layer_0",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 0,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 0,
+   "eng_delta": -4.75,
+   "hf_delta": -4.75,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 0,
+   "eng_delta": -4.25,
+   "hf_delta": -4.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.0,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 0,
+   "eng_delta": -4.25,
+   "hf_delta": -4.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 0,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 0,
+   "eng_delta": -6.5,
+   "hf_delta": -6.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.0,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 0,
+   "eng_delta": -6.125,
+   "hf_delta": -6.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_head_7_3",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_head_14_7",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_head_21_8",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 0,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 0,
+   "eng_delta": -5.375,
+   "hf_delta": -5.5,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 0,
+   "eng_delta": -5.0,
+   "hf_delta": -5.0,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 0,
+   "eng_delta": -6.375,
+   "hf_delta": -6.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 0,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 0,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.25,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.0,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.25,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 0,
+   "eng_delta": 0.125,
+   "hf_delta": 0.0,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 0,
+   "eng_delta": 0.0,
+   "hf_delta": 0.0,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 0,
+   "eng_delta": -1.375,
+   "hf_delta": -1.5,
+   "eng_parent": 0.125,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -5.0,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -5.0,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -4.875,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -5.0,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -5.0,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 0,
+   "eng_delta": -4.875,
+   "hf_delta": -4.875,
+   "eng_parent": -4.875,
+   "hf_parent": -5.0
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 0,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.25,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 0,
+   "eng_delta": -5.25,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 0,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.25,
+   "hf_parent": -5.375
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 1,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 1,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 1,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": 0.0,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": 0.0,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 1,
+   "eng_delta": 0.0,
+   "hf_delta": 0.0,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 1,
+   "eng_delta": 1.375,
+   "hf_delta": 1.5,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 1,
+   "eng_delta": 0.875,
+   "hf_delta": 0.875,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 1,
+   "eng_delta": 0.0,
+   "hf_delta": 0.0,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 1,
+   "eng_delta": 1.0,
+   "hf_delta": 1.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 1,
+   "eng_delta": 4.25,
+   "hf_delta": 4.375,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 1,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 1,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 1,
+   "eng_delta": -1.0,
+   "hf_delta": -1.0,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 1,
+   "eng_delta": 5.25,
+   "hf_delta": 5.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_head_7_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_head_14_12",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_head_21_8",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 1,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 1,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 1,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 1,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 1,
+   "eng_delta": 4.0,
+   "hf_delta": 3.875,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": -0.125,
+   "eng_parent": -0.125,
+   "hf_parent": -0.125
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 1,
+   "eng_delta": 5.25,
+   "hf_delta": 5.125,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 1,
+   "eng_delta": 5.25,
+   "hf_delta": 5.25,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 1,
+   "eng_delta": 5.25,
+   "hf_delta": 5.125,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 1,
+   "eng_delta": 5.25,
+   "hf_delta": 5.25,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 1,
+   "eng_delta": 5.375,
+   "hf_delta": 5.375,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 1,
+   "eng_delta": 5.125,
+   "hf_delta": 5.125,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 1,
+   "eng_delta": 5.125,
+   "hf_delta": 5.125,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 1,
+   "eng_delta": 4.75,
+   "hf_delta": 4.75,
+   "eng_parent": 5.25,
+   "hf_parent": 5.125
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 1,
+   "eng_delta": -1.0,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 1,
+   "eng_delta": -1.0,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 1,
+   "eng_delta": -0.875,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 1,
+   "eng_delta": -1.0,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 1,
+   "eng_delta": -1.0,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 1,
+   "eng_delta": -0.875,
+   "hf_delta": -0.875,
+   "eng_parent": -0.875,
+   "hf_parent": -0.875
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 1,
+   "eng_delta": 0.125,
+   "hf_delta": 0.0,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 1,
+   "eng_delta": 0.0,
+   "hf_delta": 0.0,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 1,
+   "eng_delta": 0.125,
+   "hf_delta": 0.0,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 1,
+   "eng_delta": 0.125,
+   "hf_delta": 0.0,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 1,
+   "eng_delta": -0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 1,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.0,
+   "hf_parent": 0.0
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.0,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 0.875,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.375,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 2,
+   "eng_delta": 0.75,
+   "hf_delta": 0.75,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 2,
+   "eng_delta": 0.75,
+   "hf_delta": 0.625,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.5,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_head_7_7",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_head_14_3",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_head_21_12",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.0,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.25,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 2,
+   "eng_delta": 0.75,
+   "hf_delta": 0.75,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 2,
+   "eng_delta": 0.75,
+   "hf_delta": 0.875,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.25,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.375,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.375,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.375,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.375,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 2,
+   "eng_delta": 1.5,
+   "hf_delta": 1.5,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.5,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.625,
+   "eng_parent": 1.25,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.25,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.25,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.125,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.25,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.25,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 2,
+   "eng_delta": 1.375,
+   "hf_delta": 1.125,
+   "eng_parent": 1.25,
+   "hf_parent": 1.25
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 1.0,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 2,
+   "eng_delta": 1.0,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 2,
+   "eng_delta": 1.125,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 2,
+   "eng_delta": 1.25,
+   "hf_delta": 1.125,
+   "eng_parent": 1.125,
+   "hf_parent": 1.125
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 3,
+   "eng_delta": -1.5,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.625,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 3,
+   "eng_delta": -1.75,
+   "hf_delta": -1.75,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 3,
+   "eng_delta": -1.75,
+   "hf_delta": -1.75,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_head_7_0",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_head_14_4",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_head_21_13",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.375,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 3,
+   "eng_delta": -1.75,
+   "hf_delta": -1.875,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 3,
+   "eng_delta": -1.875,
+   "hf_delta": -1.75,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.5
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 3,
+   "eng_delta": -1.0,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.125
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.5,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 3,
+   "eng_delta": -1.25,
+   "hf_delta": -1.25,
+   "eng_parent": -1.25,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 3,
+   "eng_delta": -1.375,
+   "hf_delta": -1.375,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.25,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 3,
+   "eng_delta": -1.125,
+   "hf_delta": -1.125,
+   "eng_parent": -1.125,
+   "hf_parent": -1.25
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.375,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.375,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 4,
+   "eng_delta": -2.375,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 4,
+   "eng_delta": -2.5,
+   "hf_delta": -2.375,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 4,
+   "eng_delta": -0.875,
+   "hf_delta": -0.875,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 4,
+   "eng_delta": -0.875,
+   "hf_delta": -1.0,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 4,
+   "eng_delta": 2.625,
+   "hf_delta": 2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 4,
+   "eng_delta": -3.5,
+   "hf_delta": -3.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 4,
+   "eng_delta": -3.375,
+   "hf_delta": -3.5,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 4,
+   "eng_delta": 3.0,
+   "hf_delta": 3.0,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_head_7_4",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.375,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_head_14_15",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_head_21_6",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 4,
+   "eng_delta": -2.5,
+   "hf_delta": -2.5,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 4,
+   "eng_delta": -2.75,
+   "hf_delta": -2.75,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.75,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 4,
+   "eng_delta": -3.5,
+   "hf_delta": -3.5,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 4,
+   "eng_delta": 2.625,
+   "hf_delta": 2.75,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 4,
+   "eng_delta": 3.0,
+   "hf_delta": 3.0,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 4,
+   "eng_delta": 3.125,
+   "hf_delta": 3.0,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 4,
+   "eng_delta": 3.125,
+   "hf_delta": 3.125,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 4,
+   "eng_delta": 3.125,
+   "hf_delta": 3.125,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 4,
+   "eng_delta": 3.0,
+   "hf_delta": 2.875,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 4,
+   "eng_delta": 2.625,
+   "hf_delta": 2.625,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 4,
+   "eng_delta": 2.75,
+   "hf_delta": 2.75,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 4,
+   "eng_delta": 2.75,
+   "hf_delta": 2.75,
+   "eng_parent": 3.0,
+   "hf_parent": 3.0
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 4,
+   "eng_delta": -2.75,
+   "hf_delta": -2.625,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 4,
+   "eng_delta": -2.75,
+   "hf_delta": -2.75,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 4,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 4,
+   "eng_delta": -2.75,
+   "hf_delta": -2.625,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 4,
+   "eng_delta": -2.875,
+   "hf_delta": -2.875,
+   "eng_parent": -2.625,
+   "hf_parent": -2.625
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 4,
+   "eng_delta": -2.0,
+   "hf_delta": -2.0,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 4,
+   "eng_delta": -2.0,
+   "hf_delta": -2.125,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 4,
+   "eng_delta": -2.0,
+   "hf_delta": -2.0,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 4,
+   "eng_delta": -2.0,
+   "hf_delta": -2.0,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 4,
+   "eng_delta": -1.875,
+   "hf_delta": -2.0,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 4,
+   "eng_delta": -2.25,
+   "hf_delta": -2.125,
+   "eng_parent": -2.0,
+   "hf_parent": -2.0
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -2.875,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 5,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 5,
+   "eng_delta": -2.75,
+   "hf_delta": -2.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 5,
+   "eng_delta": -2.75,
+   "hf_delta": -2.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 5,
+   "eng_delta": -2.0,
+   "hf_delta": -1.875,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 5,
+   "eng_delta": -2.0,
+   "hf_delta": -2.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 5,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 5,
+   "eng_delta": -4.75,
+   "hf_delta": -4.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 5,
+   "eng_delta": -4.625,
+   "hf_delta": -4.625,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 5,
+   "eng_delta": 2.25,
+   "hf_delta": 2.25,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_head_7_6",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_head_14_5",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_head_21_9",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 5,
+   "eng_delta": -3.0,
+   "hf_delta": -2.875,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 5,
+   "eng_delta": -2.625,
+   "hf_delta": -2.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 5,
+   "eng_delta": -4.75,
+   "hf_delta": -4.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 5,
+   "eng_delta": 1.625,
+   "hf_delta": 1.75,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 5,
+   "eng_delta": -3.125,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 5,
+   "eng_delta": 2.25,
+   "hf_delta": 2.375,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 5,
+   "eng_delta": 2.25,
+   "hf_delta": 2.25,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 5,
+   "eng_delta": 2.25,
+   "hf_delta": 2.375,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 5,
+   "eng_delta": 2.375,
+   "hf_delta": 2.25,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 5,
+   "eng_delta": 2.625,
+   "hf_delta": 2.625,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 5,
+   "eng_delta": 2.5,
+   "hf_delta": 2.375,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 5,
+   "eng_delta": 2.625,
+   "hf_delta": 2.625,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 5,
+   "eng_delta": 2.625,
+   "hf_delta": 2.625,
+   "eng_parent": 2.25,
+   "hf_parent": 2.25
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 5,
+   "eng_delta": -2.375,
+   "hf_delta": -2.5,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 5,
+   "eng_delta": -2.375,
+   "hf_delta": -2.375,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 5,
+   "eng_delta": -2.5,
+   "hf_delta": -2.375,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 5,
+   "eng_delta": -2.375,
+   "hf_delta": -2.5,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 5,
+   "eng_delta": -2.5,
+   "hf_delta": -2.5,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 5,
+   "eng_delta": -2.5,
+   "hf_delta": -2.5,
+   "eng_parent": -2.5,
+   "hf_parent": -2.5
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 5,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 5,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 5,
+   "eng_delta": -2.375,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 5,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 5,
+   "eng_delta": -2.25,
+   "hf_delta": -2.25,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 5,
+   "eng_delta": -2.375,
+   "hf_delta": -2.375,
+   "eng_parent": -2.25,
+   "hf_parent": -2.25
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.5,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 6,
+   "eng_delta": 0.625,
+   "hf_delta": 0.625,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.625,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.75,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 6,
+   "eng_delta": 3.625,
+   "hf_delta": 3.625,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 6,
+   "eng_delta": -0.25,
+   "hf_delta": -0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.5,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 6,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_head_7_4",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_head_14_13",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_head_21_15",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 6,
+   "eng_delta": 0.375,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 6,
+   "eng_delta": 0.75,
+   "hf_delta": 0.625,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 6,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 6,
+   "eng_delta": 3.125,
+   "hf_delta": 3.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.375,
+   "eng_parent": 0.25,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.25,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.375,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.25,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.375,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 6,
+   "eng_delta": 5.375,
+   "hf_delta": 5.25,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 6,
+   "eng_delta": 5.125,
+   "hf_delta": 5.125,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 6,
+   "eng_delta": 5.125,
+   "hf_delta": 4.875,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 6,
+   "eng_delta": 5.125,
+   "hf_delta": 5.0,
+   "eng_parent": 5.375,
+   "hf_parent": 5.25
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 6,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.25,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 6,
+   "eng_delta": 0.25,
+   "hf_delta": 0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 6,
+   "eng_delta": 0.125,
+   "hf_delta": 0.125,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.5,
+   "eng_parent": 0.25,
+   "hf_parent": 0.125
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.375,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.375,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.5,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.375,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 6,
+   "eng_delta": 0.5,
+   "hf_delta": 0.375,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 6,
+   "eng_delta": 0.75,
+   "hf_delta": 0.75,
+   "eng_parent": 0.375,
+   "hf_parent": 0.375
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -4.875,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.0,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 7,
+   "eng_delta": -4.875,
+   "hf_delta": -4.75,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 7,
+   "eng_delta": -5.5,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 7,
+   "eng_delta": -4.75,
+   "hf_delta": -4.75,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 7,
+   "eng_delta": -1.75,
+   "hf_delta": -1.625,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 7,
+   "eng_delta": -6.0,
+   "hf_delta": -6.0,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.0,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 7,
+   "eng_delta": -5.875,
+   "hf_delta": -5.75,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_head_7_12",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_head_14_15",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_head_21_11",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.125,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.375,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 7,
+   "eng_delta": -4.75,
+   "hf_delta": -4.75,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 7,
+   "eng_delta": -6.125,
+   "hf_delta": -6.125,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 7,
+   "eng_delta": -2.125,
+   "hf_delta": -2.125,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 7,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.375,
+   "hf_parent": -5.25
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.375,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.375,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.25,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.375,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 7,
+   "eng_delta": -0.25,
+   "hf_delta": -0.375,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 7,
+   "eng_delta": -0.375,
+   "hf_delta": -0.375,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 7,
+   "eng_delta": -0.5,
+   "hf_delta": -0.5,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 7,
+   "eng_delta": -0.625,
+   "hf_delta": -0.625,
+   "eng_parent": -0.25,
+   "hf_parent": -0.375
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 7,
+   "eng_delta": -5.0,
+   "hf_delta": -5.0,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 7,
+   "eng_delta": -5.0,
+   "hf_delta": -4.875,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.125,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 7,
+   "eng_delta": -5.25,
+   "hf_delta": -5.25,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 7,
+   "eng_delta": -5.125,
+   "hf_delta": -5.0,
+   "eng_parent": -5.125,
+   "hf_parent": -5.125
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 8,
+   "eng_delta": -7.125,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 8,
+   "eng_delta": -7.125,
+   "hf_delta": -7.125,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 8,
+   "eng_delta": -6.5,
+   "hf_delta": -6.5,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 8,
+   "eng_delta": -6.75,
+   "hf_delta": -6.625,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 8,
+   "eng_delta": -6.375,
+   "hf_delta": -6.375,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 8,
+   "eng_delta": -5.875,
+   "hf_delta": -6.125,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 8,
+   "eng_delta": -6.625,
+   "hf_delta": -6.625,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 8,
+   "eng_delta": -5.625,
+   "hf_delta": -5.625,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_head_7_11",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_head_14_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_head_21_8",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 8,
+   "eng_delta": -7.125,
+   "hf_delta": -7.125,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 8,
+   "eng_delta": -6.75,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 8,
+   "eng_delta": -7.125,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 8,
+   "eng_delta": -7.125,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.0,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 8,
+   "eng_delta": -6.125,
+   "hf_delta": -6.125,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -6.875,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 8,
+   "eng_delta": -5.625,
+   "hf_delta": -5.625,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 8,
+   "eng_delta": -5.625,
+   "hf_delta": -5.625,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 8,
+   "eng_delta": -5.5,
+   "hf_delta": -5.5,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 8,
+   "eng_delta": -5.5,
+   "hf_delta": -5.625,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 8,
+   "eng_delta": -5.5,
+   "hf_delta": -5.375,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 8,
+   "eng_delta": -5.5,
+   "hf_delta": -5.5,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 8,
+   "eng_delta": -5.375,
+   "hf_delta": -5.25,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 8,
+   "eng_delta": -5.5,
+   "hf_delta": -5.5,
+   "eng_parent": -5.625,
+   "hf_parent": -5.625
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -6.875,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.0,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.875,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.25,
+   "eng_parent": -7.0,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -6.875,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -6.75,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.0,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -6.875,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 8,
+   "eng_delta": -6.875,
+   "hf_delta": -6.75,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 8,
+   "eng_delta": -7.0,
+   "hf_delta": -7.0,
+   "eng_parent": -6.75,
+   "hf_parent": -6.875
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.375,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 9,
+   "eng_delta": 5.375,
+   "hf_delta": 5.25,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 9,
+   "eng_delta": 5.875,
+   "hf_delta": 5.875,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.75,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 9,
+   "eng_delta": 6.0,
+   "hf_delta": 6.0,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 9,
+   "eng_delta": 6.5,
+   "hf_delta": 6.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.75,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.875,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_head_7_6",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_head_14_7",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_head_21_13",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 9,
+   "eng_delta": 5.375,
+   "hf_delta": 5.5,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 9,
+   "eng_delta": 5.375,
+   "hf_delta": 5.375,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 9,
+   "eng_delta": 6.375,
+   "hf_delta": 6.375,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.625,
+   "eng_parent": 5.625,
+   "hf_parent": 5.625
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.875,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.875,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.875,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.75,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 9,
+   "eng_delta": 7.125,
+   "hf_delta": 7.0,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 9,
+   "eng_delta": 6.875,
+   "hf_delta": 6.75,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 9,
+   "eng_delta": 7.125,
+   "hf_delta": 7.125,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 9,
+   "eng_delta": 7.0,
+   "hf_delta": 7.0,
+   "eng_parent": 6.875,
+   "hf_parent": 6.875
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 9,
+   "eng_delta": 5.375,
+   "hf_delta": 5.375,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 9,
+   "eng_delta": 5.5,
+   "hf_delta": 5.5,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 9,
+   "eng_delta": 5.625,
+   "hf_delta": 5.5,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 9,
+   "eng_delta": 5.25,
+   "hf_delta": 5.375,
+   "eng_parent": 5.5,
+   "hf_parent": 5.5
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 9,
+   "eng_delta": 5.875,
+   "hf_delta": 5.875,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 9,
+   "eng_delta": 5.875,
+   "hf_delta": 5.875,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.75,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 9,
+   "eng_delta": 5.875,
+   "hf_delta": 5.875,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 9,
+   "eng_delta": 5.875,
+   "hf_delta": 5.625,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 9,
+   "eng_delta": 5.75,
+   "hf_delta": 5.625,
+   "eng_parent": 5.875,
+   "hf_parent": 5.875
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.75,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.75,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.75,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 10,
+   "eng_delta": -3.875,
+   "hf_delta": -3.875,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.375,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 10,
+   "eng_delta": -3.375,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 10,
+   "eng_delta": -3.0,
+   "hf_delta": -2.875,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 10,
+   "eng_delta": -2.875,
+   "hf_delta": -2.875,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 10,
+   "eng_delta": -3.125,
+   "hf_delta": -3.125,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 10,
+   "eng_delta": -2.625,
+   "hf_delta": -2.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 10,
+   "eng_delta": -1.75,
+   "hf_delta": -1.75,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 10,
+   "eng_delta": -4.25,
+   "hf_delta": -4.375,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 10,
+   "eng_delta": -3.375,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 10,
+   "eng_delta": -4.25,
+   "hf_delta": -4.375,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 10,
+   "eng_delta": -1.75,
+   "hf_delta": -1.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_head_7_6",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_head_14_3",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_head_21_14",
+   "unit": 10,
+   "eng_delta": -3.375,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.375,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.75,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.375,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 10,
+   "eng_delta": -3.25,
+   "hf_delta": -3.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 10,
+   "eng_delta": -4.25,
+   "hf_delta": -4.5,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 10,
+   "eng_delta": -2.0,
+   "hf_delta": -2.125,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 10,
+   "eng_delta": -3.375,
+   "hf_delta": -3.625,
+   "eng_parent": -3.375,
+   "hf_parent": -3.625
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 10,
+   "eng_delta": -1.875,
+   "hf_delta": -1.875,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 10,
+   "eng_delta": -1.75,
+   "hf_delta": -1.75,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 10,
+   "eng_delta": -1.75,
+   "hf_delta": -1.875,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 10,
+   "eng_delta": -1.75,
+   "hf_delta": -1.875,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 10,
+   "eng_delta": -2.125,
+   "hf_delta": -2.25,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 10,
+   "eng_delta": -2.0,
+   "hf_delta": -1.875,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 10,
+   "eng_delta": -2.125,
+   "hf_delta": -2.25,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 10,
+   "eng_delta": -2.875,
+   "hf_delta": -3.125,
+   "eng_parent": -1.75,
+   "hf_parent": -1.625
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.75,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.75,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.875,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 10,
+   "eng_delta": -3.5,
+   "hf_delta": -3.75,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 10,
+   "eng_delta": -3.625,
+   "hf_delta": -3.75,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 10,
+   "eng_delta": -3.375,
+   "hf_delta": -3.375,
+   "eng_parent": -3.625,
+   "hf_parent": -3.75
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 10,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 10,
+   "eng_delta": -2.875,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 10,
+   "eng_delta": -3.0,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 10,
+   "eng_delta": -3.0,
+   "hf_delta": -3.0,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 10,
+   "eng_delta": -3.0,
+   "hf_delta": -3.125,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 10,
+   "eng_delta": -2.875,
+   "hf_delta": -2.875,
+   "eng_parent": -3.0,
+   "hf_parent": -3.0
+  },
+  {
+   "tag": "den_layer_0",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.75,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_attn_0",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_block_0",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_resid_0",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_layer_7",
+   "unit": 11,
+   "eng_delta": 1.875,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_attn_7",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.75,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_block_7",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_resid_7",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_layer_14",
+   "unit": 11,
+   "eng_delta": 2.125,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_attn_14",
+   "unit": 11,
+   "eng_delta": 2.0,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_block_14",
+   "unit": 11,
+   "eng_delta": 2.125,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_resid_14",
+   "unit": 11,
+   "eng_delta": 2.875,
+   "hf_delta": 3.125,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_layer_21",
+   "unit": 11,
+   "eng_delta": 2.375,
+   "hf_delta": 2.375,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_attn_21",
+   "unit": 11,
+   "eng_delta": 2.0,
+   "hf_delta": 2.0,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_block_21",
+   "unit": 11,
+   "eng_delta": 2.5,
+   "hf_delta": 2.5,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_resid_21",
+   "unit": 11,
+   "eng_delta": 3.5,
+   "hf_delta": 3.5,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_layer_27",
+   "unit": 11,
+   "eng_delta": 0.75,
+   "hf_delta": 0.5,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_attn_27",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_block_27",
+   "unit": 11,
+   "eng_delta": 0.625,
+   "hf_delta": 0.5,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_resid_27",
+   "unit": 11,
+   "eng_delta": 3.375,
+   "hf_delta": 3.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_head_7_4",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_head_14_3",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_head_21_1",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_expert0_14",
+   "unit": 11,
+   "eng_delta": 2.125,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_neur_half_0_14",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.75,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_neur_all_0_14",
+   "unit": 11,
+   "eng_delta": 2.25,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_multi_attn_mlp",
+   "unit": 11,
+   "eng_delta": 2.125,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_multi_mlp_block_attn",
+   "unit": 11,
+   "eng_delta": 2.375,
+   "hf_delta": 2.25,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_multi_heads",
+   "unit": 11,
+   "eng_delta": 0.625,
+   "hf_delta": 0.75,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_multi_allmlp",
+   "unit": 11,
+   "eng_delta": 3.5,
+   "hf_delta": 3.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "den_zero_7",
+   "unit": 11,
+   "eng_delta": 1.875,
+   "hf_delta": 1.625,
+   "eng_parent": 1.75,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "noi_layer_7",
+   "unit": 11,
+   "eng_delta": 3.5,
+   "hf_delta": 3.5,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_attn_7",
+   "unit": 11,
+   "eng_delta": 3.625,
+   "hf_delta": 3.625,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_block_7",
+   "unit": 11,
+   "eng_delta": 3.5,
+   "hf_delta": 3.625,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_resid_7",
+   "unit": 11,
+   "eng_delta": 3.875,
+   "hf_delta": 3.875,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_layer_14",
+   "unit": 11,
+   "eng_delta": 3.25,
+   "hf_delta": 3.375,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_attn_14",
+   "unit": 11,
+   "eng_delta": 3.375,
+   "hf_delta": 3.5,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_block_14",
+   "unit": 11,
+   "eng_delta": 3.25,
+   "hf_delta": 3.5,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "noi_resid_14",
+   "unit": 11,
+   "eng_delta": 3.0,
+   "hf_delta": 2.875,
+   "eng_parent": 3.375,
+   "hf_parent": 3.625
+  },
+  {
+   "tag": "hmz_none",
+   "unit": 11,
+   "eng_delta": 1.375,
+   "hf_delta": 1.5,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_layer_7",
+   "unit": 11,
+   "eng_delta": 1.5,
+   "hf_delta": 1.375,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_attn_14",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_headmasked",
+   "unit": 11,
+   "eng_delta": 1.375,
+   "hf_delta": 1.5,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_headfree",
+   "unit": 11,
+   "eng_delta": 1.375,
+   "hf_delta": 1.5,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmz_multi",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.375,
+   "hf_parent": 1.5
+  },
+  {
+   "tag": "hmm_none",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "hmm_layer_7",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.75,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "hmm_attn_14",
+   "unit": 11,
+   "eng_delta": 1.75,
+   "hf_delta": 1.875,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "hmm_headmasked",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "hmm_headfree",
+   "unit": 11,
+   "eng_delta": 1.625,
+   "hf_delta": 1.625,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  },
+  {
+   "tag": "hmm_multi",
+   "unit": 11,
+   "eng_delta": 2.125,
+   "hf_delta": 2.0,
+   "eng_parent": 1.5,
+   "hf_parent": 1.625
+  }
+ ],
+ "competent_units": [
+  1,
+  2,
+  4,
+  5,
+  6,
+  9,
+  11
+ ],
+ "spawn_rescue_corr_competent": 0.9923304323055949,
+ "spawn_delta_maxabs_all": 0.25,
+ "spawn_metrics_vs_hf": {
+  "logp_true": {
+   "n": 612,
+   "maxabs": 0.3211545944213867,
+   "meanabs": 0.06088124410389296,
+   "frac_exact": 0.0
+  },
+  "logp_foil": {
+   "n": 612,
+   "maxabs": 0.2953099012374878,
+   "meanabs": 0.05405262026181019,
+   "frac_exact": 0.0
+  },
+  "p_true": {
+   "n": 612,
+   "maxabs": 0.06313586235046387,
+   "meanabs": 0.0018904035031143804,
+   "frac_exact": 0.0
+  },
+  "kl_to_clean": {
+   "n": 612,
+   "maxabs": 0.25909900665283203,
+   "meanabs": 0.022246075087413324,
+   "frac_exact": 0.0
+  }
+ },
+ "spawn_rank_equal_frac": 0.5163398692810458,
+ "identities": {
+  "neurons_linearity_relerr_max": 2.1249333315154217e-07,
+  "neurons_all_vs_expert_vec_relerr_max": 0.00596866849809885,
+  "neurons_all_vs_expert_ddelta": {
+   "n": 12,
+   "maxabs": 0.125,
+   "meanabs": 0.052083333333333336,
+   "frac_exact": 0.5833333333333334
+  },
+  "coalition_union_or_dense_clean_vs_layer_ddelta": {
+   "n": 12,
+   "maxabs": 0.0,
+   "meanabs": 0.0,
+   "frac_exact": 1.0
+  },
+  "zero_vs_parent": {
+   "n": 36,
+   "maxabs": 0.25,
+   "meanabs": 0.0625,
+   "frac_exact": 0.5277777777777778
+  },
+  "attn_head_on_masked_head_vs_parent": {
+   "n": 24,
+   "maxabs": 0.25,
+   "meanabs": 0.06770833333333333,
+   "frac_exact": 0.5
+  }
+ },
+ "diag_attn_heads_mean_relerr": {
+  "n": 336,
+  "maxabs": 0.04407210275530815,
+  "meanabs": 0.016486537319863038,
+  "frac_exact": 0.0
+ },
+ "diag_resid_layers_relerr": {
+  "n": 336,
+  "maxabs": 0.014785493724048138,
+  "meanabs": 0.00427145950167566,
+  "frac_exact": 0.03571428571428571
+ },
+ "diag_expert_neurons_act_relerr": {
+  "n": 12,
+  "maxabs": 0.059904277324676514,
+  "meanabs": 0.03568847461914023,
+  "frac_exact": 0.0
+ },
+ "diag_expert_neurons_w_abs": {
+  "n": 12,
+  "maxabs": 0.0,
+  "meanabs": 0.0,
+  "frac_exact": 1.0
+ },
+ "diag_expert_neurons_hypothetical_act_relerr": {
+  "n": 0
+ },
+ "diag_expert_neurons_routed_mismatch": 0,
+ "head_mask_zero_heads_final_maxabs": 0.0,
+ "total_s": 37.82535409927368
+}

@@ -1,0 +1,10 @@
+**l_prop W2: final-position single-layer patches (pair bootstrap)**
+
+| Model | Family | Patched output | L* (disc.) | Disc. mean | Validation rescue at L* [95% CI] | Normalised | Discovery top 4 |
+|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B-Base | main | layer | L41 | +2.00 | +1.641 [+1.390, +1.898] | 0.165 [0.141, 0.189] | L41 +2.00, L43 +1.71, L44 +1.31, L40 +0.85 |
+| Qwen3-30B-A3B-Base | main | attn_layer | L40 | +1.62 | +1.352 [+1.215, +1.499] | 0.136 [0.123, 0.149] | L40 +1.62, L43 +1.24, L39 +0.51, L38 +0.25 |
+| Qwen3-30B-A3B-Base | main | block | L43 | +2.78 | +2.927 [+2.623, +3.243] | 0.294 [0.271, 0.318] | L43 +2.77, L40 +2.49, L41 +2.16, L44 +1.32 |
+| Qwen3-30B-A3B-Base | main_interior | layer | L41 | +2.00 | +1.641 [+1.390, +1.898] | 0.165 [0.141, 0.189] | L41 +2.00, L43 +1.71, L40 +0.85, L42 +0.64 |
+| Qwen3-30B-A3B-Base | main_interior | attn_layer | L40 | +1.62 | +1.352 [+1.215, +1.499] | 0.136 [0.123, 0.149] | L40 +1.62, L43 +1.24, L39 +0.51, L38 +0.25 |
+| Qwen3-30B-A3B-Base | main_interior | block | L43 | +2.78 | +2.927 [+2.623, +3.243] | 0.294 [0.271, 0.318] | L43 +2.77, L40 +2.49, L41 +2.16, L39 +0.90 |

@@ -92,6 +92,21 @@ SECTIONS = [
      "Overshoot of the all-MoE ceiling explained by late experts reacting to attention-written evidence."),
     ("13h", "Attribution patching pilot (OLMoE)", "results/sections/ext13_atp.md",
      "Do gradient-based estimates (AtP, AtP*, EAP-IG) reproduce activation patching for experts, heads and layers?"),
+    ("14", "Phase 6 synthesis: one dial on the same items, dense twins, capacity, circuits (Stage R)", "results/sections/ext14_synthesis.md",
+     "Does stating the binding (vs inferring it) or the answer type set the attention / FFN split; do dense twins, capacity or MoE "
+     "change it; do experts reduce to a few neurons; can circuit discovery on neurons be ported to MoE; were the pre-registered "
+     "predictions right?"),
+    ("14a", "Phase 6 ladder v2: different tasks graded in advance", "results/sections/ext14_ladder.md",
+     "Antonym, object property, binding, induction and four anchors on one axis in eight models, against pre-registered grades."),
+    ("14b", "Phase 6 dials on the same WinoGrande items (explicitness, associativity, statement vs event)", "results/sections/ext14_dial.md",
+     "E1 / E1p / E2 / E3 / E0 in both directions, Dial A, Set C, frame pilot, robustness and causal checks, tier 2 on E1."),
+    ("14c", "Phase 6 dense parent vs MoE child", "results/sections/ext14_dense.md",
+     "Mistral-7B ↔ Mixtral-8x7B and Qwen2-7B ↔ Qwen2-57B-A14B on identical prompts; shared vs routed experts."),
+    ("14d", "Phase 6 capacity series", "results/sections/ext14_scale.md",
+     "Qwen3 4B → 8B → 14B → 30B-A3B, Mistral-7B → Mixtral, Qwen2-7B → Qwen2-57B; Mixtral-8x22B gated."),
+    ("14e", "Phase 6 circuits: neurons inside experts, RelP on MoE, concept circuits", "results/sections/ext14_circuit.md",
+     "How many neurons carry an expert; is Mixtral upcycled from Mistral-7B; does RelP add to forward patching; are there "
+     "concept-specific head + expert circuits?"),
 ]
 
 

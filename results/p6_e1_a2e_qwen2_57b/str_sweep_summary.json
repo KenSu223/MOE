@@ -1,0 +1,160 @@
+{
+ "n_cases": 512,
+ "pass_times_s": [
+  183.81299495697021,
+  115.96841883659363,
+  115.80724668502808,
+  114.0684106349945
+ ],
+ "mean_delta_clean": 3.1532921623438597,
+ "mean_delta_corrupt": -3.1532633397728205,
+ "mean_drop": 6.30655550211668,
+ "families": {
+  "main": {
+   "layer_discovery_argmax": 20,
+   "layer_discovery_max": 1.791,
+   "layer_discovery_top5": [
+    [
+     20,
+     1.791
+    ],
+    [
+     19,
+     0.974
+    ],
+    [
+     22,
+     0.851
+    ],
+    [
+     24,
+     0.743
+    ],
+    [
+     25,
+     0.728
+    ]
+   ],
+   "layer_validation_argmax": 20,
+   "layer_validation_max": 1.736,
+   "layer_validation_top5": [
+    [
+     20,
+     1.736
+    ],
+    [
+     19,
+     0.876
+    ],
+    [
+     22,
+     0.777
+    ],
+    [
+     24,
+     0.77
+    ],
+    [
+     21,
+     0.731
+    ]
+   ],
+   "attn_layer_discovery_argmax": 20,
+   "attn_layer_discovery_max": 2.82,
+   "attn_layer_discovery_top5": [
+    [
+     20,
+     2.82
+    ],
+    [
+     23,
+     1.568
+    ],
+    [
+     18,
+     1.194
+    ],
+    [
+     24,
+     1.114
+    ],
+    [
+     22,
+     1.069
+    ]
+   ],
+   "attn_layer_validation_argmax": 20,
+   "attn_layer_validation_max": 2.798,
+   "attn_layer_validation_top5": [
+    [
+     20,
+     2.798
+    ],
+    [
+     23,
+     1.637
+    ],
+    [
+     18,
+     1.112
+    ],
+    [
+     24,
+     1.048
+    ],
+    [
+     22,
+     0.96
+    ]
+   ],
+   "block_discovery_argmax": 20,
+   "block_discovery_max": 3.931,
+   "block_discovery_top5": [
+    [
+     20,
+     3.931
+    ],
+    [
+     23,
+     1.927
+    ],
+    [
+     22,
+     1.861
+    ],
+    [
+     24,
+     1.773
+    ],
+    [
+     18,
+     1.59
+    ]
+   ],
+   "block_validation_argmax": 20,
+   "block_validation_max": 3.82,
+   "block_validation_top5": [
+    [
+     20,
+     3.82
+    ],
+    [
+     23,
+     1.957
+    ],
+    [
+     22,
+     1.72
+    ],
+    [
+     24,
+     1.718
+    ],
+    [
+     18,
+     1.442
+    ]
+   ]
+  }
+ }
+}

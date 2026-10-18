@@ -1,0 +1,32 @@
+2026-10-17T13:41:13Z START p6ci-c3-country-mixtral_bos (waited 24816s, low priority): bash -c 
+    set -e
+    [ -f results/p6ci_c3_data/.done_country_mixtral_bos ] || { python scripts/ext14ci_c3_cf_build.py mixtral --proto mixtral_bos --rels P17,P27,P495,P103 --max-per-rel 400 --cap 48; touch results/p6ci_c3_data/.done_country_mixtral_bos; }
+    python scripts/ext14ci_c3_country.py merge --proto mixtral_bos
+    [ -f results/p6ci_c3_cfc_mixtral_bos/.done_heads ] || { python scripts/ext7_wino_heads.py --model mixtral --pairs results/p6ci_c3_data/pairs_cfc_mixtral_bos.parquet --case-sets results/p6ci_c3_data/case_sets_cfc_mixtral_bos.json         --out p6ci_c3_cfc_mixtral_bos --splits discovery --families main --layers 13,15,16,18,19,24 --max-rows 40000 --agent p6-circuit; touch results/p6ci_c3_cfc_mixtral_bos/.done_heads; }
+    python scripts/ext14ci_c3_country.py dla --proto mixtral_bos
+13:41:28 P17: 466 tokenised, 400 with >= 1 symmetric donor
+13:41:29 P27: 465 tokenised, 400 with >= 1 symmetric donor
+13:41:31 P495: 452 tokenised, 400 with >= 1 symmetric donor
+13:41:37 P103: 444 tokenised, 400 with >= 1 symmetric donor
+13:43:15 pass rows 0-4096
+13:44:48 pass rows 4096-5902
+13:44:51 P17: 391 margin pairs -> 48 / 48
+13:44:51 P27: 387 margin pairs -> 48 / 48
+13:44:52 P495: 359 margin pairs -> 48 / 48
+13:44:52 P103: 389 margin pairs -> 48 / 48
+{('co_nat', 'discovery'): 96, ('co_nat', 'validation'): 96, ('co_p17', 'discovery'): 48, ('co_p17', 'validation'): 48, ('ct_lang', 'discovery'): 48, ('ct_lang', 'validation'): 48}
+13:45:02 mixtral -> p6ci_c3_cfc_mixtral_bos: 384 directed cases, layers [13, 15, 16, 18, 19, 24] (null layer None), 32 heads, 3 passes, 80640 spawn rows; mentions: none (no mention columns, no WinoGrande text)
+13:45:08 pass 1/3: layers [13, 15], 768 prefill rows, 26880 spawn rows
+13:45:15   layer   0: load-wait 6.31s compute 0.63s  wf_rows=0
+13:45:38   layer   8: load-wait 2.72s compute 0.17s  wf_rows=0
+13:46:01   layer  16: load-wait 2.30s compute 0.59s  wf_rows=26880
+13:46:23   layer  24: load-wait 2.16s compute 0.59s  wf_rows=26880
+13:46:43   layer  31: load-wait 2.30s compute 0.59s  wf_rows=26880
+13:46:43   pass done: 768 prefill rows (T=15), 26880 spawn rows, 94.5s
+13:46:43 pass 1: 94s; 26880 rows
+13:46:44 pass 2/3: layers [16, 18], 768 prefill rows, 26880 spawn rows
+13:48:12 pass 2: 88s; 53760 rows
+13:48:12 pass 3/3: layers [19, 24], 768 prefill rows, 26880 spawn rows
+13:49:37 pass 3: 84s; 80640 rows
+13:51:25 dla pass 768 rows 93s
+2026-10-17T13:51:31Z END   p6ci-c3-country-mixtral_bos rc=0 (618s)

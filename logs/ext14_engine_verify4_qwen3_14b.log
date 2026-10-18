@@ -1,0 +1,98 @@
+04:42:20 qwen3_14b: qwen3, 6 units, dtype bf16
+04:42:20   216 configurations
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/443 [00:00<?, ?it/s]Loading weights:   0%|          | 2/443 [00:00<02:24,  3.05it/s]Loading weights:   1%|          | 5/443 [00:00<00:57,  7.68it/s]Loading weights:   2%|▏         | 7/443 [00:00<00:48,  9.04it/s]Loading weights:   3%|▎         | 15/443 [00:01<00:23, 18.32it/s]Loading weights:   4%|▍         | 18/443 [00:01<00:28, 14.96it/s]Loading weights:   5%|▍         | 21/443 [00:01<00:26, 16.13it/s]Loading weights:   6%|▌         | 26/443 [00:01<00:23, 17.40it/s]Loading weights:   6%|▋         | 28/443 [00:02<00:36, 11.42it/s]Loading weights:   8%|▊         | 37/443 [00:02<00:20, 20.30it/s]Loading weights:   9%|▉         | 40/443 [00:02<00:19, 20.62it/s]Loading weights:  11%|█         | 48/443 [00:02<00:16, 24.47it/s]Loading weights:  12%|█▏        | 51/443 [00:03<00:18, 21.69it/s]Loading weights:  12%|█▏        | 54/443 [00:03<00:17, 22.56it/s]Loading weights:  13%|█▎        | 59/443 [00:03<00:16, 23.11it/s]Loading weights:  14%|█▍        | 62/443 [00:03<00:22, 17.00it/s]Loading weights:  15%|█▌        | 67/443 [00:03<00:17, 21.59it/s]Loading weights:  16%|█▌        | 70/443 [00:04<00:18, 19.96it/s]Loading weights:  16%|█▋        | 73/443 [00:04<00:24, 14.91it/s]Loading weights:  18%|█▊        | 78/443 [00:04<00:18, 19.75it/s]Loading weights:  18%|█▊        | 81/443 [00:04<00:19, 18.70it/s]Loading weights:  19%|█▉        | 84/443 [00:05<00:25, 14.26it/s]Loading weights:  20%|██        | 89/443 [00:05<00:18, 19.12it/s]Loading weights:  21%|██        | 92/443 [00:05<00:19, 18.23it/s]Loading weights:  21%|██▏       | 95/443 [00:05<00:24, 14.01it/s]Loading weights:  23%|██▎       | 100/443 [00:05<00:18, 18.93it/s]Loading weights:  23%|██▎       | 103/443 [00:06<00:19, 17.76it/s]Loading weights:  24%|██▍       | 106/443 [00:06<00:24, 14.01it/s]Loading weights:  25%|██▌       | 111/443 [00:06<00:17, 18.93it/s]Loading weights:  26%|██▌       | 114/443 [00:06<00:18, 18.11it/s]Loading weights:  26%|██▋       | 117/443 [00:07<00:23, 13.94it/s]Loading weights:  28%|██▊       | 122/443 [00:07<00:17, 18.85it/s]Loading weights:  28%|██▊       | 125/443 [00:07<00:17, 18.03it/s]Loading weights:  29%|██▉       | 128/443 [00:07<00:22, 13.90it/s]Loading weights:  30%|██▉       | 131/443 [00:07<00:19, 15.93it/s]Loading weights:  31%|███       | 136/443 [00:07<00:16, 18.94it/s]Loading weights:  31%|███▏      | 139/443 [00:08<00:21, 14.40it/s]Loading weights:  32%|███▏      | 142/443 [00:08<00:18, 16.37it/s]Loading weights:  33%|███▎      | 147/443 [00:08<00:15, 19.23it/s]Loading weights:  34%|███▍      | 150/443 [00:08<00:20, 14.58it/s]Loading weights:  35%|███▍      | 155/443 [00:09<00:14, 19.38it/s]Loading weights:  36%|███▌      | 158/443 [00:09<00:15, 18.42it/s]Loading weights:  36%|███▋      | 161/443 [00:09<00:19, 14.13it/s]Loading weights:  37%|███▋      | 166/443 [00:09<00:14, 19.02it/s]Loading weights:  38%|███▊      | 169/443 [00:09<00:15, 18.16it/s]Loading weights:  39%|███▉      | 172/443 [00:10<00:19, 13.98it/s]Loading weights:  40%|███▉      | 176/443 [00:10<00:15, 17.46it/s]Loading weights:  41%|████      | 180/443 [00:10<00:14, 18.52it/s]Loading weights:  41%|████▏     | 183/443 [00:10<00:18, 14.17it/s]Loading weights:  42%|████▏     | 186/443 [00:11<00:15, 16.11it/s]Loading weights:  43%|████▎     | 191/443 [00:11<00:13, 18.17it/s]Loading weights:  44%|████▍     | 194/443 [00:11<00:16, 14.68it/s]Loading weights:  44%|████▍     | 197/443 [00:11<00:14, 16.62it/s]Loading weights:  46%|████▌     | 202/443 [00:11<00:12, 19.44it/s]Loading weights:  46%|████▋     | 205/443 [00:12<00:16, 14.68it/s]Loading weights:  47%|████▋     | 209/443 [00:12<00:12, 18.06it/s]Loading weights:  48%|████▊     | 213/443 [00:12<00:12, 18.95it/s]Loading weights:  49%|████▉     | 216/443 [00:12<00:15, 14.40it/s]Loading weights:  50%|████▉     | 221/443 [00:13<00:11, 19.22it/s]Loading weights:  51%|█████     | 224/443 [00:13<00:11, 18.36it/s]Loading weights:  51%|█████     | 227/443 [00:13<00:15, 14.07it/s]Loading weights:  52%|█████▏    | 232/443 [00:13<00:11, 18.98it/s]Loading weights:  53%|█████▎    | 235/443 [00:13<00:11, 18.13it/s]Loading weights:  54%|█████▎    | 238/443 [00:14<00:14, 13.96it/s]Loading weights:  55%|█████▍    | 243/443 [00:14<00:10, 18.37it/s]Loading weights: 100%|██████████| 443/443 [00:14<00:00, 30.71it/s]
+Some parameters are on the meta device because they were offloaded to the cpu.
+04:43:51   HF unit 1/6 done (75s)
+04:44:51   HF unit 2/6 done (135s)
+04:45:51   HF unit 3/6 done (195s)
+04:46:52   HF unit 4/6 done (256s)
+04:47:53   HF unit 5/6 done (317s)
+04:48:53   HF unit 6/6 done (377s)
+04:48:59   engine pass: 36 prefill rows, 252 spawns, 5.4s
+04:49:00 wrote results/verify_ext14_qwen3_14b.json
+04:49:00 model: "qwen3_14b"
+04:49:00 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-14B-Base/snapshots/0b0bd3732e2c374d483664439ea334928b65f304"
+04:49:00 family: "qwen3"
+04:49:00 dtype: "bf16"
+04:49:00 n_layers: 40
+04:49:00 n_experts: 1
+04:49:00 top_k: 1
+04:49:00 shared_inter: 0
+04:49:00 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:49:00 started: "2026-10-17T04:42:13Z"
+04:49:00 hf_offload: true
+04:49:00 light_plan: true
+04:49:00 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+04:49:00 router_fp32_flag: false
+04:49:00 hf_s: 393.0717833042145
+04:49:00 n_configs: 216
+04:49:00 n_spawns: 252
+04:49:00 prefill_delta_vs_hf: {"C": {"n": 6, "maxabs": 0.25, "meanabs": 0.11458333333333333, "frac_exact": 0.3333333333333333}, "X": {"n": 6, "maxabs": 0.25, "meanabs": 0.11458333333333333, "frac_exact": 0.3333333333333333}, "CMz": {"n": 6, "maxabs": 0.125, "meanabs": 0.07291666666666667, "frac_exact": 0.16666666666666666}, "XMz": {"n": 6, "maxabs": 0.125, "meanabs": 0.0625, "frac_exact": 0.3333333333333333}, "CMm": {"n": 6, "maxabs": 0.25, "meanabs": 0.09375, "frac_exact": 0.3333333333333333}, "XMm": {"n": 6, "maxabs": 0.25, "meanabs": 0.08333333333333333, "frac_exact": 0.5}}
+04:49:00 prefill_metrics_vs_hf: {"logp_true": {"n": 36, "maxabs": 0.30518150329589844, "meanabs": 0.07202182213465373, "frac_exact": 0.0}, "logp_foil": {"n": 36, "maxabs": 0.2964458465576172, "meanabs": 0.07933081520928277, "frac_exact": 0.0}, "p_true": {"n": 36, "maxabs": 0.012254029512405396, "meanabs": 0.0014604929749313872, "frac_exact": 0.0}, "kl_to_clean": {"n": 36, "maxabs": 0.06961804628372192, "meanabs": 0.012600988977485232, "frac_exact": 0.5}}
+04:49:00 prefill_rank_equal_frac: 0.5
+04:49:00 head_mask_effect_on_delta_hf: {"Mz": 0.11979166666666667, "Mm": 0.19270833333333334}
+04:49:00 spawn_delta_vs_hf: {"den_attn": {"n": 24, "maxabs": 0.375, "meanabs": 0.11197916666666667, "frac_exact": 0.20833333333333334, "rescue_corr": 0.9376691483778974, "rescue_hf_meanabs": 0.20052083333333334}, "den_block": {"n": 24, "maxabs": 0.25, "meanabs": 0.08854166666666667, "frac_exact": 0.375, "rescue_corr": 0.9758539758236289, "rescue_hf_meanabs": 0.3541666666666667}, "den_expert0": {"n": 6, "maxabs": 0.25, "meanabs": 0.125, "frac_exact": 0.16666666666666666, "rescue_corr": 0.9912784578721637, "rescue_hf_meanabs": 0.875}, "den_head": {"n": 18, "maxabs": 0.375, "meanabs": 0.09722222222222222, "frac_exact": 0.33
+04:49:00 spawn_rescue_corr_all: 0.9972767410892645
+04:49:00 competent_units: [0, 1, 2, 3, 4, 5]
+04:49:00 spawn_rescue_corr_competent: 0.9972767410892664
+04:49:00 spawn_delta_maxabs_all: 0.375
+04:49:00 spawn_metrics_vs_hf: {"logp_true": {"n": 216, "maxabs": 0.42899322509765625, "meanabs": 0.08138591602996544, "frac_exact": 0.0}, "logp_foil": {"n": 216, "maxabs": 0.26928186416625977, "meanabs": 0.056315817766719393, "frac_exact": 0.0}, "p_true": {"n": 216, "maxabs": 0.006292290985584259, "meanabs": 0.0002688175775599828, "frac_exact": 0.0}, "kl_to_clean": {"n": 216, "maxabs": 0.1464526653289795, "meanabs": 0.02171093140431266, "frac_exact": 0.0}}
+04:49:00 spawn_rank_equal_frac: 0.28703703703703703
+04:49:00 identities: {"neurons_linearity_relerr_max": 2.897852482419694e-07, "neurons_all_vs_expert_vec_relerr_max": 0.004086507949978113, "neurons_all_vs_expert_ddelta": {"n": 6, "maxabs": 0.125, "meanabs": 0.041666666666666664, "frac_exact": 0.5}, "coalition_union_or_dense_clean_vs_layer_ddelta": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "zero_vs_parent": {"n": 18, "maxabs": 0.125, "meanabs": 0.03125, "frac_exact": 0.6111111111111112}, "attn_head_on_masked_head_vs_parent": {"n": 12, "maxabs": 0.125, "meanabs": 0.041666666666666664, "frac_exact": 0.5833333333333334}}
+04:49:00 diag_attn_heads_mean_relerr: {"n": 240, "maxabs": 0.04785788431763649, "meanabs": 0.018552686015209475, "frac_exact": 0.0}
+04:49:00 diag_resid_layers_relerr: {"n": 240, "maxabs": 0.026688776910305023, "meanabs": 0.003584947914532677, "frac_exact": 0.025}
+04:49:00 diag_expert_neurons_act_relerr: {"n": 0}
+04:49:00 diag_expert_neurons_w_abs: {"n": 0}
+04:49:00 diag_expert_neurons_hypothetical_act_relerr: {"n": 0}
+04:49:00 diag_expert_neurons_routed_mismatch: 0
+04:49:00 head_mask_zero_heads_final_maxabs: 0.0
+04:49:00 total_s: 399.47011637687683
+04:49:10 qwen3_14b: qwen3, 6 units, dtype bf16
+04:49:18   hf_bf16 chain 8s
+04:49:37   hf_fp32 chain 19s
+04:49:43   eng_bf16 pass 6s
+04:49:56   eng_fp32 pass 13s
+04:49:56   eng_bf16 vs hf_bf16: |dDelta| mean 0.0625 max 0.125, |d logp| max 0.1401
+04:49:56   hf_bf16 vs hf_fp32: |dDelta| mean 0.0848 max 0.231, |d logp| max 0.2418
+04:49:56   eng_bf16 vs hf_fp32: |dDelta| mean 0.06234 max 0.106, |d logp| max 0.1016
+04:49:56   eng_fp32 vs hf_fp32: |dDelta| mean 7.153e-06 max 1.431e-05, |d logp| max 1.526e-05
+04:49:56 wrote results/verify_ext14_qwen3_14b_chain.json
+04:49:56 model: "qwen3_14b"
+04:49:56 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-14B-Base/snapshots/0b0bd3732e2c374d483664439ea334928b65f304"
+04:49:56 family: "qwen3"
+04:49:56 dtype: "bf16"
+04:49:56 n_layers: 40
+04:49:56 n_experts: 1
+04:49:56 top_k: 1
+04:49:56 shared_inter: 0
+04:49:56 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:49:56 started: "2026-10-17T04:49:05Z"
+04:49:56 hf_offload: false
+04:49:56 light_plan: false
+04:49:56 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+04:49:56 router_fp32_flag: false
+04:49:56 total_s: 46.55076026916504
+04:50:03 qwen3_14b: qwen3, 6 units, dtype bf16
+04:50:13   engine identities 8.9s: {"layer": 20, "zero_vs_parent": {"n": 6, "maxabs": 0.125, "meanabs": 0.0625, "frac_exact": 0.3333333333333333}, "union_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "setall_vs_layer": {"n": 6, "maxabs": 0.0, "meanabs": 0.0, "frac_exact": 1.0}, "neurons_all_vs_expert": {"n": 6, "maxabs": 0.125, "meanabs": 0.03125, "frac_exact": 0.6666666666666666}, "neurons_linearity_relerr_max": 2.903587414948561e-07, "expert_rescue_mean": 0.09375, "layer_rescue_mean": 0.09375, "clean_delta_pos_frac": 1.0, "drop_mean": 7.1875}
+04:50:17   engine pass 3.5s
+04:50:17   sanity: [{"prompt": "The capital of France is", "answer": " Paris", "rank": 1, "p": 0.2554718852043152}, {"prompt": "The Eiffel Tower is located in the city of", "answer": " Paris", "rank": 1, "p": 0.47564566135406494}, {"prompt": "Water is made of hydrogen and", "answer": " oxygen", "rank": 1, "p": 0.9804964661598206}, {"prompt": "The opposite of hot is", "answer": " cold", "rank": 1, "p": 0.5230997204780579}, {"prompt": "Monday, Tuesday, Wednesday,", "answer": " Thursday", "rank": 1, "p": 0.6666415333747864}]
+04:50:19   layer 1: update relerr max 0.00951 mean 0.007378; vs fp32: engine 0.009634 / transformers 0.009179
+04:50:20   layer 20: update relerr max 0.01386 mean 0.01209; vs fp32: engine 0.1102 / transformers 0.1101
+04:50:21   layer 39: update relerr max 0.01847 mean 0.008195; vs fp32: engine 0.01637 / transformers 0.006853
+04:50:21 wrote results/verify_ext14_qwen3_14b_perlayer.json
+04:50:21 model: "qwen3_14b"
+04:50:21 path: "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-14B-Base/snapshots/0b0bd3732e2c374d483664439ea334928b65f304"
+04:50:21 family: "qwen3"
+04:50:21 dtype: "bf16"
+04:50:21 n_layers: 40
+04:50:21 n_experts: 1
+04:50:21 top_k: 1
+04:50:21 shared_inter: 0
+04:50:21 engine_file: "/home/ubuntu/MOE/moetrace/engine.py"
+04:50:21 started: "2026-10-17T04:50:01Z"
+04:50:21 hf_offload: false
+04:50:21 light_plan: false
+04:50:21 units: {"pairs_checked": 3, "pairs_tokenizer_identical": 3, "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet", "kind": "wino_train_xl_str", "n": 6}
+04:50:21 router_fp32_flag: false
+04:50:21 total_s: 18.099701642990112

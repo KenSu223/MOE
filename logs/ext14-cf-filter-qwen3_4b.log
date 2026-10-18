@@ -1,0 +1,13 @@
+2026-10-17T03:08:51Z START ext14-cf-filter-qwen3_4b (waited 1427s): python scripts/ext14_scan_cf.py qwen3_4b --out qwen3_4b_str --paper-key Qwen3
+03:08:57 qwen3_4b (special_tokens=True): 256 cases, 3883 symmetric candidates; cases with >= 1: 221; per case quartiles [2.0, 6.0, 18.25] max 106
+03:08:58 pass 1/2: 3072 prefill rows
+03:08:59   layer   0: load-wait 0.37s compute 0.51s  wf_rows=0
+03:09:01   layer   8: load-wait 0.04s compute 0.23s  wf_rows=0
+03:09:03   layer  16: load-wait 0.04s compute 0.23s  wf_rows=0
+03:09:05   layer  24: load-wait 0.04s compute 0.23s  wf_rows=0
+03:09:08   layer  32: load-wait 0.04s compute 0.23s  wf_rows=0
+03:09:09   layer  35: load-wait 0.04s compute 0.23s  wf_rows=0
+03:09:09   pass done: 3072 prefill rows (T=16), 0 spawn rows, 10.6s
+03:09:09 pass 2/2: 1067 prefill rows
+03:09:12 summary: {"n_cases": 256, "n_candidates": 3883, "cases_with_candidate": 221, "cases_with_qualifying": 208, "cases_kept": 208, "kept_discovery": 105, "kept_validation": 103, "qualify_rate": 0.8047901107391192, "donor_top1_is_foil_rate": 0.20267834148853978, "donor_top1_is_foil_rate_selected": 0.23275862068965517, "n_selected": 812, "selected_per_case": {"1": 33, "2": 16, "3": 16, "4": 16, "5": 127}, "delta_donor_selected_mean": -5.554995381773399, "delta_donor_all_median": -3.875, "delta_clean_mean_kept": 4.364783653846154, "delta_clean_lt1_kept": 32, "top1_clean_is_true_kept": 52, "pass_times_s": [10.566427230834961, 2.8368642330169678], "rejected_tokenizer": []}
+2026-10-17T03:09:13Z END   ext14-cf-filter-qwen3_4b rc=0 (22s)

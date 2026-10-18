@@ -1,0 +1,5 @@
+results/verify_olmoe.json vs /home/ubuntu/MOE/results/verify_ext14_before_verify_olmoe.json: 23 non-timing result fields, 0 differ; resource fields differing: []
+results/verify_ext5_engine_olmoe.json vs /home/ubuntu/MOE/results/verify_ext14_before_verify_ext5_engine_olmoe.json: 225 non-timing result fields, 0 differ; resource fields differing: []
+results/verify_ext8_engine_olmoe.json vs /home/ubuntu/MOE/results/verify_ext14_before_verify_ext8_engine_olmoe.json: 496 non-timing result fields, 0 differ; resource fields differing: [('/pass1_peak_mem_GB', 2.0101490020751953, 2.0109119415283203)]
+results/verify_ext9_engine_olmoe.json vs /home/ubuntu/MOE/results/verify_ext14_before_verify_ext9_engine_olmoe.json: 316 non-timing result fields, 0 differ; resource fields differing: [('/heads_pass_peak_mem_GB', 14.972822189331055, 14.972519397735596), ('/stress/peak_mem_GB', 5.1253814697265625, 5.123805046081543)]
+2026-10-16T20:01:50Z regression main in /home/ubuntu/MOE: rc 0 0 0 0 ok=1

@@ -1,0 +1,24 @@
+2026-10-16T23:50:18Z START p6an-ci1-e1_a2e-qwen3 (waited 279s): python scripts/ext14_t2_run.py ci1 e1_a2e qwen3 --max-passes 6
+23:50:26 e1_a2e/qwen3: 256 validation rows, 2 chunks (2 to do), L=48 nH=32; spawn rows per row 1584; attention classes ['str', 'attr_clean', 'attr_corr', 'mention_clean', 'mention_corr', 'blank', 'q', 'pos0', 'final']
+23:50:27 pass (chunk 0): 256 prefill rows (128 clean), 202752 spawn rows
+23:50:31   layer   0: load-wait 2.88s compute 0.80s  wf_rows=4224
+23:50:40   layer   8: load-wait 0.96s compute 0.31s  wf_rows=38016
+23:50:50   layer  16: load-wait 0.73s compute 0.54s  wf_rows=71808
+23:51:01   layer  24: load-wait 0.50s compute 0.77s  wf_rows=105600
+23:51:11   layer  32: load-wait 0.11s compute 1.00s  wf_rows=139392
+23:51:21   layer  40: load-wait 0.11s compute 1.24s  wf_rows=173184
+23:51:31   layer  47: load-wait 0.11s compute 1.43s  wf_rows=202752
+23:51:31   pass done: 256 prefill rows (T=26), 202752 spawn rows, 63.7s
+23:51:34 chunk 0 done: {'chunk': 0, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 63.673097372055054, 'peak_GB': 17.05880880355835, 'mean_drop': 7.283203125, 'r_sum_heads_vs_attn_layer': 0.36900506713070136, 'head_dla_sum_mean': 9.726393699645996, 'candidates_not_routed_clean': 1231, 'attn_row_sum_minmax': [0.9995945692062378, 1.0003809928894043], 'utc': '2026-10-16T23:51:34Z'}
+23:51:34 pass (chunk 1): 256 prefill rows (128 clean), 202752 spawn rows
+23:51:35   layer   0: load-wait 0.75s compute 0.11s  wf_rows=4224
+23:51:45   layer   8: load-wait 0.94s compute 0.31s  wf_rows=38016
+23:51:55   layer  16: load-wait 0.71s compute 0.54s  wf_rows=71808
+23:52:05   layer  24: load-wait 0.21s compute 0.78s  wf_rows=105600
+23:52:15   layer  32: load-wait 0.10s compute 1.00s  wf_rows=139392
+23:52:25   layer  40: load-wait 0.11s compute 1.24s  wf_rows=173184
+23:52:35   layer  47: load-wait 0.10s compute 1.45s  wf_rows=202752
+23:52:35   pass done: 256 prefill rows (T=26), 202752 spawn rows, 60.6s
+23:52:38 chunk 1 done: {'chunk': 1, 'rows': 128, 'prefill': 256, 'spawn_rows': 202752, 'pass_s': 60.59540343284607, 'peak_GB': 17.05881643295288, 'mean_drop': 6.794921875, 'r_sum_heads_vs_attn_layer': 0.33648062487684566, 'head_dla_sum_mean': 9.010872840881348, 'candidates_not_routed_clean': 1391, 'attn_row_sum_minmax': [0.9996178150177002, 1.0003890991210938], 'utc': '2026-10-16T23:52:38Z'}
+23:52:38 ALL CHUNKS COMPLETE
+2026-10-16T23:52:46Z END   p6an-ci1-e1_a2e-qwen3 rc=0 (148s)

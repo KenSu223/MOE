@@ -1,0 +1,6 @@
+2026-10-17T01:55:46Z chain start (pid 2117872); order [('e1_a2e', 'qwen3'), ('e1_a2e', 'mixtral_bos'), ('e1_e2a', 'qwen3'), ('e1_e2a', 'mixtral_bos'), ('e1_a2e', 'qwen2_57b'), ('e3_a2e', 'qwen2_57b')]
+2026-10-17T01:55:46Z e1_e2a/qwen3: mirror prepared
+2026-10-17T01:55:46Z submit p6an-expert-e1_e2a-qwen3: python scripts/ext7_wino_expert.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_e2a_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_e2a_qwen3.json --out p6_e1_e2a_qwen3_t2 --agent p6-analysis --families main --layers all --pairs-layers auto --max-spawn 60000
+2026-10-17T02:14:21Z p6an-expert-e1_e2a-qwen3 rc=0 (1115s incl. queue wait)
+2026-10-17T02:14:21Z stop file
+2026-10-17T02:14:21Z chain exit

@@ -1,0 +1,256 @@
+2026-10-17T18:14:21Z START p6an-causal-e3_e2a-mixtral_bos (waited 893s, low priority): python scripts/ext14_causal_run.py e3_e2a mixtral_bos BATCH sweep
+18:14:23 === e3_e2a/mixtral_bos none sweep
+18:14:29 mixtral -> p6_causal_e3_e2a_mixtral_bos/none: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:14:29 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:14:36   layer   0: load-wait 6.06s compute 0.87s  wf_rows=768
+18:14:59   layer   8: load-wait 2.73s compute 0.36s  wf_rows=6912
+18:15:20   layer  16: load-wait 2.17s compute 0.46s  wf_rows=13056
+18:15:42   layer  24: load-wait 2.07s compute 0.57s  wf_rows=19200
+18:16:02   layer  31: load-wait 2.25s compute 0.67s  wf_rows=24576
+18:16:02   pass done: 512 prefill rows (T=32), 24576 spawn rows, 92.4s (metrics 0.3s)
+18:16:05 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:16:05 Δclean +4.00 Δcorrupt -4.00 drop +8.00; {"layer_validation_argmax": 20, "layer_validation_max": 1.378, "layer_validation_top5": [[20, 1.378], [21, 1.249], [19, 1.181], [26, 1.063], [22, 0.816]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.158, "attn_layer_validation_top5": [[13, 1.158], [19, 0.894], [25, 0.631], [15, 0.571], [31, 0.312]], "block_validation_argmax": 19, "block_validation_max": 1.989, "block_validation_top5": [[19, 1.989], [20, 1.592], [13, 1.438], [25, 1.27], [21, 1.264]]}
+18:16:05 === none sweep done in 103s
+18:16:05 === e3_e2a/mixtral_bos heads_top3 sweep
+18:16:05 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_top3: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:16:06 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:16:08   layer   0: load-wait 2.12s compute 0.25s  wf_rows=768
+18:16:26   layer   8: load-wait 1.78s compute 0.35s  wf_rows=6912
+18:16:47   layer  16: load-wait 2.37s compute 0.47s  wf_rows=13056
+18:17:09   layer  24: load-wait 2.36s compute 0.57s  wf_rows=19200
+18:17:28   layer  31: load-wait 2.16s compute 0.67s  wf_rows=24576
+18:17:28   pass done: 512 prefill rows (T=32), 24576 spawn rows, 82.3s (metrics 0.3s)
+18:17:29 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:17:29 Δclean +3.59 Δcorrupt -3.60 drop +7.19; {"layer_validation_argmax": 20, "layer_validation_max": 1.309, "layer_validation_top5": [[20, 1.309], [21, 1.167], [19, 1.05], [26, 0.998], [18, 0.801]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 0.729, "attn_layer_validation_top5": [[13, 0.729], [15, 0.64], [19, 0.424], [20, 0.322], [16, 0.292]], "block_validation_argmax": 20, "block_validation_max": 1.579, "block_validation_top5": [[20, 1.579], [19, 1.483], [21, 1.192], [26, 1.098], [16, 1.059]]}
+18:17:30 === heads_top3 sweep done in 85s
+18:17:30 === e3_e2a/mixtral_bos heads_r0 sweep
+18:17:30 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r0: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:17:31 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:17:34   layer   0: load-wait 2.10s compute 0.25s  wf_rows=768
+18:17:54   layer   8: load-wait 1.66s compute 0.35s  wf_rows=6912
+18:18:13   layer  16: load-wait 1.74s compute 0.47s  wf_rows=13056
+18:18:31   layer  24: load-wait 1.53s compute 0.57s  wf_rows=19200
+18:18:49   layer  31: load-wait 2.15s compute 0.67s  wf_rows=24576
+18:18:49   pass done: 512 prefill rows (T=32), 24576 spawn rows, 77.5s (metrics 0.3s)
+18:18:50 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:18:50 Δclean +4.00 Δcorrupt -4.00 drop +8.01; {"layer_validation_argmax": 20, "layer_validation_max": 1.381, "layer_validation_top5": [[20, 1.381], [21, 1.254], [19, 1.218], [26, 1.057], [22, 0.801]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.154, "attn_layer_validation_top5": [[13, 1.154], [19, 0.891], [25, 0.585], [15, 0.576], [31, 0.318]], "block_validation_argmax": 19, "block_validation_max": 2.012, "block_validation_top5": [[19, 2.012], [20, 1.587], [13, 1.427], [21, 1.268], [25, 1.25]]}
+18:18:51 === heads_r0 sweep done in 81s
+18:18:51 === e3_e2a/mixtral_bos heads_r1 sweep
+18:18:51 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r1: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:18:51 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:18:54   layer   0: load-wait 1.96s compute 0.25s  wf_rows=768
+18:19:13   layer   8: load-wait 2.01s compute 0.35s  wf_rows=6912
+18:19:36   layer  16: load-wait 2.49s compute 0.46s  wf_rows=13056
+18:19:57   layer  24: load-wait 2.13s compute 0.58s  wf_rows=19200
+18:20:15   layer  31: load-wait 2.19s compute 0.67s  wf_rows=24576
+18:20:16   pass done: 512 prefill rows (T=32), 24576 spawn rows, 84.2s (metrics 0.3s)
+18:20:17 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:20:17 Δclean +4.02 Δcorrupt -4.02 drop +8.04; {"layer_validation_argmax": 20, "layer_validation_max": 1.396, "layer_validation_top5": [[20, 1.396], [21, 1.27], [19, 1.184], [26, 1.052], [22, 0.812]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.155, "attn_layer_validation_top5": [[13, 1.155], [19, 0.926], [25, 0.627], [15, 0.578], [31, 0.311]], "block_validation_argmax": 19, "block_validation_max": 2.023, "block_validation_top5": [[19, 2.023], [20, 1.614], [13, 1.426], [21, 1.283], [25, 1.274]]}
+18:20:18 === heads_r1 sweep done in 87s
+18:20:18 === e3_e2a/mixtral_bos heads_r2 sweep
+18:20:18 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r2: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:20:18 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:20:21   layer   0: load-wait 2.25s compute 0.25s  wf_rows=768
+18:20:44   layer   8: load-wait 2.55s compute 0.35s  wf_rows=6912
+18:21:08   layer  16: load-wait 2.44s compute 0.46s  wf_rows=13056
+18:21:30   layer  24: load-wait 1.90s compute 0.57s  wf_rows=19200
+18:21:51   layer  31: load-wait 2.29s compute 0.67s  wf_rows=24576
+18:21:51   pass done: 512 prefill rows (T=32), 24576 spawn rows, 92.7s (metrics 0.3s)
+18:21:52 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:21:52 Δclean +4.10 Δcorrupt -4.10 drop +8.20; {"layer_validation_argmax": 20, "layer_validation_max": 1.397, "layer_validation_top5": [[20, 1.397], [21, 1.27], [19, 1.175], [26, 1.062], [22, 0.821]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.296, "attn_layer_validation_top5": [[13, 1.296], [19, 0.897], [25, 0.657], [15, 0.569], [31, 0.319]], "block_validation_argmax": 19, "block_validation_max": 1.984, "block_validation_top5": [[19, 1.984], [13, 1.623], [20, 1.619], [25, 1.299], [21, 1.292]]}
+18:21:53 === heads_r2 sweep done in 95s
+18:21:53 === e3_e2a/mixtral_bos experts_top3 sweep
+18:21:53 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_top3: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:21:53 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:21:55   layer   0: load-wait 1.34s compute 0.25s  wf_rows=768
+18:22:16   layer   8: load-wait 2.55s compute 0.36s  wf_rows=6912
+18:22:36   layer  16: load-wait 2.05s compute 0.46s  wf_rows=13056
+18:22:57   layer  24: load-wait 2.32s compute 0.58s  wf_rows=19200
+18:23:17   layer  31: load-wait 2.23s compute 0.67s  wf_rows=24576
+18:23:17   pass done: 512 prefill rows (T=32), 24576 spawn rows, 83.5s (metrics 0.3s)
+18:23:18 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:23:18 Δclean +3.60 Δcorrupt -3.60 drop +7.20; {"layer_validation_argmax": 26, "layer_validation_max": 1.13, "layer_validation_top5": [[26, 1.13], [22, 0.943], [18, 0.894], [24, 0.869], [25, 0.729]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.119, "attn_layer_validation_top5": [[13, 1.119], [25, 0.794], [19, 0.666], [15, 0.572], [22, 0.441]], "block_validation_argmax": 25, "block_validation_max": 1.469, "block_validation_top5": [[25, 1.469], [13, 1.421], [22, 1.343], [26, 1.24], [16, 1.022]]}
+18:23:19 === experts_top3 sweep done in 86s
+18:23:19 === e3_e2a/mixtral_bos experts_r0 sweep
+18:23:19 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r0: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:23:19 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:23:21   layer   0: load-wait 1.61s compute 0.25s  wf_rows=768
+18:23:44   layer   8: load-wait 3.57s compute 0.35s  wf_rows=6912
+18:24:04   layer  16: load-wait 1.84s compute 0.46s  wf_rows=13056
+18:24:22   layer  24: load-wait 2.71s compute 0.57s  wf_rows=19200
+18:24:42   layer  31: load-wait 2.17s compute 0.67s  wf_rows=24576
+18:24:42   pass done: 512 prefill rows (T=32), 24576 spawn rows, 82.8s (metrics 0.3s)
+18:24:46 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:24:46 Δclean +3.99 Δcorrupt -3.99 drop +7.98; {"layer_validation_argmax": 20, "layer_validation_max": 1.346, "layer_validation_top5": [[20, 1.346], [21, 1.196], [19, 1.114], [26, 1.071], [22, 0.841]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.16, "attn_layer_validation_top5": [[13, 1.16], [19, 0.896], [25, 0.648], [15, 0.563], [31, 0.321]], "block_validation_argmax": 19, "block_validation_max": 1.915, "block_validation_top5": [[19, 1.915], [20, 1.562], [13, 1.449], [25, 1.297], [21, 1.219]]}
+18:24:47 === experts_r0 sweep done in 88s
+18:24:47 === e3_e2a/mixtral_bos experts_r1 sweep
+18:24:47 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r1: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:24:47 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:24:50   layer   0: load-wait 2.08s compute 0.25s  wf_rows=768
+18:25:13   layer   8: load-wait 3.04s compute 0.35s  wf_rows=6912
+18:25:36   layer  16: load-wait 2.42s compute 0.46s  wf_rows=13056
+18:25:58   layer  24: load-wait 2.55s compute 0.58s  wf_rows=19200
+18:26:18   layer  31: load-wait 2.23s compute 0.67s  wf_rows=24576
+18:26:18   pass done: 512 prefill rows (T=32), 24576 spawn rows, 90.7s (metrics 0.3s)
+18:26:19 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:26:19 Δclean +4.00 Δcorrupt -4.00 drop +7.99; {"layer_validation_argmax": 20, "layer_validation_max": 1.318, "layer_validation_top5": [[20, 1.318], [21, 1.285], [19, 1.174], [26, 1.059], [22, 0.831]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.167, "attn_layer_validation_top5": [[13, 1.167], [19, 0.896], [25, 0.639], [15, 0.566], [31, 0.318]], "block_validation_argmax": 19, "block_validation_max": 1.975, "block_validation_top5": [[19, 1.975], [20, 1.531], [13, 1.459], [21, 1.306], [25, 1.269]]}
+18:26:19 === experts_r1 sweep done in 93s
+18:26:19 === e3_e2a/mixtral_bos experts_r2 sweep
+18:26:20 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r2: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 32 layers, 1 passes (24576 spawn rows), T max 32
+18:26:20 pass 1/1: layers 0..31, 512 prefill rows, 24576 spawn rows
+18:26:22   layer   0: load-wait 1.82s compute 0.25s  wf_rows=768
+18:26:41   layer   8: load-wait 1.86s compute 0.35s  wf_rows=6912
+18:27:01   layer  16: load-wait 1.64s compute 0.47s  wf_rows=13056
+18:27:21   layer  24: load-wait 2.31s compute 0.57s  wf_rows=19200
+18:27:41   layer  31: load-wait 2.23s compute 0.67s  wf_rows=24576
+18:27:42   pass done: 512 prefill rows (T=32), 24576 spawn rows, 81.7s (metrics 0.3s)
+18:27:45 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+18:27:45 Δclean +4.00 Δcorrupt -4.00 drop +7.99; {"layer_validation_argmax": 20, "layer_validation_max": 1.348, "layer_validation_top5": [[20, 1.348], [21, 1.172], [19, 1.17], [26, 1.079], [22, 0.841]], "attn_layer_validation_argmax": 13, "attn_layer_validation_max": 1.174, "attn_layer_validation_top5": [[13, 1.174], [19, 0.902], [25, 0.63], [15, 0.579], [31, 0.322]], "block_validation_argmax": 19, "block_validation_max": 1.989, "block_validation_top5": [[19, 1.989], [20, 1.564], [13, 1.461], [25, 1.287], [21, 1.192]]}
+18:27:45 === experts_r2 sweep done in 86s
+2026-10-17T18:27:52Z END   p6an-causal-e3_e2a-mixtral_bos rc=0 (811s)
+2026-10-17T18:29:03Z START p6an-causal-e3_e2a-mixtral_bos (waited 0s, low priority): python scripts/ext14_causal_run.py e3_e2a mixtral_bos BATCH joint
+18:29:03 === e3_e2a/mixtral_bos none joint
+18:29:10 mixtral -> p6_causal_e3_e2a_mixtral_bos/none: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:29:11 pass 1/1: 512 prefill rows, 1536 multi rows
+18:29:18   layer   0: load-wait 6.22s compute 1.04s  wf_rows=1536
+18:29:39   layer   8: load-wait 3.16s compute 0.32s  wf_rows=1536
+18:29:56   layer  16: load-wait 1.81s compute 0.27s  wf_rows=1536
+18:30:15   layer  24: load-wait 1.87s compute 0.28s  wf_rows=1536
+18:30:34   layer  31: load-wait 2.60s compute 0.27s  wf_rows=1536
+18:30:34   pass done: 512 prefill rows (T=32), 1536 spawn rows, 82.9s
+18:30:34 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:30:34 denoise  all_block all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:30:34 denoise  all_moe   all     : effect/drop +0.788 (mean effect +6.31, drop 8.00)
+18:30:34 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:30:34 noise    all_block all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:30:34 noise    all_moe   all     : effect/drop +0.788 (mean effect +6.31, drop 8.00)
+18:30:35 === none joint done in 92s
+18:30:35 === e3_e2a/mixtral_bos heads_top3 joint
+18:30:35 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_top3: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:30:36 pass 1/1: 512 prefill rows, 1536 multi rows
+18:30:38   layer   0: load-wait 1.22s compute 0.26s  wf_rows=1536
+18:30:54   layer   8: load-wait 1.90s compute 0.28s  wf_rows=1536
+18:31:11   layer  16: load-wait 2.35s compute 0.28s  wf_rows=1536
+18:31:32   layer  24: load-wait 2.51s compute 0.27s  wf_rows=1536
+18:31:51   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:31:51   pass done: 512 prefill rows (T=32), 1536 spawn rows, 74.6s
+18:31:52 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:31:52 denoise  all_block all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:31:52 denoise  all_moe   all     : effect/drop +0.835 (mean effect +6.01, drop 7.20)
+18:31:52 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:31:52 noise    all_block all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:31:52 noise    all_moe   all     : effect/drop +0.835 (mean effect +6.01, drop 7.20)
+18:31:53 === heads_top3 joint done in 78s
+18:31:53 === e3_e2a/mixtral_bos heads_r0 joint
+18:31:53 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r0: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:31:53 pass 1/1: 512 prefill rows, 1536 multi rows
+18:31:55   layer   0: load-wait 1.81s compute 0.25s  wf_rows=1536
+18:32:18   layer   8: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:32:41   layer  16: load-wait 2.53s compute 0.27s  wf_rows=1536
+18:33:04   layer  24: load-wait 2.68s compute 0.27s  wf_rows=1536
+18:33:24   layer  31: load-wait 2.75s compute 0.27s  wf_rows=1536
+18:33:24   pass done: 512 prefill rows (T=32), 1536 spawn rows, 90.9s
+18:33:25 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.01, drop 8.01)
+18:33:25 denoise  all_block all     : effect/drop +1.000 (mean effect +8.01, drop 8.01)
+18:33:25 denoise  all_moe   all     : effect/drop +0.791 (mean effect +6.33, drop 8.01)
+18:33:25 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.01, drop 8.01)
+18:33:25 noise    all_block all     : effect/drop +1.000 (mean effect +8.01, drop 8.01)
+18:33:25 noise    all_moe   all     : effect/drop +0.791 (mean effect +6.33, drop 8.01)
+18:33:25 === heads_r0 joint done in 93s
+18:33:25 === e3_e2a/mixtral_bos heads_r1 joint
+18:33:26 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r1: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:33:26 pass 1/1: 512 prefill rows, 1536 multi rows
+18:33:28   layer   0: load-wait 1.63s compute 0.25s  wf_rows=1536
+18:33:48   layer   8: load-wait 2.72s compute 0.27s  wf_rows=1536
+18:34:06   layer  16: load-wait 2.40s compute 0.27s  wf_rows=1536
+18:34:28   layer  24: load-wait 2.41s compute 0.27s  wf_rows=1536
+18:34:48   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:34:48   pass done: 512 prefill rows (T=32), 1536 spawn rows, 82.2s
+18:34:49 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.04, drop 8.04)
+18:34:49 denoise  all_block all     : effect/drop +1.000 (mean effect +8.04, drop 8.04)
+18:34:49 denoise  all_moe   all     : effect/drop +0.788 (mean effect +6.34, drop 8.04)
+18:34:49 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.04, drop 8.04)
+18:34:49 noise    all_block all     : effect/drop +1.000 (mean effect +8.04, drop 8.04)
+18:34:49 noise    all_moe   all     : effect/drop +0.788 (mean effect +6.34, drop 8.04)
+18:34:50 === heads_r1 joint done in 84s
+18:34:50 === e3_e2a/mixtral_bos heads_r2 joint
+18:34:50 mixtral -> p6_causal_e3_e2a_mixtral_bos/heads_r2: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:34:50 pass 1/1: 512 prefill rows, 1536 multi rows
+18:34:53   layer   0: load-wait 1.92s compute 0.25s  wf_rows=1536
+18:35:16   layer   8: load-wait 2.54s compute 0.27s  wf_rows=1536
+18:35:40   layer  16: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:36:02   layer  24: load-wait 2.37s compute 0.27s  wf_rows=1536
+18:36:22   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:36:22   pass done: 512 prefill rows (T=32), 1536 spawn rows, 91.5s
+18:36:22 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.19, drop 8.19)
+18:36:22 denoise  all_block all     : effect/drop +1.000 (mean effect +8.19, drop 8.19)
+18:36:22 denoise  all_moe   all     : effect/drop +0.788 (mean effect +6.45, drop 8.19)
+18:36:22 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.19, drop 8.19)
+18:36:22 noise    all_block all     : effect/drop +1.000 (mean effect +8.19, drop 8.19)
+18:36:22 noise    all_moe   all     : effect/drop +0.788 (mean effect +6.45, drop 8.19)
+18:36:23 === heads_r2 joint done in 93s
+18:36:23 === e3_e2a/mixtral_bos experts_top3 joint
+18:36:23 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_top3: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:36:24 pass 1/1: 512 prefill rows, 1536 multi rows
+18:36:25   layer   0: load-wait 1.02s compute 0.25s  wf_rows=1536
+18:36:45   layer   8: load-wait 2.92s compute 0.27s  wf_rows=1536
+18:37:02   layer  16: load-wait 1.89s compute 0.27s  wf_rows=1536
+18:37:19   layer  24: load-wait 1.92s compute 0.27s  wf_rows=1536
+18:37:39   layer  31: load-wait 2.50s compute 0.27s  wf_rows=1536
+18:37:39   pass done: 512 prefill rows (T=32), 1536 spawn rows, 75.1s
+18:37:39 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:37:39 denoise  all_block all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:37:39 denoise  all_moe   all     : effect/drop +0.749 (mean effect +5.39, drop 7.20)
+18:37:39 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:37:39 noise    all_block all     : effect/drop +1.000 (mean effect +7.20, drop 7.20)
+18:37:39 noise    all_moe   all     : effect/drop +0.748 (mean effect +5.38, drop 7.20)
+18:37:40 === experts_top3 joint done in 77s
+18:37:40 === e3_e2a/mixtral_bos experts_r0 joint
+18:37:40 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r0: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:37:41 pass 1/1: 512 prefill rows, 1536 multi rows
+18:37:43   layer   0: load-wait 1.58s compute 0.25s  wf_rows=1536
+18:38:03   layer   8: load-wait 2.36s compute 0.27s  wf_rows=1536
+18:38:24   layer  16: load-wait 1.48s compute 0.27s  wf_rows=1536
+18:38:41   layer  24: load-wait 0.84s compute 0.27s  wf_rows=1536
+18:39:01   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:39:01   pass done: 512 prefill rows (T=32), 1536 spawn rows, 80.0s
+18:39:01 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+18:39:01 denoise  all_block all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+18:39:01 denoise  all_moe   all     : effect/drop +0.786 (mean effect +6.28, drop 7.99)
+18:39:01 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+18:39:01 noise    all_block all     : effect/drop +1.000 (mean effect +7.99, drop 7.99)
+18:39:01 noise    all_moe   all     : effect/drop +0.786 (mean effect +6.28, drop 7.99)
+18:39:02 === experts_r0 joint done in 82s
+18:39:02 === e3_e2a/mixtral_bos experts_r1 joint
+18:39:02 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r1: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:39:02 pass 1/1: 512 prefill rows, 1536 multi rows
+18:39:05   layer   0: load-wait 2.02s compute 0.25s  wf_rows=1536
+18:39:23   layer   8: load-wait 1.79s compute 0.27s  wf_rows=1536
+18:39:43   layer  16: load-wait 1.81s compute 0.27s  wf_rows=1536
+18:40:05   layer  24: load-wait 1.57s compute 0.27s  wf_rows=1536
+18:40:23   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:40:23   pass done: 512 prefill rows (T=32), 1536 spawn rows, 80.4s
+18:40:24 denoise  all_attn  all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:40:24 denoise  all_block all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:40:24 denoise  all_moe   all     : effect/drop +0.790 (mean effect +6.32, drop 8.00)
+18:40:24 noise    all_attn  all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:40:24 noise    all_block all     : effect/drop +1.000 (mean effect +8.00, drop 8.00)
+18:40:24 noise    all_moe   all     : effect/drop +0.791 (mean effect +6.33, drop 8.00)
+18:40:24 === experts_r1 joint done in 82s
+18:40:24 === e3_e2a/mixtral_bos experts_r2 joint
+18:40:25 mixtral -> p6_causal_e3_e2a_mixtral_bos/experts_r2: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+18:40:25 pass 1/1: 512 prefill rows, 1536 multi rows
+18:40:26   layer   0: load-wait 0.97s compute 0.25s  wf_rows=1536
+18:40:42   layer   8: load-wait 1.60s compute 0.27s  wf_rows=1536
+18:41:05   layer  16: load-wait 3.19s compute 0.27s  wf_rows=1536
+18:41:24   layer  24: load-wait 1.62s compute 0.27s  wf_rows=1536
+18:41:42   layer  31: load-wait 2.62s compute 0.27s  wf_rows=1536
+18:41:42   pass done: 512 prefill rows (T=32), 1536 spawn rows, 76.4s
+18:41:42 denoise  all_attn  all     : effect/drop +1.000 (mean effect +7.98, drop 7.98)
+18:41:42 denoise  all_block all     : effect/drop +1.000 (mean effect +7.98, drop 7.98)
+18:41:42 denoise  all_moe   all     : effect/drop +0.794 (mean effect +6.34, drop 7.98)
+18:41:42 noise    all_attn  all     : effect/drop +1.000 (mean effect +7.98, drop 7.98)
+18:41:42 noise    all_block all     : effect/drop +1.000 (mean effect +7.98, drop 7.98)
+18:41:42 noise    all_moe   all     : effect/drop +0.794 (mean effect +6.34, drop 7.98)
+18:41:43 === experts_r2 joint done in 79s
+2026-10-17T18:41:49Z END   p6an-causal-e3_e2a-mixtral_bos rc=0 (766s)

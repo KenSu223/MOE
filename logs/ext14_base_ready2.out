@@ -1,0 +1,1 @@
+Terminated                 nohup setsid bash scripts/ext14_chain_base_s2.sh $p > logs/ext14_base_s2_$p.out 2>&1 < /dev/null

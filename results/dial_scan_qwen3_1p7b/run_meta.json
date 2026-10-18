@@ -1,0 +1,254 @@
+{
+ "scan_probes_core_": {
+  "model": "qwen3_1p7b",
+  "repo": "Qwen/Qwen3-1.7B-Base",
+  "proto": "qwen3_1p7b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "probes",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3_1p7b --part probes --specs data/dial/build/probe_specs_full_qwen.parquet",
+  "created_utc": "2026-10-17T05:56:26Z",
+  "complete": true,
+  "n_rows": 29600,
+  "n_keys": 3700,
+  "n_passes": 5,
+  "completed_utc": "2026-10-17T05:57:22Z"
+ },
+ "scan_cells_core_e1_a2e+e1_e2a+e3p3_a2e+e3_a2e+e3_e2a+e1p_a2e+e1p_e2a+e2_a2e+e2_e2a+sc_agree_a2e+sc_conflict_a2e+l_ant+l_": {
+  "model": "qwen3_1p7b",
+  "repo": "Qwen/Qwen3-1.7B-Base",
+  "proto": "qwen3_1p7b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3_1p7b --part cells --subset core --cells e1_a2e,e1_e2a,e3p3_a2e,e3_a2e,e3_e2a,e1p_a2e,e1p_e2a,e2_a2e,e2_e2a,sc_agree_a2e,sc_conflict_a2e,l_ant,l_prop,l_bind,l_ind,l_ioi",
+  "created_utc": "2026-10-17T06:22:12Z",
+  "complete": true,
+  "cells": {
+   "e1_a2e": {
+    "pairs": 1178,
+    "margin": 189,
+    "reverse_margin": 0,
+    "margin_rate": 0.16,
+    "by_order": {
+     "1": 0.151,
+     "2": 0.17
+    },
+    "top1_both": 0.307,
+    "passes": 1
+   },
+   "e1_e2a": {
+    "pairs": 1178,
+    "margin": 280,
+    "reverse_margin": 3,
+    "margin_rate": 0.238,
+    "by_order": {
+     "1": 0.244,
+     "2": 0.231
+    },
+    "top1_both": 0.143,
+    "passes": 1
+   },
+   "e3p3_a2e": {
+    "pairs": 624,
+    "margin": 32,
+    "reverse_margin": 0,
+    "margin_rate": 0.051,
+    "by_order": {
+     "1": 0.044,
+     "2": 0.065
+    },
+    "top1_both": 0.087,
+    "passes": 1
+   },
+   "e3_a2e": {
+    "pairs": 643,
+    "margin": 30,
+    "reverse_margin": 0,
+    "margin_rate": 0.047,
+    "by_order": {
+     "1": 0.034,
+     "2": 0.07
+    },
+    "top1_both": 0.081,
+    "passes": 1
+   },
+   "e3_e2a": {
+    "pairs": 648,
+    "margin": 474,
+    "reverse_margin": 0,
+    "margin_rate": 0.731,
+    "by_order": {
+     "1": 0.746,
+     "2": 0.704
+    },
+    "top1_both": 0.239,
+    "passes": 1
+   },
+   "e1p_a2e": {
+    "pairs": 970,
+    "margin": 107,
+    "reverse_margin": 0,
+    "margin_rate": 0.11,
+    "by_order": {
+     "1": 0.126,
+     "2": 0.095
+    },
+    "top1_both": 0.267,
+    "passes": 1
+   },
+   "e1p_e2a": {
+    "pairs": 970,
+    "margin": 213,
+    "reverse_margin": 0,
+    "margin_rate": 0.22,
+    "by_order": {
+     "1": 0.237,
+     "2": 0.202
+    },
+    "top1_both": 0.109,
+    "passes": 1
+   },
+   "e2_a2e": {
+    "pairs": 1178,
+    "margin": 0,
+    "reverse_margin": 45,
+    "margin_rate": 0.0,
+    "by_order": {
+     "1": 0.0,
+     "2": 0.0
+    },
+    "top1_both": 0.003,
+    "passes": 1
+   },
+   "e2_e2a": {
+    "pairs": 1178,
+    "margin": 101,
+    "reverse_margin": 1,
+    "margin_rate": 0.086,
+    "by_order": {
+     "1": 0.081,
+     "2": 0.09
+    },
+    "top1_both": 0.11,
+    "passes": 1
+   },
+   "sc_agree_a2e": {
+    "pairs": 1286,
+    "margin": 23,
+    "reverse_margin": 0,
+    "margin_rate": 0.018,
+    "by_order": {
+     "1": 0.02,
+     "2": 0.016
+    },
+    "top1_both": 0.082,
+    "passes": 1
+   },
+   "sc_conflict_a2e": {
+    "pairs": 1286,
+    "margin": 5,
+    "reverse_margin": 1,
+    "margin_rate": 0.004,
+    "by_order": {
+     "1": 0.006,
+     "2": 0.002
+    },
+    "top1_both": 0.04,
+    "passes": 1
+   },
+   "l_ant": {
+    "pairs": 630,
+    "margin": 544,
+    "reverse_margin": 9,
+    "margin_rate": 0.863,
+    "by_order": {
+     "1": 0.863
+    },
+    "top1_both": 0.357,
+    "passes": 1
+   },
+   "l_prop": {
+    "pairs": 845,
+    "margin": 589,
+    "reverse_margin": 0,
+    "margin_rate": 0.697,
+    "by_order": {
+     "1": 0.697
+    },
+    "top1_both": 0.249,
+    "passes": 1
+   },
+   "l_bind": {
+    "pairs": 3200,
+    "margin": 892,
+    "reverse_margin": 0,
+    "margin_rate": 0.279,
+    "by_order": {
+     "1": 0.275,
+     "2": 0.282
+    },
+    "top1_both": 0.595,
+    "passes": 1
+   },
+   "l_ind": {
+    "pairs": 1600,
+    "margin": 350,
+    "reverse_margin": 0,
+    "margin_rate": 0.219,
+    "by_order": {
+     "1": 0.214,
+     "2": 0.224
+    },
+    "top1_both": 0.28,
+    "passes": 1
+   },
+   "l_ioi": {
+    "pairs": 1600,
+    "margin": 1587,
+    "reverse_margin": 0,
+    "margin_rate": 0.992,
+    "by_order": {
+     "1": 0.992,
+     "2": 0.992
+    },
+    "top1_both": 0.569,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-17T06:23:48Z"
+ },
+ "scan_cells_all_l_cf": {
+  "model": "qwen3_1p7b",
+  "repo": "Qwen/Qwen3-1.7B-Base",
+  "proto": "qwen3_1p7b",
+  "family": "qwen",
+  "special_tokens": true,
+  "part": "cells",
+  "agent": "p6-data",
+  "command": "python scripts/ext14_scan.py qwen3_1p7b --part cells --subset all --cells l_cf",
+  "created_utc": "2026-10-17T07:01:10Z",
+  "complete": true,
+  "engine_protocol": {
+   "model_key": "qwen3_1p7b",
+   "dtype": "bfloat16",
+   "router_fp32": false
+  },
+  "cells": {
+   "l_cf": {
+    "pairs": 198,
+    "margin": 146,
+    "reverse_margin": 0,
+    "margin_rate": 0.737,
+    "by_order": {
+     "1": 0.737
+    },
+    "top1_both": 0.157,
+    "passes": 1
+   }
+  },
+  "completed_utc": "2026-10-17T07:01:19Z"
+ }
+}

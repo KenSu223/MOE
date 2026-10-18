@@ -1,0 +1,7 @@
+15:14:44   layer   0: load-wait 28.07s compute 0.94s  wf_rows=0
+15:15:15   layer   8: load-wait 3.70s compute 0.34s  wf_rows=0
+15:15:48   layer  16: load-wait 3.50s compute 0.34s  wf_rows=0
+15:16:19   layer  24: load-wait 3.59s compute 0.34s  wf_rows=0
+15:16:31   layer  27: load-wait 3.67s compute 0.32s  wf_rows=0
+15:16:32   pass done: 504 prefill rows (T=11), 0 spawn rows, 136.7s
+15:16:33 p6_l_ant_qwen2_57b: 504 directed cases; A_direct -0.095, M_direct 1.095, DLA attn share -0.097; fp32 vs engine Delta clean max |diff| 0.000

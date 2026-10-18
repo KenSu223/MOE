@@ -1,0 +1,34 @@
+{
+ "model": "olmoe",
+ "task": "wino",
+ "n_cases": 48,
+ "focal": [
+  [
+   12,
+   11
+  ],
+  [
+   13,
+   40
+  ]
+ ],
+ "n_grid": [
+  1,
+  3,
+  10,
+  30,
+  100,
+  300,
+  1000,
+  3000,
+  10000,
+  30000,
+  100000,
+  300000,
+  1000000
+ ],
+ "seconds": 199,
+ "rules": "RMSNorm denominators (incl. OLMoE q/k norms) detached; softmax pattern detached; SiLU sigmoid detached; half rule on SiLU(g)*u; MoE top-k set and weights frozen (routing weights detached in every backward)",
+ "command": "scripts/ext14ci_relp_run.py olmoe wino --n-cases 48",
+ "utc": "2026-10-17T03:15:18Z"
+}

@@ -1,0 +1,184 @@
+{
+ "note": "ext14 Phase 6 cell e0_a2e, mixtral_bos: items passing the margin in every order; fixed item split; cap 128 pairs per split (priority ['preferred', 'both_fams', 'rank']). scripts/ext14_casesets.py docstring.",
+ "pair_idx_of": {
+  "ctrl|palace|cabin|big|small|e0_a2e|bind|o1": 100032,
+  "ctrl|palace|cabin|big|small|e0_a2e|bind|o2": 100033,
+  "ctrl|warehouse|drawer|large|tiny|e0_a2e|bind|o1": 100050,
+  "ctrl|warehouse|drawer|large|tiny|e0_a2e|bind|o2": 100051,
+  "ctrl|summer|winter|hot|cold|e0_a2e|bind|o1": 100098,
+  "ctrl|summer|winter|hot|cold|e0_a2e|bind|o2": 100099,
+  "ctrl|lion|mouse|loud|quiet|e0_a2e|bind|o1": 100200,
+  "ctrl|lion|mouse|loud|quiet|e0_a2e|bind|o2": 100201,
+  "ctrl|day|night|bright|dark|e0_a2e|bind|o1": 100206,
+  "ctrl|day|night|bright|dark|e0_a2e|bind|o2": 100207,
+  "ctrl|highway|alley|wide|narrow|e0_a2e|bind|o1": 100350,
+  "ctrl|highway|alley|wide|narrow|e0_a2e|bind|o2": 100351,
+  "ctrl|city|village|big|small|e0_a2e|bind|o1": 100458,
+  "ctrl|city|village|big|small|e0_a2e|bind|o2": 100459,
+  "ctrl|ship|boat|big|small|e0_a2e|bind|o1": 100464,
+  "ctrl|ship|boat|big|small|e0_a2e|bind|o2": 100465,
+  "ctrl|desert|snow|hot|cold|e0_a2e|bind|o1": 100522,
+  "ctrl|desert|snow|hot|cold|e0_a2e|bind|o2": 100523,
+  "ctrl|sheep|lion|gentle|fierce|e0_a2e|bind|o1": 100736,
+  "ctrl|sheep|lion|gentle|fierce|e0_a2e|bind|o2": 100737,
+  "ctrl|angel|devil|holy|evil|e0_a2e|bind|o1": 100750,
+  "ctrl|angel|devil|holy|evil|e0_a2e|bind|o2": 100751,
+  "32204AGAABAE39KIV47A9RUAGMSHGQ|e0_a2e|bind|o1": 2526,
+  "32204AGAABAE39KIV47A9RUAGMSHGQ|e0_a2e|bind|o2": 2527,
+  "334ZEL5JX8T6FKE3EF8HACYN590SOZ|e0_a2e|bind|o1": 3598,
+  "334ZEL5JX8T6FKE3EF8HACYN590SOZ|e0_a2e|bind|o2": 3599,
+  "33N1S8XHHOZIK4TG354EU9IHYJA1ZJ|e0_a2e|bind|o1": 4512,
+  "33N1S8XHHOZIK4TG354EU9IHYJA1ZJ|e0_a2e|bind|o2": 4513,
+  "344M16OZKKTNNG99C5OZ66U2D0NENN|e0_a2e|bind|o1": 5236,
+  "344M16OZKKTNNG99C5OZ66U2D0NENN|e0_a2e|bind|o2": 5237,
+  "3909MD9T21VBZOWSEH5MY1LTBNKEFR|e0_a2e|bind|o1": 10772,
+  "3909MD9T21VBZOWSEH5MY1LTBNKEFR|e0_a2e|bind|o2": 10773,
+  "3BC9H1KCYWQBGFZE47RG9SZ9OOWWYB|e0_a2e|bind|o1": 13136,
+  "3BC9H1KCYWQBGFZE47RG9SZ9OOWWYB|e0_a2e|bind|o2": 13137,
+  "3BVS8WK9Q29X2CMY5Y9H0QS1QNOBII|e0_a2e|bind|o1": 13766,
+  "3BVS8WK9Q29X2CMY5Y9H0QS1QNOBII|e0_a2e|bind|o2": 13767,
+  "3CRWSLD91MI3HP1YUICVY3ZHDXOMOD|e0_a2e|bind|o1": 14296,
+  "3CRWSLD91MI3HP1YUICVY3ZHDXOMOD|e0_a2e|bind|o2": 14297,
+  "3GITHABACYJGYBYMZNHYC7X5SHO2NX|e0_a2e|bind|o1": 17880,
+  "3GITHABACYJGYBYMZNHYC7X5SHO2NX|e0_a2e|bind|o2": 17881,
+  "3H6W48L9F4N2DC86TMJX43IPW1SPW2|e0_a2e|bind|o1": 18488,
+  "3H6W48L9F4N2DC86TMJX43IPW1SPW2|e0_a2e|bind|o2": 18489,
+  "3HYV4299H2A2K9M563ZGO948PS98ER|e0_a2e|bind|o1": 19486,
+  "3HYV4299H2A2K9M563ZGO948PS98ER|e0_a2e|bind|o2": 19487,
+  "3I7KR83SNCR5KEXP7HGXM0CNSH1K9V|e0_a2e|bind|o1": 19722,
+  "3I7KR83SNCR5KEXP7HGXM0CNSH1K9V|e0_a2e|bind|o2": 19723,
+  "3LG268AV384T8P2ULETGNSB4QIPRE0|e0_a2e|bind|o1": 23352,
+  "3LG268AV384T8P2ULETGNSB4QIPRE0|e0_a2e|bind|o2": 23353,
+  "3LVTFB9DE7W6ARISYS64A3AKXBHQG3|e0_a2e|bind|o1": 23636,
+  "3LVTFB9DE7W6ARISYS64A3AKXBHQG3|e0_a2e|bind|o2": 23637,
+  "3NOEP8XAU6GWW1C3NPRJYKK5V5RPX3|e0_a2e|bind|o1": 25734,
+  "3NOEP8XAU6GWW1C3NPRJYKK5V5RPX3|e0_a2e|bind|o2": 25735,
+  "3OID399FXIL67IISIMU2SJ38BX1DFN|e0_a2e|bind|o1|rev": 26564,
+  "3OID399FXIL67IISIMU2SJ38BX1DFN|e0_a2e|bind|o2|rev": 26565,
+  "3SBNLSTU6U3XIAALZ0C93DVIZQ6ZDD|e0_a2e|bind|o1": 31350,
+  "3SBNLSTU6U3XIAALZ0C93DVIZQ6ZDD|e0_a2e|bind|o2": 31351,
+  "3T6SSHJUZHO7PK04B81YMDWDJ3ZII1|e0_a2e|bind|o1": 32270,
+  "3T6SSHJUZHO7PK04B81YMDWDJ3ZII1|e0_a2e|bind|o2": 32271,
+  "3UYRNV2KITXRKQ0BF4QZMYA8EFJN8K|e0_a2e|bind|o1": 34262,
+  "3UYRNV2KITXRKQ0BF4QZMYA8EFJN8K|e0_a2e|bind|o2": 34263,
+  "3X4Q1O9UBJ0KWMUBQCA6FL2RI63O7A|e0_a2e|bind|o1": 37074,
+  "3X4Q1O9UBJ0KWMUBQCA6FL2RI63O7A|e0_a2e|bind|o2": 37075,
+  "3Y40HMYLL3W9O6KZ4BQD8Q743JMXU4|e0_a2e|bind|o1": 38550,
+  "3Y40HMYLL3W9O6KZ4BQD8Q743JMXU4|e0_a2e|bind|o2": 38551
+ },
+ "pairs": {
+  "discovery": [
+   3598,
+   3599,
+   25734,
+   25735,
+   100464,
+   100465
+  ],
+  "validation": [
+   17880,
+   17881,
+   23636,
+   23637
+  ]
+ },
+ "directed": {
+  "discovery": [
+   7196,
+   7197,
+   7198,
+   7199,
+   51468,
+   51469,
+   51470,
+   51471,
+   200928,
+   200929,
+   200930,
+   200931
+  ],
+  "validation": [
+   35760,
+   35761,
+   35762,
+   35763,
+   47272,
+   47273,
+   47274,
+   47275
+  ]
+ },
+ "strata": {
+  "discovery": {
+   "pairs": 6,
+   "items": 3,
+   "names": 0,
+   "objects": 6,
+   "order1": 3,
+   "order2": 3,
+   "core776": 2,
+   "antonym_pair": 4,
+   "both_fams": 4,
+   "source": {
+    "wino": 4,
+    "ctrl": 2
+   },
+   "group": {
+    "": 4,
+    "big/small": 2
+   },
+   "frame": {
+    "P3": 6
+   }
+  },
+  "validation": {
+   "pairs": 4,
+   "items": 2,
+   "names": 0,
+   "objects": 4,
+   "order1": 2,
+   "order2": 2,
+   "core776": 4,
+   "antonym_pair": 2,
+   "both_fams": 2,
+   "source": {
+    "wino": 4
+   },
+   "group": {
+    "": 4
+   },
+   "frame": {
+    "P3": 4
+   }
+  }
+ },
+ "pools": {
+  "n_pool_pairs": 64,
+  "n_pool_items": 32,
+  "n_margin_pairs": 19,
+  "n_items_pass_all_strata": 5,
+  "n_items_pass": 5,
+  "assoc_strata_pool_items": null,
+  "n_pairs_of_passing_items": 10,
+  "core_margin_pairs_of_passing_items": null,
+  "extension_scanned": false,
+  "order_pass_rates": {
+   "1": 0.3438,
+   "2": 0.25
+  },
+  "order_gap": 0.0938,
+  "top1_rate_pool": 0.6094,
+  "top1_rate_selected": 0.8,
+  "margin_rate_pool": 0.2969,
+  "behaviour": {
+   "items": 32,
+   "target_wins_all_orders": 5,
+   "other_wins_all_orders": 0,
+   "other_is": "other answer",
+   "pair_rate_target_margin": 0.2969,
+   "pair_rate_other_margin": 0.0,
+   "pair_rate_target_prefers": 0.7188,
+   "pair_rate_other_prefers": 0.0
+  }
+ }
+}

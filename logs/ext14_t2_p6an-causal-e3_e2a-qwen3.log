@@ -1,0 +1,292 @@
+2026-10-17T17:18:46Z START p6an-causal-e3_e2a-qwen3 (waited 27909s, low priority): python scripts/ext14_causal_run.py e3_e2a qwen3 BATCH sweep
+17:18:48 === e3_e2a/qwen3 none sweep
+17:18:54 qwen3 -> p6_causal_e3_e2a_qwen3/none: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:18:55 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:18:59   layer   0: load-wait 3.06s compute 0.68s  wf_rows=768
+17:19:06   layer   8: load-wait 0.97s compute 0.13s  wf_rows=6912
+17:19:15   layer  16: load-wait 0.83s compute 0.17s  wf_rows=13056
+17:19:24   layer  24: load-wait 0.88s compute 0.22s  wf_rows=19200
+17:19:33   layer  32: load-wait 0.87s compute 0.26s  wf_rows=25344
+17:19:42   layer  40: load-wait 0.90s compute 0.30s  wf_rows=31488
+17:19:52   layer  47: load-wait 1.01s compute 0.39s  wf_rows=36864
+17:19:53   pass done: 512 prefill rows (T=29), 36864 spawn rows, 58.1s (metrics 1.4s)
+17:19:55 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:19:55 Δclean +4.27 Δcorrupt -4.26 drop +8.54; {"layer_validation_argmax": 41, "layer_validation_max": 1.811, "layer_validation_top5": [[41, 1.811], [43, 1.451], [39, 1.26], [44, 0.779], [38, 0.727]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.291, "attn_layer_validation_top5": [[42, 0.291], [38, 0.22], [40, 0.183], [39, 0.17], [43, 0.16]], "block_validation_argmax": 41, "block_validation_max": 1.913, "block_validation_top5": [[41, 1.913], [43, 1.586], [39, 1.434], [38, 0.923], [42, 0.923]]}
+17:19:57 === none sweep done in 69s
+17:19:57 === e3_e2a/qwen3 heads_top3 sweep
+17:19:59 qwen3 -> p6_causal_e3_e2a_qwen3/heads_top3: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:19:59 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:20:00   layer   0: load-wait 0.58s compute 0.09s  wf_rows=768
+17:20:06   layer   8: load-wait 0.68s compute 0.13s  wf_rows=6912
+17:20:13   layer  16: load-wait 0.68s compute 0.17s  wf_rows=13056
+17:20:20   layer  24: load-wait 0.87s compute 0.22s  wf_rows=19200
+17:20:29   layer  32: load-wait 0.88s compute 0.26s  wf_rows=25344
+17:20:38   layer  40: load-wait 0.85s compute 0.31s  wf_rows=31488
+17:20:47   layer  47: load-wait 0.73s compute 0.34s  wf_rows=36864
+17:20:48   pass done: 512 prefill rows (T=29), 36864 spawn rows, 48.3s (metrics 1.4s)
+17:20:50 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:20:50 Δclean +4.30 Δcorrupt -4.29 drop +8.59; {"layer_validation_argmax": 41, "layer_validation_max": 1.858, "layer_validation_top5": [[41, 1.858], [43, 1.438], [39, 1.228], [44, 0.812], [38, 0.772]], "attn_layer_validation_argmax": 38, "attn_layer_validation_max": 0.238, "attn_layer_validation_top5": [[38, 0.238], [40, 0.228], [41, 0.196], [43, 0.195], [23, 0.114]], "block_validation_argmax": 41, "block_validation_max": 2.018, "block_validation_top5": [[41, 2.018], [43, 1.598], [39, 1.279], [38, 0.962], [40, 0.832]]}
+17:20:52 === heads_top3 sweep done in 55s
+17:20:52 === e3_e2a/qwen3 heads_r0 sweep
+17:20:52 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r0: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:20:54 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:20:55   layer   0: load-wait 0.67s compute 0.09s  wf_rows=768
+17:21:02   layer   8: load-wait 0.87s compute 0.13s  wf_rows=6912
+17:21:10   layer  16: load-wait 0.88s compute 0.17s  wf_rows=13056
+17:21:18   layer  24: load-wait 0.88s compute 0.22s  wf_rows=19200
+17:21:28   layer  32: load-wait 0.94s compute 0.26s  wf_rows=25344
+17:21:37   layer  40: load-wait 0.83s compute 0.30s  wf_rows=31488
+17:21:47   layer  47: load-wait 1.10s compute 0.35s  wf_rows=36864
+17:21:48   pass done: 512 prefill rows (T=29), 36864 spawn rows, 54.3s (metrics 1.4s)
+17:21:50 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:21:50 Δclean +4.25 Δcorrupt -4.24 drop +8.49; {"layer_validation_argmax": 41, "layer_validation_max": 1.806, "layer_validation_top5": [[41, 1.806], [43, 1.436], [39, 1.25], [44, 0.784], [38, 0.731]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.286, "attn_layer_validation_top5": [[42, 0.286], [38, 0.223], [40, 0.183], [39, 0.167], [43, 0.158]], "block_validation_argmax": 41, "block_validation_max": 1.901, "block_validation_top5": [[41, 1.901], [43, 1.555], [39, 1.431], [38, 0.919], [42, 0.909]]}
+17:21:52 === heads_r0 sweep done in 59s
+17:21:52 === e3_e2a/qwen3 heads_r1 sweep
+17:21:52 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r1: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:21:53 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:21:53   layer   0: load-wait 0.60s compute 0.09s  wf_rows=768
+17:22:00   layer   8: load-wait 0.75s compute 0.13s  wf_rows=6912
+17:22:07   layer  16: load-wait 0.61s compute 0.17s  wf_rows=13056
+17:22:14   layer  24: load-wait 0.87s compute 0.22s  wf_rows=19200
+17:22:23   layer  32: load-wait 0.97s compute 0.26s  wf_rows=25344
+17:22:33   layer  40: load-wait 0.81s compute 0.30s  wf_rows=31488
+17:22:41   layer  47: load-wait 0.81s compute 0.34s  wf_rows=36864
+17:22:43   pass done: 512 prefill rows (T=29), 36864 spawn rows, 50.1s (metrics 1.4s)
+17:22:45 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:22:45 Δclean +4.37 Δcorrupt -4.36 drop +8.73; {"layer_validation_argmax": 41, "layer_validation_max": 1.838, "layer_validation_top5": [[41, 1.838], [43, 1.503], [39, 1.292], [44, 0.779], [38, 0.734]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.587, "attn_layer_validation_top5": [[42, 0.587], [38, 0.244], [40, 0.201], [39, 0.169], [43, 0.159]], "block_validation_argmax": 41, "block_validation_max": 1.931, "block_validation_top5": [[41, 1.931], [43, 1.628], [39, 1.48], [42, 1.243], [38, 0.946]]}
+17:22:47 === heads_r1 sweep done in 55s
+17:22:47 === e3_e2a/qwen3 heads_r2 sweep
+17:22:47 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r2: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:22:48 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:22:49   layer   0: load-wait 0.70s compute 0.09s  wf_rows=768
+17:22:56   layer   8: load-wait 0.82s compute 0.13s  wf_rows=6912
+17:23:03   layer  16: load-wait 0.80s compute 0.17s  wf_rows=13056
+17:23:11   layer  24: load-wait 0.86s compute 0.22s  wf_rows=19200
+17:23:21   layer  32: load-wait 0.97s compute 0.26s  wf_rows=25344
+17:23:30   layer  40: load-wait 0.84s compute 0.30s  wf_rows=31488
+17:23:40   layer  47: load-wait 1.58s compute 0.34s  wf_rows=36864
+17:23:41   pass done: 512 prefill rows (T=29), 36864 spawn rows, 53.0s (metrics 1.4s)
+17:23:44 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:23:44 Δclean +4.20 Δcorrupt -4.19 drop +8.39; {"layer_validation_argmax": 41, "layer_validation_max": 1.803, "layer_validation_top5": [[41, 1.803], [43, 1.404], [39, 1.306], [44, 0.783], [38, 0.721]], "attn_layer_validation_argmax": 38, "attn_layer_validation_max": 0.227, "attn_layer_validation_top5": [[38, 0.227], [42, 0.226], [39, 0.178], [40, 0.174], [43, 0.161]], "block_validation_argmax": 41, "block_validation_max": 1.913, "block_validation_top5": [[41, 1.913], [43, 1.517], [39, 1.497], [38, 0.917], [42, 0.833]]}
+17:23:46 === heads_r2 sweep done in 59s
+17:23:46 === e3_e2a/qwen3 experts_top3 sweep
+17:23:46 qwen3 -> p6_causal_e3_e2a_qwen3/experts_top3: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:23:47 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:23:47   layer   0: load-wait 0.55s compute 0.09s  wf_rows=768
+17:23:53   layer   8: load-wait 0.74s compute 0.13s  wf_rows=6912
+17:24:00   layer  16: load-wait 0.63s compute 0.17s  wf_rows=13056
+17:24:08   layer  24: load-wait 0.86s compute 0.22s  wf_rows=19200
+17:24:17   layer  32: load-wait 0.86s compute 0.26s  wf_rows=25344
+17:24:26   layer  40: load-wait 0.74s compute 0.30s  wf_rows=31488
+17:24:35   layer  47: load-wait 0.91s compute 0.34s  wf_rows=36864
+17:24:36   pass done: 512 prefill rows (T=29), 36864 spawn rows, 49.5s (metrics 1.4s)
+17:24:39 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:24:39 Δclean +3.86 Δcorrupt -3.86 drop +7.72; {"layer_validation_argmax": 39, "layer_validation_max": 1.276, "layer_validation_top5": [[39, 1.276], [41, 1.021], [44, 0.854], [43, 0.82], [42, 0.73]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.286, "attn_layer_validation_top5": [[42, 0.286], [38, 0.258], [40, 0.176], [39, 0.155], [41, 0.15]], "block_validation_argmax": 39, "block_validation_max": 1.424, "block_validation_top5": [[39, 1.424], [41, 1.143], [42, 0.997], [38, 0.956], [43, 0.942]]}
+17:24:41 === experts_top3 sweep done in 55s
+17:24:41 === e3_e2a/qwen3 experts_r0 sweep
+17:24:41 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r0: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:24:42 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:24:43   layer   0: load-wait 0.74s compute 0.09s  wf_rows=768
+17:24:49   layer   8: load-wait 0.73s compute 0.13s  wf_rows=6912
+17:24:56   layer  16: load-wait 0.70s compute 0.17s  wf_rows=13056
+17:25:04   layer  24: load-wait 1.01s compute 0.22s  wf_rows=19200
+17:25:14   layer  32: load-wait 0.97s compute 0.26s  wf_rows=25344
+17:25:24   layer  40: load-wait 0.80s compute 0.30s  wf_rows=31488
+17:25:33   layer  47: load-wait 0.99s compute 0.34s  wf_rows=36864
+17:25:34   pass done: 512 prefill rows (T=29), 36864 spawn rows, 52.3s (metrics 1.4s)
+17:25:37 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:25:37 Δclean +4.29 Δcorrupt -4.28 drop +8.57; {"layer_validation_argmax": 41, "layer_validation_max": 1.847, "layer_validation_top5": [[41, 1.847], [43, 1.42], [39, 1.26], [44, 0.811], [38, 0.745]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.291, "attn_layer_validation_top5": [[42, 0.291], [38, 0.239], [43, 0.185], [39, 0.177], [40, 0.173]], "block_validation_argmax": 41, "block_validation_max": 1.956, "block_validation_top5": [[41, 1.956], [43, 1.562], [39, 1.451], [38, 0.934], [42, 0.908]]}
+17:25:39 === experts_r0 sweep done in 58s
+17:25:39 === e3_e2a/qwen3 experts_r1 sweep
+17:25:39 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r1: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:25:40 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:25:41   layer   0: load-wait 0.68s compute 0.09s  wf_rows=768
+17:25:48   layer   8: load-wait 0.79s compute 0.13s  wf_rows=6912
+17:25:54   layer  16: load-wait 0.64s compute 0.17s  wf_rows=13056
+17:26:03   layer  24: load-wait 1.00s compute 0.22s  wf_rows=19200
+17:26:13   layer  32: load-wait 0.97s compute 0.26s  wf_rows=25344
+17:26:23   layer  40: load-wait 1.20s compute 0.30s  wf_rows=31488
+17:26:31   layer  47: load-wait 1.01s compute 0.34s  wf_rows=36864
+17:26:33   pass done: 512 prefill rows (T=29), 36864 spawn rows, 52.5s (metrics 1.4s)
+17:26:33 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:26:33 Δclean +4.24 Δcorrupt -4.24 drop +8.48; {"layer_validation_argmax": 41, "layer_validation_max": 1.81, "layer_validation_top5": [[41, 1.81], [43, 1.435], [39, 1.258], [44, 0.79], [38, 0.733]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.302, "attn_layer_validation_top5": [[42, 0.302], [38, 0.248], [40, 0.176], [39, 0.174], [43, 0.169]], "block_validation_argmax": 41, "block_validation_max": 1.913, "block_validation_top5": [[41, 1.913], [43, 1.575], [39, 1.442], [38, 0.933], [42, 0.93]]}
+17:26:35 === experts_r1 sweep done in 57s
+17:26:35 === e3_e2a/qwen3 experts_r2 sweep
+17:26:36 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r2: 256 directed cases (128 pairs), families {'main': {'validation': 256}}, kinds ['layer', 'attn_layer', 'block'], 48 layers, 1 passes (36864 spawn rows), T max 29
+17:26:36 pass 1/1: layers 0..47, 512 prefill rows, 36864 spawn rows
+17:26:37   layer   0: load-wait 0.56s compute 0.09s  wf_rows=768
+17:26:42   layer   8: load-wait 0.67s compute 0.13s  wf_rows=6912
+17:26:49   layer  16: load-wait 0.64s compute 0.17s  wf_rows=13056
+17:26:58   layer  24: load-wait 1.13s compute 0.22s  wf_rows=19200
+17:27:07   layer  32: load-wait 0.97s compute 0.26s  wf_rows=25344
+17:27:17   layer  40: load-wait 0.92s compute 0.30s  wf_rows=31488
+17:27:26   layer  47: load-wait 0.51s compute 0.34s  wf_rows=36864
+17:27:27   pass done: 512 prefill rows (T=29), 36864 spawn rows, 50.7s (metrics 1.4s)
+17:27:28 family main: layer disc LNone; attn_layer disc LNone; block disc LNone
+17:27:28 Δclean +4.26 Δcorrupt -4.25 drop +8.51; {"layer_validation_argmax": 41, "layer_validation_max": 1.812, "layer_validation_top5": [[41, 1.812], [43, 1.432], [39, 1.264], [44, 0.795], [38, 0.745]], "attn_layer_validation_argmax": 42, "attn_layer_validation_max": 0.308, "attn_layer_validation_top5": [[42, 0.308], [38, 0.254], [40, 0.192], [39, 0.177], [43, 0.166]], "block_validation_argmax": 41, "block_validation_max": 1.924, "block_validation_top5": [[41, 1.924], [43, 1.568], [39, 1.445], [42, 0.937], [38, 0.936]]}
+17:27:30 === experts_r2 sweep done in 55s
+2026-10-17T17:27:35Z END   p6an-causal-e3_e2a-qwen3 rc=0 (529s)
+2026-10-17T17:48:18Z START p6an-causal-e3_e2a-qwen3 (waited 851s, low priority): python scripts/ext14_causal_run.py e3_e2a qwen3 BATCH joint
+17:48:20 === e3_e2a/qwen3 none joint
+17:48:26 qwen3 -> p6_causal_e3_e2a_qwen3/none: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:48:27 pass 1/1: 512 prefill rows, 1536 multi rows
+17:48:32   layer   0: load-wait 4.62s compute 0.71s  wf_rows=1536
+17:48:41   layer   8: load-wait 1.08s compute 0.11s  wf_rows=1536
+17:48:51   layer  16: load-wait 1.15s compute 0.10s  wf_rows=1536
+17:49:01   layer  24: load-wait 1.15s compute 0.10s  wf_rows=1536
+17:49:11   layer  32: load-wait 1.15s compute 0.10s  wf_rows=1536
+17:49:21   layer  40: load-wait 1.15s compute 0.09s  wf_rows=1536
+17:49:30   layer  47: load-wait 0.85s compute 0.09s  wf_rows=1536
+17:49:30   pass done: 512 prefill rows (T=29), 1536 spawn rows, 63.2s
+17:49:30 denoise  all_attn  all     : effect/drop +0.997 (mean effect +8.49, drop 8.51)
+17:49:30 denoise  all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:49:30 denoise  all_moe   all     : effect/drop +0.823 (mean effect +7.01, drop 8.51)
+17:49:30 noise    all_attn  all     : effect/drop +0.997 (mean effect +8.48, drop 8.51)
+17:49:30 noise    all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:49:30 noise    all_moe   all     : effect/drop +0.823 (mean effect +7.00, drop 8.51)
+17:49:32 === none joint done in 72s
+17:49:32 === e3_e2a/qwen3 heads_top3 joint
+17:49:32 qwen3 -> p6_causal_e3_e2a_qwen3/heads_top3: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:49:33 pass 1/1: 512 prefill rows, 1536 multi rows
+17:49:34   layer   0: load-wait 0.73s compute 0.09s  wf_rows=1536
+17:49:43   layer   8: load-wait 0.68s compute 0.10s  wf_rows=1536
+17:49:49   layer  16: load-wait 0.56s compute 0.09s  wf_rows=1536
+17:49:56   layer  24: load-wait 1.15s compute 0.10s  wf_rows=1536
+17:50:06   layer  32: load-wait 1.14s compute 0.09s  wf_rows=1536
+17:50:17   layer  40: load-wait 0.67s compute 0.09s  wf_rows=1536
+17:50:26   layer  47: load-wait 2.15s compute 0.10s  wf_rows=1536
+17:50:26   pass done: 512 prefill rows (T=29), 1536 spawn rows, 53.5s
+17:50:27 denoise  all_attn  all     : effect/drop +0.996 (mean effect +8.54, drop 8.57)
+17:50:27 denoise  all_block all     : effect/drop +1.000 (mean effect +8.57, drop 8.57)
+17:50:27 denoise  all_moe   all     : effect/drop +0.832 (mean effect +7.13, drop 8.57)
+17:50:27 noise    all_attn  all     : effect/drop +0.995 (mean effect +8.53, drop 8.57)
+17:50:27 noise    all_block all     : effect/drop +1.000 (mean effect +8.57, drop 8.57)
+17:50:27 noise    all_moe   all     : effect/drop +0.831 (mean effect +7.12, drop 8.57)
+17:50:29 === heads_top3 joint done in 57s
+17:50:29 === e3_e2a/qwen3 heads_r0 joint
+17:50:29 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r0: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:50:29 pass 1/1: 512 prefill rows, 1536 multi rows
+17:50:30   layer   0: load-wait 0.60s compute 0.10s  wf_rows=1536
+17:50:35   layer   8: load-wait 0.99s compute 0.10s  wf_rows=1536
+17:50:44   layer  16: load-wait 1.02s compute 0.10s  wf_rows=1536
+17:50:51   layer  24: load-wait 0.93s compute 0.10s  wf_rows=1536
+17:51:01   layer  32: load-wait 1.14s compute 0.09s  wf_rows=1536
+17:51:11   layer  40: load-wait 1.19s compute 0.10s  wf_rows=1536
+17:51:19   layer  47: load-wait 1.16s compute 0.09s  wf_rows=1536
+17:51:19   pass done: 512 prefill rows (T=29), 1536 spawn rows, 50.0s
+17:51:20 denoise  all_attn  all     : effect/drop +0.996 (mean effect +8.43, drop 8.47)
+17:51:20 denoise  all_block all     : effect/drop +1.000 (mean effect +8.47, drop 8.47)
+17:51:20 denoise  all_moe   all     : effect/drop +0.824 (mean effect +6.97, drop 8.47)
+17:51:20 noise    all_attn  all     : effect/drop +0.996 (mean effect +8.43, drop 8.47)
+17:51:20 noise    all_block all     : effect/drop +1.000 (mean effect +8.47, drop 8.47)
+17:51:20 noise    all_moe   all     : effect/drop +0.822 (mean effect +6.96, drop 8.47)
+17:51:22 === heads_r0 joint done in 53s
+17:51:22 === e3_e2a/qwen3 heads_r1 joint
+17:51:23 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r1: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:51:23 pass 1/1: 512 prefill rows, 1536 multi rows
+17:51:24   layer   0: load-wait 0.64s compute 0.10s  wf_rows=1536
+17:51:30   layer   8: load-wait 0.99s compute 0.10s  wf_rows=1536
+17:51:39   layer  16: load-wait 1.00s compute 0.10s  wf_rows=1536
+17:51:48   layer  24: load-wait 1.10s compute 0.10s  wf_rows=1536
+17:51:58   layer  32: load-wait 1.15s compute 0.09s  wf_rows=1536
+17:52:08   layer  40: load-wait 1.24s compute 0.11s  wf_rows=1536
+17:52:16   layer  47: load-wait 1.21s compute 0.09s  wf_rows=1536
+17:52:16   pass done: 512 prefill rows (T=29), 1536 spawn rows, 53.1s
+17:52:17 denoise  all_attn  all     : effect/drop +0.996 (mean effect +8.69, drop 8.73)
+17:52:17 denoise  all_block all     : effect/drop +1.000 (mean effect +8.73, drop 8.73)
+17:52:17 denoise  all_moe   all     : effect/drop +0.826 (mean effect +7.21, drop 8.73)
+17:52:17 noise    all_attn  all     : effect/drop +0.995 (mean effect +8.68, drop 8.73)
+17:52:17 noise    all_block all     : effect/drop +1.000 (mean effect +8.73, drop 8.73)
+17:52:17 noise    all_moe   all     : effect/drop +0.825 (mean effect +7.20, drop 8.73)
+17:52:19 === heads_r1 joint done in 57s
+17:52:19 === e3_e2a/qwen3 heads_r2 joint
+17:52:20 qwen3 -> p6_causal_e3_e2a_qwen3/heads_r2: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:52:20 pass 1/1: 512 prefill rows, 1536 multi rows
+17:52:21   layer   0: load-wait 0.64s compute 0.09s  wf_rows=1536
+17:52:29   layer   8: load-wait 0.69s compute 0.09s  wf_rows=1536
+17:52:36   layer  16: load-wait 0.85s compute 0.09s  wf_rows=1536
+17:52:45   layer  24: load-wait 1.08s compute 0.10s  wf_rows=1536
+17:52:55   layer  32: load-wait 1.15s compute 0.10s  wf_rows=1536
+17:53:05   layer  40: load-wait 1.00s compute 0.10s  wf_rows=1536
+17:53:14   layer  47: load-wait 1.48s compute 0.10s  wf_rows=1536
+17:53:14   pass done: 512 prefill rows (T=29), 1536 spawn rows, 53.1s
+17:53:14 denoise  all_attn  all     : effect/drop +0.996 (mean effect +8.34, drop 8.37)
+17:53:14 denoise  all_block all     : effect/drop +1.000 (mean effect +8.37, drop 8.37)
+17:53:14 denoise  all_moe   all     : effect/drop +0.827 (mean effect +6.92, drop 8.37)
+17:53:14 noise    all_attn  all     : effect/drop +0.995 (mean effect +8.33, drop 8.37)
+17:53:14 noise    all_block all     : effect/drop +1.000 (mean effect +8.37, drop 8.37)
+17:53:14 noise    all_moe   all     : effect/drop +0.826 (mean effect +6.92, drop 8.37)
+17:53:16 === heads_r2 joint done in 57s
+17:53:16 === e3_e2a/qwen3 experts_top3 joint
+17:53:16 qwen3 -> p6_causal_e3_e2a_qwen3/experts_top3: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:53:17 pass 1/1: 512 prefill rows, 1536 multi rows
+17:53:18   layer   0: load-wait 0.58s compute 0.10s  wf_rows=1536
+17:53:24   layer   8: load-wait 0.66s compute 0.10s  wf_rows=1536
+17:53:30   layer  16: load-wait 0.75s compute 0.10s  wf_rows=1536
+17:53:39   layer  24: load-wait 1.10s compute 0.10s  wf_rows=1536
+17:53:49   layer  32: load-wait 1.28s compute 0.11s  wf_rows=1536
+17:53:58   layer  40: load-wait 1.22s compute 0.09s  wf_rows=1536
+17:54:07   layer  47: load-wait 1.17s compute 0.10s  wf_rows=1536
+17:54:07   pass done: 512 prefill rows (T=29), 1536 spawn rows, 49.7s
+17:54:07 denoise  all_attn  all     : effect/drop +0.995 (mean effect +7.66, drop 7.69)
+17:54:07 denoise  all_block all     : effect/drop +1.000 (mean effect +7.69, drop 7.69)
+17:54:07 denoise  all_moe   all     : effect/drop +0.813 (mean effect +6.25, drop 7.69)
+17:54:07 noise    all_attn  all     : effect/drop +0.999 (mean effect +7.69, drop 7.69)
+17:54:07 noise    all_block all     : effect/drop +1.000 (mean effect +7.69, drop 7.69)
+17:54:07 noise    all_moe   all     : effect/drop +0.812 (mean effect +6.25, drop 7.69)
+17:54:09 === experts_top3 joint done in 54s
+17:54:09 === e3_e2a/qwen3 experts_r0 joint
+17:54:10 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r0: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:54:11 pass 1/1: 512 prefill rows, 1536 multi rows
+17:54:12   layer   0: load-wait 0.67s compute 0.09s  wf_rows=1536
+17:54:18   layer   8: load-wait 0.90s compute 0.10s  wf_rows=1536
+17:54:26   layer  16: load-wait 0.74s compute 0.11s  wf_rows=1536
+17:54:33   layer  24: load-wait 1.12s compute 0.10s  wf_rows=1536
+17:54:43   layer  32: load-wait 1.13s compute 0.10s  wf_rows=1536
+17:54:53   layer  40: load-wait 1.09s compute 0.09s  wf_rows=1536
+17:55:02   layer  47: load-wait 1.45s compute 0.10s  wf_rows=1536
+17:55:02   pass done: 512 prefill rows (T=29), 1536 spawn rows, 50.8s
+17:55:02 denoise  all_attn  all     : effect/drop +0.997 (mean effect +8.56, drop 8.59)
+17:55:02 denoise  all_block all     : effect/drop +1.000 (mean effect +8.59, drop 8.59)
+17:55:02 denoise  all_moe   all     : effect/drop +0.823 (mean effect +7.07, drop 8.59)
+17:55:02 noise    all_attn  all     : effect/drop +0.994 (mean effect +8.54, drop 8.59)
+17:55:02 noise    all_block all     : effect/drop +1.000 (mean effect +8.59, drop 8.59)
+17:55:02 noise    all_moe   all     : effect/drop +0.823 (mean effect +7.07, drop 8.59)
+17:55:04 === experts_r0 joint done in 55s
+17:55:04 === e3_e2a/qwen3 experts_r1 joint
+17:55:05 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r1: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:55:06 pass 1/1: 512 prefill rows, 1536 multi rows
+17:55:06   layer   0: load-wait 0.61s compute 0.09s  wf_rows=1536
+17:55:13   layer   8: load-wait 0.75s compute 0.10s  wf_rows=1536
+17:55:20   layer  16: load-wait 0.76s compute 0.10s  wf_rows=1536
+17:55:29   layer  24: load-wait 1.07s compute 0.11s  wf_rows=1536
+17:55:38   layer  32: load-wait 1.07s compute 0.10s  wf_rows=1536
+17:55:48   layer  40: load-wait 0.91s compute 0.10s  wf_rows=1536
+17:55:57   layer  47: load-wait 1.14s compute 0.09s  wf_rows=1536
+17:55:57   pass done: 512 prefill rows (T=29), 1536 spawn rows, 51.2s
+17:55:57 denoise  all_attn  all     : effect/drop +0.994 (mean effect +8.46, drop 8.51)
+17:55:57 denoise  all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:55:57 denoise  all_moe   all     : effect/drop +0.821 (mean effect +6.99, drop 8.51)
+17:55:57 noise    all_attn  all     : effect/drop +0.992 (mean effect +8.45, drop 8.51)
+17:55:57 noise    all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:55:57 noise    all_moe   all     : effect/drop +0.820 (mean effect +6.98, drop 8.51)
+17:55:59 === experts_r1 joint done in 55s
+17:55:59 === e3_e2a/qwen3 experts_r2 joint
+17:55:59 qwen3 -> p6_causal_e3_e2a_qwen3/experts_r2: 256 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+17:56:01 pass 1/1: 512 prefill rows, 1536 multi rows
+17:56:01   layer   0: load-wait 0.60s compute 0.09s  wf_rows=1536
+17:56:07   layer   8: load-wait 0.76s compute 0.10s  wf_rows=1536
+17:56:14   layer  16: load-wait 0.85s compute 0.10s  wf_rows=1536
+17:56:23   layer  24: load-wait 1.08s compute 0.10s  wf_rows=1536
+17:56:32   layer  32: load-wait 1.14s compute 0.10s  wf_rows=1536
+17:56:42   layer  40: load-wait 0.94s compute 0.10s  wf_rows=1536
+17:56:51   layer  47: load-wait 0.70s compute 0.09s  wf_rows=1536
+17:56:51   pass done: 512 prefill rows (T=29), 1536 spawn rows, 50.4s
+17:56:51 denoise  all_attn  all     : effect/drop +0.995 (mean effect +8.47, drop 8.51)
+17:56:51 denoise  all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:56:51 denoise  all_moe   all     : effect/drop +0.821 (mean effect +6.99, drop 8.51)
+17:56:51 noise    all_attn  all     : effect/drop +0.994 (mean effect +8.47, drop 8.51)
+17:56:51 noise    all_block all     : effect/drop +1.000 (mean effect +8.51, drop 8.51)
+17:56:51 noise    all_moe   all     : effect/drop +0.821 (mean effect +6.99, drop 8.51)
+17:56:53 === experts_r2 joint done in 54s
+2026-10-17T17:56:59Z END   p6an-causal-e3_e2a-qwen3 rc=0 (521s)

@@ -1,0 +1,10 @@
+**Tier 2 at E1 (Phase 6) next to E3 (the Phase-5 dir_f1 / dir_opt runs on the Phase-5 item set; not paired)**
+
+| Model | Direction | Level | Selected expert | Spec | All-MoE ceiling | k80 greedy / random | Mixed r(20) | Heads in first 10 | KO F selected | Writer D/T |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen3-30B-A3B | attribute → entity | E1 (Phase 6) | L37E032 (A) | +0.21 [+0.16, +0.27] | -0.17 [-0.21, -0.14] | own-max k80 4 / never | 0.93 [0.92, 0.95] | 9.6 | +0.065 [+0.054, +0.075] | -0.01 [-0.03, 0.01] |
+| Qwen3-30B-A3B | attribute → entity | E3 (Phase 5 dir_f1) | L44E116 (A) | +0.17 [+0.11, +0.24] | 0.10 [0.03, 0.16] | 1 / 384 | 0.87 [0.84, 0.89] | 8.2 | +0.021 [+0.007, +0.036] | 2.25 [1.93, 2.63] |
+| Qwen3-30B-A3B | entity → attribute | E3 (Phase 5 dir_opt) | L41E117 (A) | +0.46 [+0.29, +0.66] | 0.81 [0.80, 0.83] | 11 / 320 | 0.88 [0.86, 0.92] | 3.6 | +0.025 [+0.011, +0.041] | 0.99 [0.91, 1.08] |
+| Mixtral-8x7B | attribute → entity | E1 (Phase 6) | L17E007 (A) | +0.21 [+0.13, +0.28] | 0.33 [0.28, 0.39] | 2 / 48 | 1.17 [1.11, 1.25] | 7.1 | -0.008 [-0.028, +0.011] | 0.04 [-0.00, 0.10] |
+| Mixtral-8x7B | attribute → entity | E3 (Phase 5 dir_f1) | L20E001 (A) | +0.11 [+0.02, +0.20] | 0.41 [0.36, 0.46] | 3 / 64 | 1.00 [0.97, 1.04] | 5.9 | -0.005 [-0.021, +0.011] | 0.84 [0.73, 0.99] |
+| Mixtral-8x7B | entity → attribute | E3 (Phase 5 dir_opt) | L20E000 (A) | +0.90 [+0.79, +1.02] | 0.75 [0.73, 0.78] | 8 / 48 | 0.89 [0.88, 0.90] | 2.6 | +0.025 [+0.016, +0.034] | 0.74 [0.67, 0.81] |

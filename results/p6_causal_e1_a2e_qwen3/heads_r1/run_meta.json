@@ -1,0 +1,161 @@
+{
+ "sweep": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "pairs": "/home/ubuntu/MOE/data/dial/pairs_e1_a2e_qwen3.parquet",
+  "case_sets": "/home/ubuntu/MOE/data/dial/case_sets_e1_a2e_qwen3.json",
+  "families": {
+   "main": {
+    "validation": 256
+   }
+  },
+  "kinds": [
+   "layer",
+   "attn_layer",
+   "block"
+  ],
+  "n_cases": 256,
+  "max_rows": 60000,
+  "layer_chunks": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ]
+  ],
+  "metrics": true,
+  "agent": "p6-analysis",
+  "protocol": "STR pairs: clean row + corrupted row (other prompt of the pair) per directed case; spawns parent = corrupted, clean = clean",
+  "command": "python ext7_wino_sweep.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_qwen3.json --out p6_causal_e1_a2e_qwen3/heads_r1 --agent p6-analysis --splits validation --max-rows 60000",
+  "created_utc": "2026-10-17T03:17:27Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T03:18:23Z",
+  "pass_times_s": [
+   54.665772438049316
+  ],
+  "n_rows": 37376
+ },
+ "causal": {
+  "cell": "e1_a2e",
+  "proto": "qwen3",
+  "cond": "heads_r1",
+  "mask": {
+   "head_mask": [
+    [
+     42,
+     25
+    ],
+    [
+     39,
+     0
+    ],
+    [
+     43,
+     28
+    ]
+   ],
+   "head_mask_mode": "zero"
+  },
+  "engine_prefill_class": "MaskedPrefillSpec"
+ },
+ "joint": {
+  "model": "qwen3",
+  "repo": "Qwen/Qwen3-30B-A3B-Base",
+  "families": [
+   "main"
+  ],
+  "n_cases": 256,
+  "spans": {
+   "all": [
+    0,
+    47
+   ]
+  },
+  "variants": [
+   [
+    "denoise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "denoise",
+    "all_block",
+    "all"
+   ],
+   [
+    "noise",
+    "all_moe",
+    "all"
+   ],
+   [
+    "noise",
+    "all_attn",
+    "all"
+   ],
+   [
+    "noise",
+    "all_block",
+    "all"
+   ]
+  ],
+  "agent": "p6-analysis",
+  "command": "python ext7_wino_joint.py --model qwen3 --pairs /home/ubuntu/MOE/data/dial/pairs_e1_a2e_qwen3.parquet --case-sets /home/ubuntu/MOE/data/dial/case_sets_e1_a2e_qwen3.json --out p6_causal_e1_a2e_qwen3/heads_r1 --agent p6-analysis --splits validation --families main --max-rows 30000",
+  "created_utc": "2026-10-17T03:49:27Z",
+  "complete": true,
+  "completed_utc": "2026-10-17T03:50:22Z",
+  "pass_times_s": [
+   54.21420931816101
+  ],
+  "n_rows": 1536
+ }
+}

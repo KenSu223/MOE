@@ -1,0 +1,9 @@
+2026-10-17T04:13:10Z START ext14-e3p3_a2e-mistral7b_bos-direct (waited 2133s): python -m moetrace.ext7_controls direct --model mistral7b --pairs data/dial/pairs_e3p3_a2e_mistral7b_bos.parquet --case-sets data/dial/case_sets_e3p3_a2e_mistral7b_bos.json --out p6_e3p3_a2e_mistral7b_bos --splits discovery,validation
+04:13:14   layer   0: load-wait 0.74s compute 0.36s  wf_rows=0
+04:13:16   layer   8: load-wait 0.42s compute 0.08s  wf_rows=0
+04:13:19   layer  16: load-wait 0.26s compute 0.08s  wf_rows=0
+04:13:23   layer  24: load-wait 0.35s compute 0.08s  wf_rows=0
+04:13:26   layer  31: load-wait 0.35s compute 0.08s  wf_rows=0
+04:13:26   pass done: 212 prefill rows (T=43), 0 spawn rows, 13.2s
+04:13:26 p6_e3p3_a2e_mistral7b_bos: 212 directed cases; A_direct 0.921, M_direct 0.079, DLA attn share 0.918; fp32 vs engine Delta clean max |diff| 0.060
+2026-10-17T04:13:27Z END   ext14-e3p3_a2e-mistral7b_bos-direct rc=0 (17s)

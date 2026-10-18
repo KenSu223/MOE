@@ -1,0 +1,17 @@
+2026-10-17T07:01:20Z START ext14-e1_e2a-qwen3_4b-joint (waited 1627s): python scripts/ext7_wino_joint.py --model qwen3_4b --pairs data/dial/pairs_e1_e2a_qwen3_4b.parquet --case-sets data/dial/case_sets_e1_e2a_qwen3_4b.json --out p6_e1_e2a_qwen3_4b --agent p6-data --families main --max-rows 30000
+07:01:20 qwen3_4b -> p6_e1_e2a_qwen3_4b: 476 directed cases, families ['main'], 6 multi rows per case (1 layer spans), 1 passes
+07:01:22 pass 1/1: 952 prefill rows, 2856 multi rows
+07:01:23   layer   0: load-wait 0.37s compute 0.39s  wf_rows=2856
+07:01:24   layer   8: load-wait 0.04s compute 0.12s  wf_rows=2856
+07:01:26   layer  16: load-wait 0.08s compute 0.12s  wf_rows=2856
+07:01:27   layer  24: load-wait 0.09s compute 0.12s  wf_rows=2856
+07:01:29   layer  32: load-wait 0.04s compute 0.12s  wf_rows=2856
+07:01:29   layer  35: load-wait 0.04s compute 0.12s  wf_rows=2856
+07:01:29   pass done: 952 prefill rows (T=20), 2856 spawn rows, 7.0s
+07:01:30 denoise  all_attn  all     : effect/drop +1.000 (mean effect +5.26, drop 5.26)
+07:01:30 denoise  all_block all     : effect/drop +1.000 (mean effect +5.26, drop 5.26)
+07:01:30 denoise  all_moe   all     : effect/drop +0.345 (mean effect +1.81, drop 5.26)
+07:01:30 noise    all_attn  all     : effect/drop +1.000 (mean effect +5.26, drop 5.26)
+07:01:30 noise    all_block all     : effect/drop +1.000 (mean effect +5.26, drop 5.26)
+07:01:30 noise    all_moe   all     : effect/drop +0.345 (mean effect +1.81, drop 5.26)
+2026-10-17T07:01:31Z END   ext14-e1_e2a-qwen3_4b-joint rc=0 (11s)

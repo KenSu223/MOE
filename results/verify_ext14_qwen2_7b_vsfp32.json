@@ -1,0 +1,99 @@
+{
+ "model": "qwen2_7b",
+ "path": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen2-7B/snapshots/453ed1575b739b5b03ce3758b23befdb0967f40e",
+ "family": "qwen2",
+ "dtype": "bf16",
+ "n_layers": 28,
+ "n_experts": 1,
+ "top_k": 1,
+ "shared_inter": 0,
+ "engine_file": "/home/ubuntu/MOE/moetrace/engine.py",
+ "started": "2026-10-17T04:02:29Z",
+ "hf_offload": false,
+ "light_plan": false,
+ "units": {
+  "pairs_checked": 3,
+  "pairs_tokenizer_identical": 3,
+  "file": "/home/ubuntu/MOE/data/wino_str/pairs_train_xl_qwen3.parquet",
+  "kind": "wino_train_xl_str",
+  "n": 6
+ },
+ "router_fp32_flag": false,
+ "vs_fp32": {
+  "protocol": {
+   "model_key": "qwen2_7b",
+   "dtype": "bfloat16",
+   "router_fp32": false
+  },
+  "pass_s": {
+   "proto": 3.9685235023498535,
+   "fp32": 6.575781583786011
+  },
+  "peak_mem_gb": {
+   "proto": 3.079697608947754,
+   "fp32": 5.838356971740723
+  },
+  "rescue_corr_all": 0.9480031284725734,
+  "rescue_absdiff": {
+   "n": 354,
+   "maxabs": 1.436075210571289,
+   "meanabs": 0.1898878819524905,
+   "frac_exact": 0.0
+  },
+  "prefill_delta_absdiff": {
+   "n": 12,
+   "maxabs": 1.4075021743774414,
+   "meanabs": 0.42642688751220703,
+   "frac_exact": 0.0
+  },
+  "by_kind": {
+   "attn_layer": {
+    "n": 168,
+    "maxabs": 0.8425216674804688,
+    "meanabs": 0.14030766487121582,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9093733983519078,
+    "rescue_fp32_meanabs": 0.21838833391666412
+   },
+   "block": {
+    "n": 18,
+    "maxabs": 1.2941961288452148,
+    "meanabs": 0.334918393029107,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9489963173407587,
+    "rescue_fp32_meanabs": 0.7121021151542664
+   },
+   "layer": {
+    "n": 168,
+    "maxabs": 1.436075210571289,
+    "meanabs": 0.2239291157041277,
+    "frac_exact": 0.0,
+    "rescue_corr": 0.9584224290565235,
+    "rescue_fp32_meanabs": 0.527579128742218
+   }
+  },
+  "attn_share_mean_curve": {
+   "proto": 0.22570747137069702,
+   "fp32": 0.22691237926483154
+  },
+  "attn_share_per_unit": {
+   "proto": [
+    0.42061281204223633,
+    0.2401847541332245,
+    0.469696968793869,
+    0.3636363744735718,
+    0.18446601927280426,
+    0.17411763966083527
+   ],
+   "fp32": [
+    0.3957192897796631,
+    0.2282654494047165,
+    0.37051504850387573,
+    0.4745616614818573,
+    0.20981378853321075,
+    0.1506100445985794
+   ]
+  }
+ },
+ "total_s": 12.09508752822876
+}

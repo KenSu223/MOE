@@ -1,0 +1,20 @@
+{
+ "task": "mixtral_cf",
+ "model": "mixtral",
+ "items": [
+  "cf",
+  "mixtral",
+  "mixtral_bos_str"
+ ],
+ "experts": [
+  "L19E002",
+  "L21E001",
+  "L18E001"
+ ],
+ "n_rows": 858,
+ "n_prefill": 1071,
+ "limit": null,
+ "pass_s": 114.1,
+ "command": "scripts/ext14ci_c1_run.py mixtral_cf score",
+ "utc": "2026-10-16T23:16:01Z"
+}
