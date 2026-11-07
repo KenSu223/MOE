@@ -1,0 +1,99 @@
+{
+  "task": "nounpp",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "funnel": {
+    "raw": {
+      "train": 1920,
+      "test": 480
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 372
+    },
+    "eligible_signature": {
+      "train": 1546,
+      "test": 396
+    },
+    "other_signature": 86
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 20,
+        "case_counts": {
+          "singular_singular": 6,
+          "singular_plural": 7,
+          "plural_plural": 3,
+          "plural_singular": 4
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_singular": 4,
+          "plural_plural": 2,
+          "plural_singular": 1,
+          "singular_plural": 1
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_plural": 3,
+          "plural_singular": 2,
+          "plural_plural": 1,
+          "singular_singular": 2
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "fe9a45df7ef74d175548e155544c347fc15bf2a66c89aa9c2094d3e5c4821837",
+    "calibration": "c5a09dde0e6fa26884d8a5f885ddeb6f4c27a16d73fff77f0b1c7bfb316c2c53",
+    "validation": "1d26ee4dce0a2408d930472e77c0d5b86e47e6ffab639f309fe2efd4bb1752af",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

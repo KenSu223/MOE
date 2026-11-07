@@ -1,0 +1,93 @@
+{
+  "task": "simple",
+  "signature": [
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 90
+    },
+    "eligible_signature": {
+      "train": 413,
+      "test": 97
+    },
+    "other_signature": 0
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 76,
+        "unique_content": 76,
+        "unique_groups": 10,
+        "case_counts": {
+          "singular": 38,
+          "plural": 38
+        }
+      },
+      "calibration": {
+        "rows": 16,
+        "unique_content": 16,
+        "unique_groups": 2,
+        "case_counts": {
+          "singular": 8,
+          "plural": 8
+        }
+      },
+      "validation": {
+        "rows": 15,
+        "unique_content": 15,
+        "unique_groups": 2,
+        "case_counts": {
+          "singular": 8,
+          "plural": 7
+        }
+      },
+      "test": {
+        "rows": 24,
+        "unique_content": 24,
+        "unique_groups": 3,
+        "case_counts": {
+          "plural": 12,
+          "singular": 12
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "601df737a9a7adf89e84827c7cd18aa59a19e104db6b661e7e9b69502cd519f2",
+    "calibration": "94736258fe5316793f9a2e7a05021c6d040ff41061cefe8a8dec5462fbb22377",
+    "validation": "f376a7cb57ab28799cb3ff814d8c035e7ff1d3801a4908d4a3bb375a2978f57e",
+    "test": "f04f5d4ed8e193f432fd38651ce7d64664a6dc7ea7f1383600e17909734669a8"
+  }
+}

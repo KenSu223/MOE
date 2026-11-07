@@ -1,0 +1,134 @@
+{
+  "created_at_utc": "2026-11-07T21:36:18.472018+00:00",
+  "repository_base_commit": "b538f5978a0b0314cc9e86911c0dd071d3e3853b",
+  "test_command": "python -m pytest tests/test_relp_sva.py -q --junitxml=sva_tests.xml",
+  "test_started_at": "2026-11-07T16:33:42.597662-05:00",
+  "tests": 11,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration_seconds": 19.144,
+  "test_cases": [
+    "test_native_forward_and_actual_output_patches",
+    "test_half_rule_and_frozen_normalization_coefficients",
+    "test_verifier_detects_wrong_projection",
+    "test_full_signed_mean_and_expert_cancellation",
+    "test_random_control_preserves_layer_position_and_support",
+    "test_paired_endpoint_and_expert_identity",
+    "test_data_profiles_are_locked_and_grouped_split_is_disjoint",
+    "test_summary_uses_ratio_of_means_and_never_clips",
+    "test_calibration_counts_routing_even_for_zero_activations",
+    "test_conditional_mean_keep_all_is_original_forward",
+    "test_cli_verify_score_evaluate_and_stale_gate"
+  ],
+  "environment": {
+    "torch": "2.15.0",
+    "transformers": "5.22.2",
+    "tokenizers": "0.23.3",
+    "accelerate": "1.15.0",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "pyarrow": "26.0.1",
+    "pytest": "9.2.0"
+  },
+  "validation_scope": "CPU float32, real HF OlmoeForCausalLM with randomly initialized tiny weights; includes verify/score/evaluate CLI and all three attribution units. This is not a full checkpoint acceptance certificate.",
+  "full_checkpoint_tested": false,
+  "gpu_experiment_run": false,
+  "model_weights_downloaded": false,
+  "files_sha256": {
+    "scripts/relp_sva_prepare.py": "61104c8d4b88462b44493be1c2e978f10bd4f45f9eb5988bffe0af87e3f9794a",
+    "scripts/relp_sva_run.py": "f5e65158a14d08dda8deb0e08d59517f06e884e394af2ede82a318ed7f6bad01",
+    "scripts/relp_score_pair.py": "6f4ca466f5c43f667cbf489e38481c73098889ebf74d88b380e20fad3b2a06b4",
+    "moetrace/relp_sva.py": "803376f6c3432c16a781745e76fef390fd2945e2b1ce7c40617c5a67eec7152d",
+    "moetrace/ext14_circuit_relp.py": "d326d9d3d3459cb40e048eef333aa8aeb84bd4afe19e829df56d89cce206ca9f",
+    "moetrace/models.py": "8d7e4bffa0542e0f53a05727a0aee1dd5f47e7eb3db9aaaac44c59b3ba9531f3",
+    "moetrace/arch.py": "c053a46130513f4c50afcce9d9b13ffc292c5c3b5b3c676939fe1cba834c09a2",
+    "tests/test_relp_sva.py": "6425c9c0a9ebf9bf51f265cbfc843bcfa25dc743f5aa36b57238a954e0229de8",
+    "requirements-relp-sva.txt": "7be045297427a0d45d323039f956d3cfa35ec5212eead93b377eee2731c42204",
+    "data/relp_sva/sources.lock.json": "0de88997a2a50af3b959b7dc96c37ca18b5b1078fbf12c25686cd5dcc6380353",
+    "data/relp_sva/download_receipt.json": "aacb29c6885d37f419b78701fd726d93419f53e77c422f361c479c997455bcc4"
+  },
+  "profiles": {
+    "smoke": {
+      "manifest_sha256": "881429eb33b45b25b0241b3fbf233c8ecf11f4d4bdaaa32e6ae2e710090977d1",
+      "counts": {
+        "simple": {
+          "discovery": 20,
+          "calibration": 8,
+          "validation": 8,
+          "test": 0
+        },
+        "nounpp": {
+          "discovery": 20,
+          "calibration": 8,
+          "validation": 8,
+          "test": 0
+        }
+      },
+      "all_split_hashes_checked": true,
+      "jsonl_rebuild_byte_identical": true
+    },
+    "paper": {
+      "manifest_sha256": "2fcbaae95d4d934c7c3e88335e6aaa9c83050a46e5c871a86381dd86b2b9effd",
+      "counts": {
+        "simple": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        },
+        "rc": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        },
+        "within_rc": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        },
+        "nounpp": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        }
+      },
+      "all_split_hashes_checked": true,
+      "jsonl_rebuild_byte_identical": true
+    },
+    "grouped": {
+      "manifest_sha256": "6748e49ea52eeab90a257f1c3857f88566528e127ddbb136e4eabf7af68741ac",
+      "counts": {
+        "simple": {
+          "discovery": 76,
+          "calibration": 16,
+          "validation": 15,
+          "test": 24
+        },
+        "rc": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        },
+        "within_rc": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        },
+        "nounpp": {
+          "discovery": 300,
+          "calibration": 40,
+          "validation": 40,
+          "test": 40
+        }
+      },
+      "all_split_hashes_checked": true,
+      "jsonl_rebuild_byte_identical": true
+    }
+  }
+}

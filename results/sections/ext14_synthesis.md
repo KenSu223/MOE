@@ -43,12 +43,12 @@
 - An explicit statement beats event inference in 8 of 9 models (Set C; Mistral 0.57).
 
 **6. Circuits.**
-- **Neurons:** 1–4 neurons per case carry 80 % of a selected expert's effect (Qwen3 2.1–4.3 of 768; Mixtral 3.8–17 of 14,336; N1 / N2 held), but different neurons for different cases. The indirect Qwen3 L37E032 needs a magnitude ranking.
+- **Neurons:** a handful of neurons carry 80 % of a selected expert's effect (pooled over cases: Qwen3 2.1–4.3 of 768, Mixtral 3.8–17 of 14,336; per-case medians Qwen3 2.1–5.5, Mixtral 4.0–23; N1 / N2 held), but different neurons for different cases. The indirect Qwen3 L37E032 needs a magnitude ranking.
 - **RelP on MoE (OLMoE, Mistral pilot):** works, but adds little at the final position. Its value lies at the subject / relation positions (three quarters of CounterFact's effect).
 - **Concept circuits (C3):** knocking out a concept's heads + experts removes, on its own tasks vs other tasks:
   - Qwen3: size / state 0.43 / 0.09, country 0.70 / 0.16, person role 0.21 / 0.04;
   - Mixtral: 0.32 / 0.11, 0.69 / 0.25, 0.39 / 0.02.
-  - Experts are more concept-specific than heads in 3 of 6 concept × model comparisons (N3 partly): both size / state circuits and Qwen3 person role. In the country circuits the experts are less specific than the heads.
+  - Experts are more concept-specific than heads in 3 of 6 concept × model comparisons (N3 partly): both size / state circuits and Qwen3 person role. In the country circuits and in Mixtral's person-role circuit (0.82 vs 0.88) the experts are less specific than the heads.
 
 **7. Robustness and causal checks.**
 - Shares are metric-invariant (R1, Spearman ≥ 0.97).
@@ -65,7 +65,7 @@
 
 | # | Team feedback | Answer (section) |
 |---|---|---|
-| 1 | Expert-level circuits; can the ICML paper (Arora et al. 2026, RelP on neurons) be applied to MoE? | Yes, ported and verified (frozen routing). At the final token it adds little beyond forward neuron DLA. Its value is at non-final positions (C2, 14e). Neurons inside experts: 1–4 per case (C1). |
+| 1 | Expert-level circuits; can the ICML paper (Arora et al. 2026, RelP on neurons) be applied to MoE? | Yes, ported and verified (frozen routing). At the final token it adds little beyond forward neuron DLA. Its value is at non-final positions (C2, 14e). Neurons inside experts: 2–4 of 768 (Qwen3) / 4–17 of 14,336 (Mixtral) for 80 % of the expert (C1). |
 | 2 | Bigger capacity in the same family? | Dense Qwen3 4B → 14B flat. Qwen3-30B-A3B departs in both directions. Mixtral-8x22B is the gated Stage 3 (14d). |
 | 3 | Dense counterparts? | Mistral-7B ↔ Mixtral and Qwen2-7B ↔ Qwen2-57B: invariant within ±0.10 on identical prompts (14c). |
 | 4 | Add-back plots: random ≈ greedy first k | Added to every Phase-3/4/5/6 add-back figure plus tables (P6-0). |
@@ -118,7 +118,7 @@ Three usage limits stopped the agents. The detached chains kept the GPU busy, an
 
 *Dial and ladder (sections 14a / 14b).* The figure `results/figures/ext14syn_answer_type.png` shows, per model and direction, the share with the binding implied by the event (E3) and stated (E1). A paraphrase (E1p) equals E1 in every model (|Δ| ≤ 0.07), so the copied word is not what matters; the stated binding is. Negation (E2) cannot be traced: models copy the stated word ("The jug was not full …, the _ was empty" → the jug's partner), the copy trap winning 0.41–0.60 of attribute → entity pairs by margin in the Qwen3 family and 0.29–0.30 by sign in Mistral / Mixtral (target ≤ 0.06). This reading explains the Phase-5 copy control. "Options: t1, t2" made the attribute copyable but not bound to an entity, and moved the share by only +0.04–0.07. Stating "the jug was empty" binds it, and the share rises (except in Qwen3-30B-A3B).
 
-*Dense vs MoE (14c).* Both twins are within bf16 / fp32 noise of each other on almost every cell, with the same cell order. MoE-ification of a dense model keeps attention and FFN doing the same share of the work. Prediction D6 held: Qwen2-57B's always-on shared expert carries most of the MoE rescue for entities and stored mappings (0.68–0.77) and about half for attributes (0.43–0.51). Upcycling evidence (C1): every Mixtral L20 expert matches the Mistral-7B L20 MLP neuron by neuron; L20E000's top-10 WinoGrande neurons are Mistral's top-ranked neurons at the same index (8 / 10).
+*Dense vs MoE (14c).* Both twins are within bf16 / fp32 noise of each other on almost every cell, with the same cell order. MoE-ification of a dense model keeps attention and FFN doing the same share of the work. Prediction D6 held: Qwen2-57B's always-on shared expert carries most of the MoE rescue in every cell (0.67–0.77: entity answers, antonyms, object property, CounterFact, IOI) except the WinoGrande attribute answers, where it carries about half (0.43 E1, 0.51 E3). Upcycling evidence (C1): every Mixtral L20 expert matches the Mistral-7B L20 MLP neuron by neuron; L20E000's top-10 WinoGrande neurons are Mistral's top-ranked neurons at the same index (8 / 10).
 
 *Capacity (14d).* See the summary.
 - The paired values on common items agree with the own-set values: Qwen3 dense 14B − 4B within ±0.08 in every cell (largest: E3 entity → attribute −0.08); 30B-A3B vs dense on IOI +0.18 [0.16, 0.20].

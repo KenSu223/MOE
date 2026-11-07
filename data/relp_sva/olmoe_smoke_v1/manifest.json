@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "profile": "smoke",
+  "seed": 12,
+  "source_repository": "TransluceAI/circuits",
+  "source_revision": "2d215d4ba016ba8602b69d71fc0f1ad139a427b7",
+  "model": {
+    "repository": "allenai/OLMoE-1B-7B-0125",
+    "revision": "9b0c1aa87e34a20052389dce1f0cf01da783f654",
+    "tokenizer_files": [
+      "config.json",
+      "special_tokens_map.json",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "21dc57233d4664eccd9734f5d46563a3716ff88dea5be0d33483fc2df9ce1482",
+      "special_tokens_map.json": "a6188c1e366f8ed715e60ff39c46a8c500fc33508e2affeb23e8c547c5853193",
+      "tokenizer.json": "ff3f2a2fc3b88f6f8504650e2ebb8e018bc4206a90eb41f1a9ff351e02e44ff9",
+      "tokenizer_config.json": "4054b570753cfb3a9fa6fe6f8fbcc0dd4e70d9b5976396ec9a28ebeeb682bf91"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "21dc57233d4664eccd9734f5d46563a3716ff88dea5be0d33483fc2df9ce1482",
+    "special_tokens_map.json": "a6188c1e366f8ed715e60ff39c46a8c500fc33508e2affeb23e8c547c5853193",
+    "tokenizer.json": "ff3f2a2fc3b88f6f8504650e2ebb8e018bc4206a90eb41f1a9ff351e02e44ff9",
+    "tokenizer_config.json": "4054b570753cfb3a9fa6fe6f8fbcc0dd4e70d9b5976396ec9a28ebeeb682bf91"
+  },
+  "transformers": "5.22.2",
+  "tokenizers": "0.23.3",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "alignment": "same token-to-whitespace-word map, shortest training signature, expert IDs fixed",
+  "selection_uses_model_outputs": false,
+  "paper_exact_row_ids_claimed": false,
+  "profile_note": "paper preserves duplicate source rows; grouped replaces original file split and deduplicates content",
+  "prepare_script_sha256": "61104c8d4b88462b44493be1c2e978f10bd4f45f9eb5988bffe0af87e3f9794a",
+  "tasks": {
+    "simple": {
+      "task": "simple",
+      "signature": [
+        0,
+        1
+      ],
+      "funnel": {
+        "raw": {
+          "train": 480,
+          "test": 120
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 90
+        },
+        "eligible_signature": {
+          "train": 413,
+          "test": 97
+        },
+        "other_signature": 0
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 20,
+            "unique_content": 20,
+            "unique_groups": 13,
+            "case_counts": {
+              "plural": 10,
+              "singular": 10
+            }
+          },
+          "calibration": {
+            "rows": 8,
+            "unique_content": 8,
+            "unique_groups": 7,
+            "case_counts": {
+              "plural": 5,
+              "singular": 3
+            }
+          },
+          "validation": {
+            "rows": 8,
+            "unique_content": 8,
+            "unique_groups": 5,
+            "case_counts": {
+              "singular": 5,
+              "plural": 3
+            }
+          },
+          "test": {
+            "rows": 0,
+            "unique_content": 0,
+            "unique_groups": 0,
+            "case_counts": {}
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 2,
+            "group_id": 5
+          },
+          "discovery|validation": {
+            "content_id": 1,
+            "group_id": 3
+          },
+          "discovery|test": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "calibration|validation": {
+            "content_id": 0,
+            "group_id": 1
+          },
+          "calibration|test": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "validation|test": {
+            "content_id": 0,
+            "group_id": 0
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "68b6f99dc65cde89471a7d015c203fd0ed3bd0acff5afc2296495f8e2df82e6e",
+        "calibration": "ff3cd2af3fd1444cc835d3f0d85b087a7c2b755c9e866208301cbc906585e3dc",
+        "validation": "d3eccdfd0bccbd3c11e6d01fcf38a2c30c97806b1472d37107dea4d3502cbd3f",
+        "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nounpp": {
+      "task": "nounpp",
+      "signature": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "funnel": {
+        "raw": {
+          "train": 1920,
+          "test": 480
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 372
+        },
+        "eligible_signature": {
+          "train": 1546,
+          "test": 396
+        },
+        "other_signature": 86
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 20,
+            "unique_content": 20,
+            "unique_groups": 20,
+            "case_counts": {
+              "singular_singular": 6,
+              "singular_plural": 7,
+              "plural_plural": 3,
+              "plural_singular": 4
+            }
+          },
+          "calibration": {
+            "rows": 8,
+            "unique_content": 8,
+            "unique_groups": 8,
+            "case_counts": {
+              "singular_singular": 4,
+              "plural_plural": 2,
+              "plural_singular": 1,
+              "singular_plural": 1
+            }
+          },
+          "validation": {
+            "rows": 8,
+            "unique_content": 8,
+            "unique_groups": 8,
+            "case_counts": {
+              "singular_plural": 3,
+              "plural_singular": 2,
+              "plural_plural": 1,
+              "singular_singular": 2
+            }
+          },
+          "test": {
+            "rows": 0,
+            "unique_content": 0,
+            "unique_groups": 0,
+            "case_counts": {}
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "discovery|validation": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "discovery|test": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "calibration|validation": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "calibration|test": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "validation|test": {
+            "content_id": 0,
+            "group_id": 0
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "fe9a45df7ef74d175548e155544c347fc15bf2a66c89aa9c2094d3e5c4821837",
+        "calibration": "c5a09dde0e6fa26884d8a5f885ddeb6f4c27a16d73fff77f0b1c7bfb316c2c53",
+        "validation": "1d26ee4dce0a2408d930472e77c0d5b86e47e6ffab639f309fe2efd4bb1752af",
+        "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}

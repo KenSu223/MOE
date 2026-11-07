@@ -36,7 +36,7 @@ contribution vectors). Headlines in section 2b.**
 Directions 13 / 13a–13h; team page `docs/team_brief_phase5.md`): the team meeting's critique of the WinoGrande option swap —
 WinoGrande in its original attribute → entity direction, association-neutral sets, verb and memorisation controls, copy vs
 generate, the task ladder, why the add-back curves differ, attribution-patching pilot (OLMoE). ≈ 25 GPU-h. Headlines in 2b.**
-**Phase 6 Stage R COMPLETE, NOT COMMITTED (2026-10-16/17; plan RESEARCH_PLAN.md "Phase 6" + "Scope cut"; synthesis
+**Phase 6 Stage R COMPLETE (2026-10-16/17, committed and pushed 2026-10-18 as b538f59; plan RESEARCH_PLAN.md "Phase 6" + "Scope cut"; synthesis
 `results/sections/ext14_synthesis.md`, sections `ext14_{ladder,dial,dense,scale,circuit}.md`, assembled as Directions 14 / 14a–14e;
 pre-registration `data/dial/preregistration.md` (committed 4143e09) + check `results/tables/ext14_prereg_check.md`; team page
 `docs/pages/team_brief_phase6/index.html` / `docs/team_brief_phase6.md`, artifact 3KKhAYJxcBw2M21VKoL1FE): one dial on the same WinoGrande twins (E1 stated / E1p / E2 /
@@ -264,7 +264,7 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     Entity question competence: names 10 % / 1 %, templates 4 % / 0 % (chance-level, same name in both twins 68–69 %); traced passing
     name items are attention-dominated (0.78–0.79 / 0.68). Template outcomes are set by the sentence (89–91 % of drop variance between
     templates). Margin rule = logit(answer) − logit(contrast) ≥ 1 (log-odds, not top-1).
-- **Phase 6 (2026-10-16/17, Stage R; 8 models; STR; 45 pre-registered predictions: 22 held, 14 failed, 8 untestable, 1 pending)**:
+- **Phase 6 (2026-10-16/17, Stage R; 8 models; STR; 45 pre-registered predictions: 21 held, 1 held partly (N3), 15 failed, 8 untestable)**:
   - *Answer type sets the split, stating the binding moves it*: attribute → entity (answer = entity) attention-heavy at every evidence
     level (0.48–0.83, even prior-only E0 0.73 in Qwen3); entity → attribute FFN-heavy when inferred (E3 0.18–0.34); stating the attribute
     (E1) raises e→a toward attention in 7 of 8 models (Qwen3-4B 0.31 → 0.58, 8B 0.28 → 0.55, 14B 0.21 → 0.46, Qwen2 0.21 → 0.37/0.38,
@@ -277,9 +277,12 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     bf16 vs fp32 routing agreement 0.08) → fp32.
   - *Ladder v2*: top holds (IOI 0.71–0.92, induction 0.67–0.77, binding 0.65–0.79), antonyms 0.35–0.59 (not low); Spearman 0.55–0.87.
     Associativity weak (Qwen3 a→e 0.73–0.83; MoE writes the prior −0.30 in conflict). Statement beats event in 8/9 models.
-  - *Circuits*: 1–4 neurons per prompt carry 80 % of an expert (Qwen3 2.1–4.3 of 768, Mixtral 3.8–17 of 14,336; case-specific;
+  - *Circuits*: a handful of neurons carry 80 % of an expert (pooled: Qwen3 2.1–4.3 of 768, Mixtral 3.8–17 of 14,336; per-case medians
+    Qwen3 2.1–5.5, Mixtral 4.0–23; case-specific;
     indirect L37E032 needs magnitude ranking 33); RelP ported to MoE (frozen routing) ≈ forward DLA at the final token, value at
-    non-final positions (DP3: no F3 recommended); C3 Qwen3 concept circuits remove 0.43 / 0.70 / 0.16 on own tasks vs ≤ 0.06 elsewhere.
+    non-final positions (DP3: no F3 recommended); C3 concept circuits (size / state, country, person role) remove
+    own / other Qwen3 0.43 / 0.09, 0.70 / 0.16, 0.21 / 0.04, Mixtral 0.32 / 0.11, 0.69 / 0.25, 0.39 / 0.02; experts more specific than heads
+    in 3 of 6 (both size / state, Qwen3 person role; not country, not Mixtral person role).
   - *Robustness*: metric-invariant (Spearman ≥ 0.97); top-3 head / expert knockouts lower their repair 21–31 % beyond random, share moves
     0.02–0.07. Tier 2 E1 a→e: Qwen3 re-selects L37E032, Mixtral L17E007. Logistics: GPU queue priorities
     (`logs/gpu_queue_lowprio.txt`), one GPU job per cell, pooled / behaviour-only rule, three usage limits survived.

@@ -1,0 +1,93 @@
+{
+  "task": "simple",
+  "signature": [
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 90
+    },
+    "eligible_signature": {
+      "train": 413,
+      "test": 97
+    },
+    "other_signature": 0
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 300,
+        "unique_content": 115,
+        "unique_groups": 17,
+        "case_counts": {
+          "plural": 150,
+          "singular": 150
+        }
+      },
+      "calibration": {
+        "rows": 40,
+        "unique_content": 37,
+        "unique_groups": 15,
+        "case_counts": {
+          "plural": 22,
+          "singular": 18
+        }
+      },
+      "validation": {
+        "rows": 40,
+        "unique_content": 32,
+        "unique_groups": 14,
+        "case_counts": {
+          "singular": 17,
+          "plural": 23
+        }
+      },
+      "test": {
+        "rows": 40,
+        "unique_content": 34,
+        "unique_groups": 17,
+        "case_counts": {
+          "plural": 19,
+          "singular": 21
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 33,
+        "group_id": 15
+      },
+      "discovery|validation": {
+        "content_id": 28,
+        "group_id": 14
+      },
+      "discovery|test": {
+        "content_id": 27,
+        "group_id": 17
+      },
+      "calibration|validation": {
+        "content_id": 11,
+        "group_id": 13
+      },
+      "calibration|test": {
+        "content_id": 10,
+        "group_id": 15
+      },
+      "validation|test": {
+        "content_id": 7,
+        "group_id": 14
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "09b394c0de145f2480c52025f753d8df6a6e005574e020a42d3616bbdfb5066a",
+    "calibration": "d46d3e0b7f1f3f2e287433e7b7cea51fee8e898692fd504e0302034e3d1d26b9",
+    "validation": "be60883926b8c4fbe2d6c0ad28c82a6f3abd4f33600178ecf0217b34e40bce82",
+    "test": "4a24827b9a1f99f0c995dc67706a59b6becab17b8f3884cee86b62abf972f064"
+  }
+}

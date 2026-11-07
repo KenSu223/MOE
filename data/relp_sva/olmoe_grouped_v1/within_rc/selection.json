@@ -1,0 +1,102 @@
+{
+  "task": "within_rc",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "funnel": {
+    "raw": {
+      "train": 9600,
+      "test": 2400
+    },
+    "rejected_checks": {},
+    "eligible_signature": {
+      "train": 7777,
+      "test": 1943
+    },
+    "other_signature": 2280
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 300,
+        "unique_content": 300,
+        "unique_groups": 159,
+        "case_counts": {
+          "plural_plural": 64,
+          "singular_plural": 88,
+          "plural_singular": 71,
+          "singular_singular": 77
+        }
+      },
+      "calibration": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 30,
+        "case_counts": {
+          "singular_plural": 13,
+          "plural_singular": 8,
+          "plural_plural": 10,
+          "singular_singular": 9
+        }
+      },
+      "validation": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 22,
+        "case_counts": {
+          "plural_singular": 14,
+          "plural_plural": 11,
+          "singular_singular": 10,
+          "singular_plural": 5
+        }
+      },
+      "test": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 24,
+        "case_counts": {
+          "plural_singular": 12,
+          "singular_singular": 12,
+          "singular_plural": 7,
+          "plural_plural": 9
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "24c6d926f74bbcce05f9b1fbbbf673e4cb12cf6e8be4ae1b1c12092ae97ea43b",
+    "calibration": "cb4042d3745f68d1a64906530aa6ceb19dca80c3640dfdffb9b8ff6c7f0ee1a6",
+    "validation": "014b0e4aa423bd12bf6014b888058d964fb6474c369b43775cd20e14737cf8f8",
+    "test": "a3a8885544c8ff93fc986fc2bd5e2d280dfea40f8b98171f39001446edfd71d5"
+  }
+}

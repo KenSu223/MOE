@@ -22,9 +22,9 @@ The HTML version, with figures, is `docs/pages/team_brief_phase6/index.html`.
 | More capacity? | The dense Qwen3 series is flat from 4B to 14B. Qwen3-30B-A3B departs in both directions, which is not a size trend. 8x22B is pending. |
 | Graded tasks, predicted in advance? | The top of the order held (IOI, induction, binding look-up). The bottom failed: antonyms sit near 0.5. |
 | Associativity? | A weak dial (spread 0.10). In conflicts, the experts write the prior answer and attention overrides it. |
-| Experts down to neurons? | 1–4 neurons per prompt carry 80 % of an expert's effect, but different neurons for different prompts. Mixtral's experts are Mistral-7B's MLP, neuron for neuron. |
+| Experts down to neurons? | A handful of neurons carry 80 % of an expert's effect (2–4 of 768 in Qwen3, 4–17 of 14,336 in Mixtral), but different neurons for different prompts. Mixtral's experts are Mistral-7B's MLP, neuron for neuron. |
 | The ICML paper (RelP on neurons) on MoE? | It ports and works. At the last token it adds little; its value is at earlier positions. It is not needed for expert + head circuits. |
-| Concept circuits? | In both models, the circuits hurt their own tasks much more than other tasks. Experts are more concept-specific than heads in 3 of 6 cases; not for country. |
+| Concept circuits? | In both models, the circuits hurt their own tasks much more than other tasks. Experts are more concept-specific than heads in 3 of 6 cases (size / state in both models, person role in Qwen3); not for country, nor for person role in Mixtral. |
 | Is the dial new? | As far as our literature scan found, yes for a 3+ level dial on the same items with an attention / FFN split, and for MoE. |
 
 ## 1. The dial
@@ -57,7 +57,7 @@ Before any patching, a behaviour pilot replaced our first format (`…, so the _
 
 - **Mistral-7B → Mixtral:** every task within ±0.10, task order preserved (Spearman 0.98).
 - **Qwen2-7B → Qwen2-57B:** 6 of 7 tasks within ±0.10; antonyms −0.11.
-- **Qwen2-57B's shared expert** carries 0.68–0.77 of the expert repair for entities and antonyms, and about half for attributes.
+- **Qwen2-57B's shared expert** carries 0.67–0.77 of the expert repair on every task (entity answers, antonyms, object property, CounterFact, IOI) except the WinoGrande attribute answers, where it carries about half (0.43 stated, 0.51 inferred).
 - **The dense Qwen3 series is flat.** Qwen3-30B-A3B is more attention-heavy on copy tasks (IOI 0.92 vs 0.73) and less on attribute answers.
 - **Qwen2-57B must run in fp32.** In bf16 its nearly uniform routers flip; the share would read 0.68 instead of 0.58.
 
@@ -76,13 +76,15 @@ Before any patching, a behaviour pilot replaced our first format (`…, so the _
 
 ## 5. Circuits
 
-| Expert | Neurons | Neurons for 80 % of its effect (per prompt) |
-|---|---|---|
-| Qwen3 L44E069 | 768 | 2.1 |
-| Qwen3 L41E117 | 768 | 2.7 |
-| Qwen3 L37E032 (indirect) | 768 | 33 (magnitude ranking) |
-| Mixtral L19E002 | 14,336 | 6.7 |
-| Mixtral L20E000 | 14,336 | 17 |
+| Expert | Neurons | Neurons for 80 % of its effect (pooled over prompts) | Median per prompt |
+|---|---|---|---|
+| Qwen3 L44E069 | 768 | 2.1 | 2.1 |
+| Qwen3 L41E117 | 768 | 2.7 | 2.9 |
+| Qwen3 L37E032 (indirect) | 768 | 33 (magnitude ranking) | 142 (direct-effect ranking) |
+| Mixtral L19E002 | 14,336 | 6.7 | 11 |
+| Mixtral L20E000 | 14,336 | 17 | 17 |
+
+Pooled = the patch of the top-k neurons restores 80 % of the expert's patch on the case means. Per-prompt medians use each prompt's own direct-effect ranking.
 
 **RelP (neuron circuits).** Ported to MoE with frozen routing. At the last token it ranks neurons about as well as our forward scores. On factual recall, three quarters of the neuron effect is at the subject and relation positions.
 

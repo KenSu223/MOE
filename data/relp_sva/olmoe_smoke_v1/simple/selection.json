@@ -1,0 +1,90 @@
+{
+  "task": "simple",
+  "signature": [
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 90
+    },
+    "eligible_signature": {
+      "train": 413,
+      "test": 97
+    },
+    "other_signature": 0
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 13,
+        "case_counts": {
+          "plural": 10,
+          "singular": 10
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 7,
+        "case_counts": {
+          "plural": 5,
+          "singular": 3
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 5,
+        "case_counts": {
+          "singular": 5,
+          "plural": 3
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 2,
+        "group_id": 5
+      },
+      "discovery|validation": {
+        "content_id": 1,
+        "group_id": 3
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 1
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "68b6f99dc65cde89471a7d015c203fd0ed3bd0acff5afc2296495f8e2df82e6e",
+    "calibration": "ff3cd2af3fd1444cc835d3f0d85b087a7c2b755c9e866208301cbc906585e3dc",
+    "validation": "d3eccdfd0bccbd3c11e6d01fcf38a2c30c97806b1472d37107dea4d3502cbd3f",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

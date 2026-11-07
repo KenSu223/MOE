@@ -172,13 +172,13 @@ direction (attribute → entity: "… the _ was too dirty. Answer: the" → " mi
 
 The team asked for one principled dial, graded tasks with predictions written down first, dense counterparts, bigger models
 and circuits down to experts and neurons. Eight models (Qwen3-30B-A3B, Qwen3-4B/8B/14B, Mixtral-8x7B, Mistral-7B, Qwen2-7B and
-Qwen2-57B-A14B in fp32); 45 predictions committed before any run (22 held, 14 failed).
+Qwen2-57B-A14B in fp32); 45 predictions committed before any run (21 held, 1 held partly, 15 failed, 8 not testable).
 - **The answer type sets the attention / FFN split; stating the binding moves it.** Entity answers are attention-heavy at every
   level of evidence; attribute answers are FFN-heavy when inferred and move toward attention when the attribute is stated next to
   its entity, in 7 of 8 models. Qwen3-30B-A3B is the exception.
 - **Dense parent vs MoE child: no difference** (Mistral-7B ↔ Mixtral all 10 tasks within ±0.10; Qwen2 twins 6 of 7). Mixtral's
   experts are Mistral-7B's MLP neuron for neuron.
-- **Neurons:** 1–4 neurons per prompt carry 80 % of an expert's effect. RelP (neuron circuits) ports to MoE and helps mainly at
+- **Neurons:** a handful of neurons carry 80 % of an expert's effect (2–4 of 768 in Qwen3, 4–17 of 14,336 in Mixtral). RelP (neuron circuits) ports to MoE and helps mainly at
   non-final positions.
 - **Method:** a one-line format change took base models from chance to 99 %; Qwen2-57B's flat routers make bf16 unusable.
 - Mixtral-8x22B (Stage 3) is gated by the user's decision.

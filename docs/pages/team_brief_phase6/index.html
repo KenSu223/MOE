@@ -102,9 +102,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
     <div><span class="q">More capacity?</span><span>The dense Qwen3 series is flat from 4B to 14B. Qwen3-30B-A3B departs in both directions, but that is not a size trend. Mixtral-8x22B waits for your go.</span></div>
     <div><span class="q">Graded tasks, predicted in advance?</span><span>The top of the predicted order held: IOI, induction and explicit binding look-up are the most attention-heavy. The bottom failed: antonyms sit near 0.5, not near 0.2.</span></div>
     <div><span class="q">Associativity as a dial?</span><span>Weak: the spread is 0.10. When a statement contradicts the prior, the experts write the prior answer and attention overrides it.</span></div>
-    <div><span class="q">Experts down to neurons?</span><span>1–4 neurons per prompt carry 80 % of an expert's effect, but different neurons for different prompts. Mixtral's experts are Mistral-7B's MLP, neuron for neuron.</span></div>
+    <div><span class="q">Experts down to neurons?</span><span>A handful of neurons carry 80 % of an expert's effect (2–4 of 768 in Qwen3, 4–17 of 14,336 in Mixtral), but different neurons for different prompts. Mixtral's experts are Mistral-7B's MLP, neuron for neuron.</span></div>
     <div><span class="q">The ICML paper (neuron circuits, RelP) on MoE?</span><span>It ports and works. At the final token it adds little to what we have; its value is at earlier positions. For expert + head circuits it is not needed.</span></div>
-    <div><span class="q">Concept circuits of experts + heads?</span><span>In both models, the concept circuits hurt their own tasks much more than other tasks. Experts are more concept-specific than heads in 3 of 6 cases; in the country circuits, the heads are more specific than the experts.</span></div>
+    <div><span class="q">Concept circuits of experts + heads?</span><span>In both models, the concept circuits hurt their own tasks much more than other tasks. Experts are more concept-specific than heads in 3 of 6 cases; in the country circuits and in Mixtral's person-role circuit, the heads are more specific than the experts.</span></div>
     <div><span class="q">Is the same-instance dial new?</span><span>As far as our literature scan found, yes. Context-vs-memory contrasts exist for dense models, but not a 3+ level dial on the same items with an attention / FFN split, and nothing in MoE.</span></div>
   </div>
 </section>
@@ -176,7 +176,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   <ul class="col">
     <li><strong>Mistral-7B → Mixtral-8x7B</strong>, identical prompts: every task within ±0.10 (MoE − dense −0.03 to +0.06). The order of the tasks is preserved (Spearman 0.98).</li>
     <li><strong>Qwen2-7B → Qwen2-57B-A14B:</strong> 6 of 7 tasks within ±0.10; antonyms −0.11 (Spearman 0.89).</li>
-    <li><strong>The always-on shared expert carries most of Qwen2-57B's expert repair:</strong> 0.68–0.77 for entities and antonyms, about half for attributes (0.43–0.51).</li>
+    <li><strong>The always-on shared expert carries most of Qwen2-57B's expert repair:</strong> 0.67–0.77 on every task (entity answers, antonyms, object property, CounterFact, IOI) except the WinoGrande attribute answers, where it carries about half (0.43 stated, 0.51 inferred).</li>
     <li><strong>Mixtral is an upcycled Mistral.</strong> Every layer-20 expert matches Mistral-7B's layer-20 MLP neuron by neuron. The WinoGrande expert's top-10 neurons are 8 of Mistral's own top neurons.</li>
   </ul>
   <div class="plate"><button type="button" data-zoom="figures/ext14_capacity_qwen3.png" aria-label="Enlarge the Qwen3 capacity series"><img src="figures/ext14_capacity_qwen3.png" alt="Attention share per task for Qwen3-4B, 8B, 14B and 30B-A3B: flat across the dense models, with the MoE model higher on copy tasks and lower on attribute answers" loading="lazy"></button></div>
@@ -234,17 +234,17 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   <h2>6 · Circuits: experts, neurons, concepts</h2>
   <div class="table-wrap" style="max-width: 760px">
     <table>
-      <thead><tr><th>Expert (task)</th><th class="n">Neurons in the expert</th><th class="n">Neurons for 80 % of its effect, per prompt</th></tr></thead>
+      <thead><tr><th>Expert (task)</th><th class="n">Neurons in the expert</th><th class="n">Neurons for 80 % of its effect, pooled over prompts</th><th class="n">Median per prompt</th></tr></thead>
       <tbody>
-        <tr><td>Qwen3 L44E069 (CounterFact)</td><td class="n">768</td><td class="n">2.1</td></tr>
-        <tr><td>Qwen3 L41E117 (WinoGrande attribute)</td><td class="n">768</td><td class="n">2.7</td></tr>
-        <tr><td>Qwen3 L37E032 (WinoGrande entity, indirect)</td><td class="n">768</td><td class="n">33 *</td></tr>
-        <tr><td>Mixtral L19E002 (CounterFact)</td><td class="n">14,336</td><td class="n">6.7</td></tr>
-        <tr><td>Mixtral L20E000 (WinoGrande attribute)</td><td class="n">14,336</td><td class="n">17</td></tr>
+        <tr><td>Qwen3 L44E069 (CounterFact)</td><td class="n">768</td><td class="n">2.1</td><td class="n">2.1</td></tr>
+        <tr><td>Qwen3 L41E117 (WinoGrande attribute)</td><td class="n">768</td><td class="n">2.7</td><td class="n">2.9</td></tr>
+        <tr><td>Qwen3 L37E032 (WinoGrande entity, indirect)</td><td class="n">768</td><td class="n">33 *</td><td class="n">142</td></tr>
+        <tr><td>Mixtral L19E002 (CounterFact)</td><td class="n">14,336</td><td class="n">6.7</td><td class="n">11</td></tr>
+        <tr><td>Mixtral L20E000 (WinoGrande attribute)</td><td class="n">14,336</td><td class="n">17</td><td class="n">17</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">The top neurons are different for every prompt: a fixed set covering all prompts needs 8 to several thousand. * Ranked by activation change × weight size; ranking by direct effect needs 511 for this indirect expert. Random order needs ~590 of 768 or ~10,300 of 14,336.</p>
+  <p class="note">Pooled = the patch of the top-k neurons restores 80 % of the expert's patch on the case means; the per-prompt medians use each prompt's own direct-effect ranking. The top neurons are different for every prompt: a fixed set covering all prompts needs 8 to several thousand. * Ranked by activation change × weight size; ranking by direct effect needs 511 for this indirect expert. Random order needs ~590 of 768 or ~10,300 of 14,336.</p>
   <ul class="col">
     <li><strong>The ICML method (RelP on neurons), ported to MoE</strong> with frozen routing, piloted on OLMoE and Mistral-7B. At the last token it ranks neurons about as well as our forward scores.
       <ul>
@@ -263,7 +263,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
         </table>
       </div>
       The country circuits leak most into other tasks: they overlap with the general factual-recall machinery.</li>
-    <li><strong>Experts vs heads:</strong> experts are more concept-specific in 3 of 6 cases: size / state in both models (Qwen3 0.98 vs 0.56, Mixtral 0.93 vs 0.69) and person role in Qwen3. In the country circuits the heads are more specific.</li>
+    <li><strong>Experts vs heads:</strong> experts are more concept-specific in 3 of 6 cases: size / state in both models (Qwen3 0.98 vs 0.56, Mixtral 0.93 vs 0.69) and person role in Qwen3. In the country circuits and in Mixtral's person-role circuit (0.82 vs 0.88) the heads are more specific.</li>
   </ul>
   <div class="plate"><button type="button" data-zoom="figures/ext14_t2_ab_e1_a2e_addback.png" aria-label="Enlarge add-back curves with random-equivalent marks"><img src="figures/ext14_t2_ab_e1_a2e_addback.png" alt="Add-back curves for the stated entity question: greedy, oracle and random order, with dotted marks showing how many random experts match greedy's first k" loading="lazy"></button></div>
   <p class="note">Add-back figures now mark how many random experts match greedy's first 1 / 5 / 10 / 15 ("never" when greedy is above the all-expert line). This is the same in the Phase-3/4/5 figures, and the Phase 5 page is updated.</p>
