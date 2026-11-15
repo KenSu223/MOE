@@ -1,0 +1,37 @@
+2026-11-08T00:14:02Z START relp-test-patch2 (waited 446s, low priority): .venv-relp/bin/python -m pytest tests/test_relp_moe_patch.py -q -x
+...F
+=================================== FAILURES ===================================
+________________________ test_relp_endpoints[qwen3_moe] ________________________
+
+family = 'qwen3_moe'
+tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-9/test_relp_endpoints_qwen3_moe_0')
+
+    @pytest.mark.parametrize("family", FAMS)
+    def test_relp_endpoints(family, tmp_path):
+        d = tiny(family, tmp_path)
+        m = StreamRelP(str(d), DEV, torch.float32)
+        n, T = 3, 5
+        A, Bb = pair_batch(n, T, 51)
+        tg, fo = [5, 6, 7], [9, 10, 11]
+        pool = torch.ones(n, T, dtype=torch.bool)
+        pool[:, 0] = False
+        g = Group("s", torch.cat([A, Bb]), tg * 2, fo * 2, record_h_in=True)
+        forward_pass(m, [g])
+        ta, sa, _ = relp_backward(m, g, n, pool, "paired")
+        tA, sA = relp_backward_endpoint(m, g, n, pool, "A")
+        assert torch.equal(sa, sA)
+        torch.testing.assert_close(tA, ta, rtol=1e-6, atol=1e-9)
+        tB, sB, rowsB = relp_backward_endpoint(m, g, n, pool, "B", per_row=True)
+        assert torch.equal(sB, sa)
+        # per-row expert-position scores sum to the aggregate's expert-position totals
+>       torch.testing.assert_close(rowsB.double().sum(0), tB.sum(-1), rtol=1e-4, atol=1e-6)
+E       AssertionError: The values for attribute 'device' do not match: cpu != cuda:0.
+
+tests/test_relp_moe_patch.py:95: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00, 409.00it/s]
+=========================== short test summary info ============================
+FAILED tests/test_relp_moe_patch.py::test_relp_endpoints[qwen3_moe] - Asserti...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 3 passed in 17.01s
+2026-11-08T00:14:21Z END   relp-test-patch2 rc=1 (19s)

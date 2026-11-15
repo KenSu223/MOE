@@ -1,0 +1,186 @@
+2026-11-07T23:57:52Z [relp-moe] chain start: models=[qwen3 mixtral] profiles=[smoke paper grouped]
+2026-11-07T23:57:52Z [relp-moe] start qwen3-smoke-simple-verify
+2026-11-07T23:59:32Z [relp-moe] end qwen3-smoke-simple-verify rc=0
+2026-11-07T23:59:32Z [relp-moe] start qwen3-smoke-simple-score
+2026-11-08T00:00:58Z [relp-moe] end qwen3-smoke-simple-score rc=0
+2026-11-08T00:00:58Z [relp-moe] start qwen3-smoke-simple-validation
+2026-11-08T00:01:51Z [relp-moe] end qwen3-smoke-simple-validation rc=0
+2026-11-08T00:01:51Z [relp-moe] start qwen3-smoke-nounpp-verify
+2026-11-08T00:03:29Z [relp-moe] end qwen3-smoke-nounpp-verify rc=0
+2026-11-08T00:03:29Z [relp-moe] start qwen3-smoke-nounpp-score
+2026-11-08T00:04:42Z [relp-moe] end qwen3-smoke-nounpp-score rc=0
+2026-11-08T00:04:42Z [relp-moe] start qwen3-smoke-nounpp-validation
+2026-11-08T00:05:39Z [relp-moe] end qwen3-smoke-nounpp-validation rc=0
+2026-11-08T00:05:39Z [relp-moe] start mixtral-smoke-simple-verify
+2026-11-08T00:08:42Z [relp-moe] end mixtral-smoke-simple-verify rc=0
+2026-11-08T00:08:42Z [relp-moe] start mixtral-smoke-simple-score
+2026-11-08T00:14:02Z [relp-moe] end mixtral-smoke-simple-score rc=0
+2026-11-08T00:14:02Z [relp-moe] start mixtral-smoke-simple-validation
+2026-11-08T00:15:43Z [relp-moe] end mixtral-smoke-simple-validation rc=0
+2026-11-08T00:15:43Z [relp-moe] start mixtral-smoke-nounpp-verify
+2026-11-08T00:18:53Z [relp-moe] end mixtral-smoke-nounpp-verify rc=0
+2026-11-08T00:18:53Z [relp-moe] start mixtral-smoke-nounpp-score
+2026-11-08T00:21:36Z [relp-moe] end mixtral-smoke-nounpp-score rc=0
+2026-11-08T00:21:36Z [relp-moe] start mixtral-smoke-nounpp-validation
+2026-11-08T00:23:03Z [relp-moe] end mixtral-smoke-nounpp-validation rc=0
+2026-11-08T00:23:03Z [relp-moe] start qwen3-paper-simple-verify
+2026-11-08T00:24:46Z [relp-moe] end qwen3-paper-simple-verify rc=0
+2026-11-08T00:24:47Z [relp-moe] start qwen3-paper-simple-score_zero
+2026-11-08T00:25:57Z [relp-moe] end qwen3-paper-simple-score_zero rc=0
+2026-11-08T00:25:57Z [relp-moe] start qwen3-paper-simple-score_mean
+2026-11-08T00:26:40Z [relp-moe] end qwen3-paper-simple-score_mean rc=0
+2026-11-08T00:26:40Z [relp-moe] start qwen3-paper-simple-validation
+2026-11-08T00:28:46Z [relp-moe] end qwen3-paper-simple-validation rc=0
+2026-11-08T00:28:46Z [relp-moe] start qwen3-paper-rc-verify
+2026-11-08T00:30:30Z [relp-moe] end qwen3-paper-rc-verify rc=0
+2026-11-08T00:30:30Z [relp-moe] start qwen3-paper-rc-score_zero
+2026-11-08T00:31:49Z [relp-moe] end qwen3-paper-rc-score_zero rc=0
+2026-11-08T00:31:49Z [relp-moe] start qwen3-paper-rc-score_mean
+2026-11-08T00:32:43Z [relp-moe] end qwen3-paper-rc-score_mean rc=0
+2026-11-08T00:32:43Z [relp-moe] start qwen3-paper-rc-validation
+2026-11-08T00:35:42Z [relp-moe] end qwen3-paper-rc-validation rc=0
+2026-11-08T00:35:42Z [relp-moe] start qwen3-paper-within_rc-verify
+2026-11-08T00:37:17Z [relp-moe] end qwen3-paper-within_rc-verify rc=0
+2026-11-08T00:37:17Z [relp-moe] start qwen3-paper-within_rc-score_zero
+2026-11-08T00:38:30Z [relp-moe] end qwen3-paper-within_rc-score_zero rc=0
+2026-11-08T00:38:30Z [relp-moe] start qwen3-paper-within_rc-score_mean
+2026-11-08T00:39:22Z [relp-moe] end qwen3-paper-within_rc-score_mean rc=0
+2026-11-08T00:39:22Z [relp-moe] start qwen3-paper-within_rc-validation
+2026-11-08T00:42:05Z [relp-moe] end qwen3-paper-within_rc-validation rc=0
+2026-11-08T00:42:05Z [relp-moe] start qwen3-paper-nounpp-verify
+2026-11-08T00:43:42Z [relp-moe] end qwen3-paper-nounpp-verify rc=0
+2026-11-08T00:43:42Z [relp-moe] start qwen3-paper-nounpp-score_zero
+2026-11-08T00:44:59Z [relp-moe] end qwen3-paper-nounpp-score_zero rc=0
+2026-11-08T00:44:59Z [relp-moe] start qwen3-paper-nounpp-score_mean
+2026-11-08T00:45:50Z [relp-moe] end qwen3-paper-nounpp-score_mean rc=0
+2026-11-08T00:45:50Z [relp-moe] start qwen3-paper-nounpp-validation
+2026-11-08T00:48:40Z [relp-moe] end qwen3-paper-nounpp-validation rc=0
+2026-11-08T00:48:40Z [relp-moe] start qwen3-paper-simple-test
+2026-11-08T00:50:53Z [relp-moe] end qwen3-paper-simple-test rc=0
+2026-11-08T00:50:53Z [relp-moe] start qwen3-paper-rc-test
+2026-11-08T00:53:57Z [relp-moe] end qwen3-paper-rc-test rc=0
+2026-11-08T00:53:57Z [relp-moe] start qwen3-paper-within_rc-test
+2026-11-08T00:56:42Z [relp-moe] end qwen3-paper-within_rc-test rc=0
+2026-11-08T00:56:42Z [relp-moe] start qwen3-paper-nounpp-test
+2026-11-08T00:59:28Z [relp-moe] end qwen3-paper-nounpp-test rc=0
+2026-11-08T00:59:28Z [relp-moe] start mixtral-paper-simple-verify
+2026-11-08T01:02:28Z [relp-moe] end mixtral-paper-simple-verify rc=0
+2026-11-08T01:02:28Z [relp-moe] start mixtral-paper-simple-score_zero
+2026-11-08T01:04:56Z [relp-moe] end mixtral-paper-simple-score_zero rc=0
+2026-11-08T01:04:56Z [relp-moe] start mixtral-paper-simple-score_mean
+2026-11-08T01:06:21Z [relp-moe] end mixtral-paper-simple-score_mean rc=0
+2026-11-08T01:06:21Z [relp-moe] start mixtral-paper-simple-validation
+2026-11-08T01:08:28Z [relp-moe] end mixtral-paper-simple-validation rc=0
+2026-11-08T01:08:28Z [relp-moe] start mixtral-paper-rc-verify
+2026-11-08T01:11:22Z [relp-moe] end mixtral-paper-rc-verify rc=0
+2026-11-08T01:11:22Z [relp-moe] start mixtral-paper-rc-score_zero
+2026-11-08T01:13:55Z [relp-moe] end mixtral-paper-rc-score_zero rc=0
+2026-11-08T01:13:55Z [relp-moe] start mixtral-paper-rc-score_mean
+2026-11-08T01:15:22Z [relp-moe] end mixtral-paper-rc-score_mean rc=0
+2026-11-08T01:15:22Z [relp-moe] start mixtral-paper-rc-validation
+2026-11-08T01:18:40Z [relp-moe] end mixtral-paper-rc-validation rc=0
+2026-11-08T01:18:40Z [relp-moe] start mixtral-paper-within_rc-verify
+2026-11-08T01:21:30Z [relp-moe] end mixtral-paper-within_rc-verify rc=0
+2026-11-08T01:21:30Z [relp-moe] start mixtral-paper-within_rc-score_zero
+2026-11-08T01:23:53Z [relp-moe] end mixtral-paper-within_rc-score_zero rc=0
+2026-11-08T01:23:53Z [relp-moe] start mixtral-paper-within_rc-score_mean
+2026-11-08T01:25:25Z [relp-moe] end mixtral-paper-within_rc-score_mean rc=0
+2026-11-08T01:25:25Z [relp-moe] start mixtral-paper-within_rc-validation
+2026-11-08T01:28:22Z [relp-moe] end mixtral-paper-within_rc-validation rc=0
+2026-11-08T01:28:22Z [relp-moe] start mixtral-paper-nounpp-verify
+2026-11-08T01:31:17Z [relp-moe] end mixtral-paper-nounpp-verify rc=0
+2026-11-08T01:31:17Z [relp-moe] start mixtral-paper-nounpp-score_zero
+2026-11-08T01:33:58Z [relp-moe] end mixtral-paper-nounpp-score_zero rc=0
+2026-11-08T01:33:58Z [relp-moe] start mixtral-paper-nounpp-score_mean
+2026-11-08T01:35:22Z [relp-moe] end mixtral-paper-nounpp-score_mean rc=0
+2026-11-08T01:35:22Z [relp-moe] start mixtral-paper-nounpp-validation
+2026-11-08T01:38:21Z [relp-moe] end mixtral-paper-nounpp-validation rc=0
+2026-11-08T01:38:21Z [relp-moe] start mixtral-paper-simple-test
+2026-11-08T01:40:33Z [relp-moe] end mixtral-paper-simple-test rc=0
+2026-11-08T01:40:33Z [relp-moe] start mixtral-paper-rc-test
+2026-11-08T01:43:53Z [relp-moe] end mixtral-paper-rc-test rc=0
+2026-11-08T01:43:53Z [relp-moe] start mixtral-paper-within_rc-test
+2026-11-08T01:46:49Z [relp-moe] end mixtral-paper-within_rc-test rc=0
+2026-11-08T01:46:49Z [relp-moe] start mixtral-paper-nounpp-test
+2026-11-08T01:49:48Z [relp-moe] end mixtral-paper-nounpp-test rc=0
+2026-11-08T01:49:48Z [relp-moe] start qwen3-grouped-simple-verify
+2026-11-08T01:51:36Z [relp-moe] end qwen3-grouped-simple-verify rc=0
+2026-11-08T01:51:36Z [relp-moe] start qwen3-grouped-simple-score_zero
+2026-11-08T01:52:57Z [relp-moe] end qwen3-grouped-simple-score_zero rc=0
+2026-11-08T01:52:57Z [relp-moe] start qwen3-grouped-simple-score_mean
+2026-11-08T01:53:51Z [relp-moe] end qwen3-grouped-simple-score_mean rc=0
+2026-11-08T01:53:51Z [relp-moe] start qwen3-grouped-simple-validation
+2026-11-08T01:55:30Z [relp-moe] end qwen3-grouped-simple-validation rc=0
+2026-11-08T01:55:30Z [relp-moe] start qwen3-grouped-rc-verify
+2026-11-08T01:57:15Z [relp-moe] end qwen3-grouped-rc-verify rc=0
+2026-11-08T01:57:15Z [relp-moe] start qwen3-grouped-rc-score_zero
+2026-11-08T01:58:32Z [relp-moe] end qwen3-grouped-rc-score_zero rc=0
+2026-11-08T01:58:32Z [relp-moe] start qwen3-grouped-rc-score_mean
+2026-11-08T01:59:24Z [relp-moe] end qwen3-grouped-rc-score_mean rc=0
+2026-11-08T01:59:24Z [relp-moe] start qwen3-grouped-rc-validation
+2026-11-08T02:02:27Z [relp-moe] end qwen3-grouped-rc-validation rc=0
+2026-11-08T02:02:27Z [relp-moe] start qwen3-grouped-within_rc-verify
+2026-11-08T02:04:03Z [relp-moe] end qwen3-grouped-within_rc-verify rc=0
+2026-11-08T02:04:03Z [relp-moe] start qwen3-grouped-within_rc-score_zero
+2026-11-08T02:05:18Z [relp-moe] end qwen3-grouped-within_rc-score_zero rc=0
+2026-11-08T02:05:18Z [relp-moe] start qwen3-grouped-within_rc-score_mean
+2026-11-08T02:06:12Z [relp-moe] end qwen3-grouped-within_rc-score_mean rc=0
+2026-11-08T02:06:12Z [relp-moe] start qwen3-grouped-within_rc-validation
+2026-11-08T02:08:51Z [relp-moe] end qwen3-grouped-within_rc-validation rc=0
+2026-11-08T02:08:51Z [relp-moe] start qwen3-grouped-nounpp-verify
+2026-11-08T02:10:32Z [relp-moe] end qwen3-grouped-nounpp-verify rc=0
+2026-11-08T02:10:32Z [relp-moe] start qwen3-grouped-nounpp-score_zero
+2026-11-08T02:11:48Z [relp-moe] end qwen3-grouped-nounpp-score_zero rc=0
+2026-11-08T02:11:48Z [relp-moe] start qwen3-grouped-nounpp-score_mean
+2026-11-08T02:12:41Z [relp-moe] end qwen3-grouped-nounpp-score_mean rc=0
+2026-11-08T02:12:41Z [relp-moe] start qwen3-grouped-nounpp-validation
+2026-11-08T02:15:31Z [relp-moe] end qwen3-grouped-nounpp-validation rc=0
+2026-11-08T02:15:31Z [relp-moe] start qwen3-grouped-simple-test
+2026-11-08T02:17:23Z [relp-moe] end qwen3-grouped-simple-test rc=0
+2026-11-08T02:17:23Z [relp-moe] start qwen3-grouped-rc-test
+2026-11-08T02:20:32Z [relp-moe] end qwen3-grouped-rc-test rc=0
+2026-11-08T02:20:32Z [relp-moe] start qwen3-grouped-within_rc-test
+2026-11-08T02:23:18Z [relp-moe] end qwen3-grouped-within_rc-test rc=0
+2026-11-08T02:23:18Z [relp-moe] start qwen3-grouped-nounpp-test
+2026-11-08T02:26:10Z [relp-moe] end qwen3-grouped-nounpp-test rc=0
+2026-11-08T02:26:10Z [relp-moe] start mixtral-grouped-simple-verify
+2026-11-08T02:29:18Z [relp-moe] end mixtral-grouped-simple-verify rc=0
+2026-11-08T02:29:18Z [relp-moe] start mixtral-grouped-simple-score_zero
+2026-11-08T02:31:58Z [relp-moe] end mixtral-grouped-simple-score_zero rc=0
+2026-11-08T02:31:58Z [relp-moe] start mixtral-grouped-simple-score_mean
+2026-11-08T02:33:15Z [relp-moe] end mixtral-grouped-simple-score_mean rc=0
+2026-11-08T02:33:15Z [relp-moe] start mixtral-grouped-simple-validation
+2026-11-08T02:35:15Z [relp-moe] end mixtral-grouped-simple-validation rc=0
+2026-11-08T02:35:15Z [relp-moe] start mixtral-grouped-rc-verify
+2026-11-08T02:37:56Z [relp-moe] end mixtral-grouped-rc-verify rc=0
+2026-11-08T02:37:56Z [relp-moe] start mixtral-grouped-rc-score_zero
+2026-11-08T02:40:26Z [relp-moe] end mixtral-grouped-rc-score_zero rc=0
+2026-11-08T02:40:26Z [relp-moe] start mixtral-grouped-rc-score_mean
+2026-11-08T02:41:52Z [relp-moe] end mixtral-grouped-rc-score_mean rc=0
+2026-11-08T02:41:52Z [relp-moe] start mixtral-grouped-rc-validation
+2026-11-08T02:45:10Z [relp-moe] end mixtral-grouped-rc-validation rc=0
+2026-11-08T02:45:10Z [relp-moe] start mixtral-grouped-within_rc-verify
+2026-11-08T02:48:09Z [relp-moe] end mixtral-grouped-within_rc-verify rc=0
+2026-11-08T02:48:09Z [relp-moe] start mixtral-grouped-within_rc-score_zero
+2026-11-08T02:50:40Z [relp-moe] end mixtral-grouped-within_rc-score_zero rc=0
+2026-11-08T02:50:40Z [relp-moe] start mixtral-grouped-within_rc-score_mean
+2026-11-08T02:52:05Z [relp-moe] end mixtral-grouped-within_rc-score_mean rc=0
+2026-11-08T02:52:05Z [relp-moe] start mixtral-grouped-within_rc-validation
+2026-11-08T02:54:56Z [relp-moe] end mixtral-grouped-within_rc-validation rc=0
+2026-11-08T02:54:56Z [relp-moe] start mixtral-grouped-nounpp-verify
+2026-11-08T02:57:44Z [relp-moe] end mixtral-grouped-nounpp-verify rc=0
+2026-11-08T02:57:44Z [relp-moe] start mixtral-grouped-nounpp-score_zero
+2026-11-08T03:00:15Z [relp-moe] end mixtral-grouped-nounpp-score_zero rc=0
+2026-11-08T03:00:15Z [relp-moe] start mixtral-grouped-nounpp-score_mean
+2026-11-08T03:01:40Z [relp-moe] end mixtral-grouped-nounpp-score_mean rc=0
+2026-11-08T03:01:40Z [relp-moe] start mixtral-grouped-nounpp-validation
+2026-11-08T03:04:41Z [relp-moe] end mixtral-grouped-nounpp-validation rc=0
+2026-11-08T03:04:41Z [relp-moe] start mixtral-grouped-simple-test
+2026-11-08T03:06:21Z [relp-moe] end mixtral-grouped-simple-test rc=0
+2026-11-08T03:06:21Z [relp-moe] start mixtral-grouped-rc-test
+2026-11-08T03:09:43Z [relp-moe] end mixtral-grouped-rc-test rc=0
+2026-11-08T03:09:43Z [relp-moe] start mixtral-grouped-within_rc-test
+2026-11-08T03:12:40Z [relp-moe] end mixtral-grouped-within_rc-test rc=0
+2026-11-08T03:12:40Z [relp-moe] start mixtral-grouped-nounpp-test
+2026-11-08T03:15:43Z [relp-moe] end mixtral-grouped-nounpp-test rc=0
+2026-11-08T03:15:43Z [relp-moe] chain end

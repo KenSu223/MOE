@@ -1,0 +1,98 @@
+{
+  "task": "nounpp",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "funnel": {
+    "raw": {
+      "train": 1920,
+      "test": 480
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 372
+    },
+    "eligible_signature": {
+      "train": 1614,
+      "test": 414
+    },
+    "other_signature": 0
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 19,
+        "case_counts": {
+          "singular_plural": 4,
+          "plural_singular": 7,
+          "plural_plural": 7,
+          "singular_singular": 2
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "plural_plural": 3,
+          "plural_singular": 1,
+          "singular_singular": 3,
+          "singular_plural": 1
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_singular": 3,
+          "plural_singular": 3,
+          "plural_plural": 2
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "b8a0010a7cec999540140ef8d9b0297631cde9ef51a41fd78097cd7c8093cb1a",
+    "calibration": "f93c1333fb9524b6c5d4cd9f73b7514cb3eeb3d5d6ac63c794dceeb85659e6df",
+    "validation": "a5abb935032d4cac833294e024d4f5bf32e5556b1d38fee89fa67aca641fdb06",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

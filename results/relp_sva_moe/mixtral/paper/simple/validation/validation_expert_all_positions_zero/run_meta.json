@@ -1,0 +1,195 @@
+{
+  "utc": "2026-11-08T01:06:39.293416+00:00",
+  "command": [
+    "scripts/relp_sva_moe_run.py",
+    "evaluate-multi",
+    "--model-dir",
+    "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "--manifest-dir",
+    "data/relp_sva/mixtral_paper_v1",
+    "--task",
+    "simple",
+    "--verification",
+    "results/relp_sva_moe/mixtral/paper/simple/verify/verification.json",
+    "--split",
+    "validation",
+    "--score-dirs",
+    "results/relp_sva_moe/mixtral/paper/simple/score_zero",
+    "results/relp_sva_moe/mixtral/paper/simple/score_mean",
+    "--units",
+    "neuron",
+    "expert_position",
+    "expert_all_positions",
+    "--output-dir",
+    "results/relp_sva_moe/mixtral/paper/simple/validation"
+  ],
+  "task": "simple",
+  "manifest_sha256": "13e229594a708749ad12367b3186c568d1c32fd333e59a126265a1bfff459302",
+  "identity": {
+    "model_dir": "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "dtype": "torch.bfloat16",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.22.2",
+    "engine": "relp_moe_stream.StreamRelP (layer streaming)",
+    "native_reference": "transformers eager attention + eager experts (HF reference loop)",
+    "engine_sha256": "61264b0f8064834a1da9ea5b8fed5b7706cc84ee7a7c5e2d71d235af02367237",
+    "sva_sha256": "803376f6c3432c16a781745e76fef390fd2945e2b1ce7c40617c5a67eec7152d",
+    "weights_sha256": "566f069bc28d82f6ecf5f49b44bfa641e7fb4d117d7b935601d62fe107edcf64",
+    "arch_sha256": "c053a46130513f4c50afcce9d9b13ffc292c5c3b5b3c676939fe1cba834c09a2",
+    "files": {
+      "config.json": {
+        "sha256": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793"
+      },
+      "generation_config.json": {
+        "sha256": "40e6ecbcedfc2b67b7fa8ba37216c9546c18c00242020b2b34f0b58c3558f680"
+      },
+      "model-00001-of-00019.safetensors": {
+        "size": 4892809584,
+        "mtime_ns": 1794089135486720967
+      },
+      "model-00002-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089139253521391
+      },
+      "model-00003-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089129661029628
+      },
+      "model-00004-of-00019.safetensors": {
+        "size": 4899035200,
+        "mtime_ns": 1794089136722655484
+      },
+      "model-00005-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089137967589523
+      },
+      "model-00006-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089140495455590
+      },
+      "model-00007-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089120463516939
+      },
+      "model-00008-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089121836444198
+      },
+      "model-00009-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211044727504
+      },
+      "model-00010-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089213610592619
+      },
+      "model-00011-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089228631805379
+      },
+      "model-00012-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089218982310816
+      },
+      "model-00013-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211243717044
+      },
+      "model-00014-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089216060463861
+      },
+      "model-00015-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089225473970786
+      },
+      "model-00016-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089224785006874
+      },
+      "model-00017-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089239785218501
+      },
+      "model-00018-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089250270666964
+      },
+      "model-00019-of-00019.safetensors": {
+        "size": 4221679088,
+        "mtime_ns": 1794089258129254024
+      },
+      "model.safetensors.index.json": {
+        "sha256": "a8f30ebfaf569d5cc6358a32009342a3e73d4553a340cc38a6319457d9dc13e6"
+      },
+      "special_tokens_map.json": {
+        "sha256": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33"
+      },
+      "tokenizer.json": {
+        "sha256": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc"
+      },
+      "tokenizer.model": {
+        "size": 493443,
+        "mtime_ns": 1794089243472024529
+      },
+      "tokenizer_config.json": {
+        "sha256": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+      }
+    }
+  },
+  "model_revision": "fc7ac94680e38d7348cfa806e51218e6273104b0",
+  "source_revision": "2d215d4ba016ba8602b69d71fc0f1ad139a427b7",
+  "script_sha256": "59d0d622c15bc4d71c035f2e8aa1258c6c1fe05018021e233dcb8285e37ed981",
+  "status": "complete",
+  "verification_sha256": "3b2a7f4f6e1a039c6d9d79a5dd392677fd2db724a691d2424fc7d87c37687d4f",
+  "split": "validation",
+  "unit": "expert_all_positions",
+  "score_dir": "results/relp_sva_moe/mixtral/paper/simple/score_zero",
+  "selection_plan": {
+    "mode": "paired",
+    "endpoint": "A",
+    "pool": "non_special",
+    "baseline": "zero",
+    "neuron_budgets": [
+      1,
+      5,
+      10,
+      50,
+      100,
+      200,
+      500,
+      1000
+    ],
+    "expert_budgets": [
+      1,
+      2,
+      5,
+      10,
+      20,
+      50
+    ],
+    "random_seeds": [
+      101,
+      102,
+      103
+    ],
+    "ranking": "abs(mean(signed score))",
+    "expert_aggregation": "sum over all neurons before ranking",
+    "mean_baseline": "E[q | expert selected], per layer-position-expert on calibration A only; applied to live-routed experts",
+    "discovery_sha256": "529c9df418e669ae9e774e8e13d92a7f496b9e05363b8f23a3d1cb93f173d1a3",
+    "n_discovery": 236,
+    "aggregate_sha256": "4f18137d8f751d8f8258cdcfcdaea150cc4c15408ea074ebf0f09d9dfb2419f8"
+  },
+  "n": 40,
+  "batched_with": [
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_neuron_zero",
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_expert_position_zero",
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_expert_all_positions_zero",
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_neuron_mean_q_routed",
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_expert_position_mean_q_routed",
+    "results/relp_sva_moe/mixtral/paper/simple/validation/validation_expert_all_positions_mean_q_routed"
+  ],
+  "evaluation": "streamed HF-exact functional forward after native acceptance; downstream natural routing; no rerouting/renormalization at patched q",
+  "normalization": "ratio of means; keep=faithfulness, remove=remaining(completeness), noise=lost paired difference, denoise=recovery"
+}

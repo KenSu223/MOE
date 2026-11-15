@@ -1,0 +1,71 @@
+{
+  "source_revision": "2d215d4ba016ba8602b69d71fc0f1ad139a427b7",
+  "files": [
+    {
+      "path": "data/feature_circuits/nounpp_test.json",
+      "sha256": "41ebac4cab62a574cfae6d86509f95c87aa52f2a63c35c5ea3245ec0c4368737",
+      "git_blob_sha1": "3ff15a3e7eeacf16be738d44c9e679059db65376"
+    },
+    {
+      "path": "data/feature_circuits/nounpp_train.json",
+      "sha256": "993d7162f09291fb5be22aae8fb4e1a1984377b592a0579ba6394177ceb15424",
+      "git_blob_sha1": "7974db77514cd74e47a62a932edf1ded172b34d2"
+    },
+    {
+      "path": "data/feature_circuits/rc_test.json",
+      "sha256": "64d81aac18b935765f26f11ab83dc695c4ee0d97e61097a19d0f551f0b3e1a52",
+      "git_blob_sha1": "a105e368e4971956c9560acbc3048bb846736ccf"
+    },
+    {
+      "path": "data/feature_circuits/rc_train.json",
+      "sha256": "d6f7c5cf4bfac73b7957cb45193e0179e48246eabd2f9169e03dec42303c53be",
+      "git_blob_sha1": "83ca7ca2785605cad05f1d52c5c88d4fe3fe7905"
+    },
+    {
+      "path": "data/feature_circuits/simple_test.json",
+      "sha256": "59d71a81d02627e3045ab1806f16398dda1055d744d08d816717bec7580eec44",
+      "git_blob_sha1": "602c910fcb95397bf97bfb2d4f8cd19a941a4e3e"
+    },
+    {
+      "path": "data/feature_circuits/simple_train.json",
+      "sha256": "38eb04f0f3392a6e2fc1bdda025fb402ccea44c582f963b558deeb21d77a2cad",
+      "git_blob_sha1": "295f0c353487a1dc2efe4ed44cf6689f7afa8a78"
+    },
+    {
+      "path": "data/feature_circuits/within_rc_test.json",
+      "sha256": "4d67095b2a3ca0e2a922db7673dc64430fe2b12c5b4e6c8b40368918fbc28e83",
+      "git_blob_sha1": "8f5070d04e6cbcc2b0f68dbc4569ded585478b8b"
+    },
+    {
+      "path": "data/feature_circuits/within_rc_train.json",
+      "sha256": "1995507cdf6ff8f30f94d50b58e1a0a7e01ac5d6a657132b8bcf811a965d4f30",
+      "git_blob_sha1": "5c92707711b05b7522d61bcbb405eeb25c6fece0"
+    }
+  ],
+  "model": {
+    "repository": "mistralai/Mixtral-8x7B-v0.1",
+    "revision": "fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "tokenizer_files": [
+      "config.json",
+      "special_tokens_map.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "tokenizer.model"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+      "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+      "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+    "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+    "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+    "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b",
+    "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+  },
+  "model_weights_downloaded": false
+}

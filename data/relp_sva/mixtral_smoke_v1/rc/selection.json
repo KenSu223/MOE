@@ -1,0 +1,100 @@
+{
+  "task": "rc",
+  "signature": [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "funnel": {
+    "raw": {
+      "train": 105600,
+      "test": 26400
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 39600
+    },
+    "eligible_signature": {
+      "train": 25215,
+      "test": 6375
+    },
+    "other_signature": 60810
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 20,
+        "case_counts": {
+          "singular_singular": 6,
+          "plural_singular": 7,
+          "plural_plural": 3,
+          "singular_plural": 4
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_singular": 4,
+          "plural_singular": 1,
+          "singular_plural": 3
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_singular": 2,
+          "plural_singular": 2,
+          "singular_plural": 2,
+          "plural_plural": 2
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "2043550c1dcf5ec566cf1ca203be21c6d9147432ac41fa29cdd3070e4d1da81f",
+    "calibration": "23b056fe58bf58bac3776dbb879e910aeee051f83aaf9888458b83520b871817",
+    "validation": "fbcb8a5a5d9f27a0fcad3a1f7c854e2dfd8db76f442dac0e8e50793be8f1641e",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

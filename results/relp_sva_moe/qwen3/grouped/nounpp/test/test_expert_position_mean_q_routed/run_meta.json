@@ -1,0 +1,179 @@
+{
+  "utc": "2026-11-08T02:23:34.587039+00:00",
+  "command": [
+    "scripts/relp_sva_moe_run.py",
+    "evaluate-multi",
+    "--model-dir",
+    "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+    "--manifest-dir",
+    "data/relp_sva/qwen3_grouped_v1",
+    "--task",
+    "nounpp",
+    "--verification",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json",
+    "--split",
+    "test",
+    "--score-dirs",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/score_zero",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/score_mean",
+    "--units",
+    "neuron",
+    "expert_position",
+    "expert_all_positions",
+    "--output-dir",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test"
+  ],
+  "task": "nounpp",
+  "manifest_sha256": "5185df494f735bcfc6e156660560cd0ba051eac041f87bfd829d442df9e646d5",
+  "identity": {
+    "model_dir": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+    "dtype": "torch.bfloat16",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.22.2",
+    "engine": "relp_moe_stream.StreamRelP (layer streaming)",
+    "native_reference": "transformers eager attention + eager experts (HF reference loop)",
+    "engine_sha256": "61264b0f8064834a1da9ea5b8fed5b7706cc84ee7a7c5e2d71d235af02367237",
+    "sva_sha256": "803376f6c3432c16a781745e76fef390fd2945e2b1ce7c40617c5a67eec7152d",
+    "weights_sha256": "566f069bc28d82f6ecf5f49b44bfa641e7fb4d117d7b935601d62fe107edcf64",
+    "arch_sha256": "c053a46130513f4c50afcce9d9b13ffc292c5c3b5b3c676939fe1cba834c09a2",
+    "files": {
+      "config.json": {
+        "sha256": "7e4142150e976c6b4796adf88fce0a2a23e581ed63bcede7e1d69a645e73b362"
+      },
+      "generation_config.json": {
+        "sha256": "8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8"
+      },
+      "model-00001-of-00016.safetensors": {
+        "size": 3999417504,
+        "mtime_ns": 1794088901059128166
+      },
+      "model-00002-of-00016.safetensors": {
+        "size": 3999974192,
+        "mtime_ns": 1794089059489749883
+      },
+      "model-00003-of-00016.safetensors": {
+        "size": 3997360832,
+        "mtime_ns": 1794089084884403792
+      },
+      "model-00004-of-00016.safetensors": {
+        "size": 3999975056,
+        "mtime_ns": 1794088903174015981
+      },
+      "model-00005-of-00016.safetensors": {
+        "size": 3999975400,
+        "mtime_ns": 1794089082882509878
+      },
+      "model-00006-of-00016.safetensors": {
+        "size": 3999975400,
+        "mtime_ns": 1794088904066968614
+      },
+      "model-00007-of-00016.safetensors": {
+        "size": 3999975472,
+        "mtime_ns": 1794089071648105222
+      },
+      "model-00008-of-00016.safetensors": {
+        "size": 3997362064,
+        "mtime_ns": 1794089079542686865
+      },
+      "model-00009-of-00016.safetensors": {
+        "size": 3999975408,
+        "mtime_ns": 1794089079775674518
+      },
+      "model-00010-of-00016.safetensors": {
+        "size": 3999975400,
+        "mtime_ns": 1794089072926037501
+      },
+      "model-00011-of-00016.safetensors": {
+        "size": 3999975408,
+        "mtime_ns": 1794089055784946333
+      },
+      "model-00012-of-00016.safetensors": {
+        "size": 3987400496,
+        "mtime_ns": 1794089142090371087
+      },
+      "model-00013-of-00016.safetensors": {
+        "size": 3997353632,
+        "mtime_ns": 1794089153747753498
+      },
+      "model-00014-of-00016.safetensors": {
+        "size": 3999975400,
+        "mtime_ns": 1794089158440504952
+      },
+      "model-00015-of-00016.safetensors": {
+        "size": 3999975400,
+        "mtime_ns": 1794089157617548539
+      },
+      "model-00016-of-00016.safetensors": {
+        "size": 1087928584,
+        "mtime_ns": 1794089105029334319
+      },
+      "model.safetensors.index.json": {
+        "sha256": "df0d481ec595c55a0ba58426d517390c6214a566ec4ff1c8fc4bbce9f57b3c24"
+      },
+      "tokenizer.json": {
+        "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+      },
+      "tokenizer_config.json": {
+        "sha256": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5"
+      },
+      "vocab.json": {
+        "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+      }
+    }
+  },
+  "model_revision": "1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+  "source_revision": "2d215d4ba016ba8602b69d71fc0f1ad139a427b7",
+  "script_sha256": "59d0d622c15bc4d71c035f2e8aa1258c6c1fe05018021e233dcb8285e37ed981",
+  "status": "complete",
+  "verification_sha256": "d3f5f4083d644e2af5ab47d5513d5dd368e8ac05c3c782d2793bd8eba70d6d69",
+  "split": "test",
+  "unit": "expert_position",
+  "score_dir": "results/relp_sva_moe/qwen3/grouped/nounpp/score_mean",
+  "selection_plan": {
+    "mode": "paired",
+    "endpoint": "A",
+    "pool": "non_special",
+    "baseline": "mean_q_routed",
+    "neuron_budgets": [
+      1,
+      5,
+      10,
+      50,
+      100,
+      200,
+      500,
+      1000
+    ],
+    "expert_budgets": [
+      1,
+      2,
+      5,
+      10,
+      20,
+      50
+    ],
+    "random_seeds": [
+      101,
+      102,
+      103
+    ],
+    "ranking": "abs(mean(signed score))",
+    "expert_aggregation": "sum over all neurons before ranking",
+    "mean_baseline": "E[q | expert selected], per layer-position-expert on calibration A only; applied to live-routed experts",
+    "discovery_sha256": "25eb63cc038f601daf90150964538eb2de5a0246f8df1038b2c13dd839f6a8af",
+    "n_discovery": 300,
+    "aggregate_sha256": "69a6879be781b95d8338fc752d8f0f6f8e241f76444dbc25c1604bc1312a9d86"
+  },
+  "n": 40,
+  "batched_with": [
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_neuron_zero",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_expert_position_zero",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_expert_all_positions_zero",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_neuron_mean_q_routed",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_expert_position_mean_q_routed",
+    "results/relp_sva_moe/qwen3/grouped/nounpp/test/test_expert_all_positions_mean_q_routed"
+  ],
+  "evaluation": "streamed HF-exact functional forward after native acceptance; downstream natural routing; no rerouting/renormalization at patched q",
+  "normalization": "ratio of means; keep=faithfulness, remove=remaining(completeness), noise=lost paired difference, denoise=recovery"
+}

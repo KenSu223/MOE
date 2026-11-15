@@ -1,0 +1,279 @@
+2026-11-07T23:57:52Z START relp-qwen3-smoke-simple-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task simple --output-dir results/relp_sva_moe/qwen3/smoke/simple/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.3760685920715332, "metric_functional_batched_vs_single_max_abs": 0.3760685920715332, "metric_abs_mean": 5.329407691955566, "route_sets_native_batched_vs_single_changed": 62}}
+2026-11-07T23:59:32Z END   relp-qwen3-smoke-simple-verify rc=0 (100s)
+2026-11-07T23:59:32Z START relp-qwen3-smoke-simple-score (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task simple --verification results/relp_sva_moe/qwen3/smoke/simple/verify/verification.json --mode paired --pool non_special --baseline zero --neuron-budgets 1 5 --expert-budgets 1 2 --random-seeds 101 --output-dir results/relp_sva_moe/qwen3/smoke/simple/score_zero
+scored 20/20
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:00:58Z END   relp-qwen3-smoke-simple-score rc=0 (86s)
+2026-11-08T00:00:58Z START relp-qwen3-smoke-simple-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task simple --verification results/relp_sva_moe/qwen3/smoke/simple/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/smoke/simple/score_zero --units neuron expert_position --output-dir results/relp_sva_moe/qwen3/smoke/simple/validation
+2026-11-08T00:01:51Z END   relp-qwen3-smoke-simple-validation rc=0 (53s)
+2026-11-08T00:01:51Z START relp-qwen3-smoke-nounpp-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --output-dir results/relp_sva_moe/qwen3/smoke/nounpp/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.2644062042236328, "metric_functional_batched_vs_single_max_abs": 0.2644062042236328, "metric_abs_mean": 3.2976722717285156, "route_sets_native_batched_vs_single_changed": 399}}
+2026-11-08T00:03:29Z END   relp-qwen3-smoke-nounpp-verify rc=0 (98s)
+2026-11-08T00:03:29Z START relp-qwen3-smoke-nounpp-score (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_sva_moe/qwen3/smoke/nounpp/verify/verification.json --mode paired --pool non_special --baseline zero --neuron-budgets 1 5 --expert-budgets 1 2 --random-seeds 101 --output-dir results/relp_sva_moe/qwen3/smoke/nounpp/score_zero
+scored 20/20
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:04:42Z END   relp-qwen3-smoke-nounpp-score rc=0 (73s)
+2026-11-08T00:05:02Z START relp-qwen3-smoke-nounpp-validation (waited 20s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_sva_moe/qwen3/smoke/nounpp/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/smoke/nounpp/score_zero --units neuron expert_position --output-dir results/relp_sva_moe/qwen3/smoke/nounpp/validation
+2026-11-08T00:05:39Z END   relp-qwen3-smoke-nounpp-validation rc=0 (37s)
+2026-11-08T00:23:03Z START relp-qwen3-paper-simple-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --output-dir results/relp_sva_moe/qwen3/paper/simple/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.2410264015197754, "metric_functional_batched_vs_single_max_abs": 0.2410264015197754, "metric_abs_mean": 5.947207927703857, "route_sets_native_batched_vs_single_changed": 60}}
+2026-11-08T00:24:46Z END   relp-qwen3-paper-simple-verify rc=0 (103s)
+2026-11-08T00:24:47Z START relp-qwen3-paper-simple-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/paper/simple/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:25:57Z END   relp-qwen3-paper-simple-score_zero rc=0 (70s)
+2026-11-08T00:25:57Z START relp-qwen3-paper-simple-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/paper/simple/score_zero --output-dir results/relp_sva_moe/qwen3/paper/simple/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:26:40Z END   relp-qwen3-paper-simple-score_mean rc=0 (43s)
+2026-11-08T00:26:40Z START relp-qwen3-paper-simple-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/paper/simple/score_zero results/relp_sva_moe/qwen3/paper/simple/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/simple/validation
+2026-11-08T00:28:46Z END   relp-qwen3-paper-simple-validation rc=0 (126s)
+2026-11-08T00:28:46Z START relp-qwen3-paper-rc-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --output-dir results/relp_sva_moe/qwen3/paper/rc/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.35221385955810547, "metric_functional_batched_vs_single_max_abs": 0.35221385955810547, "metric_abs_mean": 3.2645368576049805, "route_sets_native_batched_vs_single_changed": 453}}
+2026-11-08T00:30:30Z END   relp-qwen3-paper-rc-verify rc=0 (104s)
+2026-11-08T00:30:31Z START relp-qwen3-paper-rc-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/paper/rc/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:31:49Z END   relp-qwen3-paper-rc-score_zero rc=0 (78s)
+2026-11-08T00:31:49Z START relp-qwen3-paper-rc-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/paper/rc/score_zero --output-dir results/relp_sva_moe/qwen3/paper/rc/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:32:43Z END   relp-qwen3-paper-rc-score_mean rc=0 (54s)
+2026-11-08T00:32:43Z START relp-qwen3-paper-rc-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/paper/rc/score_zero results/relp_sva_moe/qwen3/paper/rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/rc/validation
+2026-11-08T00:35:42Z END   relp-qwen3-paper-rc-validation rc=0 (179s)
+2026-11-08T00:35:42Z START relp-qwen3-paper-within_rc-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.12578773498535156, "metric_functional_batched_vs_single_max_abs": 0.12578773498535156, "metric_abs_mean": 4.168722152709961, "route_sets_native_batched_vs_single_changed": 384}}
+2026-11-08T00:37:17Z END   relp-qwen3-paper-within_rc-verify rc=0 (95s)
+2026-11-08T00:37:17Z START relp-qwen3-paper-within_rc-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/paper/within_rc/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:38:30Z END   relp-qwen3-paper-within_rc-score_zero rc=0 (73s)
+2026-11-08T00:38:30Z START relp-qwen3-paper-within_rc-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/paper/within_rc/score_zero --output-dir results/relp_sva_moe/qwen3/paper/within_rc/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:39:22Z END   relp-qwen3-paper-within_rc-score_mean rc=0 (52s)
+2026-11-08T00:39:22Z START relp-qwen3-paper-within_rc-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/paper/within_rc/score_zero results/relp_sva_moe/qwen3/paper/within_rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/within_rc/validation
+2026-11-08T00:42:05Z END   relp-qwen3-paper-within_rc-validation rc=0 (163s)
+2026-11-08T00:42:05Z START relp-qwen3-paper-nounpp-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.21434950828552246, "metric_functional_batched_vs_single_max_abs": 0.21434950828552246, "metric_abs_mean": 3.430140733718872, "route_sets_native_batched_vs_single_changed": 284}}
+2026-11-08T00:43:42Z END   relp-qwen3-paper-nounpp-verify rc=0 (97s)
+2026-11-08T00:43:42Z START relp-qwen3-paper-nounpp-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/paper/nounpp/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:44:59Z END   relp-qwen3-paper-nounpp-score_zero rc=0 (77s)
+2026-11-08T00:44:59Z START relp-qwen3-paper-nounpp-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/paper/nounpp/score_zero --output-dir results/relp_sva_moe/qwen3/paper/nounpp/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T00:45:50Z END   relp-qwen3-paper-nounpp-score_mean rc=0 (51s)
+2026-11-08T00:45:50Z START relp-qwen3-paper-nounpp-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/paper/nounpp/score_zero results/relp_sva_moe/qwen3/paper/nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/nounpp/validation
+2026-11-08T00:48:40Z END   relp-qwen3-paper-nounpp-validation rc=0 (170s)
+2026-11-08T00:48:40Z START relp-qwen3-paper-simple-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/paper/simple/score_zero results/relp_sva_moe/qwen3/paper/simple/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/simple/test
+2026-11-08T00:50:53Z END   relp-qwen3-paper-simple-test rc=0 (133s)
+2026-11-08T00:50:53Z START relp-qwen3-paper-rc-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/paper/rc/score_zero results/relp_sva_moe/qwen3/paper/rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/rc/test
+2026-11-08T00:53:57Z END   relp-qwen3-paper-rc-test rc=0 (184s)
+2026-11-08T00:53:57Z START relp-qwen3-paper-within_rc-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/paper/within_rc/score_zero results/relp_sva_moe/qwen3/paper/within_rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/within_rc/test
+2026-11-08T00:56:42Z END   relp-qwen3-paper-within_rc-test rc=0 (165s)
+2026-11-08T00:56:42Z START relp-qwen3-paper-nounpp-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/paper/nounpp/score_zero results/relp_sva_moe/qwen3/paper/nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/paper/nounpp/test
+2026-11-08T00:59:28Z END   relp-qwen3-paper-nounpp-test rc=0 (166s)
+2026-11-08T01:49:48Z START relp-qwen3-grouped-simple-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --output-dir results/relp_sva_moe/qwen3/grouped/simple/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.25886964797973633, "metric_functional_batched_vs_single_max_abs": 0.25886964797973633, "metric_abs_mean": 5.070515155792236, "route_sets_native_batched_vs_single_changed": 47}}
+2026-11-08T01:51:36Z END   relp-qwen3-grouped-simple-verify rc=0 (108s)
+2026-11-08T01:51:36Z START relp-qwen3-grouped-simple-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/grouped/simple/score_zero
+scored 76/76
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T01:52:57Z END   relp-qwen3-grouped-simple-score_zero rc=0 (81s)
+2026-11-08T01:52:57Z START relp-qwen3-grouped-simple-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/grouped/simple/score_zero --output-dir results/relp_sva_moe/qwen3/grouped/simple/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T01:53:50Z END   relp-qwen3-grouped-simple-score_mean rc=0 (53s)
+2026-11-08T01:53:51Z START relp-qwen3-grouped-simple-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/grouped/simple/score_zero results/relp_sva_moe/qwen3/grouped/simple/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/simple/validation
+2026-11-08T01:55:30Z END   relp-qwen3-grouped-simple-validation rc=0 (99s)
+2026-11-08T01:55:31Z START relp-qwen3-grouped-rc-verify (waited 1s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --output-dir results/relp_sva_moe/qwen3/grouped/rc/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.20885133743286133, "metric_functional_batched_vs_single_max_abs": 0.20885133743286133, "metric_abs_mean": 4.102515697479248, "route_sets_native_batched_vs_single_changed": 451}}
+2026-11-08T01:57:15Z END   relp-qwen3-grouped-rc-verify rc=0 (104s)
+2026-11-08T01:57:15Z START relp-qwen3-grouped-rc-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/grouped/rc/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T01:58:32Z END   relp-qwen3-grouped-rc-score_zero rc=0 (77s)
+2026-11-08T01:58:32Z START relp-qwen3-grouped-rc-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/grouped/rc/score_zero --output-dir results/relp_sva_moe/qwen3/grouped/rc/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T01:59:24Z END   relp-qwen3-grouped-rc-score_mean rc=0 (52s)
+2026-11-08T01:59:25Z START relp-qwen3-grouped-rc-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/grouped/rc/score_zero results/relp_sva_moe/qwen3/grouped/rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/rc/validation
+2026-11-08T02:02:27Z END   relp-qwen3-grouped-rc-validation rc=0 (182s)
+2026-11-08T02:02:27Z START relp-qwen3-grouped-within_rc-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.6324417591094971, "metric_functional_batched_vs_single_max_abs": 0.6324417591094971, "metric_abs_mean": 3.9047598838806152, "route_sets_native_batched_vs_single_changed": 484}}
+2026-11-08T02:04:03Z END   relp-qwen3-grouped-within_rc-verify rc=0 (96s)
+2026-11-08T02:04:03Z START relp-qwen3-grouped-within_rc-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T02:05:18Z END   relp-qwen3-grouped-within_rc-score_zero rc=0 (75s)
+2026-11-08T02:05:18Z START relp-qwen3-grouped-within_rc-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/grouped/within_rc/score_zero --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T02:06:12Z END   relp-qwen3-grouped-within_rc-score_mean rc=0 (54s)
+2026-11-08T02:06:12Z START relp-qwen3-grouped-within_rc-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/grouped/within_rc/score_zero results/relp_sva_moe/qwen3/grouped/within_rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/validation
+2026-11-08T02:08:51Z END   relp-qwen3-grouped-within_rc-validation rc=0 (159s)
+2026-11-08T02:08:51Z START relp-qwen3-grouped-nounpp-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.9440712928771973, "metric_functional_batched_vs_single_max_abs": 0.9440712928771973, "metric_abs_mean": 2.8660004138946533, "route_sets_native_batched_vs_single_changed": 364}}
+2026-11-08T02:10:32Z END   relp-qwen3-grouped-nounpp-verify rc=0 (101s)
+2026-11-08T02:10:32Z START relp-qwen3-grouped-nounpp-score_zero (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --mode paired --pool non_special --baseline zero --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/score_zero
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T02:11:48Z END   relp-qwen3-grouped-nounpp-score_zero rc=0 (76s)
+2026-11-08T02:11:48Z START relp-qwen3-grouped-nounpp-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --mode paired --pool non_special --baseline mean_q_routed --reuse-scores results/relp_sva_moe/qwen3/grouped/nounpp/score_zero --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T02:12:41Z END   relp-qwen3-grouped-nounpp-score_mean rc=0 (53s)
+2026-11-08T02:12:41Z START relp-qwen3-grouped-nounpp-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --split validation --score-dirs results/relp_sva_moe/qwen3/grouped/nounpp/score_zero results/relp_sva_moe/qwen3/grouped/nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/validation
+2026-11-08T02:15:31Z END   relp-qwen3-grouped-nounpp-validation rc=0 (170s)
+2026-11-08T02:15:31Z START relp-qwen3-grouped-simple-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/grouped/simple/score_zero results/relp_sva_moe/qwen3/grouped/simple/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/simple/test
+2026-11-08T02:17:23Z END   relp-qwen3-grouped-simple-test rc=0 (112s)
+2026-11-08T02:17:23Z START relp-qwen3-grouped-rc-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/grouped/rc/score_zero results/relp_sva_moe/qwen3/grouped/rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/rc/test
+2026-11-08T02:20:32Z END   relp-qwen3-grouped-rc-test rc=0 (189s)
+2026-11-08T02:20:32Z START relp-qwen3-grouped-within_rc-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/grouped/within_rc/score_zero results/relp_sva_moe/qwen3/grouped/within_rc/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/test
+2026-11-08T02:23:18Z END   relp-qwen3-grouped-within_rc-test rc=0 (166s)
+2026-11-08T02:23:18Z START relp-qwen3-grouped-nounpp-test (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --split test --score-dirs results/relp_sva_moe/qwen3/grouped/nounpp/score_zero results/relp_sva_moe/qwen3/grouped/nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/test
+2026-11-08T02:26:10Z END   relp-qwen3-grouped-nounpp-test rc=0 (172s)
+2026-11-08T03:16:13Z START relp-qwen3-paper-simple-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/simple/score_endpointB
+endpointB done in 99s
+2026-11-08T03:18:17Z END   relp-qwen3-paper-simple-endpointB rc=0 (124s)
+2026-11-08T03:18:17Z START relp-qwen3-paper-rc-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/rc/score_endpointB
+endpointB done in 103s
+2026-11-08T03:20:19Z END   relp-qwen3-paper-rc-endpointB rc=0 (122s)
+2026-11-08T03:20:19Z START relp-qwen3-paper-within_rc-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/within_rc/score_endpointB
+endpointB done in 77s
+2026-11-08T03:22:00Z END   relp-qwen3-paper-within_rc-endpointB rc=0 (101s)
+2026-11-08T03:22:00Z START relp-qwen3-paper-nounpp-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/nounpp/score_endpointB
+endpointB done in 80s
+2026-11-08T03:23:45Z END   relp-qwen3-paper-nounpp-endpointB rc=0 (105s)
+2026-11-08T03:40:13Z START relp-qwen3-grouped-simple-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --output-dir results/relp_sva_moe/qwen3/grouped/simple/score_endpointB
+endpointB done in 95s
+2026-11-08T03:42:12Z END   relp-qwen3-grouped-simple-endpointB rc=0 (118s)
+2026-11-08T03:42:12Z START relp-qwen3-grouped-rc-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/grouped/rc/score_endpointB
+endpointB done in 87s
+2026-11-08T03:44:03Z END   relp-qwen3-grouped-rc-endpointB rc=0 (111s)
+2026-11-08T03:44:03Z START relp-qwen3-grouped-within_rc-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/score_endpointB
+endpointB done in 71s
+2026-11-08T03:45:37Z END   relp-qwen3-grouped-within_rc-endpointB rc=0 (94s)
+2026-11-08T03:45:37Z START relp-qwen3-grouped-nounpp-endpointB (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py endpointB --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/score_endpointB
+endpointB done in 86s
+2026-11-08T03:47:27Z END   relp-qwen3-grouped-nounpp-endpointB rc=0 (110s)
+2026-11-08T04:03:48Z START relp-qwen3-paper-simple-stability (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --mode paired --pool non_special --baseline zero --score-chunk 100 --output-dir results/relp_sva_moe/qwen3/paper/simple/score_zero_chunk100
+scored 100/300
+scored 200/300
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T04:07:05Z END   relp-qwen3-paper-simple-stability rc=0 (197s)
+2026-11-08T04:07:05Z START relp-qwen3-paper-rc-stability (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --mode paired --pool non_special --baseline zero --score-chunk 100 --output-dir results/relp_sva_moe/qwen3/paper/rc/score_zero_chunk100
+scored 100/300
+scored 200/300
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T04:09:54Z END   relp-qwen3-paper-rc-stability rc=0 (169s)
+2026-11-08T04:09:54Z START relp-qwen3-paper-within_rc-stability (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --mode paired --pool non_special --baseline zero --score-chunk 100 --output-dir results/relp_sva_moe/qwen3/paper/within_rc/score_zero_chunk100
+scored 100/300
+scored 200/300
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T04:12:35Z END   relp-qwen3-paper-within_rc-stability rc=0 (161s)
+2026-11-08T04:12:35Z START relp-qwen3-paper-nounpp-stability (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --mode paired --pool non_special --baseline zero --score-chunk 100 --output-dir results/relp_sva_moe/qwen3/paper/nounpp/score_zero_chunk100
+scored 100/300
+scored 200/300
+scored 300/300
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-08T04:15:20Z END   relp-qwen3-paper-nounpp-stability rc=0 (165s)
+2026-11-08T04:41:11Z START relp-qwen3-grouped-simple-patch_layerpos (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --no-experts --output-dir results/relp_sva_moe/qwen3/grouped/simple/patch_layerpos
+115 rows, 11040 units (1 positions), 1 passes (cap 732421 units)
+pass 1/1: 11040 units in 41s
+patch done in 101s
+2026-11-08T04:43:19Z END   relp-qwen3-grouped-simple-patch_layerpos rc=0 (128s)
+2026-11-08T04:43:19Z START relp-qwen3-grouped-simple-patch_final (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --positions final --output-dir results/relp_sva_moe/qwen3/grouped/simple/patch_final
+115 rows, 127194 units (1 positions), 1 passes (cap 732421 units)
+pass 1/1: 127194 units in 45s
+patch done in 86s
+2026-11-08T04:45:08Z END   relp-qwen3-grouped-simple-patch_final rc=0 (110s)
+2026-11-08T04:45:09Z START relp-qwen3-grouped-rc-patch_layerpos (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --no-experts --output-dir results/relp_sva_moe/qwen3/grouped/rc/patch_layerpos
+380 rows, 182400 units (5 positions), 1 passes (cap 244140 units)
+pass 1/1: 182400 units in 120s
+patch done in 161s
+2026-11-08T04:48:14Z END   relp-qwen3-grouped-rc-patch_layerpos rc=0 (185s)
+2026-11-08T04:48:14Z START relp-qwen3-grouped-rc-patch_final (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --positions final --output-dir results/relp_sva_moe/qwen3/grouped/rc/patch_final
+380 rows, 369968 units (1 positions), 2 passes (cap 244140 units)
+pass 1/2: 243656 units in 149s
+pass 2/2: 126312 units in 82s
+patch done in 274s
+2026-11-08T04:53:12Z END   relp-qwen3-grouped-rc-patch_final rc=0 (298s)
+2026-11-08T04:53:12Z START relp-qwen3-grouped-within_rc-patch_layerpos (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --no-experts --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/patch_layerpos
+380 rows, 36480 units (1 positions), 1 passes (cap 292968 units)
+pass 1/1: 36480 units in 33s
+patch done in 74s
+2026-11-08T04:54:57Z END   relp-qwen3-grouped-within_rc-patch_layerpos rc=0 (105s)
+2026-11-08T04:54:58Z START relp-qwen3-grouped-within_rc-patch_final (waited 1s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --positions final --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/patch_final
+380 rows, 398564 units (1 positions), 2 passes (cap 292968 units)
+pass 1/2: 291938 units in 152s
+pass 2/2: 106626 units in 61s
+patch done in 255s
+2026-11-08T04:59:39Z END   relp-qwen3-grouped-within_rc-patch_final rc=0 (281s)
+2026-11-08T05:01:15Z START relp-qwen3-grouped-nounpp-patch_layerpos (waited 95s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --no-experts --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/patch_layerpos
+380 rows, 145920 units (4 positions), 1 passes (cap 292968 units)
+pass 1/1: 145920 units in 86s
+patch done in 126s
+2026-11-08T05:03:46Z END   relp-qwen3-grouped-nounpp-patch_layerpos rc=0 (151s)
+2026-11-08T05:03:46Z START relp-qwen3-grouped-nounpp-patch_final (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --positions final --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/patch_final
+380 rows, 376172 units (1 positions), 2 passes (cap 292968 units)
+pass 1/2: 292416 units in 154s
+pass 2/2: 83756 units in 53s
+patch done in 247s
+2026-11-08T05:08:16Z END   relp-qwen3-grouped-nounpp-patch_final rc=0 (270s)
+2026-11-08T05:38:42Z START relp-qwen3-paper-simple-patch_full (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/simple/patch_full
+380 rows, 421080 units (1 positions), 1 passes (cap 732421 units)
+pass 1/1: 421080 units in 107s
+patch done in 166s
+2026-11-08T05:41:52Z END   relp-qwen3-paper-simple-patch_full rc=0 (190s)
+2026-11-08T05:41:52Z START relp-qwen3-paper-rc-patch_full (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/rc/patch_full
+380 rows, 1955638 units (5 positions), 9 passes (cap 244140 units)
+pass 1/9: 242160 units in 150s
+pass 2/9: 241516 units in 150s
+pass 3/9: 242190 units in 147s
+pass 4/9: 241596 units in 150s
+pass 5/9: 241528 units in 146s
+pass 6/9: 241062 units in 147s
+pass 7/9: 242800 units in 148s
+pass 8/9: 242280 units in 147s
+pass 9/9: 20506 units in 37s
+patch done in 1266s
+2026-11-08T06:03:36Z END   relp-qwen3-paper-rc-patch_full rc=0 (1304s)
+2026-11-08T06:03:36Z START relp-qwen3-paper-within_rc-patch_full (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/within_rc/patch_full
+380 rows, 396732 units (1 positions), 2 passes (cap 292968 units)
+pass 1/2: 292710 units in 154s
+pass 2/2: 104022 units in 60s
+patch done in 250s
+2026-11-08T06:08:11Z END   relp-qwen3-paper-within_rc-patch_full rc=0 (275s)
+2026-11-08T06:08:11Z START relp-qwen3-paper-nounpp-patch_full (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --output-dir results/relp_sva_moe/qwen3/paper/nounpp/patch_full
+380 rows, 1564852 units (4 positions), 6 passes (cap 292968 units)
+pass 1/6: 289694 units in 156s
+pass 2/6: 291464 units in 154s
+pass 3/6: 292216 units in 158s
+pass 4/6: 291848 units in 153s
+pass 5/6: 289040 units in 153s
+pass 6/6: 110590 units in 65s
+patch done in 874s
+2026-11-08T06:23:11Z END   relp-qwen3-paper-nounpp-patch_full rc=0 (900s)
+2026-11-08T06:55:47Z START relp-qwen3-paper-simple-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --units-json results/relp_sva_moe/qwen3/paper/simple/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/paper/simple/diagnose
+diagnose done in 106s
+2026-11-08T06:57:57Z END   relp-qwen3-paper-simple-diagnose rc=0 (130s)
+2026-11-08T06:57:57Z START relp-qwen3-paper-rc-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --units-json results/relp_sva_moe/qwen3/paper/rc/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/paper/rc/diagnose
+diagnose done in 94s
+2026-11-08T06:59:56Z END   relp-qwen3-paper-rc-diagnose rc=0 (120s)
+2026-11-08T06:59:57Z START relp-qwen3-paper-within_rc-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --units-json results/relp_sva_moe/qwen3/paper/within_rc/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/paper/within_rc/diagnose
+diagnose done in 95s
+2026-11-08T07:01:58Z END   relp-qwen3-paper-within_rc-diagnose rc=0 (121s)
+2026-11-08T07:01:58Z START relp-qwen3-paper-nounpp-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --units-json results/relp_sva_moe/qwen3/paper/nounpp/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/paper/nounpp/diagnose
+diagnose done in 96s
+2026-11-08T07:03:57Z END   relp-qwen3-paper-nounpp-diagnose rc=0 (119s)
+2026-11-08T07:16:13Z START relp-qwen3-grouped-simple-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --units-json results/relp_sva_moe/qwen3/grouped/simple/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/grouped/simple/diagnose
+diagnose done in 98s
+2026-11-08T07:18:15Z END   relp-qwen3-grouped-simple-diagnose rc=0 (122s)
+2026-11-08T07:18:15Z START relp-qwen3-grouped-rc-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task rc --verification results/relp_sva_moe/qwen3/grouped/rc/verify/verification.json --units-json results/relp_sva_moe/qwen3/grouped/rc/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/grouped/rc/diagnose
+diagnose done in 68s
+2026-11-08T07:19:46Z END   relp-qwen3-grouped-rc-diagnose rc=0 (91s)
+2026-11-08T07:19:46Z START relp-qwen3-grouped-within_rc-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task within_rc --verification results/relp_sva_moe/qwen3/grouped/within_rc/verify/verification.json --units-json results/relp_sva_moe/qwen3/grouped/within_rc/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/grouped/within_rc/diagnose
+diagnose done in 74s
+2026-11-08T07:21:25Z END   relp-qwen3-grouped-within_rc-diagnose rc=0 (99s)
+2026-11-08T07:21:25Z START relp-qwen3-grouped-nounpp-diagnose (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task nounpp --verification results/relp_sva_moe/qwen3/grouped/nounpp/verify/verification.json --units-json results/relp_sva_moe/qwen3/grouped/nounpp/diagnose_units.json --output-dir results/relp_sva_moe/qwen3/grouped/nounpp/diagnose
+diagnose done in 57s
+2026-11-08T07:22:48Z END   relp-qwen3-grouped-nounpp-diagnose rc=0 (83s)

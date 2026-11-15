@@ -44,6 +44,13 @@ E3 event / E0 × direction; associativity; statement vs event), ladder v2 of dif
 (Mistral-7B ↔ Mixtral-8x7B, Qwen2-7B ↔ Qwen2-57B-A14B, both Qwen2 in fp32), Qwen3 4B/8B/14B series, circuits (C1 neurons, C2 RelP
 pilot, C3 concept circuits). 8 models, 102 analysed cells. Stage 3 (Mixtral-8x22B) and F3 await the user's decision (DP6, DP3).
 Agents p6-data / p6-engine / p6-analysis / p6-circuit; prefix ext14. Headlines in 2b.**
+**Phase 7 COMPLETE, committed and pushed 2026-11-15 (2026-11-07/08 runs, post-hoc 2026-11-08/09; plan + status `docs/relp_moe_plan.md`, report `results/sections/relp_moe_sva.md`): RelP
+(Arora et al. 2026) -> MoE on SVA for Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1 (BOS kept), following docs/relp_moe_implementation_guide.md +
+docs/relp_sva_experiment_protocol.md (user commit 6706c13) exactly, then Lu-style STR activation patching on the same pairs and a
+RelP-vs-patching expert comparison with diagnostics. New layer-streamed engine `moetrace/relp_moe_stream.py` (HF-bit-exact forward,
+reverse-streamed RelP backward), patching `moetrace/relp_moe_patch.py`; runners `scripts/relp_sva_moe_run.py`, `scripts/relp_moe_compare_run.py`;
+chains `scripts/relp_moe_{chain,patch_chain,diag_chain}.sh`; post-hoc `scripts/relp_moe_posthoc.py`; outputs `results/relp_sva_moe/`; envs `.venv-relp` (experiments; `.venv` -> it)
+and `.venv-analysis` (CPU analysis / figures); evidence and deviations `docs/relp_moe_stream_notes.md`. ~7.7 GPU-h, 0 failed jobs. Headlines in 2b.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -286,6 +293,24 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
   - *Robustness*: metric-invariant (Spearman ≥ 0.97); top-3 head / expert knockouts lower their repair 21–31 % beyond random, share moves
     0.02–0.07. Tier 2 E1 a→e: Qwen3 re-selects L37E032, Mixtral L17E007. Logistics: GPU queue priorities
     (`logs/gpu_queue_lowprio.txt`), one GPU job per cell, pooled / behaviour-only rule, three usage limits survived.
+- **Phase 7 (2026-11-07/08, RelP on SVA + RelP vs Lu-style patching; report `results/sections/relp_moe_sva.md`)**:
+  - *Verification*: every task's protocol `verify` passes at atol 1e-4 / rtol 1e-3 / rel-L2 1e-3 (20/20 runs; forward bit-identical to native HF
+    for the same batch); on real OLMoE fp32 the engine reproduces the guide's FModel (scores rel-L2 9e-7, 192 interventions <= 7e-6).
+  - *RelP*: a few late final-position experts carry the agreement decision (Qwen3 L41E036 / L46E030 / L47E111; Mixtral L30E002 / L31E000 /
+    L27E002), shared across the 4 tasks; held-out test (paper, macro): top-20 expert-positions recover 0.78 / 0.94 of the paired difference
+    (matched random 0.12 / 0.31), top-1000 neurons 0.97 / 0.99 (random 0.00); grouped (content-disjoint) the same; rankings stable to batch
+    composition (top-1 and top-10 identical in 8/8 tasks); endpoint A and B means nearly coincide (SVA contains both directions of each pair).
+  - *Patching (STR, Lu's rule)*: two sites, the subject token at layer 0 (4-10 logits) and the final token in late layers. Lu's final-position
+    rule ends at Qwen3 L41E036 / Mixtral L30E002 or L31E000 when the subject is not the final word; when it is, it picks layer 0 (Mixtral: ONE
+    expert L0E002 restores the whole difference; Qwen3: no single L0 expert matters).
+  - *Comparison*: late direct-writing experts agree (same top-1 wherever Lu's rule ends late; Qwen3's best expert anywhere = RelP top-1 in 7/8,
+    8/8 at endpoint B; Pearson 0.94-0.99); RelP underestimates the strongest experts (slope up to 1.5). All large disagreements are the layer-0
+    subject site (RelP ~0.15 vs exact 4-10): Qwen3 routing-mediated (frozen later routing leaves 0.35-0.72; RelP freezes the router), Mixtral
+    linearisation (L0E002 writes 41 % of the residual norm; effect survives frozen routing + attention).
+  - *Post-hoc (2026-11-08/09, report section 7)*: exact patching's top experts are as consistent across tasks as RelP's (top-10
+    Jaccard 0.57 / 0.57 Qwen3, 0.40 / 0.36 Mixtral); the inconsistency is Lu's final-position rule, which in subject-final tasks
+    patches the subject's own layer-0 output (token identity). With layer 0 excluded the rule matches RelP in Mixtral and picks
+    RelP rank 2 / 5 in Qwen3. RelP paper (arXiv 2601.22594): agreement circuits = MLP neurons only, attention never ablated.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -319,6 +344,12 @@ Extensions:
 - Phase 6 not done (ext14_synthesis.md caveats): Stage 3 Mixtral-8x22B (DP6, user) and F3 (DP3, user); Mixtral Dial A / E0 (too few
   strong-prior items, behaviour only); E2 traced nowhere (behaviour only); Qwen2-57B trimmed to 10 cells; Mistral E1 cells only on all
   association strata; readouts at the final token only (no grids / heads except e1_a2e, e1_e2a, e3_e2a and C3 cells after the scope cut).
+- Phase 7 not done (relp_moe_sva.md caveats, docs/relp_moe_plan.md "Open follow-ups"): add-back curve ranked by exact patching
+  (~1 h GPU); neuron-to-neuron edges; the RelP paper's ablation type for paired SVA (mean vs counterfactual; check its code);
+  neuron-level patching (comparison is at expert level); OLMoE formal SVA run (the guide's
+  original target; OLMoE used only for the FModel cross-check); Mixtral without BOS; dense Mistral-7B; GN version of Lu's protocol; router-decision
+  attribution (outside RelP's scope by the guide). Phase-7 results committed 2026-11-15 (~181 MB); gitignored and kept on the root disk only: aggregate*.pt (15.3 GB full
+  neuron-level means), per_row_expert_scores.pt, routes.pt, interventions.jsonl (= parquet), dev *.pt.
 - **Phase 2 wave 2 NOT started**: F3 gradient / attribution patching (reverse layer streaming), F1.4 multi-layer
   minimal sets (engine kind `multi` exists and is verified), optional F2 on Qwen3-Instruct, F4 full position × layer
   grid (the executor supports any p per row). Wave-1 loose ends: exact `attn_head_set` kind (minimal head sets are
@@ -343,8 +374,13 @@ Extensions:
 
 - AWS g5.4xlarge: 1× A10G 24 GB, 16 vCPU, 62 GB RAM. An unrelated user process (`repo-world-model`) holds ~9 GB RAM;
   do not kill processes you did not start.
-- Python venv: `. /home/ubuntu/MOE/.venv/bin/activate` (Python 3.14, torch 2.14+cu130, transformers 5.16.1,
-  safetensors, pandas, pyarrow, scipy, matplotlib, datasets). `~/.local/bin/claude` and `~/.local/bin/gh` exist.
+- **Fresh instance since 2026-11-07** (the previous NVMe and `.venv` were gone). Python envs: `.venv-relp` (Python 3.13, exact pins of
+  `requirements-relp-sva.txt`: torch 2.15.0+cu132, transformers 5.22.2, tokenizers 0.23.3, numpy 2.3.5, pandas 2.2.3, pyarrow 26.0.1;
+  no scipy / matplotlib) with `.venv` -> `.venv-relp` (so `gpu_queue.sh` works); `.venv-analysis` (CPU torch 2.15.0 + scipy,
+  matplotlib) for analysis / figures. The older pipeline (Phases 1-6) was validated with Python 3.14 / torch 2.14 / transformers
+  5.16.1. `gh` is `/usr/bin/gh` (configured; push works). The NVMe now holds only OLMoE-1B-7B-0125, Qwen3-30B-A3B-Base and
+  Mixtral-8x7B-v0.1 at pinned revisions (`scripts/relp_moe_download.sh`); other checkpoints need re-downloading. Do not run
+  three `hf download` with HF_XET_HIGH_PERFORMANCE in parallel (OOM on 62 GB RAM).
 - **Always `export HF_HOME=/opt/dlami/nvme/hf`** before any script (`scripts/gpu_queue.sh` does it for you).
   Since 2026-10-16 (Phase 6) the NVMe holds Qwen3-30B-A3B-Base, Mixtral-8x7B, OLMoE (+Instruct), Mistral-7B, Qwen2-7B, Qwen2-57B-A14B,
   Qwen3-1.7B/4B/8B/14B-Base (≈ 404 GB used, 117 GB free); the zoo Instruct / Coder checkpoints and the offload scratch were deleted
@@ -581,6 +617,8 @@ Three patterns were used and are documented in PLAYBOOK.md:
   page's HTML source is `docs/pages/team_brief_phase5/index.html` (figures from `results/figures/`; artifact JQ9nWn4wno8CuJ8Gte3qZw).
 - `docs/team_brief_phase6.md` and `docs/pages/team_brief_phase6/index.html` (Phase 6 team page, artifact 3KKhAYJxcBw2M21VKoL1FE; figures from
   `results/figures/`); `docs/phase6_literature_scan.md` / `docs/phase6_literature_review.md`; `data/dial/preregistration.md` (Phase 6 predictions).
+- Phase 7: `docs/relp_moe_implementation_guide.md`, `docs/relp_sva_experiment_protocol.md` (user's RelP guide / protocol), `docs/relp_moe_plan.md`
+  (plan + live status), `docs/relp_moe_stream_notes.md` (engine evidence, deviations), `results/sections/relp_moe_sva.md` (report).
 - `results/REPORT.md` base deliverable: sections 1–8 plus 6b (Mixtral without BOS).
 - `results/EXTENSIONS_REPORT.md` extension deliverable, assembled from `results/sections/ext*.md`.
 - `docs/ext3_literature_review.md` attention sinks, BOS, MoE routing, tokenisation conventions (30 references).

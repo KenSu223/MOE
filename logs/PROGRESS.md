@@ -1445,3 +1445,28 @@
 2026-10-18T00:12:38Z [coordinator] Phase 6 Stage R COMPLETE: all GPU work done 2026-10-17 18:41Z (0 failed jobs after retries); final synthesis results/sections/ext14_synthesis.md, prereg check results/tables/ext14_prereg_check.md (21 held, 15 failed, 1 partly, 8 untestable of 45), EXTENSIONS_REPORT rebuilt (Directions 14-14e), team page published (artifact 3KKhAYJxcBw2M21VKoL1FE), CLAUDE.md / README / PLAYBOOK / memory updated. Idle analysis chains stopped. Not committed. Awaiting user decisions DP6 (Mixtral-8x22B) and DP3 (F3).
 2026-10-18T00:15:12Z [coordinator] Phase 6 Stage R committed and pushed (user request).
 2026-11-07T21:36:18Z [relp-sva] Completed local SVA handoff: pinned official data/tokenizer, paper/grouped/smoke manifests with overlap audits, signed neuron/expert aggregation, native-forward acceptance gate, q interventions and matched random controls. Added protocol/runner/tests and updated implementation guide. 11 CPU tiny-HF-OLMoE tests passed; all three JSONL profiles rebuilt identically. Full 7B/GPU acceptance and experiments not run; no model weights downloaded. Evidence: data/relp_sva/validation_report.json. No commit or push.
+2026-11-07T23:29:13Z [relp-moe] Preparation complete (no formal run yet): fresh instance rebuilt (.venv-relp = exact requirements-relp-sva pins on Python 3.13, .venv -> .venv-relp; OLMoE / Qwen3-30B-A3B-Base / Mixtral-8x7B-v0.1 at pinned revisions on NVMe, 41 shards sha256-verified); SVA data fetched; tokenizer-aligned manifests qwen3_{smoke,paper,grouped}_v1 and mixtral_{smoke,paper,grouped}_v1 (Mixtral paper/simple discovery 236 via --short-discovery; OLMoE rebuild byte-identical). New layer-streamed RelP engine moetrace/relp_moe_stream.py + scripts/relp_sva_moe_run.py (verify/score/evaluate/evaluate-multi): 33/33 tests; real OLMoE fp32 vs FModel scores rel L2 9e-7, 192 interventions <= 7e-6; real-checkpoint verify at protocol tolerances Qwen3 2148/2148, Mixtral 1444/1444 (dev, results/relp_moe_dev/). Chain scripts/relp_moe_chain.sh ready; awaiting user go-ahead. Notes: docs/relp_moe_stream_notes.md
+2026-11-07T23:57:52Z [relp-moe] chain start (scripts/relp_moe_chain.sh): models=[qwen3 mixtral] profiles=[smoke paper grouped]
+2026-11-07T23:59:00Z [relp-moe] User go-ahead received; S1 RelP chain launched 2026-11-07T23:57:52Z (scripts/relp_moe_chain.sh: smoke -> paper -> grouped, qwen3 + mixtral). Plan/status: docs/relp_moe_plan.md (S2 stability, S3 endpoint B, S4 Lu-style patching + comparison, S5/S6 analysis + report). Watcher armed.
+2026-11-08T00:05:39Z [relp-moe] PROFILE DONE qwen3/smoke
+2026-11-08T00:15:02Z [relp-moe] chain2 (scripts/relp_moe_patch_chain.sh) launched, waiting for the RelP chain to end; patch grid dev run on real Qwen3 OK (82,622 units, 1 pass 70 s; denoise top units: L0 subject position, L41 final position; top expert L41E036 final).
+2026-11-08T00:23:03Z [relp-moe] PROFILE DONE mixtral/smoke
+2026-11-08T00:59:28Z [relp-moe] PROFILE DONE qwen3/paper
+2026-11-08T01:49:48Z [relp-moe] PROFILE DONE mixtral/paper
+2026-11-08T02:26:10Z [relp-moe] PROFILE DONE qwen3/grouped
+2026-11-08T02:53:56Z [relp-moe] coordinator back after a usage-limit pause (~01:00-02:53Z); chains ran unattended without failures: mixtral/paper and qwen3/grouped complete, mixtral/grouped in progress; chain2 waiting.
+2026-11-08T03:15:43Z [relp-moe] PROFILE DONE mixtral/grouped
+2026-11-08T03:15:43Z [relp-moe] chain end
+2026-11-08T03:16:13Z [relp-moe] chain2 start: S3 endpoint B -> S2 stability -> S4 patching grids (scripts/relp_moe_patch_chain.sh)
+2026-11-08T03:16:48Z [relp-moe] S1 RelP main experiment COMPLETE (03:15Z, 3 h 18 min): 20/20 model/profile/task runs, all verifications passed at protocol tolerances, all validation/test evaluations present. chain2 (S3 -> S2 -> S4) taking over.
+2026-11-08T04:03:48Z [relp-moe] S3 endpoint B DONE (paper + grouped)
+2026-11-08T04:41:11Z [relp-moe] S2 stability re-score DONE (paper)
+2026-11-08T05:03:32Z [relp-moe] chain3 (scripts/relp_moe_diag_chain.sh, S4f diagnostics) launched, waits for chain2. Dev diagnose (qwen3/grouped/simple): the L0 subject-position MoE-output effect (6.7) is routing-mediated (frozen downstream routing 0.38; frozen attention 6.8); late units are direct writers.
+2026-11-08T05:38:42Z [relp-moe] S4c/S4e grouped patching DONE
+2026-11-08T06:53:05Z [relp-moe] S4d paper full patching grids DONE
+2026-11-08T06:53:05Z [relp-moe] chain2 end
+2026-11-08T06:55:29Z [relp-moe] S4 patching grids COMPLETE (chain2 end 06:53Z; S4d 1 h 15 min, well under the 6 h ceiling). chain3 (S4f diagnostics) running.
+2026-11-08T07:38:07Z [relp-moe] S4f diagnostics DONE
+2026-11-08T07:40:44Z [relp-moe] chain3 end: diagnostics, analysis and figures refreshed; ready for the final report
+2026-11-08T07:41:42Z [relp-moe] Phase 7 COMPLETE: all GPU work done 07:40Z (S1-S4f, ~7.7 GPU-h, 0 failed jobs); final analysis, figures and report results/sections/relp_moe_sva.md written; CLAUDE.md / plan updated. Not committed.
+2026-11-15T00:36:58Z [relp-moe] Post-hoc analyses written (scripts/relp_moe_posthoc.py, report section 7, tables relp_moe_posthoc_*): first-pick rescues, Lu rule without layer 0 (large disagreements vanish), cross-task consistency (exact = RelP), grid coverage, top-20 routing status; RelP paper check (MLP-neuron circuits, attention never ablated). Docs (report, plan, CLAUDE.md incl. fresh-instance env) updated; .gitignore keeps 16 GB of .pt / duplicate jsonl local. Not yet committed.

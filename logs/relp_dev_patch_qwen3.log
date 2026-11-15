@@ -1,0 +1,5 @@
+2026-11-08T00:08:42Z START relp-dev-patch-qwen3 (waited 169s, low priority): .venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_sva_moe/qwen3/smoke/nounpp/verify/verification.json --splits discovery --max-rows 20 --output-dir results/relp_moe_dev/qwen3/patch_smoke_nounpp
+20 rows, 82622 units (4 positions), 1 passes (cap 292968 units)
+pass 1/1: 82622 units in 70s
+patch done in 129s
+2026-11-08T00:11:09Z END   relp-dev-patch-qwen3 rc=0 (147s)

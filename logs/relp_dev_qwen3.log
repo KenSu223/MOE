@@ -1,0 +1,17 @@
+2026-11-07T22:54:54Z START relp-dev-qwen3-verify (waited 586s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --output-dir results/relp_moe_dev/qwen3/smoke_nounpp/verify
+{"passed": true, "n_checks": 2148, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.2644062042236328, "metric_functional_batched_vs_single_max_abs": 0.2644062042236328, "metric_abs_mean": 3.2976722717285156, "route_sets_native_batched_vs_single_changed": 399}}
+2026-11-07T22:56:33Z END   relp-dev-qwen3-verify rc=0 (99s)
+2026-11-07T22:56:33Z qwen3 verify rc=0
+2026-11-07T22:56:33Z START relp-dev-qwen3-score (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_moe_dev/qwen3/smoke_nounpp/verify/verification.json --output-dir results/relp_moe_dev/qwen3/smoke_nounpp/score_zero
+scored 20/20
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-07T22:57:56Z END   relp-dev-qwen3-score rc=0 (83s)
+2026-11-07T22:57:56Z qwen3 score rc=0
+2026-11-07T22:57:56Z START relp-dev-qwen3-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_moe_dev/qwen3/smoke_nounpp/verify/verification.json --baseline mean_q_routed --reuse-scores results/relp_moe_dev/qwen3/smoke_nounpp/score_zero --output-dir results/relp_moe_dev/qwen3/smoke_nounpp/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-07T22:58:50Z END   relp-dev-qwen3-score_mean rc=0 (54s)
+2026-11-07T22:58:50Z qwen3 score_mean rc=0
+2026-11-07T22:58:50Z START relp-dev-qwen3-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_smoke_v1 --task nounpp --verification results/relp_moe_dev/qwen3/smoke_nounpp/verify/verification.json --split validation --score-dirs results/relp_moe_dev/qwen3/smoke_nounpp/score_zero results/relp_moe_dev/qwen3/smoke_nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_moe_dev/qwen3/smoke_nounpp/validation
+2026-11-07T23:01:31Z END   relp-dev-qwen3-validation rc=0 (161s)
+2026-11-07T23:01:31Z qwen3 validation rc=0
+2026-11-07T23:01:31Z qwen3 DEVCHECK DONE

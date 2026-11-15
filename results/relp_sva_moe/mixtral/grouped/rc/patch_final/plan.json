@@ -1,0 +1,19 @@
+{
+  "rows": 380,
+  "units": 79220,
+  "positions": [
+    6
+  ],
+  "passes": 1,
+  "units_per_pass_cap": 104631,
+  "directions": [
+    "denoise",
+    "noise"
+  ],
+  "experts": true,
+  "splits": [
+    "discovery",
+    "validation",
+    "test"
+  ]
+}

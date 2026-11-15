@@ -1,0 +1,100 @@
+{
+  "task": "rc",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "funnel": {
+    "raw": {
+      "train": 105600,
+      "test": 26400
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 19800
+    },
+    "eligible_signature": {
+      "train": 77142,
+      "test": 19248
+    },
+    "other_signature": 15810
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 20,
+        "case_counts": {
+          "singular_plural": 9,
+          "singular_singular": 2,
+          "plural_singular": 7,
+          "plural_plural": 2
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "plural_singular": 2,
+          "singular_plural": 2,
+          "plural_plural": 3,
+          "singular_singular": 1
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "plural_plural": 1,
+          "singular_plural": 3,
+          "singular_singular": 3,
+          "plural_singular": 1
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 1
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "41049e2725abff20bd9f3d2ef65ceff3c1d064b5f5c2c792f89742e975936ed4",
+    "calibration": "35307941998873492286bf892221d0998ac7fcbc56b1da53baed6c54acc64953",
+    "validation": "a072fce941398af423656e8b1b48f80e3b8c236264aaa1286d6ac7c73e34374c",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

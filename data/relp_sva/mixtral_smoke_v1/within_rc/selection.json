@@ -1,0 +1,99 @@
+{
+  "task": "within_rc",
+  "signature": [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "funnel": {
+    "raw": {
+      "train": 9600,
+      "test": 2400
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 6000
+    },
+    "eligible_signature": {
+      "train": 2317,
+      "test": 563
+    },
+    "other_signature": 3120
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 19,
+        "unique_groups": 19,
+        "case_counts": {
+          "singular_plural": 5,
+          "plural_singular": 3,
+          "singular_singular": 5,
+          "plural_plural": 7
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 7,
+        "unique_groups": 6,
+        "case_counts": {
+          "singular_singular": 1,
+          "plural_singular": 3,
+          "plural_plural": 3,
+          "singular_plural": 1
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "singular_plural": 1,
+          "singular_singular": 3,
+          "plural_singular": 4
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "5d1cac256ce0f120342621cf8709ae3585189631971b6ab40272f06f0f73d29e",
+    "calibration": "68be98510f3c787b3141de5a6a22aa2551544bb17e557d00e3ad1aa175d147ca",
+    "validation": "d34e68bf6ebcd20c9a85478c672bb63de9c1129bb5049ad2257583ad6b47a53f",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

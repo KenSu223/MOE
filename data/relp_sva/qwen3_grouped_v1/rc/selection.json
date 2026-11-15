@@ -1,0 +1,105 @@
+{
+  "task": "rc",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "funnel": {
+    "raw": {
+      "train": 105600,
+      "test": 26400
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 19800
+    },
+    "eligible_signature": {
+      "train": 77142,
+      "test": 19248
+    },
+    "other_signature": 15810
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 300,
+        "unique_content": 300,
+        "unique_groups": 281,
+        "case_counts": {
+          "plural_singular": 78,
+          "singular_singular": 70,
+          "plural_plural": 68,
+          "singular_plural": 84
+        }
+      },
+      "calibration": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 38,
+        "case_counts": {
+          "singular_singular": 14,
+          "singular_plural": 5,
+          "plural_plural": 15,
+          "plural_singular": 6
+        }
+      },
+      "validation": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 39,
+        "case_counts": {
+          "plural_singular": 12,
+          "plural_plural": 9,
+          "singular_singular": 14,
+          "singular_plural": 5
+        }
+      },
+      "test": {
+        "rows": 40,
+        "unique_content": 40,
+        "unique_groups": 39,
+        "case_counts": {
+          "plural_plural": 15,
+          "singular_plural": 10,
+          "singular_singular": 9,
+          "plural_singular": 6
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "0dfbf80a9c658e2e5289f984f6229478fe16ed2f9066191aaecaa92d7d4e9b27",
+    "calibration": "cd30f402e0ea8fbb04df2189a05affb1db4beab37d4e7e2eef91fc2f6c06301e",
+    "validation": "aa56b535b24c02450b2f591fbc53790a71f0b9be4d458a2f7a53bf9a5113bf6b",
+    "test": "8752c41f45b19502ef4703970418492819fd4839c218086ab35a7dd88b53a4b0"
+  }
+}

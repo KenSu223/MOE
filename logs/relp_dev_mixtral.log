@@ -1,0 +1,17 @@
+2026-11-07T23:01:31Z START relp-dev-mixtral-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py verify --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_smoke_v1 --task nounpp --output-dir results/relp_moe_dev/mixtral/smoke_nounpp/verify
+{"passed": true, "n_checks": 1444, "failed_checks": [], "diagnostics": {"metric_native_batched_vs_single_max_abs": 0.21069121360778809, "metric_functional_batched_vs_single_max_abs": 0.21069121360778809, "metric_abs_mean": 4.497352600097656, "route_sets_native_batched_vs_single_changed": 13}}
+2026-11-07T23:04:34Z END   relp-dev-mixtral-verify rc=0 (183s)
+2026-11-07T23:04:34Z mixtral verify rc=0
+2026-11-07T23:04:34Z START relp-dev-mixtral-score (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_smoke_v1 --task nounpp --verification results/relp_moe_dev/mixtral/smoke_nounpp/verify/verification.json --output-dir results/relp_moe_dev/mixtral/smoke_nounpp/score_zero
+scored 20/20
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-07T23:07:17Z END   relp-dev-mixtral-score rc=0 (163s)
+2026-11-07T23:07:17Z mixtral score rc=0
+2026-11-07T23:07:17Z START relp-dev-mixtral-score_mean (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py score --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_smoke_v1 --task nounpp --verification results/relp_moe_dev/mixtral/smoke_nounpp/verify/verification.json --baseline mean_q_routed --reuse-scores results/relp_moe_dev/mixtral/smoke_nounpp/score_zero --output-dir results/relp_moe_dev/mixtral/smoke_nounpp/score_mean
+Saved complete signed means and independent neuron/expert rankings.
+2026-11-07T23:08:42Z END   relp-dev-mixtral-score_mean rc=0 (85s)
+2026-11-07T23:08:42Z mixtral score_mean rc=0
+2026-11-07T23:08:42Z START relp-dev-mixtral-validation (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_sva_moe_run.py evaluate-multi --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_smoke_v1 --task nounpp --verification results/relp_moe_dev/mixtral/smoke_nounpp/verify/verification.json --split validation --score-dirs results/relp_moe_dev/mixtral/smoke_nounpp/score_zero results/relp_moe_dev/mixtral/smoke_nounpp/score_mean --units neuron expert_position expert_all_positions --output-dir results/relp_moe_dev/mixtral/smoke_nounpp/validation
+2026-11-07T23:11:05Z END   relp-dev-mixtral-validation rc=0 (143s)
+2026-11-07T23:11:05Z mixtral validation rc=0
+2026-11-07T23:11:05Z mixtral DEVCHECK DONE

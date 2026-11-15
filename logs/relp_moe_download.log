@@ -1,0 +1,11 @@
+scripts/relp_moe_download.sh: line 16: 1159996 Killed                     hf download "$repo" --revision "$rev" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+scripts/relp_moe_download.sh: line 16: 1159997 Killed                     hf download "$repo" --revision "$rev" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+scripts/relp_moe_download.sh: line 16: 1159995 Killed                     hf download "$repo" --revision "$rev" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+scripts/relp_moe_download.sh: line 16: 1160820 Killed                     hf download "$repo" --revision "$rev" --include "*.safetensors" --include "*.json" --include "*.txt" --include "*.model" --include "tokenizer*" --include "merges*" --include "vocab*" >> "$log" 2>&1
+2026-11-07T22:04:03Z DONE allenai/OLMoE-1B-7B-0125@9b0c1aa87e34a20052389dce1f0cf01da783f654 rc=0 elapsed=225s
+2026-11-07T22:06:13Z DONE Qwen/Qwen3-30B-A3B-Base@1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 rc=0 elapsed=355s
+2026-11-07T22:07:55Z DONE mistralai/Mixtral-8x7B-v0.1@fc7ac94680e38d7348cfa806e51218e6273104b0 rc=0 elapsed=457s
+2026-11-07T22:07:55Z ALL_DOWNLOADS_DONE
+15G	/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base
+7.5G	/opt/dlami/nvme/hf/hub/models--allenai--OLMoE-1B-7B-0125
+20G	/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1

@@ -1,0 +1,25 @@
+{
+  "model_dir": "/opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+  "layers": {
+    "0": {
+      "input_layernorm.weight": true,
+      "post_attention_layernorm.weight": true,
+      "self_attn.q_proj.weight": true,
+      "self_attn.k_proj.weight": true,
+      "self_attn.v_proj.weight": true,
+      "self_attn.o_proj.weight": true,
+      "mlp.gate.weight": true,
+      "mlp.experts.gate_up_proj": true,
+      "mlp.experts.down_proj": true,
+      "self_attn.q_norm.weight": true,
+      "self_attn.k_norm.weight": true,
+      "hf_param_names_covered": true
+    }
+  },
+  "globals": {
+    "embed": true,
+    "norm": true,
+    "head": true
+  },
+  "passed": true
+}

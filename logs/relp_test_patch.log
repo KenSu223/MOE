@@ -1,0 +1,10 @@
+2026-11-08T00:04:42Z START relp-test-patch (waited 63s, low priority): python -m pytest tests/test_relp_moe_patch.py -q -x
+......                                                                   [100%]
+=============================== warnings summary ===============================
+tests/test_relp_moe_patch.py::test_patch_pass_equals_brute_force[qwen3_moe]
+  /home/ubuntu/MOE/moetrace/relp_moe_patch.py:169: UserWarning: torch.searchsorted(): boundary tensor is non-contiguous, this will lower the performance due to extra data copy when converting non-contiguous tensor to contiguous, please use contiguous boundary tensor if possible. This message will only appear once per program. (Triggered internally at /__w/pytorch/pytorch/aten/src/ATen/native/BucketizationUtils.h:38.)
+    first = torch.searchsorted(u_layer, torch.arange(m.L + 1, device=dev))  # slots [first[l], first[l+1]) spawn at l
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 1 warning in 17.85s
+2026-11-08T00:05:02Z END   relp-test-patch rc=0 (20s)

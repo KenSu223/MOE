@@ -1,0 +1,64 @@
+2026-11-07T23:11:24Z START relp-dev-profile-eval (waited 0s): python /tmp/claude-1000/-home-ubuntu-MOE/eb2b657e-ce1d-4ae7-88e3-8cbde87b0717/scratchpad/prof_eval.py qwen3
+total 69.24122428894043
+         3363339 function calls (3361073 primitive calls) in 69.158 seconds
+
+   Ordered by: cumulative time
+   List reduced from 215 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.680    0.680   69.165   69.165 /home/ubuntu/MOE/scripts/relp_sva_moe_run.py:210(evaluate)
+      192    0.311    0.002   65.493    0.341 /home/ubuntu/MOE/moetrace/relp_moe_stream.py:242(layer)
+        1    0.006    0.006   59.286   59.286 /home/ubuntu/MOE/moetrace/relp_moe_stream.py:456(forward_pass)
+       48    0.001    0.000   50.709    1.056 /usr/lib/python3.13/threading.py:1001(_bootstrap)
+       48    0.000    0.000   47.567    0.991 /usr/lib/python3.13/threading.py:1059(join)
+       48    0.409    0.009   47.565    0.991 {method 'join' of '_thread._ThreadHandle' objects}
+    18432   15.902    0.001   45.896    0.002 {method 'copy_' of 'torch._C.TensorBase' objects}
+       48    0.065    0.001   40.136    0.836 /usr/lib/python3.13/threading.py:1028(_bootstrap_inner)
+    20544    8.963    0.000   30.101    0.001 /home/ubuntu/MOE/moetrace/relp_moe_stream.py:274(_apply_override)
+       48    0.005    0.000   13.133    0.274 /usr/lib/python3.13/threading.py:984(run)
+       48    0.068    0.001   12.941    0.270 /home/ubuntu/MOE/moetrace/weights.py:87(_fill_layer_host)
+     2560    2.270    0.001    9.170    0.004 /home/ubuntu/MOE/moetrace/relp_sva.py:248(route_change)
+    18864    0.731    0.000    8.675    0.000 /home/ubuntu/MOE/moetrace/weights.py:72(cpu_tensor)
+       49    0.002    0.000    6.291    0.128 /home/ubuntu/MOE/moetrace/weights.py:174(__iter__)
+   256849    3.896    0.000    5.012    0.000 {method 'index_add_' of 'torch._C.TensorBase' objects}
+   126251    4.369    0.000    4.634    0.000 {built-in method torch.where}
+       48    0.000    0.000    4.298    0.090 /home/ubuntu/MOE/.venv-relp/lib/python3.13/site-packages/torch/cuda/streams.py:102(synchronize)
+       48    4.298    0.090    4.298    0.090 {function Stream.synchronize at 0x7880bc7c4f40}
+    18864    0.652    0.000    3.238    0.000 {method 'get_tensor' of 'builtins.safe_open' objects}
+    37728    2.917    0.000    2.922    0.000 /home/ubuntu/MOE/.venv-relp/lib/python3.13/site-packages/torch/storage.py:477(__getitem__)
+    38977    2.172    0.000    2.198    0.000 {method 'to' of 'torch._C.TensorBase' objects}
+      144    0.259    0.002    2.088    0.014 /home/ubuntu/MOE/scripts/relp_sva_moe_run.py:263(ofn)
+   245760    1.850    0.000    1.850    0.000 {method 'sort' of 'torch._C.TensorBase' objects}
+   245760    1.579    0.000    1.579    0.000 {method 'scatter' of 'torch._C.TensorBase' objects}
+    33624    1.340    0.000    1.564    0.000 {built-in method torch._C._nn.linear}
+
+
+         3363339 function calls (3361073 primitive calls) in 69.158 seconds
+
+   Ordered by: internal time
+   List reduced from 215 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    18432   15.902    0.001   45.896    0.002 {method 'copy_' of 'torch._C.TensorBase' objects}
+    20544    8.963    0.000   30.101    0.001 /home/ubuntu/MOE/moetrace/relp_moe_stream.py:274(_apply_override)
+   126251    4.369    0.000    4.634    0.000 {built-in method torch.where}
+       48    4.298    0.090    4.298    0.090 {function Stream.synchronize at 0x7880bc7c4f40}
+   256849    3.896    0.000    5.012    0.000 {method 'index_add_' of 'torch._C.TensorBase' objects}
+    37728    2.917    0.000    2.922    0.000 /home/ubuntu/MOE/.venv-relp/lib/python3.13/site-packages/torch/storage.py:477(__getitem__)
+     2560    2.270    0.001    9.170    0.004 /home/ubuntu/MOE/moetrace/relp_sva.py:248(route_change)
+    38977    2.172    0.000    2.198    0.000 {method 'to' of 'torch._C.TensorBase' objects}
+   245760    1.850    0.000    1.850    0.000 {method 'sort' of 'torch._C.TensorBase' objects}
+   245760    1.579    0.000    1.579    0.000 {method 'scatter' of 'torch._C.TensorBase' objects}
+    33624    1.340    0.000    1.564    0.000 {built-in method torch._C._nn.linear}
+    20544    1.248    0.000    1.292    0.000 {built-in method torch.argsort}
+   163680    1.141    0.000    1.160    0.000 {method 'any' of 'torch._C.TensorBase' objects}
+   246148    1.069    0.000    1.069    0.000 {method 'sum' of 'torch._C.TensorBase' objects}
+    20544    1.009    0.000    1.047    0.000 {built-in method torch.nonzero}
+    82080    0.980    0.000    1.043    0.000 {built-in method torch.zeros_like}
+    30682    0.927    0.000    1.095    0.000 {built-in method torch.tensor}
+    61636    0.922    0.000    0.986    0.000 {built-in method torch.arange}
+    61158    0.805    0.000    0.862    0.000 {built-in method torch.cat}
+    18864    0.731    0.000    8.675    0.000 /home/ubuntu/MOE/moetrace/weights.py:72(cpu_tensor)
+
+
+2026-11-07T23:12:57Z END   relp-dev-profile-eval rc=0 (93s)

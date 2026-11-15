@@ -1,0 +1,6 @@
+2026-11-08T07:29:18Z START relp-dev-probe-mixtral (waited 139s, low priority): .venv-relp/bin/python scripts/relp_moe_probe_size.py /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 data/relp_sva/mixtral_paper_v1 nounpp results/relp_moe_dev/probe_size_mixtral_nounpp.json --experts 0:2 30:2 31:0
+wrote results/relp_moe_dev/probe_size_mixtral_nounpp.json
+2026-11-08T07:30:46Z END   relp-dev-probe-mixtral rc=0 (88s)
+2026-11-08T07:33:32Z START relp-dev-probe-qwen3 (waited 166s, low priority): .venv-relp/bin/python scripts/relp_moe_probe_size.py /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 data/relp_sva/qwen3_paper_v1 nounpp results/relp_moe_dev/probe_size_qwen3_nounpp.json --experts 41:36 46:30
+wrote results/relp_moe_dev/probe_size_qwen3_nounpp.json
+2026-11-08T07:34:51Z END   relp-dev-probe-qwen3 rc=0 (79s)

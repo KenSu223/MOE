@@ -1,0 +1,35 @@
+{
+  "mode": "paired",
+  "endpoint": "A",
+  "pool": "non_special",
+  "baseline": "mean_q_routed",
+  "neuron_budgets": [
+    1,
+    5,
+    10,
+    50,
+    100,
+    200,
+    500,
+    1000
+  ],
+  "expert_budgets": [
+    1,
+    2,
+    5,
+    10,
+    20,
+    50
+  ],
+  "random_seeds": [
+    101,
+    102,
+    103
+  ],
+  "ranking": "abs(mean(signed score))",
+  "expert_aggregation": "sum over all neurons before ranking",
+  "mean_baseline": "E[q | expert selected], per layer-position-expert on calibration A only; applied to live-routed experts",
+  "discovery_sha256": "6b5fc213f77e19e525ee12e80e60d4aa45a56fe7b60bce65bd58412596f78f50",
+  "n_discovery": 76,
+  "aggregate_sha256": "fd255e8cb61a0116d60305f0213431a60d0b3133104a943f2a89e0a5039cc77a"
+}

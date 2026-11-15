@@ -1,0 +1,96 @@
+{
+  "task": "within_rc",
+  "signature": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "funnel": {
+    "raw": {
+      "train": 9600,
+      "test": 2400
+    },
+    "rejected_checks": {},
+    "eligible_signature": {
+      "train": 7777,
+      "test": 1943
+    },
+    "other_signature": 2280
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 20,
+        "unique_content": 20,
+        "unique_groups": 20,
+        "case_counts": {
+          "singular_singular": 4,
+          "singular_plural": 4,
+          "plural_singular": 6,
+          "plural_plural": 6
+        }
+      },
+      "calibration": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 8,
+        "case_counts": {
+          "plural_plural": 2,
+          "plural_singular": 4,
+          "singular_singular": 1,
+          "singular_plural": 1
+        }
+      },
+      "validation": {
+        "rows": 8,
+        "unique_content": 8,
+        "unique_groups": 7,
+        "case_counts": {
+          "singular_plural": 3,
+          "plural_plural": 2,
+          "singular_singular": 3
+        }
+      },
+      "test": {
+        "rows": 0,
+        "unique_content": 0,
+        "unique_groups": 0,
+        "case_counts": {}
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 1
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "66e190220a036c280ca2d525da70c26024e0dd6b91ae8107fd2bf58b8237cb8f",
+    "calibration": "d723e4441924ac6df33bda621904678f11560fa420383c0928a3a2c205443674",
+    "validation": "3fc6061c6f320d88805feb2dfd4b55335b5fc3b4bae164936e70c0da27b74f92",
+    "test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

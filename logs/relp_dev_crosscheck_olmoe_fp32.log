@@ -1,0 +1,63 @@
+2026-11-07T22:29:16Z START relp-dev-crosscheck-olmoe-fp32 (waited 0s): python scripts/relp_moe_crosscheck_olmoe.py --dtype float32 --out results/relp_moe_dev/crosscheck_olmoe_fp32.json
+scored 6/6
+Loading weights:   0%|          | 0/179 [00:00<?, ?it/s]Loading weights:   2%|▏         | 4/179 [00:00<00:17,  9.79it/s]Loading weights:   3%|▎         | 5/179 [00:01<00:58,  2.98it/s]Loading weights:   8%|▊         | 15/179 [00:01<00:16,  9.92it/s]Loading weights:   9%|▉         | 17/179 [00:02<00:22,  7.34it/s]Loading weights:  15%|█▍        | 26/179 [00:02<00:12, 11.77it/s]Loading weights:  16%|█▌        | 28/179 [00:03<00:15,  9.90it/s]Loading weights:  21%|██        | 37/179 [00:03<00:09, 15.23it/s]Loading weights:  22%|██▏       | 39/179 [00:03<00:11, 12.13it/s]Loading weights:  27%|██▋       | 48/179 [00:04<00:08, 16.34it/s]Loading weights:  28%|██▊       | 50/179 [00:05<00:14,  8.65it/s]Loading weights:  33%|███▎      | 59/179 [00:05<00:10, 11.82it/s]Loading weights:  34%|███▍      | 61/179 [00:06<00:16,  7.16it/s]Loading weights:  39%|███▉      | 70/179 [00:06<00:09, 11.44it/s]Loading weights:  41%|████      | 73/179 [00:07<00:14,  7.50it/s]Loading weights:  45%|████▌     | 81/179 [00:08<00:09, 10.03it/s]Loading weights:  46%|████▋     | 83/179 [00:08<00:11,  8.22it/s]Loading weights:  51%|█████▏    | 92/179 [00:09<00:07, 11.60it/s]Loading weights:  53%|█████▎    | 94/179 [00:10<00:11,  7.44it/s]Loading weights:  58%|█████▊    | 103/179 [00:10<00:06, 11.08it/s]Loading weights:  59%|█████▊    | 105/179 [00:10<00:08,  8.78it/s]Loading weights:  64%|██████▎   | 114/179 [00:11<00:05, 12.19it/s]Loading weights:  65%|██████▍   | 116/179 [00:12<00:08,  7.64it/s]Loading weights:  70%|██████▉   | 125/179 [00:12<00:04, 10.90it/s]Loading weights:  71%|███████   | 127/179 [00:13<00:07,  7.07it/s]Loading weights:  76%|███████▌  | 136/179 [00:14<00:04, 10.28it/s]Loading weights:  77%|███████▋  | 138/179 [00:15<00:07,  5.37it/s]Loading weights:  82%|████████▏ | 147/179 [00:18<00:07,  4.28it/s]Loading weights:  83%|████████▎ | 148/179 [00:21<00:13,  2.38it/s]Loading weights:  88%|████████▊ | 158/179 [00:22<00:05,  4.03it/s]Loading weights:  89%|████████▉ | 159/179 [00:23<00:06,  3.18it/s]Loading weights:  94%|█████████▍| 169/179 [00:23<00:01,  5.28it/s]Loading weights:  96%|█████████▌| 171/179 [00:25<00:01,  4.19it/s]Loading weights: 100%|██████████| 179/179 [00:25<00:00,  7.15it/s]
+{
+  "dtype": "float32",
+  "task": "nounpp",
+  "manifest": "/home/ubuntu/MOE/data/relp_sva/olmoe_smoke_v1",
+  "n_score": 6,
+  "n_eval": 2,
+  "stream_score_seconds": 36.15746283531189,
+  "fmodel_score_seconds": 118.22860503196716,
+  "score": {
+    "support_equal": true,
+    "support_nodes": 1187840,
+    "max_abs_diff": 1.3709068298339844e-06,
+    "max_abs_ref": 2.6757567524909973,
+    "rel_l2": 9.343993142413786e-07,
+    "expert_position_rel_l2": 5.975085058333891e-07,
+    "corr": 0.999999999999468,
+    "margins_max_abs_diff": 3.5762786865234375e-06,
+    "calibration_counts_equal": true,
+    "calibration_qmean_max_abs_diff": 2.288818359375e-05,
+    "neuron_top1000_overlap": 1.0,
+    "neuron_top10_identical_order": true,
+    "expert_position_top50_overlap": 1.0,
+    "expert_position_top10_identical_order": true
+  },
+  "evaluate": {
+    "neuron/zero": {
+      "records": 48,
+      "keys_identical": true,
+      "margin_max_abs_diff": 5.751848220825195e-06,
+      "margin_abs_mean": 2.511126713206371,
+      "empty_max_abs_diff": 5.185604095458984e-06,
+      "route_change_counts_equal": "48/48"
+    },
+    "neuron/mean_q_routed": {
+      "records": 48,
+      "keys_identical": true,
+      "margin_max_abs_diff": 5.245208740234375e-06,
+      "margin_abs_mean": 2.8070772842814526,
+      "empty_max_abs_diff": 8.344650268554688e-07,
+      "route_change_counts_equal": "48/48"
+    },
+    "expert_position/zero": {
+      "records": 48,
+      "keys_identical": true,
+      "margin_max_abs_diff": 7.063150405883789e-06,
+      "margin_abs_mean": 2.3902502547328672,
+      "empty_max_abs_diff": 5.185604095458984e-06,
+      "route_change_counts_equal": "48/48"
+    },
+    "expert_position/mean_q_routed": {
+      "records": 48,
+      "keys_identical": true,
+      "margin_max_abs_diff": 5.602836608886719e-06,
+      "margin_abs_mean": 2.6207679814348617,
+      "empty_max_abs_diff": 8.344650268554688e-07,
+      "route_change_counts_equal": "48/48"
+    }
+  }
+}
+2026-11-07T22:54:54Z END   relp-dev-crosscheck-olmoe-fp32 rc=0 (1538s)

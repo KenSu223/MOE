@@ -1,0 +1,93 @@
+{
+  "task": "simple",
+  "signature": [
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 90
+    },
+    "eligible_signature": {
+      "train": 413,
+      "test": 97
+    },
+    "other_signature": 0
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 300,
+        "unique_content": 115,
+        "unique_groups": 17,
+        "case_counts": {
+          "plural": 150,
+          "singular": 150
+        }
+      },
+      "calibration": {
+        "rows": 40,
+        "unique_content": 37,
+        "unique_groups": 15,
+        "case_counts": {
+          "plural": 22,
+          "singular": 18
+        }
+      },
+      "validation": {
+        "rows": 40,
+        "unique_content": 32,
+        "unique_groups": 14,
+        "case_counts": {
+          "singular": 17,
+          "plural": 23
+        }
+      },
+      "test": {
+        "rows": 40,
+        "unique_content": 34,
+        "unique_groups": 17,
+        "case_counts": {
+          "plural": 19,
+          "singular": 21
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 33,
+        "group_id": 15
+      },
+      "discovery|validation": {
+        "content_id": 28,
+        "group_id": 14
+      },
+      "discovery|test": {
+        "content_id": 27,
+        "group_id": 17
+      },
+      "calibration|validation": {
+        "content_id": 11,
+        "group_id": 13
+      },
+      "calibration|test": {
+        "content_id": 10,
+        "group_id": 15
+      },
+      "validation|test": {
+        "content_id": 7,
+        "group_id": 14
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "959d070449b0811c69b7dd69ad852a7f496c77b2fcfadacd508e437f9b50ef0f",
+    "calibration": "6ec99458263239bbcf9ade27c36b9ba71f15bc8c448f3144c6c70bc55f568857",
+    "validation": "d64a0e613f281fe54a4b93462abe2a0b7a817b4c46da1b0d2aa71867dc48a582",
+    "test": "7dc1fe9600c41c52d52b5fa73b1740bce27861b2c1bedcad511f6bb8be5e029e"
+  }
+}

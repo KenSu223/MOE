@@ -1,0 +1,3 @@
+2026-11-08T04:59:40Z START relp-dev-diagnose-qwen3 (waited 101s, low priority): .venv-relp/bin/python scripts/relp_moe_compare_run.py diagnose --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_grouped_v1 --task simple --verification results/relp_sva_moe/qwen3/grouped/simple/verify/verification.json --units-json /tmp/claude-1000/-home-ubuntu-MOE/eb2b657e-ce1d-4ae7-88e3-8cbde87b0717/scratchpad/units_dev.json --output-dir results/relp_moe_dev/qwen3/diagnose_grouped_simple
+diagnose done in 72s
+2026-11-08T05:01:15Z END   relp-dev-diagnose-qwen3 rc=0 (95s)

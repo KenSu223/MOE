@@ -14,6 +14,17 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT = ROOT / 'data/relp_sva'
 TASKS = ('simple', 'rc', 'within_rc', 'nounpp')
+# RelP-MoE (2026-11-07): Qwen3-30B-A3B-Base and Mixtral-8x7B-v0.1 tokenizers are pinned in models.lock.json; the
+# OLMoE entry of sources.lock.json and every OLMoE output stay exactly as before (default --model olmoe).
+MODELS = ('olmoe', 'qwen3', 'mixtral')
+
+def model_lock(root, lock, key):
+    if key == 'olmoe':
+        return lock['model']
+    return json.loads((root/'models.lock.json').read_text())['models'][key]
+
+def tokenizer_dir(root, key):
+    return root/'tokenizer' if key == 'olmoe' else root/f'tokenizer_{key}'
 
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
@@ -32,7 +43,7 @@ def download(url, path, size=None, blob=None):
         path.write_bytes(data)
     return hashlib.sha256(data).hexdigest()
 
-def fetch(root):
+def fetch(root, key='olmoe'):
     lock = json.loads((root/'sources.lock.json').read_text())
     def one(f):
         url = f"https://raw.githubusercontent.com/{lock['repository']}/{lock['revision']}/{f['path']}"
@@ -40,13 +51,14 @@ def fetch(root):
         return {'path':f['path'], 'sha256':sha, 'git_blob_sha1':f['git_blob_sha1']}
     with ThreadPoolExecutor(max_workers=4) as ex:
         files = list(ex.map(one, lock['files']))
-    model = lock['model']
+    model = model_lock(root, lock, key)
     tok = {}
     for name in model['tokenizer_files']:
-        tok[name] = download(f"https://huggingface.co/{model['repository']}/resolve/{model['revision']}/{name}", root/'tokenizer'/name)
+        tok[name] = download(f"https://huggingface.co/{model['repository']}/resolve/{model['revision']}/{name}", tokenizer_dir(root, key)/name)
         if name in model.get('tokenizer_sha256',{}) and tok[name]!=model['tokenizer_sha256'][name]:
             raise ValueError(f'Pinned tokenizer hash mismatch: {name}')
-    dump(root/'download_receipt.json', {'source_revision':lock['revision'], 'files':files,
+    dump(root/('download_receipt.json' if key == 'olmoe' else f'download_receipt_{key}.json'),
+         {'source_revision':lock['revision'], 'files':files,
          'model':model, 'tokenizer_sha256':tok, 'model_weights_downloaded':False})
 
 def token_word_map(text, offsets, special):
@@ -115,7 +127,7 @@ def overlap(splits):
                               for field in ('content_id','group_id')}
     return {'splits':out,'overlaps':pairs}
 
-def select_splits(train, test, profile, seed):
+def select_splits(train, test, profile, seed, short_discovery=False):
     rng = random.Random(seed)
     train, test = list(train), list(test)
     rng.shuffle(train)
@@ -123,6 +135,10 @@ def select_splits(train, test, profile, seed):
     if profile in ('paper','smoke'):
         counts = (300,40,40,40) if profile=='paper' else (20,8,8,0)
         nd,nc,nv,nt = counts
+        if short_discovery and profile=='paper' and nc+nv < len(train) < nd+nc+nv and len(test)>=nt:
+            # RelP-MoE opt-in (--short-discovery): a tokenizer leaves fewer than 380 aligned train rows (Mixtral simple: 316).
+            # Calibration/validation/test keep 40; discovery takes the remainder. Never duplicates rows. Recorded in the manifest.
+            nd = len(train)-nc-nv
         if len(train)<nd+nc+nv or len(test)<nt:
             raise ValueError(f'Insufficient eligible rows: train={len(train)} test={len(test)} requested={counts}')
         return dict(discovery=train[:nd],calibration=train[nd:nd+nc],validation=train[nd+nc:nd+nc+nv],test=test[:nt])
@@ -149,10 +165,11 @@ def prepare(args):
     root, output = args.data_root, args.output_dir
     if output.exists(): raise ValueError('Output already exists; choose a new directory')
     lock=json.loads((root/'sources.lock.json').read_text())
-    tokdir=args.tokenizer_dir or root/'tokenizer'
-    for name,expected in lock['model'].get('tokenizer_sha256',{}).items():
+    model=model_lock(root, lock, args.model)
+    tokdir=args.tokenizer_dir or tokenizer_dir(root, args.model)
+    for name,expected in model.get('tokenizer_sha256',{}).items():
         if hashlib.sha256((tokdir/name).read_bytes()).hexdigest()!=expected:
-            raise ValueError(f'Tokenizer/config is not the pinned OLMoE revision: {name}')
+            raise ValueError(f'Tokenizer/config is not the pinned {args.model} revision: {name}')
     tok=AutoTokenizer.from_pretrained(tokdir, local_files_only=True, use_fast=True)
     if not tok.is_fast: raise ValueError('Fast tokenizer required for offset alignment')
     tok_hash={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(tokdir.glob('*'))
@@ -177,20 +194,21 @@ def prepare(args):
         signature=min(counts, key=lambda s:(len(s),-counts[s],s))
         eligible={s:[r for r in encoded if r['source_split']==s and tuple(r['token_word_map'])==signature]
                   for s in ('train','test')}
-        splits=select_splits(eligible['train'],eligible['test'],args.profile,args.seed)
+        splits=select_splits(eligible['train'],eligible['test'],args.profile,args.seed,args.short_discovery)
         task_outputs[task]={'task':task,'signature':list(signature),'splits':splits,
             'funnel':{'raw':{s:len(v) for s,v in raw.items()},'rejected_checks':rejects,
                       'eligible_signature':{s:len(v) for s,v in eligible.items()},
                       'other_signature':len(encoded)-sum(map(len,eligible.values()))},'audit':overlap(splits)}
     output.mkdir(parents=True,exist_ok=False)
     meta={'schema':1,'profile':args.profile,'seed':args.seed,'source_repository':lock['repository'],
-          'source_revision':lock['revision'],'model':lock['model'],'tokenizer_sha256':tok_hash,
+          'source_revision':lock['revision'],'model':model,'tokenizer_sha256':tok_hash,
           'transformers':transformers.__version__,'tokenizers':tokenizers.__version__,
           'tokenization':'raw prefix, add_special_tokens=True, no chat template, no padding',
           'alignment':'same token-to-whitespace-word map, shortest training signature, expert IDs fixed',
           'selection_uses_model_outputs':False,'paper_exact_row_ids_claimed':False,
           'profile_note':'paper preserves duplicate source rows; grouped replaces original file split and deduplicates content',
           'prepare_script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+          **({'short_discovery_opt_in':True} if args.short_discovery else {}),
           'tasks':{}}
     for task,result in task_outputs.items():
         dest=output/task;dest.mkdir()
@@ -213,8 +231,10 @@ def main():
     p.add_argument('--profile',choices=('paper','grouped','smoke'),default='paper')
     p.add_argument('--tasks',nargs='+',choices=TASKS,default=list(TASKS))
     p.add_argument('--seed',type=int,default=12)
+    p.add_argument('--model',choices=MODELS,default='olmoe',help='Tokenizer to align with (manifests are per tokenizer)')
+    p.add_argument('--short-discovery',action='store_true',help='paper profile: if a task has < 380 aligned train rows, keep 40/40/40 and shrink discovery (recorded)')
     a=p.parse_args()
-    if a.command=='fetch':fetch(a.data_root)
+    if a.command=='fetch':fetch(a.data_root,a.model)
     else:
         if a.output_dir is None:p.error('--output-dir is required')
         prepare(a)

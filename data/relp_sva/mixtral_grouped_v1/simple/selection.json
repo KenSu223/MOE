@@ -1,0 +1,94 @@
+{
+  "task": "simple",
+  "signature": [
+    -1,
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 180
+    },
+    "eligible_signature": {
+      "train": 316,
+      "test": 74
+    },
+    "other_signature": 30
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 54,
+        "unique_content": 54,
+        "unique_groups": 7,
+        "case_counts": {
+          "singular": 27,
+          "plural": 27
+        }
+      },
+      "calibration": {
+        "rows": 16,
+        "unique_content": 16,
+        "unique_groups": 2,
+        "case_counts": {
+          "singular": 8,
+          "plural": 8
+        }
+      },
+      "validation": {
+        "rows": 15,
+        "unique_content": 15,
+        "unique_groups": 2,
+        "case_counts": {
+          "plural": 7,
+          "singular": 8
+        }
+      },
+      "test": {
+        "rows": 14,
+        "unique_content": 14,
+        "unique_groups": 2,
+        "case_counts": {
+          "singular": 7,
+          "plural": 7
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "discovery|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|validation": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "calibration|test": {
+        "content_id": 0,
+        "group_id": 0
+      },
+      "validation|test": {
+        "content_id": 0,
+        "group_id": 0
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "2f9452c0ab8ab383cdc6ec0790dd957d927cc39dcf87ccff509b56dc293f147a",
+    "calibration": "ce57e80d89a7143f9e67bd1e8598719b34eb884d2887f1b014d7ffc50f9fad7e",
+    "validation": "3c437d85f5bffcf49c7ac8ffa9d5364ccb592e290874e96245ac48358b076989",
+    "test": "73c61f2235faf2d195f92db96fd9ac944b72770c4b8b1dcfa5fd1e4475845382"
+  }
+}

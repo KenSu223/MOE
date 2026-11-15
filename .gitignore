@@ -30,3 +30,10 @@ data/winogrande_1.1/
 results/codefact_*/scan_routing.parquet
 results/codefact_*/expert_parts/
 results/codefact_smoke/
+# Phase 7 (RelP on SVA): .venv is a symlink to .venv-relp; large or regenerable result files stay on the root disk only
+/.venv
+results/relp_sva_moe/**/aggregate*.pt
+results/relp_sva_moe/**/per_row_expert_scores.pt
+results/relp_sva_moe/**/routes.pt
+results/relp_sva_moe/**/interventions.jsonl
+results/relp_moe_dev/**/*.pt

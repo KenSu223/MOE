@@ -1,0 +1,453 @@
+{
+  "schema": 1,
+  "profile": "paper",
+  "seed": 12,
+  "source_repository": "TransluceAI/circuits",
+  "source_revision": "2d215d4ba016ba8602b69d71fc0f1ad139a427b7",
+  "model": {
+    "repository": "mistralai/Mixtral-8x7B-v0.1",
+    "revision": "fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "tokenizer_files": [
+      "config.json",
+      "special_tokens_map.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "tokenizer.model"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+      "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+      "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+    "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+    "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+    "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055",
+    "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+  },
+  "transformers": "5.22.2",
+  "tokenizers": "0.23.3",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "alignment": "same token-to-whitespace-word map, shortest training signature, expert IDs fixed",
+  "selection_uses_model_outputs": false,
+  "paper_exact_row_ids_claimed": false,
+  "profile_note": "paper preserves duplicate source rows; grouped replaces original file split and deduplicates content",
+  "prepare_script_sha256": "66ff7317a359b15efcd30ad866e6bb085c82a550ffbcefe695a29fe221dd52c0",
+  "short_discovery_opt_in": true,
+  "tasks": {
+    "simple": {
+      "task": "simple",
+      "signature": [
+        -1,
+        0,
+        1
+      ],
+      "funnel": {
+        "raw": {
+          "train": 480,
+          "test": 120
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 180
+        },
+        "eligible_signature": {
+          "train": 316,
+          "test": 74
+        },
+        "other_signature": 30
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 236,
+            "unique_content": 91,
+            "unique_groups": 13,
+            "case_counts": {
+              "plural": 123,
+              "singular": 113
+            }
+          },
+          "calibration": {
+            "rows": 40,
+            "unique_content": 33,
+            "unique_groups": 13,
+            "case_counts": {
+              "singular": 23,
+              "plural": 17
+            }
+          },
+          "validation": {
+            "rows": 40,
+            "unique_content": 34,
+            "unique_groups": 11,
+            "case_counts": {
+              "singular": 18,
+              "plural": 22
+            }
+          },
+          "test": {
+            "rows": 40,
+            "unique_content": 30,
+            "unique_groups": 13,
+            "case_counts": {
+              "singular": 20,
+              "plural": 20
+            }
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 30,
+            "group_id": 13
+          },
+          "discovery|validation": {
+            "content_id": 33,
+            "group_id": 11
+          },
+          "discovery|test": {
+            "content_id": 28,
+            "group_id": 13
+          },
+          "calibration|validation": {
+            "content_id": 9,
+            "group_id": 11
+          },
+          "calibration|test": {
+            "content_id": 7,
+            "group_id": 13
+          },
+          "validation|test": {
+            "content_id": 8,
+            "group_id": 11
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "529c9df418e669ae9e774e8e13d92a7f496b9e05363b8f23a3d1cb93f173d1a3",
+        "calibration": "e36ee59e1cd5e0bfe61d763500e153106367c3d896cd40e7492421c1c23da107",
+        "validation": "9f18c187c0afffc4e63e21caaff33de32089786dc5305b19f814cff51e7bf4c2",
+        "test": "1ec247b82dfadaa29f232c317055f5a57b9584cb6c97184d1e155bc476352d5a"
+      }
+    },
+    "rc": {
+      "task": "rc",
+      "signature": [
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "funnel": {
+        "raw": {
+          "train": 105600,
+          "test": 26400
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 39600
+        },
+        "eligible_signature": {
+          "train": 25215,
+          "test": 6375
+        },
+        "other_signature": 60810
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 300,
+            "unique_content": 296,
+            "unique_groups": 268,
+            "case_counts": {
+              "singular_singular": 88,
+              "plural_singular": 91,
+              "plural_plural": 63,
+              "singular_plural": 58
+            }
+          },
+          "calibration": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 39,
+            "case_counts": {
+              "singular_singular": 14,
+              "singular_plural": 7,
+              "plural_singular": 12,
+              "plural_plural": 7
+            }
+          },
+          "validation": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 38,
+            "case_counts": {
+              "singular_singular": 17,
+              "plural_plural": 7,
+              "plural_singular": 11,
+              "singular_plural": 5
+            }
+          },
+          "test": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 39,
+            "case_counts": {
+              "singular_singular": 14,
+              "plural_singular": 13,
+              "singular_plural": 8,
+              "plural_plural": 5
+            }
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 3,
+            "group_id": 10
+          },
+          "discovery|validation": {
+            "content_id": 1,
+            "group_id": 7
+          },
+          "discovery|test": {
+            "content_id": 2,
+            "group_id": 9
+          },
+          "calibration|validation": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "calibration|test": {
+            "content_id": 0,
+            "group_id": 0
+          },
+          "validation|test": {
+            "content_id": 0,
+            "group_id": 1
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "4039990ffc2025b9cc9d3fb46b86467be68d8b2a59eb9ce33bc570952203bfdb",
+        "calibration": "4b468510979b653cdbcf639e8cc41505ece088644a7bd9b4ef5e320a4e467c25",
+        "validation": "b783442f6da8d1940ce553057bbf6fca3e60c54e5ca876e0d6a0cace33311f0a",
+        "test": "ed17a47514e19fea95bd8c46403b498efb1e931e53acdbb530af8aaaec83c680"
+      }
+    },
+    "within_rc": {
+      "task": "within_rc",
+      "signature": [
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "funnel": {
+        "raw": {
+          "train": 9600,
+          "test": 2400
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 6000
+        },
+        "eligible_signature": {
+          "train": 2317,
+          "test": 563
+        },
+        "other_signature": 3120
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 300,
+            "unique_content": 253,
+            "unique_groups": 93,
+            "case_counts": {
+              "singular_plural": 84,
+              "plural_singular": 73,
+              "singular_singular": 87,
+              "plural_plural": 56
+            }
+          },
+          "calibration": {
+            "rows": 40,
+            "unique_content": 39,
+            "unique_groups": 32,
+            "case_counts": {
+              "plural_singular": 6,
+              "singular_singular": 12,
+              "singular_plural": 8,
+              "plural_plural": 14
+            }
+          },
+          "validation": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 31,
+            "case_counts": {
+              "plural_singular": 11,
+              "plural_plural": 5,
+              "singular_plural": 13,
+              "singular_singular": 11
+            }
+          },
+          "test": {
+            "rows": 40,
+            "unique_content": 39,
+            "unique_groups": 36,
+            "case_counts": {
+              "singular_plural": 10,
+              "singular_singular": 8,
+              "plural_plural": 16,
+              "plural_singular": 6
+            }
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 7,
+            "group_id": 32
+          },
+          "discovery|validation": {
+            "content_id": 12,
+            "group_id": 29
+          },
+          "discovery|test": {
+            "content_id": 14,
+            "group_id": 35
+          },
+          "calibration|validation": {
+            "content_id": 1,
+            "group_id": 11
+          },
+          "calibration|test": {
+            "content_id": 1,
+            "group_id": 11
+          },
+          "validation|test": {
+            "content_id": 3,
+            "group_id": 6
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "df1141cf2c7dc906bba7ec08d391f553bfd3e245568d8570dd67e906c1bf45f7",
+        "calibration": "66975811b3019cc4efd1abb4aa2c48859ae7984e06a5d2492ce4263ccd2774df",
+        "validation": "70d0ad84c4adbbac03aea028b71b15ce06c67eb51d9452d90fc406589b6d7bc4",
+        "test": "89cd749ee8f7bf59d9a0ef082c839707c1b7ddfd561607706c0f6214075f0a62"
+      }
+    },
+    "nounpp": {
+      "task": "nounpp",
+      "signature": [
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "funnel": {
+        "raw": {
+          "train": 1920,
+          "test": 480
+        },
+        "rejected_checks": {
+          "pair_length_mismatch": 746
+        },
+        "eligible_signature": {
+          "train": 1101,
+          "test": 283
+        },
+        "other_signature": 270
+      },
+      "audit": {
+        "splits": {
+          "discovery": {
+            "rows": 300,
+            "unique_content": 291,
+            "unique_groups": 249,
+            "case_counts": {
+              "plural_plural": 59,
+              "plural_singular": 87,
+              "singular_plural": 71,
+              "singular_singular": 83
+            }
+          },
+          "calibration": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 39,
+            "case_counts": {
+              "singular_singular": 11,
+              "plural_singular": 5,
+              "singular_plural": 13,
+              "plural_plural": 11
+            }
+          },
+          "validation": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 39,
+            "case_counts": {
+              "singular_singular": 14,
+              "singular_plural": 9,
+              "plural_plural": 5,
+              "plural_singular": 12
+            }
+          },
+          "test": {
+            "rows": 40,
+            "unique_content": 40,
+            "unique_groups": 39,
+            "case_counts": {
+              "plural_singular": 14,
+              "plural_plural": 11,
+              "singular_plural": 7,
+              "singular_singular": 8
+            }
+          }
+        },
+        "overlaps": {
+          "discovery|calibration": {
+            "content_id": 2,
+            "group_id": 14
+          },
+          "discovery|validation": {
+            "content_id": 3,
+            "group_id": 17
+          },
+          "discovery|test": {
+            "content_id": 3,
+            "group_id": 15
+          },
+          "calibration|validation": {
+            "content_id": 0,
+            "group_id": 3
+          },
+          "calibration|test": {
+            "content_id": 0,
+            "group_id": 2
+          },
+          "validation|test": {
+            "content_id": 0,
+            "group_id": 1
+          }
+        }
+      },
+      "files_sha256": {
+        "discovery": "f0cc79c3b97c30037c07bd31afa428958a83a0e50e32332a1ace751878a05e51",
+        "calibration": "5444530e15d685436c45e15709ba65baa5f1698e3e9efd7eef32f39fd4ed2036",
+        "validation": "efcfe9f9bc7e666edbcd7a93af39fda2ca7f8cbbf96e11dcec0bccb09d811c7a",
+        "test": "f1dec4d2de14e1b80704d282c99bf456f01dc8b27e10838182830cf7fba06972"
+      }
+    }
+  }
+}

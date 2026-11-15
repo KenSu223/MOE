@@ -1,0 +1,94 @@
+{
+  "task": "simple",
+  "signature": [
+    -1,
+    0,
+    1
+  ],
+  "funnel": {
+    "raw": {
+      "train": 480,
+      "test": 120
+    },
+    "rejected_checks": {
+      "pair_length_mismatch": 180
+    },
+    "eligible_signature": {
+      "train": 316,
+      "test": 74
+    },
+    "other_signature": 30
+  },
+  "audit": {
+    "splits": {
+      "discovery": {
+        "rows": 236,
+        "unique_content": 91,
+        "unique_groups": 13,
+        "case_counts": {
+          "plural": 123,
+          "singular": 113
+        }
+      },
+      "calibration": {
+        "rows": 40,
+        "unique_content": 33,
+        "unique_groups": 13,
+        "case_counts": {
+          "singular": 23,
+          "plural": 17
+        }
+      },
+      "validation": {
+        "rows": 40,
+        "unique_content": 34,
+        "unique_groups": 11,
+        "case_counts": {
+          "singular": 18,
+          "plural": 22
+        }
+      },
+      "test": {
+        "rows": 40,
+        "unique_content": 30,
+        "unique_groups": 13,
+        "case_counts": {
+          "singular": 20,
+          "plural": 20
+        }
+      }
+    },
+    "overlaps": {
+      "discovery|calibration": {
+        "content_id": 30,
+        "group_id": 13
+      },
+      "discovery|validation": {
+        "content_id": 33,
+        "group_id": 11
+      },
+      "discovery|test": {
+        "content_id": 28,
+        "group_id": 13
+      },
+      "calibration|validation": {
+        "content_id": 9,
+        "group_id": 11
+      },
+      "calibration|test": {
+        "content_id": 7,
+        "group_id": 13
+      },
+      "validation|test": {
+        "content_id": 8,
+        "group_id": 11
+      }
+    }
+  },
+  "files_sha256": {
+    "discovery": "529c9df418e669ae9e774e8e13d92a7f496b9e05363b8f23a3d1cb93f173d1a3",
+    "calibration": "e36ee59e1cd5e0bfe61d763500e153106367c3d896cd40e7492421c1c23da107",
+    "validation": "9f18c187c0afffc4e63e21caaff33de32089786dc5305b19f814cff51e7bf4c2",
+    "test": "1ec247b82dfadaa29f232c317055f5a57b9584cb6c97184d1e155bc476352d5a"
+  }
+}
