@@ -1,0 +1,437 @@
+2026-11-15T02:34:19Z START relp-p8-qwen3-nounpp-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_noise
+40 rows, 165922 units (4 positions), 1 passes (cap 292968 units)
+pass 1/1: 165922 units in 98s
+patch done in 157s
+2026-11-15T02:37:12Z END   relp-p8-qwen3-nounpp-noise rc=0 (173s)
+2026-11-15T02:37:12Z START relp-p8-qwen3-simple-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_noise
+40 rows, 43954 units (1 positions), 1 passes (cap 732421 units)
+pass 1/1: 43954 units in 44s
+patch done in 98s
+2026-11-15T02:39:13Z END   relp-p8-qwen3-simple-noise rc=0 (121s)
+2026-11-15T02:39:13Z START relp-p8-qwen3-rc-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_noise
+40 rows, 206436 units (5 positions), 1 passes (cap 244140 units)
+pass 1/1: 206436 units in 131s
+patch done in 182s
+2026-11-15T02:42:39Z END   relp-p8-qwen3-rc-noise rc=0 (206s)
+2026-11-15T02:43:10Z START relp-p8-qwen3-within_rc-noise (waited 31s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_noise
+40 rows, 41734 units (1 positions), 1 passes (cap 292968 units)
+pass 1/1: 41734 units in 45s
+patch done in 96s
+2026-11-15T02:45:02Z END   relp-p8-qwen3-within_rc-noise rc=0 (112s)
+2026-11-15T03:12:12Z START relp-p8-qwen3-nounpp-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_probe --sub-rows 3000
+probe done in 34s
+2026-11-15T03:13:05Z END   relp-p8-qwen3-nounpp-probe rc=0 (53s)
+2026-11-15T03:13:05Z START relp-p8-qwen3-nounpp-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_rules --sub-rows 3000
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 4.284120082855225}
+endpoint B: 12 variants in 65s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 3.9609274864196777}
+endpoint A: 12 variants in 64s
+rules done in 161s
+2026-11-15T03:16:07Z END   relp-p8-qwen3-nounpp-rules rc=0 (182s)
+2026-11-15T03:16:07Z START relp-p8-qwen3-nounpp-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_path --sub-rows 3000
+path pairs 100/300 (59s)
+path pairs 200/300 (108s)
+path pairs 300/300 (161s)
+path done in 161s
+2026-11-15T03:19:13Z END   relp-p8-qwen3-nounpp-path rc=0 (186s)
+2026-11-15T03:19:13Z START relp-p8-qwen3-nounpp-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_freeze --sub-rows 3000
+freeze: 100 rows, 48241 units x 8 variants, 2 passes
+freeze pass 1/2: 36175 units in 186s
+freeze pass 2/2: 12066 units in 67s
+freeze done in 256s
+2026-11-15T03:23:53Z END   relp-p8-qwen3-nounpp-freeze rc=0 (280s)
+2026-11-15T03:23:54Z START relp-p8-qwen3-nounpp-neuron (waited 1s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_neuron --sub-rows 3000
+neuron: 300 rows, 587585 units x 1 variants, 3 passes
+neuron pass 1/3: 292684 units in 70s
+neuron pass 2/3: 292872 units in 70s
+neuron pass 3/3: 2029 units in 29s
+neuron done in 233s
+2026-11-15T03:28:13Z END   relp-p8-qwen3-nounpp-neuron rc=0 (259s)
+2026-11-15T03:28:13Z START relp-p8-qwen3-simple-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_probe --sub-rows 3000
+probe done in 28s
+2026-11-15T03:29:06Z END   relp-p8-qwen3-simple-probe rc=0 (53s)
+2026-11-15T03:29:06Z START relp-p8-qwen3-simple-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_rules --sub-rows 3000
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.4772891998291016}
+endpoint B: 12 variants in 43s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.4772891998291016}
+endpoint A: 12 variants in 44s
+rules done in 116s
+2026-11-15T03:31:27Z END   relp-p8-qwen3-simple-rules rc=0 (141s)
+2026-11-15T03:31:27Z START relp-p8-qwen3-simple-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_path --sub-rows 3000
+path pairs 100/300 (52s)
+path pairs 200/300 (97s)
+path pairs 300/300 (143s)
+path done in 144s
+2026-11-15T03:34:16Z END   relp-p8-qwen3-simple-path rc=0 (169s)
+2026-11-15T03:34:16Z START relp-p8-qwen3-simple-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_freeze --sub-rows 3000
+freeze: 100 rows, 28340 units x 8 variants, 1 passes
+freeze pass 1/1: 28340 units in 71s
+freeze done in 73s
+2026-11-15T03:35:54Z END   relp-p8-qwen3-simple-freeze rc=0 (98s)
+2026-11-15T03:35:54Z START relp-p8-qwen3-simple-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_neuron --sub-rows 3000
+neuron: 300 rows, 611875 units x 1 variants, 1 passes
+neuron pass 1/1: 611875 units in 45s
+neuron done in 105s
+2026-11-15T03:38:05Z END   relp-p8-qwen3-simple-neuron rc=0 (131s)
+2026-11-15T03:38:05Z START relp-p8-qwen3-rc-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_probe --sub-rows 3000
+probe done in 26s
+2026-11-15T03:38:57Z END   relp-p8-qwen3-rc-probe rc=0 (52s)
+2026-11-15T03:38:57Z START relp-p8-qwen3-rc-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_rules --sub-rows 3000
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 4.364587783813477}
+endpoint B: 12 variants in 66s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 4.368078708648682}
+endpoint A: 12 variants in 70s
+rules done in 163s
+2026-11-15T03:42:02Z END   relp-p8-qwen3-rc-rules rc=0 (185s)
+2026-11-15T03:42:02Z START relp-p8-qwen3-rc-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_freeze --sub-rows 3000
+freeze: 100 rows, 53241 units x 8 variants, 2 passes
+freeze pass 1/2: 30303 units in 181s
+freeze pass 2/2: 22938 units in 137s
+freeze done in 321s
+2026-11-15T03:47:49Z END   relp-p8-qwen3-rc-freeze rc=0 (347s)
+2026-11-15T03:47:49Z START relp-p8-qwen3-rc-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_neuron --sub-rows 3000
+neuron: 300 rows, 588455 units x 1 variants, 3 passes
+neuron pass 1/3: 243951 units in 70s
+neuron pass 2/3: 243822 units in 71s
+neuron pass 3/3: 100682 units in 38s
+neuron done in 246s
+2026-11-15T03:52:21Z END   relp-p8-qwen3-rc-neuron rc=0 (272s)
+2026-11-15T03:52:21Z START relp-p8-qwen3-within_rc-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_probe --sub-rows 3000
+probe done in 27s
+2026-11-15T03:53:11Z END   relp-p8-qwen3-within_rc-probe rc=0 (50s)
+2026-11-15T03:53:11Z START relp-p8-qwen3-within_rc-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_rules --sub-rows 3000
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.566124677658081}
+endpoint B: 12 variants in 55s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 3.260444164276123}
+endpoint A: 12 variants in 58s
+rules done in 141s
+2026-11-15T03:55:56Z END   relp-p8-qwen3-within_rc-rules rc=0 (165s)
+2026-11-15T03:55:56Z START relp-p8-qwen3-within_rc-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_freeze --sub-rows 3000
+freeze: 100 rows, 27522 units x 8 variants, 1 passes
+freeze pass 1/1: 27522 units in 118s
+freeze done in 119s
+2026-11-15T03:58:19Z END   relp-p8-qwen3-within_rc-freeze rc=0 (143s)
+2026-11-15T03:58:19Z START relp-p8-qwen3-within_rc-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_neuron --sub-rows 3000
+neuron: 300 rows, 616076 units x 1 variants, 3 passes
+neuron pass 1/3: 291289 units in 71s
+neuron pass 2/3: 291830 units in 39s
+neuron pass 3/3: 32957 units in 25s
+neuron done in 208s
+2026-11-15T04:02:12Z END   relp-p8-qwen3-within_rc-neuron rc=0 (233s)
+2026-11-15T05:46:49Z START relp-p8-qwen3-nounpp-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_addback --sub-rows 3000 --rw-variant relp_soft05
+expert_position: 109 labels, 6776 eligible units
+expert_all_positions: 85 labels, 2919 eligible units
+addback done in 275s
+2026-11-15T05:51:46Z END   relp-p8-qwen3-nounpp-addback rc=0 (297s)
+2026-11-15T05:51:46Z START relp-p8-qwen3-simple-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_addback --sub-rows 3000 --rw-variant relp_soft05
+expert_position: 109 labels, 1928 eligible units
+expert_all_positions: 85 labels, 1817 eligible units
+addback done in 184s
+2026-11-15T05:55:11Z END   relp-p8-qwen3-simple-addback rc=0 (205s)
+2026-11-15T05:55:11Z START relp-p8-qwen3-rc-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_addback --sub-rows 3000 --rw-variant relp_soft05
+expert_position: 91 labels, 8148 eligible units
+expert_all_positions: 71 labels, 3069 eligible units
+addback done in 257s
+2026-11-15T05:59:48Z END   relp-p8-qwen3-rc-addback rc=0 (277s)
+2026-11-15T05:59:48Z START relp-p8-qwen3-within_rc-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_addback --sub-rows 3000 --rw-variant relp_soft05
+expert_position: 91 labels, 6101 eligible units
+expert_all_positions: 71 labels, 2624 eligible units
+addback done in 225s
+2026-11-15T06:03:55Z END   relp-p8-qwen3-within_rc-addback rc=0 (247s)
+2026-11-15T07:21:55Z START relp-p8-qwen3-counterfact-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+{"passed": true, "n_checks": 2148, "failed_checks": []}
+2026-11-15T07:23:32Z END   relp-p8-qwen3-counterfact-verify rc=0 (97s)
+2026-11-15T07:23:32Z START relp-p8-qwen3-counterfact-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+probe done in 45s
+2026-11-15T07:24:29Z END   relp-p8-qwen3-counterfact-probe rc=0 (57s)
+2026-11-15T07:24:29Z START relp-p8-qwen3-twohop-scan (waited 57s): .venv-relp/bin/python scripts/relp_moe_p8_run3.py scan --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --task twohop --base-dir results/relp_p8/qwen3/twohop --candidates data/relp_p8/twohop_candidates_qwen3.json
+scan: 128 cities, 108 with margin >= 1, 115 with margin >= 0
+2026-11-15T07:25:23Z END   relp-p8-qwen3-twohop-scan rc=0 (54s)
+2026-11-15T07:25:23Z START relp-p8-qwen3-counterfact-rules (waited 54s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+rules done in 524s
+2026-11-15T07:34:18Z END   relp-p8-qwen3-counterfact-rules rc=0 (535s)
+2026-11-15T07:36:11Z START relp-p8-qwen3-counterfact-path (waited 113s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+path done in 252s
+2026-11-15T07:40:38Z END   relp-p8-qwen3-counterfact-path rc=0 (267s)
+2026-11-15T07:40:38Z START relp-p8-qwen3-counterfact-patch (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000 --directions denoise noise
+patch: 2942126 units x 1 variants in 12 buckets, ~17 passes
+patch_T3: 2 rows, 6188 units x 1 variants, 2 passes
+patch_T4: 8 rows, 35176 units x 1 variants, 8 passes
+patch_T5: 55 rows, 297284 units x 1 variants, 19 passes
+patch_T6: 54 rows, 352898 units x 1 variants, 18 passes
+patch_T7: 68 rows, 507666 units x 1 variants, 20 passes
+patch_T8: 71 rows, 561742 units x 1 variants, 20 passes
+patch_T9: 46 rows, 419458 units x 1 variants, 21 passes
+patch_T10: 41 rows, 417950 units x 1 variants, 20 passes
+patch_T11: 16 rows, 172562 units x 1 variants, 16 passes
+patch_T12: 11 rows, 125804 units x 1 variants, 11 passes
+patch_T13: 1 rows, 14018 units x 1 variants, 1 passes
+patch_T15: 2 rows, 31380 units x 1 variants, 2 passes
+patch_T3 pass 1/2: 3100 units in 192s
+patch_T4 pass 1/8: 4308 units in 192s
+patch_T5 pass 1/19: 16240 units in 192s
+patch_T6 pass 1/18: 19178 units in 192s
+patch_T7 pass 1/20: 24378 units in 192s
+patch_T8 pass 1/20: 32008 units in 192s
+patch_T9 pass 1/21: 25108 units in 192s
+patch_T10 pass 1/20: 19920 units in 192s
+patch_T11 pass 1/16: 11972 units in 192s
+patch_T12 pass 1/11: 10320 units in 192s
+patch_T13 pass 1/1: 14018 units in 192s
+patch_T15 pass 1/2: 13742 units in 192s
+patch_T3 pass 2/2: 3088 units in 176s
+patch_T4 pass 2/8: 4336 units in 176s
+patch_T5 pass 2/19: 15708 units in 176s
+patch_T6 pass 2/18: 20082 units in 176s
+patch_T7 pass 2/20: 30356 units in 176s
+patch_T8 pass 2/20: 26586 units in 176s
+patch_T9 pass 2/21: 20646 units in 176s
+patch_T10 pass 2/20: 21802 units in 176s
+patch_T11 pass 2/16: 11700 units in 176s
+patch_T12 pass 2/11: 9926 units in 176s
+patch_T15 pass 2/2: 17638 units in 176s
+patch_T4 pass 3/8: 4116 units in 154s
+patch_T5 pass 3/19: 16308 units in 154s
+patch_T6 pass 3/18: 20268 units in 154s
+patch_T7 pass 3/20: 24684 units in 154s
+patch_T8 pass 3/20: 30468 units in 154s
+patch_T9 pass 3/21: 21798 units in 154s
+patch_T10 pass 3/20: 23232 units in 154s
+patch_T11 pass 3/16: 12302 units in 154s
+patch_T12 pass 3/11: 13062 units in 154s
+patch_T4 pass 4/8: 4112 units in 146s
+patch_T5 pass 4/19: 16484 units in 146s
+patch_T6 pass 4/18: 14310 units in 146s
+patch_T7 pass 4/20: 30372 units in 146s
+patch_T8 pass 4/20: 29002 units in 146s
+patch_T9 pass 4/21: 20224 units in 146s
+patch_T10 pass 4/20: 17674 units in 146s
+patch_T11 pass 4/16: 12366 units in 146s
+patch_T12 pass 4/11: 13486 units in 146s
+patch_T4 pass 5/8: 4612 units in 149s
+patch_T5 pass 5/19: 17154 units in 149s
+patch_T6 pass 5/18: 19834 units in 149s
+patch_T7 pass 5/20: 28014 units in 149s
+patch_T8 pass 5/20: 30892 units in 149s
+patch_T9 pass 5/21: 18996 units in 149s
+patch_T10 pass 5/20: 22180 units in 149s
+patch_T11 pass 5/16: 8048 units in 149s
+patch_T12 pass 5/11: 13266 units in 149s
+patch_T4 pass 6/8: 4300 units in 150s
+patch_T5 pass 6/19: 16326 units in 150s
+patch_T6 pass 6/18: 19416 units in 150s
+patch_T7 pass 6/20: 27146 units in 150s
+patch_T8 pass 6/20: 31330 units in 150s
+patch_T9 pass 6/21: 20844 units in 150s
+patch_T10 pass 6/20: 21970 units in 150s
+patch_T11 pass 6/16: 8190 units in 150s
+patch_T12 pass 6/11: 13396 units in 150s
+patch_T4 pass 7/8: 4712 units in 156s
+patch_T5 pass 7/19: 15466 units in 156s
+patch_T6 pass 7/18: 20816 units in 156s
+patch_T7 pass 7/20: 24438 units in 156s
+patch_T8 pass 7/20: 29602 units in 156s
+patch_T9 pass 7/21: 25008 units in 156s
+patch_T10 pass 7/20: 24414 units in 156s
+patch_T11 pass 7/16: 13238 units in 156s
+patch_T12 pass 7/11: 9400 units in 156s
+patch_T4 pass 8/8: 4680 units in 147s
+patch_T5 pass 8/19: 16180 units in 147s
+patch_T6 pass 8/18: 20490 units in 147s
+patch_T7 pass 8/20: 22900 units in 147s
+patch_T8 pass 8/20: 28142 units in 147s
+patch_T9 pass 8/21: 20472 units in 147s
+patch_T10 pass 8/20: 23616 units in 147s
+patch_T11 pass 8/16: 13246 units in 147s
+patch_T12 pass 8/11: 9226 units in 147s
+patch_T5 pass 9/19: 16962 units in 144s
+patch_T6 pass 9/18: 20678 units in 144s
+patch_T7 pass 9/20: 26992 units in 144s
+patch_T8 pass 9/20: 28064 units in 144s
+patch_T9 pass 9/21: 20708 units in 144s
+patch_T10 pass 9/20: 21252 units in 144s
+patch_T11 pass 9/16: 11856 units in 144s
+patch_T12 pass 9/11: 9836 units in 144s
+patch_T5 pass 10/19: 16586 units in 145s
+patch_T6 pass 10/18: 20678 units in 145s
+patch_T7 pass 10/20: 28402 units in 145s
+patch_T8 pass 10/20: 26482 units in 145s
+patch_T9 pass 10/21: 20730 units in 145s
+patch_T10 pass 10/20: 20610 units in 145s
+patch_T11 pass 10/16: 11738 units in 145s
+patch_T12 pass 10/11: 10132 units in 145s
+patch_T5 pass 11/19: 16484 units in 135s
+patch_T6 pass 11/18: 18184 units in 135s
+patch_T7 pass 11/20: 24584 units in 135s
+patch_T8 pass 11/20: 29554 units in 135s
+patch_T9 pass 11/21: 20700 units in 135s
+patch_T10 pass 11/20: 14950 units in 135s
+patch_T11 pass 11/16: 6772 units in 135s
+patch_T12 pass 11/11: 13754 units in 135s
+patch_T5 pass 12/19: 16680 units in 123s
+patch_T6 pass 12/18: 19716 units in 123s
+patch_T7 pass 12/20: 24366 units in 123s
+patch_T8 pass 12/20: 27854 units in 123s
+patch_T9 pass 12/21: 19706 units in 123s
+patch_T10 pass 12/20: 21720 units in 123s
+patch_T11 pass 12/16: 6620 units in 123s
+patch_T5 pass 13/19: 13808 units in 120s
+patch_T6 pass 13/18: 19758 units in 120s
+patch_T7 pass 13/20: 23224 units in 120s
+patch_T8 pass 13/20: 25520 units in 120s
+patch_T9 pass 13/21: 14518 units in 120s
+patch_T10 pass 13/20: 24142 units in 120s
+patch_T11 pass 13/16: 9492 units in 120s
+patch_T5 pass 14/19: 16776 units in 133s
+patch_T6 pass 14/18: 19298 units in 133s
+patch_T7 pass 14/20: 29150 units in 133s
+patch_T8 pass 14/20: 30972 units in 133s
+patch_T9 pass 14/21: 21732 units in 133s
+patch_T10 pass 14/20: 21552 units in 133s
+patch_T11 pass 14/16: 9290 units in 133s
+patch_T5 pass 15/19: 15934 units in 135s
+patch_T6 pass 15/18: 20332 units in 135s
+patch_T7 pass 15/20: 30192 units in 135s
+patch_T8 pass 15/20: 31664 units in 135s
+patch_T9 pass 15/21: 17302 units in 135s
+patch_T10 pass 15/20: 21556 units in 135s
+patch_T11 pass 15/16: 13244 units in 135s
+patch_T5 pass 16/19: 16776 units in 129s
+patch_T6 pass 16/18: 20310 units in 129s
+patch_T7 pass 16/20: 23270 units in 129s
+patch_T8 pass 16/20: 33152 units in 129s
+patch_T9 pass 16/21: 18786 units in 129s
+patch_T10 pass 16/20: 18192 units in 129s
+patch_T11 pass 16/16: 12488 units in 129s
+patch_T5 pass 17/19: 16132 units in 116s
+patch_T6 pass 17/18: 19654 units in 116s
+patch_T7 pass 17/20: 23012 units in 116s
+patch_T8 pass 17/20: 27156 units in 116s
+patch_T9 pass 17/21: 20908 units in 116s
+patch_T10 pass 17/20: 22284 units in 116s
+patch_T5 pass 18/19: 16150 units in 120s
+patch_T6 pass 18/18: 19896 units in 120s
+patch_T7 pass 18/20: 30260 units in 121s
+patch_T8 pass 18/20: 26474 units in 121s
+patch_T9 pass 18/21: 21552 units in 121s
+patch_T10 pass 18/20: 23266 units in 121s
+patch_T5 pass 19/19: 5130 units in 96s
+patch_T7 pass 19/20: 23132 units in 96s
+patch_T8 pass 19/20: 27922 units in 96s
+patch_T9 pass 19/21: 20326 units in 96s
+patch_T10 pass 19/20: 22238 units in 96s
+patch_T7 pass 20/20: 8794 units in 55s
+patch_T8 pass 20/20: 8898 units in 56s
+patch_T9 pass 20/21: 19178 units in 56s
+patch_T10 pass 20/20: 11380 units in 56s
+patch_T9 pass 21/21: 10216 units in 30s
+patch done in 2809s
+2026-11-15T08:27:42Z END   relp-p8-qwen3-counterfact-patch rc=0 (2824s)
+2026-11-15T08:27:42Z START relp-p8-qwen3-counterfact-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py noise --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+noise: 45526 units x 1 variants in 7 buckets, ~1 passes
+noise_T5: 8 rows, 8829 units x 1 variants, 1 passes
+noise_T6: 8 rows, 9071 units x 1 variants, 1 passes
+noise_T7: 4 rows, 4991 units x 1 variants, 1 passes
+noise_T8: 9 rows, 10316 units x 1 variants, 1 passes
+noise_T9: 5 rows, 5758 units x 1 variants, 1 passes
+noise_T10: 4 rows, 4227 units x 1 variants, 1 passes
+noise_T12: 2 rows, 2334 units x 1 variants, 1 passes
+noise_T5 pass 1/1: 8829 units in 60s
+noise_T6 pass 1/1: 9071 units in 59s
+noise_T7 pass 1/1: 4991 units in 59s
+noise_T8 pass 1/1: 10316 units in 59s
+noise_T9 pass 1/1: 5758 units in 59s
+noise_T10 pass 1/1: 4227 units in 59s
+noise_T12 pass 1/1: 2334 units in 59s
+noise done in 74s
+2026-11-15T08:29:10Z END   relp-p8-qwen3-counterfact-noise rc=0 (88s)
+2026-11-15T08:29:10Z START relp-p8-qwen3-counterfact-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+freeze: 21939 units x 8 variants in 9 buckets, ~1 passes
+freeze_T4: 2 rows, 439 units x 8 variants, 1 passes
+freeze_T5: 20 rows, 4383 units x 8 variants, 1 passes
+freeze_T6: 14 rows, 3024 units x 8 variants, 1 passes
+freeze_T7: 19 rows, 4209 units x 8 variants, 1 passes
+freeze_T8: 20 rows, 4327 units x 8 variants, 1 passes
+freeze_T9: 13 rows, 2871 units x 8 variants, 1 passes
+freeze_T10: 8 rows, 1786 units x 8 variants, 1 passes
+freeze_T11: 2 rows, 446 units x 8 variants, 1 passes
+freeze_T12: 2 rows, 454 units x 8 variants, 1 passes
+freeze_T4 pass 1/1: 439 units in 196s
+freeze_T5 pass 1/1: 4383 units in 196s
+freeze_T6 pass 1/1: 3024 units in 196s
+freeze_T7 pass 1/1: 4209 units in 196s
+freeze_T8 pass 1/1: 4327 units in 196s
+freeze_T9 pass 1/1: 2871 units in 196s
+freeze_T10 pass 1/1: 1786 units in 196s
+freeze_T11 pass 1/1: 446 units in 196s
+freeze_T12 pass 1/1: 454 units in 196s
+freeze done in 205s
+2026-11-15T08:32:49Z END   relp-p8-qwen3-counterfact-freeze rc=0 (219s)
+2026-11-15T08:32:49Z START relp-p8-qwen3-counterfact-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_p8/qwen3/counterfact --sub-rows 3000
+role: 89 labels, 6832 eligible units
+all: 78 labels, 5063 eligible units
+role: labels 40/89 (110s)
+role: labels 80/89 (206s)
+role: labels 89/89 (252s)
+all: labels 40/78 (336s)
+all: labels 78/78 (425s)
+addback done in 426s
+2026-11-15T08:40:09Z END   relp-p8-qwen3-counterfact-addback rc=0 (440s)
+2026-11-15T09:46:39Z START relp-p8-qwen3-twohop-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+{"passed": true, "n_checks": 2148, "failed_checks": []}
+2026-11-15T09:48:40Z END   relp-p8-qwen3-twohop-verify rc=0 (121s)
+2026-11-15T09:48:40Z START relp-p8-qwen3-twohop-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+probe done in 47s
+2026-11-15T09:49:40Z END   relp-p8-qwen3-twohop-probe rc=0 (60s)
+2026-11-15T09:49:40Z START relp-p8-qwen3-twohop-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+rules done in 171s
+2026-11-15T09:52:45Z END   relp-p8-qwen3-twohop-rules rc=0 (185s)
+2026-11-15T09:52:45Z START relp-p8-qwen3-twohop-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+path done in 114s
+2026-11-15T09:54:53Z END   relp-p8-qwen3-twohop-path rc=0 (128s)
+2026-11-15T09:54:53Z START relp-p8-qwen3-twohop-patch (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000 --directions denoise
+patch: 480098 units x 1 variants in 3 buckets, ~4 passes
+patch_T10: 204 rows, 202098 units x 1 variants, 4 passes
+patch_T11: 172 rows, 269820 units x 1 variants, 4 passes
+patch_T12: 4 rows, 8180 units x 1 variants, 4 passes
+patch_T10 pass 1/4: 51086 units in 132s
+patch_T11 pass 1/4: 68694 units in 132s
+patch_T12 pass 1/4: 2044 units in 132s
+patch_T10 pass 2/4: 51039 units in 131s
+patch_T11 pass 2/4: 67755 units in 131s
+patch_T12 pass 2/4: 2044 units in 131s
+patch_T10 pass 3/4: 51323 units in 131s
+patch_T11 pass 3/4: 67695 units in 131s
+patch_T12 pass 3/4: 2046 units in 131s
+patch_T10 pass 4/4: 48650 units in 127s
+patch_T11 pass 4/4: 65676 units in 127s
+patch_T12 pass 4/4: 2046 units in 127s
+patch done in 560s
+2026-11-15T10:04:29Z END   relp-p8-qwen3-twohop-patch rc=0 (576s)
+2026-11-15T10:04:29Z START relp-p8-qwen3-twohop-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py noise --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+noise: 39876 units x 1 variants in 2 buckets, ~1 passes
+noise_T10: 22 rows, 21812 units x 1 variants, 1 passes
+noise_T11: 18 rows, 18064 units x 1 variants, 1 passes
+noise_T10 pass 1/1: 21812 units in 50s
+noise_T11 pass 1/1: 18064 units in 50s
+noise done in 60s
+2026-11-15T10:05:43Z END   relp-p8-qwen3-twohop-noise rc=0 (74s)
+2026-11-15T10:05:43Z START relp-p8-qwen3-twohop-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+freeze: 33532 units x 8 variants in 2 buckets, ~2 passes
+freeze_T10: 48 rows, 16186 units x 8 variants, 2 passes
+freeze_T11: 52 rows, 17346 units x 8 variants, 2 passes
+freeze_T10 pass 1/2: 8100 units in 160s
+freeze_T11 pass 1/2: 8640 units in 160s
+freeze_T10 pass 2/2: 8086 units in 158s
+freeze_T11 pass 2/2: 8706 units in 158s
+freeze done in 328s
+2026-11-15T10:11:25Z END   relp-p8-qwen3-twohop-freeze rc=0 (342s)
+2026-11-15T10:11:25Z START relp-p8-qwen3-twohop-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_twohop_v1 --task twohop --base-dir results/relp_p8/qwen3/twohop --sub-rows 3000
+role: 89 labels, 1700 eligible units
+all: 78 labels, 1689 eligible units
+role: labels 67/89 (72s)
+role: labels 89/89 (102s)
+all: labels 67/78 (152s)
+all: labels 78/78 (180s)
+addback done in 180s
+2026-11-15T10:14:41Z END   relp-p8-qwen3-twohop-addback rc=0 (196s)

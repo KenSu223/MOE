@@ -1,0 +1,151 @@
+{
+  "utc": "2026-11-15T08:43:45.588870+00:00",
+  "command": [
+    "scripts/relp_moe_p8_run3.py",
+    "probe",
+    "--model-dir",
+    "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "--manifest-dir",
+    "data/relp_p8/mixtral_counterfact_v1",
+    "--task",
+    "counterfact",
+    "--base-dir",
+    "results/relp_p8/mixtral/counterfact",
+    "--sub-rows",
+    "1500"
+  ],
+  "task": "counterfact",
+  "script_sha256": "aa990bc3d2a013c2e1bf819dc7cc6c5d0f8cbf6bc6b419d35efa3cecb4118c9f",
+  "p8_module_sha256": "9ebaa1b982b0441a772fc68f66c7e56a3a7f2aa39db5c33149236b6187cca992",
+  "status": "complete",
+  "manifest_sha256": "cfc29990d07fabad6cd2883d2f932dd0afc22613e804bd1f9dfbf16157f27835",
+  "identity": {
+    "model_dir": "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "dtype": "torch.bfloat16",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.22.2",
+    "engine": "relp_moe_stream.StreamRelP (layer streaming)",
+    "native_reference": "transformers eager attention + eager experts (HF reference loop)",
+    "engine_sha256": "61264b0f8064834a1da9ea5b8fed5b7706cc84ee7a7c5e2d71d235af02367237",
+    "sva_sha256": "803376f6c3432c16a781745e76fef390fd2945e2b1ce7c40617c5a67eec7152d",
+    "weights_sha256": "566f069bc28d82f6ecf5f49b44bfa641e7fb4d117d7b935601d62fe107edcf64",
+    "arch_sha256": "c053a46130513f4c50afcce9d9b13ffc292c5c3b5b3c676939fe1cba834c09a2",
+    "files": {
+      "config.json": {
+        "sha256": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793"
+      },
+      "generation_config.json": {
+        "sha256": "40e6ecbcedfc2b67b7fa8ba37216c9546c18c00242020b2b34f0b58c3558f680"
+      },
+      "model-00001-of-00019.safetensors": {
+        "size": 4892809584,
+        "mtime_ns": 1794089135486720967
+      },
+      "model-00002-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089139253521391
+      },
+      "model-00003-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089129661029628
+      },
+      "model-00004-of-00019.safetensors": {
+        "size": 4899035200,
+        "mtime_ns": 1794089136722655484
+      },
+      "model-00005-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089137967589523
+      },
+      "model-00006-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089140495455590
+      },
+      "model-00007-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089120463516939
+      },
+      "model-00008-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089121836444198
+      },
+      "model-00009-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211044727504
+      },
+      "model-00010-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089213610592619
+      },
+      "model-00011-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089228631805379
+      },
+      "model-00012-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089218982310816
+      },
+      "model-00013-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211243717044
+      },
+      "model-00014-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089216060463861
+      },
+      "model-00015-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089225473970786
+      },
+      "model-00016-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089224785006874
+      },
+      "model-00017-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089239785218501
+      },
+      "model-00018-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089250270666964
+      },
+      "model-00019-of-00019.safetensors": {
+        "size": 4221679088,
+        "mtime_ns": 1794089258129254024
+      },
+      "model.safetensors.index.json": {
+        "sha256": "a8f30ebfaf569d5cc6358a32009342a3e73d4553a340cc38a6319457d9dc13e6"
+      },
+      "special_tokens_map.json": {
+        "sha256": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33"
+      },
+      "tokenizer.json": {
+        "sha256": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc"
+      },
+      "tokenizer.model": {
+        "size": 493443,
+        "mtime_ns": 1794089243472024529
+      },
+      "tokenizer_config.json": {
+        "sha256": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+      }
+    }
+  },
+  "verification_sha256": "7aedcd719daf4a2d24e9181d23c9d19be6a2f87b2e81174e6b7f7d54a2eca29e",
+  "seconds": 80.02524042129517,
+  "rows": 377,
+  "buckets": {
+    "5": 14,
+    "6": 37,
+    "7": 46,
+    "8": 68,
+    "9": 51,
+    "10": 72,
+    "11": 42,
+    "12": 29,
+    "13": 10,
+    "14": 6,
+    "16": 2
+  }
+}

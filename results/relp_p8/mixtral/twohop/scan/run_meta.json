@@ -1,0 +1,24 @@
+{
+  "utc": "2026-11-15T07:34:31.535566+00:00",
+  "command": [
+    "scripts/relp_moe_p8_run3.py",
+    "scan",
+    "--model-dir",
+    "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "--task",
+    "twohop",
+    "--base-dir",
+    "results/relp_p8/mixtral/twohop",
+    "--candidates",
+    "data/relp_p8/twohop_candidates_mixtral.json"
+  ],
+  "task": "twohop",
+  "script_sha256": "aa990bc3d2a013c2e1bf819dc7cc6c5d0f8cbf6bc6b419d35efa3cecb4118c9f",
+  "p8_module_sha256": "9ebaa1b982b0441a772fc68f66c7e56a3a7f2aa39db5c33149236b6187cca992",
+  "status": "complete",
+  "seconds": 103.40866994857788,
+  "cities": 128,
+  "pass_margin_1": 123,
+  "pass_margin_0": 125,
+  "rule": "logit(first token of the own capital) - max over the other capitals' first tokens >= 1"
+}

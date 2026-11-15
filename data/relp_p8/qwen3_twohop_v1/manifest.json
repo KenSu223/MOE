@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "profile": "p8",
+  "seed": 12,
+  "model": {
+    "repository": "Qwen/Qwen3-30B-A3B-Base",
+    "revision": "1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+    "tokenizer_files": [
+      "config.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "vocab.json",
+      "merges.txt"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "7e4142150e976c6b4796adf88fce0a2a23e581ed63bcede7e1d69a645e73b362",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "tokenizer_config.json": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "7e4142150e976c6b4796adf88fce0a2a23e581ed63bcede7e1d69a645e73b362",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "tokenizer_config.json": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5"
+  },
+  "source_revision": "fixed list in scripts/relp_moe_p8_prepare.py + competence scan",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "roles": {
+    "subject": "last token of the changed word",
+    "final": "last token"
+  },
+  "prepare_script_sha256": "7efd7d113158a46ab39d5c21e6a7e69b6331485a557343d4490f517271edbc1b",
+  "tasks": {
+    "twohop": {
+      "task": "twohop",
+      "files_sha256": {
+        "calibration": "db5859ac42ca73eb6883b29890541927c904f423bb8fe1f77f93736561934bdf",
+        "discovery": "bdacdede0e89b94eba49695beb76c34681438e53cf0d29408d7420f784303ea7",
+        "validation": "509175c112cdf961c397933092b9653bce9fc544335a1bf54f35b9b51bb859c1",
+        "test": "c4ba601974077ea3cdffeb8358b7b07236310fd5f2dc1c8294a5dc57189b1046"
+      },
+      "audit": {
+        "calibration": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "10": 18,
+            "11": 22
+          }
+        },
+        "discovery": {
+          "rows": 300,
+          "groups": 150,
+          "lengths": {
+            "10": 142,
+            "11": 156,
+            "12": 2
+          }
+        },
+        "validation": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "10": 32,
+            "11": 8
+          }
+        },
+        "test": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "10": 30,
+            "11": 8,
+            "12": 2
+          }
+        }
+      },
+      "scan_sha256": "3678271ec4986944087348ebeb58ea998c8eaaf6d1a6e8284aa1e6617e76e193",
+      "funnel": {
+        "candidates": 128,
+        "pass_scan": 108,
+        "min_margin": 1.0,
+        "relaxed_from": null,
+        "states_passing": 45,
+        "states": {
+          "discovery": [
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "Colorado",
+            "Connecticut",
+            "Florida",
+            "Georgia",
+            "Idaho",
+            "Illinois",
+            "Indiana",
+            "Iowa",
+            "Kentucky",
+            "Louisiana",
+            "Maryland",
+            "Michigan",
+            "Nebraska",
+            "Nevada",
+            "New Jersey",
+            "New Mexico",
+            "North Dakota",
+            "Oregon",
+            "Pennsylvania",
+            "South Carolina",
+            "Tennessee",
+            "Texas",
+            "Utah",
+            "Virginia"
+          ],
+          "validation": [
+            "California",
+            "Kansas",
+            "Massachusetts",
+            "Minnesota",
+            "New York",
+            "Ohio",
+            "South Dakota",
+            "Wisconsin",
+            "Wyoming"
+          ],
+          "test": [
+            "Alabama",
+            "Hawaii",
+            "Maine",
+            "Mississippi",
+            "Missouri",
+            "Montana",
+            "North Carolina",
+            "Oklahoma",
+            "Washington"
+          ]
+        },
+        "unordered_pairs_available": {
+          "discovery": 788,
+          "validation": 121,
+          "test": 52
+        }
+      },
+      "selection_uses_model_outputs": true,
+      "template": "Fact: the capital of the state containing {} is"
+    }
+  }
+}

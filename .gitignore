@@ -37,3 +37,13 @@ results/relp_sva_moe/**/per_row_expert_scores.pt
 results/relp_sva_moe/**/routes.pt
 results/relp_sva_moe/**/interventions.jsonl
 results/relp_moe_dev/**/*.pt
+
+# Phase 8 (RelP follow-ups): kept on the root disk only -
+#  resumable chunk files that are merged row for row into the parquet beside them (patch / freeze / noise / neuron_patch),
+#  raw router-logit dumps (input of the GPU `rules` step only) and stage-3 routing records (input of the GPU steps only)
+results/relp_sva_moe/**/p8_*/*_part_[0-9]*.npz
+results/relp_sva_moe/**/p8_probe/router_logits.npy
+results/relp_p8/**/*_part_[0-9]*.npz
+results/relp_p8/**/routes_T*.pt
+results/relp_moe_dev/p8_smoke*/**/*_part_[0-9]*.npz
+results/relp_moe_dev/p8_smoke*/**/router_logits.npy

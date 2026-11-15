@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "profile": "p8",
+  "seed": 12,
+  "model": {
+    "repository": "mistralai/Mixtral-8x7B-v0.1",
+    "revision": "fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "tokenizer_files": [
+      "config.json",
+      "special_tokens_map.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "tokenizer.model"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+      "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+      "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+    "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+    "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+    "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055",
+    "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+  },
+  "source_revision": "results/mixtral_bos_str (Direction 6 STR, donors slot 0-1)",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "roles": {
+    "subject": "last token of the changed word",
+    "final": "last token"
+  },
+  "prepare_script_sha256": "418a077add03ba9d7e8d423949034cb147272ffaa9c606a069e071577fbd5c97",
+  "tasks": {
+    "counterfact": {
+      "task": "counterfact",
+      "files_sha256": {
+        "discovery": "bd0bdd03992d3754604414d7d0e85017d9434e7de9ae76d196ef4da14c4b5bcc",
+        "calibration": "177b24e055f4a399832dfd2355544b8e7d858f6b66685c884fabf8d0e219ca79",
+        "validation": "a1fb594da75441b3671890000bd59a1719fd9db31c65c73e7e290ffefea70acc",
+        "test": "ebf44c68951900555311c15259747967644d3d8533580d85cafa4efd0ddd5d2e"
+      },
+      "audit": {
+        "discovery": {
+          "rows": 201,
+          "groups": 107,
+          "lengths": {
+            "5": 8,
+            "6": 18,
+            "7": 30,
+            "8": 27,
+            "9": 25,
+            "10": 48,
+            "11": 15,
+            "12": 15,
+            "13": 7,
+            "14": 6,
+            "16": 2
+          }
+        },
+        "calibration": {
+          "rows": 27,
+          "groups": 15,
+          "lengths": {
+            "6": 2,
+            "7": 2,
+            "8": 11,
+            "9": 5,
+            "10": 5,
+            "12": 2
+          }
+        },
+        "validation": {
+          "rows": 86,
+          "groups": 45,
+          "lengths": {
+            "5": 4,
+            "6": 12,
+            "7": 8,
+            "8": 15,
+            "9": 12,
+            "10": 14,
+            "11": 13,
+            "12": 7,
+            "13": 1
+          }
+        },
+        "test": {
+          "rows": 90,
+          "groups": 46,
+          "lengths": {
+            "5": 2,
+            "6": 7,
+            "7": 8,
+            "8": 26,
+            "9": 14,
+            "10": 10,
+            "11": 14,
+            "12": 7,
+            "13": 2
+          }
+        }
+      },
+      "source_sha256": {
+        "sweep_cases.parquet": "ea66cc6a0a3d901f75a4c905880d39c8a4763e8b4c806d24795087c77da59e27",
+        "str_candidates.parquet": "e954fda30c5d6efb2f37a0ae23f3f4c56c0dfed5a03c106d2833f676289bdc49"
+      },
+      "selection_uses_model_outputs": true,
+      "note": "cases = the paper's Table-8 cases with a qualifying STR donor (Direction 6: donor margin <= -1)"
+    }
+  }
+}

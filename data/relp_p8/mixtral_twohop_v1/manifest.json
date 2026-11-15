@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "profile": "p8",
+  "seed": 12,
+  "model": {
+    "repository": "mistralai/Mixtral-8x7B-v0.1",
+    "revision": "fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "tokenizer_files": [
+      "config.json",
+      "special_tokens_map.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "tokenizer.model"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+      "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+      "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+      "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b",
+      "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793",
+    "special_tokens_map.json": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33",
+    "tokenizer.json": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc",
+    "tokenizer.model": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055",
+    "tokenizer_config.json": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+  },
+  "source_revision": "fixed list in scripts/relp_moe_p8_prepare.py + competence scan",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "roles": {
+    "subject": "last token of the changed word",
+    "final": "last token"
+  },
+  "prepare_script_sha256": "7efd7d113158a46ab39d5c21e6a7e69b6331485a557343d4490f517271edbc1b",
+  "tasks": {
+    "twohop": {
+      "task": "twohop",
+      "files_sha256": {
+        "calibration": "c26bf4167d791ad787ef38643f1b2c8d9341dca36d192a0facc1391924e6bbf5",
+        "discovery": "d95f40144bbb23952394b9859cfdfa35bb35a3e4f59a5849a4e78788323baf59",
+        "validation": "727a4352cb64437226d868dbaa4153659b504ed4b04b33da2544fb1a610e04d0",
+        "test": "a6d6ac159c7db23623f63099d057ee8825a202fe3abcbc5457c8fe76cbd44043"
+      },
+      "audit": {
+        "calibration": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "12": 2,
+            "13": 30,
+            "14": 8
+          }
+        },
+        "discovery": {
+          "rows": 300,
+          "groups": 150,
+          "lengths": {
+            "12": 40,
+            "13": 164,
+            "14": 92,
+            "15": 4
+          }
+        },
+        "validation": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "13": 34,
+            "14": 4,
+            "15": 2
+          }
+        },
+        "test": {
+          "rows": 40,
+          "groups": 20,
+          "lengths": {
+            "12": 8,
+            "13": 28,
+            "14": 4
+          }
+        }
+      },
+      "scan_sha256": "ba19b17b71b653a8d912688a608e5e08492e8f39cd6e27cc5b2ee2c7d16710b4",
+      "funnel": {
+        "candidates": 128,
+        "pass_scan": 123,
+        "min_margin": 1.0,
+        "relaxed_from": null,
+        "states_passing": 49,
+        "states": {
+          "discovery": [
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "California",
+            "Connecticut",
+            "Florida",
+            "Georgia",
+            "Illinois",
+            "Indiana",
+            "Iowa",
+            "Kentucky",
+            "Louisiana",
+            "Maryland",
+            "Massachusetts",
+            "Michigan",
+            "Minnesota",
+            "Nebraska",
+            "Nevada",
+            "New Hampshire",
+            "North Carolina",
+            "North Dakota",
+            "Oklahoma",
+            "Oregon",
+            "Pennsylvania",
+            "Rhode Island",
+            "South Carolina",
+            "Texas",
+            "Vermont",
+            "Washington"
+          ],
+          "validation": [
+            "Colorado",
+            "Idaho",
+            "Kansas",
+            "New Jersey",
+            "New Mexico",
+            "South Dakota",
+            "Tennessee",
+            "Virginia",
+            "Wisconsin",
+            "Wyoming"
+          ],
+          "test": [
+            "Alabama",
+            "Hawaii",
+            "Maine",
+            "Mississippi",
+            "Missouri",
+            "Montana",
+            "New York",
+            "Ohio",
+            "Utah",
+            "West Virginia"
+          ]
+        },
+        "unordered_pairs_available": {
+          "discovery": 951,
+          "validation": 70,
+          "test": 52
+        }
+      },
+      "selection_uses_model_outputs": true,
+      "template": "Fact: the capital of the state containing {} is"
+    }
+  }
+}

@@ -1,0 +1,508 @@
+2026-11-15T02:45:02Z START relp-p8-mixtral-nounpp-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_noise
+40 rows, 33916 units (4 positions), 1 passes (cap 122070 units)
+pass 1/1: 33916 units in 96s
+patch done in 187s
+2026-11-15T02:48:35Z END   relp-p8-mixtral-nounpp-noise rc=0 (213s)
+2026-11-15T02:48:51Z START relp-p8-mixtral-simple-noise (waited 16s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_noise
+40 rows, 8924 units (1 positions), 1 passes (cap 244140 units)
+pass 1/1: 8924 units in 76s
+patch done in 161s
+2026-11-15T02:51:48Z END   relp-p8-mixtral-simple-noise rc=0 (177s)
+2026-11-15T02:52:20Z START relp-p8-mixtral-rc-noise (waited 32s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_noise
+40 rows, 41978 units (5 positions), 1 passes (cap 104631 units)
+pass 1/1: 41978 units in 99s
+patch done in 175s
+2026-11-15T02:55:32Z END   relp-p8-mixtral-rc-noise rc=0 (192s)
+2026-11-15T02:56:51Z START relp-p8-mixtral-within_rc-noise (waited 79s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_compare_run.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --splits discovery --max-rows 40 --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_noise
+40 rows, 9024 units (1 positions), 1 passes (cap 122070 units)
+pass 1/1: 9024 units in 85s
+patch done in 177s
+2026-11-15T03:00:13Z END   relp-p8-mixtral-within_rc-noise rc=0 (202s)
+2026-11-15T04:02:12Z START relp-p8-mixtral-nounpp-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_probe --sub-rows 1500
+probe done in 92s
+2026-11-15T04:04:11Z END   relp-p8-mixtral-nounpp-probe rc=0 (119s)
+2026-11-15T04:04:11Z START relp-p8-mixtral-nounpp-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_rules --sub-rows 1500
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 3.3378095626831055}
+endpoint B: 12 variants in 78s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 3.4195098876953125}
+endpoint A: 12 variants in 78s
+rules done in 246s
+2026-11-15T04:08:43Z END   relp-p8-mixtral-nounpp-rules rc=0 (272s)
+2026-11-15T04:08:43Z START relp-p8-mixtral-nounpp-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py path --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_path --sub-rows 1500
+path pairs 100/300 (132s)
+path pairs 200/300 (257s)
+path pairs 300/300 (377s)
+path done in 378s
+2026-11-15T04:15:27Z END   relp-p8-mixtral-nounpp-path rc=0 (404s)
+2026-11-15T04:15:27Z START relp-p8-mixtral-nounpp-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_freeze --sub-rows 1500
+freeze: 100 rows, 32956 units x 8 variants, 3 passes
+freeze pass 1/3: 15130 units in 190s
+freeze pass 2/3: 15199 units in 194s
+freeze pass 3/3: 2627 units in 70s
+freeze done in 456s
+2026-11-15T04:23:29Z END   relp-p8-mixtral-nounpp-freeze rc=0 (482s)
+2026-11-15T04:23:29Z START relp-p8-mixtral-nounpp-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_neuron --sub-rows 1500
+neuron: 300 rows, 559793 units x 1 variants, 5 passes
+neuron pass 1/5: 120215 units in 97s
+neuron pass 2/5: 121099 units in 99s
+neuron pass 3/5: 121203 units in 106s
+neuron pass 4/5: 120751 units in 107s
+neuron pass 5/5: 76525 units in 83s
+neuron done in 637s
+2026-11-15T04:34:32Z END   relp-p8-mixtral-nounpp-neuron rc=0 (663s)
+2026-11-15T04:34:33Z START relp-p8-mixtral-simple-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_probe --sub-rows 1500
+probe done in 65s
+2026-11-15T04:36:03Z END   relp-p8-mixtral-simple-probe rc=0 (90s)
+2026-11-15T04:36:03Z START relp-p8-mixtral-simple-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_rules --sub-rows 1500
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.6591148376464844}
+endpoint B: 12 variants in 70s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.6591148376464844}
+endpoint A: 12 variants in 84s
+rules done in 230s
+2026-11-15T04:40:18Z END   relp-p8-mixtral-simple-rules rc=0 (255s)
+2026-11-15T04:40:18Z START relp-p8-mixtral-simple-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py path --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_path --sub-rows 1500
+path pairs 100/236 (126s)
+path pairs 200/236 (243s)
+path pairs 236/236 (363s)
+path done in 363s
+2026-11-15T04:46:47Z END   relp-p8-mixtral-simple-path rc=0 (389s)
+2026-11-15T04:46:47Z START relp-p8-mixtral-simple-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_freeze --sub-rows 1500
+freeze: 100 rows, 14801 units x 8 variants, 1 passes
+freeze pass 1/1: 14801 units in 108s
+freeze done in 109s
+2026-11-15T04:49:00Z END   relp-p8-mixtral-simple-freeze rc=0 (133s)
+2026-11-15T04:49:00Z START relp-p8-mixtral-simple-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_neuron --sub-rows 1500
+neuron: 236 rows, 507216 units x 1 variants, 3 passes
+neuron pass 1/3: 242561 units in 86s
+neuron pass 2/3: 242896 units in 92s
+neuron pass 3/3: 21759 units in 65s
+neuron done in 390s
+2026-11-15T04:55:56Z END   relp-p8-mixtral-simple-neuron rc=0 (416s)
+2026-11-15T04:55:57Z START relp-p8-mixtral-rc-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_probe --sub-rows 1500
+probe done in 61s
+2026-11-15T04:57:23Z END   relp-p8-mixtral-rc-probe rc=0 (86s)
+2026-11-15T04:57:23Z START relp-p8-mixtral-rc-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_rules --sub-rows 1500
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 1.7026472091674805}
+endpoint B: 12 variants in 82s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 1.7380685806274414}
+endpoint A: 12 variants in 79s
+rules done in 252s
+2026-11-15T05:02:00Z END   relp-p8-mixtral-rc-rules rc=0 (277s)
+2026-11-15T05:02:00Z START relp-p8-mixtral-rc-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_freeze --sub-rows 1500
+freeze: 100 rows, 34900 units x 8 variants, 3 passes
+freeze pass 1/3: 12916 units in 190s
+freeze pass 2/3: 12902 units in 197s
+freeze pass 3/3: 9082 units in 144s
+freeze done in 531s
+2026-11-15T05:11:17Z END   relp-p8-mixtral-rc-freeze rc=0 (557s)
+2026-11-15T05:11:17Z START relp-p8-mixtral-rc-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_neuron --sub-rows 1500
+neuron: 300 rows, 526579 units x 1 variants, 6 passes
+neuron pass 1/6: 103684 units in 109s
+neuron pass 2/6: 103555 units in 107s
+neuron pass 3/6: 103615 units in 107s
+neuron pass 4/6: 104347 units in 113s
+neuron pass 5/6: 103864 units in 113s
+neuron pass 6/6: 7514 units in 86s
+neuron done in 787s
+2026-11-15T05:24:50Z END   relp-p8-mixtral-rc-neuron rc=0 (813s)
+2026-11-15T05:24:50Z START relp-p8-mixtral-within_rc-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_probe --sub-rows 1500
+probe done in 59s
+2026-11-15T05:26:15Z END   relp-p8-mixtral-within_rc-probe rc=0 (85s)
+2026-11-15T05:26:15Z START relp-p8-mixtral-within_rc-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_rules --sub-rows 1500
+D1 endpoint B: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 1.9564303159713745}
+endpoint B: 12 variants in 78s
+D1 endpoint A: {'bit_identical': True, 'max_abs': 0.0, 'ref_max_abs': 2.0863473415374756}
+endpoint A: 12 variants in 86s
+rules done in 253s
+2026-11-15T05:30:53Z END   relp-p8-mixtral-within_rc-rules rc=0 (278s)
+2026-11-15T05:30:53Z START relp-p8-mixtral-within_rc-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_freeze --sub-rows 1500
+freeze: 100 rows, 13199 units x 8 variants, 1 passes
+freeze pass 1/1: 13199 units in 177s
+freeze done in 178s
+2026-11-15T05:34:15Z END   relp-p8-mixtral-within_rc-freeze rc=0 (202s)
+2026-11-15T05:34:15Z START relp-p8-mixtral-within_rc-neuron (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_neuron --sub-rows 1500
+neuron: 300 rows, 625499 units x 1 variants, 6 passes
+neuron pass 1/6: 120599 units in 106s
+neuron pass 2/6: 121912 units in 93s
+neuron pass 3/6: 119927 units in 97s
+neuron pass 4/6: 120253 units in 94s
+neuron pass 5/6: 121902 units in 104s
+neuron pass 6/6: 20906 units in 73s
+neuron done in 725s
+2026-11-15T05:46:45Z END   relp-p8-mixtral-within_rc-neuron rc=0 (750s)
+2026-11-15T06:03:55Z START relp-p8-mixtral-nounpp-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_addback --sub-rows 1500 --rw-variant relp_soft2
+expert_position: 108 labels, 742 eligible units
+expert_all_positions: 85 labels, 251 eligible units
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run.py", line 433, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run.py", line 413, in main
+    recs = R.evaluate(m, rows, jobs, "non_special", a.eval_chunk)
+  File "/home/ubuntu/MOE/scripts/relp_sva_moe_run.py", line 289, in evaluate
+    forward_pass(m, [base] + groups)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/moetrace/relp_moe_stream.py", line 483, in forward_pass
+    g.h, rec = m.layer(g.h, w, g._cos, g._sin, g._mask, relp=g.relp,
+               ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                       pairs=g.pairs or g.record_dense_q, override=ov, out_patch=op)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/moetrace/relp_moe_stream.py", line 251, in layer
+    o, qp, cp = self.experts(xf, topi, topw, w, relp, pairs or bool(ovs))
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/moetrace/relp_moe_p8.py", line 127, in experts
+    return super().experts(xf, topi, topw, w, relp, pairs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/moetrace/relp_moe_stream.py", line 221, in experts
+    cp = xf.new_zeros(N, self.k, self.H) if pairs else None
+         ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 98.00 MiB. GPU 0 has a total capacity of 22.06 GiB of which 59.44 MiB is free. Including non-PyTorch memory, this process has 21.98 GiB memory in use. Of the allocated memory 20.55 GiB is allocated by PyTorch, and 1.13 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+2026-11-15T06:04:28Z END   relp-p8-mixtral-nounpp-addback rc=1 (33s)
+2026-11-15T06:04:28Z START relp-p8-mixtral-simple-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_addback --sub-rows 1500 --rw-variant relp_soft2
+expert_position: 96 labels, 228 eligible units
+expert_all_positions: 85 labels, 195 eligible units
+addback done in 173s
+2026-11-15T06:07:42Z END   relp-p8-mixtral-simple-addback rc=0 (194s)
+2026-11-15T06:07:42Z START relp-p8-mixtral-rc-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_addback --sub-rows 1500 --rw-variant relp_soft2
+expert_position: 90 labels, 872 eligible units
+expert_all_positions: 71 labels, 251 eligible units
+expert_position: labels 24/90 (96s)
+expert_position: labels 48/90 (185s)
+expert_position: labels 72/90 (259s)
+expert_position: labels 90/90 (322s)
+expert_all_positions: labels 24/71 (383s)
+expert_all_positions: labels 48/71 (447s)
+expert_all_positions: labels 71/71 (511s)
+addback done in 512s
+2026-11-15T06:16:40Z END   relp-p8-mixtral-rc-addback rc=0 (538s)
+2026-11-15T06:16:40Z START relp-p8-mixtral-within_rc-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_addback --sub-rows 1500 --rw-variant relp_soft2
+expert_position: 89 labels, 642 eligible units
+expert_all_positions: 71 labels, 239 eligible units
+expert_position: labels 28/89 (86s)
+expert_position: labels 56/89 (167s)
+expert_position: labels 84/89 (240s)
+expert_position: labels 89/89 (310s)
+expert_all_positions: labels 28/71 (389s)
+expert_all_positions: labels 56/71 (465s)
+expert_all_positions: labels 71/71 (541s)
+addback done in 542s
+2026-11-15T06:26:08Z END   relp-p8-mixtral-within_rc-addback rc=0 (568s)
+2026-11-15T06:26:27Z START relp-p8-mixtral-nounpp-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_addback --sub-rows 1500 --rw-variant relp_soft2
+expert_position: 108 labels, 742 eligible units
+expert_all_positions: 85 labels, 251 eligible units
+expert_position: labels 28/108 (83s)
+expert_position: labels 56/108 (152s)
+expert_position: labels 84/108 (220s)
+expert_position: labels 108/108 (287s)
+expert_all_positions: labels 28/85 (361s)
+expert_all_positions: labels 56/85 (432s)
+expert_all_positions: labels 84/85 (511s)
+expert_all_positions: labels 85/85 (586s)
+addback done in 587s
+2026-11-15T06:36:40Z END   relp-p8-mixtral-nounpp-addback rc=0 (613s)
+2026-11-15T07:34:18Z START relp-p8-mixtral-twohop-scan (waited 534s): .venv-relp/bin/python scripts/relp_moe_p8_run3.py scan --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --task twohop --base-dir results/relp_p8/mixtral/twohop --candidates data/relp_p8/twohop_candidates_mixtral.json
+scan: 128 cities, 123 with margin >= 1, 125 with margin >= 0
+2026-11-15T07:36:11Z END   relp-p8-mixtral-twohop-scan rc=0 (113s)
+2026-11-15T08:40:09Z START relp-p8-mixtral-counterfact-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py verify --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+{"passed": true, "n_checks": 1444, "failed_checks": []}
+2026-11-15T08:43:27Z END   relp-p8-mixtral-counterfact-verify rc=0 (198s)
+2026-11-15T08:43:27Z START relp-p8-mixtral-counterfact-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+/home/ubuntu/MOE/scripts/relp_moe_p8_run3.py:212: RuntimeWarning: Mean of empty slice
+  o[q + "_mean"] = np.stack([np.nanmean(x[i][:, ms[i][0]:], axis=1) for i in range(len(rs))])
+probe done in 80s
+2026-11-15T08:45:02Z END   relp-p8-mixtral-counterfact-probe rc=0 (95s)
+2026-11-15T08:45:02Z START relp-p8-mixtral-counterfact-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+rules done in 262s
+2026-11-15T08:49:38Z END   relp-p8-mixtral-counterfact-rules rc=0 (276s)
+2026-11-15T08:49:38Z START relp-p8-mixtral-counterfact-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+path done in 173s
+2026-11-15T08:52:47Z END   relp-p8-mixtral-counterfact-path rc=0 (189s)
+2026-11-15T08:52:47Z START relp-p8-mixtral-counterfact-patch (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500 --directions denoise noise
+patch: 665106 units x 1 variants in 11 buckets, ~9 passes
+patch_T5: 14 rows, 13318 units x 1 variants, 14 passes
+patch_T6: 37 rows, 44802 units x 1 variants, 10 passes
+patch_T7: 46 rows, 65476 units x 1 variants, 10 passes
+patch_T8: 68 rows, 108300 units x 1 variants, 10 passes
+patch_T9: 51 rows, 90444 units x 1 variants, 10 passes
+patch_T10: 72 rows, 139608 units x 1 variants, 10 passes
+patch_T11: 42 rows, 91158 units x 1 variants, 10 passes
+patch_T12: 29 rows, 63266 units x 1 variants, 11 passes
+patch_T13: 10 rows, 26522 units x 1 variants, 10 passes
+patch_T14: 6 rows, 14562 units x 1 variants, 6 passes
+patch_T16: 2 rows, 7650 units x 1 variants, 2 passes
+patch_T5 pass 1/14: 976 units in 182s
+patch_T6 pass 1/10: 4808 units in 182s
+patch_T7 pass 1/10: 7048 units in 182s
+patch_T8 pass 1/10: 11864 units in 182s
+patch_T9 pass 1/10: 9500 units in 182s
+patch_T10 pass 1/10: 13886 units in 182s
+patch_T11 pass 1/10: 8432 units in 182s
+patch_T12 pass 1/11: 7020 units in 182s
+patch_T13 pass 1/10: 2296 units in 182s
+patch_T14 pass 1/6: 2676 units in 182s
+patch_T16 pass 1/2: 3758 units in 182s
+patch_T5 pass 2/14: 980 units in 175s
+patch_T6 pass 2/10: 4750 units in 175s
+patch_T7 pass 2/10: 7348 units in 175s
+patch_T8 pass 2/10: 11544 units in 175s
+patch_T9 pass 2/10: 9646 units in 175s
+patch_T10 pass 2/10: 15446 units in 175s
+patch_T11 pass 2/10: 8086 units in 175s
+patch_T12 pass 2/11: 5280 units in 175s
+patch_T13 pass 2/10: 2720 units in 175s
+patch_T14 pass 2/6: 2664 units in 175s
+patch_T16 pass 2/2: 3892 units in 175s
+patch_T5 pass 3/14: 950 units in 164s
+patch_T6 pass 3/10: 4746 units in 164s
+patch_T7 pass 3/10: 7166 units in 164s
+patch_T8 pass 3/10: 11312 units in 164s
+patch_T9 pass 3/10: 9582 units in 164s
+patch_T10 pass 3/10: 14600 units in 164s
+patch_T11 pass 3/10: 8868 units in 164s
+patch_T12 pass 3/11: 6266 units in 164s
+patch_T13 pass 3/10: 2848 units in 164s
+patch_T14 pass 3/6: 2252 units in 164s
+patch_T5 pass 4/14: 936 units in 170s
+patch_T6 pass 4/10: 5000 units in 170s
+patch_T7 pass 4/10: 7252 units in 170s
+patch_T8 pass 4/10: 11498 units in 170s
+patch_T9 pass 4/10: 9410 units in 170s
+patch_T10 pass 4/10: 15802 units in 170s
+patch_T11 pass 4/10: 9984 units in 170s
+patch_T12 pass 4/11: 5334 units in 170s
+patch_T13 pass 4/10: 2762 units in 170s
+patch_T14 pass 4/6: 2330 units in 170s
+patch_T5 pass 5/14: 964 units in 169s
+patch_T6 pass 5/10: 5072 units in 169s
+patch_T7 pass 5/10: 5982 units in 169s
+patch_T8 pass 5/10: 11504 units in 169s
+patch_T9 pass 5/10: 9388 units in 169s
+patch_T10 pass 5/10: 15508 units in 169s
+patch_T11 pass 5/10: 9510 units in 169s
+patch_T12 pass 5/11: 7068 units in 169s
+patch_T13 pass 5/10: 2782 units in 169s
+patch_T14 pass 5/6: 2332 units in 169s
+patch_T5 pass 6/14: 982 units in 163s
+patch_T6 pass 6/10: 4962 units in 163s
+patch_T7 pass 6/10: 6296 units in 163s
+patch_T8 pass 6/10: 11560 units in 163s
+patch_T9 pass 6/10: 9608 units in 163s
+patch_T10 pass 6/10: 15040 units in 163s
+patch_T11 pass 6/10: 9324 units in 163s
+patch_T12 pass 6/11: 4694 units in 163s
+patch_T13 pass 6/10: 2116 units in 163s
+patch_T14 pass 6/6: 2308 units in 163s
+patch_T5 pass 7/14: 954 units in 163s
+patch_T6 pass 7/10: 4916 units in 163s
+patch_T7 pass 7/10: 5964 units in 163s
+patch_T8 pass 7/10: 11796 units in 163s
+patch_T9 pass 7/10: 9676 units in 163s
+patch_T10 pass 7/10: 15328 units in 163s
+patch_T11 pass 7/10: 9936 units in 163s
+patch_T12 pass 7/11: 6902 units in 163s
+patch_T13 pass 7/10: 2128 units in 163s
+patch_T5 pass 8/14: 922 units in 161s
+patch_T6 pass 8/10: 4482 units in 161s
+patch_T7 pass 8/10: 7178 units in 161s
+patch_T8 pass 8/10: 11944 units in 161s
+patch_T9 pass 8/10: 9532 units in 161s
+patch_T10 pass 8/10: 15396 units in 161s
+patch_T11 pass 8/10: 8094 units in 161s
+patch_T12 pass 8/11: 6954 units in 161s
+patch_T13 pass 8/10: 3226 units in 161s
+patch_T5 pass 9/14: 972 units in 161s
+patch_T6 pass 9/10: 4832 units in 162s
+patch_T7 pass 9/10: 6896 units in 162s
+patch_T8 pass 9/10: 11782 units in 162s
+patch_T9 pass 9/10: 10202 units in 162s
+patch_T10 pass 9/10: 14444 units in 162s
+patch_T11 pass 9/10: 9598 units in 162s
+patch_T12 pass 9/11: 4848 units in 162s
+patch_T13 pass 9/10: 2892 units in 162s
+patch_T5 pass 10/14: 992 units in 108s
+patch_T6 pass 10/10: 1234 units in 108s
+patch_T7 pass 10/10: 4346 units in 108s
+patch_T8 pass 10/10: 3496 units in 108s
+patch_T9 pass 10/10: 3900 units in 108s
+patch_T10 pass 10/10: 4158 units in 108s
+patch_T11 pass 10/10: 9326 units in 108s
+patch_T12 pass 10/11: 7126 units in 108s
+patch_T13 pass 10/10: 2752 units in 108s
+patch_T5 pass 11/14: 936 units in 79s
+patch_T12 pass 11/11: 1774 units in 79s
+patch_T5 pass 12/14: 920 units in 77s
+patch_T5 pass 13/14: 934 units in 75s
+patch_T5 pass 14/14: 900 units in 73s
+patch done in 1995s
+2026-11-15T09:26:17Z END   relp-p8-mixtral-counterfact-patch rc=0 (2010s)
+2026-11-15T09:26:17Z START relp-p8-mixtral-counterfact-noise (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py noise --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+noise: 9255 units x 1 variants in 11 buckets, ~1 passes
+noise_T5: 4 rows, 926 units x 1 variants, 1 passes
+noise_T6: 5 rows, 1171 units x 1 variants, 1 passes
+noise_T7: 6 rows, 1391 units x 1 variants, 1 passes
+noise_T8: 6 rows, 1399 units x 1 variants, 1 passes
+noise_T9: 4 rows, 899 units x 1 variants, 1 passes
+noise_T10: 5 rows, 1186 units x 1 variants, 1 passes
+noise_T11: 4 rows, 905 units x 1 variants, 1 passes
+noise_T12: 2 rows, 449 units x 1 variants, 1 passes
+noise_T13: 1 rows, 218 units x 1 variants, 1 passes
+noise_T14: 2 rows, 466 units x 1 variants, 1 passes
+noise_T16: 1 rows, 245 units x 1 variants, 1 passes
+noise_T5 pass 1/1: 926 units in 78s
+noise_T6 pass 1/1: 1171 units in 77s
+noise_T7 pass 1/1: 1391 units in 77s
+noise_T8 pass 1/1: 1399 units in 77s
+noise_T9 pass 1/1: 899 units in 77s
+noise_T10 pass 1/1: 1186 units in 77s
+noise_T11 pass 1/1: 905 units in 77s
+noise_T12 pass 1/1: 449 units in 77s
+noise_T13 pass 1/1: 218 units in 77s
+noise_T14 pass 1/1: 466 units in 77s
+noise_T16 pass 1/1: 245 units in 78s
+noise done in 89s
+2026-11-15T09:28:00Z END   relp-p8-mixtral-counterfact-noise rc=0 (103s)
+2026-11-15T09:28:00Z START relp-p8-mixtral-counterfact-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+freeze: 16157 units x 8 variants in 11 buckets, ~2 passes
+freeze_T5: 8 rows, 1292 units x 8 variants, 2 passes
+freeze_T6: 12 rows, 1905 units x 8 variants, 2 passes
+freeze_T7: 12 rows, 1955 units x 8 variants, 2 passes
+freeze_T8: 18 rows, 2882 units x 8 variants, 2 passes
+freeze_T9: 8 rows, 1316 units x 8 variants, 2 passes
+freeze_T10: 22 rows, 3562 units x 8 variants, 2 passes
+freeze_T11: 6 rows, 997 units x 8 variants, 3 passes
+freeze_T12: 6 rows, 971 units x 8 variants, 2 passes
+freeze_T13: 3 rows, 468 units x 8 variants, 3 passes
+freeze_T14: 4 rows, 640 units x 8 variants, 2 passes
+freeze_T16: 1 rows, 169 units x 8 variants, 1 passes
+freeze_T5 pass 1/2: 640 units in 167s
+freeze_T6 pass 1/2: 950 units in 167s
+freeze_T7 pass 1/2: 966 units in 167s
+freeze_T8 pass 1/2: 1429 units in 167s
+freeze_T9 pass 1/2: 659 units in 167s
+freeze_T10 pass 1/2: 1790 units in 167s
+freeze_T11 pass 1/3: 488 units in 167s
+freeze_T12 pass 1/2: 488 units in 167s
+freeze_T13 pass 1/3: 149 units in 167s
+freeze_T14 pass 1/2: 319 units in 167s
+freeze_T16 pass 1/1: 169 units in 167s
+freeze_T5 pass 2/2: 652 units in 160s
+freeze_T6 pass 2/2: 955 units in 160s
+freeze_T7 pass 2/2: 989 units in 160s
+freeze_T8 pass 2/2: 1453 units in 160s
+freeze_T9 pass 2/2: 657 units in 160s
+freeze_T10 pass 2/2: 1772 units in 160s
+freeze_T11 pass 2/3: 338 units in 160s
+freeze_T12 pass 2/2: 483 units in 160s
+freeze_T13 pass 2/3: 156 units in 160s
+freeze_T14 pass 2/2: 321 units in 160s
+freeze_T11 pass 3/3: 171 units in 69s
+freeze_T13 pass 3/3: 163 units in 69s
+freeze done in 408s
+2026-11-15T09:35:04Z END   relp-p8-mixtral-counterfact-freeze rc=0 (424s)
+2026-11-15T09:35:04Z START relp-p8-mixtral-counterfact-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_counterfact_v1 --task counterfact --base-dir results/relp_p8/mixtral/counterfact --sub-rows 1500
+role: 89 labels, 504 eligible units
+all: 78 labels, 256 eligible units
+role: labels 21/89 (81s)
+role: labels 42/89 (152s)
+role: labels 63/89 (220s)
+role: labels 84/89 (303s)
+role: labels 89/89 (380s)
+all: labels 21/78 (458s)
+all: labels 42/78 (535s)
+all: labels 63/78 (606s)
+all: labels 78/78 (679s)
+addback done in 679s
+2026-11-15T09:46:38Z END   relp-p8-mixtral-counterfact-addback rc=0 (694s)
+2026-11-15T10:14:41Z START relp-p8-mixtral-twohop-verify (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py verify --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+{"passed": true, "n_checks": 1444, "failed_checks": []}
+2026-11-15T10:17:55Z END   relp-p8-mixtral-twohop-verify rc=0 (194s)
+2026-11-15T10:17:55Z START relp-p8-mixtral-twohop-probe (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py probe --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+probe done in 82s
+2026-11-15T10:19:32Z END   relp-p8-mixtral-twohop-probe rc=0 (97s)
+2026-11-15T10:19:32Z START relp-p8-mixtral-twohop-rules (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py rules --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+rules done in 251s
+2026-11-15T10:23:57Z END   relp-p8-mixtral-twohop-rules rc=0 (265s)
+2026-11-15T10:23:57Z START relp-p8-mixtral-twohop-path (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run3.py", line 544, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run3.py", line 248, in main
+    res = run_buckets(disc, job)
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run3.py", line 185, in run_buckets
+    res = lockstep(m, [lambda mp, idx=idx: job(mp, [rows[i] for i in idx], idx) for idx in bk.values()])
+  File "/home/ubuntu/MOE/moetrace/relp_moe_p8.py", line 725, in lockstep
+    for l, w in m.stream(reverse=rev):
+                ~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ubuntu/MOE/moetrace/weights.py", line 190, in __iter__
+    w = self.store._to_device(slot)
+  File "/home/ubuntu/MOE/moetrace/weights.py", line 118, in _to_device
+    gate_up=buf.gate_up.to(d, dt, non_blocking=True), down=buf.down.to(d, dt, non_blocking=True),
+            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.75 GiB. GPU 0 has a total capacity of 22.06 GiB of which 13.44 MiB is free. Including non-PyTorch memory, this process has 22.03 GiB memory in use. Of the allocated memory 20.85 GiB is allocated by PyTorch, and 865.87 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+2026-11-15T10:25:32Z END   relp-p8-mixtral-twohop-path rc=1 (95s)
+2026-11-15T10:25:32Z START relp-p8-mixtral-twohop-patch (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py patch --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500 --directions denoise
+patch: 140128 units x 1 variants in 4 buckets, ~3 passes
+patch_T12: 48 rows, 10702 units x 1 variants, 3 passes
+patch_T13: 226 rows, 79288 units x 1 variants, 3 passes
+patch_T14: 100 rows, 46572 units x 1 variants, 3 passes
+patch_T15: 6 rows, 3566 units x 1 variants, 3 passes
+patch_T12 pass 1/3: 3552 units in 157s
+patch_T13 pass 1/3: 26878 units in 157s
+patch_T14 pass 1/3: 15772 units in 157s
+patch_T15 pass 1/3: 1180 units in 157s
+patch_T12 pass 2/3: 3528 units in 153s
+patch_T13 pass 2/3: 26614 units in 153s
+patch_T14 pass 2/3: 15792 units in 153s
+patch_T15 pass 2/3: 1212 units in 153s
+patch_T12 pass 3/3: 3622 units in 149s
+patch_T13 pass 3/3: 25796 units in 149s
+patch_T14 pass 3/3: 15008 units in 149s
+patch_T15 pass 3/3: 1174 units in 149s
+patch done in 556s
+2026-11-15T10:35:02Z END   relp-p8-mixtral-twohop-patch rc=0 (570s)
+2026-11-15T10:35:02Z START relp-p8-mixtral-twohop-path (waited 522s): .venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500 --chunk 40
+path done in 670s
+2026-11-15T10:46:27Z END   relp-p8-mixtral-twohop-path rc=0 (685s)
+2026-11-15T10:46:27Z START relp-p8-mixtral-twohop-noise (waited 685s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py noise --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+noise: 8984 units x 1 variants in 3 buckets, ~1 passes
+noise_T12: 4 rows, 922 units x 1 variants, 1 passes
+noise_T13: 24 rows, 5454 units x 1 variants, 1 passes
+noise_T14: 12 rows, 2608 units x 1 variants, 1 passes
+noise_T12 pass 1/1: 922 units in 61s
+noise_T13 pass 1/1: 5454 units in 61s
+noise_T14 pass 1/1: 2608 units in 61s
+noise done in 73s
+2026-11-15T10:47:55Z END   relp-p8-mixtral-twohop-noise rc=0 (88s)
+2026-11-15T10:47:55Z START relp-p8-mixtral-twohop-freeze (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+freeze: 19014 units x 8 variants in 4 buckets, ~3 passes
+freeze_T12: 12 rows, 2238 units x 8 variants, 4 passes
+freeze_T13: 54 rows, 10464 units x 8 variants, 3 passes
+freeze_T14: 32 rows, 5946 units x 8 variants, 4 passes
+freeze_T15: 2 rows, 366 units x 8 variants, 2 passes
+freeze_T12 pass 1/4: 574 units in 178s
+freeze_T13 pass 1/3: 3492 units in 178s
+freeze_T14 pass 1/4: 1858 units in 178s
+freeze_T15 pass 1/2: 183 units in 178s
+freeze_T12 pass 2/4: 725 units in 175s
+freeze_T13 pass 2/3: 3526 units in 175s
+freeze_T14 pass 2/4: 1844 units in 175s
+freeze_T15 pass 2/2: 183 units in 175s
+freeze_T12 pass 3/4: 748 units in 167s
+freeze_T13 pass 3/3: 3446 units in 167s
+freeze_T14 pass 3/4: 1866 units in 167s
+freeze_T12 pass 4/4: 191 units in 72s
+freeze_T14 pass 4/4: 378 units in 72s
+freeze done in 604s
+2026-11-15T10:58:14Z END   relp-p8-mixtral-twohop-freeze rc=0 (619s)
+2026-11-15T10:58:14Z START relp-p8-mixtral-twohop-addback (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py addback --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_p8/mixtral_twohop_v1 --task twohop --base-dir results/relp_p8/mixtral/twohop --sub-rows 1500
+role: 88 labels, 318 eligible units
+all: 78 labels, 243 eligible units
+role: labels 32/88 (93s)
+role: labels 64/88 (171s)
+role: labels 88/88 (244s)
+all: labels 32/78 (314s)
+all: labels 64/78 (379s)
+all: labels 78/78 (446s)
+addback done in 446s
+2026-11-15T11:05:55Z END   relp-p8-mixtral-twohop-addback rc=0 (461s)

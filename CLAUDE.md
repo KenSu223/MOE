@@ -51,6 +51,17 @@ RelP-vs-patching expert comparison with diagnostics. New layer-streamed engine `
 reverse-streamed RelP backward), patching `moetrace/relp_moe_patch.py`; runners `scripts/relp_sva_moe_run.py`, `scripts/relp_moe_compare_run.py`;
 chains `scripts/relp_moe_{chain,patch_chain,diag_chain}.sh`; post-hoc `scripts/relp_moe_posthoc.py`; outputs `results/relp_sva_moe/`; envs `.venv-relp` (experiments; `.venv` -> it)
 and `.venv-analysis` (CPU analysis / figures); evidence and deviations `docs/relp_moe_stream_notes.md`. ~7.7 GPU-h, 0 failed jobs. Headlines in 2b.**
+**Phase 8 stages 1-3 COMPLETE 2026-11-15, committed and pushed 2026-11-15 (plan + status `docs/relp_moe_phase8_plan.md`, report `results/sections/relp_moe_p8.md`;
+stage 3 = CounterFact and two-hop state capitals, WinoGrande / IOI not run by the user's decision; stage 4 (larger models) awaits a decision):
+follow-ups from the team meeting on Phase 7 -
+add-back curves under RelP's and exact patching's rankings, layer distribution and rank-rank scatter, where RelP's frozen router /
+nonlinearities fail (routing classes, route switches, gate probe, frozen-quantity decomposition), plain gradient vs RelP rules,
+router-aware attribution, neuron-level patching (~4.0 GPU-h), then the same comparison on CounterFact and two-hop capitals (~4.0 GPU-h).
+Code: `moetrace/relp_moe_p8.py` (rule-switchable RelP, multi-variant backward, path, probe, freeze / neuron patches, `lockstep` for
+varying prompt lengths, `evaluate_roles`), runners `scripts/relp_moe_p8_run.py` (SVA) / `relp_moe_p8_run3.py` (other tasks), manifests
+`scripts/relp_moe_p8_prepare.py` -> `data/relp_p8/`, analysis `scripts/relp_moe_p8_{analyze,analyze3,figures,figures3}.py`, chains
+`scripts/relp_moe_p8_chain_{noise,a,b}.sh`, tests `tests/test_relp_moe_p8.py` (27); outputs `results/relp_sva_moe/**/p8_*`, `results/relp_p8/`.
+Deferred: larger models (Mixtral-8x22B, gpt-oss). Log tag `[relp-p8]`.**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -311,6 +322,30 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     Jaccard 0.57 / 0.57 Qwen3, 0.40 / 0.36 Mixtral); the inconsistency is Lu's final-position rule, which in subject-final tasks
     patches the subject's own layer-0 output (token identity). With layer 0 excluded the rule matches RelP in Mixtral and picks
     RelP rank 2 / 5 in Qwen3. RelP paper (arXiv 2601.22594): agreement circuits = MLP neurons only, attention never ablated.
+- **Phase 8 (2026-11-15, stages 1-2; report `results/sections/relp_moe_p8.md`)**:
+  - *Add-back (held-out)*: Qwen3 RelP ranking = exact up to K = 20, better from K = 50 (0.96 vs 0.88; RelP-paper keep 0.71 vs 0.45); Lu's
+    layer-first order worst; Mixtral exact wins only via L0E002 (0.96 at K = 1), RelP 0.94 at K = 20.
+  - *Noise reversed*: exact single patches have a bf16 / routing-near-tie noise floor (Qwen3 L0-23 experts SD 0.16-0.23 vs mean |effect| ~0.1,
+    repeat r ~0); RelP's lists are more reproducible below rank ~30; method agreement is bounded by exact patching's reliability. Patched rows also
+    share a per-(pair, layer) offset -> sums over many weak exact units are unreliable.
+  - *Decomposition of RelP's error* (patches re-run with later quantities frozen): Qwen3 early subject site = later top-k set switches 60-87 % +
+    routing weights 7-28 % (routing channel); Mixtral L0E002 = expert nonlinearity 52-69 %, half rule 15-27 %, attention 5-20 %, routing ~1 %;
+    late experts = half rule. Frozen-norm patches diverge for early units. Per unit, later route switches predict agreement (r 0.85-0.91 -> 0.06-0.26);
+    forward-only gate differences do not separate reliable pairs (reliability is unit-level).
+  - *Rules*: RelP ranks slightly better than the plain gradient (top-20 0.96 vs 0.90); half rule calibrated for small perturbations (single neurons:
+    RelP slope ~1, true gradient 1.0-1.1, no-half 0.5-0.9) but underestimates large late writes. Single-pass router-aware rules change nothing;
+    an 8-step path gradient through routing weights recovers 83 % / 64 % of the layer-0 effect and the best small-K add-back (exploratory, 2 tasks).
+  - *Neurons*: RelP top 100 vs exact single-neuron patches Pearson 0.93-1.00, slope ~1; ranks 301-1000 31-80 % above the noise floor.
+  - *Other tasks (stage 3; CounterFact STR pairs, two-hop `Fact: the capital of the state containing {city} is`; units at two roles = last
+    subject token, final token)*: same top unit under RelP and exact patching in 4 / 4 cells; final-token last-8 experts Pearson 0.96-1.00.
+    CounterFact top units = the base reproduction's experts (Qwen3 L44E069, L42E115; Mixtral L21E001, L19E002); Qwen3 L44E069 is also the
+    two-hop top unit (exact 11.7 of 19.6 logits; restores 0.59 alone on held-out states); Mixtral L19E002 / L21E001 are 4th / 5th on two-hop
+    (top L24E007). Early subject site in every cell: exact 5.6-15.3 logits at layers 0-2, RelP 8-22 %, plain gradient ~0; cause = later
+    routing 61 % / 36 % (Qwen3 CounterFact / two-hop), 20 % / 46 % (Mixtral), rest linearisation -> SVA's split (Qwen3 91 % routing, Mixtral
+    1 %) was the extreme case, not a model property. Two-hop early-middle city-token experts in Qwen3 (L8E032 4.6, L2E104 3.6): RelP finds
+    L8E032 but underestimates 5x. Held-out add-back at K = 20 (RelP / exact / 8-step path gradient / Lu): CounterFact 0.32 / 0.32 / 0.32 / 0.17
+    (Qwen3), 0.43 / 0.55 / 0.57 / 0.26 (Mixtral); two-hop 0.97 / 0.98 / 0.99 / 0.73, 0.85 / 0.86 / 0.92 / 0.71. Old-engine cross-check
+    (Direction 6 run): whole-layer rescues r 1.000, experts with >= 30 pairs r 0.977 / 0.994.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
   paper's Mixtral expert claim is a search-scope artefact (L18E001); (b) last-layer read-out vs localisation
   (interior-layer rule for code / chat?); (c) select layers by block (attention + MoE) rescue rather than MoE rescue?;
@@ -344,6 +379,11 @@ Extensions:
 - Phase 6 not done (ext14_synthesis.md caveats): Stage 3 Mixtral-8x22B (DP6, user) and F3 (DP3, user); Mixtral Dial A / E0 (too few
   strong-prior items, behaviour only); E2 traced nowhere (behaviour only); Qwen2-57B trimmed to 10 cells; Mistral E1 cells only on all
   association strata; readouts at the final token only (no grids / heads except e1_a2e, e1_e2a, e3_e2a and C3 cells after the scope cut).
+- Phase 8 not done (relp_moe_p8.md sections 6-7): stage 4 larger models (user decision); WinoGrande / IOI under the Phase-8 tools (user
+  dropped them); path gradient as an add-back ranking on all four SVA tasks (two so far) and with more than 8 steps; roles for the earlier
+  subject tokens in CounterFact; neuron-level scores and mean-baseline keep / remove on the stage-3 tasks; vocabulary projection of what
+  L44E069 writes on two-hop. Phase-8 results committed 2026-11-15 (~451 MB);
+  gitignored and kept on the root disk only (~506 MB): resumable `*_part_NNN.npz` chunks (merged row for row into the parquet beside them), `p8_probe/router_logits.npy`, stage-3 `routes_T*.pt`.
 - Phase 7 not done (relp_moe_sva.md caveats, docs/relp_moe_plan.md "Open follow-ups"): add-back curve ranked by exact patching
   (~1 h GPU); neuron-to-neuron edges; the RelP paper's ablation type for paired SVA (mean vs counterfactual; check its code);
   neuron-level patching (comparison is at expert level); OLMoE formal SVA run (the guide's
@@ -582,7 +622,8 @@ Recipes:
   every pass. Log every milestone to `logs/PROGRESS.md` (append-only, UTC timestamps).
 - Parallel agents own disjoint files (base modules vs `ext*` modules, one script prefix per direction) and share the
   GPU only through `gpu_queue.sh`; never stop a running chain to edit it, append a new chain.
-- Commits: trailer `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`. Pushing works from this shell (the
+- Commits: trailer `Co-Authored-By: Claude <model of the session> <noreply@anthropic.com>` (Fable 5.1 through Phase 6, Opus 5.5 for
+  Phase 7, Fable 5.2 for Phase 8). Pushing works from this shell (the
   user's GitHub credentials are configured); commit sub-agent outputs selectively with `git add <paths>`.
 
 ## 7. Unattended / headless workflow (see PLAYBOOK.md)
@@ -619,6 +660,7 @@ Three patterns were used and are documented in PLAYBOOK.md:
   `results/figures/`); `docs/phase6_literature_scan.md` / `docs/phase6_literature_review.md`; `data/dial/preregistration.md` (Phase 6 predictions).
 - Phase 7: `docs/relp_moe_implementation_guide.md`, `docs/relp_sva_experiment_protocol.md` (user's RelP guide / protocol), `docs/relp_moe_plan.md`
   (plan + live status), `docs/relp_moe_stream_notes.md` (engine evidence, deviations), `results/sections/relp_moe_sva.md` (report).
+- Phase 8: `docs/relp_moe_phase8_plan.md` (meeting notes verbatim, work items, live status, analysis decisions), `results/sections/relp_moe_p8.md` (report, stages 1-2).
 - `results/REPORT.md` base deliverable: sections 1–8 plus 6b (Mixtral without BOS).
 - `results/EXTENSIONS_REPORT.md` extension deliverable, assembled from `results/sections/ext*.md`.
 - `docs/ext3_literature_review.md` attention sinks, BOS, MoE routing, tokenisation conventions (30 references).

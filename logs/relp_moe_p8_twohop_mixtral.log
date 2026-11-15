@@ -1,0 +1,111 @@
+{
+ "candidates": 128,
+ "pass_scan": 123,
+ "min_margin": 1.0,
+ "relaxed_from": null,
+ "states_passing": 49,
+ "states": {
+  "discovery": [
+   "Alaska",
+   "Arizona",
+   "Arkansas",
+   "California",
+   "Connecticut",
+   "Florida",
+   "Georgia",
+   "Illinois",
+   "Indiana",
+   "Iowa",
+   "Kentucky",
+   "Louisiana",
+   "Maryland",
+   "Massachusetts",
+   "Michigan",
+   "Minnesota",
+   "Nebraska",
+   "Nevada",
+   "New Hampshire",
+   "North Carolina",
+   "North Dakota",
+   "Oklahoma",
+   "Oregon",
+   "Pennsylvania",
+   "Rhode Island",
+   "South Carolina",
+   "Texas",
+   "Vermont",
+   "Washington"
+  ],
+  "validation": [
+   "Colorado",
+   "Idaho",
+   "Kansas",
+   "New Jersey",
+   "New Mexico",
+   "South Dakota",
+   "Tennessee",
+   "Virginia",
+   "Wisconsin",
+   "Wyoming"
+  ],
+  "test": [
+   "Alabama",
+   "Hawaii",
+   "Maine",
+   "Mississippi",
+   "Missouri",
+   "Montana",
+   "New York",
+   "Ohio",
+   "Utah",
+   "West Virginia"
+  ]
+ },
+ "unordered_pairs_available": {
+  "discovery": 951,
+  "validation": 70,
+  "test": 52
+ }
+}
+{
+ "manifest": "/home/ubuntu/MOE/data/relp_p8/mixtral_twohop_v1",
+ "audit": {
+  "calibration": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "12": 2,
+    "13": 30,
+    "14": 8
+   }
+  },
+  "discovery": {
+   "rows": 300,
+   "groups": 150,
+   "lengths": {
+    "12": 40,
+    "13": 164,
+    "14": 92,
+    "15": 4
+   }
+  },
+  "validation": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "13": 34,
+    "14": 4,
+    "15": 2
+   }
+  },
+  "test": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "12": 8,
+    "13": 28,
+    "14": 4
+   }
+  }
+ }
+}

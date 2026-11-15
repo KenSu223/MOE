@@ -1,0 +1,100 @@
+2026-11-15T02:55:32Z START relp-dev-p8smoke-qwen3-probe (waited 93s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_probe
+probe done in 58s
+2026-11-15T02:56:51Z END   relp-dev-p8smoke-qwen3-probe rc=0 (79s)
+2026-11-15T02:56:51Z smoke qwen3 nounpp probe rc=0 (172s)
+2026-11-15T03:00:13Z START relp-dev-p8smoke-qwen3-rules (waited 202s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_rules
+endpoint B: 12 variants in 46s
+endpoint A: 12 variants in 41s
+rules done in 146s
+2026-11-15T03:03:02Z END   relp-dev-p8smoke-qwen3-rules rc=0 (169s)
+2026-11-15T03:03:02Z smoke qwen3 nounpp rules rc=0 (371s)
+2026-11-15T03:03:02Z START relp-dev-p8smoke-qwen3-path (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --chunk 4 --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_path
+path pairs 4/8 (64s)
+path pairs 8/8 (100s)
+path done in 100s
+2026-11-15T03:05:04Z END   relp-dev-p8smoke-qwen3-path rc=0 (122s)
+2026-11-15T03:05:04Z smoke qwen3 nounpp path rc=0 (122s)
+2026-11-15T03:05:04Z START relp-dev-p8smoke-qwen3-freeze (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_freeze
+freeze: 8 rows, 3862 units x 8 variants, 1 passes
+freeze pass 1/1: 3862 units in 38s
+freeze done in 39s
+2026-11-15T03:06:06Z END   relp-dev-p8smoke-qwen3-freeze rc=0 (63s)
+2026-11-15T03:06:07Z smoke qwen3 nounpp freeze rc=0 (63s)
+2026-11-15T03:06:07Z START relp-dev-p8smoke-qwen3-neuron (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py neuron --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_neuron
+neuron: 8 rows, 15528 units x 1 variants, 1 passes
+neuron pass 1/1: 15528 units in 29s
+neuron done in 84s
+2026-11-15T03:07:54Z END   relp-dev-p8smoke-qwen3-neuron rc=0 (107s)
+2026-11-15T03:07:54Z smoke qwen3 nounpp neuron rc=0 (107s)
+2026-11-15T03:07:54Z START relp-dev-p8smoke-qwen3-addback (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --max-rows 8 --rw-variant relp_rw --output-dir results/relp_moe_dev/p8_smoke/qwen3_nounpp/p8_addback
+Traceback (most recent call last):
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run.py", line 423, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/MOE/scripts/relp_moe_p8_run.py", line 335, in main
+    xv[ex.layer.values, ex.pos.values, ex.expert.values] = torch.tensor(ex["mean"].values)
+    ~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Index put requires the source and destination dtypes match, got Double for the destination and Float for the source.
+2026-11-15T03:08:17Z END   relp-dev-p8smoke-qwen3-addback rc=1 (23s)
+2026-11-15T03:08:17Z smoke qwen3 nounpp addback rc=1 (23s)
+2026-11-15T07:07:33Z START relp-dev-p8smoke3-qwen3-verify (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py verify --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+{"passed": true, "n_checks": 2148, "failed_checks": []}
+2026-11-15T07:09:18Z END   relp-dev-p8smoke3-qwen3-verify rc=0 (105s)
+2026-11-15T07:09:18Z smoke3 qwen3 counterfact verify rc=0 (105s)
+2026-11-15T07:09:18Z START relp-dev-p8smoke3-qwen3-probe (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py probe --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+probe done in 49s
+2026-11-15T07:10:15Z END   relp-dev-p8smoke3-qwen3-probe rc=0 (57s)
+2026-11-15T07:10:15Z smoke3 qwen3 counterfact probe rc=0 (57s)
+2026-11-15T07:10:15Z START relp-dev-p8smoke3-qwen3-rules (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py rules --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+rules done in 151s
+2026-11-15T07:12:56Z END   relp-dev-p8smoke3-qwen3-rules rc=0 (161s)
+2026-11-15T07:12:56Z smoke3 qwen3 counterfact rules rc=0 (161s)
+2026-11-15T07:12:56Z START relp-dev-p8smoke3-qwen3-path (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py path --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+path done in 88s
+2026-11-15T07:14:43Z END   relp-dev-p8smoke3-qwen3-path rc=0 (107s)
+2026-11-15T07:14:43Z smoke3 qwen3 counterfact path rc=0 (107s)
+2026-11-15T07:14:43Z START relp-dev-p8smoke3-qwen3-patch (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py patch --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+patch: 132808 units x 1 variants in 5 buckets, ~1 passes
+patch_T5: 2 rows, 11262 units x 1 variants, 1 passes
+patch_T7: 7 rows, 47118 units x 1 variants, 1 passes
+patch_T8: 2 rows, 15222 units x 1 variants, 1 passes
+patch_T9: 5 rows, 44648 units x 1 variants, 1 passes
+patch_T10: 2 rows, 14558 units x 1 variants, 1 passes
+patch_T5 pass 1/1: 11262 units in 122s
+patch_T7 pass 1/1: 47118 units in 121s
+patch_T8 pass 1/1: 15222 units in 121s
+patch_T9 pass 1/1: 44648 units in 122s
+patch_T10 pass 1/1: 14558 units in 122s
+patch done in 158s
+2026-11-15T07:17:38Z END   relp-dev-p8smoke3-qwen3-patch rc=0 (175s)
+2026-11-15T07:17:38Z smoke3 qwen3 counterfact patch rc=0 (175s)
+2026-11-15T07:17:38Z START relp-dev-p8smoke3-qwen3-noise (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py noise --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+noise: 7236 units x 1 variants in 3 buckets, ~1 passes
+noise_T7: 2 rows, 2480 units x 1 variants, 1 passes
+noise_T8: 1 rows, 1227 units x 1 variants, 1 passes
+noise_T9: 3 rows, 3529 units x 1 variants, 1 passes
+noise_T7 pass 1/1: 2480 units in 30s
+noise_T8 pass 1/1: 1227 units in 30s
+noise_T9 pass 1/1: 3529 units in 30s
+noise done in 40s
+2026-11-15T07:18:30Z END   relp-dev-p8smoke3-qwen3-noise rc=0 (52s)
+2026-11-15T07:18:30Z smoke3 qwen3 counterfact noise rc=0 (52s)
+2026-11-15T07:18:30Z START relp-dev-p8smoke3-qwen3-freeze (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py freeze --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+freeze: 1553 units x 8 variants in 3 buckets, ~1 passes
+freeze_T7: 2 rows, 541 units x 8 variants, 1 passes
+freeze_T8: 1 rows, 262 units x 8 variants, 1 passes
+freeze_T9: 3 rows, 750 units x 8 variants, 1 passes
+freeze_T7 pass 1/1: 541 units in 37s
+freeze_T8 pass 1/1: 262 units in 37s
+freeze_T9 pass 1/1: 750 units in 37s
+freeze done in 46s
+2026-11-15T07:19:29Z END   relp-dev-p8smoke3-qwen3-freeze rc=0 (59s)
+2026-11-15T07:19:29Z smoke3 qwen3 counterfact freeze rc=0 (59s)
+2026-11-15T07:19:29Z START relp-dev-p8smoke3-qwen3-addback (waited 0s, low priority): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_run3.py addback --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_p8/qwen3_counterfact_v1 --task counterfact --base-dir results/relp_moe_dev/p8_smoke3/qwen3_counterfact --max-rows 6
+role: 89 labels, 2919 eligible units
+all: 78 labels, 3302 eligible units
+role: labels 89/89 (55s)
+all: labels 78/78 (97s)
+addback done in 97s
+2026-11-15T07:21:18Z END   relp-dev-p8smoke3-qwen3-addback rc=0 (109s)
+2026-11-15T07:21:18Z smoke3 qwen3 counterfact addback rc=0 (109s)

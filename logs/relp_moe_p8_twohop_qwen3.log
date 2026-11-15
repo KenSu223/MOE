@@ -1,0 +1,104 @@
+{
+ "candidates": 128,
+ "pass_scan": 108,
+ "min_margin": 1.0,
+ "relaxed_from": null,
+ "states_passing": 45,
+ "states": {
+  "discovery": [
+   "Alaska",
+   "Arizona",
+   "Arkansas",
+   "Colorado",
+   "Connecticut",
+   "Florida",
+   "Georgia",
+   "Idaho",
+   "Illinois",
+   "Indiana",
+   "Iowa",
+   "Kentucky",
+   "Louisiana",
+   "Maryland",
+   "Michigan",
+   "Nebraska",
+   "Nevada",
+   "New Jersey",
+   "New Mexico",
+   "North Dakota",
+   "Oregon",
+   "Pennsylvania",
+   "South Carolina",
+   "Tennessee",
+   "Texas",
+   "Utah",
+   "Virginia"
+  ],
+  "validation": [
+   "California",
+   "Kansas",
+   "Massachusetts",
+   "Minnesota",
+   "New York",
+   "Ohio",
+   "South Dakota",
+   "Wisconsin",
+   "Wyoming"
+  ],
+  "test": [
+   "Alabama",
+   "Hawaii",
+   "Maine",
+   "Mississippi",
+   "Missouri",
+   "Montana",
+   "North Carolina",
+   "Oklahoma",
+   "Washington"
+  ]
+ },
+ "unordered_pairs_available": {
+  "discovery": 788,
+  "validation": 121,
+  "test": 52
+ }
+}
+{
+ "manifest": "/home/ubuntu/MOE/data/relp_p8/qwen3_twohop_v1",
+ "audit": {
+  "calibration": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "10": 18,
+    "11": 22
+   }
+  },
+  "discovery": {
+   "rows": 300,
+   "groups": 150,
+   "lengths": {
+    "10": 142,
+    "11": 156,
+    "12": 2
+   }
+  },
+  "validation": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "10": 32,
+    "11": 8
+   }
+  },
+  "test": {
+   "rows": 40,
+   "groups": 20,
+   "lengths": {
+    "10": 30,
+    "11": 8,
+    "12": 2
+   }
+  }
+ }
+}

@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "profile": "p8",
+  "seed": 12,
+  "model": {
+    "repository": "Qwen/Qwen3-30B-A3B-Base",
+    "revision": "1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9",
+    "tokenizer_files": [
+      "config.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "vocab.json",
+      "merges.txt"
+    ],
+    "tokenizer_sha256": {
+      "config.json": "7e4142150e976c6b4796adf88fce0a2a23e581ed63bcede7e1d69a645e73b362",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "tokenizer_config.json": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    }
+  },
+  "tokenizer_sha256": {
+    "config.json": "7e4142150e976c6b4796adf88fce0a2a23e581ed63bcede7e1d69a645e73b362",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "tokenizer_config.json": "3c04ed3ca964ea2f6b2b5faf0dc4d31aec1cb1e8b4bcf63f402d295046b422b5"
+  },
+  "source_revision": "results/qwen3_str (Direction 6 STR, donors slot 0-1)",
+  "tokenization": "raw prefix, add_special_tokens=True, no chat template, no padding",
+  "roles": {
+    "subject": "last token of the changed word",
+    "final": "last token"
+  },
+  "prepare_script_sha256": "418a077add03ba9d7e8d423949034cb147272ffaa9c606a069e071577fbd5c97",
+  "tasks": {
+    "counterfact": {
+      "task": "counterfact",
+      "files_sha256": {
+        "discovery": "4e0bda696bf4d86c12339b2876aee20926db570abecb9bce7a80a43107cc0778",
+        "calibration": "bbfcc274355c7a859066aedd0cf1833f90eb021b03d65f1fe0e1eeaef77ccfe6",
+        "validation": "c933a64039b4db06695c4dee2382d225f6054d1d383d275eabd13dbeef375d55",
+        "test": "aa17e9dceef9edcd94bbab1eb24b6ab5f8157331875c6f5a62e7ed3a3b2fa163"
+      },
+      "audit": {
+        "discovery": {
+          "rows": 200,
+          "groups": 107,
+          "lengths": {
+            "3": 2,
+            "4": 6,
+            "5": 27,
+            "6": 28,
+            "7": 43,
+            "8": 41,
+            "9": 23,
+            "10": 21,
+            "11": 4,
+            "12": 4,
+            "15": 1
+          }
+        },
+        "calibration": {
+          "rows": 28,
+          "groups": 15,
+          "lengths": {
+            "4": 2,
+            "5": 1,
+            "6": 4,
+            "7": 10,
+            "8": 4,
+            "10": 4,
+            "11": 3
+          }
+        },
+        "validation": {
+          "rows": 85,
+          "groups": 46,
+          "lengths": {
+            "5": 12,
+            "6": 14,
+            "7": 15,
+            "8": 13,
+            "9": 11,
+            "10": 8,
+            "11": 6,
+            "12": 4,
+            "13": 1,
+            "15": 1
+          }
+        },
+        "test": {
+          "rows": 90,
+          "groups": 47,
+          "lengths": {
+            "4": 2,
+            "5": 16,
+            "6": 12,
+            "7": 10,
+            "8": 17,
+            "9": 12,
+            "10": 12,
+            "11": 6,
+            "12": 3
+          }
+        }
+      },
+      "source_sha256": {
+        "sweep_cases.parquet": "c1b1ee66c859c3121cf19bed696091240092e0a301f281836636bb2d4fc7edf8",
+        "str_candidates.parquet": "f7c2b01296a7b52ab66716c9b4ce13091360dedb1aed5a0e6f3693115e81746a"
+      },
+      "selection_uses_model_outputs": true,
+      "note": "cases = the paper's Table-8 cases with a qualifying STR donor (Direction 6: donor margin <= -1)"
+    }
+  }
+}

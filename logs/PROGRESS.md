@@ -1470,3 +1470,44 @@
 2026-11-08T07:40:44Z [relp-moe] chain3 end: diagnostics, analysis and figures refreshed; ready for the final report
 2026-11-08T07:41:42Z [relp-moe] Phase 7 COMPLETE: all GPU work done 07:40Z (S1-S4f, ~7.7 GPU-h, 0 failed jobs); final analysis, figures and report results/sections/relp_moe_sva.md written; CLAUDE.md / plan updated. Not committed.
 2026-11-15T00:36:58Z [relp-moe] Post-hoc analyses written (scripts/relp_moe_posthoc.py, report section 7, tables relp_moe_posthoc_*): first-pick rescues, Lu rule without layer 0 (large disagreements vanish), cross-task consistency (exact = RelP), grid coverage, top-20 routing status; RelP paper check (MLP-neuron circuits, attention never ablated). Docs (report, plan, CLAUDE.md incl. fresh-instance env) updated; .gitignore keeps 16 GB of .pt / duplicate jsonl local. Not yet committed.
+2026-11-15T01:16:38Z [relp-moe] Phase 7 committed and pushed (user request): 1fd31f7 on main (1,518 files, ~181 MB; 16 GB of .pt and duplicate jsonl gitignored, kept on the root disk).
+2026-11-15T01:59:49Z [relp-moe] Phase 8 PLANNED (not started): team-meeting follow-ups written to docs/relp_moe_phase8_plan.md (meeting notes verbatim; stage 1 existing-data analyses, stage 2 GPU on SVA ~4-5 h, stage 3 other tasks, stage 4 larger models; 5 user decisions). CPU preview only (routing classes / route switches, nounpp); no GPU job run.
+2026-11-15T02:28:28Z [relp-p8] plan v2 written (docs/relp_moe_phase8_plan.md): scope fixed by the user (stages 1-3 incl. router-aware attribution S2.6 and neuron-level check S2.7; stage 4 deferred); every item specified to command / output level after re-reading the guide, protocol, engine, patch module and runners; stage-3 data inventoried (CounterFact STR 403/404 pairs, WinoGrande and IOI pair sets, two-hop tokenizer check); ~12 GPU-h planned. Awaiting the user's approval; no GPU job run.
+2026-11-15T02:34:00Z [relp-p8] USER DECISION: run stage 1 + stage 2 (incl. S2.6 router-aware, S2.7 neurons), then a detailed analysis; stage 3 and stage 4 deferred until the user decides after the analysis. Plan v3; execution START.
+2026-11-15T03:00:13Z [relp-p8] S2.5 noise repeats DONE (8/8 paper tasks, 40 discovery pairs each)
+2026-11-15T03:12:15Z [relp-p8] code + tests done (moetrace/relp_moe_p8.py, scripts/relp_moe_p8_{run,data,select,analyze,figures}.py, tests/test_relp_moe_p8.py 21/21); smoke on qwen3/nounpp 8 rows: all 6 commands rc=0 (fixed: tracked-neuron accumulation, add-back dtype); S2.5 noise repeats DONE 8/8; chain A (stage 2 GPU) START
+2026-11-15T03:28:13Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/nounpp
+2026-11-15T03:38:05Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/simple
+2026-11-15T03:52:21Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/rc
+2026-11-15T04:02:12Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/within_rc
+2026-11-15T04:05:02Z [relp-p8] chain A: Qwen3 probe/rules/path/freeze/neuron complete 4/4 (D1 bit-identical, D3 unit-mean r >= 0.998); Mixtral started 04:02Z; stage-1 analysis + figures done; interim stage-2 analysis on Qwen3 done
+2026-11-15T04:34:32Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/nounpp
+2026-11-15T04:55:56Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/simple
+2026-11-15T05:24:50Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/rc
+2026-11-15T05:46:45Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/within_rc
+2026-11-15T06:04:28Z [relp-p8] FAIL mixtral/nounpp/addback rc=1 (logs/relp_moe_p8_jobs_mixtral.log)
+2026-11-15T06:07:59Z [relp-p8] mixtral/nounpp/addback OOM (evaluate() keeps every group's per-layer pair records; Mixtral I=14336): runner now splits labels into memory-sized passes (from mixtral rc on); nounpp to be rerun after chain A ends
+2026-11-15T06:26:08Z [relp-p8] chain A ended with failures (see logs/relp_moe_p8_chain.log)
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/nounpp
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/simple
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/rc
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for qwen3/within_rc
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/nounpp
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/simple
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/rc
+2026-11-15T06:26:23Z [relp-p8] stage 2 GPU (probe/rules/path/freeze/neuron) done for mixtral/within_rc
+2026-11-15T06:36:40Z [relp-p8] chain A DONE: stage 2 complete for 2 models x 4 tasks
+2026-11-15T06:38:00Z [relp-p8] chain A COMPLETE: stage 2 GPU done for 2 models x 4 tasks (probe, rules, path x2, freeze, neuron, addback; mixtral/nounpp/addback rerun after the OOM fix). Final analysis + figures refreshed.
+2026-11-15T06:45:47Z [relp-p8] stages 1-2 COMPLETE: report results/sections/relp_moe_p8.md (+ tables relp_moe_p8_*.md, figures relp_moe_p8_*.png); plan / CLAUDE.md updated; nothing committed; stages 3-4 await the user's decision
+2026-11-15T07:00:21Z [relp-p8] USER DECISION: run stage 3 with CounterFact first, then two-hop capitals; WinoGrande and IOI not run. Stage 3 START (design in docs/relp_moe_phase8_plan.md section 8d).
+2026-11-15T07:21:58Z [relp-p8] stage 3 code done: lockstep scheduler + evaluate_roles (tests 27/27), scripts/relp_moe_p8_{prepare,run3,analyze3,smoke3}.py, chain scripts/relp_moe_p8_chain_b.sh; CounterFact manifests built (qwen3 200/28/85/90, mixtral 201/27/86/90 rows; ids = pinned tokenizer); smoke qwen3/counterfact 6 rows: 8/8 commands rc=0 (verify 2148/2148; exact and RelP top-2 = L44E069, L42E115 @ final); chain B START
+2026-11-15T08:40:09Z [relp-p8] stage 3 GPU done for qwen3/counterfact
+2026-11-15T08:40:59Z [relp-p8] stage 3 qwen3/counterfact DONE 8/8 (07:22-08:40Z; patch grid 2.94 M units 47 min). First read: exact and RelP top-5 role units identical (L44E069, L42E115, L47E086, L43E046, L43E005 @ final); final-role last-8 Pearson 0.996; add-back RelP = exact (K=20 0.32 / 0.32, K=200 0.74 / 0.73), Lu order 0.17; subject site L0 RelP 14 % of exact, routing ~58 % of the gap; old-engine cross-check unit means r 0.974 (>= 30 pairs), whole-layer r 1.000. two-hop scans: qwen3 108/128, mixtral 123/128 cities pass; manifests 300/40/40/40 both.
+2026-11-15T09:46:39Z [relp-p8] stage 3 GPU done for mixtral/counterfact
+2026-11-15T09:47:01Z [relp-p8] stage 3 CounterFact DONE for both models (mixtral 08:40-09:46Z, patch grid 0.67 M units); two-hop started (qwen3 first)
+2026-11-15T10:14:41Z [relp-p8] stage 3 GPU done for qwen3/twohop
+2026-11-15T10:25:32Z [relp-p8] FAIL stage 3 mixtral/twohop/path rc=1 (logs/relp_moe_p8_jobs_mixtral.log)
+2026-11-15T10:26:22Z [relp-p8] mixtral/twohop/path OOM (whole bucket of up to 156 pairs x 9 path points at once): run3 path now chunks pairs inside a bucket (--chunk); rerun queued with --chunk 40
+2026-11-15T11:05:55Z [relp-p8] stage 3 GPU done for mixtral/twohop
+2026-11-15T11:05:55Z [relp-p8] chain B ended with failures (see logs/relp_moe_p8_chain.log)
+2026-11-15T11:11:42Z [relp-p8] stage 3 COMPLETE: chain B done (32/32 runs complete incl. the mixtral/twohop/path rerun with --chunk 40; ~4.0 GPU-h); final analysis (scripts/relp_moe_p8_analyze3.py, figures3) and report section 3 of results/sections/relp_moe_p8.md written; plan / CLAUDE.md updated; nothing committed; stage 4 awaits the user's decision

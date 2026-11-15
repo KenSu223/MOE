@@ -1,0 +1,189 @@
+{
+  "utc": "2026-11-15T04:04:29.818870+00:00",
+  "command": [
+    "scripts/relp_moe_p8_run.py",
+    "rules",
+    "--model-dir",
+    "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "--manifest-dir",
+    "data/relp_sva/mixtral_paper_v1",
+    "--task",
+    "nounpp",
+    "--verification",
+    "results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json",
+    "--phase7-dir",
+    "results/relp_sva_moe/mixtral/paper/nounpp",
+    "--output-dir",
+    "results/relp_sva_moe/mixtral/paper/nounpp/p8_rules",
+    "--sub-rows",
+    "1500"
+  ],
+  "task": "nounpp",
+  "manifest_sha256": "13e229594a708749ad12367b3186c568d1c32fd333e59a126265a1bfff459302",
+  "identity": {
+    "model_dir": "/opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0",
+    "dtype": "torch.bfloat16",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.22.2",
+    "engine": "relp_moe_stream.StreamRelP (layer streaming)",
+    "native_reference": "transformers eager attention + eager experts (HF reference loop)",
+    "engine_sha256": "61264b0f8064834a1da9ea5b8fed5b7706cc84ee7a7c5e2d71d235af02367237",
+    "sva_sha256": "803376f6c3432c16a781745e76fef390fd2945e2b1ce7c40617c5a67eec7152d",
+    "weights_sha256": "566f069bc28d82f6ecf5f49b44bfa641e7fb4d117d7b935601d62fe107edcf64",
+    "arch_sha256": "c053a46130513f4c50afcce9d9b13ffc292c5c3b5b3c676939fe1cba834c09a2",
+    "files": {
+      "config.json": {
+        "sha256": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793"
+      },
+      "generation_config.json": {
+        "sha256": "40e6ecbcedfc2b67b7fa8ba37216c9546c18c00242020b2b34f0b58c3558f680"
+      },
+      "model-00001-of-00019.safetensors": {
+        "size": 4892809584,
+        "mtime_ns": 1794089135486720967
+      },
+      "model-00002-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089139253521391
+      },
+      "model-00003-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089129661029628
+      },
+      "model-00004-of-00019.safetensors": {
+        "size": 4899035200,
+        "mtime_ns": 1794089136722655484
+      },
+      "model-00005-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089137967589523
+      },
+      "model-00006-of-00019.safetensors": {
+        "size": 4983004016,
+        "mtime_ns": 1794089140495455590
+      },
+      "model-00007-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089120463516939
+      },
+      "model-00008-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089121836444198
+      },
+      "model-00009-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211044727504
+      },
+      "model-00010-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089213610592619
+      },
+      "model-00011-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089228631805379
+      },
+      "model-00012-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089218982310816
+      },
+      "model-00013-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089211243717044
+      },
+      "model-00014-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089216060463861
+      },
+      "model-00015-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089225473970786
+      },
+      "model-00016-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089224785006874
+      },
+      "model-00017-of-00019.safetensors": {
+        "size": 4899035248,
+        "mtime_ns": 1794089239785218501
+      },
+      "model-00018-of-00019.safetensors": {
+        "size": 4983004072,
+        "mtime_ns": 1794089250270666964
+      },
+      "model-00019-of-00019.safetensors": {
+        "size": 4221679088,
+        "mtime_ns": 1794089258129254024
+      },
+      "model.safetensors.index.json": {
+        "sha256": "a8f30ebfaf569d5cc6358a32009342a3e73d4553a340cc38a6319457d9dc13e6"
+      },
+      "special_tokens_map.json": {
+        "sha256": "96bdbb8504d9967606e5f661ccc7cbbac44a3661af863a7a58614670a0ccab33"
+      },
+      "tokenizer.json": {
+        "sha256": "fc4f0bd70b3709312d9d1d9e5ba674794b6bc5abc17429897a540f93882f25fc"
+      },
+      "tokenizer.model": {
+        "size": 493443,
+        "mtime_ns": 1794089243472024529
+      },
+      "tokenizer_config.json": {
+        "sha256": "747ec99bae3fd9d7bf9c3b9172e5ca0d82ca0d23d64a58ef1752b612f196817b"
+      }
+    }
+  },
+  "verification_sha256": "0c32477089386543d21fa2d1b236f5e8ab56a1e35d09b667a708293071dc8008",
+  "script_sha256": "d89b0c9769a28bde232bc2cf9f518b2f9be0151c6590f5957a05614d44a7d295",
+  "p8_module_sha256": "2ce55ef9319f883c51e1c1d88497b0dcc6b6093e5c5f013c9b5cb9fe81dfade4",
+  "patch_module_sha256": "1db02d24d11ca84790bebd7dc982bf31b1ac0171dbf5eaa145afae13e3bd6a6d",
+  "status": "complete",
+  "seconds": 246.19868206977844,
+  "rows": 300,
+  "tau_per_layer": [
+    0.304177171974422,
+    0.40088610722541734,
+    0.32286640036855685,
+    0.5020083091533365,
+    0.36878334921019656,
+    0.4629488271608274,
+    0.48410457562285997,
+    0.31299017868460366,
+    0.4134772568426928,
+    0.3422071345352907,
+    0.2882217848182834,
+    0.3131023974417356,
+    0.28693800184864315,
+    0.2865054470173419,
+    0.28349713910682084,
+    0.3068826509635684,
+    0.30335164800397857,
+    0.38698350759190864,
+    0.4407473373241472,
+    0.5533273782824395,
+    0.42727755666990475,
+    0.6094636178857152,
+    0.48084507048809283,
+    0.5557376302783622,
+    0.560401053354304,
+    0.48920848612272344,
+    0.48000575499073816,
+    0.46927831301605344,
+    0.42190052098033975,
+    0.33307607124580535,
+    0.2916675494278594,
+    0.4459235202357189
+  ],
+  "seconds_B": 77.57098698616028,
+  "D1_B": {
+    "bit_identical": true,
+    "max_abs": 0.0,
+    "ref_max_abs": 3.3378095626831055
+  },
+  "seconds_A": 77.72318840026855,
+  "D1_A": {
+    "bit_identical": true,
+    "max_abs": 0.0,
+    "ref_max_abs": 3.4195098876953125
+  }
+}

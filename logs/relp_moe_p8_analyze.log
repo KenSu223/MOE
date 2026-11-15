@@ -1,0 +1,28 @@
+S1 qwen3/simple: 303,636 expert pair-units
+S1 qwen3/nounpp: 1,119,388 expert pair-units
+S1 qwen3/rc: 1,399,252 expert pair-units
+S1 qwen3/within_rc: 283,886 expert pair-units
+S1 mixtral/simple: 37,988 expert pair-units
+S1 mixtral/nounpp: 178,258 expert pair-units
+S1 mixtral/rc: 220,166 expert pair-units
+S1 mixtral/within_rc: 48,228 expert pair-units
+wrote /home/ubuntu/MOE/results/relp_sva_moe/p8_summary.json
+
+real	0m51.413s
+user	0m51.746s
+sys	0m2.502s
+wrote layerdist_qwen3
+wrote layerdist_mixtral
+wrote rankscatter_qwen3
+wrote valscatter_qwen3
+wrote rankscatter_mixtral
+wrote valscatter_mixtral
+wrote depth
+wrote biasmap_qwen3
+wrote biasmap_mixtral
+wrote classes
+wrote rules
+wrote freeze
+wrote neuron
+wrote addback_expert_position
+wrote addback_expert_all_positions

@@ -1,0 +1,222 @@
+2026-11-15T02:34:19Z [relp-p8/noise] chain start
+2026-11-15T02:34:19Z [relp-p8/noise] start qwen3-nounpp-noise
+2026-11-15T02:37:12Z [relp-p8/noise] end qwen3-nounpp-noise rc=0
+2026-11-15T02:37:12Z [relp-p8/noise] start qwen3-simple-noise
+2026-11-15T02:39:13Z [relp-p8/noise] end qwen3-simple-noise rc=0
+2026-11-15T02:39:13Z [relp-p8/noise] start qwen3-rc-noise
+2026-11-15T02:42:39Z [relp-p8/noise] end qwen3-rc-noise rc=0
+2026-11-15T02:42:39Z [relp-p8/noise] start qwen3-within_rc-noise
+2026-11-15T02:45:02Z [relp-p8/noise] end qwen3-within_rc-noise rc=0
+2026-11-15T02:45:02Z [relp-p8/noise] start mixtral-nounpp-noise
+2026-11-15T02:48:35Z [relp-p8/noise] end mixtral-nounpp-noise rc=0
+2026-11-15T02:48:35Z [relp-p8/noise] start mixtral-simple-noise
+2026-11-15T02:51:48Z [relp-p8/noise] end mixtral-simple-noise rc=0
+2026-11-15T02:51:48Z [relp-p8/noise] start mixtral-rc-noise
+2026-11-15T02:55:32Z [relp-p8/noise] end mixtral-rc-noise rc=0
+2026-11-15T02:55:32Z [relp-p8/noise] start mixtral-within_rc-noise
+2026-11-15T03:00:13Z [relp-p8/noise] end mixtral-within_rc-noise rc=0
+2026-11-15T03:00:13Z [relp-p8/noise] chain end (fail=0)
+2026-11-15T03:12:12Z [relp-p8/A] chain A start
+2026-11-15T03:12:12Z [relp-p8/A] start qwen3-nounpp-probe
+2026-11-15T03:13:05Z [relp-p8/A] end qwen3-nounpp-probe rc=0
+2026-11-15T03:13:05Z [relp-p8/A] start qwen3-nounpp-rules
+2026-11-15T03:16:07Z [relp-p8/A] end qwen3-nounpp-rules rc=0
+2026-11-15T03:16:07Z [relp-p8/A] start qwen3-nounpp-path
+2026-11-15T03:19:13Z [relp-p8/A] end qwen3-nounpp-path rc=0
+2026-11-15T03:19:13Z [relp-p8/A] start qwen3-nounpp-freeze
+2026-11-15T03:23:53Z [relp-p8/A] end qwen3-nounpp-freeze rc=0
+2026-11-15T03:23:53Z [relp-p8/A] start qwen3-nounpp-neuron
+2026-11-15T03:28:13Z [relp-p8/A] end qwen3-nounpp-neuron rc=0
+2026-11-15T03:28:13Z [relp-p8/A] start qwen3-simple-probe
+2026-11-15T03:29:06Z [relp-p8/A] end qwen3-simple-probe rc=0
+2026-11-15T03:29:06Z [relp-p8/A] start qwen3-simple-rules
+2026-11-15T03:31:27Z [relp-p8/A] end qwen3-simple-rules rc=0
+2026-11-15T03:31:27Z [relp-p8/A] start qwen3-simple-path
+2026-11-15T03:34:16Z [relp-p8/A] end qwen3-simple-path rc=0
+2026-11-15T03:34:16Z [relp-p8/A] start qwen3-simple-freeze
+2026-11-15T03:35:54Z [relp-p8/A] end qwen3-simple-freeze rc=0
+2026-11-15T03:35:54Z [relp-p8/A] start qwen3-simple-neuron
+2026-11-15T03:38:05Z [relp-p8/A] end qwen3-simple-neuron rc=0
+2026-11-15T03:38:05Z [relp-p8/A] start qwen3-rc-probe
+2026-11-15T03:38:57Z [relp-p8/A] end qwen3-rc-probe rc=0
+2026-11-15T03:38:57Z [relp-p8/A] start qwen3-rc-rules
+2026-11-15T03:42:02Z [relp-p8/A] end qwen3-rc-rules rc=0
+2026-11-15T03:42:02Z [relp-p8/A] start qwen3-rc-freeze
+2026-11-15T03:47:49Z [relp-p8/A] end qwen3-rc-freeze rc=0
+2026-11-15T03:47:49Z [relp-p8/A] start qwen3-rc-neuron
+2026-11-15T03:52:21Z [relp-p8/A] end qwen3-rc-neuron rc=0
+2026-11-15T03:52:21Z [relp-p8/A] start qwen3-within_rc-probe
+2026-11-15T03:53:11Z [relp-p8/A] end qwen3-within_rc-probe rc=0
+2026-11-15T03:53:11Z [relp-p8/A] start qwen3-within_rc-rules
+2026-11-15T03:55:56Z [relp-p8/A] end qwen3-within_rc-rules rc=0
+2026-11-15T03:55:56Z [relp-p8/A] start qwen3-within_rc-freeze
+2026-11-15T03:58:19Z [relp-p8/A] end qwen3-within_rc-freeze rc=0
+2026-11-15T03:58:19Z [relp-p8/A] start qwen3-within_rc-neuron
+2026-11-15T04:02:12Z [relp-p8/A] end qwen3-within_rc-neuron rc=0
+2026-11-15T04:02:12Z [relp-p8/A] start mixtral-nounpp-probe
+2026-11-15T04:04:11Z [relp-p8/A] end mixtral-nounpp-probe rc=0
+2026-11-15T04:04:11Z [relp-p8/A] start mixtral-nounpp-rules
+2026-11-15T04:08:43Z [relp-p8/A] end mixtral-nounpp-rules rc=0
+2026-11-15T04:08:43Z [relp-p8/A] start mixtral-nounpp-path
+2026-11-15T04:15:27Z [relp-p8/A] end mixtral-nounpp-path rc=0
+2026-11-15T04:15:27Z [relp-p8/A] start mixtral-nounpp-freeze
+2026-11-15T04:23:29Z [relp-p8/A] end mixtral-nounpp-freeze rc=0
+2026-11-15T04:23:29Z [relp-p8/A] start mixtral-nounpp-neuron
+2026-11-15T04:34:32Z [relp-p8/A] end mixtral-nounpp-neuron rc=0
+2026-11-15T04:34:32Z [relp-p8/A] start mixtral-simple-probe
+2026-11-15T04:36:03Z [relp-p8/A] end mixtral-simple-probe rc=0
+2026-11-15T04:36:03Z [relp-p8/A] start mixtral-simple-rules
+2026-11-15T04:40:18Z [relp-p8/A] end mixtral-simple-rules rc=0
+2026-11-15T04:40:18Z [relp-p8/A] start mixtral-simple-path
+2026-11-15T04:46:47Z [relp-p8/A] end mixtral-simple-path rc=0
+2026-11-15T04:46:47Z [relp-p8/A] start mixtral-simple-freeze
+2026-11-15T04:49:00Z [relp-p8/A] end mixtral-simple-freeze rc=0
+2026-11-15T04:49:00Z [relp-p8/A] start mixtral-simple-neuron
+2026-11-15T04:55:56Z [relp-p8/A] end mixtral-simple-neuron rc=0
+2026-11-15T04:55:56Z [relp-p8/A] start mixtral-rc-probe
+2026-11-15T04:57:23Z [relp-p8/A] end mixtral-rc-probe rc=0
+2026-11-15T04:57:23Z [relp-p8/A] start mixtral-rc-rules
+2026-11-15T05:02:00Z [relp-p8/A] end mixtral-rc-rules rc=0
+2026-11-15T05:02:00Z [relp-p8/A] start mixtral-rc-freeze
+2026-11-15T05:11:17Z [relp-p8/A] end mixtral-rc-freeze rc=0
+2026-11-15T05:11:17Z [relp-p8/A] start mixtral-rc-neuron
+2026-11-15T05:24:50Z [relp-p8/A] end mixtral-rc-neuron rc=0
+2026-11-15T05:24:50Z [relp-p8/A] start mixtral-within_rc-probe
+2026-11-15T05:26:15Z [relp-p8/A] end mixtral-within_rc-probe rc=0
+2026-11-15T05:26:15Z [relp-p8/A] start mixtral-within_rc-rules
+2026-11-15T05:30:53Z [relp-p8/A] end mixtral-within_rc-rules rc=0
+2026-11-15T05:30:53Z [relp-p8/A] start mixtral-within_rc-freeze
+2026-11-15T05:34:15Z [relp-p8/A] end mixtral-within_rc-freeze rc=0
+2026-11-15T05:34:15Z [relp-p8/A] start mixtral-within_rc-neuron
+2026-11-15T05:46:45Z [relp-p8/A] end mixtral-within_rc-neuron rc=0
+2026-11-15T05:46:49Z [relp-p8/A] start qwen3-nounpp-addback
+2026-11-15T05:51:46Z [relp-p8/A] end qwen3-nounpp-addback rc=0
+2026-11-15T05:51:46Z [relp-p8/A] start qwen3-simple-addback
+2026-11-15T05:55:11Z [relp-p8/A] end qwen3-simple-addback rc=0
+2026-11-15T05:55:11Z [relp-p8/A] start qwen3-rc-addback
+2026-11-15T05:59:48Z [relp-p8/A] end qwen3-rc-addback rc=0
+2026-11-15T05:59:48Z [relp-p8/A] start qwen3-within_rc-addback
+2026-11-15T06:03:55Z [relp-p8/A] end qwen3-within_rc-addback rc=0
+2026-11-15T06:03:55Z [relp-p8/A] start mixtral-nounpp-addback
+2026-11-15T06:04:28Z [relp-p8/A] end mixtral-nounpp-addback rc=1
+2026-11-15T06:04:28Z [relp-p8/A] start mixtral-simple-addback
+2026-11-15T06:07:42Z [relp-p8/A] end mixtral-simple-addback rc=0
+2026-11-15T06:07:42Z [relp-p8/A] start mixtral-rc-addback
+2026-11-15T06:16:40Z [relp-p8/A] end mixtral-rc-addback rc=0
+2026-11-15T06:16:40Z [relp-p8/A] start mixtral-within_rc-addback
+2026-11-15T06:26:08Z [relp-p8/A] end mixtral-within_rc-addback rc=0
+2026-11-15T06:26:08Z [relp-p8/A] chain A end (fail=1)
+2026-11-15T06:26:23Z [relp-p8/A] chain A start
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/nounpp/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/nounpp/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/nounpp/path (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/nounpp/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/nounpp/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/simple/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/simple/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/simple/path (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/simple/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/simple/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/rc/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/rc/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/rc/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/rc/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/within_rc/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/within_rc/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/within_rc/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip qwen3/within_rc/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/nounpp/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/nounpp/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/nounpp/path (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/nounpp/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/nounpp/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/simple/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/simple/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/simple/path (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/simple/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/simple/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/rc/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/rc/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/rc/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/rc/neuron (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/within_rc/probe (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/within_rc/rules (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/within_rc/freeze (complete)
+2026-11-15T06:26:23Z [relp-p8/A] skip mixtral/within_rc/neuron (complete)
+2026-11-15T06:26:27Z [relp-p8/A] skip qwen3/nounpp/addback (complete)
+2026-11-15T06:26:27Z [relp-p8/A] skip qwen3/simple/addback (complete)
+2026-11-15T06:26:27Z [relp-p8/A] skip qwen3/rc/addback (complete)
+2026-11-15T06:26:27Z [relp-p8/A] skip qwen3/within_rc/addback (complete)
+2026-11-15T06:26:27Z [relp-p8/A] start mixtral-nounpp-addback
+2026-11-15T06:36:40Z [relp-p8/A] end mixtral-nounpp-addback rc=0
+2026-11-15T06:36:40Z [relp-p8/A] skip mixtral/simple/addback (complete)
+2026-11-15T06:36:40Z [relp-p8/A] skip mixtral/rc/addback (complete)
+2026-11-15T06:36:40Z [relp-p8/A] skip mixtral/within_rc/addback (complete)
+2026-11-15T06:36:40Z [relp-p8/A] chain A end (fail=0)
+2026-11-15T07:21:55Z [relp-p8/B] chain B start
+2026-11-15T07:21:55Z [relp-p8/B] start qwen3-counterfact-verify
+2026-11-15T07:23:32Z [relp-p8/B] end qwen3-counterfact-verify rc=0
+2026-11-15T07:23:32Z [relp-p8/B] start qwen3-counterfact-probe
+2026-11-15T07:24:29Z [relp-p8/B] end qwen3-counterfact-probe rc=0
+2026-11-15T07:24:29Z [relp-p8/B] start qwen3-counterfact-rules
+2026-11-15T07:34:18Z [relp-p8/B] end qwen3-counterfact-rules rc=0
+2026-11-15T07:34:18Z [relp-p8/B] start qwen3-counterfact-path
+2026-11-15T07:40:38Z [relp-p8/B] end qwen3-counterfact-path rc=0
+2026-11-15T07:40:38Z [relp-p8/B] start qwen3-counterfact-patch
+2026-11-15T08:27:42Z [relp-p8/B] end qwen3-counterfact-patch rc=0
+2026-11-15T08:27:42Z [relp-p8/B] start qwen3-counterfact-noise
+2026-11-15T08:29:10Z [relp-p8/B] end qwen3-counterfact-noise rc=0
+2026-11-15T08:29:10Z [relp-p8/B] start qwen3-counterfact-freeze
+2026-11-15T08:32:49Z [relp-p8/B] end qwen3-counterfact-freeze rc=0
+2026-11-15T08:32:49Z [relp-p8/B] start qwen3-counterfact-addback
+2026-11-15T08:40:09Z [relp-p8/B] end qwen3-counterfact-addback rc=0
+2026-11-15T08:40:09Z [relp-p8/B] start mixtral-counterfact-verify
+2026-11-15T08:43:27Z [relp-p8/B] end mixtral-counterfact-verify rc=0
+2026-11-15T08:43:27Z [relp-p8/B] start mixtral-counterfact-probe
+2026-11-15T08:45:02Z [relp-p8/B] end mixtral-counterfact-probe rc=0
+2026-11-15T08:45:02Z [relp-p8/B] start mixtral-counterfact-rules
+2026-11-15T08:49:38Z [relp-p8/B] end mixtral-counterfact-rules rc=0
+2026-11-15T08:49:38Z [relp-p8/B] start mixtral-counterfact-path
+2026-11-15T08:52:47Z [relp-p8/B] end mixtral-counterfact-path rc=0
+2026-11-15T08:52:47Z [relp-p8/B] start mixtral-counterfact-patch
+2026-11-15T09:26:17Z [relp-p8/B] end mixtral-counterfact-patch rc=0
+2026-11-15T09:26:17Z [relp-p8/B] start mixtral-counterfact-noise
+2026-11-15T09:28:00Z [relp-p8/B] end mixtral-counterfact-noise rc=0
+2026-11-15T09:28:00Z [relp-p8/B] start mixtral-counterfact-freeze
+2026-11-15T09:35:04Z [relp-p8/B] end mixtral-counterfact-freeze rc=0
+2026-11-15T09:35:04Z [relp-p8/B] start mixtral-counterfact-addback
+2026-11-15T09:46:39Z [relp-p8/B] end mixtral-counterfact-addback rc=0
+2026-11-15T09:46:39Z [relp-p8/B] start qwen3-twohop-verify
+2026-11-15T09:48:40Z [relp-p8/B] end qwen3-twohop-verify rc=0
+2026-11-15T09:48:40Z [relp-p8/B] start qwen3-twohop-probe
+2026-11-15T09:49:40Z [relp-p8/B] end qwen3-twohop-probe rc=0
+2026-11-15T09:49:40Z [relp-p8/B] start qwen3-twohop-rules
+2026-11-15T09:52:45Z [relp-p8/B] end qwen3-twohop-rules rc=0
+2026-11-15T09:52:45Z [relp-p8/B] start qwen3-twohop-path
+2026-11-15T09:54:53Z [relp-p8/B] end qwen3-twohop-path rc=0
+2026-11-15T09:54:53Z [relp-p8/B] start qwen3-twohop-patch
+2026-11-15T10:04:29Z [relp-p8/B] end qwen3-twohop-patch rc=0
+2026-11-15T10:04:29Z [relp-p8/B] start qwen3-twohop-noise
+2026-11-15T10:05:43Z [relp-p8/B] end qwen3-twohop-noise rc=0
+2026-11-15T10:05:43Z [relp-p8/B] start qwen3-twohop-freeze
+2026-11-15T10:11:25Z [relp-p8/B] end qwen3-twohop-freeze rc=0
+2026-11-15T10:11:25Z [relp-p8/B] start qwen3-twohop-addback
+2026-11-15T10:14:41Z [relp-p8/B] end qwen3-twohop-addback rc=0
+2026-11-15T10:14:41Z [relp-p8/B] start mixtral-twohop-verify
+2026-11-15T10:17:55Z [relp-p8/B] end mixtral-twohop-verify rc=0
+2026-11-15T10:17:55Z [relp-p8/B] start mixtral-twohop-probe
+2026-11-15T10:19:32Z [relp-p8/B] end mixtral-twohop-probe rc=0
+2026-11-15T10:19:32Z [relp-p8/B] start mixtral-twohop-rules
+2026-11-15T10:23:57Z [relp-p8/B] end mixtral-twohop-rules rc=0
+2026-11-15T10:23:57Z [relp-p8/B] start mixtral-twohop-path
+2026-11-15T10:25:32Z [relp-p8/B] end mixtral-twohop-path rc=1
+2026-11-15T10:25:32Z [relp-p8/B] start mixtral-twohop-patch
+2026-11-15T10:35:02Z [relp-p8/B] end mixtral-twohop-patch rc=0
+2026-11-15T10:35:02Z [relp-p8/B] start mixtral-twohop-noise
+2026-11-15T10:46:27Z [relp-p8/B] rerun mixtral-twohop-path (chunk 40) rc=0
+2026-11-15T10:47:55Z [relp-p8/B] end mixtral-twohop-noise rc=0
+2026-11-15T10:47:55Z [relp-p8/B] start mixtral-twohop-freeze
+2026-11-15T10:58:14Z [relp-p8/B] end mixtral-twohop-freeze rc=0
+2026-11-15T10:58:14Z [relp-p8/B] start mixtral-twohop-addback
+2026-11-15T11:05:55Z [relp-p8/B] end mixtral-twohop-addback rc=0
+2026-11-15T11:05:56Z [relp-p8/B] chain B end (fail=1)

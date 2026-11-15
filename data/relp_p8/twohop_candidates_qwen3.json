@@ -1,0 +1,4634 @@
+{
+ "template": "Fact: the capital of the state containing {} is",
+ "capital_tokens": {
+  "Alabama": 43025,
+  "Alaska": 5534,
+  "Arizona": 22672,
+  "Arkansas": 14671,
+  "California": 40234,
+  "Colorado": 22117,
+  "Connecticut": 72120,
+  "Delaware": 86826,
+  "Florida": 41102,
+  "Georgia": 19440,
+  "Hawaii": 81540,
+  "Idaho": 78573,
+  "Illinois": 52424,
+  "Indiana": 41351,
+  "Iowa": 3874,
+  "Kansas": 2014,
+  "Kentucky": 9270,
+  "Louisiana": 85169,
+  "Maine": 83475,
+  "Maryland": 1527,
+  "Massachusetts": 10196,
+  "Michigan": 96484,
+  "Minnesota": 14205,
+  "Mississippi": 13658,
+  "Missouri": 33544,
+  "Montana": 71946,
+  "Nebraska": 24379,
+  "Nevada": 40176,
+  "New Hampshire": 63093,
+  "New Jersey": 47520,
+  "New Mexico": 15993,
+  "New York": 54954,
+  "North Carolina": 64083,
+  "North Dakota": 425,
+  "Ohio": 31817,
+  "Oklahoma": 22797,
+  "Oregon": 59381,
+  "Pennsylvania": 21071,
+  "Rhode Island": 57841,
+  "South Carolina": 18796,
+  "South Dakota": 36977,
+  "Tennessee": 36540,
+  "Texas": 19260,
+  "Utah": 27040,
+  "Vermont": 9795,
+  "Virginia": 34248,
+  "Washington": 95729,
+  "West Virginia": 52293,
+  "Wisconsin": 29915,
+  "Wyoming": 8436
+ },
+ "items": [
+  {
+   "city": "Birmingham",
+   "state": "Alabama",
+   "capital": "Montgomery",
+   "prompt": "Fact: the capital of the state containing Birmingham is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    35837,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 43025
+  },
+  {
+   "city": "Huntsville",
+   "state": "Alabama",
+   "capital": "Montgomery",
+   "prompt": "Fact: the capital of the state containing Huntsville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    70626,
+    7919,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 43025
+  },
+  {
+   "city": "Mobile",
+   "state": "Alabama",
+   "capital": "Montgomery",
+   "prompt": "Fact: the capital of the state containing Mobile is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    13411,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 43025
+  },
+  {
+   "city": "Tuscaloosa",
+   "state": "Alabama",
+   "capital": "Montgomery",
+   "prompt": "Fact: the capital of the state containing Tuscaloosa is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    70904,
+    5416,
+    78,
+    11983,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "capital_token": 43025
+  },
+  {
+   "city": "Anchorage",
+   "state": "Alaska",
+   "capital": "Juneau",
+   "prompt": "Fact: the capital of the state containing Anchorage is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    71484,
+    2680,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 5534
+  },
+  {
+   "city": "Fairbanks",
+   "state": "Alaska",
+   "capital": "Juneau",
+   "prompt": "Fact: the capital of the state containing Fairbanks is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    14588,
+    78946,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 5534
+  },
+  {
+   "city": "Tucson",
+   "state": "Arizona",
+   "capital": "Phoenix",
+   "prompt": "Fact: the capital of the state containing Tucson is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    66852,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 22672
+  },
+  {
+   "city": "Mesa",
+   "state": "Arizona",
+   "capital": "Phoenix",
+   "prompt": "Fact: the capital of the state containing Mesa is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    54865,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 22672
+  },
+  {
+   "city": "Scottsdale",
+   "state": "Arizona",
+   "capital": "Phoenix",
+   "prompt": "Fact: the capital of the state containing Scottsdale is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    9815,
+    83682,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 22672
+  },
+  {
+   "city": "Flagstaff",
+   "state": "Arizona",
+   "capital": "Phoenix",
+   "prompt": "Fact: the capital of the state containing Flagstaff is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    22666,
+    27122,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 22672
+  },
+  {
+   "city": "Tempe",
+   "state": "Arizona",
+   "capital": "Phoenix",
+   "prompt": "Fact: the capital of the state containing Tempe is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    8647,
+    375,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 22672
+  },
+  {
+   "city": "Fayetteville",
+   "state": "Arkansas",
+   "capital": "Little Rock",
+   "prompt": "Fact: the capital of the state containing Fayetteville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    98815,
+    7919,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 14671
+  },
+  {
+   "city": "Fort Smith",
+   "state": "Arkansas",
+   "capital": "Little Rock",
+   "prompt": "Fact: the capital of the state containing Fort Smith is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11002,
+    9082,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 14671
+  },
+  {
+   "city": "Los Angeles",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing Los Angeles is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    9656,
+    11902,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "San Diego",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing San Diego is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    5836,
+    18336,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "San Francisco",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing San Francisco is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    5836,
+    12879,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "San Jose",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing San Jose is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    5836,
+    10860,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "Fresno",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing Fresno is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    81170,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "Oakland",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing Oakland is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    29681,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "Pasadena",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing Pasadena is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    82450,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "Anaheim",
+   "state": "California",
+   "capital": "Sacramento",
+   "prompt": "Fact: the capital of the state containing Anaheim is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    71164,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 40234
+  },
+  {
+   "city": "Boulder",
+   "state": "Colorado",
+   "capital": "Denver",
+   "prompt": "Fact: the capital of the state containing Boulder is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    55643,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 22117
+  },
+  {
+   "city": "Colorado Springs",
+   "state": "Colorado",
+   "capital": "Denver",
+   "prompt": "Fact: the capital of the state containing Colorado Springs is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    15383,
+    29204,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 22117
+  },
+  {
+   "city": "Fort Collins",
+   "state": "Colorado",
+   "capital": "Denver",
+   "prompt": "Fact: the capital of the state containing Fort Collins is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11002,
+    28670,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 22117
+  },
+  {
+   "city": "Bridgeport",
+   "state": "Connecticut",
+   "capital": "Hartford",
+   "prompt": "Fact: the capital of the state containing Bridgeport is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    19874,
+    403,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 72120
+  },
+  {
+   "city": "New Haven",
+   "state": "Connecticut",
+   "capital": "Hartford",
+   "prompt": "Fact: the capital of the state containing New Haven is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    1532,
+    41614,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 72120
+  },
+  {
+   "city": "Stamford",
+   "state": "Connecticut",
+   "capital": "Hartford",
+   "prompt": "Fact: the capital of the state containing Stamford is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    98287,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 72120
+  },
+  {
+   "city": "Wilmington",
+   "state": "Delaware",
+   "capital": "Dover",
+   "prompt": "Fact: the capital of the state containing Wilmington is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    84505,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 86826
+  },
+  {
+   "city": "Miami",
+   "state": "Florida",
+   "capital": "Tallahassee",
+   "prompt": "Fact: the capital of the state containing Miami is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    17584,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 41102
+  },
+  {
+   "city": "Orlando",
+   "state": "Florida",
+   "capital": "Tallahassee",
+   "prompt": "Fact: the capital of the state containing Orlando is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    27844,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 41102
+  },
+  {
+   "city": "Tampa",
+   "state": "Florida",
+   "capital": "Tallahassee",
+   "prompt": "Fact: the capital of the state containing Tampa is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    32125,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 41102
+  },
+  {
+   "city": "Jacksonville",
+   "state": "Florida",
+   "capital": "Tallahassee",
+   "prompt": "Fact: the capital of the state containing Jacksonville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    47946,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 41102
+  },
+  {
+   "city": "Savannah",
+   "state": "Georgia",
+   "capital": "Atlanta",
+   "prompt": "Fact: the capital of the state containing Savannah is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    72076,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 19440
+  },
+  {
+   "city": "Macon",
+   "state": "Georgia",
+   "capital": "Atlanta",
+   "prompt": "Fact: the capital of the state containing Macon is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11331,
+    443,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 19440
+  },
+  {
+   "city": "Hilo",
+   "state": "Hawaii",
+   "capital": "Honolulu",
+   "prompt": "Fact: the capital of the state containing Hilo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    472,
+    18045,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 81540
+  },
+  {
+   "city": "Nampa",
+   "state": "Idaho",
+   "capital": "Boise",
+   "prompt": "Fact: the capital of the state containing Nampa is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    451,
+    22639,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 78573
+  },
+  {
+   "city": "Pocatello",
+   "state": "Idaho",
+   "capital": "Boise",
+   "prompt": "Fact: the capital of the state containing Pocatello is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    393,
+    509,
+    266,
+    4791,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10,
+    11
+   ],
+   "capital_token": 78573
+  },
+  {
+   "city": "Chicago",
+   "state": "Illinois",
+   "capital": "Springfield",
+   "prompt": "Fact: the capital of the state containing Chicago is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    10557,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 52424
+  },
+  {
+   "city": "Peoria",
+   "state": "Illinois",
+   "capital": "Springfield",
+   "prompt": "Fact: the capital of the state containing Peoria is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    5139,
+    10782,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 52424
+  },
+  {
+   "city": "Naperville",
+   "state": "Illinois",
+   "capital": "Springfield",
+   "prompt": "Fact: the capital of the state containing Naperville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    28476,
+    50772,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 52424
+  },
+  {
+   "city": "Fort Wayne",
+   "state": "Indiana",
+   "capital": "Indianapolis",
+   "prompt": "Fact: the capital of the state containing Fort Wayne is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11002,
+    27540,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 41351
+  },
+  {
+   "city": "Evansville",
+   "state": "Indiana",
+   "capital": "Indianapolis",
+   "prompt": "Fact: the capital of the state containing Evansville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    29463,
+    7919,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 41351
+  },
+  {
+   "city": "Gary",
+   "state": "Indiana",
+   "capital": "Indianapolis",
+   "prompt": "Fact: the capital of the state containing Gary is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    23826,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 41351
+  },
+  {
+   "city": "Cedar Rapids",
+   "state": "Iowa",
+   "capital": "Des Moines",
+   "prompt": "Fact: the capital of the state containing Cedar Rapids is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    56648,
+    54186,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 3874
+  },
+  {
+   "city": "Davenport",
+   "state": "Iowa",
+   "capital": "Des Moines",
+   "prompt": "Fact: the capital of the state containing Davenport is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    422,
+    96876,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 3874
+  },
+  {
+   "city": "Wichita",
+   "state": "Kansas",
+   "capital": "Topeka",
+   "prompt": "Fact: the capital of the state containing Wichita is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    87618,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 2014
+  },
+  {
+   "city": "Louisville",
+   "state": "Kentucky",
+   "capital": "Frankfort",
+   "prompt": "Fact: the capital of the state containing Louisville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    45034,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 9270
+  },
+  {
+   "city": "Lexington",
+   "state": "Kentucky",
+   "capital": "Frankfort",
+   "prompt": "Fact: the capital of the state containing Lexington is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    70658,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 9270
+  },
+  {
+   "city": "New Orleans",
+   "state": "Louisiana",
+   "capital": "Baton Rouge",
+   "prompt": "Fact: the capital of the state containing New Orleans is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    1532,
+    25919,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 85169
+  },
+  {
+   "city": "Shreveport",
+   "state": "Louisiana",
+   "capital": "Baton Rouge",
+   "prompt": "Fact: the capital of the state containing Shreveport is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    1417,
+    90976,
+    403,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 85169
+  },
+  {
+   "city": "Bangor",
+   "state": "Maine",
+   "capital": "Augusta",
+   "prompt": "Fact: the capital of the state containing Bangor is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    16914,
+    269,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 83475
+  },
+  {
+   "city": "Baltimore",
+   "state": "Maryland",
+   "capital": "Annapolis",
+   "prompt": "Fact: the capital of the state containing Baltimore is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    23947,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 1527
+  },
+  {
+   "city": "Worcester",
+   "state": "Massachusetts",
+   "capital": "Boston",
+   "prompt": "Fact: the capital of the state containing Worcester is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    88369,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 10196
+  },
+  {
+   "city": "Cambridge",
+   "state": "Massachusetts",
+   "capital": "Boston",
+   "prompt": "Fact: the capital of the state containing Cambridge is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    23641,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 10196
+  },
+  {
+   "city": "Detroit",
+   "state": "Michigan",
+   "capital": "Lansing",
+   "prompt": "Fact: the capital of the state containing Detroit is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    19761,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 96484
+  },
+  {
+   "city": "Grand Rapids",
+   "state": "Michigan",
+   "capital": "Lansing",
+   "prompt": "Fact: the capital of the state containing Grand Rapids is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    10304,
+    54186,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 96484
+  },
+  {
+   "city": "Ann Arbor",
+   "state": "Michigan",
+   "capital": "Lansing",
+   "prompt": "Fact: the capital of the state containing Ann Arbor is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    9305,
+    64539,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 96484
+  },
+  {
+   "city": "Flint",
+   "state": "Michigan",
+   "capital": "Lansing",
+   "prompt": "Fact: the capital of the state containing Flint is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    52836,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 96484
+  },
+  {
+   "city": "Minneapolis",
+   "state": "Minnesota",
+   "capital": "Saint Paul",
+   "prompt": "Fact: the capital of the state containing Minneapolis is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    41858,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 14205
+  },
+  {
+   "city": "Duluth",
+   "state": "Minnesota",
+   "capital": "Saint Paul",
+   "prompt": "Fact: the capital of the state containing Duluth is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    62615,
+    940,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 14205
+  },
+  {
+   "city": "Biloxi",
+   "state": "Mississippi",
+   "capital": "Jackson",
+   "prompt": "Fact: the capital of the state containing Biloxi is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    38058,
+    5131,
+    72,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 13658
+  },
+  {
+   "city": "Gulfport",
+   "state": "Mississippi",
+   "capital": "Jackson",
+   "prompt": "Fact: the capital of the state containing Gulfport is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    26847,
+    403,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 13658
+  },
+  {
+   "city": "St. Louis",
+   "state": "Missouri",
+   "capital": "Jefferson City",
+   "prompt": "Fact: the capital of the state containing St. Louis is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    794,
+    13,
+    11876,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 33544
+  },
+  {
+   "city": "Billings",
+   "state": "Montana",
+   "capital": "Helena",
+   "prompt": "Fact: the capital of the state containing Billings is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    8596,
+    819,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 71946
+  },
+  {
+   "city": "Missoula",
+   "state": "Montana",
+   "capital": "Helena",
+   "prompt": "Fact: the capital of the state containing Missoula is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    8906,
+    283,
+    4260,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 71946
+  },
+  {
+   "city": "Bozeman",
+   "state": "Montana",
+   "capital": "Helena",
+   "prompt": "Fact: the capital of the state containing Bozeman is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    2516,
+    89,
+    15977,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 71946
+  },
+  {
+   "city": "Omaha",
+   "state": "Nebraska",
+   "capital": "Lincoln",
+   "prompt": "Fact: the capital of the state containing Omaha is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    67205,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 24379
+  },
+  {
+   "city": "Las Vegas",
+   "state": "Nevada",
+   "capital": "Carson City",
+   "prompt": "Fact: the capital of the state containing Las Vegas is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    15755,
+    17596,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 40176
+  },
+  {
+   "city": "Reno",
+   "state": "Nevada",
+   "capital": "Carson City",
+   "prompt": "Fact: the capital of the state containing Reno is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    63418,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 40176
+  },
+  {
+   "city": "Manchester",
+   "state": "New Hampshire",
+   "capital": "Concord",
+   "prompt": "Fact: the capital of the state containing Manchester is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    19361,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 63093
+  },
+  {
+   "city": "Nashua",
+   "state": "New Hampshire",
+   "capital": "Concord",
+   "prompt": "Fact: the capital of the state containing Nashua is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    27412,
+    4284,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 63093
+  },
+  {
+   "city": "Newark",
+   "state": "New Jersey",
+   "capital": "Trenton",
+   "prompt": "Fact: the capital of the state containing Newark is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    64499,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 47520
+  },
+  {
+   "city": "Jersey City",
+   "state": "New Jersey",
+   "capital": "Trenton",
+   "prompt": "Fact: the capital of the state containing Jersey City is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    15849,
+    4311,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 47520
+  },
+  {
+   "city": "Princeton",
+   "state": "New Jersey",
+   "capital": "Trenton",
+   "prompt": "Fact: the capital of the state containing Princeton is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    49321,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 47520
+  },
+  {
+   "city": "Albuquerque",
+   "state": "New Mexico",
+   "capital": "Santa Fe",
+   "prompt": "Fact: the capital of the state containing Albuquerque is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    75812,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 15993
+  },
+  {
+   "city": "Roswell",
+   "state": "New Mexico",
+   "capital": "Santa Fe",
+   "prompt": "Fact: the capital of the state containing Roswell is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    16465,
+    9157,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 15993
+  },
+  {
+   "city": "Buffalo",
+   "state": "New York",
+   "capital": "Albany",
+   "prompt": "Fact: the capital of the state containing Buffalo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    31389,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 54954
+  },
+  {
+   "city": "Syracuse",
+   "state": "New York",
+   "capital": "Albany",
+   "prompt": "Fact: the capital of the state containing Syracuse is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    61596,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 54954
+  },
+  {
+   "city": "Brooklyn",
+   "state": "New York",
+   "capital": "Albany",
+   "prompt": "Fact: the capital of the state containing Brooklyn is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    25748,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 54954
+  },
+  {
+   "city": "Charlotte",
+   "state": "North Carolina",
+   "capital": "Raleigh",
+   "prompt": "Fact: the capital of the state containing Charlotte is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    28373,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 64083
+  },
+  {
+   "city": "Greensboro",
+   "state": "North Carolina",
+   "capital": "Raleigh",
+   "prompt": "Fact: the capital of the state containing Greensboro is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    41591,
+    34867,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 64083
+  },
+  {
+   "city": "Durham",
+   "state": "North Carolina",
+   "capital": "Raleigh",
+   "prompt": "Fact: the capital of the state containing Durham is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    57714,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 64083
+  },
+  {
+   "city": "Asheville",
+   "state": "North Carolina",
+   "capital": "Raleigh",
+   "prompt": "Fact: the capital of the state containing Asheville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    96538,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 64083
+  },
+  {
+   "city": "Fargo",
+   "state": "North Dakota",
+   "capital": "Bismarck",
+   "prompt": "Fact: the capital of the state containing Fargo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    57650,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 425
+  },
+  {
+   "city": "Cleveland",
+   "state": "Ohio",
+   "capital": "Columbus",
+   "prompt": "Fact: the capital of the state containing Cleveland is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    23475,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 31817
+  },
+  {
+   "city": "Cincinnati",
+   "state": "Ohio",
+   "capital": "Columbus",
+   "prompt": "Fact: the capital of the state containing Cincinnati is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    35139,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 31817
+  },
+  {
+   "city": "Toledo",
+   "state": "Ohio",
+   "capital": "Columbus",
+   "prompt": "Fact: the capital of the state containing Toledo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    72277,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 31817
+  },
+  {
+   "city": "Akron",
+   "state": "Ohio",
+   "capital": "Columbus",
+   "prompt": "Fact: the capital of the state containing Akron is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    94793,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 31817
+  },
+  {
+   "city": "Dayton",
+   "state": "Ohio",
+   "capital": "Columbus",
+   "prompt": "Fact: the capital of the state containing Dayton is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    48173,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 31817
+  },
+  {
+   "city": "Tulsa",
+   "state": "Oklahoma",
+   "capital": "Oklahoma City",
+   "prompt": "Fact: the capital of the state containing Tulsa is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    74562,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 22797
+  },
+  {
+   "city": "Norman",
+   "state": "Oklahoma",
+   "capital": "Oklahoma City",
+   "prompt": "Fact: the capital of the state containing Norman is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    40068,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 22797
+  },
+  {
+   "city": "Portland",
+   "state": "Oregon",
+   "capital": "Salem",
+   "prompt": "Fact: the capital of the state containing Portland is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    23077,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 59381
+  },
+  {
+   "city": "Eugene",
+   "state": "Oregon",
+   "capital": "Salem",
+   "prompt": "Fact: the capital of the state containing Eugene is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    50458,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 59381
+  },
+  {
+   "city": "Philadelphia",
+   "state": "Pennsylvania",
+   "capital": "Harrisburg",
+   "prompt": "Fact: the capital of the state containing Philadelphia is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    19335,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 21071
+  },
+  {
+   "city": "Pittsburgh",
+   "state": "Pennsylvania",
+   "capital": "Harrisburg",
+   "prompt": "Fact: the capital of the state containing Pittsburgh is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    27527,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 21071
+  },
+  {
+   "city": "Allentown",
+   "state": "Pennsylvania",
+   "capital": "Harrisburg",
+   "prompt": "Fact: the capital of the state containing Allentown is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    2009,
+    306,
+    779,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 21071
+  },
+  {
+   "city": "Scranton",
+   "state": "Pennsylvania",
+   "capital": "Harrisburg",
+   "prompt": "Fact: the capital of the state containing Scranton is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    32134,
+    30954,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 21071
+  },
+  {
+   "city": "Newport",
+   "state": "Rhode Island",
+   "capital": "Providence",
+   "prompt": "Fact: the capital of the state containing Newport is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    58800,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 57841
+  },
+  {
+   "city": "Warwick",
+   "state": "Rhode Island",
+   "capital": "Providence",
+   "prompt": "Fact: the capital of the state containing Warwick is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    77102,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 57841
+  },
+  {
+   "city": "Greenville",
+   "state": "South Carolina",
+   "capital": "Columbia",
+   "prompt": "Fact: the capital of the state containing Greenville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    92554,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 18796
+  },
+  {
+   "city": "Myrtle Beach",
+   "state": "South Carolina",
+   "capital": "Columbia",
+   "prompt": "Fact: the capital of the state containing Myrtle Beach is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    3017,
+    92436,
+    12721,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 18796
+  },
+  {
+   "city": "Sioux Falls",
+   "state": "South Dakota",
+   "capital": "Pierre",
+   "prompt": "Fact: the capital of the state containing Sioux Falls is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    81593,
+    29643,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 36977
+  },
+  {
+   "city": "Rapid City",
+   "state": "South Dakota",
+   "capital": "Pierre",
+   "prompt": "Fact: the capital of the state containing Rapid City is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    46990,
+    4311,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 36977
+  },
+  {
+   "city": "Memphis",
+   "state": "Tennessee",
+   "capital": "Nashville",
+   "prompt": "Fact: the capital of the state containing Memphis is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    42062,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 36540
+  },
+  {
+   "city": "Knoxville",
+   "state": "Tennessee",
+   "capital": "Nashville",
+   "prompt": "Fact: the capital of the state containing Knoxville is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    94902,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 36540
+  },
+  {
+   "city": "Chattanooga",
+   "state": "Tennessee",
+   "capital": "Nashville",
+   "prompt": "Fact: the capital of the state containing Chattanooga is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    96843,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 36540
+  },
+  {
+   "city": "Dallas",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing Dallas is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    18542,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "Houston",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing Houston is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    16003,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "San Antonio",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing San Antonio is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    5836,
+    22437,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "El Paso",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing El Paso is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    3984,
+    66329,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "Fort Worth",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing Fort Worth is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11002,
+    36146,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "Lubbock",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing Lubbock is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    57651,
+    749,
+    377,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "Amarillo",
+   "state": "Texas",
+   "capital": "Austin",
+   "prompt": "Fact: the capital of the state containing Amarillo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    73657,
+    21782,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 19260
+  },
+  {
+   "city": "Provo",
+   "state": "Utah",
+   "capital": "Salt Lake City",
+   "prompt": "Fact: the capital of the state containing Provo is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    1298,
+    3334,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 27040
+  },
+  {
+   "city": "Ogden",
+   "state": "Utah",
+   "capital": "Salt Lake City",
+   "prompt": "Fact: the capital of the state containing Ogden is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    40837,
+    5183,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 27040
+  },
+  {
+   "city": "Burlington",
+   "state": "Vermont",
+   "capital": "Montpelier",
+   "prompt": "Fact: the capital of the state containing Burlington is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    72505,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 9795
+  },
+  {
+   "city": "Norfolk",
+   "state": "Virginia",
+   "capital": "Richmond",
+   "prompt": "Fact: the capital of the state containing Norfolk is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    58692,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 34248
+  },
+  {
+   "city": "Virginia Beach",
+   "state": "Virginia",
+   "capital": "Richmond",
+   "prompt": "Fact: the capital of the state containing Virginia Beach is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    12989,
+    12721,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 34248
+  },
+  {
+   "city": "Arlington",
+   "state": "Virginia",
+   "capital": "Richmond",
+   "prompt": "Fact: the capital of the state containing Arlington is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    58696,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 34248
+  },
+  {
+   "city": "Seattle",
+   "state": "Washington",
+   "capital": "Olympia",
+   "prompt": "Fact: the capital of the state containing Seattle is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    16355,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 95729
+  },
+  {
+   "city": "Spokane",
+   "state": "Washington",
+   "capital": "Olympia",
+   "prompt": "Fact: the capital of the state containing Spokane is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    88180,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 95729
+  },
+  {
+   "city": "Tacoma",
+   "state": "Washington",
+   "capital": "Olympia",
+   "prompt": "Fact: the capital of the state containing Tacoma is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    84528,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 95729
+  },
+  {
+   "city": "Morgantown",
+   "state": "West Virginia",
+   "capital": "Charleston",
+   "prompt": "Fact: the capital of the state containing Morgantown is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    78060,
+    517,
+    779,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 52293
+  },
+  {
+   "city": "Huntington",
+   "state": "West Virginia",
+   "capital": "Charleston",
+   "prompt": "Fact: the capital of the state containing Huntington is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    74751,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 52293
+  },
+  {
+   "city": "Milwaukee",
+   "state": "Wisconsin",
+   "capital": "Madison",
+   "prompt": "Fact: the capital of the state containing Milwaukee is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    35818,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8
+   ],
+   "capital_token": 29915
+  },
+  {
+   "city": "Green Bay",
+   "state": "Wisconsin",
+   "capital": "Madison",
+   "prompt": "Fact: the capital of the state containing Green Bay is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    7840,
+    9154,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 29915
+  },
+  {
+   "city": "Casper",
+   "state": "Wyoming",
+   "capital": "Cheyenne",
+   "prompt": "Fact: the capital of the state containing Casper is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    11054,
+    712,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9
+   ],
+   "capital_token": 8436
+  },
+  {
+   "city": "Laramie",
+   "state": "Wyoming",
+   "capital": "Cheyenne",
+   "prompt": "Fact: the capital of the state containing Laramie is",
+   "ids": [
+    17417,
+    25,
+    279,
+    6722,
+    315,
+    279,
+    1584,
+    8482,
+    444,
+    637,
+    645,
+    374
+   ],
+   "special_tokens_mask": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "city_positions": [
+    8,
+    9,
+    10
+   ],
+   "capital_token": 8436
+  }
+ ]
+}
