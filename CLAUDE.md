@@ -51,7 +51,7 @@ RelP-vs-patching expert comparison with diagnostics. New layer-streamed engine `
 reverse-streamed RelP backward), patching `moetrace/relp_moe_patch.py`; runners `scripts/relp_sva_moe_run.py`, `scripts/relp_moe_compare_run.py`;
 chains `scripts/relp_moe_{chain,patch_chain,diag_chain}.sh`; post-hoc `scripts/relp_moe_posthoc.py`; outputs `results/relp_sva_moe/`; envs `.venv-relp` (experiments; `.venv` -> it)
 and `.venv-analysis` (CPU analysis / figures); evidence and deviations `docs/relp_moe_stream_notes.md`. ~7.7 GPU-h, 0 failed jobs. Headlines in 2b.**
-**Phase 8 stages 1-3 COMPLETE 2026-11-15, committed and pushed 2026-11-15 (plan + status `docs/relp_moe_phase8_plan.md`, report `results/sections/relp_moe_p8.md`;
+**Phase 8 stages 1-3 COMPLETE 2026-11-15, committed and pushed 2026-11-15 as 6af6da3 (plan + status `docs/relp_moe_phase8_plan.md`, report `results/sections/relp_moe_p8.md`;
 stage 3 = CounterFact and two-hop state capitals, WinoGrande / IOI not run by the user's decision; stage 4 (larger models) awaits a decision):
 follow-ups from the team meeting on Phase 7 -
 add-back curves under RelP's and exact patching's rankings, layer distribution and rank-rank scatter, where RelP's frozen router /

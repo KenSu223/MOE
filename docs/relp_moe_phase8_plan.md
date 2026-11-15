@@ -1,7 +1,7 @@
 # Phase 8 plan: follow-ups to the RelP vs activation patching study (team meeting, week of 2026-11-09)
 
 **Status: stages 1, 2 and 3 COMPLETE 2026-11-15 (report `results/sections/relp_moe_p8.md`, sections 1-2 = SVA, section 3 = CounterFact and
-two-hop capitals; WinoGrande and IOI NOT run, by the user's decision). Committed and pushed 2026-11-15 (user request). Stage 4 (larger models) awaits a decision.** Scope (user, 2026-11-15):
+two-hop capitals; WinoGrande and IOI NOT run, by the user's decision). Committed and pushed 2026-11-15 as 6af6da3 (user request). Stage 4 (larger models) awaits a decision.** Scope (user, 2026-11-15):
 run stage 1 and stage 2 (including the router-aware attribution S2.6 and the neuron-level check S2.7), then a detailed
 analysis (section 8b); **stage 3 (other tasks) and stage 4 (larger models) are deferred and decided by the user after that
 analysis.** Because stage 3 is deferred, the length-bucket / role generalisation is not built now (SVA has one template per

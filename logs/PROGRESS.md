@@ -1511,3 +1511,4 @@
 2026-11-15T11:05:55Z [relp-p8] stage 3 GPU done for mixtral/twohop
 2026-11-15T11:05:55Z [relp-p8] chain B ended with failures (see logs/relp_moe_p8_chain.log)
 2026-11-15T11:11:42Z [relp-p8] stage 3 COMPLETE: chain B done (32/32 runs complete incl. the mixtral/twohop/path rerun with --chunk 40; ~4.0 GPU-h); final analysis (scripts/relp_moe_p8_analyze3.py, figures3) and report section 3 of results/sections/relp_moe_p8.md written; plan / CLAUDE.md updated; nothing committed; stage 4 awaits the user's decision
+2026-11-15T16:43:24Z [relp-p8] Phase 8 stages 1-3 committed and pushed (user request): 6af6da3 on main (461 files, ~451 MB, largest file 31 MB). Gitignored and kept on the root disk (~506 MB): resumable *_part_NNN.npz chunks (row counts equal the merged parquet in 28/28 directories), p8_probe/router_logits.npy, stage-3 routes_T*.pt. Stage 4 (larger models) awaits the user's decision.
