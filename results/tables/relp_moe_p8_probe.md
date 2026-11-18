@@ -206,9 +206,9 @@ jaccard = top-k set overlap (1 = same experts); tv_w = total variation of the ro
 | mixtral | within_rc | resid_rel_late | -0.046 | -0.496 | 0.014 | -0.507 |
 | mixtral | within_rc | min_margin | 0.003 | 0.490 | -0.151 | 0.132 |
 
-## Pairs split at the discovery median of a feature: held-out faithfulness of each ranking (denoise) and discovery agreement
+## Pairs split at the discovery median of a feature: held-out rescue of each ranking (denoise) and discovery agreement
 
-| model | task | feature | side | ranking | K | pairs | faithfulness |
+| model | task | feature | side | ranking | K | pairs | rescue |
 |---|---|---|---|---|---|---|---|
 | qwen3 | simple | jaccard | at/above median | relp | 5 | 44 | 0.306 |
 | qwen3 | simple | jaccard | at/above median | relp | 20 | 44 | 0.772 |

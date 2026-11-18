@@ -682,7 +682,7 @@ def s27(models, summary):
 
 
 def s21(models, summary):
-    """S2.1: add-back curves (faithfulness / completeness) under each ranking; D2; additivity."""
+    """S2.1: add-back curves (rescue / disruption; RelP-paper faithfulness / completeness) under each ranking; D2; additivity."""
     recs, d2, add = [], [], []
     for model in models:
         for task in D.TASKS:
@@ -725,16 +725,16 @@ def s21(models, summary):
     S_ = pd.concat(recs)
     S_.to_parquet(OUT / "s21_addback.parquet", index=False)
     D2, A_ = pd.DataFrame(d2), pd.DataFrame(add)
-    S_["value"] = np.where(S_.intervention == "noise", 1 - S_.normalized, S_.normalized)   # completeness = remaining share
+    S_["value"] = S_.normalized   # denoise = rescue (share restored), noise = disruption (share lost); keep / remove as in the protocol
     mean_t = S_[S_.split == "all"].groupby(["model", "unit", "intervention", "ranking", "budget"]).value.mean().reset_index()
     summary["s21"] = {"curves_mean_over_tasks": mean_t.to_dict(orient="records"), "D2": D2.to_dict(orient="records"),
                       "additivity": A_.to_dict(orient="records")}
     blocks = []
     for unit in ("expert_position", "expert_all_positions"):
-        for iv_, lab in (("denoise", "faithfulness: share of the paired difference restored when only these units carry the clean run"),
-                         ("noise", "completeness: share left when these units carry the corrupted run (ideal 0)"),
-                         ("keep", "keep with the mean_q_routed baseline (the RelP paper's faithfulness)"),
-                         ("remove", "remove with the mean_q_routed baseline (the RelP paper's completeness)")):
+        for iv_, lab in (("denoise", "rescue: share of the paired difference restored when only these units carry the clean run"),
+                         ("noise", "disruption: share of the paired difference lost when only these units carry the corrupted run"),
+                         ("keep", "faithfulness (the RelP paper's keep): these units kept, every other pool unit set to the mean_q_routed baseline"),
+                         ("remove", "completeness (the RelP paper's remove): these units set to the mean_q_routed baseline; share left, ideal 0")):
             x = mean_t[(mean_t.unit == unit) & (mean_t.intervention == iv_) & ~mean_t.ranking.str.startswith("path_")]
             x = x.assign(ranking=np.where(x.ranking == "random", "random (3 seeds)", x.ranking),
                          budget=np.where(x.ranking == "all", "all", x.budget.astype(str)))
@@ -747,14 +747,14 @@ def s21(models, summary):
     if "path_grad_rw" in set(two.ranking):
         tw = two[two.ranking.isin(["relp", "rw", "path_grad_rw", "path_relp", "exact", "exact_noL0-2"])]
         tw = tw.groupby(["model", "intervention", "ranking", "budget"]).value.mean().reset_index()
-        blocks.append(("Router-aware and multi-step rankings vs RelP and exact (simple + nounpp only, expert-positions; denoise = faithfulness, noise = share left)",
+        blocks.append(("Router-aware and multi-step rankings vs RelP and exact (simple + nounpp only, expert-positions; denoise = rescue, noise = disruption)",
                        tw.pivot_table(index=["model", "intervention", "ranking"], columns="budget", values="value").reset_index(), 2, None))
     if len(D2):
         blocks.append(("D2: RelP list, Phase 8 vs Phase 7 (same pairs, other batch composition)",
                        D2.groupby(["model", "intervention"]).agg(n=("diff", "size"), max_abs_diff=("diff", lambda x: float(np.abs(x).max())),
                                                                  mean_diff=("diff", "mean")).reset_index(), 3, None))
     blocks.append(("Additivity: sum of single exact effects vs the joint patch of the exact ranking's top-K (normalised by the paired difference)", A_, 3, None))
-    write_table("addback", "S2.1 Experts added back vs faithfulness and completeness (SVA, held-out pairs)", blocks)
+    write_table("addback", "S2.1 Experts added back: rescue and disruption (swap with the other sentence), faithfulness and completeness (RelP paper, mean baseline); SVA, held-out pairs", blocks)
 
 
 def s22(models, summary):
@@ -806,12 +806,12 @@ def s22(models, summary):
                                     continue
                                 split.append({"model": model, "task": task, "feature": f_, "side": side, "ranking": rk, "K": K,
                                               "pairs": int(x.row_id.nunique()),
-                                              "faithfulness": float((x.margin - x.margin_B).mean() / (x.margin_A - x.margin_B).mean())})
+                                              "rescue": float((x.margin - x.margin_B).mean() / (x.margin_A - x.margin_B).mean())})
                     # discovery-side agreement in the same split
                     dz = J.set_index("row_id")
                     for side, msk in (("at/above median", dz[f_] >= thr), ("below median", dz[f_] < thr)):
                         split.append({"model": model, "task": task, "feature": f_, "side": side, "ranking": "discovery per-pair agreement",
-                                      "K": 0, "pairs": int(msk.sum()), "faithfulness": float(dz[msk].pearson.median())})
+                                      "K": 0, "pairs": int(msk.sum()), "rescue": float(dz[msk].pearson.median())})
     if not maps:
         return
     M, P, S_ = pd.DataFrame(maps), pd.DataFrame(pred), pd.DataFrame(split)
@@ -824,7 +824,7 @@ def s22(models, summary):
                "jaccard = top-k set overlap (1 = same experts); tv_w = total variation of the routing weights; dsig_mean = mean |change| of the SiLU gate sigmoid(g) of experts routed in both runs; lognorm2 = |log| ratio of the MoE-input RMS; attn_tv = total variation of the attention pattern; resid_rel = ||h_A - h_B|| / ||h_B||."),
               ("Spearman of per-pair RelP-vs-exact agreement with forward-only features (discovery)", P, 3, None)]
     if len(S_):
-        blocks.append(("Pairs split at the discovery median of a feature: held-out faithfulness of each ranking (denoise) and discovery agreement", S_, 3, None))
+        blocks.append(("Pairs split at the discovery median of a feature: held-out rescue of each ranking (denoise) and discovery agreement", S_, 3, None))
     write_table("probe", "S2.2 Gate probe: what differs between the runs, and does it predict where RelP is reliable", blocks)
 
 

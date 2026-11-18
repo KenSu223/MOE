@@ -16,12 +16,15 @@ This phase follows up Phase 7 (`results/sections/relp_moe_sva.md`) with the ques
 
 1. **Add-back curves (held-out pairs).**
    - Qwen3:
-     - RelP's ranking matches exact patching's up to K = 20 expert-positions and beats it from K = 50 (share restored 0.96 vs
+     - RelP's ranking matches exact patching's up to K = 20 expert-positions and beats it from K = 50 (rescue 0.96 vs
        0.88).
-     - With the RelP paper's mean-baseline faithfulness the gap is larger: 0.71 vs 0.45 at K = 50.
+     - With the RelP paper's faithfulness (mean baseline) the gap is larger: 0.71 vs 0.45 at K = 50.
      - Lu's layer-first order is the worst ranking (0.50 at K = 20).
    - Mixtral: exact patching wins at K <= 10 only through one unit (L0E002, 0.96 at K = 1); RelP reaches 0.94 at K = 20 and
      0.99 at K = 50.
+   - The swap does not renormalise the routing weights at the patched site (sum off by > 0.02 at 67-70 % of the sites). Re-running
+     the curves under four other patch semantics (section 2.1b) changes no comparison of the rankings: renormalising does nothing;
+     swapping only the content lowers Qwen3's curves by up to 0.15 (the part carried by the routing difference), not Mixtral's.
 2. **Location of the top experts.**
    - Qwen3: clustered in the last 8 of 48 layers (80-95 % of the top-20).
    - Mixtral: spread over its second half (50-75 % in the last 8 of 32 layers, the rest in L15-L27).
@@ -120,26 +123,31 @@ was split into memory-sized passes.
 
 ## 2. The meeting's questions
 
-### 2.1 Experts added back vs faithfulness and completeness (S2.1)
+### 2.1 Experts added back: rescue, disruption, faithfulness and completeness (S2.1)
 
 Setup:
 - Rankings are fixed on discovery pairs; curves are measured on the 80 validation and test pairs per task.
-- **Faithfulness:** only the K units carry the clean run, and the curve gives the share of the paired difference restored.
-- **Completeness:** the K units carry the corrupted run, and the curve gives the share left (ideal 0).
-- **Keep / remove:** the RelP paper's definitions, with the other units, or these units, set to the mean_q_routed baseline.
+- **Names.** Two families of measures, kept apart by name in the text, tables and figures:
+  - **Rescue** (swap with the other sentence, denoise direction): only the K units carry the clean run inside the corrupted run;
+    share of the paired difference restored (ideal 1).
+  - **Disruption** (swap, noise direction): only the K units carry the corrupted run inside the clean run; share of the paired
+    difference lost (ideal 1). Earlier versions of these figures plotted 1 - disruption under the name "completeness".
+  - **Faithfulness** and **completeness** are reserved for the RelP paper's definitions with the mean_q_routed baseline:
+    faithfulness = keep (these units kept, every other pool unit set to the mean), completeness = remove (these units set to the
+    mean; share left, ideal 0).
 
 ![add-back curves](../figures/relp_moe_p8_addback_expert_position.png)
 
 | expert-positions K | 1 | 5 | 10 | 20 | 50 | 100 | 200 |
 |---|---|---|---|---|---|---|---|
-| Qwen3 faithfulness: RelP / exact / Lu / random | 0.21 / 0.21 / 0.16 / 0.03 | 0.45 / 0.45 / 0.25 / 0.05 | 0.64 / 0.63 / 0.46 / 0.05 | 0.78 / 0.79 / 0.50 / 0.12 | **0.96 / 0.88** / 0.62 / 0.13 | 0.99 / 0.91 / 0.77 / 0.25 | 0.99 / 0.96 / 0.86 / 0.39 |
-| Qwen3 keep (mean baseline): RelP / exact | 0.04 / 0.04 | 0.14 / 0.13 | 0.21 / 0.19 | 0.27 / 0.28 | **0.71 / 0.45** | 0.95 / 0.56 | 1.01 / 0.80 |
-| Mixtral faithfulness: RelP / exact / exact without L0-2 / random | 0.14 / **0.96** / 0.13 / 0.03 | 0.40 / 0.97 / 0.40 / 0.12 | 0.70 / 0.98 / 0.56 / 0.30 | 0.94 / 0.98 / 0.73 / 0.31 | 0.99 / 0.99 / 0.90 / 0.86 | 1.00 / 1.00 / 0.95 / 0.95 | 1.00 / 1.00 / 0.98 / 0.99 |
-| Mixtral keep (mean baseline): RelP / exact | 0.00 / 0.00 | 0.00 / 0.01 | 0.01 / 0.02 | 0.06 / 0.13 | 0.53 / 0.51 | 0.99 / 0.75 | 1.05 / 0.97 |
+| Qwen3 rescue: RelP / exact / Lu / random | 0.21 / 0.21 / 0.16 / 0.03 | 0.45 / 0.45 / 0.25 / 0.05 | 0.64 / 0.63 / 0.46 / 0.05 | 0.78 / 0.79 / 0.50 / 0.12 | **0.96 / 0.88** / 0.62 / 0.13 | 0.99 / 0.91 / 0.77 / 0.25 | 0.99 / 0.96 / 0.86 / 0.39 |
+| Qwen3 faithfulness (RelP paper, keep): RelP / exact | 0.04 / 0.04 | 0.14 / 0.13 | 0.21 / 0.19 | 0.27 / 0.28 | **0.71 / 0.45** | 0.95 / 0.56 | 1.01 / 0.80 |
+| Mixtral rescue: RelP / exact / exact without L0-2 / random | 0.14 / **0.96** / 0.13 / 0.03 | 0.40 / 0.97 / 0.40 / 0.12 | 0.70 / 0.98 / 0.56 / 0.30 | 0.94 / 0.98 / 0.73 / 0.31 | 0.99 / 0.99 / 0.90 / 0.86 | 1.00 / 1.00 / 0.95 / 0.95 | 1.00 / 1.00 / 0.98 / 0.99 |
+| Mixtral faithfulness (RelP paper, keep): RelP / exact | 0.00 / 0.00 | 0.00 / 0.01 | 0.01 / 0.02 | 0.06 / 0.13 | 0.53 / 0.51 | 0.99 / 0.75 | 1.05 / 0.97 |
 
 - **Qwen3.**
   - The two rankings are interchangeable up to K = 20. From K = 50, RelP's ranking is better: its 21st-50th units restore
-    more, and when they are kept they hold the answer up better.
+    more (rescue), and when only they are kept they hold the answer up better (faithfulness).
   - Exact patching's list deteriorates there, because its single-patch estimates are noise below rank ~30 (section 2.4).
   - Excluding layers 0-2 from the exact ranking makes it worse at large K (0.93 at K = 500), so its tail is not driven by the
     early units.
@@ -147,15 +155,85 @@ Setup:
 - **Mixtral.**
   - One unit, L0E002 at the subject, restores 0.96 of the difference on its own. RelP ranks it 8th-26th, so the RelP curve
     jumps once the list reaches it (0.70 at K = 10, 0.94 at K = 20).
-  - Once the late experts are in, both rankings saturate; RelP's keep curve is again higher from K = 100.
+  - Once the late experts are in, both rankings saturate; RelP's faithfulness curve is again higher from K = 100.
 - **Whole experts** (all positions together; `results/figures/relp_moe_p8_addback_expert_all_positions.png`): the same
   picture.
-  - Qwen3: equal up to K = 20; RelP better at K = 50 (0.96 vs 0.89; keep 0.73 vs 0.46).
+  - Qwen3: equal up to K = 20; RelP better at K = 50 (rescue 0.96 vs 0.89; faithfulness 0.73 vs 0.46).
   - Mixtral: exact better below K = 20 because of L0E002; equal from K = 20.
 - **Additivity of exact single effects** (held-out pairs, the exact ranking's top-K):
   - Qwen3: the sum of single effects is close to the joint effect (K = 20: 0.64-0.88 vs 0.76-0.81).
   - Mixtral: strongly sub-additive (K = 20: 1.4-2.0 vs 0.95-1.00). L0E002 alone carries the difference, and the late experts
     then add nothing.
+
+### 2.1b Does the routing-weight sum of the swap matter? Five patch semantics (follow-up, 2026-11-16)
+
+**The concern.** The swap behind rescue and disruption (and behind every single-expert activation patch of Phases 7-8 and of the
+base reproduction) replaces an expert's *weighted* contribution g_e u_e and does not renormalise the routing weights at the
+patched site (guide section 8: "a contribution replacement, not a natural mixture"). The weight sum there becomes
+1 - sum_C g_live + sum_C g_source; an expert routed only in the source run is injected on top of the live experts, one routed only
+in the live run is removed. Under the full swap, with the RelP list's top 20 on held-out pairs:
+
+| | sites whose weight sum is off by > 0.02 | 90 % of the sites within | injected / removed instances |
+|---|---|---|---|
+| Qwen3 | 67 % | 0.77-1.25 | 11 % / 11 % |
+| Mixtral | 70 % | 0.38-1.66 (extremes 0 and 2) | 9 % / 9 % |
+
+The RelP paper's keep / remove with `mean_q_routed` never injects (only live-routed experts are replaced); its replacement still
+carries an average instead of the current weight.
+
+**Five semantics at the patched site** (C = the selected experts at that site; downstream routing natural in every mode;
+`moetrace/relp_moe_p8.py`, `MIX_MODES`):
+
+| mode | MoE output at the patched site | weight sum |
+|---|---|---|
+| full swap (S2.1) | live experts not in C with live weights + experts in C with the source run's weights and content | not 1 |
+| content only, both-routed (guide section 8) | live routing kept; experts in C routed in both runs get the source content | 1 |
+| content only, all live-routed | as above, and live-only experts in C get the content they compute on the source input | 1 |
+| full swap, renormalised | the full swap with all weights rescaled to the live run's total | 1 |
+| routing decision moved too | the source run's experts and weights; experts in C with source content, the others with live content | 1 |
+
+- Same rankings, random sets and held-out pairs as S2.1 (expert-positions; rescue and disruption). GPU 23 min.
+- **Checks.**
+  - Tests: 30 / 30 (`tests/test_relp_moe_p8.py`). Every mode matches a hand-built reference (expert by expert, injected
+    through the engine's whole-output patch) on single-site patches in all three model families. With every expert selected,
+    "routing moved" equals the full swap, and so does "renormalised" where the weights sum to 1. A 1 % error in the
+    recomputed expert outputs is caught.
+  - The full-swap rows repeat S2.1 in another batch composition (row-level r 0.999-1.000; median difference 0.01-0.06
+    logits, the batch noise of section 2.4).
+
+Rescue, RelP ranking / activation-patching ranking (Qwen3; disruption agrees within 0.01):
+
+| Qwen3 | K = 10 | 20 | 50 | 100 |
+|---|---|---|---|---|
+| full swap (S2.1) | 0.64 / 0.64 | 0.78 / 0.79 | **0.96 / 0.88** | 0.99 / 0.91 |
+| full swap, renormalised | 0.64 / 0.64 | 0.78 / 0.79 | 0.95 / 0.87 | 0.99 / 0.91 |
+| routing decision moved too | 0.65 / 0.64 | 0.80 / 0.80 | 0.96 / 0.89 | 0.99 / 0.92 |
+| content only, all live-routed | 0.61 / 0.60 | 0.74 / 0.74 | 0.91 / 0.85 | 0.97 / 0.88 |
+| content only, both-routed | 0.60 / 0.59 | 0.69 / 0.69 | **0.80 / 0.76** | 0.95 / 0.79 |
+
+![five patch semantics, Qwen3](../figures/relp_moe_p8mix_modes_qwen3.png)
+
+- **The weight sum itself does not matter.** Renormalising changes the curves by at most 0.002 (RelP list) and 0.008 (exact
+  list). Mixtral's curves are the same under all five semantics (within 0.015 for the RelP and exact lists, 0.045 for Lu's and
+  random sets): L0E002, which carries Mixtral's difference, is routed in both runs, so its effect is content.
+- **In Qwen3 part of the restored difference is routing.** With the routing kept and only the content swapped, the curves are
+  lower from K = 10 on, by up to 0.15 (RelP list, K = 50: 0.80 vs 0.96) and 0.13 (exact list). Moving the whole routing decision
+  at the site instead changes nothing for the ranked lists, but lifts random sets (K = 100: 0.41 vs 0.25; K = 500: 0.89 vs 0.61).
+  In Qwen3, which experts a site uses carries information of its own: the routing channel of section 2.8, seen here from the
+  intervention side. Mixtral shows no such lift.
+- **The comparison of the rankings does not change.** Under every semantics:
+  - Qwen3: RelP = exact up to K = 20 (within 0.01); RelP better at K = 50 (+0.05 to +0.08) and K = 100 (+0.07 to +0.16). Per
+    task the same: nounpp, rc, simple positive, within_rc about 0.
+  - Mixtral: exact ahead at K <= 10 through L0E002 (-0.57 at K = 5); equal from K = 50.
+  - Lu's order stays the worst ranking in Qwen3 from K = 5 on (in Mixtral it starts at 0.54 with its first final-position unit
+    and falls below RelP from K = 10).
+- **Reading.** The full swap answers "what does this expert's weighted output from the other run do here"; content only answers
+  "what does this expert's computation do under the routing the run has". The un-normalised weight sum is harmless for the
+  conclusions of this report. Content-only curves are the stricter, expert-only version; the gap to the full swap measures what
+  the routing difference at the selected sites carries.
+- **Limits.** "Content only, all live-routed" uses, for live-only experts, an output the source run never computed. "Routing
+  moved" changes a whole site as soon as one of its experts is selected, which is why its random sets rise. One run per cell.
+- Table: `results/tables/relp_moe_p8mix.md`; figures: `results/figures/relp_moe_p8mix_{modes,rankings}_{qwen3,mixtral}.png`.
 
 ### 2.2 Are the top experts clustered in the last layers? (S1.1)
 
@@ -382,7 +460,7 @@ many later top-k sets the exact patch switches (`results/tables/relp_moe_p8_swit
   - Best Spearman with per-pair late-layer agreement: Mixtral late routing-weight change -0.46; Qwen3 late SiLU-gate change
     -0.36.
   - Grammatical case does not matter: per-pair agreement is flat across the four number combinations.
-- **Splitting held-out pairs at the discovery median of any probe feature does not change RelP's add-back faithfulness relative
+- **Splitting held-out pairs at the discovery median of any probe feature does not change RelP's add-back rescue relative
   to exact patching's.** At K = 20 the RelP-minus-exact difference is the same in both halves: within 0.007 in Qwen3, and
   -0.04 to -0.05 in Mixtral, which is L0E002.
 - **Conclusion:** no data split isolates "pairs where RelP is wrong". RelP is wrong at certain units in every pair:
@@ -397,11 +475,11 @@ many later top-k sets the exact patch switches (`results/tables/relp_moe_p8_swit
 Criterion stated before the runs:
 1. On Qwen3's layer 0-2 subject-position units the score reaches at least 0.5 of the exact effect (RelP: 0.06).
 2. Last-8 expert Pearson falls by no more than 0.02.
-3. Held-out faithfulness at K = 20 is no more than 0.02 below RelP's.
+3. Held-out rescue at K = 20 is no more than 0.02 below RelP's.
 
 Simple and nounpp, where the path runs exist:
 
-| variant | Qwen3 L0-2 subject: score / exact | Qwen3 L0 alone | Mixtral L0 alone | Qwen3 last-8 Pearson | Qwen3 all-unit Pearson | faithfulness K = 20, Qwen3 / Mixtral |
+| variant | Qwen3 L0-2 subject: score / exact | Qwen3 L0 alone | Mixtral L0 alone | Qwen3 last-8 Pearson | Qwen3 all-unit Pearson | rescue K = 20, Qwen3 / Mixtral |
 |---|---|---|---|---|---|---|
 | RelP | 0.06 | 0.03 | 0.02 | 0.981 | 0.964 | 0.77 / 0.95 |
 | RelP + gradient through routing weights (rw) | 0.06 | 0.03 | 0.02 | 0.980 | 0.965 | |
@@ -471,7 +549,7 @@ Simple and nounpp, where the path runs exist:
   whole-layer rescues agree at r 1.000 (largest difference 0.024 / 0.016 logits); single experts with at least 30 pairs at
   r 0.977 / 0.994 (largest difference 0.08 / 0.05). Single pairs in the first half of the layers do not agree (r 0.33 in Qwen3),
   which is the noise floor of section 2.4 again.
-- **Not in stage 3:** neuron-level scores (expert level only) and the mean-baseline keep / remove curves (no per-position means
+- **Not in stage 3:** neuron-level scores (expert level only) and the RelP paper's faithfulness / completeness curves (mean baseline; no per-position means
   exist across templates).
 
 ### 3.2 Where the exact effects sit
@@ -562,7 +640,7 @@ Decomposition of exact - RelP at that site (first 100 discovery pairs; shares of
 
 ![add-back, role units](../figures/relp_moe_p8s3_addback_role.png)
 
-Faithfulness (share of the paired difference restored when only the K units carry the clean run), role units:
+Rescue (share of the paired difference restored when only the K units carry the clean run), role units:
 
 | K | 1 | 5 | 10 | 20 | 50 | 100 |
 |---|---|---|---|---|---|---|
@@ -580,8 +658,8 @@ Faithfulness (share of the paired difference restored when only the K units carr
 - **CounterFact is distributed.** 20 units restore 0.32-0.55 and 100 restore 0.6-0.8; on two-hop 20 units restore 0.85-0.99.
   All role units together restore 0.84-0.85 on CounterFact (the earlier subject tokens are outside the pool) and 0.96-1.00 on
   two-hop.
-- **Completeness** (share left when the K units are corrupted) mirrors this: at K = 20, CounterFact 0.68 / 0.66 (Qwen3, RelP /
-  exact) and 0.59 / 0.46 (Mixtral); two-hop 0.03 / 0.02 and 0.15 / 0.14.
+- **Disruption** (share lost when only the K units carry the corrupted run) mirrors this: at K = 20, CounterFact 0.32 / 0.34
+  (Qwen3, RelP / exact) and 0.41 / 0.54 (Mixtral); two-hop 0.97 / 0.98 and 0.85 / 0.86.
 - **Whole experts** (`results/figures/relp_moe_p8s3_addback_all.png`): the same order of the rankings. Mixtral CounterFact shows the
   largest gap (K = 10: exact 0.78, path gradient 0.87, RelP 0.46).
 
@@ -679,8 +757,11 @@ Qwen3 from Mixtral.
 ## 7. Caveats
 
 - Two models. Stage 2 (SVA) uses the paper profile only.
+- **Patch semantics.** Rescue / disruption (S2.1, stage 3) use the full swap, which does not renormalise the routing weights at
+  the patched site. Section 2.1b re-runs the SVA curves under four other semantics (no comparison changes); stage 3's curves
+  were not re-run under them.
 - **Stage 3 scope:**
-  - units at two roles only (last subject token, final token); expert level only; add-back with noise / denoise only;
+  - units at two roles only (last subject token, final token); expert level only; add-back with rescue / disruption only;
   - CounterFact pairs are the paper's cases that have a qualifying STR donor (Direction 6), not a fresh sample;
   - the two-hop task uses one template and a competence filter; it does not show that the model computes the state as an
     intermediate step;
@@ -725,4 +806,9 @@ Qwen3 from Mixtral.
   - outputs `results/relp_p8/<model>/<task>/<command>/`, `results/relp_p8/analysis/`, `results/relp_p8/summary.json`;
   - tables `results/tables/relp_moe_p8s3_{overview,agreement,rules,freeze,addback,probe,tasks}.md`;
   - figures `results/figures/relp_moe_p8s3_{sites,rankscatter,addback_role,addback_all,freeze}.png`.
+- **Patch semantics (section 2.1b, 2026-11-16):** `MIX_MODES` / `evaluate_mix` in `moetrace/relp_moe_p8.py`; runner
+  `scripts/relp_moe_p8_mix.py`, chain `scripts/relp_moe_p8_chain_mix.sh`, analysis `scripts/relp_moe_p8_mix_analyze.py`; outputs
+  `results/relp_sva_moe/<model>/paper/<task>/p8_mix/margins.parquet`, `results/relp_sva_moe/p8/mix_summary.parquet`; table
+  `results/tables/relp_moe_p8mix.md`; figures `results/figures/relp_moe_p8mix_{modes,rankings}_{qwen3,mixtral}.png`; logs
+  `logs/relp_moe_p8_mix{,_jobs}.log`.
 - **Logs:** `logs/relp_moe_p8_chain.log`, `logs/relp_moe_p8_jobs_{qwen3,mixtral}.log`, `logs/PROGRESS.md` (`[relp-p8]`).

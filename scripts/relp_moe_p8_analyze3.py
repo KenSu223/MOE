@@ -279,7 +279,7 @@ def analyse(base, summary):
                 den = (iv.groupby("row_id").margin_A.first() - iv.groupby("row_id").margin_B.first()).mean()
                 g = iv.groupby(["unit", "ranking", "seed", "budget", "intervention"])
                 s_ = pd.DataFrame({"m": g.margin.mean(), "a": g.margin_A.mean(), "b": g.margin_B.mean()}).reset_index()
-                s_["value"] = np.where(s_.intervention == "denoise", (s_.m - s_.b) / (s_.a - s_.b), (s_.m - s_.b) / (s_.a - s_.b))
+                s_["value"] = np.where(s_.intervention == "denoise", (s_.m - s_.b) / (s_.a - s_.b), (s_.a - s_.m) / (s_.a - s_.b))   # rescue / disruption
                 s_["model"], s_["task"] = model, task
                 R["addback"].append(s_)
             # ---- probe
@@ -336,13 +336,13 @@ def write(out):
         ab = ab.assign(ranking=np.where(ab.ranking == "random", "random (3 seeds)", ab.ranking),
                        budget=np.where(ab.ranking == "all", "all", ab.budget.astype(str)))
         for unit, ul in (("role", "role units (layer, role, expert)"), ("all", "whole experts (all positions)")):
-            for iv_, lab in (("denoise", "faithfulness: share of the paired difference restored when only these units carry the clean run"),
-                             ("noise", "completeness: share left when these units carry the corrupted run (ideal 0)")):
+            for iv_, lab in (("denoise", "rescue: share of the paired difference restored when only these units carry the clean run"),
+                             ("noise", "disruption: share of the paired difference lost when only these units carry the corrupted run")):
                 x = ab[(ab.unit == unit) & (ab.intervention == iv_)].groupby(["model", "task", "ranking", "budget"]).value.mean().reset_index()
                 pv = x.pivot_table(index=["model", "task", "ranking"], columns="budget", values="value")
                 order = sorted([c_ for c_ in pv.columns if c_ != "all"], key=int) + (["all"] if "all" in pv.columns else [])
                 blocks.append((f"{ul}: {lab} (validation + test)", pv[order].reset_index(), 2, None))
-    W("addback", "Stage 3: experts added back vs faithfulness and completeness (held-out pairs)", blocks)
+    W("addback", "Stage 3: experts added back vs rescue and disruption (held-out pairs)", blocks)
     W("probe", "Stage 3: clean vs corrupted run at the two roles (discovery means)", [
         ("Gate probe", out["probe"], 3, "jaccard = top-k set overlap; tv_w = total variation of routing weights; dsig_mean = mean |change| of the SiLU gate; lognorm2 = |log| ratio of the MoE-input RMS; attn_tv = total variation of the attention pattern; resid_rel = ||h_A - h_B|| / ||h_B||.")])
 
@@ -351,7 +351,7 @@ def write(out):
 
 def cross_task(base):
     """One row per (model, task) over SVA (stage 2 outputs) and the stage-3 tasks: late-unit agreement, the early subject site and
-    its causes, held-out faithfulness at K = 20 under each ranking."""
+    its causes, held-out rescue at K = 20 under each ranking."""
     P8 = ROOT / "results/relp_sva_moe/p8"
     rows = []
     # ---- SVA (four tasks, mean)
@@ -377,8 +377,8 @@ def cross_task(base):
                      "L0_subject_exact": float(g.effect_natural), "L0_subject_relp_share": float(g.relp / g.effect_natural),
                      "gap_routing_share": float((g.t_set + g.t_weights) / g.gap), "gap_attention_share": float(g.t_attention / g.gap),
                      "gap_nonlin_share": float(g.t_normnl / g.gap), "gap_half_share": float(g.t_half / g.gap),
-                     "faith20_relp": k20["relp"], "faith20_exact": k20["exact"], "faith20_lu": k20["lu"],
-                     "faith20_path_grad": float(pg.groupby("task").normalized.mean().mean()) if len(pg) else float("nan")})
+                     "rescue20_relp": k20["relp"], "rescue20_exact": k20["exact"], "rescue20_lu": k20["lu"],
+                     "rescue20_path_grad": float(pg.groupby("task").normalized.mean().mean()) if len(pg) else float("nan")})
     # ---- stage 3
     A = base / "analysis"
     if (A / "agree.parquet").exists():
@@ -402,7 +402,7 @@ def cross_task(base):
                                gap_nonlin_share=float(g.normnl / g.gap), gap_half_share=float(g.half / g.gap))
             if len(ad):
                 x = ad[(ad.model == r.model) & (ad.task == r.task) & (ad.unit == "role") & (ad.intervention == "denoise") & (ad.budget == 20)]
-                for rk, nm in (("relp", "faith20_relp"), ("exact", "faith20_exact"), ("lu", "faith20_lu"), ("path_grad_rw", "faith20_path_grad")):
+                for rk, nm in (("relp", "rescue20_relp"), ("exact", "rescue20_exact"), ("lu", "rescue20_lu"), ("path_grad_rw", "rescue20_path_grad")):
                     v = x[x.ranking == rk].value
                     row[nm] = float(v.mean()) if len(v) else float("nan")
             rows.append(row)
@@ -411,13 +411,13 @@ def cross_task(base):
     T.to_parquet(base / "analysis" / "tasks.parquet", index=False)
     cols = [c for c in ["model", "task", "paired_difference", "late_final_pearson", "late_final_slope", "top1_same", "L0_subject_exact",
                         "L0_subject_relp_share", "L0-2_subject_exact", "L0-2_subject_relp_share", "gap_routing_share", "gap_attention_share",
-                        "gap_linearisation_share", "gap_nonlin_share", "gap_half_share", "faith20_relp", "faith20_exact", "faith20_path_grad", "faith20_lu"] if c in T.columns]
+                        "gap_linearisation_share", "gap_nonlin_share", "gap_half_share", "rescue20_relp", "rescue20_exact", "rescue20_path_grad", "rescue20_lu"] if c in T.columns]
     text = ("# Phase 8: SVA, CounterFact and two-hop capitals side by side\n\nGenerated by scripts/relp_moe_p8_analyze3.py.\n\n"
             "late_final_* = RelP (endpoint B) vs exact denoise over final-token expert units of the last 8 layers; L0_subject_* = whole-MoE-output "
             "patch at the (last) subject token in layer 0; gap_*_share = share of exact - RelP at the early subject site (SVA: layer 0; stage 3: "
             "layers 0-2) from later routing (set switches + weights), later attention patterns, and the linearisation of the remaining model (= later norms + expert "
             "nonlinearity + higher order, plus the half rule; the two parts are also listed and can have opposite signs); routing + attention + "
-            "linearisation = 1; faith20_* = held-out share of the paired difference restored "
+            "linearisation = 1; rescue20_* = held-out share of the paired difference restored "
             "by the top 20 units of each ranking (SVA: expert-positions; stage 3: role units).\n\n" + md_table(T[cols], 2))
     (TAB / "relp_moe_p8s3_tasks.md").write_text(text)
     return T

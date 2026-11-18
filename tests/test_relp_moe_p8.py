@@ -304,3 +304,116 @@ def test_evaluate_roles_equals_protocol_evaluate(family, tmp_path):
     full, sparse = Label("a", 0, 3), Label("a", 0, 1)
     assert (out_r := evaluate_roles(m, A, Bb, tg, fo, pool, rolepos, role_masks, "role"))["margin"][full]["denoise"].ne(out_r["margin_B"]).any()
     assert not torch.equal(out_r["margin"][full]["denoise"], out_r["margin"][sparse]["denoise"])
+
+
+def _mix_reference(m, A, Bb, tg, fo, layer, pos, Cset, mode, kind):
+    """Slow reference for one single-layer, single-position patch: the MoE output at (layer, pos) of every row is built by
+    hand from the unpatched runs (expert by expert, fp32) and injected with the engine's whole-output patch (out_patch_fn)."""
+    import torch.nn.functional as F
+    n, T = A.shape
+    live_ids, src_ids = (Bb, A) if kind == "denoise" else (A, Bb)
+    cap = {}
+    g0 = Group("ref", torch.cat([live_ids, src_ids]), list(tg) * 2, list(fo) * 2, record_h_in=True)
+
+    def on_layer(l, w, st):
+        if l != layer:
+            return
+        h = g0.h_in[l]
+        cos, sin = m.rope(T, h)
+        hm = h + m.attention(m.rms(h, w.ln1), w, cos, sin, m.causal_mask(2 * n, T, h.dtype), False)
+        x = m.rms(hm, w.ln2)[:, pos].float()
+        probs = torch.softmax(F.linear(x, w.router.float()), -1)
+        topv, topi = probs.topk(m.k, -1)
+        if m.norm_topk:
+            topv = topv / topv.sum(-1, keepdim=True)
+
+        def u(e, xx):
+            gg, uu = F.linear(xx, w.gate_up[e].float()).chunk(2, -1)
+            return F.linear(F.silu(gg) * uu, w.down[e].float())
+        outs = []
+        for i in range(n):
+            xl, xs = x[i], x[n + i]
+            Rl = {int(e): float(v) for e, v in zip(topi[i], topv[i])}
+            Rs = {int(e): float(v) for e, v in zip(topi[n + i], topv[n + i])}
+            o = torch.zeros_like(xl)
+            if mode == "full":
+                for e, gl in Rl.items():
+                    if e not in Cset:
+                        o += gl * u(e, xl)
+                for e, gs in Rs.items():
+                    if e in Cset:
+                        o += gs * u(e, xs)
+            elif mode in ("content_both", "content_all"):
+                for e, gl in Rl.items():
+                    swap = e in Cset and (mode == "content_all" or e in Rs)
+                    o += gl * u(e, xs if swap else xl)
+            elif mode == "renorm":
+                kept = sum(gl for e, gl in Rl.items() if e not in Cset) + sum(gs for e, gs in Rs.items() if e in Cset)
+                s = sum(Rl.values()) / kept if kept > 0 else 0.0
+                for e, gl in Rl.items():
+                    if e not in Cset:
+                        o += s * gl * u(e, xl)
+                for e, gs in Rs.items():
+                    if e in Cset:
+                        o += s * gs * u(e, xs)
+            else:  # route
+                for e, gs in Rs.items():
+                    o += gs * u(e, xs if e in Cset else xl)
+            outs.append(o)
+        cap["o"] = torch.stack(outs)
+    forward_pass(m, [g0], on_layer=on_layer)
+    mk = torch.zeros(n, T, dtype=torch.bool, device=DEV)
+    mk[:, pos] = True
+    vals = torch.zeros(n, T, cap["o"].shape[-1], device=DEV)
+    vals[:, pos] = cap["o"]
+    gp = Group("pat", live_ids, list(tg), list(fo), out_patch_fn=lambda l, st: (mk, vals) if l == layer else None)
+    forward_pass(m, [gp])
+    return gp.delta.float().cpu()
+
+
+@pytest.mark.parametrize("family", FAMS)
+def test_evaluate_mix(family, tmp_path):
+    """Patch semantics at the patched MoE sites: 'full' = the engine (evaluate_roles); every mode = a hand-built reference on
+    single-layer, single-position patches; with every expert of every changed position selected, route = full (and
+    renorm = full where the routing weights sum to 1)."""
+    from collections import namedtuple
+    from moetrace.relp_moe_p8 import MIX_MODES, evaluate_mix, evaluate_roles
+    d = tiny(family, tmp_path)
+    m = StreamRelP(str(d), DEV, torch.float32)
+    n, T = 4, 6
+    A, Bb = pair_batch(n, T, 222)
+    tg, fo = [5, 6, 7, 8], [9, 10, 11, 12]
+    pool = torch.ones(T, dtype=torch.bool)
+    rolepos = torch.arange(T)[None].expand(n, T).contiguous()
+    Label = namedtuple("Label", "name")
+    gen = torch.Generator().manual_seed(3)
+    masks = {Label("sparse"): torch.rand(m.L, T, m.E, generator=gen) < 0.2,
+             Label("dense"): torch.rand(m.L, T, m.E, generator=gen) < 0.6}
+    allm = torch.zeros(m.L, T, m.E, dtype=torch.bool)
+    allm[:, 2:] = True
+    masks[Label("all")] = allm
+    sites = {Label("site1"): (1, 3, {0, 1, 2, 3}), Label("site2"): (0, 2, {2, 5}), Label("site3"): (2, 5, {1, 4})}
+    for lab, (l, t, cs) in sites.items():
+        x = torch.zeros(m.L, T, m.E, dtype=torch.bool)
+        x[l, t, sorted(cs)] = True
+        masks[lab] = x
+    out = evaluate_mix(m, A, Bb, tg, fo, pool, rolepos, masks, "role", chunk_rows=9)
+    ref = evaluate_roles(m, A, Bb, tg, fo, pool, rolepos, masks, "role", chunk_rows=7)
+    assert torch.allclose(out["margin_A"], ref["margin_A"], atol=1e-5) and torch.allclose(out["margin_B"], ref["margin_B"], atol=1e-5)
+    for lab in masks:
+        for kind in ("noise", "denoise"):
+            assert torch.allclose(out["margin"][lab]["full"][kind], ref["margin"][lab][kind], atol=1e-4), (lab, kind)
+    for lab, (l, t, cs) in sites.items():
+        for mode in MIX_MODES:
+            for kind in ("noise", "denoise"):
+                r = _mix_reference(m, A, Bb, tg, fo, l, t, cs, mode, kind)
+                assert torch.allclose(out["margin"][lab][mode][kind], r, atol=1e-4), (lab, mode, kind, out["margin"][lab][mode][kind], r)
+    allx = Label("all")
+    for kind in ("noise", "denoise"):
+        assert torch.allclose(out["margin"][allx]["route"][kind], out["margin"][allx]["full"][kind], atol=1e-5)
+        if family != "olmoe":   # OLMoE keeps the softmax weights of the top-k (sum < 1); renorm rescales to the live total
+            assert torch.allclose(out["margin"][allx]["renorm"][kind], out["margin"][allx]["full"][kind], atol=1e-4)
+    # the modes differ where routing differs between the runs, and content_* never moves an expert routed in neither run
+    d_ = {mode: out["margin"][Label("dense")][mode]["denoise"] for mode in MIX_MODES}
+    assert not torch.allclose(d_["full"], d_["content_both"], atol=1e-4)
+    assert not torch.allclose(d_["full"], d_["route"], atol=1e-4)

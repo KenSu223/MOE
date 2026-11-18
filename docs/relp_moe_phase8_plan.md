@@ -1,7 +1,8 @@
 # Phase 8 plan: follow-ups to the RelP vs activation patching study (team meeting, week of 2026-11-09)
 
 **Status: stages 1, 2 and 3 COMPLETE 2026-11-15 (report `results/sections/relp_moe_p8.md`, sections 1-2 = SVA, section 3 = CounterFact and
-two-hop capitals; WinoGrande and IOI NOT run, by the user's decision). Committed and pushed 2026-11-15 as 6af6da3 (user request). Stage 4 (larger models) awaits a decision.** Scope (user, 2026-11-15):
+two-hop capitals; WinoGrande and IOI NOT run, by the user's decision). Committed and pushed 2026-11-15 as 6af6da3 (user request); 2026-11-16 follow-ups (rescue / disruption naming, five patch semantics,
+report section 2.1b) committed and pushed 2026-11-18. Stage 4 (larger models) approved 2026-11-18 as part of Phase 9.** Scope (user, 2026-11-15):
 run stage 1 and stage 2 (including the router-aware attribution S2.6 and the neuron-level check S2.7), then a detailed
 analysis (section 8b); **stage 3 (other tasks) and stage 4 (larger models) are deferred and decided by the user after that
 analysis.** Because stage 3 is deferred, the length-bucket / role generalisation is not built now (SVA has one template per
@@ -42,7 +43,7 @@ From the RelP vs activation patching experiment we ran on SVA:
 
 | note | work item | needs |
 |---|---|---|
-| experts added back vs faithfulness + completeness | S2.1 add-back curves under both rankings | GPU |
+| experts added back vs faithfulness + completeness | S2.1 add-back curves under both rankings (named rescue / disruption and faithfulness / completeness, see section 4) | GPU |
 | layer distribution of the top experts | S1.1 | existing data |
 | rank-rank scatter coloured by layer | S1.2 | existing data |
 | "RelP gets noisier down the list, patching does not" | S1.3 (agreement down the list, split-half reliability, noise floor), S2.1, S2.5 | existing data + GPU |
@@ -104,10 +105,12 @@ S1.3 / S2.5 decide.
 - **Exact effects.** Complete replacement at one layer (Phase 7 semantics), later layers natural. denoise = F(B<-A) - F_B;
   noise = F_A - F(A<-B). Mean over discovery pairs (absent units 0); ranking by |mean|, signed ranking as a sensitivity.
 - **Matched comparisons.** denoise <-> RelP at endpoint B (primary); noise <-> endpoint A.
-- **Held-out curves.** Faithfulness(K) = E[F(B<-A on C_K) - F_B] / E[F_A - F_B] (only the K units carry the clean run);
-  completeness(K) = E[F(A<-B on C_K) - F_B] / E[F_A - F_B] (what is left when the K units are corrupted; ideal 0). The same
-  with the protocol's baselines (keep / remove, zero and mean_q_routed): the RelP paper's definitions. Ratio of means;
-  validation + test pairs.
+- **Held-out curves.** Rescue(K) = E[F(B<-A on C_K) - F_B] / E[F_A - F_B] (only the K units carry the clean run; ideal 1);
+  disruption(K) = E[F_A - F(A<-B on C_K)] / E[F_A - F_B] (share lost when only the K units carry the corrupted run; ideal 1).
+  Faithfulness and completeness are the RelP paper's definitions with the protocol's baselines (keep / remove, zero and
+  mean_q_routed): faithfulness = keep, completeness = remove (share left, ideal 0). Ratio of means; validation + test pairs.
+  Naming decided by the user 2026-11-16, so the two families are not confused: before that, rescue was called "faithfulness"
+  and 1 - disruption "completeness" in this plan, the report, tables and figures.
 - **Uncertainty.** Group bootstrap over `group_id` (2,000 resamples). A unit mean counts as non-zero if |mean| > 2 SE; every
   rank statistic is reported for all units and for units non-zero under at least one method.
 - **Selection.** Rankings, thresholds, temperatures and unit samples are fixed on discovery pairs; validation and test are
@@ -208,7 +211,7 @@ relp-p8-<model>-<task>-<command>`.
   - residual distance ||h_A - h_B|| / ||h_B||.
   Analysis: maps of each quantity (layer x position, per task); which quantity predicts RelP's error per unit (features
   averaged over later layers and positions) and per pair; pairs split at the discovery median of the best predictor into
-  "gates stable" / "gates change"; RelP-vs-exact agreement and held-out faithfulness / completeness (per-pair values of S2.1)
+  "gates stable" / "gates change"; RelP-vs-exact agreement and held-out rescue / disruption (per-pair values of S2.1)
   on each half. Outputs `probe.npz`, `router_logits.npy`; tables `probe_maps.md`, `probe_predict.md`, `probe_split.md`.
 - [x] **S2.4 + S2.6 `rules` (one forward, one reverse stream, all variants).** Discovery pairs, scores at endpoint B (and A for
   `relp`), expert-position means and per-pair values; neuron-level means kept for `relp` and the selected router-aware
@@ -233,7 +236,7 @@ relp-p8-<model>-<task>-<command>`.
   Selection of the router-aware variant for S2.1: highest expert-level Pearson with exact patching on discovery, mean
   over tasks, one choice per model.
   Stated in advance: success = on the Qwen3 layer 0-2 subject position units the score reaches >= 0.5 of the exact effect
-  (RelP: about 0.03), expert-level Pearson on the last 8 layers falls by <= 0.02, and held-out faithfulness at K = 20 is not
+  (RelP: about 0.03), expert-level Pearson on the last 8 layers falls by <= 0.02, and held-out rescue at K = 20 is not
   more than 0.02 below RelP. Any other outcome is reported as it is.
 - [x] **S2.5 `noise` (repeat patches).** (2026-11-15 02:34-03:00Z, 8/8, `p8_noise/`) 40 discovery pairs per task, changed and final positions, all layers, all routed
   experts, both directions, in another batch composition; difference to `patch_full` per (pair, unit) -> noise floor by
@@ -254,16 +257,16 @@ relp-p8-<model>-<task>-<command>`.
   neurons at endpoint B in the same job. Analysis: Pearson / slope / sign agreement by rank bin, noise floor from the random
   set, sum of single-neuron effects vs the expert's effect. Outputs `neuron_patch.parquet`, `relp_neuron_rows.pt`; table
   `neuron.md`, figure `neuron_<model>.png`.
-- [x] **S2.1 `addback` (experts added back vs faithfulness and completeness).** Validation + test pairs (80 per task).
+- [x] **S2.1 `addback` (experts added back vs rescue / disruption and faithfulness / completeness).** Validation + test pairs (80 per task).
   Rankings fixed on discovery: `relp` (protocol, endpoint A), `relp_B`, `exact` (|mean rescue|), `exact_noL0-2` (layers 0-2
   excluded), `lu` (Lu's order: layers by final-position whole-MoE rescue, inside a layer the recurrent final-position
   experts by rescue), `grad`, the selected router-aware variant, `random` (3 seeds, matched to `relp`).
   Units and budgets: expert-position 1, 2, 5, 10, 20, 50, 100, 200, 500, all; whole expert 1, 2, 5, 10, 20, 50, 100, all
   ("all" = every eligible unit of the pool, the ceiling; budgets above the eligible count are dropped).
-  Interventions: denoise and noise (faithfulness / completeness with the other run as baseline), keep and remove with the
-  mean_q_routed baseline (zero-baseline keep is ~0 by construction, Phase 7; dropped to halve the run).
+  Interventions: denoise and noise (rescue / disruption, the other run as baseline), keep and remove (faithfulness /
+  completeness, the RelP paper's) with the mean_q_routed baseline (zero-baseline keep is ~0 by construction, Phase 7; dropped to halve the run).
   Added 2026-11-15 after the first path results: rankings `path_grad_rw` and `path_relp` (8-step path scores) for simple and nounpp. Outputs `interventions.parquet`, `summary.json`, `rankings.json`;
-  figures `addback_<model>.png` (x = number of experts, y = faithfulness and completeness, one line per ranking), table
+  figures `addback_<model>.png` (x = number of experts, y = rescue, disruption, faithfulness, completeness; one line per ranking), table
   `addback.md`.
 
 ## 8b. Detailed analysis after stage 2 (decision point)
@@ -312,7 +315,7 @@ the new task). Outputs `results/relp_p8/<model>/<task>/`.
   Denoise only (mirrored rows). Cross-check for WinoGrande: old-engine final-position expert rescues; IOI has no earlier
   expert-level patching.
 - [ ] **S3.4 Cross-task summary.** Per task and model: RelP-vs-exact agreement (expert level), MoE-only add-back ceiling and
-  faithfulness at K = 20, share of the exact effect at the early site, against the task's attention share (Phases 3-6).
+  rescue at K = 20, share of the exact effect at the early site, against the task's attention share (Phases 3-6).
   Figure `tasks.png`, table `tasks.md`.
 
 ## 8c. Live status
@@ -338,6 +341,14 @@ the new task). Outputs `results/relp_p8/<model>/<task>/`.
   set / weights / attention / norm+nonlinearity / half (RAN and RANG, the norm- and gate-frozen patches, diverge for some early
   units, so their splits are given only where bounded); single-neuron effects are corrected for a per-(pair, layer) offset of
   the patched rows (bf16 GEMM-shape difference amplified by routing), estimated from random / top-expert neurons.
+
+- 2026-11-16 follow-up (user request: "run all three"): the swap does not renormalise the routing weights at the patched site
+  (guide section 8). Added `MIX_MODES` (full / content_both / content_all / renorm / route) and `evaluate_mix` to
+  `moetrace/relp_moe_p8.py` (engine untouched; a shallow model copy whose layer() also applies the new overrides); tests 30/30
+  (hand-built reference per mode on 3 families; a 1 % mutation is caught). Runner `scripts/relp_moe_p8_mix.py` (rankings and random
+  sets rebuilt exactly as S2.1; full rows repeat S2.1 at r >= 0.999), chain `scripts/relp_moe_p8_chain_mix.sh` 17:41-18:04Z, 8/8,
+  23 GPU-min; analysis `scripts/relp_moe_p8_mix_analyze.py` -> report section 2.1b. Result: no ranking comparison changes; renorm =
+  full; content-only lowers Qwen3 by up to 0.15 (routing carried), Mixtral unchanged. Committed 2026-11-18.
 
 ## 8d. Stage 3 execution (approved 2026-11-15: CounterFact, then two-hop; no WinoGrande / IOI)
 

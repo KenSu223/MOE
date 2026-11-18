@@ -25757,7 +25757,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.3062631545632858
+    "rescue": 0.3062631545632858
    },
    {
     "model": "qwen3",
@@ -25767,7 +25767,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7720531909869346
+    "rescue": 0.7720531909869346
    },
    {
     "model": "qwen3",
@@ -25777,7 +25777,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.3031949845260352
+    "rescue": 0.3031949845260352
    },
    {
     "model": "qwen3",
@@ -25787,7 +25787,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7705292796930566
+    "rescue": 0.7705292796930566
    },
    {
     "model": "qwen3",
@@ -25797,7 +25797,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": -0.0028502573519765023
+    "rescue": -0.0028502573519765023
    },
    {
     "model": "qwen3",
@@ -25807,7 +25807,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.6130045196204306
+    "rescue": 0.6130045196204306
    },
    {
     "model": "qwen3",
@@ -25817,7 +25817,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.052745547900839275
+    "rescue": 0.052745547900839275
    },
    {
     "model": "qwen3",
@@ -25827,7 +25827,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.12662137199646187
+    "rescue": 0.12662137199646187
    },
    {
     "model": "qwen3",
@@ -25837,7 +25837,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.3469020225486989
+    "rescue": 0.3469020225486989
    },
    {
     "model": "qwen3",
@@ -25847,7 +25847,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7530657045431283
+    "rescue": 0.7530657045431283
    },
    {
     "model": "qwen3",
@@ -25857,7 +25857,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.33979515701591845
+    "rescue": 0.33979515701591845
    },
    {
     "model": "qwen3",
@@ -25867,7 +25867,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7552951637943321
+    "rescue": 0.7552951637943321
    },
    {
     "model": "qwen3",
@@ -25877,7 +25877,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.034284043961906964
+    "rescue": 0.034284043961906964
    },
    {
     "model": "qwen3",
@@ -25887,7 +25887,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.5693352891543288
+    "rescue": 0.5693352891543288
    },
    {
     "model": "qwen3",
@@ -25897,7 +25897,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.057406462942782205
+    "rescue": 0.057406462942782205
    },
    {
     "model": "qwen3",
@@ -25907,7 +25907,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.11379911262239233
+    "rescue": 0.11379911262239233
    },
    {
     "model": "qwen3",
@@ -25917,7 +25917,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 152,
-    "faithfulness": 0.6242064078712988
+    "rescue": 0.6242064078712988
    },
    {
     "model": "qwen3",
@@ -25927,7 +25927,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 148,
-    "faithfulness": 0.7213620873005228
+    "rescue": 0.7213620873005228
    },
    {
     "model": "qwen3",
@@ -25937,7 +25937,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.32315343139396774
+    "rescue": 0.32315343139396774
    },
    {
     "model": "qwen3",
@@ -25947,7 +25947,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7510976522700814
+    "rescue": 0.7510976522700814
    },
    {
     "model": "qwen3",
@@ -25957,7 +25957,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.3248963730026177
+    "rescue": 0.3248963730026177
    },
    {
     "model": "qwen3",
@@ -25967,7 +25967,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7548001138457022
+    "rescue": 0.7548001138457022
    },
    {
     "model": "qwen3",
@@ -25977,7 +25977,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.005058908345323356
+    "rescue": 0.005058908345323356
    },
    {
     "model": "qwen3",
@@ -25987,7 +25987,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.5616615662477219
+    "rescue": 0.5616615662477219
    },
    {
     "model": "qwen3",
@@ -25997,7 +25997,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.05075342972739416
+    "rescue": 0.05075342972739416
    },
    {
     "model": "qwen3",
@@ -26007,7 +26007,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.11919270061638965
+    "rescue": 0.11919270061638965
    },
    {
     "model": "qwen3",
@@ -26017,7 +26017,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.32396438589418086
+    "rescue": 0.32396438589418086
    },
    {
     "model": "qwen3",
@@ -26027,7 +26027,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7754995303227916
+    "rescue": 0.7754995303227916
    },
    {
     "model": "qwen3",
@@ -26037,7 +26037,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.3133166263726296
+    "rescue": 0.3133166263726296
    },
    {
     "model": "qwen3",
@@ -26047,7 +26047,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7723221759598101
+    "rescue": 0.7723221759598101
    },
    {
     "model": "qwen3",
@@ -26057,7 +26057,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.02007307407085786
+    "rescue": 0.02007307407085786
    },
    {
     "model": "qwen3",
@@ -26067,7 +26067,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.6237535795979919
+    "rescue": 0.6237535795979919
    },
    {
     "model": "qwen3",
@@ -26077,7 +26077,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.05829980596013061
+    "rescue": 0.05829980596013061
    },
    {
     "model": "qwen3",
@@ -26087,7 +26087,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.12291932422753207
+    "rescue": 0.12291932422753207
    },
    {
     "model": "qwen3",
@@ -26097,7 +26097,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 170,
-    "faithfulness": 0.6599408447899695
+    "rescue": 0.6599408447899695
    },
    {
     "model": "qwen3",
@@ -26107,7 +26107,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 130,
-    "faithfulness": 0.6460053027556731
+    "rescue": 0.6460053027556731
    },
    {
     "model": "qwen3",
@@ -26117,7 +26117,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.2893452835938443
+    "rescue": 0.2893452835938443
    },
    {
     "model": "qwen3",
@@ -26127,7 +26127,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7611240287262693
+    "rescue": 0.7611240287262693
    },
    {
     "model": "qwen3",
@@ -26137,7 +26137,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.297839869846043
+    "rescue": 0.297839869846043
    },
    {
     "model": "qwen3",
@@ -26147,7 +26147,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7615495240246797
+    "rescue": 0.7615495240246797
    },
    {
     "model": "qwen3",
@@ -26157,7 +26157,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.008063418176156054
+    "rescue": 0.008063418176156054
    },
    {
     "model": "qwen3",
@@ -26167,7 +26167,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.51196541366614
+    "rescue": 0.51196541366614
    },
    {
     "model": "qwen3",
@@ -26177,7 +26177,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.04555426770606729
+    "rescue": 0.04555426770606729
    },
    {
     "model": "qwen3",
@@ -26187,7 +26187,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.12865420853853313
+    "rescue": 0.12865420853853313
    },
    {
     "model": "qwen3",
@@ -26197,7 +26197,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.36872982753662215
+    "rescue": 0.36872982753662215
    },
    {
     "model": "qwen3",
@@ -26207,7 +26207,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7677043606189733
+    "rescue": 0.7677043606189733
    },
    {
     "model": "qwen3",
@@ -26217,7 +26217,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.3464223721251598
+    "rescue": 0.3464223721251598
    },
    {
     "model": "qwen3",
@@ -26227,7 +26227,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7673184036905513
+    "rescue": 0.7673184036905513
    },
    {
     "model": "qwen3",
@@ -26237,7 +26237,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.019450165526543963
+    "rescue": 0.019450165526543963
    },
    {
     "model": "qwen3",
@@ -26247,7 +26247,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7031012827765465
+    "rescue": 0.7031012827765465
    },
    {
     "model": "qwen3",
@@ -26257,7 +26257,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.06683469962108372
+    "rescue": 0.06683469962108372
    },
    {
     "model": "qwen3",
@@ -26267,7 +26267,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.11127064650847238
+    "rescue": 0.11127064650847238
    },
    {
     "model": "qwen3",
@@ -26277,7 +26277,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 155,
-    "faithfulness": 0.6148559092521895
+    "rescue": 0.6148559092521895
    },
    {
     "model": "qwen3",
@@ -26287,7 +26287,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 145,
-    "faithfulness": 0.7218424622113766
+    "rescue": 0.7218424622113766
    },
    {
     "model": "qwen3",
@@ -26297,7 +26297,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.3011372313585184
+    "rescue": 0.3011372313585184
    },
    {
     "model": "qwen3",
@@ -26307,7 +26307,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.7590002591045665
+    "rescue": 0.7590002591045665
    },
    {
     "model": "qwen3",
@@ -26317,7 +26317,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.30777579106607755
+    "rescue": 0.30777579106607755
    },
    {
     "model": "qwen3",
@@ -26327,7 +26327,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.7594942108144654
+    "rescue": 0.7594942108144654
    },
    {
     "model": "qwen3",
@@ -26337,7 +26337,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.0044336454441368835
+    "rescue": 0.0044336454441368835
    },
    {
     "model": "qwen3",
@@ -26347,7 +26347,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.5254770268848376
+    "rescue": 0.5254770268848376
    },
    {
     "model": "qwen3",
@@ -26357,7 +26357,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.0435523955559626
+    "rescue": 0.0435523955559626
    },
    {
     "model": "qwen3",
@@ -26367,7 +26367,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.12436259374630976
+    "rescue": 0.12436259374630976
    },
    {
     "model": "qwen3",
@@ -26377,7 +26377,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.3584194155881826
+    "rescue": 0.3584194155881826
    },
    {
     "model": "qwen3",
@@ -26387,7 +26387,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.7716636169001208
+    "rescue": 0.7716636169001208
    },
    {
     "model": "qwen3",
@@ -26397,7 +26397,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.33589133703822527
+    "rescue": 0.33589133703822527
    },
    {
     "model": "qwen3",
@@ -26407,7 +26407,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.7710896875326603
+    "rescue": 0.7710896875326603
    },
    {
     "model": "qwen3",
@@ -26417,7 +26417,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.02623111746033506
+    "rescue": 0.02623111746033506
    },
    {
     "model": "qwen3",
@@ -26427,7 +26427,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.7013744683585508
+    "rescue": 0.7013744683585508
    },
    {
     "model": "qwen3",
@@ -26437,7 +26437,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.0720849875833383
+    "rescue": 0.0720849875833383
    },
    {
     "model": "qwen3",
@@ -26447,7 +26447,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.11618188016670924
+    "rescue": 0.11618188016670924
    },
    {
     "model": "qwen3",
@@ -26457,7 +26457,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 153,
-    "faithfulness": 0.6146596527386923
+    "rescue": 0.6146596527386923
    },
    {
     "model": "qwen3",
@@ -26467,7 +26467,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 147,
-    "faithfulness": 0.7201024439909458
+    "rescue": 0.7201024439909458
    },
    {
     "model": "qwen3",
@@ -26477,7 +26477,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.44497362948222496
+    "rescue": 0.44497362948222496
    },
    {
     "model": "qwen3",
@@ -26487,7 +26487,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7810975260405973
+    "rescue": 0.7810975260405973
    },
    {
     "model": "qwen3",
@@ -26497,7 +26497,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.44441678366651244
+    "rescue": 0.44441678366651244
    },
    {
     "model": "qwen3",
@@ -26507,7 +26507,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7820844349878641
+    "rescue": 0.7820844349878641
    },
    {
     "model": "qwen3",
@@ -26517,7 +26517,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.3989013570662722
+    "rescue": 0.3989013570662722
    },
    {
     "model": "qwen3",
@@ -26527,7 +26527,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.40826548395226436
+    "rescue": 0.40826548395226436
    },
    {
     "model": "qwen3",
@@ -26537,7 +26537,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.021621489901029436
+    "rescue": 0.021621489901029436
    },
    {
     "model": "qwen3",
@@ -26547,7 +26547,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.1818931594496024
+    "rescue": 0.1818931594496024
    },
    {
     "model": "qwen3",
@@ -26557,7 +26557,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.47502157621124563
+    "rescue": 0.47502157621124563
    },
    {
     "model": "qwen3",
@@ -26567,7 +26567,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7841777594067226
+    "rescue": 0.7841777594067226
    },
    {
     "model": "qwen3",
@@ -26577,7 +26577,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4753915606090912
+    "rescue": 0.4753915606090912
    },
    {
     "model": "qwen3",
@@ -26587,7 +26587,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.786929923802518
+    "rescue": 0.786929923802518
    },
    {
     "model": "qwen3",
@@ -26597,7 +26597,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4301382761266039
+    "rescue": 0.4301382761266039
    },
    {
     "model": "qwen3",
@@ -26607,7 +26607,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.4428125364923341
+    "rescue": 0.4428125364923341
    },
    {
     "model": "qwen3",
@@ -26617,7 +26617,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.02347294257224101
+    "rescue": 0.02347294257224101
    },
    {
     "model": "qwen3",
@@ -26627,7 +26627,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.18986051610750465
+    "rescue": 0.18986051610750465
    },
    {
     "model": "qwen3",
@@ -26637,7 +26637,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6576984549531165
+    "rescue": 0.6576984549531165
    },
    {
     "model": "qwen3",
@@ -26647,7 +26647,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6536332131116718
+    "rescue": 0.6536332131116718
    },
    {
     "model": "qwen3",
@@ -26657,7 +26657,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4601014431160463
+    "rescue": 0.4601014431160463
    },
    {
     "model": "qwen3",
@@ -26667,7 +26667,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7806395614683007
+    "rescue": 0.7806395614683007
    },
    {
     "model": "qwen3",
@@ -26677,7 +26677,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4599451928629949
+    "rescue": 0.4599451928629949
    },
    {
     "model": "qwen3",
@@ -26687,7 +26687,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7834226658011421
+    "rescue": 0.7834226658011421
    },
    {
     "model": "qwen3",
@@ -26697,7 +26697,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4226244131815959
+    "rescue": 0.4226244131815959
    },
    {
     "model": "qwen3",
@@ -26707,7 +26707,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.4343282045297253
+    "rescue": 0.4343282045297253
    },
    {
     "model": "qwen3",
@@ -26717,7 +26717,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.019908144434427764
+    "rescue": 0.019908144434427764
    },
    {
     "model": "qwen3",
@@ -26727,7 +26727,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.18514843934158082
+    "rescue": 0.18514843934158082
    },
    {
     "model": "qwen3",
@@ -26737,7 +26737,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.4603981972697465
+    "rescue": 0.4603981972697465
    },
    {
     "model": "qwen3",
@@ -26747,7 +26747,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7847677726224868
+    "rescue": 0.7847677726224868
    },
    {
     "model": "qwen3",
@@ -26757,7 +26757,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.46038578597617447
+    "rescue": 0.46038578597617447
    },
    {
     "model": "qwen3",
@@ -26767,7 +26767,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7857170821045112
+    "rescue": 0.7857170821045112
    },
    {
     "model": "qwen3",
@@ -26777,7 +26777,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.40661978988901143
+    "rescue": 0.40661978988901143
    },
    {
     "model": "qwen3",
@@ -26787,7 +26787,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.4169830322988366
+    "rescue": 0.4169830322988366
    },
    {
     "model": "qwen3",
@@ -26797,7 +26797,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.02532317482844152
+    "rescue": 0.02532317482844152
    },
    {
     "model": "qwen3",
@@ -26807,7 +26807,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.18676922289410303
+    "rescue": 0.18676922289410303
    },
    {
     "model": "qwen3",
@@ -26817,7 +26817,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6622363141231289
+    "rescue": 0.6622363141231289
    },
    {
     "model": "qwen3",
@@ -26827,7 +26827,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6384323815262654
+    "rescue": 0.6384323815262654
    },
    {
     "model": "qwen3",
@@ -26837,7 +26837,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.45801486841341604
+    "rescue": 0.45801486841341604
    },
    {
     "model": "qwen3",
@@ -26847,7 +26847,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.7813500598422034
+    "rescue": 0.7813500598422034
    },
    {
     "model": "qwen3",
@@ -26857,7 +26857,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.4581958195140464
+    "rescue": 0.4581958195140464
    },
    {
     "model": "qwen3",
@@ -26867,7 +26867,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.7816891679642476
+    "rescue": 0.7816891679642476
    },
    {
     "model": "qwen3",
@@ -26877,7 +26877,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.4153741955100877
+    "rescue": 0.4153741955100877
    },
    {
     "model": "qwen3",
@@ -26887,7 +26887,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.42701412720947485
+    "rescue": 0.42701412720947485
    },
    {
     "model": "qwen3",
@@ -26897,7 +26897,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.018286415247551546
+    "rescue": 0.018286415247551546
    },
    {
     "model": "qwen3",
@@ -26907,7 +26907,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.1802050594526938
+    "rescue": 0.1802050594526938
    },
    {
     "model": "qwen3",
@@ -26917,7 +26917,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.46206714523269865
+    "rescue": 0.46206714523269865
    },
    {
     "model": "qwen3",
@@ -26927,7 +26927,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.7837340666895736
+    "rescue": 0.7837340666895736
    },
    {
     "model": "qwen3",
@@ -26937,7 +26937,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.4617639168463311
+    "rescue": 0.4617639168463311
    },
    {
     "model": "qwen3",
@@ -26947,7 +26947,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.7868782604716527
+    "rescue": 0.7868782604716527
    },
    {
     "model": "qwen3",
@@ -26957,7 +26957,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.4142935988512938
+    "rescue": 0.4142935988512938
    },
    {
     "model": "qwen3",
@@ -26967,7 +26967,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.42485644106848414
+    "rescue": 0.42485644106848414
    },
    {
     "model": "qwen3",
@@ -26977,7 +26977,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.02604979431373567
+    "rescue": 0.02604979431373567
    },
    {
     "model": "qwen3",
@@ -26987,7 +26987,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.1906221952324077
+    "rescue": 0.1906221952324077
    },
    {
     "model": "qwen3",
@@ -26997,7 +26997,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6377690953548869
+    "rescue": 0.6377690953548869
    },
    {
     "model": "qwen3",
@@ -27007,7 +27007,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.666394634082119
+    "rescue": 0.666394634082119
    },
    {
     "model": "qwen3",
@@ -27017,7 +27017,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.46401693807641536
+    "rescue": 0.46401693807641536
    },
    {
     "model": "qwen3",
@@ -27027,7 +27027,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.7760069947509083
+    "rescue": 0.7760069947509083
    },
    {
     "model": "qwen3",
@@ -27037,7 +27037,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.4647297771509953
+    "rescue": 0.4647297771509953
    },
    {
     "model": "qwen3",
@@ -27047,7 +27047,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.7755074129827507
+    "rescue": 0.7755074129827507
    },
    {
     "model": "qwen3",
@@ -27057,7 +27057,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.42389681767757287
+    "rescue": 0.42389681767757287
    },
    {
     "model": "qwen3",
@@ -27067,7 +27067,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.43508194124863275
+    "rescue": 0.43508194124863275
    },
    {
     "model": "qwen3",
@@ -27077,7 +27077,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.017869529530842976
+    "rescue": 0.017869529530842976
    },
    {
     "model": "qwen3",
@@ -27087,7 +27087,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.18268281189623228
+    "rescue": 0.18268281189623228
    },
    {
     "model": "qwen3",
@@ -27097,7 +27097,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.45746522617865665
+    "rescue": 0.45746522617865665
    },
    {
     "model": "qwen3",
@@ -27107,7 +27107,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.7875744283972335
+    "rescue": 0.7875744283972335
    },
    {
     "model": "qwen3",
@@ -27117,7 +27117,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.4567902594565347
+    "rescue": 0.4567902594565347
    },
    {
     "model": "qwen3",
@@ -27127,7 +27127,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.7912174537524256
+    "rescue": 0.7912174537524256
    },
    {
     "model": "qwen3",
@@ -27137,7 +27137,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.40805147150476834
+    "rescue": 0.40805147150476834
    },
    {
     "model": "qwen3",
@@ -27147,7 +27147,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.41899596352165647
+    "rescue": 0.41899596352165647
    },
    {
     "model": "qwen3",
@@ -27157,7 +27157,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.02602530694224637
+    "rescue": 0.02602530694224637
    },
    {
     "model": "qwen3",
@@ -27167,7 +27167,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.18834840553647328
+    "rescue": 0.18834840553647328
    },
    {
     "model": "qwen3",
@@ -27177,7 +27177,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 151,
-    "faithfulness": 0.6376617231557039
+    "rescue": 0.6376617231557039
    },
    {
     "model": "qwen3",
@@ -27187,7 +27187,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 149,
-    "faithfulness": 0.665850748230506
+    "rescue": 0.665850748230506
    },
    {
     "model": "qwen3",
@@ -27197,7 +27197,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.5697946913179123
+    "rescue": 0.5697946913179123
    },
    {
     "model": "qwen3",
@@ -27207,7 +27207,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.7757915002528297
+    "rescue": 0.7757915002528297
    },
    {
     "model": "qwen3",
@@ -27217,7 +27217,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.5697902300433851
+    "rescue": 0.5697902300433851
    },
    {
     "model": "qwen3",
@@ -27227,7 +27227,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.7793881185873467
+    "rescue": 0.7793881185873467
    },
    {
     "model": "qwen3",
@@ -27237,7 +27237,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.43611545398141427
+    "rescue": 0.43611545398141427
    },
    {
     "model": "qwen3",
@@ -27247,7 +27247,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.44285299141258444
+    "rescue": 0.44285299141258444
    },
    {
     "model": "qwen3",
@@ -27257,7 +27257,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.10980801563791663
+    "rescue": 0.10980801563791663
    },
    {
     "model": "qwen3",
@@ -27267,7 +27267,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.050609397308511404
+    "rescue": 0.050609397308511404
    },
    {
     "model": "qwen3",
@@ -27277,7 +27277,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.574922328229262
+    "rescue": 0.574922328229262
    },
    {
     "model": "qwen3",
@@ -27287,7 +27287,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.7881711669214779
+    "rescue": 0.7881711669214779
    },
    {
     "model": "qwen3",
@@ -27297,7 +27297,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.5758228557006309
+    "rescue": 0.5758228557006309
    },
    {
     "model": "qwen3",
@@ -27307,7 +27307,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.7904168831588024
+    "rescue": 0.7904168831588024
    },
    {
     "model": "qwen3",
@@ -27317,7 +27317,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.4190269994200686
+    "rescue": 0.4190269994200686
    },
    {
     "model": "qwen3",
@@ -27327,7 +27327,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.4259828235126204
+    "rescue": 0.4259828235126204
    },
    {
     "model": "qwen3",
@@ -27337,7 +27337,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.10639497951302487
+    "rescue": 0.10639497951302487
    },
    {
     "model": "qwen3",
@@ -27347,7 +27347,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.038857656820969706
+    "rescue": 0.038857656820969706
    },
    {
     "model": "qwen3",
@@ -27357,7 +27357,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6278059091358159
+    "rescue": 0.6278059091358159
    },
    {
     "model": "qwen3",
@@ -27367,7 +27367,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6053173985360751
+    "rescue": 0.6053173985360751
    },
    {
     "model": "qwen3",
@@ -27377,7 +27377,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.5664919511580828
+    "rescue": 0.5664919511580828
    },
    {
     "model": "qwen3",
@@ -27387,7 +27387,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.7675074740142723
+    "rescue": 0.7675074740142723
    },
    {
     "model": "qwen3",
@@ -27397,7 +27397,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.567228802075594
+    "rescue": 0.567228802075594
    },
    {
     "model": "qwen3",
@@ -27407,7 +27407,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.7696449754442595
+    "rescue": 0.7696449754442595
    },
    {
     "model": "qwen3",
@@ -27417,7 +27417,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.4088355292853443
+    "rescue": 0.4088355292853443
    },
    {
     "model": "qwen3",
@@ -27427,7 +27427,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.4259212584581337
+    "rescue": 0.4259212584581337
    },
    {
     "model": "qwen3",
@@ -27437,7 +27437,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.1034997760423818
+    "rescue": 0.1034997760423818
    },
    {
     "model": "qwen3",
@@ -27447,7 +27447,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.0378941353446421
+    "rescue": 0.0378941353446421
    },
    {
     "model": "qwen3",
@@ -27457,7 +27457,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.5809802646650821
+    "rescue": 0.5809802646650821
    },
    {
     "model": "qwen3",
@@ -27467,7 +27467,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.8031869351425605
+    "rescue": 0.8031869351425605
    },
    {
     "model": "qwen3",
@@ -27477,7 +27477,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.5812848282304854
+    "rescue": 0.5812848282304854
    },
    {
     "model": "qwen3",
@@ -27487,7 +27487,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.806765564675626
+    "rescue": 0.806765564675626
    },
    {
     "model": "qwen3",
@@ -27497,7 +27497,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.44698188157097024
+    "rescue": 0.44698188157097024
    },
    {
     "model": "qwen3",
@@ -27507,7 +27507,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.4410064474160906
+    "rescue": 0.4410064474160906
    },
    {
     "model": "qwen3",
@@ -27517,7 +27517,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.11305935422552983
+    "rescue": 0.11305935422552983
    },
    {
     "model": "qwen3",
@@ -27527,7 +27527,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.05048075121498834
+    "rescue": 0.05048075121498834
    },
    {
     "model": "qwen3",
@@ -27537,7 +27537,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.5658121333002419
+    "rescue": 0.5658121333002419
    },
    {
     "model": "qwen3",
@@ -27547,7 +27547,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6390945284352842
+    "rescue": 0.6390945284352842
    },
    {
     "model": "qwen3",
@@ -27557,7 +27557,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.576956597193238
+    "rescue": 0.576956597193238
    },
    {
     "model": "qwen3",
@@ -27567,7 +27567,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.7822852767995646
+    "rescue": 0.7822852767995646
    },
    {
     "model": "qwen3",
@@ -27577,7 +27577,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.5775710538294262
+    "rescue": 0.5775710538294262
    },
    {
     "model": "qwen3",
@@ -27587,7 +27587,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.7852177066374149
+    "rescue": 0.7852177066374149
    },
    {
     "model": "qwen3",
@@ -27597,7 +27597,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.4307589058008144
+    "rescue": 0.4307589058008144
    },
    {
     "model": "qwen3",
@@ -27607,7 +27607,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.4465523935904712
+    "rescue": 0.4465523935904712
    },
    {
     "model": "qwen3",
@@ -27617,7 +27617,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.10828155275390691
+    "rescue": 0.10828155275390691
    },
    {
     "model": "qwen3",
@@ -27627,7 +27627,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.04114442814215839
+    "rescue": 0.04114442814215839
    },
    {
     "model": "qwen3",
@@ -27637,7 +27637,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.5677006877594456
+    "rescue": 0.5677006877594456
    },
    {
     "model": "qwen3",
@@ -27647,7 +27647,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.7846352293320311
+    "rescue": 0.7846352293320311
    },
    {
     "model": "qwen3",
@@ -27657,7 +27657,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.5681570936459751
+    "rescue": 0.5681570936459751
    },
    {
     "model": "qwen3",
@@ -27667,7 +27667,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.787209602140058
+    "rescue": 0.787209602140058
    },
    {
     "model": "qwen3",
@@ -27677,7 +27677,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.4192642895709602
+    "rescue": 0.4192642895709602
    },
    {
     "model": "qwen3",
@@ -27687,7 +27687,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.4146474301184661
+    "rescue": 0.4146474301184661
    },
    {
     "model": "qwen3",
@@ -27697,7 +27697,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.10703017047405014
+    "rescue": 0.10703017047405014
    },
    {
     "model": "qwen3",
@@ -27707,7 +27707,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.04646307377539534
+    "rescue": 0.04646307377539534
    },
    {
     "model": "qwen3",
@@ -27717,7 +27717,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.5725638694643456
+    "rescue": 0.5725638694643456
    },
    {
     "model": "qwen3",
@@ -27727,7 +27727,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6421262745230127
+    "rescue": 0.6421262745230127
    },
    {
     "model": "qwen3",
@@ -27737,7 +27737,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.5767165689451085
+    "rescue": 0.5767165689451085
    },
    {
     "model": "qwen3",
@@ -27747,7 +27747,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7829743257386078
+    "rescue": 0.7829743257386078
    },
    {
     "model": "qwen3",
@@ -27757,7 +27757,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.5773944963169002
+    "rescue": 0.5773944963169002
    },
    {
     "model": "qwen3",
@@ -27767,7 +27767,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.7860602982117535
+    "rescue": 0.7860602982117535
    },
    {
     "model": "qwen3",
@@ -27777,7 +27777,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.43221379908064417
+    "rescue": 0.43221379908064417
    },
    {
     "model": "qwen3",
@@ -27787,7 +27787,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.44866344018318166
+    "rescue": 0.44866344018318166
    },
    {
     "model": "qwen3",
@@ -27797,7 +27797,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.10813725619337607
+    "rescue": 0.10813725619337607
    },
    {
     "model": "qwen3",
@@ -27807,7 +27807,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.04089916214095508
+    "rescue": 0.04089916214095508
    },
    {
     "model": "qwen3",
@@ -27817,7 +27817,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.5681677402082661
+    "rescue": 0.5681677402082661
    },
    {
     "model": "qwen3",
@@ -27827,7 +27827,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7837341667682564
+    "rescue": 0.7837341667682564
    },
    {
     "model": "qwen3",
@@ -27837,7 +27837,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.5685479448989518
+    "rescue": 0.5685479448989518
    },
    {
     "model": "qwen3",
@@ -27847,7 +27847,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.7861237597020938
+    "rescue": 0.7861237597020938
    },
    {
     "model": "qwen3",
@@ -27857,7 +27857,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.4176604877212169
+    "rescue": 0.4176604877212169
    },
    {
     "model": "qwen3",
@@ -27867,7 +27867,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.41259673392989504
+    "rescue": 0.41259673392989504
    },
    {
     "model": "qwen3",
@@ -27877,7 +27877,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.1072326493506545
+    "rescue": 0.1072326493506545
    },
    {
     "model": "qwen3",
@@ -27887,7 +27887,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.04667206668194309
+    "rescue": 0.04667206668194309
    },
    {
     "model": "qwen3",
@@ -27897,7 +27897,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.5725638694643456
+    "rescue": 0.5725638694643456
    },
    {
     "model": "qwen3",
@@ -27907,7 +27907,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.6304470382399239
+    "rescue": 0.6304470382399239
    },
    {
     "model": "qwen3",
@@ -27917,7 +27917,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.43044458111842415
+    "rescue": 0.43044458111842415
    },
    {
     "model": "qwen3",
@@ -27927,7 +27927,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.819008978326097
+    "rescue": 0.819008978326097
    },
    {
     "model": "qwen3",
@@ -27937,7 +27937,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.445623103485606
+    "rescue": 0.445623103485606
    },
    {
     "model": "qwen3",
@@ -27947,7 +27947,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.8097352924534031
+    "rescue": 0.8097352924534031
    },
    {
     "model": "qwen3",
@@ -27957,7 +27957,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.20183909039453346
+    "rescue": 0.20183909039453346
    },
    {
     "model": "qwen3",
@@ -27967,7 +27967,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.7431023713174262
+    "rescue": 0.7431023713174262
    },
    {
     "model": "qwen3",
@@ -27977,7 +27977,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.025887301136870138
+    "rescue": 0.025887301136870138
    },
    {
     "model": "qwen3",
@@ -27987,7 +27987,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.14012646674789622
+    "rescue": 0.14012646674789622
    },
    {
     "model": "qwen3",
@@ -27997,7 +27997,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.4567985722545307
+    "rescue": 0.4567985722545307
    },
    {
     "model": "qwen3",
@@ -28007,7 +28007,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.7877180386505632
+    "rescue": 0.7877180386505632
    },
    {
     "model": "qwen3",
@@ -28017,7 +28017,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.4692161903441359
+    "rescue": 0.4692161903441359
    },
    {
     "model": "qwen3",
@@ -28027,7 +28027,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.802644506359159
+    "rescue": 0.802644506359159
    },
    {
     "model": "qwen3",
@@ -28037,7 +28037,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.08429653174264874
+    "rescue": 0.08429653174264874
    },
    {
     "model": "qwen3",
@@ -28047,7 +28047,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.3906096564387179
+    "rescue": 0.3906096564387179
    },
    {
     "model": "qwen3",
@@ -28057,7 +28057,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.025914539802037805
+    "rescue": 0.025914539802037805
    },
    {
     "model": "qwen3",
@@ -28067,7 +28067,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.15045565029065133
+    "rescue": 0.15045565029065133
    },
    {
     "model": "qwen3",
@@ -28077,7 +28077,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.8190116385340009
+    "rescue": 0.8190116385340009
    },
    {
     "model": "qwen3",
@@ -28087,7 +28087,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.7424725435564306
+    "rescue": 0.7424725435564306
    },
    {
     "model": "qwen3",
@@ -28097,7 +28097,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.4517231180894954
+    "rescue": 0.4517231180894954
    },
    {
     "model": "qwen3",
@@ -28107,7 +28107,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.7947813890767966
+    "rescue": 0.7947813890767966
    },
    {
     "model": "qwen3",
@@ -28117,7 +28117,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.46254807977936896
+    "rescue": 0.46254807977936896
    },
    {
     "model": "qwen3",
@@ -28127,7 +28127,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.8067412539822776
+    "rescue": 0.8067412539822776
    },
    {
     "model": "qwen3",
@@ -28137,7 +28137,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.08897883473419028
+    "rescue": 0.08897883473419028
    },
    {
     "model": "qwen3",
@@ -28147,7 +28147,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.4690594726975437
+    "rescue": 0.4690594726975437
    },
    {
     "model": "qwen3",
@@ -28157,7 +28157,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.023240170263558582
+    "rescue": 0.023240170263558582
    },
    {
     "model": "qwen3",
@@ -28167,7 +28167,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.14391152520481287
+    "rescue": 0.14391152520481287
    },
    {
     "model": "qwen3",
@@ -28177,7 +28177,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.43430985716131815
+    "rescue": 0.43430985716131815
    },
    {
     "model": "qwen3",
@@ -28187,7 +28187,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.8130124218467721
+    "rescue": 0.8130124218467721
    },
    {
     "model": "qwen3",
@@ -28197,7 +28197,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.45196589925439423
+    "rescue": 0.45196589925439423
    },
    {
     "model": "qwen3",
@@ -28207,7 +28207,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.8049895438415046
+    "rescue": 0.8049895438415046
    },
    {
     "model": "qwen3",
@@ -28217,7 +28217,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.20896157661964518
+    "rescue": 0.20896157661964518
    },
    {
     "model": "qwen3",
@@ -28227,7 +28227,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.6770692740441849
+    "rescue": 0.6770692740441849
    },
    {
     "model": "qwen3",
@@ -28237,7 +28237,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.029512896609083468
+    "rescue": 0.029512896609083468
    },
    {
     "model": "qwen3",
@@ -28247,7 +28247,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.14782167327746157
+    "rescue": 0.14782167327746157
    },
    {
     "model": "qwen3",
@@ -28257,7 +28257,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 151,
-    "faithfulness": 0.7402210574019624
+    "rescue": 0.7402210574019624
    },
    {
     "model": "qwen3",
@@ -28267,7 +28267,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 149,
-    "faithfulness": 0.8172478004185151
+    "rescue": 0.8172478004185151
    },
    {
     "model": "qwen3",
@@ -28277,7 +28277,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.46715973097976093
+    "rescue": 0.46715973097976093
    },
    {
     "model": "qwen3",
@@ -28287,7 +28287,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.7968875571374203
+    "rescue": 0.7968875571374203
    },
    {
     "model": "qwen3",
@@ -28297,7 +28297,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.4723780185560892
+    "rescue": 0.4723780185560892
    },
    {
     "model": "qwen3",
@@ -28307,7 +28307,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.8131441888886464
+    "rescue": 0.8131441888886464
    },
    {
     "model": "qwen3",
@@ -28317,7 +28317,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.12506759934319642
+    "rescue": 0.12506759934319642
    },
    {
     "model": "qwen3",
@@ -28327,7 +28327,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.48456984512662415
+    "rescue": 0.48456984512662415
    },
    {
     "model": "qwen3",
@@ -28337,7 +28337,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.028836507916290884
+    "rescue": 0.028836507916290884
    },
    {
     "model": "qwen3",
@@ -28347,7 +28347,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.1530340205296542
+    "rescue": 0.1530340205296542
    },
    {
     "model": "qwen3",
@@ -28357,7 +28357,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.4202395376284541
+    "rescue": 0.4202395376284541
    },
    {
     "model": "qwen3",
@@ -28367,7 +28367,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.8084591699885602
+    "rescue": 0.8084591699885602
    },
    {
     "model": "qwen3",
@@ -28377,7 +28377,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.4429412814958654
+    "rescue": 0.4429412814958654
    },
    {
     "model": "qwen3",
@@ -28387,7 +28387,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.798454139587134
+    "rescue": 0.798454139587134
    },
    {
     "model": "qwen3",
@@ -28397,7 +28397,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.155530977082954
+    "rescue": 0.155530977082954
    },
    {
     "model": "qwen3",
@@ -28407,7 +28407,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.6341126848649089
+    "rescue": 0.6341126848649089
    },
    {
     "model": "qwen3",
@@ -28417,7 +28417,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.022803478518839
+    "rescue": 0.022803478518839
    },
    {
     "model": "qwen3",
@@ -28427,7 +28427,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.13769179221085392
+    "rescue": 0.13769179221085392
    },
    {
     "model": "qwen3",
@@ -28437,7 +28437,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 151,
-    "faithfulness": 0.732477209561775
+    "rescue": 0.732477209561775
    },
    {
     "model": "qwen3",
@@ -28447,7 +28447,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 149,
-    "faithfulness": 0.8366319411026748
+    "rescue": 0.8366319411026748
    },
    {
     "model": "qwen3",
@@ -28457,7 +28457,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.46647273444602605
+    "rescue": 0.46647273444602605
    },
    {
     "model": "qwen3",
@@ -28467,7 +28467,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.797426077799562
+    "rescue": 0.797426077799562
    },
    {
     "model": "qwen3",
@@ -28477,7 +28477,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.47329138938900617
+    "rescue": 0.47329138938900617
    },
    {
     "model": "qwen3",
@@ -28487,7 +28487,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.8152115404999222
+    "rescue": 0.8152115404999222
    },
    {
     "model": "qwen3",
@@ -28497,7 +28497,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.11285376117667759
+    "rescue": 0.11285376117667759
    },
    {
     "model": "qwen3",
@@ -28507,7 +28507,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.43709049533088734
+    "rescue": 0.43709049533088734
    },
    {
     "model": "qwen3",
@@ -28517,7 +28517,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.029458732288085394
+    "rescue": 0.029458732288085394
    },
    {
     "model": "qwen3",
@@ -28527,7 +28527,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.1545984069728875
+    "rescue": 0.1545984069728875
    },
    {
     "model": "qwen3",
@@ -28537,7 +28537,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.42194165375524284
+    "rescue": 0.42194165375524284
    },
    {
     "model": "qwen3",
@@ -28547,7 +28547,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.8076660436786861
+    "rescue": 0.8076660436786861
    },
    {
     "model": "qwen3",
@@ -28557,7 +28557,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.44264928226358197
+    "rescue": 0.44264928226358197
    },
    {
     "model": "qwen3",
@@ -28567,7 +28567,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.7966783041267019
+    "rescue": 0.7966783041267019
    },
    {
     "model": "qwen3",
@@ -28577,7 +28577,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.16723163503925342
+    "rescue": 0.16723163503925342
    },
    {
     "model": "qwen3",
@@ -28587,7 +28587,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.6789290692470787
+    "rescue": 0.6789290692470787
    },
    {
     "model": "qwen3",
@@ -28597,7 +28597,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.022303590226745607
+    "rescue": 0.022303590226745607
    },
    {
     "model": "qwen3",
@@ -28607,7 +28607,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.1364387180850379
+    "rescue": 0.1364387180850379
    },
    {
     "model": "qwen3",
@@ -28617,7 +28617,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.7260930497679927
+    "rescue": 0.7260930497679927
    },
    {
     "model": "qwen3",
@@ -28627,7 +28627,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.8350715996160516
+    "rescue": 0.8350715996160516
    },
    {
     "model": "mixtral",
@@ -28637,7 +28637,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.4736627575891795
+    "rescue": 0.4736627575891795
    },
    {
     "model": "mixtral",
@@ -28647,7 +28647,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.9150884943288053
+    "rescue": 0.9150884943288053
    },
    {
     "model": "mixtral",
@@ -28657,7 +28657,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.9934550005151677
+    "rescue": 0.9934550005151677
    },
    {
     "model": "mixtral",
@@ -28667,7 +28667,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.9969075944567908
+    "rescue": 0.9969075944567908
    },
    {
     "model": "mixtral",
@@ -28677,7 +28677,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.9930692385384248
+    "rescue": 0.9930692385384248
    },
    {
     "model": "mixtral",
@@ -28687,7 +28687,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.9963662523378961
+    "rescue": 0.9963662523378961
    },
    {
     "model": "mixtral",
@@ -28697,7 +28697,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.16652212595738664
+    "rescue": 0.16652212595738664
    },
    {
     "model": "mixtral",
@@ -28707,7 +28707,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.5208719635284504
+    "rescue": 0.5208719635284504
    },
    {
     "model": "mixtral",
@@ -28717,7 +28717,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.49674693308853474
+    "rescue": 0.49674693308853474
    },
    {
     "model": "mixtral",
@@ -28727,7 +28727,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.9182247044463683
+    "rescue": 0.9182247044463683
    },
    {
     "model": "mixtral",
@@ -28737,7 +28737,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.9877652346166652
+    "rescue": 0.9877652346166652
    },
    {
     "model": "mixtral",
@@ -28747,7 +28747,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.9950778399453496
+    "rescue": 0.9950778399453496
    },
    {
     "model": "mixtral",
@@ -28757,7 +28757,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.9862916445460669
+    "rescue": 0.9862916445460669
    },
    {
     "model": "mixtral",
@@ -28767,7 +28767,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.9938349645811995
+    "rescue": 0.9938349645811995
    },
    {
     "model": "mixtral",
@@ -28777,7 +28777,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.189764791908183
+    "rescue": 0.189764791908183
    },
    {
     "model": "mixtral",
@@ -28787,7 +28787,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.5419353811036075
+    "rescue": 0.5419353811036075
    },
    {
     "model": "mixtral",
@@ -28797,7 +28797,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 123,
-    "faithfulness": 0.25873315400118785
+    "rescue": 0.25873315400118785
    },
    {
     "model": "mixtral",
@@ -28807,7 +28807,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 113,
-    "faithfulness": 0.2822585401126398
+    "rescue": 0.2822585401126398
    },
    {
     "model": "mixtral",
@@ -28817,7 +28817,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.48955824769661366
+    "rescue": 0.48955824769661366
    },
    {
     "model": "mixtral",
@@ -28827,7 +28827,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9303192932681646
+    "rescue": 0.9303192932681646
    },
    {
     "model": "mixtral",
@@ -28837,7 +28837,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.9925685400925855
+    "rescue": 0.9925685400925855
    },
    {
     "model": "mixtral",
@@ -28847,7 +28847,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9955661381282429
+    "rescue": 0.9955661381282429
    },
    {
     "model": "mixtral",
@@ -28857,7 +28857,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.9910155512773464
+    "rescue": 0.9910155512773464
    },
    {
     "model": "mixtral",
@@ -28867,7 +28867,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9957501054722717
+    "rescue": 0.9957501054722717
    },
    {
     "model": "mixtral",
@@ -28877,7 +28877,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.18252171059939776
+    "rescue": 0.18252171059939776
    },
    {
     "model": "mixtral",
@@ -28887,7 +28887,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.5396188185796826
+    "rescue": 0.5396188185796826
    },
    {
     "model": "mixtral",
@@ -28897,7 +28897,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.47516655377917477
+    "rescue": 0.47516655377917477
    },
    {
     "model": "mixtral",
@@ -28907,7 +28907,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.8999646447045069
+    "rescue": 0.8999646447045069
    },
    {
     "model": "mixtral",
@@ -28917,7 +28917,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.9895294843227657
+    "rescue": 0.9895294843227657
    },
    {
     "model": "mixtral",
@@ -28927,7 +28927,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.996883979450084
+    "rescue": 0.996883979450084
    },
    {
     "model": "mixtral",
@@ -28937,7 +28937,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.9895632188972403
+    "rescue": 0.9895632188972403
    },
    {
     "model": "mixtral",
@@ -28947,7 +28947,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.9948799182938012
+    "rescue": 0.9948799182938012
    },
    {
     "model": "mixtral",
@@ -28957,7 +28957,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.1680421572076802
+    "rescue": 0.1680421572076802
    },
    {
     "model": "mixtral",
@@ -28967,7 +28967,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.5172687059967057
+    "rescue": 0.5172687059967057
    },
    {
     "model": "mixtral",
@@ -28977,7 +28977,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 128,
-    "faithfulness": 0.2523405731262952
+    "rescue": 0.2523405731262952
    },
    {
     "model": "mixtral",
@@ -28987,7 +28987,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 108,
-    "faithfulness": 0.27639791557930815
+    "rescue": 0.27639791557930815
    },
    {
     "model": "mixtral",
@@ -28997,7 +28997,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.4815873174469493
+    "rescue": 0.4815873174469493
    },
    {
     "model": "mixtral",
@@ -29007,7 +29007,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.9276868949034812
+    "rescue": 0.9276868949034812
    },
    {
     "model": "mixtral",
@@ -29017,7 +29017,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.9901830865931825
+    "rescue": 0.9901830865931825
    },
    {
     "model": "mixtral",
@@ -29027,7 +29027,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.9963405242638099
+    "rescue": 0.9963405242638099
    },
    {
     "model": "mixtral",
@@ -29037,7 +29037,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.9898702524948091
+    "rescue": 0.9898702524948091
    },
    {
     "model": "mixtral",
@@ -29047,7 +29047,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.9950566451178748
+    "rescue": 0.9950566451178748
    },
    {
     "model": "mixtral",
@@ -29057,7 +29057,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.1812447953457653
+    "rescue": 0.1812447953457653
    },
    {
     "model": "mixtral",
@@ -29067,7 +29067,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.5527258136092323
+    "rescue": 0.5527258136092323
    },
    {
     "model": "mixtral",
@@ -29077,7 +29077,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.4848609008924136
+    "rescue": 0.4848609008924136
    },
    {
     "model": "mixtral",
@@ -29087,7 +29087,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.9001293078466022
+    "rescue": 0.9001293078466022
    },
    {
     "model": "mixtral",
@@ -29097,7 +29097,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.9925811060947182
+    "rescue": 0.9925811060947182
    },
    {
     "model": "mixtral",
@@ -29107,7 +29107,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.9959326323440568
+    "rescue": 0.9959326323440568
    },
    {
     "model": "mixtral",
@@ -29117,7 +29117,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.9910291603098943
+    "rescue": 0.9910291603098943
    },
    {
     "model": "mixtral",
@@ -29127,7 +29127,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.9957686113049485
+    "rescue": 0.9957686113049485
    },
    {
     "model": "mixtral",
@@ -29137,7 +29137,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.1681510674737676
+    "rescue": 0.1681510674737676
    },
    {
     "model": "mixtral",
@@ -29147,7 +29147,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.4958694863756927
+    "rescue": 0.4958694863756927
    },
    {
     "model": "mixtral",
@@ -29157,7 +29157,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 121,
-    "faithfulness": 0.26369970039255364
+    "rescue": 0.26369970039255364
    },
    {
     "model": "mixtral",
@@ -29167,7 +29167,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 115,
-    "faithfulness": 0.25873315400118785
+    "rescue": 0.25873315400118785
    },
    {
     "model": "mixtral",
@@ -29177,7 +29177,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 53,
-    "faithfulness": 0.4826614911222067
+    "rescue": 0.4826614911222067
    },
    {
     "model": "mixtral",
@@ -29187,7 +29187,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 53,
-    "faithfulness": 0.9272672712232576
+    "rescue": 0.9272672712232576
    },
    {
     "model": "mixtral",
@@ -29197,7 +29197,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 53,
-    "faithfulness": 0.9892695936907113
+    "rescue": 0.9892695936907113
    },
    {
     "model": "mixtral",
@@ -29207,7 +29207,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 53,
-    "faithfulness": 0.9953588493616047
+    "rescue": 0.9953588493616047
    },
    {
     "model": "mixtral",
@@ -29217,7 +29217,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 53,
-    "faithfulness": 0.9887744406046507
+    "rescue": 0.9887744406046507
    },
    {
     "model": "mixtral",
@@ -29227,7 +29227,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 53,
-    "faithfulness": 0.994514572811744
+    "rescue": 0.994514572811744
    },
    {
     "model": "mixtral",
@@ -29237,7 +29237,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 53,
-    "faithfulness": 0.18232852141640754
+    "rescue": 0.18232852141640754
    },
    {
     "model": "mixtral",
@@ -29247,7 +29247,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 53,
-    "faithfulness": 0.5510873898209555
+    "rescue": 0.5510873898209555
    },
    {
     "model": "mixtral",
@@ -29257,7 +29257,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 27,
-    "faithfulness": 0.48343014290105973
+    "rescue": 0.48343014290105973
    },
    {
     "model": "mixtral",
@@ -29267,7 +29267,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 27,
-    "faithfulness": 0.8964973124205209
+    "rescue": 0.8964973124205209
    },
    {
     "model": "mixtral",
@@ -29277,7 +29277,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 27,
-    "faithfulness": 0.9946242525274346
+    "rescue": 0.9946242525274346
    },
    {
     "model": "mixtral",
@@ -29287,7 +29287,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 27,
-    "faithfulness": 0.9976522476913597
+    "rescue": 0.9976522476913597
    },
    {
     "model": "mixtral",
@@ -29297,7 +29297,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 27,
-    "faithfulness": 0.9932061464830318
+    "rescue": 0.9932061464830318
    },
    {
     "model": "mixtral",
@@ -29307,7 +29307,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 27,
-    "faithfulness": 0.9968676319082909
+    "rescue": 0.9968676319082909
    },
    {
     "model": "mixtral",
@@ -29317,7 +29317,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 27,
-    "faithfulness": 0.1640926970619467
+    "rescue": 0.1640926970619467
    },
    {
     "model": "mixtral",
@@ -29327,7 +29327,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 27,
-    "faithfulness": 0.4897807047567263
+    "rescue": 0.4897807047567263
    },
    {
     "model": "mixtral",
@@ -29337,7 +29337,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 119,
-    "faithfulness": 0.2697927517162875
+    "rescue": 0.2697927517162875
    },
    {
     "model": "mixtral",
@@ -29347,7 +29347,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 117,
-    "faithfulness": 0.2585475290260504
+    "rescue": 0.2585475290260504
    },
    {
     "model": "mixtral",
@@ -29357,7 +29357,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.38557550590593864
+    "rescue": 0.38557550590593864
    },
    {
     "model": "mixtral",
@@ -29367,7 +29367,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.9837000157433871
+    "rescue": 0.9837000157433871
    },
    {
     "model": "mixtral",
@@ -29377,7 +29377,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.9744592525441894
+    "rescue": 0.9744592525441894
    },
    {
     "model": "mixtral",
@@ -29387,7 +29387,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.98272935079375
+    "rescue": 0.98272935079375
    },
    {
     "model": "mixtral",
@@ -29397,7 +29397,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.22197940892942597
+    "rescue": 0.22197940892942597
    },
    {
     "model": "mixtral",
@@ -29407,7 +29407,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.4480836205059963
+    "rescue": 0.4480836205059963
    },
    {
     "model": "mixtral",
@@ -29417,7 +29417,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 38,
-    "faithfulness": 0.10996074075994886
+    "rescue": 0.10996074075994886
    },
    {
     "model": "mixtral",
@@ -29427,7 +29427,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 38,
-    "faithfulness": 0.24652624415157737
+    "rescue": 0.24652624415157737
    },
    {
     "model": "mixtral",
@@ -29437,7 +29437,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.3634550665425647
+    "rescue": 0.3634550665425647
    },
    {
     "model": "mixtral",
@@ -29447,7 +29447,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 1.0011759091747485
+    "rescue": 1.0011759091747485
    },
    {
     "model": "mixtral",
@@ -29457,7 +29457,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 1.0018116903737964
+    "rescue": 1.0018116903737964
    },
    {
     "model": "mixtral",
@@ -29467,7 +29467,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.9998353623655907
+    "rescue": 0.9998353623655907
    },
    {
     "model": "mixtral",
@@ -29477,7 +29477,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.19007230281392562
+    "rescue": 0.19007230281392562
    },
    {
     "model": "mixtral",
@@ -29487,7 +29487,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.4155368633069884
+    "rescue": 0.4155368633069884
    },
    {
     "model": "mixtral",
@@ -29497,7 +29497,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 42,
-    "faithfulness": 0.10068342613845856
+    "rescue": 0.10068342613845856
    },
    {
     "model": "mixtral",
@@ -29507,7 +29507,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 42,
-    "faithfulness": 0.22074524192657152
+    "rescue": 0.22074524192657152
    },
    {
     "model": "mixtral",
@@ -29517,7 +29517,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 154,
-    "faithfulness": 0.3233853481732181
+    "rescue": 0.3233853481732181
    },
    {
     "model": "mixtral",
@@ -29527,7 +29527,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 146,
-    "faithfulness": 0.31647233188923796
+    "rescue": 0.31647233188923796
    },
    {
     "model": "mixtral",
@@ -29537,7 +29537,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.3627655222398351
+    "rescue": 0.3627655222398351
    },
    {
     "model": "mixtral",
@@ -29547,7 +29547,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.9934268156162367
+    "rescue": 0.9934268156162367
    },
    {
     "model": "mixtral",
@@ -29557,7 +29557,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.989336598437388
+    "rescue": 0.989336598437388
    },
    {
     "model": "mixtral",
@@ -29567,7 +29567,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.9923115335141217
+    "rescue": 0.9923115335141217
    },
    {
     "model": "mixtral",
@@ -29577,7 +29577,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.18344818641885927
+    "rescue": 0.18344818641885927
    },
    {
     "model": "mixtral",
@@ -29587,7 +29587,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.4153992889437924
+    "rescue": 0.4153992889437924
    },
    {
     "model": "mixtral",
@@ -29597,7 +29597,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 47,
-    "faithfulness": 0.09864152375270233
+    "rescue": 0.09864152375270233
    },
    {
     "model": "mixtral",
@@ -29607,7 +29607,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 47,
-    "faithfulness": 0.21880527867933258
+    "rescue": 0.21880527867933258
    },
    {
     "model": "mixtral",
@@ -29617,7 +29617,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.3896920468187142
+    "rescue": 0.3896920468187142
    },
    {
     "model": "mixtral",
@@ -29627,7 +29627,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.9919251807824836
+    "rescue": 0.9919251807824836
    },
    {
     "model": "mixtral",
@@ -29637,7 +29637,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.9878124998318784
+    "rescue": 0.9878124998318784
    },
    {
     "model": "mixtral",
@@ -29647,7 +29647,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.9906956635501644
+    "rescue": 0.9906956635501644
    },
    {
     "model": "mixtral",
@@ -29657,7 +29657,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.2357075431368267
+    "rescue": 0.2357075431368267
    },
    {
     "model": "mixtral",
@@ -29667,7 +29667,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.4529268621082121
+    "rescue": 0.4529268621082121
    },
    {
     "model": "mixtral",
@@ -29677,7 +29677,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 33,
-    "faithfulness": 0.11411268519890745
+    "rescue": 0.11411268519890745
    },
    {
     "model": "mixtral",
@@ -29687,7 +29687,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 33,
-    "faithfulness": 0.2528964762794232
+    "rescue": 0.2528964762794232
    },
    {
     "model": "mixtral",
@@ -29697,7 +29697,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 151,
-    "faithfulness": 0.30603815029879244
+    "rescue": 0.30603815029879244
    },
    {
     "model": "mixtral",
@@ -29707,7 +29707,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 149,
-    "faithfulness": 0.3267856073707046
+    "rescue": 0.3267856073707046
    },
    {
     "model": "mixtral",
@@ -29717,7 +29717,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.38403876351111693
+    "rescue": 0.38403876351111693
    },
    {
     "model": "mixtral",
@@ -29727,7 +29727,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9958634690723507
+    "rescue": 0.9958634690723507
    },
    {
     "model": "mixtral",
@@ -29737,7 +29737,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.9908340673330219
+    "rescue": 0.9908340673330219
    },
    {
     "model": "mixtral",
@@ -29747,7 +29747,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.993946339299804
+    "rescue": 0.993946339299804
    },
    {
     "model": "mixtral",
@@ -29757,7 +29757,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.2076569849373187
+    "rescue": 0.2076569849373187
    },
    {
     "model": "mixtral",
@@ -29767,7 +29767,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.4413394722498053
+    "rescue": 0.4413394722498053
    },
    {
     "model": "mixtral",
@@ -29777,7 +29777,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.10911060554167334
+    "rescue": 0.10911060554167334
    },
    {
     "model": "mixtral",
@@ -29787,7 +29787,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.23721336731278395
+    "rescue": 0.23721336731278395
    },
    {
     "model": "mixtral",
@@ -29797,7 +29797,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.3615963125558575
+    "rescue": 0.3615963125558575
    },
    {
     "model": "mixtral",
@@ -29807,7 +29807,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.9889660085401862
+    "rescue": 0.9889660085401862
    },
    {
     "model": "mixtral",
@@ -29817,7 +29817,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.9860278613475232
+    "rescue": 0.9860278613475232
    },
    {
     "model": "mixtral",
@@ -29827,7 +29827,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.9887446403576458
+    "rescue": 0.9887446403576458
    },
    {
     "model": "mixtral",
@@ -29837,7 +29837,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.20251419913076615
+    "rescue": 0.20251419913076615
    },
    {
     "model": "mixtral",
@@ -29847,7 +29847,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.418402424798682
+    "rescue": 0.418402424798682
    },
    {
     "model": "mixtral",
@@ -29857,7 +29857,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.10016073951958053
+    "rescue": 0.10016073951958053
    },
    {
     "model": "mixtral",
@@ -29867,7 +29867,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.22797545272174885
+    "rescue": 0.22797545272174885
    },
    {
     "model": "mixtral",
@@ -29877,7 +29877,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.31399946619951646
+    "rescue": 0.31399946619951646
    },
    {
     "model": "mixtral",
@@ -29887,7 +29887,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3261795810905912
+    "rescue": 0.3261795810905912
    },
    {
     "model": "mixtral",
@@ -29897,7 +29897,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.38597808331491573
+    "rescue": 0.38597808331491573
    },
    {
     "model": "mixtral",
@@ -29907,7 +29907,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.9957971936063753
+    "rescue": 0.9957971936063753
    },
    {
     "model": "mixtral",
@@ -29917,7 +29917,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.9913660376911897
+    "rescue": 0.9913660376911897
    },
    {
     "model": "mixtral",
@@ -29927,7 +29927,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.9946145311720095
+    "rescue": 0.9946145311720095
    },
    {
     "model": "mixtral",
@@ -29937,7 +29937,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.20718611600508263
+    "rescue": 0.20718611600508263
    },
    {
     "model": "mixtral",
@@ -29947,7 +29947,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.4417531168852373
+    "rescue": 0.4417531168852373
    },
    {
     "model": "mixtral",
@@ -29957,7 +29957,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 46,
-    "faithfulness": 0.1085445758553103
+    "rescue": 0.1085445758553103
    },
    {
     "model": "mixtral",
@@ -29967,7 +29967,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 46,
-    "faithfulness": 0.23716211211903987
+    "rescue": 0.23716211211903987
    },
    {
     "model": "mixtral",
@@ -29977,7 +29977,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.3569041960002785
+    "rescue": 0.3569041960002785
    },
    {
     "model": "mixtral",
@@ -29987,7 +29987,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.9884774383431839
+    "rescue": 0.9884774383431839
    },
    {
     "model": "mixtral",
@@ -29997,7 +29997,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.9848550718625216
+    "rescue": 0.9848550718625216
    },
    {
     "model": "mixtral",
@@ -30007,7 +30007,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.9873422512237657
+    "rescue": 0.9873422512237657
    },
    {
     "model": "mixtral",
@@ -30017,7 +30017,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.20275667412964607
+    "rescue": 0.20275667412964607
    },
    {
     "model": "mixtral",
@@ -30027,7 +30027,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.41586490716205926
+    "rescue": 0.41586490716205926
    },
    {
     "model": "mixtral",
@@ -30037,7 +30037,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 34,
-    "faithfulness": 0.10021788203737221
+    "rescue": 0.10021788203737221
    },
    {
     "model": "mixtral",
@@ -30047,7 +30047,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 34,
-    "faithfulness": 0.22726709969631134
+    "rescue": 0.22726709969631134
    },
    {
     "model": "mixtral",
@@ -30057,7 +30057,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3202705786081687
+    "rescue": 0.3202705786081687
    },
    {
     "model": "mixtral",
@@ -30067,7 +30067,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3172120923272287
+    "rescue": 0.3172120923272287
    },
    {
     "model": "mixtral",
@@ -30077,7 +30077,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.2705037417352823
+    "rescue": 0.2705037417352823
    },
    {
     "model": "mixtral",
@@ -30087,7 +30087,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9539156321159205
+    "rescue": 0.9539156321159205
    },
    {
     "model": "mixtral",
@@ -30097,7 +30097,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9316251605779863
+    "rescue": 0.9316251605779863
    },
    {
     "model": "mixtral",
@@ -30107,7 +30107,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9543250843269482
+    "rescue": 0.9543250843269482
    },
    {
     "model": "mixtral",
@@ -30117,7 +30117,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.1746078227741998
+    "rescue": 0.1746078227741998
    },
    {
     "model": "mixtral",
@@ -30127,7 +30127,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.3792557124519186
+    "rescue": 0.3792557124519186
    },
    {
     "model": "mixtral",
@@ -30137,7 +30137,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.09065794239448406
+    "rescue": 0.09065794239448406
    },
    {
     "model": "mixtral",
@@ -30147,7 +30147,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.2517897652351709
+    "rescue": 0.2517897652351709
    },
    {
     "model": "mixtral",
@@ -30157,7 +30157,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.26304890403069864
+    "rescue": 0.26304890403069864
    },
    {
     "model": "mixtral",
@@ -30167,7 +30167,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9517105465517892
+    "rescue": 0.9517105465517892
    },
    {
     "model": "mixtral",
@@ -30177,7 +30177,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9318832578451901
+    "rescue": 0.9318832578451901
    },
    {
     "model": "mixtral",
@@ -30187,7 +30187,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9529235867470586
+    "rescue": 0.9529235867470586
    },
    {
     "model": "mixtral",
@@ -30197,7 +30197,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.15694406352509002
+    "rescue": 0.15694406352509002
    },
    {
     "model": "mixtral",
@@ -30207,7 +30207,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.36163843928031497
+    "rescue": 0.36163843928031497
    },
    {
     "model": "mixtral",
@@ -30217,7 +30217,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.08541219195262706
+    "rescue": 0.08541219195262706
    },
    {
     "model": "mixtral",
@@ -30227,7 +30227,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.22275700981859503
+    "rescue": 0.22275700981859503
    },
    {
     "model": "mixtral",
@@ -30237,7 +30237,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 151,
-    "faithfulness": 0.33050516897488974
+    "rescue": 0.33050516897488974
    },
    {
     "model": "mixtral",
@@ -30247,7 +30247,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 149,
-    "faithfulness": 0.3193318440591539
+    "rescue": 0.3193318440591539
    },
    {
     "model": "mixtral",
@@ -30257,7 +30257,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.24236208042715776
+    "rescue": 0.24236208042715776
    },
    {
     "model": "mixtral",
@@ -30267,7 +30267,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.9468450367105825
+    "rescue": 0.9468450367105825
    },
    {
     "model": "mixtral",
@@ -30277,7 +30277,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.9256273705630046
+    "rescue": 0.9256273705630046
    },
    {
     "model": "mixtral",
@@ -30287,7 +30287,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.9454308423303658
+    "rescue": 0.9454308423303658
    },
    {
     "model": "mixtral",
@@ -30297,7 +30297,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.16909436414148155
+    "rescue": 0.16909436414148155
    },
    {
     "model": "mixtral",
@@ -30307,7 +30307,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.3596128212671579
+    "rescue": 0.3596128212671579
    },
    {
     "model": "mixtral",
@@ -30317,7 +30317,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 35,
-    "faithfulness": 0.09023859784716898
+    "rescue": 0.09023859784716898
    },
    {
     "model": "mixtral",
@@ -30327,7 +30327,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 35,
-    "faithfulness": 0.23597745539116022
+    "rescue": 0.23597745539116022
    },
    {
     "model": "mixtral",
@@ -30337,7 +30337,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.2859994805281003
+    "rescue": 0.2859994805281003
    },
    {
     "model": "mixtral",
@@ -30347,7 +30347,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.9575185128108951
+    "rescue": 0.9575185128108951
    },
    {
     "model": "mixtral",
@@ -30357,7 +30357,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.936543121054783
+    "rescue": 0.936543121054783
    },
    {
     "model": "mixtral",
@@ -30367,7 +30367,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.9600574881484224
+    "rescue": 0.9600574881484224
    },
    {
     "model": "mixtral",
@@ -30377,7 +30377,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.1634719665249356
+    "rescue": 0.1634719665249356
    },
    {
     "model": "mixtral",
@@ -30387,7 +30387,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.3792143246946109
+    "rescue": 0.3792143246946109
    },
    {
     "model": "mixtral",
@@ -30397,7 +30397,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 45,
-    "faithfulness": 0.08639793926205477
+    "rescue": 0.08639793926205477
    },
    {
     "model": "mixtral",
@@ -30407,7 +30407,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 45,
-    "faithfulness": 0.2387673458433528
+    "rescue": 0.2387673458433528
    },
    {
     "model": "mixtral",
@@ -30417,7 +30417,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.31635267371284287
+    "rescue": 0.31635267371284287
    },
    {
     "model": "mixtral",
@@ -30427,7 +30427,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3351600794945885
+    "rescue": 0.3351600794945885
    },
    {
     "model": "mixtral",
@@ -30437,7 +30437,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.26638011078284024
+    "rescue": 0.26638011078284024
    },
    {
     "model": "mixtral",
@@ -30447,7 +30447,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.9379105437737036
+    "rescue": 0.9379105437737036
    },
    {
     "model": "mixtral",
@@ -30457,7 +30457,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.9073508627952217
+    "rescue": 0.9073508627952217
    },
    {
     "model": "mixtral",
@@ -30467,7 +30467,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.940726661311381
+    "rescue": 0.940726661311381
    },
    {
     "model": "mixtral",
@@ -30477,7 +30477,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.16200435162444005
+    "rescue": 0.16200435162444005
    },
    {
     "model": "mixtral",
@@ -30487,7 +30487,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.3739604128938996
+    "rescue": 0.3739604128938996
    },
    {
     "model": "mixtral",
@@ -30497,7 +30497,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 32,
-    "faithfulness": 0.0968352785912581
+    "rescue": 0.0968352785912581
    },
    {
     "model": "mixtral",
@@ -30507,7 +30507,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 32,
-    "faithfulness": 0.24330911762628438
+    "rescue": 0.24330911762628438
    },
    {
     "model": "mixtral",
@@ -30517,7 +30517,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.2671129052900268
+    "rescue": 0.2671129052900268
    },
    {
     "model": "mixtral",
@@ -30527,7 +30527,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.9614084858870048
+    "rescue": 0.9614084858870048
    },
    {
     "model": "mixtral",
@@ -30537,7 +30537,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.9457728925493739
+    "rescue": 0.9457728925493739
    },
    {
     "model": "mixtral",
@@ -30547,7 +30547,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.9610559687776368
+    "rescue": 0.9610559687776368
    },
    {
     "model": "mixtral",
@@ -30557,7 +30557,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.1682012098703188
+    "rescue": 0.1682012098703188
    },
    {
     "model": "mixtral",
@@ -30567,7 +30567,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.3686856565389866
+    "rescue": 0.3686856565389866
    },
    {
     "model": "mixtral",
@@ -30577,7 +30577,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 48,
-    "faithfulness": 0.0830550003913073
+    "rescue": 0.0830550003913073
    },
    {
     "model": "mixtral",
@@ -30587,7 +30587,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 48,
-    "faithfulness": 0.23422934974109025
+    "rescue": 0.23422934974109025
    },
    {
     "model": "mixtral",
@@ -30597,7 +30597,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3389766063441706
+    "rescue": 0.3389766063441706
    },
    {
     "model": "mixtral",
@@ -30607,7 +30607,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.3148941755107521
+    "rescue": 0.3148941755107521
    },
    {
     "model": "mixtral",
@@ -30617,7 +30617,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.2802388670261203
+    "rescue": 0.2802388670261203
    },
    {
     "model": "mixtral",
@@ -30627,7 +30627,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.9480374080088015
+    "rescue": 0.9480374080088015
    },
    {
     "model": "mixtral",
@@ -30637,7 +30637,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.9184643147658673
+    "rescue": 0.9184643147658673
    },
    {
     "model": "mixtral",
@@ -30647,7 +30647,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.9504437115831598
+    "rescue": 0.9504437115831598
    },
    {
     "model": "mixtral",
@@ -30657,7 +30657,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.1620740014871573
+    "rescue": 0.1620740014871573
    },
    {
     "model": "mixtral",
@@ -30667,7 +30667,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.37949846915505175
+    "rescue": 0.37949846915505175
    },
    {
     "model": "mixtral",
@@ -30677,7 +30677,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 31,
-    "faithfulness": 0.0933416159539115
+    "rescue": 0.0933416159539115
    },
    {
     "model": "mixtral",
@@ -30687,7 +30687,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 31,
-    "faithfulness": 0.2389735466716127
+    "rescue": 0.2389735466716127
    },
    {
     "model": "mixtral",
@@ -30697,7 +30697,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.25913174990689514
+    "rescue": 0.25913174990689514
    },
    {
     "model": "mixtral",
@@ -30707,7 +30707,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.9555958245863068
+    "rescue": 0.9555958245863068
    },
    {
     "model": "mixtral",
@@ -30717,7 +30717,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.9394045787449246
+    "rescue": 0.9394045787449246
    },
    {
     "model": "mixtral",
@@ -30727,7 +30727,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.9554766678517286
+    "rescue": 0.9554766678517286
    },
    {
     "model": "mixtral",
@@ -30737,7 +30737,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.16816631115486472
+    "rescue": 0.16816631115486472
    },
    {
     "model": "mixtral",
@@ -30747,7 +30747,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.36549164519759675
+    "rescue": 0.36549164519759675
    },
    {
     "model": "mixtral",
@@ -30757,7 +30757,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 49,
-    "faithfulness": 0.08505553300341885
+    "rescue": 0.08505553300341885
    },
    {
     "model": "mixtral",
@@ -30767,7 +30767,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 49,
-    "faithfulness": 0.23671872451242543
+    "rescue": 0.23671872451242543
    },
    {
     "model": "mixtral",
@@ -30777,7 +30777,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.33579948151764305
+    "rescue": 0.33579948151764305
    },
    {
     "model": "mixtral",
@@ -30787,7 +30787,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.31403534385902193
+    "rescue": 0.31403534385902193
    },
    {
     "model": "mixtral",
@@ -30797,7 +30797,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.47894317786714835
+    "rescue": 0.47894317786714835
    },
    {
     "model": "mixtral",
@@ -30807,7 +30807,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9060082992779355
+    "rescue": 0.9060082992779355
    },
    {
     "model": "mixtral",
@@ -30817,7 +30817,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9855056460472448
+    "rescue": 0.9855056460472448
    },
    {
     "model": "mixtral",
@@ -30827,7 +30827,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9938914652418365
+    "rescue": 0.9938914652418365
    },
    {
     "model": "mixtral",
@@ -30837,7 +30837,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9860001073344262
+    "rescue": 0.9860001073344262
    },
    {
     "model": "mixtral",
@@ -30847,7 +30847,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9941638666405554
+    "rescue": 0.9941638666405554
    },
    {
     "model": "mixtral",
@@ -30857,7 +30857,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.10455608446286441
+    "rescue": 0.10455608446286441
    },
    {
     "model": "mixtral",
@@ -30867,7 +30867,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.23928383855454838
+    "rescue": 0.23928383855454838
    },
    {
     "model": "mixtral",
@@ -30877,7 +30877,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.48226494025038646
+    "rescue": 0.48226494025038646
    },
    {
     "model": "mixtral",
@@ -30887,7 +30887,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.8722462404795233
+    "rescue": 0.8722462404795233
    },
    {
     "model": "mixtral",
@@ -30897,7 +30897,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9740138427594766
+    "rescue": 0.9740138427594766
    },
    {
     "model": "mixtral",
@@ -30907,7 +30907,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.98759322380401
+    "rescue": 0.98759322380401
    },
    {
     "model": "mixtral",
@@ -30917,7 +30917,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.9806787142601345
+    "rescue": 0.9806787142601345
    },
    {
     "model": "mixtral",
@@ -30927,7 +30927,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.9834262247919886
+    "rescue": 0.9834262247919886
    },
    {
     "model": "mixtral",
@@ -30937,7 +30937,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 40,
-    "faithfulness": 0.09818402739355586
+    "rescue": 0.09818402739355586
    },
    {
     "model": "mixtral",
@@ -30947,7 +30947,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 40,
-    "faithfulness": 0.26539677737162787
+    "rescue": 0.26539677737162787
    },
    {
     "model": "mixtral",
@@ -30957,7 +30957,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 157,
-    "faithfulness": 0.24289954740066055
+    "rescue": 0.24289954740066055
    },
    {
     "model": "mixtral",
@@ -30967,7 +30967,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 143,
-    "faithfulness": 0.24391486625556963
+    "rescue": 0.24391486625556963
    },
    {
     "model": "mixtral",
@@ -30977,7 +30977,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 43,
-    "faithfulness": 0.4925038394641913
+    "rescue": 0.4925038394641913
    },
    {
     "model": "mixtral",
@@ -30987,7 +30987,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 43,
-    "faithfulness": 0.8764277223120488
+    "rescue": 0.8764277223120488
    },
    {
     "model": "mixtral",
@@ -30997,7 +30997,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 43,
-    "faithfulness": 0.9711982842987752
+    "rescue": 0.9711982842987752
    },
    {
     "model": "mixtral",
@@ -31007,7 +31007,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 43,
-    "faithfulness": 0.9861663790114936
+    "rescue": 0.9861663790114936
    },
    {
     "model": "mixtral",
@@ -31017,7 +31017,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 43,
-    "faithfulness": 0.9770876036071816
+    "rescue": 0.9770876036071816
    },
    {
     "model": "mixtral",
@@ -31027,7 +31027,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 43,
-    "faithfulness": 0.9814283552127173
+    "rescue": 0.9814283552127173
    },
    {
     "model": "mixtral",
@@ -31037,7 +31037,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 43,
-    "faithfulness": 0.09942503103904098
+    "rescue": 0.09942503103904098
    },
    {
     "model": "mixtral",
@@ -31047,7 +31047,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 43,
-    "faithfulness": 0.26897205589237316
+    "rescue": 0.26897205589237316
    },
    {
     "model": "mixtral",
@@ -31057,7 +31057,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 37,
-    "faithfulness": 0.46814882054791307
+    "rescue": 0.46814882054791307
    },
    {
     "model": "mixtral",
@@ -31067,7 +31067,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 37,
-    "faithfulness": 0.9033967315530499
+    "rescue": 0.9033967315530499
    },
    {
     "model": "mixtral",
@@ -31077,7 +31077,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 37,
-    "faithfulness": 0.9890151638590029
+    "rescue": 0.9890151638590029
    },
    {
     "model": "mixtral",
@@ -31087,7 +31087,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 37,
-    "faithfulness": 0.9956942666580554
+    "rescue": 0.9956942666580554
    },
    {
     "model": "mixtral",
@@ -31097,7 +31097,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 37,
-    "faithfulness": 0.9899986840916519
+    "rescue": 0.9899986840916519
    },
    {
     "model": "mixtral",
@@ -31107,7 +31107,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 37,
-    "faithfulness": 0.9967863236740382
+    "rescue": 0.9967863236740382
    },
    {
     "model": "mixtral",
@@ -31117,7 +31117,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 37,
-    "faithfulness": 0.10359436595554115
+    "rescue": 0.10359436595554115
    },
    {
     "model": "mixtral",
@@ -31127,7 +31127,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 37,
-    "faithfulness": 0.23423794184054195
+    "rescue": 0.23423794184054195
    },
    {
     "model": "mixtral",
@@ -31137,7 +31137,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.2445776547593359
+    "rescue": 0.2445776547593359
    },
    {
     "model": "mixtral",
@@ -31147,7 +31147,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.24218487817206769
+    "rescue": 0.24218487817206769
    },
    {
     "model": "mixtral",
@@ -31157,7 +31157,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.4830176158061583
+    "rescue": 0.4830176158061583
    },
    {
     "model": "mixtral",
@@ -31167,7 +31167,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.8817769357133993
+    "rescue": 0.8817769357133993
    },
    {
     "model": "mixtral",
@@ -31177,7 +31177,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.9785519110770985
+    "rescue": 0.9785519110770985
    },
    {
     "model": "mixtral",
@@ -31187,7 +31187,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.9896577214166649
+    "rescue": 0.9896577214166649
    },
    {
     "model": "mixtral",
@@ -31197,7 +31197,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.9803767547286131
+    "rescue": 0.9803767547286131
    },
    {
     "model": "mixtral",
@@ -31207,7 +31207,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.9876406647471145
+    "rescue": 0.9876406647471145
    },
    {
     "model": "mixtral",
@@ -31217,7 +31217,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 39,
-    "faithfulness": 0.09944838388695068
+    "rescue": 0.09944838388695068
    },
    {
     "model": "mixtral",
@@ -31227,7 +31227,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 39,
-    "faithfulness": 0.2645843853514503
+    "rescue": 0.2645843853514503
    },
    {
     "model": "mixtral",
@@ -31237,7 +31237,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.47828227020603
+    "rescue": 0.47828227020603
    },
    {
     "model": "mixtral",
@@ -31247,7 +31247,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.8969186299209343
+    "rescue": 0.8969186299209343
    },
    {
     "model": "mixtral",
@@ -31257,7 +31257,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.9812211619434472
+    "rescue": 0.9812211619434472
    },
    {
     "model": "mixtral",
@@ -31267,7 +31267,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.9919321533900716
+    "rescue": 0.9919321533900716
    },
    {
     "model": "mixtral",
@@ -31277,7 +31277,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.9862273236486717
+    "rescue": 0.9862273236486717
    },
    {
     "model": "mixtral",
@@ -31287,7 +31287,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.9901843052188684
+    "rescue": 0.9901843052188684
    },
    {
     "model": "mixtral",
@@ -31297,7 +31297,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 41,
-    "faithfulness": 0.10333223406827675
+    "rescue": 0.10333223406827675
    },
    {
     "model": "mixtral",
@@ -31307,7 +31307,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 41,
-    "faithfulness": 0.24027957123634974
+    "rescue": 0.24027957123634974
    },
    {
     "model": "mixtral",
@@ -31317,7 +31317,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.23542490355834206
+    "rescue": 0.23542490355834206
    },
    {
     "model": "mixtral",
@@ -31327,7 +31327,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 150,
-    "faithfulness": 0.2510696079794017
+    "rescue": 0.2510696079794017
    },
    {
     "model": "mixtral",
@@ -31337,7 +31337,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.4937168661104577
+    "rescue": 0.4937168661104577
    },
    {
     "model": "mixtral",
@@ -31347,7 +31347,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.8857764963942006
+    "rescue": 0.8857764963942006
    },
    {
     "model": "mixtral",
@@ -31357,7 +31357,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.9722655304332396
+    "rescue": 0.9722655304332396
    },
    {
     "model": "mixtral",
@@ -31367,7 +31367,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9874762895018736
+    "rescue": 0.9874762895018736
    },
    {
     "model": "mixtral",
@@ -31377,7 +31377,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.9781398888184354
+    "rescue": 0.9781398888184354
    },
    {
     "model": "mixtral",
@@ -31387,7 +31387,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.9825041828797375
+    "rescue": 0.9825041828797375
    },
    {
     "model": "mixtral",
@@ -31397,7 +31397,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 44,
-    "faithfulness": 0.09553332789698374
+    "rescue": 0.09553332789698374
    },
    {
     "model": "mixtral",
@@ -31407,7 +31407,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 44,
-    "faithfulness": 0.26579889681225954
+    "rescue": 0.26579889681225954
    },
    {
     "model": "mixtral",
@@ -31417,7 +31417,7 @@
     "ranking": "relp",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.46556646635146826
+    "rescue": 0.46556646635146826
    },
    {
     "model": "mixtral",
@@ -31427,7 +31427,7 @@
     "ranking": "relp",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.8940867171242296
+    "rescue": 0.8940867171242296
    },
    {
     "model": "mixtral",
@@ -31437,7 +31437,7 @@
     "ranking": "exact",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.9886795347573273
+    "rescue": 0.9886795347573273
    },
    {
     "model": "mixtral",
@@ -31447,7 +31447,7 @@
     "ranking": "exact",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.9946734529536877
+    "rescue": 0.9946734529536877
    },
    {
     "model": "mixtral",
@@ -31457,7 +31457,7 @@
     "ranking": "lu",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.9894380268788076
+    "rescue": 0.9894380268788076
    },
    {
     "model": "mixtral",
@@ -31467,7 +31467,7 @@
     "ranking": "lu",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.9963196022857753
+    "rescue": 0.9963196022857753
    },
    {
     "model": "mixtral",
@@ -31477,7 +31477,7 @@
     "ranking": "random",
     "K": 5,
     "pairs": 36,
-    "faithfulness": 0.10822958566866925
+    "rescue": 0.10822958566866925
    },
    {
     "model": "mixtral",
@@ -31487,7 +31487,7 @@
     "ranking": "random",
     "K": 20,
     "pairs": 36,
-    "faithfulness": 0.23613579042221278
+    "rescue": 0.23613579042221278
    },
    {
     "model": "mixtral",
@@ -31497,7 +31497,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 154,
-    "faithfulness": 0.22893068509492306
+    "rescue": 0.22893068509492306
    },
    {
     "model": "mixtral",
@@ -31507,7 +31507,7 @@
     "ranking": "discovery per-pair agreement",
     "K": 0,
     "pairs": 146,
-    "faithfulness": 0.2510696079794017
+    "rescue": 0.2510696079794017
    }
   ]
  },
@@ -32687,7 +32687,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 195,
-    "value": 0.0005324178712982075
+    "value": 0.9994675821287018
    },
    {
     "model": "mixtral",
@@ -32695,7 +32695,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 239,
-    "value": 0.0006273730117022369
+    "value": 0.9993726269882978
    },
    {
     "model": "mixtral",
@@ -32703,7 +32703,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 251,
-    "value": 0.0015155373221412138
+    "value": 0.9984844626778588
    },
    {
     "model": "mixtral",
@@ -32711,7 +32711,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 1,
-    "value": 0.05071288324714829
+    "value": 0.9492871167528517
    },
    {
     "model": "mixtral",
@@ -32719,7 +32719,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 2,
-    "value": 0.044033056751887234
+    "value": 0.9559669432481128
    },
    {
     "model": "mixtral",
@@ -32727,7 +32727,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 5,
-    "value": 0.03557781601036783
+    "value": 0.9644221839896322
    },
    {
     "model": "mixtral",
@@ -32735,7 +32735,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 10,
-    "value": 0.026258242553649197
+    "value": 0.9737417574463508
    },
    {
     "model": "mixtral",
@@ -32743,7 +32743,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 20,
-    "value": 0.014429002208016545
+    "value": 0.9855709977919834
    },
    {
     "model": "mixtral",
@@ -32751,7 +32751,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 50,
-    "value": 0.0022502936036735977
+    "value": 0.9977497063963264
    },
    {
     "model": "mixtral",
@@ -32759,7 +32759,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 100,
-    "value": 0.001163851066298044
+    "value": 0.998836148933702
    },
    {
     "model": "mixtral",
@@ -32767,7 +32767,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 1,
-    "value": 0.8673362952747463
+    "value": 0.13266370472525366
    },
    {
     "model": "mixtral",
@@ -32775,7 +32775,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 2,
-    "value": 0.7543866100079566
+    "value": 0.2456133899920434
    },
    {
     "model": "mixtral",
@@ -32783,7 +32783,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 5,
-    "value": 0.6022694831581641
+    "value": 0.39773051684183586
    },
    {
     "model": "mixtral",
@@ -32791,7 +32791,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 10,
-    "value": 0.4249592576411272
+    "value": 0.5750407423588728
    },
    {
     "model": "mixtral",
@@ -32799,7 +32799,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 20,
-    "value": 0.2205917468512418
+    "value": 0.7794082531487582
    },
    {
     "model": "mixtral",
@@ -32807,7 +32807,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 50,
-    "value": 0.07190860948656416
+    "value": 0.9280913905134358
    },
    {
     "model": "mixtral",
@@ -32815,7 +32815,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 100,
-    "value": 0.017420880127485217
+    "value": 0.9825791198725148
    },
    {
     "model": "mixtral",
@@ -32823,7 +32823,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 1,
-    "value": 0.865281584095597
+    "value": 0.1347184159044031
    },
    {
     "model": "mixtral",
@@ -32831,7 +32831,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 2,
-    "value": 0.7543492571777404
+    "value": 0.24565074282225968
    },
    {
     "model": "mixtral",
@@ -32839,7 +32839,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 5,
-    "value": 0.6030963015472512
+    "value": 0.3969036984527488
    },
    {
     "model": "mixtral",
@@ -32847,7 +32847,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 10,
-    "value": 0.4298724900074654
+    "value": 0.5701275099925346
    },
    {
     "model": "mixtral",
@@ -32855,7 +32855,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 20,
-    "value": 0.15338261168006745
+    "value": 0.8466173883199326
    },
    {
     "model": "mixtral",
@@ -32863,7 +32863,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 50,
-    "value": 0.03805997254724611
+    "value": 0.9619400274527539
    },
    {
     "model": "mixtral",
@@ -32871,7 +32871,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 100,
-    "value": 0.011246743405326276
+    "value": 0.9887532565946737
    },
    {
     "model": "mixtral",
@@ -32879,7 +32879,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 1,
-    "value": 0.47396084381753567
+    "value": 0.5260391561824643
    },
    {
     "model": "mixtral",
@@ -32887,7 +32887,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 2,
-    "value": 0.43532648856658857
+    "value": 0.5646735114334114
    },
    {
     "model": "mixtral",
@@ -32895,7 +32895,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 5,
-    "value": 0.41842232701623044
+    "value": 0.5815776729837696
    },
    {
     "model": "mixtral",
@@ -32903,7 +32903,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 10,
-    "value": 0.35496926602318046
+    "value": 0.6450307339768195
    },
    {
     "model": "mixtral",
@@ -32911,7 +32911,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 20,
-    "value": 0.30577095834181356
+    "value": 0.6942290416581864
    },
    {
     "model": "mixtral",
@@ -32919,7 +32919,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 50,
-    "value": 0.20315747555235814
+    "value": 0.7968425244476418
    },
    {
     "model": "mixtral",
@@ -32927,7 +32927,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 100,
-    "value": 0.07407537715943704
+    "value": 0.925924622840563
    },
    {
     "model": "mixtral",
@@ -32935,7 +32935,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 1,
-    "value": 0.018134405449618918
+    "value": 0.9818655945503811
    },
    {
     "model": "mixtral",
@@ -32943,7 +32943,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 2,
-    "value": 0.012796032118570777
+    "value": 0.9872039678814293
    },
    {
     "model": "mixtral",
@@ -32951,7 +32951,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 5,
-    "value": 0.006415621969313001
+    "value": 0.993584378030687
    },
    {
     "model": "mixtral",
@@ -32959,7 +32959,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 10,
-    "value": 0.003711882667328581
+    "value": 0.9962881173326714
    },
    {
     "model": "mixtral",
@@ -32967,7 +32967,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 20,
-    "value": 0.0014408639072991392
+    "value": 0.9985591360927009
    },
    {
     "model": "mixtral",
@@ -32975,7 +32975,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 50,
-    "value": 0.001079533152351153
+    "value": 0.9989204668476488
    },
    {
     "model": "mixtral",
@@ -32983,7 +32983,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 100,
-    "value": 0.0007698663898948466
+    "value": 0.9992301336101052
    },
    {
     "model": "mixtral",
@@ -32991,7 +32991,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 1,
-    "value": 0.8430566880842844
+    "value": 0.15694331191571564
    },
    {
     "model": "mixtral",
@@ -32999,7 +32999,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 2,
-    "value": 0.7167308277152816
+    "value": 0.2832691722847184
    },
    {
     "model": "mixtral",
@@ -33007,7 +33007,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 5,
-    "value": 0.2543673588207151
+    "value": 0.7456326411792848
    },
    {
     "model": "mixtral",
@@ -33015,7 +33015,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 10,
-    "value": 0.006212345565167365
+    "value": 0.9937876544348326
    },
    {
     "model": "mixtral",
@@ -33023,7 +33023,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 20,
-    "value": 0.0028553204873531524
+    "value": 0.9971446795126468
    },
    {
     "model": "mixtral",
@@ -33031,7 +33031,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 50,
-    "value": 0.0014277646421056445
+    "value": 0.9985722353578943
    },
    {
     "model": "mixtral",
@@ -33039,7 +33039,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 100,
-    "value": 0.0007249194835346473
+    "value": 0.9992750805164654
    },
    {
     "model": "mixtral",
@@ -33047,7 +33047,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 1,
-    "value": 0.9858085893723224
+    "value": 0.014191410627677705
    },
    {
     "model": "mixtral",
@@ -33055,7 +33055,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 2,
-    "value": 0.9562393663123426
+    "value": 0.04376063368765739
    },
    {
     "model": "mixtral",
@@ -33063,7 +33063,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 5,
-    "value": 0.8773274178475234
+    "value": 0.12267258215247652
    },
    {
     "model": "mixtral",
@@ -33071,7 +33071,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 10,
-    "value": 0.8280497227871372
+    "value": 0.17195027721286282
    },
    {
     "model": "mixtral",
@@ -33079,7 +33079,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 20,
-    "value": 0.6157084336319968
+    "value": 0.38429156636800316
    },
    {
     "model": "mixtral",
@@ -33087,7 +33087,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 50,
-    "value": 0.40907641169721326
+    "value": 0.5909235883027867
    },
    {
     "model": "mixtral",
@@ -33095,7 +33095,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 100,
-    "value": 0.03494696084765115
+    "value": 0.9650530391523487
    },
    {
     "model": "mixtral",
@@ -33103,7 +33103,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 1,
-    "value": 0.8651538672080619
+    "value": 0.13484613279193808
    },
    {
     "model": "mixtral",
@@ -33111,7 +33111,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 2,
-    "value": 0.7541123055097994
+    "value": 0.2458876944902007
    },
    {
     "model": "mixtral",
@@ -33119,7 +33119,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 5,
-    "value": 0.6023727234831039
+    "value": 0.3976272765168961
    },
    {
     "model": "mixtral",
@@ -33127,7 +33127,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 10,
-    "value": 0.43087083487249456
+    "value": 0.5691291651275054
    },
    {
     "model": "mixtral",
@@ -33135,7 +33135,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 20,
-    "value": 0.06357273050626547
+    "value": 0.9364272694937346
    },
    {
     "model": "mixtral",
@@ -33143,7 +33143,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 50,
-    "value": 0.0029003934911938922
+    "value": 0.9970996065088061
    },
    {
     "model": "mixtral",
@@ -33151,7 +33151,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 100,
-    "value": 0.0014815556660426055
+    "value": 0.9985184443339574
    },
    {
     "model": "mixtral",
@@ -33159,7 +33159,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 1,
-    "value": 0.8652147200762441
+    "value": 0.13478527992375586
    },
    {
     "model": "mixtral",
@@ -33167,7 +33167,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 2,
-    "value": 0.7544036355278255
+    "value": 0.24559636447217448
    },
    {
     "model": "mixtral",
@@ -33175,7 +33175,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 5,
-    "value": 0.6026849591947361
+    "value": 0.397315040805264
    },
    {
     "model": "mixtral",
@@ -33183,7 +33183,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 10,
-    "value": 0.4391602447013443
+    "value": 0.5608397552986557
    },
    {
     "model": "mixtral",
@@ -33191,7 +33191,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 20,
-    "value": 0.06586832210312354
+    "value": 0.9341316778968765
    },
    {
     "model": "mixtral",
@@ -33199,7 +33199,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 50,
-    "value": 0.003149557494579902
+    "value": 0.9968504425054201
    },
    {
     "model": "mixtral",
@@ -33207,7 +33207,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 100,
-    "value": 0.0013189550176121168
+    "value": 0.9986810449823879
    },
    {
     "model": "mixtral",
@@ -33215,7 +33215,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 1,
-    "value": 0.8654941897640714
+    "value": 0.13450581023592856
    },
    {
     "model": "mixtral",
@@ -33223,7 +33223,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 2,
-    "value": 0.7538915525163522
+    "value": 0.2461084474836478
    },
    {
     "model": "mixtral",
@@ -33231,7 +33231,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 5,
-    "value": 0.6016465440921762
+    "value": 0.3983534559078238
    },
    {
     "model": "mixtral",
@@ -33239,7 +33239,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 10,
-    "value": 0.4306507314652287
+    "value": 0.5693492685347713
    },
    {
     "model": "mixtral",
@@ -33247,7 +33247,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 20,
-    "value": 0.044936868195839585
+    "value": 0.9550631318041605
    },
    {
     "model": "mixtral",
@@ -33255,7 +33255,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 50,
-    "value": 0.0031244697899454887
+    "value": 0.9968755302100545
    },
    {
     "model": "mixtral",
@@ -33263,7 +33263,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 100,
-    "value": 0.0012786751511917327
+    "value": 0.9987213248488083
    },
    {
     "model": "mixtral",
@@ -35343,7 +35343,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 228,
-    "value": 0.00024247148890754744
+    "value": 0.9997575285110925
    },
    {
     "model": "mixtral",
@@ -35351,7 +35351,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 642,
-    "value": 0.0008479407318812138
+    "value": 0.9991520592681188
    },
    {
     "model": "mixtral",
@@ -35359,7 +35359,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 742,
-    "value": 0.0019103864586089703
+    "value": 0.998089613541391
    },
    {
     "model": "mixtral",
@@ -35367,7 +35367,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 872,
-    "value": 0.0017527005949451446
+    "value": 0.9982472994050549
    },
    {
     "model": "mixtral",
@@ -35375,7 +35375,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 1,
-    "value": 0.04957436179445254
+    "value": 0.9504256382055475
    },
    {
     "model": "mixtral",
@@ -35383,7 +35383,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 2,
-    "value": 0.04264149394620623
+    "value": 0.9573585060537938
    },
    {
     "model": "mixtral",
@@ -35391,7 +35391,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 5,
-    "value": 0.034740523522681394
+    "value": 0.9652594764773186
    },
    {
     "model": "mixtral",
@@ -35399,7 +35399,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 10,
-    "value": 0.02639715984946428
+    "value": 0.9736028401505357
    },
    {
     "model": "mixtral",
@@ -35407,7 +35407,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 20,
-    "value": 0.015455535967017264
+    "value": 0.9845444640329828
    },
    {
     "model": "mixtral",
@@ -35415,7 +35415,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 50,
-    "value": 0.003164989698588444
+    "value": 0.9968350103014115
    },
    {
     "model": "mixtral",
@@ -35423,7 +35423,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 100,
-    "value": 0.0014544424343349294
+    "value": 0.9985455575656651
    },
    {
     "model": "mixtral",
@@ -35431,7 +35431,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 200,
-    "value": 0.0008202570129086095
+    "value": 0.9991797429870914
    },
    {
     "model": "mixtral",
@@ -35439,7 +35439,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 500,
-    "value": 0.0012504049825018404
+    "value": 0.9987495950174982
    },
    {
     "model": "mixtral",
@@ -35447,7 +35447,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 1,
-    "value": 0.8680899745469106
+    "value": 0.13191002545308939
    },
    {
     "model": "mixtral",
@@ -35455,7 +35455,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 2,
-    "value": 0.7549662766895405
+    "value": 0.24503372331045944
    },
    {
     "model": "mixtral",
@@ -35463,7 +35463,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 5,
-    "value": 0.6052253417013069
+    "value": 0.39477465829869307
    },
    {
     "model": "mixtral",
@@ -35471,7 +35471,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 10,
-    "value": 0.4507942384466697
+    "value": 0.5492057615533303
    },
    {
     "model": "mixtral",
@@ -35479,7 +35479,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 20,
-    "value": 0.26568965321386306
+    "value": 0.7343103467861369
    },
    {
     "model": "mixtral",
@@ -35487,7 +35487,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 50,
-    "value": 0.09678193582901651
+    "value": 0.9032180641709835
    },
    {
     "model": "mixtral",
@@ -35495,7 +35495,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 100,
-    "value": 0.051592887804735754
+    "value": 0.9484071121952642
    },
    {
     "model": "mixtral",
@@ -35503,7 +35503,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 200,
-    "value": 0.019099882961340908
+    "value": 0.9809001170386591
    },
    {
     "model": "mixtral",
@@ -35511,7 +35511,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 500,
-    "value": 0.00824771062038491
+    "value": 0.991752289379615
    },
    {
     "model": "mixtral",
@@ -35519,7 +35519,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 1,
-    "value": 0.865795677830258
+    "value": 0.13420432216974199
    },
    {
     "model": "mixtral",
@@ -35527,7 +35527,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 2,
-    "value": 0.754982434851339
+    "value": 0.24501756514866102
    },
    {
     "model": "mixtral",
@@ -35535,7 +35535,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 5,
-    "value": 0.6050104247546768
+    "value": 0.3949895752453232
    },
    {
     "model": "mixtral",
@@ -35543,7 +35543,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 10,
-    "value": 0.4571249161313557
+    "value": 0.5428750838686442
    },
    {
     "model": "mixtral",
@@ -35551,7 +35551,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 20,
-    "value": 0.18307468293286663
+    "value": 0.8169253170671333
    },
    {
     "model": "mixtral",
@@ -35559,7 +35559,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 50,
-    "value": 0.059753852978450345
+    "value": 0.9402461470215496
    },
    {
     "model": "mixtral",
@@ -35567,7 +35567,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 100,
-    "value": 0.022447072213469532
+    "value": 0.9775529277865305
    },
    {
     "model": "mixtral",
@@ -35575,7 +35575,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 200,
-    "value": 0.010806616520103701
+    "value": 0.9891933834798963
    },
    {
     "model": "mixtral",
@@ -35583,7 +35583,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 500,
-    "value": 0.0014148573317523578
+    "value": 0.9985851426682476
    },
    {
     "model": "mixtral",
@@ -35591,7 +35591,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 1,
-    "value": 0.4734587918641933
+    "value": 0.5265412081358067
    },
    {
     "model": "mixtral",
@@ -35599,7 +35599,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 2,
-    "value": 0.43572475840399877
+    "value": 0.5642752415960013
    },
    {
     "model": "mixtral",
@@ -35607,7 +35607,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 5,
-    "value": 0.41873795561544325
+    "value": 0.5812620443845568
    },
    {
     "model": "mixtral",
@@ -35615,7 +35615,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 10,
-    "value": 0.3556382785772061
+    "value": 0.6443617214227939
    },
    {
     "model": "mixtral",
@@ -35623,7 +35623,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 20,
-    "value": 0.30820232262610725
+    "value": 0.6917976773738927
    },
    {
     "model": "mixtral",
@@ -35631,7 +35631,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 50,
-    "value": 0.22186648438752352
+    "value": 0.7781335156124765
    },
    {
     "model": "mixtral",
@@ -35639,7 +35639,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 100,
-    "value": 0.17676647806987877
+    "value": 0.8232335219301212
    },
    {
     "model": "mixtral",
@@ -35647,7 +35647,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 200,
-    "value": 0.33659869890580696
+    "value": 0.663401301094193
    },
    {
     "model": "mixtral",
@@ -35655,7 +35655,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 1,
-    "value": 0.018731114647602576
+    "value": 0.9812688853523974
    },
    {
     "model": "mixtral",
@@ -35663,7 +35663,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 2,
-    "value": 0.012366292431566117
+    "value": 0.9876337075684338
    },
    {
     "model": "mixtral",
@@ -35671,7 +35671,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 5,
-    "value": 0.008621274488014918
+    "value": 0.991378725511985
    },
    {
     "model": "mixtral",
@@ -35679,7 +35679,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 10,
-    "value": 0.004425763397540861
+    "value": 0.9955742366024591
    },
    {
     "model": "mixtral",
@@ -35687,7 +35687,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 20,
-    "value": 0.0029819012026972014
+    "value": 0.9970180987973027
    },
    {
     "model": "mixtral",
@@ -35695,7 +35695,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 50,
-    "value": 0.0008251645404351304
+    "value": 0.9991748354595649
    },
    {
     "model": "mixtral",
@@ -35703,7 +35703,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 100,
-    "value": 0.0007862434726311207
+    "value": 0.9992137565273689
    },
    {
     "model": "mixtral",
@@ -35711,7 +35711,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 200,
-    "value": 0.00035348123118023045
+    "value": 0.9996465187688197
    },
    {
     "model": "mixtral",
@@ -35719,7 +35719,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 500,
-    "value": 0.0016213668081042076
+    "value": 0.9983786331918958
    },
    {
     "model": "mixtral",
@@ -35727,7 +35727,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 1,
-    "value": 0.8433989011893444
+    "value": 0.1566010988106557
    },
    {
     "model": "mixtral",
@@ -35735,7 +35735,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 2,
-    "value": 0.7170538324187345
+    "value": 0.28294616758126545
    },
    {
     "model": "mixtral",
@@ -35743,7 +35743,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 5,
-    "value": 0.2545853041201116
+    "value": 0.7454146958798884
    },
    {
     "model": "mixtral",
@@ -35751,7 +35751,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 10,
-    "value": 0.006880210544255139
+    "value": 0.9931197894557449
    },
    {
     "model": "mixtral",
@@ -35759,7 +35759,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 20,
-    "value": 0.0035897564961785977
+    "value": 0.9964102435038213
    },
    {
     "model": "mixtral",
@@ -35767,7 +35767,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 50,
-    "value": 0.0003146823139265065
+    "value": 0.9996853176860735
    },
    {
     "model": "mixtral",
@@ -35775,7 +35775,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 100,
-    "value": 0.00067858962328049
+    "value": 0.9993214103767195
    },
    {
     "model": "mixtral",
@@ -35783,7 +35783,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 200,
-    "value": 0.0008469682937735645
+    "value": 0.9991530317062265
    },
    {
     "model": "mixtral",
@@ -35791,7 +35791,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 500,
-    "value": 0.0017110815137177937
+    "value": 0.9982889184862822
    },
    {
     "model": "mixtral",
@@ -35799,7 +35799,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 1,
-    "value": 0.966055971235594
+    "value": 0.033944028764406144
    },
    {
     "model": "mixtral",
@@ -35807,7 +35807,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 2,
-    "value": 0.9578037427789693
+    "value": 0.04219625722103066
    },
    {
     "model": "mixtral",
@@ -35815,7 +35815,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 5,
-    "value": 0.8810799746066266
+    "value": 0.11892002539337343
    },
    {
     "model": "mixtral",
@@ -35823,7 +35823,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 10,
-    "value": 0.6995129269471448
+    "value": 0.30048707305285505
    },
    {
     "model": "mixtral",
@@ -35831,7 +35831,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 20,
-    "value": 0.6899847164541105
+    "value": 0.3100152835458895
    },
    {
     "model": "mixtral",
@@ -35839,7 +35839,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 50,
-    "value": 0.14008339876589207
+    "value": 0.859916601234108
    },
    {
     "model": "mixtral",
@@ -35847,7 +35847,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 100,
-    "value": 0.044160920166009206
+    "value": 0.9558390798339907
    },
    {
     "model": "mixtral",
@@ -35855,7 +35855,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 200,
-    "value": 0.012739367179749958
+    "value": 0.98726063282025
    },
    {
     "model": "mixtral",
@@ -35863,7 +35863,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 500,
-    "value": 0.0023258833204981874
+    "value": 0.9976741166795018
    },
    {
     "model": "mixtral",
@@ -35871,7 +35871,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 1,
-    "value": 0.8657145654057748
+    "value": 0.1342854345942252
    },
    {
     "model": "mixtral",
@@ -35879,7 +35879,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 2,
-    "value": 0.7547705437268434
+    "value": 0.24522945627315662
    },
    {
     "model": "mixtral",
@@ -35887,7 +35887,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 5,
-    "value": 0.6044537540701328
+    "value": 0.39554624592986726
    },
    {
     "model": "mixtral",
@@ -35895,7 +35895,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 10,
-    "value": 0.3095489286069213
+    "value": 0.6904510713930787
    },
    {
     "model": "mixtral",
@@ -35903,7 +35903,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 20,
-    "value": 0.06655291861944101
+    "value": 0.933447081380559
    },
    {
     "model": "mixtral",
@@ -35911,7 +35911,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 50,
-    "value": 0.006540310670338861
+    "value": 0.9934596893296611
    },
    {
     "model": "mixtral",
@@ -35919,7 +35919,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 100,
-    "value": 0.0012559262993228348
+    "value": 0.9987440737006772
    },
    {
     "model": "mixtral",
@@ -35927,7 +35927,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 200,
-    "value": 0.0008913124538874051
+    "value": 0.9991086875461126
    },
    {
     "model": "mixtral",
@@ -35935,7 +35935,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 500,
-    "value": 0.0013585545928043175
+    "value": 0.9986414454071957
    },
    {
     "model": "mixtral",
@@ -35943,7 +35943,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 1,
-    "value": 0.8657225177345583
+    "value": 0.13427748226544164
    },
    {
     "model": "mixtral",
@@ -35951,7 +35951,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 2,
-    "value": 0.7552156875458926
+    "value": 0.24478431245410737
    },
    {
     "model": "mixtral",
@@ -35959,7 +35959,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 5,
-    "value": 0.6052829924040151
+    "value": 0.39471700759598494
    },
    {
     "model": "mixtral",
@@ -35967,7 +35967,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 10,
-    "value": 0.3165774777474221
+    "value": 0.6834225222525778
    },
    {
     "model": "mixtral",
@@ -35975,7 +35975,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 20,
-    "value": 0.06809436550268314
+    "value": 0.9319056344973169
    },
    {
     "model": "mixtral",
@@ -35983,7 +35983,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 50,
-    "value": 0.007402983477194897
+    "value": 0.9925970165228051
    },
    {
     "model": "mixtral",
@@ -35991,7 +35991,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 100,
-    "value": 0.001435065075507419
+    "value": 0.9985649349244926
    },
    {
     "model": "mixtral",
@@ -35999,7 +35999,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 200,
-    "value": 0.0007072486950414347
+    "value": 0.9992927513049585
    },
    {
     "model": "mixtral",
@@ -36007,7 +36007,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 500,
-    "value": 0.0013560670495503062
+    "value": 0.9986439329504497
    },
    {
     "model": "mixtral",
@@ -36015,7 +36015,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 1,
-    "value": 0.8658170598071371
+    "value": 0.13418294019286298
    },
    {
     "model": "mixtral",
@@ -36023,7 +36023,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 2,
-    "value": 0.7550718356786646
+    "value": 0.2449281643213354
    },
    {
     "model": "mixtral",
@@ -36031,7 +36031,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 5,
-    "value": 0.6048617155094123
+    "value": 0.39513828449058763
    },
    {
     "model": "mixtral",
@@ -36039,7 +36039,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 10,
-    "value": 0.17916697151758795
+    "value": 0.820833028482412
    },
    {
     "model": "mixtral",
@@ -36047,7 +36047,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 20,
-    "value": 0.04815237522293861
+    "value": 0.9518476247770614
    },
    {
     "model": "mixtral",
@@ -36055,7 +36055,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 50,
-    "value": 0.006187358939470089
+    "value": 0.9938126410605299
    },
    {
     "model": "mixtral",
@@ -36063,7 +36063,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 100,
-    "value": 0.0013738110459936281
+    "value": 0.9986261889540063
    },
    {
     "model": "mixtral",
@@ -36071,7 +36071,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 200,
-    "value": 0.0007942539926275582
+    "value": 0.9992057460073724
    },
    {
     "model": "mixtral",
@@ -36079,7 +36079,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 500,
-    "value": 0.0011758565838657642
+    "value": 0.9988241434161343
    },
    {
     "model": "mixtral",
@@ -38015,7 +38015,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 1817,
-    "value": 0.005117224820227473
+    "value": 0.9948827751797725
    },
    {
     "model": "qwen3",
@@ -38023,7 +38023,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 2624,
-    "value": 0.004968639962560029
+    "value": 0.99503136003744
    },
    {
     "model": "qwen3",
@@ -38031,7 +38031,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 2919,
-    "value": 0.004238217107501607
+    "value": 0.9957617828924984
    },
    {
     "model": "qwen3",
@@ -38039,7 +38039,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 3069,
-    "value": 0.0038972683866559388
+    "value": 0.9961027316133441
    },
    {
     "model": "qwen3",
@@ -38047,7 +38047,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 1,
-    "value": 0.7525660333928819
+    "value": 0.24743396660711814
    },
    {
     "model": "qwen3",
@@ -38055,7 +38055,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 2,
-    "value": 0.6658297626702121
+    "value": 0.33417023732978784
    },
    {
     "model": "qwen3",
@@ -38063,7 +38063,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 5,
-    "value": 0.4977875481290206
+    "value": 0.5022124518709794
    },
    {
     "model": "qwen3",
@@ -38071,7 +38071,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 10,
-    "value": 0.3399843410711546
+    "value": 0.6600156589288454
    },
    {
     "model": "qwen3",
@@ -38079,7 +38079,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 20,
-    "value": 0.20446247984311564
+    "value": 0.7955375201568844
    },
    {
     "model": "qwen3",
@@ -38087,7 +38087,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 50,
-    "value": 0.1099004566374315
+    "value": 0.8900995433625685
    },
    {
     "model": "qwen3",
@@ -38095,7 +38095,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 100,
-    "value": 0.07401059803550822
+    "value": 0.9259894019644918
    },
    {
     "model": "qwen3",
@@ -38103,7 +38103,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 1,
-    "value": 0.752637288418996
+    "value": 0.24736271158100395
    },
    {
     "model": "qwen3",
@@ -38111,7 +38111,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 2,
-    "value": 0.6658620797968349
+    "value": 0.3341379202031651
    },
    {
     "model": "qwen3",
@@ -38119,7 +38119,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 5,
-    "value": 0.4991037693218152
+    "value": 0.5008962306781848
    },
    {
     "model": "qwen3",
@@ -38127,7 +38127,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 10,
-    "value": 0.3406331296323234
+    "value": 0.6593668703676766
    },
    {
     "model": "qwen3",
@@ -38135,7 +38135,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 20,
-    "value": 0.2046577393000989
+    "value": 0.7953422606999011
    },
    {
     "model": "qwen3",
@@ -38143,7 +38143,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 50,
-    "value": 0.13506164323043013
+    "value": 0.8649383567695699
    },
    {
     "model": "qwen3",
@@ -38151,7 +38151,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 100,
-    "value": 0.11955719941010604
+    "value": 0.880442800589894
    },
    {
     "model": "qwen3",
@@ -38159,7 +38159,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 1,
-    "value": 0.7544331925035604
+    "value": 0.24556680749643955
    },
    {
     "model": "qwen3",
@@ -38167,7 +38167,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 2,
-    "value": 0.6953295803364932
+    "value": 0.30467041966350683
    },
    {
     "model": "qwen3",
@@ -38175,7 +38175,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 5,
-    "value": 0.5043020608235251
+    "value": 0.49569793917647487
    },
    {
     "model": "qwen3",
@@ -38183,7 +38183,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 10,
-    "value": 0.35758063071489643
+    "value": 0.6424193692851036
    },
    {
     "model": "qwen3",
@@ -38191,7 +38191,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 20,
-    "value": 0.24458437277484646
+    "value": 0.7554156272251535
    },
    {
     "model": "qwen3",
@@ -38199,7 +38199,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 50,
-    "value": 0.12069042104563399
+    "value": 0.879309578954366
    },
    {
     "model": "qwen3",
@@ -38207,7 +38207,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 100,
-    "value": 0.04727762342160108
+    "value": 0.952722376578399
    },
    {
     "model": "qwen3",
@@ -38215,7 +38215,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 1,
-    "value": 0.8053029516795286
+    "value": 0.1946970483204714
    },
    {
     "model": "qwen3",
@@ -38223,7 +38223,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 2,
-    "value": 0.733275875076804
+    "value": 0.266724124923196
    },
    {
     "model": "qwen3",
@@ -38231,7 +38231,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 5,
-    "value": 0.6878741047869763
+    "value": 0.31212589521302364
    },
    {
     "model": "qwen3",
@@ -38239,7 +38239,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 10,
-    "value": 0.5129901529544431
+    "value": 0.48700984704555694
    },
    {
     "model": "qwen3",
@@ -38247,7 +38247,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 20,
-    "value": 0.4918736571059612
+    "value": 0.5081263428940388
    },
    {
     "model": "qwen3",
@@ -38255,7 +38255,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 50,
-    "value": 0.3528336097278042
+    "value": 0.6471663902721958
    },
    {
     "model": "qwen3",
@@ -38263,7 +38263,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 100,
-    "value": 0.2002184682363575
+    "value": 0.7997815317636425
    },
    {
     "model": "qwen3",
@@ -38271,7 +38271,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 1,
-    "value": 0.993961817236902
+    "value": 0.006038182763097919
    },
    {
     "model": "qwen3",
@@ -38279,7 +38279,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 2,
-    "value": 0.781342016269353
+    "value": 0.21865798373064707
    },
    {
     "model": "qwen3",
@@ -38287,7 +38287,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 5,
-    "value": 0.6209693316311119
+    "value": 0.3790306683688881
    },
    {
     "model": "qwen3",
@@ -38295,7 +38295,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 10,
-    "value": 0.15169381304136215
+    "value": 0.8483061869586379
    },
    {
     "model": "qwen3",
@@ -38303,7 +38303,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 20,
-    "value": 0.015932848730173588
+    "value": 0.9840671512698265
    },
    {
     "model": "qwen3",
@@ -38311,7 +38311,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 50,
-    "value": 0.005591217235528467
+    "value": 0.9944087827644715
    },
    {
     "model": "qwen3",
@@ -38319,7 +38319,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 100,
-    "value": 0.006078559655611326
+    "value": 0.9939214403443887
    },
    {
     "model": "qwen3",
@@ -38327,7 +38327,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 1,
-    "value": 0.7394656160520872
+    "value": 0.2605343839479129
    },
    {
     "model": "qwen3",
@@ -38335,7 +38335,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 2,
-    "value": 0.6374069198666795
+    "value": 0.3625930801333205
    },
    {
     "model": "qwen3",
@@ -38343,7 +38343,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 5,
-    "value": 0.5149424816461361
+    "value": 0.48505751835386385
    },
    {
     "model": "qwen3",
@@ -38351,7 +38351,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 10,
-    "value": 0.3846872863157271
+    "value": 0.6153127136842729
    },
    {
     "model": "qwen3",
@@ -38359,7 +38359,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 20,
-    "value": 0.1828748187190305
+    "value": 0.8171251812809694
    },
    {
     "model": "qwen3",
@@ -38367,7 +38367,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 50,
-    "value": 0.012404689338186947
+    "value": 0.987595310661813
    },
    {
     "model": "qwen3",
@@ -38375,7 +38375,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 100,
-    "value": 0.009412448336562407
+    "value": 0.9905875516634376
    },
    {
     "model": "qwen3",
@@ -38383,7 +38383,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 1,
-    "value": 0.9895590064673025
+    "value": 0.010440993532697479
    },
    {
     "model": "qwen3",
@@ -38391,7 +38391,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 2,
-    "value": 0.9934866120280658
+    "value": 0.0065133879719341805
    },
    {
     "model": "qwen3",
@@ -38399,7 +38399,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 5,
-    "value": 0.9962939364393693
+    "value": 0.003706063560630723
    },
    {
     "model": "qwen3",
@@ -38407,7 +38407,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 10,
-    "value": 0.9716493543365642
+    "value": 0.02835064566343588
    },
    {
     "model": "qwen3",
@@ -38415,7 +38415,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 20,
-    "value": 0.9650132611882216
+    "value": 0.03498673881177837
    },
    {
     "model": "qwen3",
@@ -38423,7 +38423,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 50,
-    "value": 0.9377068643011786
+    "value": 0.06229313569882152
    },
    {
     "model": "qwen3",
@@ -38431,7 +38431,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 100,
-    "value": 0.7744411108823708
+    "value": 0.2255588891176293
    },
    {
     "model": "qwen3",
@@ -38439,7 +38439,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 1,
-    "value": 0.7539032850076527
+    "value": 0.2460967149923473
    },
    {
     "model": "qwen3",
@@ -38447,7 +38447,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 2,
-    "value": 0.668951966059226
+    "value": 0.3310480339407739
    },
    {
     "model": "qwen3",
@@ -38455,7 +38455,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 5,
-    "value": 0.4984055150801828
+    "value": 0.5015944849198172
    },
    {
     "model": "qwen3",
@@ -38463,7 +38463,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 10,
-    "value": 0.33451006550330376
+    "value": 0.6654899344966962
    },
    {
     "model": "qwen3",
@@ -38471,7 +38471,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 20,
-    "value": 0.20169599951549472
+    "value": 0.7983040004845052
    },
    {
     "model": "qwen3",
@@ -38479,7 +38479,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 50,
-    "value": 0.04865195820822166
+    "value": 0.9513480417917783
    },
    {
     "model": "qwen3",
@@ -38487,7 +38487,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 100,
-    "value": 0.008425408589845751
+    "value": 0.9915745914101542
    },
    {
     "model": "qwen3",
@@ -38495,7 +38495,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 1,
-    "value": 0.7538489093284333
+    "value": 0.24615109067156676
    },
    {
     "model": "qwen3",
@@ -38503,7 +38503,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 2,
-    "value": 0.6696021610449416
+    "value": 0.3303978389550584
    },
    {
     "model": "qwen3",
@@ -38511,7 +38511,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 5,
-    "value": 0.4971486389881565
+    "value": 0.5028513610118436
    },
    {
     "model": "qwen3",
@@ -38519,7 +38519,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 10,
-    "value": 0.3347528378403266
+    "value": 0.6652471621596734
    },
    {
     "model": "qwen3",
@@ -38527,7 +38527,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 20,
-    "value": 0.2039487825809503
+    "value": 0.7960512174190497
    },
    {
     "model": "qwen3",
@@ -38535,7 +38535,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 50,
-    "value": 0.047765109394697886
+    "value": 0.9522348906053021
    },
    {
     "model": "qwen3",
@@ -38543,7 +38543,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 100,
-    "value": 0.01003826136980801
+    "value": 0.989961738630192
    },
    {
     "model": "qwen3",
@@ -38551,7 +38551,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 1,
-    "value": 0.7529529123266304
+    "value": 0.24704708767336958
    },
    {
     "model": "qwen3",
@@ -38559,7 +38559,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 2,
-    "value": 0.6648620557307539
+    "value": 0.3351379442692461
    },
    {
     "model": "qwen3",
@@ -38567,7 +38567,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 5,
-    "value": 0.49690307203115525
+    "value": 0.5030969279688448
    },
    {
     "model": "qwen3",
@@ -38575,7 +38575,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 10,
-    "value": 0.33399965651085745
+    "value": 0.6660003434891426
    },
    {
     "model": "qwen3",
@@ -38583,7 +38583,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 20,
-    "value": 0.20213484651896194
+    "value": 0.797865153481038
    },
    {
     "model": "qwen3",
@@ -38591,7 +38591,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 50,
-    "value": 0.04871123212800746
+    "value": 0.9512887678719926
    },
    {
     "model": "qwen3",
@@ -38599,7 +38599,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 100,
-    "value": 0.010492149293242853
+    "value": 0.9895078507067572
    },
    {
     "model": "qwen3",
@@ -40703,7 +40703,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 1928,
-    "value": 0.0051404440890107095
+    "value": 0.9948595559109893
    },
    {
     "model": "qwen3",
@@ -40711,7 +40711,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 6101,
-    "value": 0.0052392894045864
+    "value": 0.9947607105954136
    },
    {
     "model": "qwen3",
@@ -40719,7 +40719,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 6776,
-    "value": 0.004457120688334815
+    "value": 0.9955428793116652
    },
    {
     "model": "qwen3",
@@ -40727,7 +40727,7 @@
     "intervention": "noise",
     "ranking": "all",
     "budget": 8148,
-    "value": 0.004201572964950606
+    "value": 0.9957984270350494
    },
    {
     "model": "qwen3",
@@ -40735,7 +40735,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 1,
-    "value": 0.7813418915467102
+    "value": 0.21865810845328984
    },
    {
     "model": "qwen3",
@@ -40743,7 +40743,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 2,
-    "value": 0.7255501580320087
+    "value": 0.27444984196799127
    },
    {
     "model": "qwen3",
@@ -40751,7 +40751,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 5,
-    "value": 0.552100018605451
+    "value": 0.44789998139454906
    },
    {
     "model": "qwen3",
@@ -40759,7 +40759,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 10,
-    "value": 0.3636371271255946
+    "value": 0.6363628728744054
    },
    {
     "model": "qwen3",
@@ -40767,7 +40767,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 20,
-    "value": 0.20840906002741594
+    "value": 0.791590939972584
    },
    {
     "model": "qwen3",
@@ -40775,7 +40775,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 50,
-    "value": 0.11691401317678932
+    "value": 0.8830859868232107
    },
    {
     "model": "qwen3",
@@ -40783,7 +40783,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 100,
-    "value": 0.08923916362240081
+    "value": 0.9107608363775992
    },
    {
     "model": "qwen3",
@@ -40791,7 +40791,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 200,
-    "value": 0.04458078366612955
+    "value": 0.9554192163338704
    },
    {
     "model": "qwen3",
@@ -40799,7 +40799,7 @@
     "intervention": "noise",
     "ranking": "exact",
     "budget": 500,
-    "value": 0.011549334363384567
+    "value": 0.9884506656366154
    },
    {
     "model": "qwen3",
@@ -40807,7 +40807,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 1,
-    "value": 0.7816203761731036
+    "value": 0.21837962382689638
    },
    {
     "model": "qwen3",
@@ -40815,7 +40815,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 2,
-    "value": 0.7269552039342433
+    "value": 0.27304479606575677
    },
    {
     "model": "qwen3",
@@ -40823,7 +40823,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 5,
-    "value": 0.5534748332811599
+    "value": 0.4465251667188402
    },
    {
     "model": "qwen3",
@@ -40831,7 +40831,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 10,
-    "value": 0.3643320834461473
+    "value": 0.6356679165538527
    },
    {
     "model": "qwen3",
@@ -40839,7 +40839,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 20,
-    "value": 0.20819143550706823
+    "value": 0.7918085644929318
    },
    {
     "model": "qwen3",
@@ -40847,7 +40847,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 50,
-    "value": 0.13735408740505256
+    "value": 0.8626459125949475
    },
    {
     "model": "qwen3",
@@ -40855,7 +40855,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 100,
-    "value": 0.1228336092405658
+    "value": 0.8771663907594343
    },
    {
     "model": "qwen3",
@@ -40863,7 +40863,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 200,
-    "value": 0.09800556112686878
+    "value": 0.9019944388731312
    },
    {
     "model": "qwen3",
@@ -40871,7 +40871,7 @@
     "intervention": "noise",
     "ranking": "exact_noL0-2",
     "budget": 500,
-    "value": 0.06798544362205816
+    "value": 0.9320145563779418
    },
    {
     "model": "qwen3",
@@ -40879,7 +40879,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 1,
-    "value": 0.78226874255638
+    "value": 0.21773125744361993
    },
    {
     "model": "qwen3",
@@ -40887,7 +40887,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 2,
-    "value": 0.7230696087983289
+    "value": 0.2769303912016711
    },
    {
     "model": "qwen3",
@@ -40895,7 +40895,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 5,
-    "value": 0.5573350761150304
+    "value": 0.44266492388496964
    },
    {
     "model": "qwen3",
@@ -40903,7 +40903,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 10,
-    "value": 0.377223649009512
+    "value": 0.622776350990488
    },
    {
     "model": "qwen3",
@@ -40911,7 +40911,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 20,
-    "value": 0.24879414356523158
+    "value": 0.7512058564347684
    },
    {
     "model": "qwen3",
@@ -40919,7 +40919,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 50,
-    "value": 0.13531866354981992
+    "value": 0.8646813364501801
    },
    {
     "model": "qwen3",
@@ -40927,7 +40927,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 100,
-    "value": 0.05933608790886821
+    "value": 0.9406639120911318
    },
    {
     "model": "qwen3",
@@ -40935,7 +40935,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 200,
-    "value": 0.017157220262186995
+    "value": 0.982842779737813
    },
    {
     "model": "qwen3",
@@ -40943,7 +40943,7 @@
     "intervention": "noise",
     "ranking": "grad",
     "budget": 500,
-    "value": 0.007864806508290245
+    "value": 0.9921351934917098
    },
    {
     "model": "qwen3",
@@ -40951,7 +40951,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 1,
-    "value": 0.8357379990926539
+    "value": 0.1642620009073461
    },
    {
     "model": "qwen3",
@@ -40959,7 +40959,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 2,
-    "value": 0.7843748611031991
+    "value": 0.21562513889680085
    },
    {
     "model": "qwen3",
@@ -40967,7 +40967,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 5,
-    "value": 0.7389117985777499
+    "value": 0.2610882014222501
    },
    {
     "model": "qwen3",
@@ -40975,7 +40975,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 10,
-    "value": 0.5635228320328118
+    "value": 0.4364771679671882
    },
    {
     "model": "qwen3",
@@ -40983,7 +40983,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 20,
-    "value": 0.5417827518935224
+    "value": 0.45821724810647757
    },
    {
     "model": "qwen3",
@@ -40991,7 +40991,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 50,
-    "value": 0.40109807381161455
+    "value": 0.5989019261883854
    },
    {
     "model": "qwen3",
@@ -40999,7 +40999,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 100,
-    "value": 0.24032616004931365
+    "value": 0.7596738399506864
    },
    {
     "model": "qwen3",
@@ -41007,7 +41007,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 200,
-    "value": 0.14569179173318886
+    "value": 0.8543082082668112
    },
    {
     "model": "qwen3",
@@ -41015,7 +41015,7 @@
     "intervention": "noise",
     "ranking": "lu",
     "budget": 500,
-    "value": 0.11757523165575198
+    "value": 0.882424768344248
    },
    {
     "model": "qwen3",
@@ -41023,7 +41023,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 1,
-    "value": 0.9886429775135743
+    "value": 0.011357022486425589
    },
    {
     "model": "qwen3",
@@ -41031,7 +41031,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 2,
-    "value": 0.8127670890511869
+    "value": 0.18723291094881303
    },
    {
     "model": "qwen3",
@@ -41039,7 +41039,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 5,
-    "value": 0.647268081326866
+    "value": 0.352731918673134
    },
    {
     "model": "qwen3",
@@ -41047,7 +41047,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 10,
-    "value": 0.16996033306369895
+    "value": 0.830039666936301
    },
    {
     "model": "qwen3",
@@ -41055,7 +41055,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 20,
-    "value": 0.01680643030428064
+    "value": 0.9831935696957194
    },
    {
     "model": "qwen3",
@@ -41063,7 +41063,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 50,
-    "value": 0.0074226486528828906
+    "value": 0.9925773513471171
    },
    {
     "model": "qwen3",
@@ -41071,7 +41071,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 100,
-    "value": 0.005069127894562542
+    "value": 0.9949308721054375
    },
    {
     "model": "qwen3",
@@ -41079,7 +41079,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 200,
-    "value": 0.0056194568394841715
+    "value": 0.9943805431605158
    },
    {
     "model": "qwen3",
@@ -41087,7 +41087,7 @@
     "intervention": "noise",
     "ranking": "path_grad_rw",
     "budget": 500,
-    "value": 0.004710606785740923
+    "value": 0.995289393214259
    },
    {
     "model": "qwen3",
@@ -41095,7 +41095,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 1,
-    "value": 0.7709287051411029
+    "value": 0.22907129485889705
    },
    {
     "model": "qwen3",
@@ -41103,7 +41103,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 2,
-    "value": 0.6936893921692654
+    "value": 0.3063106078307346
    },
    {
     "model": "qwen3",
@@ -41111,7 +41111,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 5,
-    "value": 0.5703462446236252
+    "value": 0.42965375537637485
    },
    {
     "model": "qwen3",
@@ -41119,7 +41119,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 10,
-    "value": 0.4083133035798811
+    "value": 0.5916866964201188
    },
    {
     "model": "qwen3",
@@ -41127,7 +41127,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 20,
-    "value": 0.19997956945375905
+    "value": 0.800020430546241
    },
    {
     "model": "qwen3",
@@ -41135,7 +41135,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 50,
-    "value": 0.012849892886320102
+    "value": 0.9871501071136799
    },
    {
     "model": "qwen3",
@@ -41143,7 +41143,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 100,
-    "value": 0.00910360957367462
+    "value": 0.9908963904263254
    },
    {
     "model": "qwen3",
@@ -41151,7 +41151,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 200,
-    "value": 0.004873759151261203
+    "value": 0.9951262408487388
    },
    {
     "model": "qwen3",
@@ -41159,7 +41159,7 @@
     "intervention": "noise",
     "ranking": "path_relp",
     "budget": 500,
-    "value": 0.005238516173179331
+    "value": 0.9947614838268206
    },
    {
     "model": "qwen3",
@@ -41167,7 +41167,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 1,
-    "value": 0.9723086210831479
+    "value": 0.02769137891685222
    },
    {
     "model": "qwen3",
@@ -41175,7 +41175,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 2,
-    "value": 0.9549485719215367
+    "value": 0.045051428078463344
    },
    {
     "model": "qwen3",
@@ -41183,7 +41183,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 5,
-    "value": 0.9470756160998256
+    "value": 0.05292438390017437
    },
    {
     "model": "qwen3",
@@ -41191,7 +41191,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 10,
-    "value": 0.9566922437489119
+    "value": 0.043307756251088146
    },
    {
     "model": "qwen3",
@@ -41199,7 +41199,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 20,
-    "value": 0.876334505892142
+    "value": 0.12366549410785797
    },
    {
     "model": "qwen3",
@@ -41207,7 +41207,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 50,
-    "value": 0.8668184439862633
+    "value": 0.13318155601373668
    },
    {
     "model": "qwen3",
@@ -41215,7 +41215,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 100,
-    "value": 0.748822793589427
+    "value": 0.25117720641057306
    },
    {
     "model": "qwen3",
@@ -41223,7 +41223,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 200,
-    "value": 0.6086014575982515
+    "value": 0.39139854240174854
    },
    {
     "model": "qwen3",
@@ -41231,7 +41231,7 @@
     "intervention": "noise",
     "ranking": "random",
     "budget": 500,
-    "value": 0.4025937451769555
+    "value": 0.5974062548230444
    },
    {
     "model": "qwen3",
@@ -41239,7 +41239,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 1,
-    "value": 0.7814100046423443
+    "value": 0.2185899953576557
    },
    {
     "model": "qwen3",
@@ -41247,7 +41247,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 2,
-    "value": 0.7269141190293958
+    "value": 0.2730858809706042
    },
    {
     "model": "qwen3",
@@ -41255,7 +41255,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 5,
-    "value": 0.5506889427677801
+    "value": 0.44931105723221987
    },
    {
     "model": "qwen3",
@@ -41263,7 +41263,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 10,
-    "value": 0.357002635312887
+    "value": 0.642997364687113
    },
    {
     "model": "qwen3",
@@ -41271,7 +41271,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 20,
-    "value": 0.2121274492894139
+    "value": 0.7878725507105862
    },
    {
     "model": "qwen3",
@@ -41279,7 +41279,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 50,
-    "value": 0.045946926537764804
+    "value": 0.9540530734622352
    },
    {
     "model": "qwen3",
@@ -41287,7 +41287,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 100,
-    "value": 0.010452309393191889
+    "value": 0.9895476906068081
    },
    {
     "model": "qwen3",
@@ -41295,7 +41295,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 200,
-    "value": 0.0051820183982490275
+    "value": 0.994817981601751
    },
    {
     "model": "qwen3",
@@ -41303,7 +41303,7 @@
     "intervention": "noise",
     "ranking": "relp",
     "budget": 500,
-    "value": 0.004982906003621723
+    "value": 0.9950170939963783
    },
    {
     "model": "qwen3",
@@ -41311,7 +41311,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 1,
-    "value": 0.7826559995451072
+    "value": 0.2173440004548928
    },
    {
     "model": "qwen3",
@@ -41319,7 +41319,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 2,
-    "value": 0.7309571292621706
+    "value": 0.26904287073782945
    },
    {
     "model": "qwen3",
@@ -41327,7 +41327,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 5,
-    "value": 0.5503199334251824
+    "value": 0.4496800665748176
    },
    {
     "model": "qwen3",
@@ -41335,7 +41335,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 10,
-    "value": 0.35564072034728544
+    "value": 0.6443592796527146
    },
    {
     "model": "qwen3",
@@ -41343,7 +41343,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 20,
-    "value": 0.2079541160687102
+    "value": 0.7920458839312898
    },
    {
     "model": "qwen3",
@@ -41351,7 +41351,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 50,
-    "value": 0.05363521878249958
+    "value": 0.9463647812175005
    },
    {
     "model": "qwen3",
@@ -41359,7 +41359,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 100,
-    "value": 0.011364787029508855
+    "value": 0.9886352129704912
    },
    {
     "model": "qwen3",
@@ -41367,7 +41367,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 200,
-    "value": 0.005953353335741179
+    "value": 0.9940466466642588
    },
    {
     "model": "qwen3",
@@ -41375,7 +41375,7 @@
     "intervention": "noise",
     "ranking": "relp_B",
     "budget": 500,
-    "value": 0.004784428855059725
+    "value": 0.9952155711449403
    },
    {
     "model": "qwen3",
@@ -41383,7 +41383,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 1,
-    "value": 0.7823692526110662
+    "value": 0.21763074738893384
    },
    {
     "model": "qwen3",
@@ -41391,7 +41391,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 2,
-    "value": 0.7258512559723608
+    "value": 0.27414874402763917
    },
    {
     "model": "qwen3",
@@ -41399,7 +41399,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 5,
-    "value": 0.5497692032231533
+    "value": 0.45023079677684674
    },
    {
     "model": "qwen3",
@@ -41407,7 +41407,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 10,
-    "value": 0.35489239305555287
+    "value": 0.6451076069444471
    },
    {
     "model": "qwen3",
@@ -41415,7 +41415,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 20,
-    "value": 0.2111631143676796
+    "value": 0.7888368856323205
    },
    {
     "model": "qwen3",
@@ -41423,7 +41423,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 50,
-    "value": 0.04585924428045715
+    "value": 0.9541407557195428
    },
    {
     "model": "qwen3",
@@ -41431,7 +41431,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 100,
-    "value": 0.010429876948300776
+    "value": 0.9895701230516992
    },
    {
     "model": "qwen3",
@@ -41439,7 +41439,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 200,
-    "value": 0.005182489811981106
+    "value": 0.9948175101880189
    },
    {
     "model": "qwen3",
@@ -41447,7 +41447,7 @@
     "intervention": "noise",
     "ranking": "rw",
     "budget": 500,
-    "value": 0.00480495954971541
+    "value": 0.9951950404502846
    },
    {
     "model": "qwen3",

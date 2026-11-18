@@ -788,3 +788,190 @@ def evaluate_roles(m: StreamRelP, A: torch.Tensor, Bb: torch.Tensor, target: lis
     for si, (li, kind) in enumerate(spec):
         res["margin"].setdefault(labels[li], {})[kind] = mg[si]
     return res
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# patch semantics at the patched MoE sites (the routing-weight sum question; guide section 8)
+# ----------------------------------------------------------------------------------------------------------------------
+# At a patched site (row, position, layer) with selected experts C, live routing (R_l, g_l), the source run's routing
+# (R_s, g_s), unweighted expert outputs u_e(x) = W_down,e (SiLU(W_g,e x) * W_u,e x), live MoE input x_l and the source
+# run's MoE input x_s, the MoE output becomes
+#   full          sum_{e in R_l \ C} g_l,e u_e(x_l) + sum_{e in C} g_s,e u_e(x_s)        (the engine's complete replacement:
+#                 weights of the two runs mixed, sum 1 - sum_C g_l + sum_C g_s, an expert routed in one run only is injected
+#                 or removed)
+#   content_both  sum_{e in R_l} g_l,e * (u_e(x_s) if e in C and e in R_s else u_e(x_l))  (guide section 8: the live routing is
+#                 kept, only the content of experts routed in both runs is replaced)
+#   content_all   sum_{e in R_l} g_l,e * (u_e(x_s) if e in C else u_e(x_l))               (as content_both; experts routed only
+#                 live get the content they compute on the source input, which the source run did not use)
+#   renorm        the full output with every weight multiplied by s = sum_{R_l} g_l / (sum_{R_l \ C} g_l + sum_{C n R_s} g_s)
+#                 (the natural total of the live run, 1 for Qwen3-MoE and Mixtral; s = 0 if nothing is left)
+#   route         sum_{e in R_s} g_s,e * (u_e(x_s) if e in C else u_e(x_l))               (the source run's routing decision
+#                 at the site is moved as well; with C containing R_s it equals the source MoE output)
+# Downstream routing is recomputed as usual. Sites without a selected expert are untouched.
+MIX_MODES = ("full", "content_both", "content_all", "renorm", "route")
+
+
+class MixOverride:
+    """Expert-level intervention with one of the MIX_MODES semantics (not 'full': that one is the engine's Override).
+    rows [B] bool (intervened rows of the group); S [n, T, E] bool selected experts per intervened row and position;
+    src: the source group's LayerOut of this layer (with .xf, set by _mix_layer); src_rows [n] rows in the source group."""
+
+    def __init__(self, rows, S, mode, src, src_rows):
+        if mode not in MIX_MODES[1:]:
+            raise ValueError(mode)
+        self.rows, self.S, self.mode, self.src, self.src_rows = rows, S, mode, src, src_rows
+
+
+def _mix_layer(self, h, w, cos, sin, mask, relp=False, pairs=False, override=None, out_patch=None):
+    """StreamRelP.layer (same operations) that also keeps the MoE input on the record (rec.xf) and applies MixOverride
+    objects. Records of groups without pairs are released after the layer (only the source group's are read)."""
+    from .relp_moe_stream import LayerOut
+    B, T, H = h.shape
+    a = self.attention(self.rms(h, w.ln1, relp), w, cos, sin, mask, relp)
+    h = h + a
+    x2 = self.rms(h, w.ln2, relp)
+    xf = x2.view(-1, H)
+    topi, topw = self.route(xf, w)
+    ovs = [] if override is None else (override if isinstance(override, (list, tuple)) else [override])
+    o, qp, cp = self.experts(xf, topi, topw, w, relp, pairs or bool(ovs))
+    rec = LayerOut(topi=topi, topw=topw, q=qp, c=cp)
+    if ovs:
+        o = o.view(B, T, H)
+        for ov in ovs:
+            o = _apply_mix(self, o, rec, xf, w, ov) if isinstance(ov, MixOverride) else self._apply_override(o, rec, w, ov)
+        o = o.reshape(-1, H)
+    o = o.reshape(B, T, H)
+    if out_patch is not None:
+        mk, val = out_patch
+        o = torch.where(mk[..., None], val.to(o.dtype), o)
+    rec.out = o.detach()
+    if pairs:
+        rec.xf = xf
+    else:
+        rec.q = rec.c = None
+    return h + o, rec
+
+
+def _expert_out(m, w, e, x, wt, dtype):
+    """HF eager expert e on inputs x [n, H] with routing weights wt [n]: (W_down (SiLU(g) * u)) * w, cast to dtype."""
+    g, u = F.linear(x, w.gate_up[e]).chunk(2, dim=-1)
+    y = F.linear(m.act(g, u, False), w.down[e])
+    return (y * wt[:, None]).to(dtype)
+
+
+def _apply_mix(m, o, rec, xf, w, ov: MixOverride):
+    B, T, H = o.shape
+    E = m.E
+    rows = torch.where(ov.rows)[0]
+    if rows.numel() == 0:
+        return o
+    sites = ov.S.any(-1)                                            # [n, T]
+    if not bool(sites.any()):
+        return o
+    pi, ti = torch.nonzero(sites, as_tuple=True)
+    ri = rows[pi]
+    lf = ri * T + ti                                                # live (row, position) in the group's flat N
+    sf = ov.src_rows[pi] * T + ti                                   # source (row, position)
+    C = ov.S[pi, ti]                                                # [P, E]
+    l_ti, l_tw, l_c = rec.topi[lf], rec.topw[lf], rec.c[lf]
+    s_ti, s_tw, s_c = ov.src.topi[sf], ov.src.topw[sf], ov.src.c[sf]
+    inC_l, inC_s = C.gather(1, l_ti), C.gather(1, s_ti)
+    l_in_s = (l_ti[:, :, None] == s_ti[:, None, :]).any(-1)
+    dt = o.dtype
+
+    def recompute(contrib, exp, need, x, wts):
+        idx = torch.nonzero(need)
+        if idx.numel() == 0:
+            return contrib
+        ee = exp[need]
+        for e in torch.unique(ee).tolist():
+            sel = ee == e
+            p_, j_ = idx[sel, 0], idx[sel, 1]
+            contrib[p_, j_] = _expert_out(m, w, e, x[p_], wts[p_, j_], dt)
+        return contrib
+
+    if ov.mode in ("content_both", "content_all"):
+        exp, valid = l_ti, torch.ones_like(inC_l)
+        need = inC_l & l_in_s if ov.mode == "content_both" else inC_l
+        contrib = recompute(l_c.clone(), l_ti, need, ov.src.xf[sf], l_tw)
+    elif ov.mode == "renorm":
+        exp = torch.cat([l_ti, s_ti], 1)
+        valid = torch.cat([~inC_l, inC_s], 1)
+        kept = torch.where(~inC_l, l_tw.float(), torch.zeros_like(l_tw, dtype=torch.float32)).sum(1) + \
+            torch.where(inC_s, s_tw.float(), torch.zeros_like(s_tw, dtype=torch.float32)).sum(1)
+        scale = torch.where(kept > 0, l_tw.float().sum(1) / kept.clamp_min(1e-30), torch.zeros_like(kept))
+        contrib = (torch.cat([l_c, s_c], 1).float() * scale[:, None, None]).to(dt)
+    else:  # route
+        exp, valid = s_ti, torch.ones_like(inC_s)
+        contrib = recompute(s_c.clone(), s_ti, ~inC_s, xf[lf], s_tw)
+    # accumulate in ascending expert order from zeros (as the HF loop's index_add_)
+    order = torch.argsort(torch.where(valid, exp, torch.full_like(exp, E + 1)), dim=1, stable=True)
+    contrib = torch.gather(contrib, 1, order[..., None].expand(-1, -1, H))
+    vs = torch.gather(valid, 1, order)
+    acc = torch.zeros(contrib.shape[0], H, dtype=dt, device=o.device)
+    for s in range(contrib.shape[1]):
+        acc = acc + torch.where(vs[:, s, None], contrib[:, s], torch.zeros_like(contrib[:, s]))
+    o = o.clone()
+    o[ri, ti] = acc
+    return o
+
+
+def mix_view(m: StreamRelP) -> StreamRelP:
+    """A shallow copy of the model whose layer() also applies MixOverride (the engine object itself is not changed)."""
+    import copy
+    import types
+    mv = copy.copy(m)
+    mv.layer = types.MethodType(_mix_layer, mv)
+    return mv
+
+
+def evaluate_mix(m: StreamRelP, A: torch.Tensor, Bb: torch.Tensor, target: list, foil: list, pool: torch.Tensor,
+                 rolepos: torch.Tensor, masks: dict, unit: str, modes=MIX_MODES, chunk_rows: int = 1040) -> dict:
+    """evaluate_roles with the patch semantics of MIX_MODES at every patched site (expert units only).
+    'full' uses the engine's Override exactly as evaluate_roles. Returns {'margin_A', 'margin_B',
+    'margin': {label: {mode: {'noise': [n], 'denoise': [n]}}}} (float32, cpu)."""
+    from .relp_moe_stream import Override, forward_pass
+    n, T = A.shape
+    dev = m.dev
+    mv = mix_view(m)
+    labels = list(masks)
+    spec = [(li, kind, mode) for li in range(len(labels)) for kind in ("noise", "denoise") for mode in modes]
+    pool_d = pool.to(dev)
+    rp = rolepos.to(dev)
+    ar = torch.arange(n, device=dev)
+    base = Group("base", torch.cat([A, Bb]), list(target) * 2, list(foil) * 2, pairs=True, keep=set())
+    per_group = max(1, chunk_rows // n)
+    groups = []
+    for c0 in range(0, len(spec), per_group):
+        sub = spec[c0:c0 + per_group]
+        ids = torch.cat([(Bb if kind == "denoise" else A) for _, kind, _ in sub])
+
+        def ofn(l, w, st, sub=sub):
+            out = []
+            src = st["layer_out"]["base"]
+            for bi, (li, kind, mode) in enumerate(sub):
+                mk = masks[labels[li]][l]
+                if not bool(mk.any()):
+                    continue
+                rows_mask = torch.zeros(len(sub) * n, dtype=torch.bool, device=dev)
+                rows_mask[bi * n:(bi + 1) * n] = True
+                if unit == "all":
+                    s3 = (mk.to(dev)[None, :] & pool_d[:, None])[None].expand(n, T, m.E)
+                else:
+                    s3 = torch.zeros(n, T, m.E, dtype=torch.bool, device=dev)
+                    for r in range(rp.shape[1]):
+                        s3[ar, rp[:, r]] |= mk[r].to(dev)[None, :]
+                srows = ar + n if kind == "noise" else ar
+                if mode == "full":
+                    out.append(Override(rows=rows_mask, S=s3[..., None].expand(n, T, m.E, m.I), value="source", src=src,
+                                        src_rows=srows))
+                else:
+                    out.append(MixOverride(rows_mask, s3, mode, src, srows))
+            return out or None
+        groups.append(Group(f"mix{c0}", ids, list(target) * len(sub), list(foil) * len(sub), override_fn=ofn))
+    forward_pass(mv, [base] + groups)
+    mg = torch.cat([g.delta.float().cpu() for g in groups]).view(len(spec), n)
+    res = {"margin_A": base.delta[:n].float().cpu(), "margin_B": base.delta[n:].float().cpu(), "margin": {}}
+    for si, (li, kind, mode) in enumerate(spec):
+        res["margin"].setdefault(labels[li], {}).setdefault(mode, {})[kind] = mg[si]
+    return res

@@ -202,21 +202,23 @@ def fig_classes(models):
 
 
 def fig_addback(models):
-    """S2.1: experts added back vs faithfulness / completeness, one line per ranking (mean of the 4 tasks)."""
+    """S2.1: experts added back vs rescue / disruption (swap with the other sentence) and the RelP paper's faithfulness / completeness
+    (mean baseline), one line per ranking (mean of the 4 tasks)."""
     f = P8 / "s21_addback.parquet"
     if not f.exists():
         return
     S_ = pd.read_parquet(f)
     S_ = S_[(S_.split == "all")]
-    S_["value"] = np.where(S_.intervention == "noise", 1 - S_.normalized, S_.normalized)
+    S_["value"] = S_.normalized          # noise: disruption = share lost (the protocol's own normalisation)
     S_.loc[S_.ranking == "random", "ranking"] = "random"
     lines = [("relp", BLUE, "RelP (protocol)", "-"), ("exact", ORANGE, "exact patching", "-"),
              ("exact_noL0-2", AQUA, "exact, layers 0-2 excluded", "-"), ("lu", "#eda100", "Lu's layer-first order", "-"),
              ("random", "#9a9994", "random (3 seeds)", "--")]
     for unit, ulab in (("expert_position", "expert-positions"), ("expert_all_positions", "whole experts")):
-        panels = [("denoise", "faithfulness: share restored\n(only these units from the clean run)"),
-                  ("noise", "completeness: share left\n(these units corrupted; ideal 0)"),
-                  ("keep", "keep, mean baseline\n(RelP paper's faithfulness)"), ("remove", "remove, mean baseline\n(RelP paper's completeness)")]
+        panels = [("denoise", "Rescue: share restored\n(these units from the clean run)"),
+                  ("noise", "Disruption: share lost\n(these units from the corrupted run)"),
+                  ("keep", "Faithfulness (RelP paper): keep these\nunits, all others set to the mean"),
+                  ("remove", "Completeness (RelP paper): these units\nset to the mean; share left, ideal 0")]
         fig, axs = plt.subplots(len(models), 4, figsize=(14, 3.4 * len(models)), squeeze=False)
         for i, model in enumerate(models):
             for j, (iv, lab) in enumerate(panels):
@@ -240,7 +242,9 @@ def fig_addback(models):
                 if i == len(models) - 1:
                     ax.set_xlabel(f"number of {ulab} (K)")
         fig.legend(*axs[0, 0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, -0.05), ncol=6, fontsize=8.5)
-        fig.suptitle(f"Add-back curves on held-out SVA pairs (validation + test, mean of 4 tasks): {ulab}", x=0.01, ha="left")
+        fig.suptitle(f"Add-back curves on held-out SVA pairs (validation + test, mean of 4 tasks): {ulab}\n"
+                     "rescue and disruption swap units with the other sentence; faithfulness and completeness (RelP paper) use the mean baseline",
+                     x=0.01, y=1.03, ha="left")
         save(fig, f"addback_{unit}")
 
 
@@ -360,19 +364,19 @@ def fig_rules(models):
     save(fig, "rules")
 
 def fig_addback_tasks(models):
-    """S2.1 per task: faithfulness and completeness vs K under RelP's and exact patching's ranking (expert-positions)."""
+    """S2.1 per task: rescue and disruption vs K under RelP's and exact patching's ranking (expert-positions)."""
     f = P8 / "s21_addback.parquet"
     if not f.exists():
         return
     S_ = pd.read_parquet(f)
     S_ = S_[(S_.split == "all") & (S_.unit == "expert_position")].copy()
-    S_["value"] = np.where(S_.intervention == "noise", 1 - S_.normalized, S_.normalized)
+    S_["value"] = S_.normalized          # noise: disruption = share lost
     lines = [("relp", BLUE, "RelP ranking", "-"), ("exact", ORANGE, "activation-patching ranking", "-"),
              ("lu", "#eda100", "Lu's layer-first order", "-"), ("random", "#9a9994", "random (3 seeds)", "--")]
     for model in models:
         fig, axs = plt.subplots(2, 4, figsize=(13.5, 6.2), sharex=True)
         for j, task in enumerate(TASKS):
-            for i, (iv, lab) in enumerate((("denoise", "faithfulness\n(share restored)"), ("noise", "completeness\n(share left; ideal 0)"))):
+            for i, (iv, lab) in enumerate((("denoise", "Rescue\n(share restored)"), ("noise", "Disruption\n(share lost)"))):
                 ax = axs[i, j]
                 x = S_[(S_.model == model) & (S_.task == task) & (S_.intervention == iv)]
                 for rk, colr, name, ls in lines:
@@ -388,7 +392,7 @@ def fig_addback_tasks(models):
                 if i == 1:
                     ax.set_xlabel("number of expert-positions (K)")
         fig.legend(*axs[0, 0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, -0.04), ncol=4, fontsize=9)
-        fig.suptitle(f"{MODEL_NAME[model]}: experts added back vs faithfulness and completeness, per task (held-out pairs)", x=0.01, ha="left")
+        fig.suptitle(f"{MODEL_NAME[model]}: experts added back vs rescue and disruption, per task (held-out pairs)", x=0.01, ha="left")
         save(fig, f"addback_tasks_{model}")
 
 

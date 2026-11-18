@@ -107,7 +107,7 @@ def fig_addback():
     for unit, ulab in (("role", "expert-positions (subject and final token)"), ("all", "whole experts")):
         fig, axs = plt.subplots(2, len(cs), figsize=(3.6 * len(cs), 6.2), squeeze=False, sharex=True)
         for j, (model, task) in enumerate(cs):
-            for i, (iv, lab) in enumerate((("denoise", "faithfulness\n(share restored)"), ("noise", "completeness\n(share left; ideal 0)"))):
+            for i, (iv, lab) in enumerate((("denoise", "Rescue\n(share restored)"), ("noise", "Disruption\n(share lost)"))):
                 ax = axs[i, j]
                 x = S_[(S_.model == model) & (S_.task == task) & (S_.unit == unit) & (S_.intervention == iv)]
                 allv = x[x.ranking == "all"].value.mean()
@@ -126,7 +126,7 @@ def fig_addback():
                 if i == 1:
                     ax.set_xlabel("number of units (K)")
         fig.legend(*axs[0, 0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, -0.05), ncol=6, fontsize=8.5)
-        fig.suptitle(f"Experts added back vs faithfulness and completeness on held-out pairs: {ulab}", x=0.5, ha="center")
+        fig.suptitle(f"Experts added back vs rescue and disruption on held-out pairs: {ulab}", x=0.5, ha="center")
         save(fig, f"addback_{unit}")
 
 

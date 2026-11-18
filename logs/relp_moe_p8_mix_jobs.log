@@ -1,0 +1,40 @@
+2026-11-16T17:41:51Z START relp-p8-qwen3-nounpp-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task nounpp --verification results/relp_sva_moe/qwen3/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/nounpp --output-dir results/relp_sva_moe/qwen3/paper/nounpp/p8_mix
+nounpp: 80 rows, T = 5, 55 labels, 183 labels per pass
+labels 55/55 (137s)
+mix done in 137s
+2026-11-16T17:44:32Z END   relp-p8-qwen3-nounpp-mix rc=0 (161s)
+2026-11-16T17:44:32Z START relp-p8-qwen3-simple-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task simple --verification results/relp_sva_moe/qwen3/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/simple --output-dir results/relp_sva_moe/qwen3/paper/simple/p8_mix
+simple: 80 rows, T = 2, 55 labels, 457 labels per pass
+labels 55/55 (92s)
+mix done in 93s
+2026-11-16T17:46:28Z END   relp-p8-qwen3-simple-mix rc=0 (116s)
+2026-11-16T17:46:28Z START relp-p8-qwen3-rc-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task rc --verification results/relp_sva_moe/qwen3/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/rc --output-dir results/relp_sva_moe/qwen3/paper/rc/p8_mix
+rc: 80 rows, T = 6, 55 labels, 152 labels per pass
+labels 55/55 (146s)
+mix done in 146s
+2026-11-16T17:49:15Z END   relp-p8-qwen3-rc-mix rc=0 (167s)
+2026-11-16T17:49:15Z START relp-p8-qwen3-within_rc-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--Qwen--Qwen3-30B-A3B-Base/snapshots/1b75feb79f60b8dc6c5bc769a898c206a1c6a4f9 --manifest-dir data/relp_sva/qwen3_paper_v1 --task within_rc --verification results/relp_sva_moe/qwen3/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/qwen3/paper/within_rc --output-dir results/relp_sva_moe/qwen3/paper/within_rc/p8_mix
+within_rc: 80 rows, T = 5, 55 labels, 183 labels per pass
+labels 55/55 (133s)
+mix done in 133s
+2026-11-16T17:51:50Z END   relp-p8-qwen3-within_rc-mix rc=0 (155s)
+2026-11-16T17:51:50Z START relp-p8-mixtral-nounpp-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task nounpp --verification results/relp_sva_moe/mixtral/paper/nounpp/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/nounpp --output-dir results/relp_sva_moe/mixtral/paper/nounpp/p8_mix
+nounpp: 80 rows, T = 6, 54 labels, 76 labels per pass
+labels 54/54 (186s)
+mix done in 186s
+2026-11-16T17:55:21Z END   relp-p8-mixtral-nounpp-mix rc=0 (211s)
+2026-11-16T17:55:21Z START relp-p8-mixtral-simple-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task simple --verification results/relp_sva_moe/mixtral/paper/simple/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/simple --output-dir results/relp_sva_moe/mixtral/paper/simple/p8_mix
+simple: 80 rows, T = 3, 48 labels, 152 labels per pass
+labels 48/48 (99s)
+mix done in 99s
+2026-11-16T17:57:24Z END   relp-p8-mixtral-simple-mix rc=0 (123s)
+2026-11-16T17:57:24Z START relp-p8-mixtral-rc-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task rc --verification results/relp_sva_moe/mixtral/paper/rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/rc --output-dir results/relp_sva_moe/mixtral/paper/rc/p8_mix
+rc: 80 rows, T = 7, 54 labels, 65 labels per pass
+labels 54/54 (205s)
+mix done in 206s
+2026-11-16T18:01:14Z END   relp-p8-mixtral-rc-mix rc=0 (230s)
+2026-11-16T18:01:14Z START relp-p8-mixtral-within_rc-mix (waited 0s): /home/ubuntu/MOE/.venv-relp/bin/python scripts/relp_moe_p8_mix.py --model-dir /opt/dlami/nvme/hf/hub/models--mistralai--Mixtral-8x7B-v0.1/snapshots/fc7ac94680e38d7348cfa806e51218e6273104b0 --manifest-dir data/relp_sva/mixtral_paper_v1 --task within_rc --verification results/relp_sva_moe/mixtral/paper/within_rc/verify/verification.json --phase7-dir results/relp_sva_moe/mixtral/paper/within_rc --output-dir results/relp_sva_moe/mixtral/paper/within_rc/p8_mix
+within_rc: 80 rows, T = 6, 53 labels, 76 labels per pass
+labels 53/53 (180s)
+mix done in 180s
+2026-11-16T18:04:39Z END   relp-p8-mixtral-within_rc-mix rc=0 (205s)

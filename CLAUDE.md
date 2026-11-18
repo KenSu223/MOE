@@ -60,8 +60,11 @@ router-aware attribution, neuron-level patching (~4.0 GPU-h), then the same comp
 Code: `moetrace/relp_moe_p8.py` (rule-switchable RelP, multi-variant backward, path, probe, freeze / neuron patches, `lockstep` for
 varying prompt lengths, `evaluate_roles`), runners `scripts/relp_moe_p8_run.py` (SVA) / `relp_moe_p8_run3.py` (other tasks), manifests
 `scripts/relp_moe_p8_prepare.py` -> `data/relp_p8/`, analysis `scripts/relp_moe_p8_{analyze,analyze3,figures,figures3}.py`, chains
-`scripts/relp_moe_p8_chain_{noise,a,b}.sh`, tests `tests/test_relp_moe_p8.py` (27); outputs `results/relp_sva_moe/**/p8_*`, `results/relp_p8/`.
-Deferred: larger models (Mixtral-8x22B, gpt-oss). Log tag `[relp-p8]`.**
+`scripts/relp_moe_p8_chain_{noise,a,b}.sh`, tests `tests/test_relp_moe_p8.py` (30); outputs `results/relp_sva_moe/**/p8_*`, `results/relp_p8/`.
+Deferred: larger models (Mixtral-8x22B, gpt-oss). Log tag `[relp-p8]`. Naming (user, 2026-11-16): rescue / disruption = swap with
+the other sentence (denoise: share restored; noise: share lost); faithfulness / completeness = ONLY the RelP paper's keep / remove (mean baseline).
+Follow-up 2026-11-16 (committed 2026-11-18): five patch semantics at the patched MoE site (`MIX_MODES`, `evaluate_mix` in relp_moe_p8.py; runner
+`scripts/relp_moe_p8_mix.py`, chain `relp_moe_p8_chain_mix.sh`, analysis `relp_moe_p8_mix_analyze.py`; report section 2.1b).**
 
 ## 2. Results in one screen (base reproduction)
 
@@ -323,7 +326,7 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     patches the subject's own layer-0 output (token identity). With layer 0 excluded the rule matches RelP in Mixtral and picks
     RelP rank 2 / 5 in Qwen3. RelP paper (arXiv 2601.22594): agreement circuits = MLP neurons only, attention never ablated.
 - **Phase 8 (2026-11-15, stages 1-2; report `results/sections/relp_moe_p8.md`)**:
-  - *Add-back (held-out)*: Qwen3 RelP ranking = exact up to K = 20, better from K = 50 (0.96 vs 0.88; RelP-paper keep 0.71 vs 0.45); Lu's
+  - *Add-back (held-out)*: Qwen3 RelP ranking = exact up to K = 20, better from K = 50 (rescue 0.96 vs 0.88; RelP-paper faithfulness = keep 0.71 vs 0.45); Lu's
     layer-first order worst; Mixtral exact wins only via L0E002 (0.96 at K = 1), RelP 0.94 at K = 20.
   - *Noise reversed*: exact single patches have a bf16 / routing-near-tie noise floor (Qwen3 L0-23 experts SD 0.16-0.23 vs mean |effect| ~0.1,
     repeat r ~0); RelP's lists are more reproducible below rank ~30; method agreement is bounded by exact patching's reliability. Patched rows also
@@ -336,6 +339,11 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     RelP slope ~1, true gradient 1.0-1.1, no-half 0.5-0.9) but underestimates large late writes. Single-pass router-aware rules change nothing;
     an 8-step path gradient through routing weights recovers 83 % / 64 % of the layer-0 effect and the best small-K add-back (exploratory, 2 tasks).
   - *Neurons*: RelP top 100 vs exact single-neuron patches Pearson 0.93-1.00, slope ~1; ranks 301-1000 31-80 % above the noise floor.
+  - *Patch semantics (2026-11-16)*: the swap (rescue / disruption, every single-expert patch) does not renormalise the routing weights at the
+    patched site (sum off at 67-70 % of sites; Mixtral 0.38-1.66). Under renormalised / content-only (guide section 8, both-routed or all
+    live-routed) / routing-moved semantics no ranking comparison changes; renorm = full (<= 0.008); content-only lowers Qwen3 by up to 0.15
+    (routing-carried part), Mixtral unchanged (L0E002 is routed in both runs); moving the routing decision lifts Qwen3's random sets
+    (K = 500: 0.89 vs 0.61).
   - *Other tasks (stage 3; CounterFact STR pairs, two-hop `Fact: the capital of the state containing {city} is`; units at two roles = last
     subject token, final token)*: same top unit under RelP and exact patching in 4 / 4 cells; final-token last-8 experts Pearson 0.96-1.00.
     CounterFact top units = the base reproduction's experts (Qwen3 L44E069, L42E115; Mixtral L21E001, L19E002); Qwen3 L44E069 is also the
@@ -343,7 +351,7 @@ Both waves done 2026-09-14 (wave 1: Directions 1 and 3; wave 2: Directions 2, 2b
     (top L24E007). Early subject site in every cell: exact 5.6-15.3 logits at layers 0-2, RelP 8-22 %, plain gradient ~0; cause = later
     routing 61 % / 36 % (Qwen3 CounterFact / two-hop), 20 % / 46 % (Mixtral), rest linearisation -> SVA's split (Qwen3 91 % routing, Mixtral
     1 %) was the extreme case, not a model property. Two-hop early-middle city-token experts in Qwen3 (L8E032 4.6, L2E104 3.6): RelP finds
-    L8E032 but underestimates 5x. Held-out add-back at K = 20 (RelP / exact / 8-step path gradient / Lu): CounterFact 0.32 / 0.32 / 0.32 / 0.17
+    L8E032 but underestimates 5x. Held-out rescue at K = 20 (RelP / exact / 8-step path gradient / Lu): CounterFact 0.32 / 0.32 / 0.32 / 0.17
     (Qwen3), 0.43 / 0.55 / 0.57 / 0.26 (Mixtral); two-hop 0.97 / 0.98 / 0.99 / 0.73, 0.85 / 0.86 / 0.92 / 0.71. Old-engine cross-check
     (Direction 6 run): whole-layer rescues r 1.000, experts with >= 30 pairs r 0.977 / 0.994.
 - Open method questions raised by the agents, **not yet decided by the user**: (a) how strongly to state that the
